@@ -1,0 +1,163 @@
+<?php
+
+if (!defined('BASEPATH'))
+    exit('No direct script access allowed');
+
+class user extends MY_Controller {
+
+    public $role = null;
+    public $user_id = null;
+    public $user = null;
+    public $role_id = null;
+
+    function __construct() {
+        parent::__construct();
+        $this->load->model('super_model');
+        $this->load->library('session');
+        $this->load->helper('url');
+        $s = $this->session->all_userdata();
+        if ($s[0]->role != 'Superadmin' && $s[0]->role != 'Admin') {
+            redirect(base_url());
+        }
+        $this->role = $s[0]->role;
+        $this->user_id = $s[0]->id;
+        $this->user = $s[0]->username;
+        $this->role_id = $s[0]->role_id;
+    }
+
+    public function DeleteUser() {
+        $per = $this->checkpermission($this->role_id, 'delete');
+        if ($per) {
+            $s = $this->session->all_userdata();
+            $user = $s[0]->username;
+            $data['id'] = $_GET['id'];
+            $this->super_model->deleteuser($data);
+            $this->session->set_flashdata('message', '<section class="content"><div class="col-xs-12"><div class="alert alert-success alert-dismissable"><i class="fa fa-check"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' . $this->loadPo('User Successfully Deleted') . '</div></div></section>');
+            $this->log($user, 'User Successfully Deleted');
+            redirect(base_url() . 'user');
+        } else {
+            $this->log($user, 'Unauthorised Access trying to delete a user');
+            $this->session->set_flashdata('message', '<section class="content"><div class="col-xs-12"><div class="alert alert-danger alert-dismissable"><i class="fa fa-ban"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' . $this->loadPo('Access Denied') . '</div></div></section>');
+            redirect(base_url() . 'user');
+        }
+    }
+
+    function index() {
+        $userid = $this->user_id;
+        $s = $this->session->all_userdata();
+        $user = $s[0]->username;
+        $data['welcome'] = $this;
+        $this->load->library("pagination");
+        $config = array();
+        $config["base_url"] = base_url() . "user/index/";
+        $config["total_rows"] = $this->super_model->countuser($userid);
+        $config["per_page"] = 10;
+        $config["uri_segment"] = 3;
+        $this->pagination->initialize($config);
+        $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        $data['result'] = $this->super_model->fetchUser($userid, $config["per_page"], $page);
+        $data["links"] = $this->pagination->create_links();
+        $data['total_rows'] = $config["total_rows"];
+        $this->show_view('users', $data);
+    }
+
+    function changestatus() {
+        $data['id'] = $_GET['id'];
+        $data['status'] = $_GET['status'];
+        $this->super_model->updatestatus($data);
+        $this->log($this->user, 'Status Changed For user id-> ' . $data['id']);
+        $this->session->set_flashdata('message', '<section class="content"><div class="col-xs-12"><div class="alert alert-success alert-dismissable"><i class="fa fa-check"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' . $this->loadPo('User Successfully Updated') . '</div></div></section>');
+        redirect(base_url() . 'user');
+    }
+
+    public function register() {
+        $data['owner_id'] = $this->user_id;
+        $data['userrole'] = $this->role;
+        $data['welcome'] = $this;
+        $data['role'] = $this->super_model->Fetchrole($this->user_id);
+        if ($_POST) {
+            unset($_POST['submit']);
+            unset($_POST['cpassword']);
+            $_POST['password'] = md5($_POST['password']);
+            $data = $_POST;
+            $result = $this->super_model->Checkemail($data);
+            if (count($result) == '0') {
+                $result = $this->super_model->Checkusername($data);
+                if (count($result) == '0') {
+                    $this->super_model->inseruser($_POST);
+                    $this->log($this->user, 'New user successfully inserted with username-> ' . $_POST['username']);
+                    $email = $this->super_model->Checkemail($data);
+                    $email['action'] = 'activation';
+                    $email['token'] = sha1(md5(uniqid()) . rand('1', '5000') . md5(time()));
+                    $id = $this->super_model->genratetoken($email); // Genrate new token and return id
+                    $token = $this->super_model->fetchtoken($id);   //fetch ganrated token
+                    $to = $_POST['email'];
+                    $subject = 'Activation Mail';
+                    $body = base_url() . 'layout/token/?token=' . $token[0]->token;
+                    $mail = $this->sendmail($to, $subject, $body);
+                    if (!$mail) {
+                        $this->session->set_flashdata('message', '<section class="content"><div class="col-xs-12"><div class="alert alert-success alert-dismissable"><i class="fa fa-check"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' . $this->loadPo('User Successfully But Activation mail was not send').'<br>'. $mail->ErrorInfo. '</div></div></section>');
+                        redirect(base_url() . 'user');
+                    } else {
+                        $this->log($user, 'Activation Mail sent Successfully to ' . $_POST['email']);
+                        $this->session->set_flashdata('message', '<section class="content"><div class="col-xs-12"><div class="alert alert-success alert-dismissable"><i class="fa fa-check"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>User Successfully Addad and Activation Links Sent to Use\'s email</div></div></section>');
+                        redirect(base_url() . 'user');
+                    }
+                } else {
+                    echo 'username Already exist Please try To login';
+                    $this->load->view('register');
+                }
+            } else {
+                echo 'Email Already exist Please try To login';
+                $this->load->view('adduser', $data);
+            }
+        } else {
+            $this->show_view('adduser', $data);
+        }
+    }
+
+    function updateprofile() {
+        //echo $this->user;
+        $data['welcome'] = $this;
+        $data['userrole'] = $this->role;
+        $data['role'] = $this->super_model->Fetchrole($this->user_id);
+        if (isset($_GET['id'])) {
+            if (isset($_POST['submit'])) {
+                unset($_POST['submit']);
+                $this->super_model->updateuser($_POST, $_GET['id']);
+                $this->log($this->user, 'profile updated for user is ' . $_GET['id']);
+                $this->session->set_flashdata('message', '<section class="content"><div class="col-xs-12"><div class="alert alert-success alert-dismissable"><i class="fa fa-check"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' . $this->loadPo('User Successfully Updated') . '</div></div></section>');
+
+                redirect(base_url() . 'user');
+            } else {
+                $id = $_GET['id'];
+                $data['result'] = $this->super_model->profile($id);
+                $this->show_view('edituser', $data);
+            }
+        } else {
+            $this->session->set_flashdata('message', '<section class="content"><div class="col-xs-12"><div class="alert alert-danger alert-dismissable"><i class="fa fa-ban"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' . $this->loadPo('Access Denied') . '</div></div></section>');
+            redirect(base_url() . 'user');
+        }
+    }
+
+    function checkemail() {
+        $data['email'] = $_GET['email'];
+        $result = $this->super_model->Checkemail($data);
+        if (count($result) == '0') {
+            echo '1';
+        } else {
+            echo '0';
+        }
+    }
+
+    function checkusername() {
+        $data['username'] = $_GET['username'];
+        $result = $this->super_model->Checkusername($data);
+        if (count($result) == '0') {
+            echo '1';
+        } else {
+            echo '0';
+        }
+    }
+
+}

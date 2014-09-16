@@ -1,0 +1,75 @@
+<?php
+
+if (!defined('BASEPATH'))
+    exit('No direct script access allowed');
+
+class Api extends CI_Controller {
+
+    function __construct() {
+        parent::__construct();
+        $this->load->model('api_model');
+        $this->load->helper('url');
+    }
+
+#####index function for authentication and ganrate token
+
+    public function index() {
+        if (isset($_GET['user'])) {
+            if (isset($_GET['pass'])) {
+                $_GET['pass'] = md5($_GET['pass']);
+                ###aunthenticate user
+                $user = $this->api_model->checkuser($_GET);
+                //print_r($user);
+                if (count($user) == '1') {
+                    $id = $user[0]->id;
+                    ####delete old token
+                    $this->api_model->deletetoken($id);
+                    ###ganrate new token
+                    $this->api_model->inserttocken($id);
+                    ###fetch token detail
+                    $token = $this->api_model->checktoken($id);
+                    $tokenid = $token[0]->token;
+                    ####redirect to video function
+                    $url = base_url() . "api/video/?token=" . $tokenid;
+                    redirect($url);
+                } else {
+                    echo 'Authantication Failed';
+                }
+            } else {
+                echo 'Invalid Request Please Follow Valid URL<br> <b>http://localhost/mobiletv/api/?user=you_username&pass=your password</b>';
+            }
+        } else {
+            echo 'Invalid Request Please Follow Valid URL<br> <b>http://localhost/mobiletv/api/?user=you_username&pass=your password</b>';
+        }
+    }
+
+    function video() {
+        if (isset($_GET)) {
+            if (isset($_GET['token'])) {
+                $token = $_GET['token'];
+                $tokendetail = $this->api_model->fetchtoken($token);
+                if (count($tokendetail) == '1') {
+                    $this->api_model->updatetoken($token);
+                    $uid = $tokendetail[0]->owner_id;
+                    $video = $this->api_model->get_video($uid);
+                    if (isset($_GET['type']) && $_GET['type'] == 'json') {
+                        echo json_encode($video);
+                    } else {
+                        echo '<pre>';
+                        print_r($video);
+                    }
+                } else {
+                    echo 'token Expired or Invalid';
+                }
+            } else {
+                echo 'Token Not Found';
+            }
+        } else {
+            echo 'Invalid Token Please Try Again';
+        }
+    }
+
+}
+
+/* End of file welcome.php */
+/* Location: ./application/controllers/welcome.php */

@@ -1,0 +1,746 @@
+<?php
+
+class Videos_model extends CI_Model {
+
+    function __construct() {
+        parent::__construct();
+        $this->load->database();
+        $this->load->helper('url');
+    }
+
+    function get_videocount($uid) {
+        $id = $this->get_ownerid($uid);
+        array_push($id, $uid);
+        $this->db->select('a.*');
+        $this->db->from('contents a');
+        $this->db->where_in('a.uid', $id);
+        $query = $this->db->get();
+        //echo $this->db->last_query();
+        return count($query->result());
+    }
+
+    function get_video($uid, $limit, $start, $sort = '', $sort_by = '') {
+        $id = $this->get_ownerid($uid);
+        array_push($id, $uid);
+        $this->db->select('a.*, b.category , c.username, e.name as file,e.minetype');
+        
+        $this->db->from('contents a');
+        $this->db->where_in('a.uid', $id); 
+        $this->db->join('categories b', 'a.category = b.id', 'left');
+        $this->db->join('users c', 'a.uid = c.id', 'left');
+        $this->db->join('videos d', 'a.id = d.content_id', 'left');
+        $this->db->join('files e', 'd.file_id = e.id', 'left');
+        //$this->db->join('video_rating f', 'a.id = f.content_id', 'left');
+        $this->db->group_by('a.id');
+        $this->db->order_by($sort, $sort_by);
+        $this->db->limit($limit, $start);
+        $query = $this->db->get();
+       //echo $this->db->last_query();
+        
+        $data = $query->result();
+        return $data;
+    }
+    function get_ownerid($uid){
+        $this->db->select('id');
+        $this->db->where('owner_id', $uid);
+        $query = $this->db->get('users');
+        //return $query->result();
+            $data = array();
+        $i =1;
+        foreach($query->result() as $value){
+            //print_r($value);
+            $data[$i] =  $value->id;
+            $i++;
+        }
+        return  $data;
+        
+    }
+
+    function getSearchRecord_count($data, $uid) {
+        $id = $this->get_ownerid($uid);
+        array_push($id, $uid);
+        $this->db->select('count(a.id) as row ');
+        $this->db->from('contents a');
+        $this->db->where_in('a.uid', $id);
+        $this->db->join('categories b', 'a.category = b.id', 'left');
+        if (isset($data['content_title']) && $data['content_title'] != '') {
+            $data['title'] = $data['content_title'];
+            $this->db->like('title', trim($data['content_title']));
+        }
+        if (isset($data['category']) && $data['category'] != '') {
+            $this->db->where('a.category', $data['category']);
+        }
+        if ((isset($data['datepickerstart']) && $data['datepickerstart'] != '') && (isset($data['datepickerend']) && $data['datepickerend'] != '')) {
+            $date = str_replace('/', '-', $data['datepickerstart']);
+            $datestart = date('y-m-d', strtotime($date));
+            $date = str_replace('/', '-', $data['datepickerend']);
+            $dateend = date('y-m-d', strtotime($date));
+            $datestart1 = $datestart . " 00:00:00";
+            $dateend1 = $dateend . " 23:59:59";
+            $this->db->where("a.created BETWEEN '$datestart1' and '$dateend1'", NULL, FALSE);
+        } else {
+            if (isset($data['datepickerstart']) && $data['datepickerstart'] != '') {
+                $date = str_replace('/', '-', $data['datepickerstart']);
+                $datestart = date('y-m-d', strtotime($date));
+                $datestart1 = $datestart . " 00:00:00";
+                $dateend = $datestart . " 23:59:59";
+                $this->db->where("a.created BETWEEN '$datestart1' and '$dateend'", NULL, FALSE);
+            }
+            if (isset($data['datepickerend']) && $data['datepickerend'] != '') {
+                $date = str_replace('/', '-', $data['datepickerend']);
+                $dateend = date('y-m-d', strtotime($date));
+                $datestart1 = $dateend . " 00:00:00";
+                $dateend1 = $dateend . " 23:59:59";
+                $this->db->where("a.created BETWEEN '$datestart1' and '$dateend1'", NULL, FALSE);
+            }
+        }
+        $query = $this->db->get();
+        $data = $query->result();
+        return $data[0]->row;
+    }
+
+    function getSearchVideos($uid, $limit, $start, $data) {
+        $id = $this->get_ownerid($uid);
+        array_push($id, $uid);
+        $this->db->select('a.*, b.category , c.username, e.name as file,e.minetype');
+        $this->db->from('contents a');
+        $this->db->where_in('a.uid', $id);
+        $this->db->join('categories b', 'a.category = b.id', 'left');
+        $this->db->join('users c', 'a.uid = c.id', 'left', 'left');
+        $this->db->join('videos d', 'a.id = d.content_id', 'left');
+        $this->db->join('files e', 'd.file_id = e.id', 'left');
+        //$this->db->join('video_rating f', 'a.id = f.content_id', 'left');
+        if (isset($data['content_title']) && $data['content_title'] != '') {
+            $data['title'] = $data['content_title'];
+            $this->db->like('title', trim($data['content_title']));
+        }
+        if (isset($data['category']) && $data['category'] != '') {
+            $this->db->where('a.category', $data['category']);
+        }
+        if ((isset($data['datepickerstart']) && $data['datepickerstart'] != '') && (isset($data['datepickerend']) && $data['datepickerend'] != '')) {
+            $date = str_replace('/', '-', $data['datepickerstart']);
+            $datestart = date('y-m-d', strtotime($date));
+            $date = str_replace('/', '-', $data['datepickerend']);
+            $dateend = date('y-m-d', strtotime($date));
+            $datestart1 = $datestart . " 00:00:00";
+            $dateend1 = $dateend . " 23:59:59";
+            $this->db->where("a.created BETWEEN '$datestart1' and '$dateend1'", NULL, FALSE);
+        } else {
+            if (isset($data['datepickerstart']) && $data['datepickerstart'] != '') {
+                $date = str_replace('/', '-', $data['datepickerstart']);
+                $datestart = date('y-m-d', strtotime($date));
+                $datestart1 = $datestart . " 00:00:00";
+                $dateend1 = $datestart . " 23:59:59";
+                $this->db->where("a.created BETWEEN '$datestart1' and '$dateend1'", NULL, FALSE);
+            }
+            if (isset($data['datepickerend']) && $data['datepickerend'] != '') {
+                $date = str_replace('/', '-', $data['datepickerend']);
+                $dateend = date('y-m-d', strtotime($date));
+                $datestart1 = $dateend . " 00:00:00";
+                $dateend1 = $dateend . " 23:59:59";
+                $this->db->where("a.created BETWEEN '$datestart1' and '$dateend1'", NULL, FALSE);
+            }
+        }
+        $this->db->group_by('a.id');
+        $this->db->limit($limit, $start);
+        $query = $this->db->get();
+        //echo $this->db->last_query(); 
+        return $query->result();
+    }
+
+    function edit_profile($id) {
+        $this->db->select('a.*, b.category , c.username,  group_concat(e.name) as keyword, g.name as file');
+        $this->db->from('contents a');
+        $this->db->join('categories b', 'a.category = b.id', 'left');
+        $this->db->join('users c', 'a.uid = c.id', 'left');
+        $this->db->join('content_keywords d', 'd.content_id = a.id', 'left');
+        $this->db->join('keywords e', 'e.id = d.keyword_id', 'left');
+        $this->db->join('videos f', 'a.id = f.content_id');
+        $this->db->join('files g', 'f.file_id = g.id');
+        //$this->db->join('video_detail h', 'h.content_id = a.id', 'left');
+        $this->db->where('a.id', $id);
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    function get_category($uid) {
+        $this->db->select('a.*,b.category as parent');
+        $this->db->from('categories a');
+        //$this->db->where('a.u_id', $uid);
+        $this->db->join('categories b', 'a.parent_id = b.id', 'left');
+        $this->db->order_by('b.category', 'asc');
+        $query = $this->db->get();
+        return $query->result();
+    }
+    function deleteyoutube($id){
+        $this->db->delete('videos', array('content_id' => $id));
+		$this->db->delete('contents', array('id' => $id));
+    }
+    function delete_video($id) {
+		if($id){
+			$videoFileId = $this->getVideoFileIds($id);
+			/* $videoFileSrcId = $this->getVideoSrcInfo($id);
+			if($videoFileSrcId)
+			{
+				$this->db->delete('video_source', array('content_id' => $id));
+			} */
+			If($videoFileId) {
+				$this->db->delete('files', array('id' => $videoFileId));
+				$this->db->delete('video_flavors', array('content_id' => $id));
+				//$this->db->delete('wowza_video', array('content_id' => $id));
+				$this->db->delete('videos', array('content_id' => $id));
+				$this->db->delete('contents', array('id' => $id));
+				return 1;
+			} else {
+				return 0;
+			}
+		} else {
+		return 0;
+		}
+    }
+	
+	function getVideoFileIds($id) {
+        $this->db->select('a.id');
+        $this->db->from('files a');
+        $this->db->join('videos b', 'a.id = b.file_id');
+        $this->db->where('b.content_id', $id);
+        $query = $this->db->get();
+		$result = $query->result();
+		if(count($result))
+		{
+			$videoFileId = $result[0]->id;
+			return $videoFileId;
+		} else {
+			return 0;
+		}
+
+    }
+	
+	function getVideoSrcInfo($id) {
+        $this->db->select('id');
+        $this->db->from('video_source');
+        $this->db->where('content_id', $id);
+        $query = $this->db->get();
+		$result = $query->result();
+		if(count($result))
+		{
+			$videoSrcId = $result[0]->id;
+			return $videoSrcId;
+		} else {
+			return 0;
+		}
+
+    }
+
+    function upload_video($post) {
+        $this->db->set($post);
+        $this->db->set('created','NOW()',FALSE);
+        $this->db->set('modified','NOW()',FALSE);
+        $this->db->insert('contents');
+        $lastId = $this->db->insert_id();
+        return $lastId;
+    }
+
+    function upload_detail($post) {
+        $data = array(
+            'content_id' => $post['content_id'],
+            'file_id' => $post['filed_id'],
+            'status' => $post['status']
+        );
+        $this->db->set('created','NOW()',FALSE);
+        $this->db->set('modified','NOW()',FALSE);
+        $this->db->insert('videos', $data);
+        $this->result = $this->db->insert_id();
+        return $this->result;
+    }
+    
+    function save_keywords($keywords = array(),$content_id){
+        
+        //Delete all content keywords
+        $data = array('content_id' => $content_id);
+        $this->db->delete('content_keywords', $data);
+        
+        $total = array();
+        //insert data in content_keywords table
+        foreach($keywords as $key=>$val){
+            $data = array('content_id'=>$content_id,'keyword_id'=>$val,'status'=>1);
+            $this->db->set($data);
+            $this->db->insert('content_keywords', $data);
+            $total[] = $this->db->insert_id();
+            
+        }
+        return $total;
+    }
+
+    function keyword_master($post) {
+        $data = array(
+            'content_id' => $post['id'],
+            'keyword_id' => $post['key_id'],
+        );
+        $this->db->set($data);
+        $this->db->insert('content_keywords', $data);
+        $this->result = $this->db->insert_id();
+    }
+
+    function update_profile($post) {
+        $data = array(
+            'title' => $post['title'],
+            //'star_cast' => $post['star_cast'],
+            'category' => $post['category'],
+            //'channel' => $post['channel'],
+            'description' => $post['description'],
+            'status' => $post['status'],
+			'feature_video' => $post['feature_video']
+        );
+        $this->db->set('modified','NOW()', FALSE);
+        $this->db->where('id', $post['id']);
+        $this->db->update('contents', $data);
+        //echo $this->db->last_query(); exit;
+        return true;
+    }
+
+    function update_keyword($post_key) {
+        $data = array(
+            'name' => $post_key['keyword'],
+        );
+        $this->db->where('id', '1');
+        $this->db->update('keywords', $data);
+        return true;
+    }
+
+    function insert_keyword($value) {
+        
+        $this->db->select('id');
+        $this->db->from('keywords');
+        $this->db->where('name', $value);
+        $query = $this->db->get();
+        $result = $query->result();
+        if(count($result) > 0){
+            return $result[0]->id;
+        }else{
+            $this->db->set('name', $value);
+            $this->db->insert('keywords');
+            $this->result = $this->db->insert_id();
+            return $this->result;    
+        }
+    }
+
+    function delete_keywords($post) {
+        $data = array('content_id' => $post);
+        $this->db->delete('content_keywords', $data);
+        return 1;
+    }
+
+    function save_scheduling($value) {
+        $this->db->set($value);
+        $this->db->insert('video_scheduling');
+        $this->result = $this->db->insert_id();
+        return $this->result;
+    }
+
+    function get_scheduling($id) {
+        $this->db->select('*');
+        $this->db->from('video_scheduling');
+        $this->db->where('content_id', $id);
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    function update_scheduling($post) {
+        $data = array(
+            'schedule' => $post['schedule'],
+            'startDate' => $post['startDate'],
+            'endDate' => $post['endDate'],
+            'content_id' => $post['content_id'],
+        );
+        $this->db->set('modified','NOW()',FALSE);
+        $this->db->where('content_id', $post['content_id']);
+        $this->db->update('video_scheduling', $data);
+        return true;
+    }
+
+    function checkvideoexist($data) {
+        $this->db->from('contents');
+        $this->db->where('title', $data);
+        $query = $this->db->get();
+        $rowcount = $query->num_rows();
+        if ($rowcount > 0)
+            return 0;
+        else
+            return 1;
+    }
+
+    /* function added to get thumnails(4/8/14 ry) */
+
+    function get_thumbs($id) {
+        $this->db->select('a.*, b.default_thumbnail, b.content_id');
+        $this->db->from('files a');
+        $this->db->join('video_thumbnails b', 'a.id = b.file_id');
+        $this->db->order_by('b.file_id', 'desc');
+        $this->db->where('b.content_id', $id);
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    function insert_file($post) {
+        $data = array(
+            'name' => $post['filename'],
+            'type' => $post['type'],
+            'minetype' => $post['minetype'],
+            'relative_path' => $post['relative_path'],
+            'absolute_path' => $post['absolute_path'],
+            'status' => $post['status'],
+            'uid' => $post['uid'],
+            'info' => $post['info']
+        );
+        $this->db->set('created','NOW()',FALSE);
+        $this->db->set('modified','NOW()',FALSE);
+        $this->db->insert('files', $data);
+        $this->result = $this->db->insert_id();
+        return $this->result;
+    }
+
+    function insert_thumb($post) {
+        $data = array(
+            'content_id' => $post['content_id'],
+            'file_id' => $post['file_id'],
+            'created' => $post['created'],
+        );
+        $this->db->insert('video_thumbnails', $data);
+        return true;
+    }
+
+    function update_defaultImg($content_id, $file_id) {
+        if ($content_id != '' && $file_id != '') {
+            $result = $this->update_defaultImgPre($content_id);
+            if ($result) {
+                $data = array(
+                    'default_thumbnail' => '1',
+                );
+                $this->db->where('content_id', $content_id);
+                $this->db->where('file_id', $file_id);
+                $this->db->update('video_thumbnails', $data);
+                return true;
+            }
+        }
+    }
+
+    function update_defaultImgPre($content_id) {
+        $data = array(
+            'default_thumbnail' => '0',
+        );
+        $this->db->where('content_id', $content_id);
+        $this->db->update('video_thumbnails', $data);
+        return true;
+    }
+
+    function get_thumbImgName($file_id) {
+        $this->db->select('name');
+        $this->db->from('files');
+        $this->db->where('id', $file_id);
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    function delele_thumbImg($content_id, $file_id) {
+        $this->db->delete('video_thumbnails', array('content_id' => $content_id, 'file_id' => $file_id));
+        $this->db->delete('files', array('id' => $file_id));
+        return true;
+    }
+
+    function get_videoInfo($vid) {
+
+        $this->db->select('f.name');
+        $this->db->from('contents a');
+        $this->db->where('a.id', $vid);
+        $this->db->join('videos v', 'a.id = v.content_id', 'left');
+        $this->db->join('files f', 'v.file_id = f.id', 'left');
+        $query = $this->db->get();
+        $result = $query->result();
+        $fileInfo = $result[0]->name;
+        if ($fileInfo != "") {
+            return $fileInfo;
+        } else {
+            return 0;
+        }
+    }
+
+    function get_defaultThumb($vid) {
+        $this->db->select('default_thumbnail');
+        $this->db->from('video_thumbnails');
+        $this->db->where('content_id', $vid);
+        $query = $this->db->get();
+        $thumbVal = '0';
+        foreach ($query->result_array() as $row) {
+            $default_thumbnail = $row['default_thumbnail'];
+            if ($default_thumbnail == '1') {
+                $thumbVal = '1';
+            }
+        }
+        return $thumbVal;
+    }
+	
+	function get_thumbIds($id) {
+        $this->db->select('a.id, a.name');
+        $this->db->from('files a');
+        $this->db->join('video_thumbnails b', 'a.id = b.file_id');
+        $this->db->where('b.content_id', $id);
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    /* function added to get thumnails(4/8/14 ry) */
+
+    /* function added to edit flavors() */
+
+    function getsetting($vid) {
+        $query = $this->db->query("
+            select * from flavors f left join (select flavor_id,file_id,status from video_flavors where content_id = $vid) vf on vf.flavor_id = f.id   
+            ");
+        //   echo   $this->db->last_query();
+        return $query->result();
+    }
+
+    function changestatus($data) {
+        $data['status'] = 'inprocess';
+        $data['created'] = date('y-m-d h:i:s');
+        $data['modified'] = date('y-m-d h:i:s');
+        $this->db->insert('video_flavors', $data);
+        // echo $this->db->last_query();
+    }
+
+    function deletestatus($data) {
+        $id = $data[0]->id;
+        $this->db->delete('video_flavors', array('id' => $id));
+    }
+
+    function checkstatus($data) {
+        $this->db->select('*');
+        $this->db->where($data);
+        $query = $this->db->get('video_flavors');
+        return $query->result();
+    }
+
+    /* function added to edit flavors() */
+    /* function added to edit video_status() */
+	
+	function getstatus($limit, $start) {
+	
+	$this->db->select('c.id,c.title,categories.category,f.*,vf.created as assignedTime,vf.status,fv.path as previewPath,fv.created as completedTime');
+	$this->db->from('video_flavors vf');
+	$this->db->join('flavored_video fv', 'vf.id = fv.flavor_id', 'left');
+	$this->db->join('flavors f', 'f.id = vf.flavor_id', 'left');
+	$this->db->join('contents c', 'vf.content_id = c.id', 'left');
+	$this->db->join('categories', 'categories.id = c.category', 'left'); 
+	$this->db->where('vf.content_id >', 0);  
+	$this->db->order_by('c.id', 'DESC');
+	$this->db->limit($limit, $start);
+        $query = $this->db->get();
+	//echo $this->db->last_query();
+	$data = $query->result();
+        return $data;
+    } 
+
+
+    function getstatuscount() {
+	    $this->db->select('a.flavor_name, a.bitrate, a.video_bitrate, a.width, a.height,
+		b.flavor_id, b.content_id, b.status, b.created as assignedTime,
+		c.title, c.category as catId,
+		c.category,
+		e.path as previewPath, e.created as completedTime');
+        $this->db->from('flavors a');
+        $this->db->join('video_flavors b', 'a.id = b.flavor_id');
+        $this->db->join('contents c', 'b.content_id = c.id');
+		$this->db->join('categories d', 'd.category = d.id', 'left');
+        $this->db->join('flavored_video e', 'a.id = e.flavor_id','left');
+        $query = $this->db->get();
+        return count($query->result());
+    }
+
+    /* function added to edit video_status() */
+
+    /* function used for upload video source starts */
+
+    function checkVideoSrc($url) {
+        $this->db->select('*');
+        $this->db->from('video_source');
+        $this->db->where('url', $url);
+        $query = $this->db->get();
+        $srcurl = count($query->result());
+        return $srcurl;
+    }
+
+    function saveVideoSrc($post) {
+        $data = array(
+            'url' => $post['source_url'],
+            'content_id' => $post['content_id'],
+            'uid' => $post['uid'],
+            'created' => $post['created'],
+        );
+        $this->db->insert('video_source', $data);
+        return true;
+    }
+
+    /* function used for upload video source ends */
+
+    /* function used for video setting flavor section starts */
+
+    function getFlavorData() {
+        $this->db->select('*');
+        $this->db->from('flavors');
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    function checkFlavorData($settings_key, $uid) {
+        $this->db->select('id');
+        $this->db->from('options');
+        $this->db->where(array('key' => $settings_key, 'user_id' => $uid));
+        $query = $this->db->get();
+        $countFlavorData = count($query->result());
+        return $countFlavorData;
+    }
+
+    function getOptionData($uid) {
+        $this->db->select('value');
+        $this->db->from('options');
+        $this->db->where(array('key' => 'flavor_settings', 'user_id' => $uid));
+        $query = $this->db->get();
+        foreach ($query->result_array() as $row) {
+            $optionData = $row['value'];
+        }
+        if (isset($optionData)) {
+            return $optionData;
+        } else {
+            return "";
+        }
+    }
+
+    function update_flavorOption($post, $settings_key, $uid) {
+        $this->db->where(array('key' => $settings_key, 'user_id' => $uid));
+        $this->db->update('options', $post);
+        return true;
+    }
+
+    function insert_flavorOption($post) {
+        $this->db->insert('options', $post);
+    }
+
+    function getPlayerData($uid) {
+        $this->db->select('value');
+        $this->db->from('options');
+        $this->db->where(array('key' => 'player_settings', 'user_id' => $uid));
+        $query = $this->db->get();
+        $optionData = array();
+        foreach ($query->result_array() as $row) {
+            $optionData = $row['value'];
+        }
+        return $optionData;
+    }
+	
+	function insert_video_flavors($post){
+                $this->db->set('created','NOW()',FALSE);
+		$this->db->insert('video_flavors', $post);
+	}
+
+    /* function used for video setting flavor section starts */
+
+
+    /* function used for promo section */
+
+    function get_promos($id) {
+        $this->db->select('a.*, b.default, b.file_id');
+        $this->db->from('files a');
+        $this->db->join('video_promos b', 'a.id = b.file_id');
+        $this->db->order_by('b.id', 'desc');
+        $this->db->where('b.content_id', $id);
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    function get_defaultPromo($vid) {
+        $this->db->select('default');
+        $this->db->from('video_promos');
+        $this->db->where('content_id', $vid);
+        $query = $this->db->get();
+        $promoVal = '0';
+        foreach ($query->result_array() as $row) {
+            $default_promo = $row['default'];
+            if ($default_promo == '1') {
+                $promoVal = '1';
+            }
+        }
+        return $promoVal;
+    }
+
+    function video_detail($id) {
+        $this->db->select('a.*, b.category , c.username, e.name as file');
+        $this->db->from('contents a');
+        $this->db->where('a.id', $id);
+        $this->db->join('categories b', 'a.category = b.id', 'left');
+        $this->db->join('users c', 'a.uid = c.id', 'left');
+        $this->db->join('videos d', 'a.id = d.content_id', 'left');
+        $this->db->join('files e', 'd.file_id = e.id', 'left');
+        $query = $this->db->get();
+       // echo $this->db->last_query();
+        $data = $query->result();
+        return $data;
+    }
+    
+    function get_likecount($cid) {
+        $this->db->select('*');
+        $this->db->from('likes');
+        $this->db->where('content_id', $cid);
+        $query = $this->db->get();
+        //echo $this->db->last_query();
+        return count($query->result());
+        //$this->db->count_all("contents");
+    }
+
+    /* functions added for promo section */
+	
+	function getCountryList(){
+	    $this->db->select('id, name');
+            $query = $this->db->get('countries');
+            return $query->result();
+	}
+	
+	function getDurationList($uid){
+	    $this->db->select('*');
+            $this->db->from('duration');
+            $this->db->where('uid', $uid);
+	    $query = $this->db->get();
+            return $query->result();
+	}
+        function checkdetail($id){
+            $this->db->where('content_id', $id);
+            $query = $this->db->get('video_detail');
+            return $query->result();
+        }
+        function insertdetail($detail){          
+            $value['content_id'] = $detail['content_id'];
+            $value['star_cast'] = $detail['star_cast'];
+            $value['director'] = $detail['director'];
+            $value['music_director'] = $detail['music_director'];
+            $value['producer'] = $detail['producer'];
+            $this->db->set('created','NOW()',FALSE);
+            $this->db->insert('video_detail', $value);
+            //echo $this->db->last_query();
+        }
+        function updatetdetail($detail){          
+            $cid = $detail['content_id'];
+            $value['star_cast'] = $detail['star_cast'];
+            $value['director'] = $detail['director'];
+            $value['music_director'] = $detail['music_director'];
+            $value['producer'] = $detail['producer'];
+            $this->db->where('content_id', $cid);
+            $this->db->update('video_detail', $value);
+            //echo $this->db->last_query();
+        }
+        function gettype($id){
+            $this->db->select('type');
+            $this->db->where('id', $id);
+            $query = $this->db->get('contents');
+            return $query->result();
+        }
+}
