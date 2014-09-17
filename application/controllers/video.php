@@ -185,51 +185,35 @@
                 if (isset($_POST['submit']) && $_POST['submit'] == "Update") {
                     $this->form_validation->set_rules($this->validation_rules['update_video']);
                     if ($this->form_validation->run()) {
-                        $post['id'] = $vid;
-                        $post['title'] = $this->input->post('content_title');
-                        $post['category'] = $this->input->post('content_category');
-                        //$post['channel'] = $this->input->post('content_channel');
-                        $post['description'] = $this->input->post('description');
+                        $post = $_POST;
+                        $post['content_id'] = $vid;
                         $post['status'] = $this->input->post('status') == 'on' ? 1 : 0;
-						$post['feature_video'] = $this->input->post('feature_video') == 'on' ? 1 : 0;
-                        $post['modified'] = date('Y-m-d');
-                        $this->videos_model->delete_keywords($post['id']);
-                        $post_key = $this->input->post('tags');
-                        $post_key1 = implode(",", $post_key);
-                        $post_keydata = explode(',', $post_key1);
-                        foreach ($post_key as $value) {
-                            $post['key_id'] = $this->videos_model->insert_keyword($value);
-                            $id = $this->videos_model->keyword_master($post);
-                        }
-                        $this->data['update'] = $this->videos_model->update_profile($post);
-                        //** $detail = $this->videos_model->checkdetail($vid);
-                        //if(count($detail) == '0'){
-                        //    $_POST['content_id'] = $vid;
-                        //    $this->videos_model->insertdetail($_POST);
-                       // }else{
-                       //     $_POST['content_id'] = $vid;
-                        //    $this->videos_model->updatetdetail($_POST);
-                       // }
+			$post['feature_video'] = $this->input->post('feature_video') == 'on' ? 1 : 0;
+                        $post_key = $_POST['tags'];
+                        $this->videos_model->_saveVideo($post);
+                        $this->videos_model->_setKeyword($post_key, $vid);
                         $msg = $this->loadPo('Video Updated successfully.');
                         $this->log($this->user, $msg);
                         $this->session->set_flashdata('message', sprintf('<section class="content"><div class="col-xs-12"><div class="alert alert-success alert-dismissable"><i class="fa fa-check"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>%s</div></div></section>', $msg));
                         redirect('video');
                     } else {
-                        $this->data['result'] = $this->videos_model->edit_profile($vid);
+                        $this->data['result'] = (array) $this->videos_model->edit_profile($vid);
+                        $this->data['result']['keywords'] =  $this->videos_model->_getKeyword($vid);
+                        $this->data['thumbnails_info'] = $this->videos_model->get_thumbs($vid);
+                        $this->data['content_id'] = $vid;
                         $this->data['category'] = $this->videos_model->get_category($this->uid);
                         $this->data['setting'] = $this->videos_model->getsetting($vid);
                         $this->data['countryData'] = $this->videos_model->getCountryList(); 
-                        //$this->data['durationData'] = $this->videos_model->getDurationList($this->uid);
                         $this->show_video_view('videoEditBasic', $this->data);
                     }
                 } else {
-                    $this->data['result'] = $this->videos_model->edit_profile($vid);
+                    $this->data['result'] = (array) $this->videos_model->edit_profile($vid);
+                    $this->data['result']['keywords'] =  $this->videos_model->_getKeyword($vid);
                     $this->data['thumbnails_info'] = $this->videos_model->get_thumbs($vid);
                     $this->data['content_id'] = $vid;
                     $this->data['category'] = $this->videos_model->get_category($this->uid);
                     $this->data['setting'] = $this->videos_model->getsetting($vid);
                     $this->data['countryData'] = $this->videos_model->getCountryList(); 
-                    //$this->data['durationData'] = $this->videos_model->getDurationList($this->uid); 
                     $this->show_video_view('videoEditBasic', $this->data);
                 }
             }
@@ -246,11 +230,11 @@
                 $type = $this->videos_model->gettype($id);
                // print_r($type); die;
                 if($type['0']->type == 'youtube'){
-                     $result = $this->videos_model->deleteyoutube($id);
-                            $msg = $this->loadPo('Video Deleted successfully.');
-                            $this->log($this->user, $msg);
-                            $this->session->set_flashdata('message', sprintf('<section class="content"><div class="col-xs-12"><div class="alert alert-success alert-dismissable"><i class="fa fa-check"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>%s</div></div></section>', $msg));
-                            redirect($_GET['curl']); exit;
+                $result = $this->videos_model->deleteyoutube($id);
+                $msg = $this->loadPo('Video Deleted successfully.');
+                $this->log($this->user, $msg);
+                $this->session->set_flashdata('message', sprintf('<section class="content"><div class="col-xs-12"><div class="alert alert-success alert-dismissable"><i class="fa fa-check"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>%s</div></div></section>', $msg));
+                redirect($_GET['curl']); exit;
 
                 }
                 $data['result'] = $this->videos_model->edit_profile($id);
@@ -298,38 +282,19 @@
                     } else {
                        $videoresult = $this->uploadVideoAS3($incoming_tmp, $incoming_original, $content_type); 
                                             if($videoresult) {
-                            $post = array();
-                            $post['title'] = $incoming_original;
-                            $post['uid'] = $sess['0']->id;
-                            $post['created'] = date('Y-m-d');
-                            $this->data['filename'] = $incoming_original;
-                            $this->data['uid'] = $sess['0']->id;
-                            $this->data['created'] = date('Y-m-d');
-                            $this->data['relative_path'] = $path . $incoming_original;
-                            $this->data['absolute_path'] = amazonFileUrl . $incoming_original;
-                            $this->data['minetype'] = "video/" . $extension;
-                            $this->data['type'] = $extension;
-                            $this->data['status'] = '0';
-                            $this->data['info'] = base64_encode($incoming_original);
-                            $last_id = $this->videos_model->upload_video($post);
-                            $last_id_file = $this->videos_model->insert_file($this->data);
+                            $data = array();
+                            $data['content_title'] = $incoming_original;
+                            $data['uid'] = $sess['0']->id;
+                            $data['filename'] = $incoming_original;
+                            $data['uid'] = $sess['0']->id;
+                            $data['relative_path'] = $path . $incoming_original;
+                            $data['absolute_path'] = amazonFileUrl . $incoming_original;
+                            $data['minetype'] = "video/" . $extension;
+                            $data['type'] = $extension;
+                            $data['status'] = '0';
+                            $data['info'] = base64_encode($incoming_original);
+                            $last_id = $this->videos_model->_saveVideo($data);
                             if ($last_id != '') {
-                                $this->data1['content_id'] = $last_id;
-                                $this->data1['filed_id'] = $last_id_file;
-                                $this->data1['status'] = '0';
-                                //$this->data1['created'] = date('Y-m-d');
-                                $this->videos_model->upload_detail($this->data1);
-								$flavor_data = $this->videos_model->getFlavorData(); 
-								foreach($flavor_data as $flavorVal)
-								{
-									$videoFlavorsData['flavor_id'] = $flavorVal->id;
-									$videoFlavorsData['content_id'] = $last_id;
-									$videoFlavorsData['file_id'] = $last_id_file;
-									$videoFlavorsData['status'] = 'pending';
-									//$videoFlavorsData['created'] = date('Y-m-d');
-									$this->videos_model->insert_video_flavors($videoFlavorsData);
-								}
-
                                 $msg = $this->loadPo('Video Uploaded successfully.');
                                 $this->log($this->user, $msg);
                                 $data['id'] = base64_encode($last_id);
@@ -398,8 +363,8 @@
                 $emsg = '';
                 if ($extension == 'csv') {
                     $csv_data = $this->csvreader->parse_file($incoming_tmp);
+                    //print_r($csv_data); die;
                     foreach ($csv_data as $row) {
-                        
                         if($this->remoteFileExists($row['url'])){
                             $fileSrcPath = $row['url'];
                             $videoFileExt = end(explode(".", $row['fileName']));
@@ -447,53 +412,29 @@
                                         
                                         if ($videoresult) {
                                                 $contentData = array();
-                                                $contentData['title'] = isset($row['content_title']) && $row['content_title'] != '' ? $row['content_title'] : 'content_title';
+                                                $contentData['content_title'] = isset($row['content_title']) && $row['content_title'] != '' ? $row['content_title'] : 'content_title';
                                                 $contentData['description'] = isset($row['description']) && $row['description'] != '' ? $row['description'] : 'description';
                                                 $contentData['type'] = 'CSV';
                                                 $contentData['category'] = $catId;
                                                 $contentData['uid'] = $this->uid;
                                                 //$contentData['created'] = date('Y-m-d');
-                                                $fileData['filename'] = $videoFileUniqName;
-                                                $fileData['uid'] = $this->uid;
+                                                $contentData['filename'] = $videoFileUniqName;
+                                                $contentData['uid'] = $this->uid;
                                                 //$fileData['created'] = date('Y-m-d');
-                                                $fileData['relative_path'] = $uploadPath . $videoFileUniqName;
-                                                $fileData['absolute_path'] = amazonFileUrl . $videoFileUniqName;
-                                                $fileData['minetype'] = "video/" . $videoFileExt;
-                                                $fileData['type'] = $videoFileExt;
-                                                $fileData['status'] = '1';
-                                                $fileData['info'] = base64_encode($videoFileUniqName);
-                                                $lastId = $this->videos_model->upload_video($contentData);
-                                                $lastFileId = $this->videos_model->insert_file($fileData);
-                                                
+                                                $contentData['relative_path'] = $uploadPath . $videoFileUniqName;
+                                                $contentData['absolute_path'] = amazonFileUrl . $videoFileUniqName;
+                                                $contentData['minetype'] = "video/" . $videoFileExt;
+                                                $contentData['type'] = $videoFileExt;
+                                                $contentData['status'] = '1';
+                                                $contentData['info'] = base64_encode($videoFileUniqName);
+                                                $lastId = $this->videos_model->_saveVideo($contentData);
+                                               
                                                 //Insert keywords
-                                                $keywords_ids = array();
                                                 if(isset($row['keyword']) && $row['keyword'] != ''){
-                                                    $tmp = explode('|',$row['keyword']);
-                                                    foreach($tmp as $k=>$v){
-                                                        $keywords_ids[] = $this->videos_model->insert_keyword($v);
-                                                    }
+                                                    $this->videos_model->_setKeyword(str_replace("|",",",$row['keyword']), $lastId);
                                                 }
-                                                
-                                                //Insert in keyword_content
-                                                $this->videos_model->save_keywords($keywords_ids,$lastId);
-                                                
                                                 if ($lastId != '') {
-                                                        $videoData['content_id'] = $lastId;
-                                                        $videoData['filed_id'] = $lastFileId;
-                                                        $videoData['status'] = '0';
-                                                        $videoData['created'] = date('Y-m-d');
-                                                        $this->videos_model->upload_detail($videoData);
-                                                        $flavor_data = $this->videos_model->getFlavorData(); 
-                                                                foreach($flavor_data as $flavorVal)
-                                                                {
-                                                                    $videoFlavorsData['flavor_id'] = $flavorVal->id;
-                                                                    $videoFlavorsData['content_id'] = $lastId;
-                                                                    $videoFlavorsData['file_id'] = $lastFileId;
-                                                                    $videoFlavorsData['status'] = 'pending';
-                                                                    //$videoFlavorsData['created'] = date('Y-m-d');
-                                                                    $this->videos_model->insert_video_flavors($videoFlavorsData);
-                                                                }
-                                                        $success_video[] = $row;
+                                                    $success_video[] =$row;
                                                         $msg = '';
                                                         foreach ($success_video as $val) {
                                                                 $msg .= $val['content_title'] . '&nbsp;&nbsp;';
@@ -1518,16 +1459,9 @@
                 $this->data['minetype'] = "";
                 $this->data['info'] = base64_encode($videoUrl);
                 $last_id = $this->videos_model->upload_video($post);
-                
-                
                 //Save keywords
-                $post_keydata = explode(',', $tmp['content']['keywords']);
-                foreach ($post_keydata as $value) {
-                    $keyword_ids[] = $this->videos_model->insert_keyword(trim($value));
-                }
-                
-                $this->videos_model->save_keywords($keyword_ids,$last_id);
-                
+                $post_keydata = $tmp['content']['keywords'];
+                $this->videos_model->_setKeyword(trim($post_keydata),$last_id);
                 $last_id_file = $this->videos_model->insert_file($this->data);
                 if ($last_id != '') {
                     $this->data1['content_id'] = $last_id;

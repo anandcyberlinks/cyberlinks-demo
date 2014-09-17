@@ -1,5 +1,5 @@
 <?php
-
+ini_set('display_errors', 'On');
 class Videos_model extends CI_Model {
 
     function __construct() {
@@ -7,7 +7,150 @@ class Videos_model extends CI_Model {
         $this->load->database();
         $this->load->helper('url');
     }
+    /**
+     *Function for Save and update video created by arshad
+     *$data = array();
+     * $data['title'] ='mandatory' for insert and update query
+     * $data['uid'] ='mandatory' for insert and update query
+     * $data['description'] ='optional'
+     * $data['fname'] = 'filename' mandatory for insert query
+     * $data['type'] = 'filetype' mandatory for insert query
+     * $data['minetype'], $data['relative_path'], $data['absolute_path'], $data['info']   = mandatory for insert query
+     * for update table you should be send $data['id'] = 'content_id'
+     * $data['category'] = 'category_id' mandatory for update
+     * $data['feature_video'] = '0 or 1' mandatory for update
+     * $data['status'] = '0 or 1' mandatory for update
+     * $data['star_cast'], $data['director'], $data['music_director'], $data['producer']  = 'optional' for update
+     */
+    
+    function _saveVideo($data){
+        $contents['title'] = $data['content_title'];
+        if(isset($data['description'])){
+            $contents['description'] = $data['description'];
+            $contents['status'] = $data['status'];
+        }
+        if(isset($data['content_id'])){
+            $cid = $data['content_id'];
+            $contents['category'] = $data['content_category'];
+            $contents['feature_video'] = $data['feature_video'];
+            
+            $this->db->where('id', $cid);
+            $this->db->set($contents);
+            $this->db->update('contents');
+            /* video detail
+            $detail = array();
+            if(isset($data['star_cast'])){
+                $detail['star_cast'] = $data['star_cast'];    
+            }
+            if(isset($data['director'])){
+                $detail['director'] = $data['director'];    
+            }
+            if(isset($data['music_director'])){
+                $detail['music_director'] = $data['music_director'];    
+            }
+            if(isset($data['producer'])){
+                $detail['producer'] = $data['producer'];    
+            }
+            $this->db->where('content_id', $cid);
+            $this->db->set($detail);
+            $this->db->update('video_detail');
+            **/
+        }else{
+            ###inserting data in contents table and return id###
+            $contents['uid'] = $data['uid'];
+            $this->db->set($contents);
+            $this->db->set('created','NOW()',FALSE);
+            $this->db->insert('contents');
+            $cid = $this->db->insert_id();
+            
+            ###inserting data in video_detail table with contents_id###
+            $this->db->set('content_id', $cid);
+            $this->db->set('created','NOW()',FALSE);
+            $this->db->insert('video_detail');
+            
+            ###inserting file detail data in files table and return id###
+            $file['name'] = $data['filename'];
+            $file['type'] = $data['type'];
+            $file['minetype'] = $data['minetype'];
+            $file['relative_path'] = $data['relative_path'];
+            $file['absolute_path'] = $data['absolute_path'];
+            $file['info'] = $data['info'];
+            $this->db->set($file);
+            $this->db->set('created','NOW()',FALSE);
+            $this->db->insert('files');
+            $fid = $this->db->insert_id();
+            
+            ###inserting data in videos table with contents_id and file_id###
+            $this->db->set('content_id', $cid);
+            $this->db->set('file_id', $fid);
+            $this->db->set('created','NOW()',FALSE);
+            $this->db->insert('videos');
+            
+            ###transcoding video ###
+            $this->db->select('*');
+            $this->db->from('flavors');
+            $query = $this->db->get();
+            $flav = $query->result();
+            foreach($flav as $flavorVal){
+		$videoFlavorsData['flavor_id'] = $flavorVal->id;
+		$videoFlavorsData['content_id'] = $cid;
+		$videoFlavorsData['file_id'] = $fid;
+		$videoFlavorsData['status'] = 'pending';
+		//$videoFlavorsData['created'] = date('Y-m-d');
+		$this->db->set('created','NOW()',FALSE);
+		$this->db->insert('video_flavors', $videoFlavorsData);
+	    }
+        }
+        return $cid;
+    }
+    ###saveVideo() function end #####
 
+        /*
+     *Function for keyword insert
+     *$keydata is post keyword example 'computer,hello, hollywood, bollywood'
+    */
+    function _setKeyword($keywords, $content_id){
+        //echo $keywords.$content_id; exit;
+        $keydata = explode(',', $keywords);
+        foreach ($keydata as $value) {
+            $this->db->select('id');
+            $this->db->from('keywords');
+            $this->db->where('name', $value);
+            $query = $this->db->get();
+            $result = $query->result();
+            if(count($result) > 0){
+                $keyword_ids[] = $result[0]->id;
+            }else{
+            $this->db->set('name', $value);
+            $this->db->insert('keywords');
+            $this->result = $this->db->insert_id();
+            $keyword_ids[] = $this->result;    
+            } 
+        }
+            $data = array('content_id' => $content_id);
+            $this->db->delete('content_keywords', $data);
+            $total = array();
+            //insert data in content_keywords table
+            foreach($keyword_ids as $key=>$val){
+                $data = array('content_id'=>$content_id,'keyword_id'=>$val,'status'=>1);
+                $this->db->set($data);
+                $this->db->insert('content_keywords', $data);
+                $total[] = $this->db->insert_id();
+            }
+        return $total;
+    }
+    /*
+     *Function for get Keyword
+     */
+    function _getKeyword($content_id){
+        $this->db->select('keywords.name');
+        $this->db->from('keywords');
+        $this->db->join('content_keywords','keywords.id = content_keywords.keyword_id');
+        $this->db->where('content_keywords.content_id', $content_id);
+        $query = $this->db->get();
+        $keyword = $query->result_array();
+        return implode(',', array_column($keyword, 'name'));
+    }
     function get_videocount($uid) {
         $id = $this->get_ownerid($uid);
         array_push($id, $uid);
@@ -149,29 +292,45 @@ class Videos_model extends CI_Model {
     }
 
     function edit_profile($id) {
-        $this->db->select('a.*, b.category , c.username,  group_concat(e.name) as keyword, g.name as file');
+        $this->db->select('a.*, b.id , c.username, g.name as file');
         $this->db->from('contents a');
         $this->db->join('categories b', 'a.category = b.id', 'left');
         $this->db->join('users c', 'a.uid = c.id', 'left');
-        $this->db->join('content_keywords d', 'd.content_id = a.id', 'left');
-        $this->db->join('keywords e', 'e.id = d.keyword_id', 'left');
         $this->db->join('videos f', 'a.id = f.content_id');
         $this->db->join('files g', 'f.file_id = g.id');
         //$this->db->join('video_detail h', 'h.content_id = a.id', 'left');
         $this->db->where('a.id', $id);
         $query = $this->db->get();
-        return $query->result();
+        return reset($query->result());
     }
-
-    function get_category($uid) {
-        $this->db->select('a.*,b.category as parent');
-        $this->db->from('categories a');
-        //$this->db->where('a.u_id', $uid);
-        $this->db->join('categories b', 'a.parent_id = b.id', 'left');
-        $this->db->order_by('b.category', 'asc');
+    
+    function get_category($uid,$relation = false) {
+        $this->db->select('child.id,child.category,child.parent_id,parent.category as parent');
+        $this->db->from('categories child');
+        $this->db->join('categories parent', 'child.parent_id = parent.id', 'left');
+        $this->db->where('child.u_id', $uid);
+        $this->db->order_by('child.category', 'asc');
         $query = $this->db->get();
-        return $query->result();
+        $result = $query->result();
+        
+        $category = array();
+        if($relation === false){
+            foreach($result as $key=>$val){
+                $category[$val->id] = ucfirst(strtolower($val->category));
+            }
+        }else{
+            foreach($result as $key=>$val){
+                if($val->parent_id > 0){
+                    $category[$val->parent][$val->id] = ucfirst(strtolower($val->category));
+                }else{
+                    $category[$val->id] = ucfirst(strtolower($val->category));
+                }
+            }
+        }
+        return $category;
     }
+    
+    
     function deleteyoutube($id){
         $this->db->delete('videos', array('content_id' => $id));
 		$this->db->delete('contents', array('id' => $id));
@@ -231,16 +390,6 @@ class Videos_model extends CI_Model {
 		}
 
     }
-
-    function upload_video($post) {
-        $this->db->set($post);
-        $this->db->set('created','NOW()',FALSE);
-        $this->db->set('modified','NOW()',FALSE);
-        $this->db->insert('contents');
-        $lastId = $this->db->insert_id();
-        return $lastId;
-    }
-
     function upload_detail($post) {
         $data = array(
             'content_id' => $post['content_id'],
@@ -252,34 +401,6 @@ class Videos_model extends CI_Model {
         $this->db->insert('videos', $data);
         $this->result = $this->db->insert_id();
         return $this->result;
-    }
-    
-    function save_keywords($keywords = array(),$content_id){
-        
-        //Delete all content keywords
-        $data = array('content_id' => $content_id);
-        $this->db->delete('content_keywords', $data);
-        
-        $total = array();
-        //insert data in content_keywords table
-        foreach($keywords as $key=>$val){
-            $data = array('content_id'=>$content_id,'keyword_id'=>$val,'status'=>1);
-            $this->db->set($data);
-            $this->db->insert('content_keywords', $data);
-            $total[] = $this->db->insert_id();
-            
-        }
-        return $total;
-    }
-
-    function keyword_master($post) {
-        $data = array(
-            'content_id' => $post['id'],
-            'keyword_id' => $post['key_id'],
-        );
-        $this->db->set($data);
-        $this->db->insert('content_keywords', $data);
-        $this->result = $this->db->insert_id();
     }
 
     function update_profile($post) {
@@ -298,39 +419,6 @@ class Videos_model extends CI_Model {
         //echo $this->db->last_query(); exit;
         return true;
     }
-
-    function update_keyword($post_key) {
-        $data = array(
-            'name' => $post_key['keyword'],
-        );
-        $this->db->where('id', '1');
-        $this->db->update('keywords', $data);
-        return true;
-    }
-
-    function insert_keyword($value) {
-        
-        $this->db->select('id');
-        $this->db->from('keywords');
-        $this->db->where('name', $value);
-        $query = $this->db->get();
-        $result = $query->result();
-        if(count($result) > 0){
-            return $result[0]->id;
-        }else{
-            $this->db->set('name', $value);
-            $this->db->insert('keywords');
-            $this->result = $this->db->insert_id();
-            return $this->result;    
-        }
-    }
-
-    function delete_keywords($post) {
-        $data = array('content_id' => $post);
-        $this->db->delete('content_keywords', $data);
-        return 1;
-    }
-
     function save_scheduling($value) {
         $this->db->set($value);
         $this->db->insert('video_scheduling');
@@ -381,25 +469,6 @@ class Videos_model extends CI_Model {
         $query = $this->db->get();
         return $query->result();
     }
-
-    function insert_file($post) {
-        $data = array(
-            'name' => $post['filename'],
-            'type' => $post['type'],
-            'minetype' => $post['minetype'],
-            'relative_path' => $post['relative_path'],
-            'absolute_path' => $post['absolute_path'],
-            'status' => $post['status'],
-            'uid' => $post['uid'],
-            'info' => $post['info']
-        );
-        $this->db->set('created','NOW()',FALSE);
-        $this->db->set('modified','NOW()',FALSE);
-        $this->db->insert('files', $data);
-        $this->result = $this->db->insert_id();
-        return $this->result;
-    }
-
     function insert_thumb($post) {
         $data = array(
             'content_id' => $post['content_id'],
