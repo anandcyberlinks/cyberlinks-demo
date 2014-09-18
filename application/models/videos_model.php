@@ -87,19 +87,21 @@ class Videos_model extends CI_Model {
             $this->db->insert('videos');
             
             ###transcoding video ###
-            $this->db->select('*');
-            $this->db->from('flavors');
-            $query = $this->db->get();
-            $flav = $query->result();
-            foreach($flav as $flavorVal){
-		$videoFlavorsData['flavor_id'] = $flavorVal->id;
-		$videoFlavorsData['content_id'] = $cid;
-		$videoFlavorsData['file_id'] = $fid;
-		$videoFlavorsData['status'] = 'pending';
-		//$videoFlavorsData['created'] = date('Y-m-d');
-		$this->db->set('created','NOW()',FALSE);
-		$this->db->insert('video_flavors', $videoFlavorsData);
-	    }
+            if($data['type'] != 'youtube'){
+                $this->db->select('*');
+                $this->db->from('flavors');
+                $query = $this->db->get();
+                $flav = $query->result();
+                foreach($flav as $flavorVal){
+                    $videoFlavorsData['flavor_id'] = $flavorVal->id;
+                    $videoFlavorsData['content_id'] = $cid;
+                    $videoFlavorsData['file_id'] = $fid;
+                    $videoFlavorsData['status'] = 'pending';
+                    //$videoFlavorsData['created'] = date('Y-m-d');
+                    $this->db->set('created','NOW()',FALSE);
+                    $this->db->insert('video_flavors', $videoFlavorsData);
+                }
+            }
         }
         return $cid;
     }
