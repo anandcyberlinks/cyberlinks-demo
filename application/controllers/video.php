@@ -663,11 +663,11 @@
 						$videoresult ='1';
 					} */
 					if($videoresult) {
-						$contentData = array();
-						$contentData['title'] = $fileNameUniq;
-						$contentData['uid'] = $this->uid;
-						$contentData['type'] = 'FTP';
-						$contentData['category'] = '0';
+						$fileData = array();
+						$fileData['title'] = $fileNameUniq;
+						$fileData['uid'] = $this->uid;
+						$fileData['type'] = 'FTP';
+						$fileData['category'] = '0';
 						//$contentData['created'] = date('Y-m-d');
 						$fileData['filename'] = $fileNameUniq;
 						$fileData['uid'] = $this->uid;
@@ -678,30 +678,14 @@
 						$fileData['type'] = $fileExt;
 						$fileData['status'] = '0';
 						$fileData['info'] = base64_encode($fileNameUniq);
-						$lastId = $this->videos_model->upload_video($contentData);
+						$lastId = $this->videos_model->_saveVideo($fileData);
 						$lastFileId = $this->videos_model->insert_file($fileData);
-						if ($lastId != '') {
-							$videoData['content_id'] = $lastId;
-							$videoData['filed_id'] = $lastFileId;
-							$videoData['status'] = '0';
-							$videoData['created'] = date('Y-m-d');
-							$this->videos_model->upload_detail($videoData);
-							$flavor_data = $this->videos_model->getFlavorData(); 
-								foreach($flavor_data as $flavorVal)
-								{
-									$videoFlavorsData['flavor_id'] = $flavorVal->id;
-									$videoFlavorsData['content_id'] = $lastId;
-									$videoFlavorsData['file_id'] = $lastFileId;
-									$videoFlavorsData['status'] = 'pending';
-									//$videoFlavorsData['created'] = date('Y-m-d');
-									$this->videos_model->insert_video_flavors($videoFlavorsData);
-								}
 							$msg = "";
 							$msg .= $fileName . '&nbsp;&nbsp;';
 							$msg .= '</br>';
 							$message = $this->loadPo('This video content is not available in directory') . " : <br>" . $msg;
 							$this->log($this->user, $message);
-						}
+
 						//if($this->amazons3){
 							if (isset($local_file)) {
 								unlink($local_file);
