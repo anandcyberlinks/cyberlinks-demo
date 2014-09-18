@@ -1427,36 +1427,26 @@
                 $tmp = $this->get_youtube($videoUrl);
                 
                 $youtubeData = $tmp['detail']['entry']->{'media$group'};
-                $post['title'] = $tmp['content']['title'];
+                $post['content_title'] = $tmp['content']['title'];
                 $post['description'] = $youtubeData->{'media$description'}->{'$t'};
                 $post['uid'] = $this->uid;
                 $post['created'] = date('Y-m-d');
                 $post['type'] = 'youtube';
-                
-                $this->data['filename'] = $videoUrl;
-                $this->data['uid'] = $this->uid;
-                $this->data['created'] = date('Y-m-d');
-                $this->data['relative_path'] = $videoUrl;
-                $this->data['absolute_path'] = $videoUrl;
-                $this->data['status'] = '0';
-                $this->data['type'] = 'Youtube';
-                $this->data['minetype'] = "";
-                $this->data['info'] = base64_encode($videoUrl);
-                $last_id = $this->videos_model->upload_video($post);
+                $post['filename'] = $videoUrl;
+                $post['uid'] = $this->uid;
+                $post['created'] = date('Y-m-d');
+                $post['relative_path'] = $videoUrl;
+                $post['absolute_path'] = $videoUrl;
+                $post['status'] = '0';
+                $post['type'] = 'Youtube';
+                $post['minetype'] = "";
+                $post['info'] = base64_encode($videoUrl);
+                $last_id = $this->videos_model->_saveVideo($post);
                 //Save keywords
                 $post_keydata = $tmp['content']['keywords'];
                 $this->videos_model->_setKeyword(trim($post_keydata),$last_id);
-                $last_id_file = $this->videos_model->insert_file($this->data);
-                if ($last_id != '') {
-                    $this->data1['content_id'] = $last_id;
-                    $this->data1['filed_id'] = $last_id_file;
-                    $this->data1['status'] = '0';
-                    $this->data1['created'] = date('Y-m-d');
-                    $this->videos_model->upload_detail($this->data1);
-                    $msg = $this->loadPo('Video Uploaded successfully.');
-                    $id = base64_encode($last_id);
-                    redirect(base_url().'video/videoOpr/Basic?action='.$id. '&');
-                }
+                $id = base64_encode($last_id);
+                redirect(base_url().'video/videoOpr/Basic?action='.$id. '&');
                 }else{
                 $this->session->set_flashdata('message', '<section class="content"><div class="col-xs-12"><div class="alert alert-danger alert-dismissable"><i class="fa fa-ban"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Invalid Youtube URL</div></div></section>');
                 redirect($_POST['redirect_url']);
