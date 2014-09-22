@@ -37,12 +37,17 @@
 											<div class="box-body">
 											<!-- 	<div style="display:none;"><input type="hidden" name="_method" value="POST"/></div> -->
 												<div class="form-group">
-													<span class="btn btn-default btn-file btn-sm">
-														<?php echo  $welcome->loadPo('Choose CSV') ?> <input name="csv_file"  id="csv_file"  atr="files" type="file"/>
-													</span>
+													<div class="row">
+														<div class="col-xs-10">
+															<span class="btn btn-default btn-file btn-sm">
+																<?php echo  $welcome->loadPo('Choose CSV') ?> <input name="csv_file"  id="csv_file"  atr="files" type="file"/>
+															</span>
+														</div>
+														<div class="col-xs-2" id="displayfile"></div>
+													</div>
 												 </div>
-												 <div id="status_csv_file" style="color:red;"  class="callout-danger" ></div>
-												 <div class="box-body" id="displayfile" ></div>
+												<div id="status_csv_file" style="color:red;"  class="callout-danger" ></div>
+												<div id="csvFileList" ></div>
 										 	</div><!-- /.box-body -->
 											<div class="box-footer">
 												<button type="submit" name="Submit" id="uploadcsv" value="Upload" class="btn btn-primary btn-sm"><?php  echo  $welcome->loadPo('Upload') ?></button>

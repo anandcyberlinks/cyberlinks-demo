@@ -39,14 +39,14 @@
                                                 <label for="searchCategory"><?php echo $welcome->loadPo('Category') ?></label>
                                                 <select name="category" class="form-control" placeholder="<?php echo $welcome->loadPo('Category') ?>" id="searchCategory">
                                                     <option value=""><?php echo $welcome->loadPo('Select') ?></option>
-                                                    <?php foreach ($category as $value) { ?>
-                                                        <option value="<?php echo $value->id ?>" <?php
+                                                    <?php foreach ($category as $key=>$val) { ?>
+                                                        <option value="<?php echo $key; ?>" <?php
                                                         if (isset($search_data['category'])) {
-                                                            if ($value->id == $search_data['category']) {
+                                                            if ($key == $search_data['category']) {
                                                                 echo 'selected';
                                                             }
                                                         }
-                                                        ?>  ><?php echo $value->category ?></option>
+                                                        ?>  ><?php echo $val ?></option>
                                                             <?php } ?>
                                                 </select>
                                             </div>

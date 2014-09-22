@@ -341,22 +341,69 @@ $(function(){
 	
     function prepareUpload(event)
     {
-		$('#status_csv_file').html('');
-	    files = event.target.files;
-		var fileName = this.files[0].name;
+	$('#status_csv_file').html('');
+	$('#csvFileList').html('');
+	files = event.target.files;
+	var fileName = this.files[0].name;
         var fileSize = this.files[0].size;
         var fileType = this.files[0].type;
-	 	var size= fileSize/1048576 ;
-		var fsize = size.toFixed(2);  
-		if (!fileType.match(/(?:csv|vnd.ms-excel|csv|CSV)$/)) 
-		{
-			// inputed file path is not an image of one of the above types
+	var size= fileSize/1048576 ;
+	var fsize = size.toFixed(2);  
+	    if (this.files && this.files.length > 0) {
+		filesArray = this.files;
+		$.each(this.files, function(index, value) {
+		    if (value.type == 'text/csv') {
+			var reader = new FileReader();
+			var link_reg = /(http:\/\/|https:\/\/)/i;
+			reader.readAsText(value);
+			reader.onload = function(file){
+			    var content = file.target.result;
+			    var rows = file.target.result.split(/[\r\n|\n]+/);
+			    var table = document.createElement('table');
+			    table.className = "table table-bordered table-striped";
+			    var tbody = document.createElement('tbody');
+    
+			    for (var i = 0; i < rows.length; i++){
+				var tr = document.createElement('tr');
+				var arr = rows[i].split(',');
+				
+				if(arr.length >=5 ){
+				    for (var j = 0; j < arr.length; j++){
+					if (i==0){
+					    var td = document.createElement('th');
+					}else{
+					    var td = document.createElement('td');
+					}
+					
+					if( link_reg.test(arr[j]) ){
+					    var a = document.createElement('a');
+					    a.href = arr[j];
+					    a.target = "_blank";
+					    a.innerHTML = arr[j];
+					    td.appendChild(a);
+					}else{
+					    td.innerHTML = arr[j];
+					}
+					
+					tr.appendChild(td);
+				    }
+				    tbody.appendChild(tr);
+				}
+				console.log(tbody);
+			    }
+			    table.appendChild(tbody);
+			    document.getElementById('csvFileList').appendChild(table);
+			}
+		    }else{
+			//$('#content').prepend(message('Only .csv file accepted','error'));
 			var row_data1 = "";
-			row_data1 +='<section class="content"><div class="col-xs-12"><div class="alert alert-danger alert-dismissable"><i class="fa fa-check"></i>only CSV file is allow!</div><div></section>';
+			row_data1 +='<section class="content"><div class="col-xs-12"><div class="alert alert-danger alert-dismissable"><i class="fa fa-ban"></i>Only .csv file accepted</div><div></section>';
 			$('#msgftp').html(row_data1).fadeTo(3000, 500).slideUp(3000);
 			$('#displayfile').hide();
 			return false;
-		}
+		    }
+		});
+	    }
 	}
 	
 	
