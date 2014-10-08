@@ -282,6 +282,16 @@ $(function(){
 								}
 							})
 	}
+function delete_page(id,url)
+	{ 
+	  bootbox.confirm("Are you sure you want to Delete Page", function(confirmed) 
+							{
+								if (confirmed) 
+								{
+									location.href = url+'?id='+id ;
+								}
+							})
+	}
 	function delete_role(id)
 	{ 
 	  bootbox.confirm("Are you sure you want to Delete video", function(confirmed) 

@@ -49,6 +49,11 @@
                     <!--<li class="<?=($this->uri->segment(1)==='transcode')?'active':''?>"><a href="<?php echo base_url() ?>transcode"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('Transcode'); ?></a></li>         -->           
                 </ul>
             </li>
+	    <li class="<?=($this->uri->segment(1)=='pages')?'active':''?>">
+                <a href="<?php echo base_url() ?>pages">
+                    <i class="glyphicon glyphicon-th-list"></i> <span><?php echo $welcome->loadPo('CMS Pages'); ?></span>
+                </a>
+            </li>
             <?php $s = $this->session->all_userdata();
             if($s[0]->role == 'Superadmin' || $s[0]->role == 'Admin'){
                 ?>
