@@ -226,7 +226,7 @@
                     $post_key = $_POST['tags'];
                     $this->videos_model->_saveVideo($post);
                     $this->videos_model->_setKeyword($post_key, $vid);                    
-                    $msg = $this->loadPo($this->config->item('success_file_update'));
+                    $msg = $this->loadPo($this->config->item('success_record_update'));
                     $this->log($this->user, $msg);
                     $this->session->set_flashdata('message', $this->_successmsg($msg));
                     redirect('video');

@@ -568,23 +568,23 @@ msgstr "पहला नाम"
 msgid "Last Name"
 msgstr "अंतिम नाम"
 
-msgid "New Role added Successfully"
+msgid "Role added successfully"
 msgstr "नई भूमिका सफलतापूर्वक गयी"
 
 msgid "User(s) having this role, You Can't Delete this"
 msgstr "उपयोगकर्ता (ओं) , आप यह नहीं हटा सकते"
 
-msgid "Role Deleted Successfully"
+msgid "Role deleted successfully"
 msgstr "भूमिका सफलतापूर्वक नष्ट कर दिया"
 
-msgid "User Successfully Deleted"
-msgstr "प्रयोक्ता को सफलतापूर्वक नष्ट कर दिया गया"
+msgid "User deleted successfully."
+msgstr "प्रयोक्ता को सफलतापूर्वक नष्ट कर दिया गया."
 
 msgid "Access Denied"
 msgstr "प्रवेश निषेध"
 
-msgid "User Successfully Updated"
-msgstr "प्प्रयोक्ता सफलतापूर्वक अपडेट"
+msgid "User updated successfully."
+msgstr "प्प्रयोक्ता सफलतापूर्वक अपडेट."
 
 msgid "Username"
 msgstr "यूजर नेम "
@@ -647,15 +647,15 @@ msgid "Player Settings Updated successfully."
 msgstr "प्लेयर सेटिंग्स सफलतापूर्वक अद्यतन."
 
 
-msgid "Category Successfully Deleted"
-msgstr "श्रेणी सफलतापूर्वक नष्ट कर दिया"
+msgid "Record deleted successfully"
+msgstr "रिकॉर्ड सफलतापूर्वक नष्ट कर दिया"
 
 msgid "Add Transcode"
 msgstr "ट्रांसकोड जोड़ें"
 
 
-msgid "Video in this Category You Can't Delete this"
-msgstr "वीडियो इस श्रेणी में है आप इस श्रेणी को नहीं हटा सकते"
+msgid "Category have some records therefore you can\'t delete this"
+msgstr "इस श्रेणी में कुछ रिकॉर्ड है इसलिए आप इसे नष्ट नहीं कर सकते"
 
 
 msgid "Add Category"
@@ -723,7 +723,7 @@ msgid "Please fill all Field."
 msgstr "सभी क्षेत्र भरें."
 
 msgid "This is not a Video File. Please Select Video File Only!"
-msgstr "यह एक वीडियो फ़ाइल नहीं है. कृपया केवल वीडियो फ़ाइल चुनें!"
+msgstr "यह एक वीडियो फ़ाइल नहीं है.कृपया केवल वीडियो फ़ाइल चुनें!"
 
 msgid "Subscription"
 msgstr "सदस्यता"

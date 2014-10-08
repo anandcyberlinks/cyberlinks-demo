@@ -42,13 +42,13 @@ $config['success_language_change'] = 'Language changed successfully.';
 $config['success_login'] = 'SuccesFully Loged In';
 $config['success_email_verified'] = 'Mail Succesfully verified';
 $config['success_password_changed'] = 'Password Changed Successfully.';
-$config['success_role_add'] = 'Role added Successfully';
+$config['success_role_add'] = 'Role added successfully';
 $config['success_permission_changed'] = 'Permission changed successfully';
 $config['success_permission_deleted'] = 'Permission deleted successfully';
-$config['success_role_deleted'] = 'Role deleted successfully';
+$config['success_role_deleted'] = 'Role deleted successfully.';
 $config['success_flavor_status_change'] = 'Flavor status change for Content id';
 $config['success_delete_user'] = 'User deleted successfully.';
-$config['success_update_user'] = 'User Successfully Updated';
+$config['success_update_user'] = 'User updated successfully.';
 $config['success_add_user_mail_error'] = 'User added successfully But Activation mail not sent';
 $config['success_add_user_mail_sent'] = 'User added successfully and Activation Links has been Sent to your email';
 
