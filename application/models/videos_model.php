@@ -366,14 +366,28 @@ class Videos_model extends CI_Model {
                     $this->db->delete('video_source', array('content_id' => $id));
             } */
             If($videoFileId) {
-                $this->db->delete('files', array('id' => $videoFileId));
-                $this->db->delete('video_flavors', array('content_id' => $id));
+                if($this->checkIfRecordsExists('files', 'id', $videoFileId)){
+                    $this->db->delete('files', array('id' => $videoFileId));
+                }
+                if($this->checkIfRecordsExists('video_flavors', 'content_id', $id)){
+                   $this->db->delete('content_id', array('content_id' => $id));
+                }
+                if($this->checkIfRecordsExists('video_thumbnails', 'content_id', $id)){
+                   $this->db->delete('video_thumbnails', array('content_id' => $id));
+                }
+                if($this->checkIfRecordsExists('videos', 'content_id', $videoFileId)){
+                    $this->db->delete('videos', array('id' => $videoFileId));
+                }                
+                if($this->checkIfRecordsExists('contents', 'id', $id)){
+                    $this->db->delete('contents', array('id' => $id));
+                }
+                if($this->checkIfRecordsExists('content_keywords', 'content_id', $id)){
+                    $this->db->delete('content_keywords', array('content_id' => $id));
+                }
+                if($this->checkIfRecordsExists('video_detail', 'content_id', $id)){
+                    $this->db->delete('video_detail', array('content_id' => $id));
+                }
                 //$this->db->delete('wowza_video', array('content_id' => $id));
-                $this->db->delete('video_thumbnails', array('content_id' => $id));
-                $this->db->delete('videos', array('content_id' => $id));
-                $this->db->delete('contents', array('id' => $id));
-                $this->db->delete('content_keywords', array('content_id' => $id));
-                $this->db->delete('video_detail', array('content_id' => $id));
                 return 1;
             } else {
                     return 0;
