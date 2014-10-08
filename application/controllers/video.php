@@ -1,5 +1,5 @@
     <?php
-    
+    ini_set('display_errors',1);
     if (!defined('BASEPATH'))
         exit('No direct script access allowed');
     

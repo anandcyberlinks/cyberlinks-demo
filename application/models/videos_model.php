@@ -360,11 +360,15 @@ class Videos_model extends CI_Model {
         if($id){
             $videoFileId = $this->getVideoFileIds($id);
             $deleteKeyword = $this->deletekeywords($id);
-            if($this->checkIfRecordsExists('video_source', 'content_id', $id))
+            /*if($this->checkIfRecordsExists('video_source', 'content_id', $id))
             {
                 $this->db->delete('video_source', array('content_id' => $id));
-            }
+            }*/
+            
             If($videoFileId) {
+                if($this->checkIfRecordsExists('contents', 'id', $id)){
+                    $this->db->delete('contents', array('id' => $id));
+                }
                 if($this->checkIfRecordsExists('files', 'id', $videoFileId)){
                     $this->db->delete('files', array('id' => $videoFileId));
                 }
@@ -376,10 +380,7 @@ class Videos_model extends CI_Model {
                 }
                 if($this->checkIfRecordsExists('videos', 'content_id', $videoFileId)){
                     $this->db->delete('videos', array('id' => $videoFileId));
-                }                
-                if($this->checkIfRecordsExists('contents', 'id', $id)){
-                    $this->db->delete('contents', array('id' => $id));
-                }
+                }     
                 if($this->checkIfRecordsExists('content_keywords', 'content_id', $id)){
                     $this->db->delete('content_keywords', array('content_id' => $id));
                 }
@@ -394,6 +395,25 @@ class Videos_model extends CI_Model {
         } else {
         return 0;
         }
+    }
+    
+    	
+    function getVideoFileIds($id) {
+        $this->db->select('a.id');
+        $this->db->from('files a');
+        $this->db->join('videos b', 'a.id = b.file_id');
+        $this->db->where('b.content_id', $id);
+        $query = $this->db->get();
+        //echo $this->db->last_query(); exit;
+		$result = $query->result();
+		if(count($result))
+		{
+			$videoFileId = $result[0]->id;
+			return $videoFileId;
+		} else {
+			return 0;
+		}
+
     }
     
     function checkIfRecordsExists($table, $field, $value){
@@ -430,23 +450,7 @@ class Videos_model extends CI_Model {
         }
 
     }
-	
-    function getVideoFileIds($id) {
-        $this->db->select('a.id');
-        $this->db->from('files a');
-        $this->db->join('videos b', 'a.id = b.file_id');
-        $this->db->where('b.content_id', $id);
-        $query = $this->db->get();
-		$result = $query->result();
-		if(count($result))
-		{
-			$videoFileId = $result[0]->id;
-			return $videoFileId;
-		} else {
-			return 0;
-		}
 
-    }
 
     /*function upload_detail($post) {
         $data = array(
