@@ -15,7 +15,7 @@
 |
 */
 
-$config['base_url']	= 'http://'.$_SERVER['HTTP_HOST'].'/newsnation_cms/';
+$config['base_url']	= 'http://localhost/final/';
 /*
 |--------------------------------------------------------------------------
 | Index File
@@ -357,6 +357,18 @@ $config['rewrite_short_tags'] = FALSE;
 */
 $config['proxy_ips'] = '';
 
+
+/*
+|--------------------------------------------------------------------------
+| Enable/Disable Amazon S3 server connectivity
+|--------------------------------------------------------------------------
+|
+| If you would like to upload files on 'amazon s3 server' you must enable it by
+| setting this variable to TRUE (boolean).  
+|
+*/
+
+$config['amazons3'] = FALSE;
 
 /* End of file config.php */
 /* Location: ./application/config/config.php */

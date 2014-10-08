@@ -23,7 +23,7 @@
 						<!-- general form elements -->
 						<div class="box box-primary">
 							<!-- form start -->
-							<form role="form" action="<?php echo base_url(); ?>comments/searchComment" method="POST">
+							<form role="form" action="<?php echo base_url(); ?>comments/index" method="POST">
 						<div class="box-body">
 							<div class="row">
 								<div class="form-group col-lg-4">
@@ -63,23 +63,23 @@
 								<table id="example1" class="table table-bordered table-striped ">
 						<thead>
 							<tr>
-								<th width="15%"><?php echo  $welcome->loadPo('Comment') ?></th>
+								<th width="16%"><?php echo  $welcome->loadPo('Comment') ?></th>
 								<th width="15%"><?php echo  $welcome->loadPo('Content Title') ?></th>
 								<th width="5%"><?php echo  $welcome->loadPo('Category') ?></th>
 								<th width="5%"><?php echo  $welcome->loadPo('User') ?></th>
-								<th width="15%"><?php echo  $welcome->loadPo('Create Date') ?></th>
-								<th width="15%"><?php echo  $welcome->loadPo('Update Date') ?></th>
+								<th width="10%"><?php echo  $welcome->loadPo('Created Date') ?></th>
+								<th width="10%"><?php echo  $welcome->loadPo('Updated Date') ?></th>
 								<th width="10%"><?php echo  $welcome->loadPo('IP') ?></th>
 								<th width="5%"><?php echo  $welcome->loadPo('Approved') ?></th>
 								<th width="5%"><?php echo  $welcome->loadPo('Status') ?></th>
-								<th width="6%"><?php echo  $welcome->loadPo('Action') ?></th>
+								<th width="15%"><?php echo  $welcome->loadPo('Action') ?></th>
 							</tr>
 						</thead>
 						<tbody>										
 							<?php foreach($comments as $value){ ?>
 							<tr>
-                                                            <td><?php echo $value->comment ;?></td>
-                                                                <td><?php echo $value->title ;?></td>
+								<td><?php echo $value->comment ;?></td>
+								<td><?php echo $value->title ;?></td>
 								<td><?php echo $value->category ;?></td>
 								<td><?php echo $value->username; ?></td>
 								<td><?php echo date('M d,Y', strtotime($value->created_date)) ?></td>
@@ -105,10 +105,9 @@
 								</td >
 								<td>																					
 									<a name="edit" id="<?php echo $value->id;?>" href="<?php echo base_url();?>comments/editComment/<?php echo $value->id;?>" title="Edit Flavor" data-toggle="modal">
-									<button class="btn btn-info btn-sm">&nbsp;&nbsp;&nbsp;<?php echo  $welcome->loadPo('Edit') ?>&nbsp;&nbsp;</button></a>
-									<br><br>
-									<!--<a class="confirm" href="<?php echo base_url() ?>comments/deleteComment?id=<?php echo $value->id; ?>" ><button class="btn btn-danger" data-toggle="modal" data-target=".bs-example-modal-sm" >Delete</button></a>-->
-									 <a class="confirm" onclick="return delete_comment(<?php echo $value->id;?>,'<?php echo base_url().'comments/deleteComment' ?>');" href="" ><button class="btn btn-danger btn-sm" data-toggle="modal" data-target=".bs-example-modal-sm" ><?php echo  $welcome->loadPo('Delete') ?></button></a>
+										<button class="btn btn-info btn-sm">&nbsp;&nbsp;&nbsp;<?php echo  $welcome->loadPo('Edit') ?>&nbsp;&nbsp;</button>
+									</a>									
+									<a class="confirm" onclick="return delete_comment(<?php echo $value->id;?>,'<?php echo base_url().'comments/deleteComment' ?>');" href="" ><button class="btn btn-danger btn-sm" data-toggle="modal" data-target=".bs-example-modal-sm" ><?php echo  $welcome->loadPo('Delete') ?></button></a>
 									
 								</td>
 							</tr>                                           
@@ -160,102 +159,3 @@
     </aside><!-- /.right-side -->
 </div><!-- ./wrapper -->
 
-<script>
-//Delete
-
-function set_form(id,page)
-{
-	$('#modid').val(id);
-	$('#modpage').val(page);
-	
-}
-function del_comment_page()
-{
-	var modid =  $("#modid").val();
-	var modpage =  $("#modpage").val();	
-		var str = 'id='+modid;
-		 jQuery.ajax({
-				 type :"POST",
-				 url  :modpage,
-				 data : str,
-				 success:function(data)
-				 {
-					if(data==1)
-					{
-						$('#myModal').modal('hide');
-						var ht = '<section class="content"><div class="col-xs-12"><div class="alert alert-success alert-dismissable"><i class="fa fa-check"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>TThe Comment has been successfully Deleted.</div></div></section>'						
-						jQuery("#msg_div").html(ht);						
-						
-					}
-				 } 
-				});
-}
-//Active/Inactive Status
-function comment_status(ID, PAGE, status) 
-{
-	var str = 'id='+ID+'&status='+status;
-	jQuery.ajax({
-		type :"POST",
-		url  :PAGE,
-		data : str,
-		success:function(data)
-		{			
-			if(data==1)
-			{
-				var a_spanid = 'active_'+ID ;
-				var d_spanid = 'dactive_'+ID ;
-				if(status !="active")
-				{
-					/* var ht = '<section class="content"><div class="col-xs-12"><div class="alert alert-success alert-dismissable"><i class="fa fa-check"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>The Comment has been successfully Inactive.</div></div></section>' */
-					$("#"+a_spanid).hide();
-					$("#"+d_spanid).show();
-					
-					jQuery("#msg_div").html();				
-				}
-				else
-				{
-					/* var ht = '<section class="content"><div class="col-xs-12"><div class="alert alert-success alert-dismissable"><i class="fa fa-check"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>The Comment has been successfully Active.</div></div></section>' */				
-					$("#"+d_spanid).hide();
-					$("#"+a_spanid).show();				
-					jQuery("#msg_div").html();					
-				}
-			}
-		} 
-	});
-}	
-
-//Aprroved/Bloack
-function comment_approved_status(ID, PAGE, approve)
-{
-	var str = 'id='+ID+'&approved='+approve;
-	jQuery.ajax({
-		type :"POST",
-		url  :PAGE,
-		data : str,
-		success:function(data)
-		{			
-			if(data==1)
-			{
-				var a_spanid = 'approve_'+ID ;
-				var d_spanid = 'block_'+ID ;
-				if(approve !="YES")
-				{
-					/* var ht = '<section class="content"><div class="col-xs-12"><div class="alert alert-success alert-dismissable"><i class="fa fa-check"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>The Comment has been successfully Block.</div></div></section>' */
-					$("#"+a_spanid).hide();
-					$("#"+d_spanid).show();
-					jQuery("#msg_div").html();					
-				}
-				else
-				{
-					/* var ht = '<section class="content"><div class="col-xs-12"><div class="alert alert-success alert-dismissable"><i class="fa fa-check"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>The Comment has been successfully Approved.</div></div></section>' */
-					$("#"+d_spanid).hide();
-					$("#"+a_spanid).show();
-					jQuery("#msg_div").html();
-				
-				}
-			}
-		} 
-	});			
-} 
-
-</script> 

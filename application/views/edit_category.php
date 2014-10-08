@@ -32,8 +32,8 @@
 									<div class="row">
 										<div class="form-group col-lg-5">
 											<div class="input text">
-												<label for="CategoryCategory"><?php echo $welcome->loadPo('Category').' '.$welcome->loadPo('Name'); ?></label>
-												<input name="category" class="form-control" placeholder="Category Name" maxlength="255" type="text" value="<?php echo $value->category;?>" id="CategoryCategory"/>
+												<label for="Category"><?php echo $welcome->loadPo('Category').' '.$welcome->loadPo('Name'); ?></label>
+												<input name="category" class="form-control" placeholder="Category Name" maxlength="255" type="text" value="<?php echo $value->category;?>" id="Category"/>
 												<?php echo form_error('category','<span class="text-danger">','</span>'); ?>
 											</div>
 										</div>
@@ -44,15 +44,16 @@
 												<label for="CategoryParentId"><?php echo $welcome->loadPo('Parent'); ?></label>
 												<select name="parent_id" id="parent_id" class="form-control">
 													<option value=""  <?php echo set_select('parent', '', TRUE); ?>>--<?php echo $welcome->loadPo('Select');?>--</option>
-													<?php 
+													<?php
+													
 													foreach($allParentCategory as $cvalue){													
 													if($value->id != $cvalue->parent_id)
 													{
-														if($cvalue->parent_id == 0){	
+														//if($cvalue->parent_id == 0){	
 														if($value->category != $cvalue->category){	
 													?>
 														<option value="<?php echo $cvalue->id;?>" <?php echo ($cvalue->category==$value->parent)?"selected='selected'":''; ?> ><?php  echo ucfirst($cvalue->category);?></option>
-													<?php }}}}?>
+													<?php }}}?>
 												</select>
 												<?php echo form_error('parent_id','<span class="text-danger">','</span>'); ?>
 											</div>

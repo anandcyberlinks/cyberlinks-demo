@@ -6,6 +6,13 @@ $(function(){
 	$('#durationDiv').hide();
 
 
+	$(document).on('click','.ftpdir',function(){
+		var path = $(this).attr('href');
+		$('#ftpPath').val(path);
+		check();
+		return false;
+	});
+
 	/*	Start Date and Time in Scheduling */
 	
   
@@ -334,7 +341,9 @@ $(function(){
 	/* bulk upload by CSV file only */
 
  	// Variable to store your files
-   var files;
+    var files;
+    var csvFilesArr = [] ;
+    var colLength = 5;
 	// uplaod events
     $('#csv_file').on('change', prepareUpload);
 	// Grab the files and set them to our variable
@@ -348,76 +357,120 @@ $(function(){
         var fileSize = this.files[0].size;
         var fileType = this.files[0].type;
 	var size= fileSize/1048576 ;
-	var fsize = size.toFixed(2);  
-	    if (this.files && this.files.length > 0) {
-		filesArray = this.files;
-		$.each(this.files, function(index, value) {
-		    if (value.type == 'text/csv') {
-			var reader = new FileReader();
-			var link_reg = /(http:\/\/|https:\/\/)/i;
-			reader.readAsText(value);
-			reader.onload = function(file){
-			    var content = file.target.result;
-			    var rows = file.target.result.split(/[\r\n|\n]+/);
-			    var table = document.createElement('table');
-			    table.className = "table table-bordered table-striped";
-			    var tbody = document.createElement('tbody');
-    
-			    for (var i = 0; i < rows.length; i++){
-				var tr = document.createElement('tr');
-				var arr = rows[i].split(',');
-				
-				if(arr.length >=5 ){
-				    for (var j = 0; j < arr.length; j++){
-					if (i==0){
-					    var td = document.createElement('th');
-					}else{
-					    var td = document.createElement('td');
-					}
-					
-					if( link_reg.test(arr[j]) ){
-					    var a = document.createElement('a');
-					    a.href = arr[j];
-					    a.target = "_blank";
-					    a.innerHTML = arr[j];
-					    td.appendChild(a);
-					}else{
-					    td.innerHTML = arr[j];
-					}
-					
-					tr.appendChild(td);
-				    }
-				    tbody.appendChild(tr);
+	var fsize = size.toFixed(2);	
+	if (this.files && this.files.length > 0) {
+	    $('#displayfile').html('<img src="'+baseurl+'assets/img/loader.gif"> loading...');
+            filesArray = this.files;
+            $.each(this.files, function(index, value) {
+                if (value.type == 'text/csv') {
+                    var reader = new FileReader();
+                    var link_reg = /(http:\/\/|https:\/\/)/i;
+                    reader.readAsText(value);
+                    reader.onload = function(file){
+                        var content = file.target.result;
+                        var rows = file.target.result.split(/\r\n|\n/);
+			document.getElementById("csvFileList").innerHTML = "";
+                        var table = document.createElement('table');
+                        table.className = "table table-bordered";
+                        var tbody = document.createElement('tbody');
+                        for (var i = 0; i < rows.length; i++){
+                            var tr = document.createElement('tr');
+			    tr.id = "tr_"+i;
+                            var arr = rows[i].split(',');
+                            if(arr.length == colLength ){
+				var tmpArr = [];
+                                for (var j = 0; j < arr.length; j++){
+                                    if (i==0){
+                                        var td = document.createElement('th');
+                                    }else{
+                                        var td = document.createElement('td');
+					tmpArr.push(arr[j]);
+                                    }				    
+				    
+                                    if( link_reg.test(arr[j]) ){
+                                        var a = document.createElement('a');
+                                        a.href = arr[j];
+                                        a.target = "_blank";
+                                        a.innerHTML = arr[j];
+                                        td.appendChild(a);
+                                    }else{
+                                        td.innerHTML = arr[j];
+                                    }
+                                    
+                                    tr.appendChild(td);
+                                }
+				if (i!=0) {
+				    csvFilesArr.push(tmpArr);
 				}
-				console.log(tbody);
+                                tbody.appendChild(tr);
+                            }
+                        }
+                        table.appendChild(tbody);
+                        document.getElementById('csvFileList').appendChild(table);
+                    }
+                }else{
+		    var row_data1 = "";
+		    row_data1 +='<section class="content"><div class="col-xs-12"><div class="alert alert-danger alert-dismissable"><i class="fa fa-ban"></i>Only .csv file accepted</div><div></section>';
+		    $('#msgftp').html(row_data1).fadeTo(3000, 500).slideUp(3000);
+		    $('#displayfile').hide();
+		    return false;
+                }
+            });
+        }
+	$('#displayfile').html('');
+
+    }
+	
+    $('#uploadcsv').on('click', function(){
+	$('#displayfile').html('<img src="'+baseurl+'assets/img/loader.gif"> loading...');
+	var csvFilesCount = csvFilesArr.length;
+	for(var i=0; i< csvFilesCount; i++) {
+	    if (csvFilesArr[i].length == colLength) {
+		var content_title = csvFilesArr[i]['0'];
+		var category = csvFilesArr[i]['1'];
+		var keyword = csvFilesArr[i]['2'];
+		var url = csvFilesArr[i]['3'];
+		var description = csvFilesArr[i]['4'];
+		var rowIdTbl = i + 1;
+		$.ajax({
+		    type: "POST",
+		    url: baseurl+"video/csvupload",
+		    data: { 'content_title': content_title, 'category': category, 'keyword': keyword , 'url': url, 'description': description, 'rowId': rowIdTbl },
+		    dataType: 'json',
+		    success: function(data, textStatus, jqXHR)
+		    { 
+			if(typeof data.error === 'undefined')
+			{
+			    var rowId = data.rowId;
+			    // Success so call function to process the form
+			    if(data.message == 'success') {
+				$('#tr_'+rowId).css('backgroundColor', '#82FA58');
+				if (rowId == csvFilesCount) {
+				    $('#displayfile').html('');
+			        }
+			    } else {
+				$('#tr_'+rowId).css('backgroundColor', '#FA5858');
+				if (rowId == csvFilesCount) {
+				    $('#displayfile').html('');
+			        }
 			    }
-			    table.appendChild(tbody);
-			    document.getElementById('csvFileList').appendChild(table);
 			}
-		    }else{
-			//$('#content').prepend(message('Only .csv file accepted','error'));
-			var row_data1 = "";
-			row_data1 +='<section class="content"><div class="col-xs-12"><div class="alert alert-danger alert-dismissable"><i class="fa fa-ban"></i>Only .csv file accepted</div><div></section>';
-			$('#msgftp').html(row_data1).fadeTo(3000, 500).slideUp(3000);
-			$('#displayfile').hide();
-			return false;
+			else
+			{
+			    // Handle errors here
+			    console.log('ERRORS: ' + data.error);
+			}
+		    },
+		    error: function(jqXHR, textStatus, errorThrown)
+		    {
+			// Handle errors here
+			console.log('ERRORS: ' + textStatus);
 		    }
 		});
-	    }
+	    }   
 	}
-	
-	
-	$('#uploadcsv').click(function(e) {
-		var fileName = $('#csv_file').val();
-		if(fileName == "")
-		{
-			$('#status_csv_file').html('Please Select a file to upload.');
-			return false;
-		} else {
-			$('#displayfile').html('<img src="assets/img/loader.gif"> loading...');
-            return true; // Valid file type
-		}		
-	});	
+	return false;
+    });
 
 	
 	/* function to validate url starts */
@@ -471,9 +524,209 @@ $(function(){
 
 	
 	/* functions to check png image in video setting section starts */
+	
+	/* functions to upload file using ftp section starts */
+	
+    function connect()
+    {					
+	var ftpserver = $( "#ftpserver" ).val();
+	var username = $( "#username" ).val();
+	var password = $( "#password" ).val();
+	var ftpPath = $( "#ftpPath" ).val();
+	if(ftpserver == "")
+	    {
+		$('#error1').html("Please Fill the FTP Server Name").show();
+		$('#loadingmessage').hide();
+		return false;
+	    }
+	    else{	$('#error1').hide(); }
+	    if(username == "")
+	    {
+		$('#error2').html("please Fill the FTP Server Username").show();
+		$('#loadingmessage').hide();
+		return false;
+	    }
+	    else{ $('#error2').hide(); }
+	    if(password == "")
+	    {
+		$('#error3').html("Please Fill the FTP Server Password").show();
+		$('#loadingmessage').hide();
+		return false;
+	    }
+	    else{ $('#error3').hide(); }
+	    $('#displayfileftp').html('<img src="'+baseurl+'assets/img/loader.gif"> loading...');
+
+	    $.ajax({
+		type: "POST",
+		url: baseurl+"video/ftpLogin",
+		data:{'ftpserver': ftpserver, 'username': username, 'password': password, 'ftpPath' :ftpPath },
+		dataType: 'json',
+		success: function(response) {
+		    if(response.status == 'success')
+		    {	
+			$('#displayfileftp').html('');
+			$('#ftpcontainer').show();
+			$('#ftpdata').html(response.data);
+			$('#ftpdata,#search').show();
+
+		    } else {
+			$('#displayfileftp').html('');
+			//$('#ftpBulkuploadForm .loader').html('');
+		    }
+		}
+	    });
+	    return false;
+    }
+
+    function check()
+    {
+	var form = $(this);
+	$('#displayfileftp').html('<img src="'+baseurl+'assets/img/loader.gif"> loading...');
+	var ftpserver = $( "#ftpserver" ).val();
+	var username = $( "#username" ).val();
+	var password = $( "#password" ).val();
+	var ftpPath = $( "#ftpPath" ).val();
+	$.ajax({
+	    type: "POST",
+	    url: baseurl+"video/ftpLogin",
+	    dataType: "json",
+	    data:{ftpserver: ftpserver ,username: username,password: password ,ftpPath :ftpPath},
+	    success: function(response) {
+		if(response.status == 'success')
+		    {	
+			$('#displayfileftp').html('');
+			$('#ftpcontainer').show();
+			$('#ftpdata').html(response.data);
+			$('#ftpdata,#search').show();
+
+		    } else {
+			$('#displayfileftp').html('');
+			//$('#ftpBulkuploadForm .loader').html('');
+		    }
+	    }
+	});
+	return false;
+     }
+     
+    function Download()
+    {
+	$('#displayfileftp').html('<img src="'+baseurl+'assets/img/loader.gif"> loading...');
+	//myFunction(); // call function for Size count
+	var ftpPath = $( "#ftpPath" ).val();
+	var ftpserver = $( "#ftpserver" ).val();
+	var username = $( "#username" ).val();
+	var password = $( "#password" ).val();
+	var redirect_url = $( "#redirect_url" ).val();
+	var chkarr = [];
+	$("input[type=checkbox]:checked").each ( function() {
+		var filePath = $(this).val();
+		var lastPart = filePath.split("/").pop();
+		chkarr.push(lastPart); 
+	});
+		/* we join the array separated by the comma */
+	var selected;
+	selected = chkarr.join(',') + ",";
+	if(selected.length > 1){
+	    $.ajax({
+		type: "POST",
+		url: baseurl+"video/uploadFtp",
+		data: {chk :selected  ,ftpserver: ftpserver ,username: username ,password: password ,ftpPath: ftpPath, redirect_url: redirect_url },
+		success: function(data)
+		    { 	
+		    var obj = $.parseJSON(data);
+		    if(obj.flag == 0)
+			{
+			    var row_data = "";
+			    $('#displayfileftp').html('');
+			    row_data +='<div class="alert alert-danger alert-dismissable"><i class="fa fa-check"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> Error in downloading files'+chkarr+'</div>';
+			    document.getElementById('msgftp').innerHTML = row_data;
+			    $('#msgftp').html(row_data);
+			} else {
+			    var row_data = "";
+			    $('#displayfileftp').html('');
+			    row_data +='<div class="alert alert-success alert-dismissable"><i class="fa fa-check"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>DownLoad completed successfully '+chkarr+'</div>';
+			    document.getElementById('msgftp').innerHTML = row_data;
+			    $('#msgftp').html(row_data);
+			}
+		    }				
+	    });
+	}
+
+    }	
+	
+    /* functions to upload file using ftp section ends */
+    
+    /* functions used for comment section starts */
+    
+    //Active/Inactive Status
+    function comment_status(ID, PAGE, status) 
+    {
+	var str = 'id='+ID+'&status='+status;
+	jQuery.ajax({
+	    type :"POST",
+	    url  :PAGE,
+	    data : str,
+	    success:function(data)
+	    {			
+		if(data==1)
+		{
+		    var a_spanid = 'active_'+ID ;
+		    var d_spanid = 'dactive_'+ID ;
+		    if(status !="active")
+		    {
+			/* var ht = '<section class="content"><div class="col-xs-12"><div class="alert alert-success alert-dismissable"><i class="fa fa-check"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>The Comment has been successfully Inactive.</div></div></section>' */
+			$("#"+a_spanid).hide();
+			$("#"+d_spanid).show();
+			jQuery("#msg_div").html();				
+		    }
+		    else
+		    {
+			/* var ht = '<section class="content"><div class="col-xs-12"><div class="alert alert-success alert-dismissable"><i class="fa fa-check"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>The Comment has been successfully Active.</div></div></section>' */				
+			$("#"+d_spanid).hide();
+			$("#"+a_spanid).show();				
+			jQuery("#msg_div").html();					
+		    }
+		}
+	    } 
+	});
+    }	
+    
+    //Aprroved/Bloack
+    function comment_approved_status(ID, PAGE, approve)
+    {
+	var str = 'id='+ID+'&approved='+approve;
+	jQuery.ajax({
+	    type :"POST",
+	    url  :PAGE,
+	    data : str,
+	    success:function(data)
+	    {			
+		if(data==1)
+		{
+		    var a_spanid = 'approve_'+ID ;
+		    var d_spanid = 'block_'+ID ;
+		    if(approve !="YES")
+		    {
+			/* var ht = '<section class="content"><div class="col-xs-12"><div class="alert alert-success alert-dismissable"><i class="fa fa-check"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>The Comment has been successfully Block.</div></div></section>' */
+			$("#"+a_spanid).hide();
+			$("#"+d_spanid).show();
+			jQuery("#msg_div").html();					
+		    }
+		    else
+		    {
+			/* var ht = '<section class="content"><div class="col-xs-12"><div class="alert alert-success alert-dismissable"><i class="fa fa-check"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>The Comment has been successfully Approved.</div></div></section>' */
+			$("#"+d_spanid).hide();
+			$("#"+a_spanid).show();
+			jQuery("#msg_div").html();		    
+		    }
+		}
+	    } 
+	});			
+    } 
 
 	
-	
+    /* functions used for comment section ends */
+
 	
 
 

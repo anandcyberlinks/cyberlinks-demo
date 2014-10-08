@@ -24,7 +24,7 @@
                         <!-- general form elements -->
                         <div class="box box-primary">
                             <!-- form start -->
-                            <form  method="post" action="<?php echo base_url(); ?>video/search" onsubmit="return date_check();" id="searchIndexForm" accept-charset="utf-8">
+                            <form  method="post" action="<?php echo base_url(); ?>video/index" onsubmit="return date_check();" id="searchIndexForm" name="searchIndexForm" accept-charset="utf-8">
                                 <div style="display:none;"><input type="hidden" name="_method" value="POST"/></div>
                                 <div class="box-body">
                                     <div class="row">
@@ -109,7 +109,7 @@
                                                     <?php if(in_array($value->minetype,array('video/wmv','video/avi'))) { ?>
                                                     --
                                                     <?php } else { ?>
-                                                    <a class="prev_video" href="#myModal" data-backdrop="static" data-toggle="modal" data-img-url="<?php echo amazonFileUrl.$value->file; ?>">Preview</a>
+                                                    <a class="prev_video" href="#myModal" data-backdrop="static" data-toggle="modal" data-img-url="<?php echo baseurl.serverVideoRelPath.$value->file; ?>">Preview</a>
                                                     <?php } ?>
                                                 </td>
                                                 <td  width="120"><?php echo date('M d,Y', strtotime($value->created)); ?></td>

@@ -127,6 +127,10 @@ class Transcode extends MY_Controller {
     );
 
     function index() {
+        $searchterm='';
+        if($this->uri->segment(2) ==''){                
+            $this->session->unset_userdata('search_form');
+        }
         $sort = $this->uri->segment(3);
         $sort_by = $this->uri->segment(4);
         switch ($sort) {
@@ -154,42 +158,24 @@ class Transcode extends MY_Controller {
             default:
                 $sort = 'device_name';
         }
-        $this->load->library("pagination");
-        $config = array();
-        $config["base_url"] = base_url() . "transcode/index";
-        $config["total_rows"] = $this->Transcode_model->getRecord_count();
-        $config["per_page"] = 10;
-        $config["uri_segment"] = 3;
-        $this->pagination->initialize($config);
-        $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
-        $this->data["links"] = $this->pagination->create_links();
-        $this->data['total_rows'] = $config["total_rows"];
-        $this->data['transcode'] = $this->Transcode_model->getTranscode($config["per_page"], $page, $sort, $sort_by);
-        $this->data['allTranscode'] = $this->Transcode_model->getAllTranscode();
-        $this->show_view('transcode', $this->data);
-    }
-
-    /* 	Search Transcode  */
-
-    function searchTranscode() {
         if (isset($_POST['submit']) && $_POST['submit'] == 'Search') {
             $this->session->set_userdata('search_form', $_POST);
         } elseif (isset($_POST['reset']) && $_POST['reset'] == 'Reset') {
             $this->session->unset_userdata('search_form');
         }
-        $search_for = $this->session->userdata('search_form');
+        $searchterm = $this->session->userdata('search_form');
+
         $this->load->library("pagination");
         $config = array();
-        $config["base_url"] = base_url() . "transcode/searchTranscode";
-        $config["total_rows"] = count($this->Transcode_model->getSearchCount($search_for));
+        $config["base_url"] = base_url() . "transcode/index";
+        $config["total_rows"] = $this->Transcode_model->getRecordCount($searchterm);
         $config["per_page"] = 10;
         $config["uri_segment"] = 3;
         $this->pagination->initialize($config);
         $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
         $this->data["links"] = $this->pagination->create_links();
         $this->data['total_rows'] = $config["total_rows"];
-        $this->data['transcode'] = $this->Transcode_model->getSearchTranscode($config["per_page"], $page, $search_for);
-        $this->data["search_data"] = $search_for;
+        $this->data['transcode'] = $this->Transcode_model->getTranscode($config["per_page"], $page, $sort, $sort_by, $searchterm);
         $this->data['allTranscode'] = $this->Transcode_model->getAllTranscode();
         $this->show_view('transcode', $this->data);
     }
@@ -204,52 +190,30 @@ class Transcode extends MY_Controller {
             $tid = base64_decode($id);
             if ($tid) {
                 if (isset($_POST['submit']) && $_POST['submit'] == "Update") {
+                    echo '<pre>';print_r($_POST);echo '</pre>'; exit;
                     $this->form_validation->set_rules($this->validation_rules['update_Transcode']);
                     if ($this->form_validation->run()) {
-                        $post['id'] = $tid;
-                        $post['flavor_name'] = $this->input->post('flavor_name');
-                        $post['device_name'] = $this->input->post('device_name');
-                        $post['bitrate_type'] = $this->input->post('bitrate_type');
-                        $post['bitrate'] = $this->input->post('bitrate');
-                        $post['video_bitrate'] = $this->input->post('video_bitrate');
-                        $post['audio_bitrate'] = $this->input->post('audio_bitrate');
-                        $post['width'] = $this->input->post('width');
-                        $post['height'] = $this->input->post('height');
-                        $post['frame_rate'] = $this->input->post('frame_rate');
-                        $post['keyframe_rate'] = $this->input->post('keyframe_rate');
-                        $post['modified'] = date('Y-m-d');
-                        $this->Transcode_model->update_transcode($post);
+                        $_POST['id'] = $tid;
+                        $this->Transcode_model->_saveTranscode($_POST);
                         $msg = $this->loadPo('Transcode Success Fully Updated');
                         $this->log($this->user, $msg);
                         $this->session->set_flashdata('message', sprintf('<section class="content"><div class="col-xs-12"><div class="alert alert-success alert-dismissable"><i class="fa fa-check"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>%s</div></div></section>', $msg));
                         redirect('transcode');
                     } else {
                         $this->data['allTranscode'] = $this->Transcode_model->getAllTranscode();
-                        $this->data['edit'] = $this->Transcode_model->editTranscode($tid);
+                        $this->data['edit'] = $this->Transcode_model->getAllTranscode($tid);
                         $this->show_view('edit_transcode', $this->data);
                     }
                 } else {
                     $this->data['allTranscode'] = $this->Transcode_model->getAllTranscode();
-                    $this->data['edit'] = $this->Transcode_model->editTranscode($tid);
+                    $this->data['edit'] = $this->Transcode_model->getAllTranscode($tid);
                     $this->show_view('edit_transcode', $this->data);
                 }
             } else {
                 if (isset($_POST['submit']) && $_POST['submit'] == 'Submit') {
-                    $post['flavor_name'] = $this->input->post('flavor_name');
-                    $post['device_name'] = $this->input->post('device_name');
-                    $post['bitrate_type'] = $this->input->post('bitrate_type');
-                    $post['bitrate'] = $this->input->post('bitrate');
-                    $post['video_bitrate'] = $this->input->post('video_bitrate');
-                    $post['audio_bitrate'] = $this->input->post('audio_bitrate');
-                    $post['width'] = $this->input->post('width');
-                    $post['height'] = $this->input->post('height');
-                    $post['frame_rate'] = $this->input->post('frame_rate');
-                    $post['keyframe_rate'] = $this->input->post('keyframe_rate');
-                    $post['created'] = date('Y-m-d');
-                    $post['modified'] = date('Y-m-d');
                     $this->form_validation->set_rules($this->validation_rules['add_transcode']);
                     if ($this->form_validation->run()) {
-                        $this->Transcode_model->saveTranscode($post);
+                        $this->Transcode_model->_saveTranscode($_POST);
                         $sess = $this->session->all_userdata();
                         $msg = $this->loadPo('Transcode Successfully Added');
                         $this->log($this->user, $msg);

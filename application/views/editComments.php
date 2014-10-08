@@ -4,10 +4,10 @@
 	<section class="content-header">
 		<h1>Update Comment</h1>
 		<ol class="breadcrumb">
-				<li><a href="<?php echo base_url(); ?>"><i class="fa fa-dashboard"></i><?php echo $welcome->loadPo('Dashboard') ?></a></li>
-                                <li><a href="<?php echo base_url(); ?>comments"><i class="glyphicon glyphicon-comment"></i><?php echo $welcome->loadPo('Comment') ?></a></li>
-                                <li class="active"><?php echo $welcome->loadPo('Update Comment') ?></li>
-			</ol>
+			<li><a href="<?php echo base_url(); ?>"><i class="fa fa-dashboard"></i><?php echo $welcome->loadPo('Dashboard') ?></a></li>
+			<li><a href="<?php echo base_url(); ?>comments"><i class="glyphicon glyphicon-comment"></i><?php echo $welcome->loadPo('Comment') ?></a></li>
+			<li class="active"><?php echo $welcome->loadPo('Update Comment') ?></li>
+		</ol>
 	</section>
 	
 	<section class="content">                   					
@@ -16,7 +16,7 @@
 					<div class="box-header">	
 						<h3 class="box-title">Update Comment</h3>
 					</div>				
-					<?php  foreach ($edit as $value){?> 
+					<?php  foreach ($result as $value){?> 
 					<form enctype="multipart/form-data" method="post" action="">
 					<div class="box-body">
 						<div class="row">
@@ -28,7 +28,7 @@
 							</div>							
 						</div>						
 					</div><!-- /.box-body -->
-					<div class="box-footer" align="center">
+					<div class="box-footer">
 						<button type="submit" name="Submit" value="Update" class="btn btn-primary">Submit</button>
 						<a class="btn btn-primary" href="<?php echo base_url();?>comments">Cancel</a>
 					</div>

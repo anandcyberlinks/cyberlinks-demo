@@ -60,7 +60,6 @@ class Layout extends MY_Controller {
 
     function dashboard() {
         $data['result'] = $this->session->all_userdata();
-        //print_r($data);
         $data['welcome'] = $this;
         $this->show_view('dashboard', $data);
     }
@@ -83,8 +82,8 @@ class Layout extends MY_Controller {
             if (count($email) == '1') {
                 $email['action'] = 'password_reset';
                 $email['token'] = sha1(md5(uniqid()) . rand('1', '5000') . md5(time()));
-                $id = $this->user_model->genratetoken($email); // Genrate new token and return id
-                $token = $this->user_model->fetchtoken($id);   //fetch ganrated token
+                $id = $this->user_model->genratetoken($email); // Generate new token and return id
+                $token = $this->user_model->fetchtoken($id);   //fetch generated token
                 $to = $_POST['email'];
                 $subject = 'Reset Password';
                 $body = base_url() . 'layout/token/?token=' . $token[0]->token;
@@ -191,17 +190,22 @@ class Layout extends MY_Controller {
                 $allowedFileSize = $allowedSize * 1024 * 1024; // Bytes
                 $allowedExt = array('jpg', 'jpeg', 'png', 'bmp', 'gif');
                 $extns = implode(',', $allowedExt);
-                $p_image = $_FILES['image']['name'] . "." . $fileExt;
+                $p_image = uniqid().".".$fileExt;
                // echo $p_image; die;
                 //echo $ext; die;
                 if (in_array($fileExt, $allowedExt)) {
                     if ($_FILES['image']['size'] <= $allowedFileSize) {
                         // print_r( $fileInfoArray = pathinfo($p_image));
                         $src = $_FILES['image']['tmp_name'];
-                        $dest = "assets/img/$p_image";
+                        $dest = PROFILEPIC_PATH.$p_image;
 
+                        $userData = $this->user_model->fetchuser($this->user_id);
+                        $profilePicOld = REAL_PATH.PROFILEPIC_PATH.$userData[0]->image;
                         $isMoved = move_uploaded_file($src, $dest);
                         if ($isMoved == true) {
+                            if(file_exists($profilePicOld)){
+                                unlink($profilePicOld);
+                            }
                             $this->user_model->do_upload($this->user_id, $p_image);
                             $this->session->set_flashdata('message', '<section class="content"><div class="col-xs-12"><div class="alert alert-success alert-dismissable"><i class="fa fa-check"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Image Changed Success Fully</div></div></section>');
                             redirect(base_url() . 'layout/profile');

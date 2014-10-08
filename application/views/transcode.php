@@ -29,7 +29,7 @@
 								</div>
 							</div><!-- /.box-header -->
 							<!-- form start -->
-							<form action="<?php echo base_url(); ?>transcode/searchTranscode" id="searchTranscodeForm" method="post" accept-charset="utf-8">
+							<form action="<?php echo base_url(); ?>transcode/index" id="searchTranscodeForm" method="post" accept-charset="utf-8">
 								<div style="display:none;"><input type="hidden" name="_method" value="POST"/></div>
 								<div class="box-body">
 									<div class="row">

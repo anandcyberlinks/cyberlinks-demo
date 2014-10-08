@@ -27,7 +27,6 @@
 							<!-- form start -->
 							<form action="" id="TranscodeTranscodeoprForm" method="post" accept-charset="utf-8">
 								<div style="display:none;"><input type="hidden" name="_method" value="POST"/></div>
-								<input type="hidden" name="data[Transcode][id]" id="TranscodeId"/>
 								<div class="box-body">
 									<div class="row">
 										<div class="form-group col-lg-3">

@@ -25,23 +25,6 @@ class user extends MY_Controller {
         $this->role_id = $s[0]->role_id;
     }
 
-    public function DeleteUser() {
-        $per = $this->checkpermission($this->role_id, 'delete');
-        if ($per) {
-            $s = $this->session->all_userdata();
-            $user = $s[0]->username;
-            $data['id'] = $_GET['id'];
-            $this->super_model->deleteuser($data);
-            $this->session->set_flashdata('message', '<section class="content"><div class="col-xs-12"><div class="alert alert-success alert-dismissable"><i class="fa fa-check"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' . $this->loadPo('User Successfully Deleted') . '</div></div></section>');
-            $this->log($user, 'User Successfully Deleted');
-            redirect(base_url() . 'user');
-        } else {
-            $this->log($user, 'Unauthorised Access trying to delete a user');
-            $this->session->set_flashdata('message', '<section class="content"><div class="col-xs-12"><div class="alert alert-danger alert-dismissable"><i class="fa fa-ban"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' . $this->loadPo('Access Denied') . '</div></div></section>');
-            redirect(base_url() . 'user');
-        }
-    }
-
     function index() {
         $userid = $this->user_id;
         $s = $this->session->all_userdata();
@@ -60,6 +43,25 @@ class user extends MY_Controller {
         $data['total_rows'] = $config["total_rows"];
         $this->show_view('users', $data);
     }
+    
+    public function DeleteUser() {
+        $per = $this->checkpermission($this->role_id, 'delete');
+        if ($per) {
+            $s = $this->session->all_userdata();
+            $user = $s[0]->username;
+            $data['id'] = $_GET['id'];
+            $this->super_model->deleteuser($data);
+            $this->session->set_flashdata('message', '<section class="content"><div class="col-xs-12"><div class="alert alert-success alert-dismissable"><i class="fa fa-check"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' . $this->loadPo('User Successfully Deleted') . '</div></div></section>');
+            $this->log($user, 'User Successfully Deleted');
+            redirect(base_url() . 'user');
+        } else {
+            $this->log($user, 'Unauthorised Access trying to delete a user');
+            $this->session->set_flashdata('message', '<section class="content"><div class="col-xs-12"><div class="alert alert-danger alert-dismissable"><i class="fa fa-ban"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' . $this->loadPo('Access Denied') . '</div></div></section>');
+            redirect(base_url() . 'user');
+        }
+    }
+
+
 
     function changestatus() {
         $data['id'] = $_GET['id'];

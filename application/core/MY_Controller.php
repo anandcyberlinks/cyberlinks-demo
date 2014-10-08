@@ -48,6 +48,22 @@ class MY_Controller extends CI_Controller {
     var $display_pages = TRUE;
     var $anchor_class = '';
     
+    
+    
+    // constructor of this controller
+    public function __construct() {
+        parent::__construct();
+        $this->load->helper('url');
+        $this->load->library('session');
+        $this->load->library('image_lib');
+        $this->amazons3 = $this->config->item('amazons3');
+        $sess = $this->session->all_userdata();
+        if (!(isset($sess['lan']))) {
+            $lang = 'eng';
+            $this->session->set_userdata('lan', $lang);
+        }
+    }
+    
     function get_data($url) {
         $ch = curl_init();
         $timeout = 5;
@@ -107,18 +123,6 @@ class MY_Controller extends CI_Controller {
     }
 
 
-    // constructor of this controller
-    public function __construct() {
-        parent::__construct();
-        $this->load->helper('url');
-        $this->load->library('session');
-        $sess = $this->session->all_userdata();
-        if (!(isset($sess['lan']))) {
-            $lang = 'eng';
-            $this->session->set_userdata('lan', $lang);
-        }
-    }
-
     function checkpermission($role, $permission) {
         $this->db->where(array('role_id' => $role, 'permission' => $permission));
         $query = $this->db->get('permission');
@@ -138,7 +142,7 @@ class MY_Controller extends CI_Controller {
         $query = $this->db->get('users');
         $result = $query->result();
         if ($result[0]->image != "") {
-            return base_url() . 'assets/img/' . $result[0]->image;
+            return baseurl.PROFILEPIC_PATH. $result[0]->image;
         } else {
             return base_url() . 'assets/img/avatar3.png';
         }
@@ -331,103 +335,536 @@ class MY_Controller extends CI_Controller {
 	function getVideoFileSize($fileName, $path) {
         $this->load->library('getid3/getid3');
         $getID3 = new GetId3;
-		$ThisFileInfo = $getID3->analyze($path.$fileName);
+	$ThisFileInfo = $getID3->analyze($path.$fileName);
 
         return $ThisFileInfo;
     }
 	
-	/********* function used to upload video file on amazon s3 server **********/
+    /********* UPLOAD SECTION STARTS(Edited by rekha) *********/
+   
+    /*  
+    /----------------------------------------------------------------------------------
+    / 	File Upload 
+    /----------------------------------------------------------------------------------
+    /	    
+    / 	$incoming_tmp                   = as temp path of file to be uploaded
+    / 	$incoming_original              = original filename
+    / 	$content_type                   = content type
+    /
+    */
+    
+    function _upload($tmpFilePath, $fileNameUnique) {
+	$fileInfo = $this->getFileInfo($tmpFilePath);
+	$mimeType = $fileInfo['mime_type']; 
+	list($mimeTypeN,$binary)  = explode("/", $mimeType); 
+	if($this->amazons3) {
+	    $bucket = bucket;
+	    // Create a `Aws` object using a configuration file
+	    $aws =  Aws::factory(APPPATH.'config/amazoneS3.php');
+	    // Get the client from the service locator by namespace
+	    $client = $aws->get('s3');
+	    if (!$client->doesBucketExist($bucket)) {
+		    $client->createBucket(array('Bucket' => $bucket,'ACL' => 'public-read'));						
+	    } 
+	    $uploader = UploadBuilder::newInstance()
+		->setClient($client)
+		->setSource($tmpFilePath)
+		->setBucket($bucket)
+		->setKey($fileNameUnique) 
+		->setOption('ACL', 'public-read')
+		->setOption('ContentType', $mimeType)
+		->build();
+	    try {
+		$uploader->upload();
+		return true;
+	    } catch (MultipartUploadException $e) {
+		$uploader->abort();
+		return false;
+	    }
+
+	} else { 
+	    if($mimeTypeN == 'video') {
+		$result = $this->upload_move_files($tmpFilePath, $fileNameUnique, REAL_PATH.serverVideoRelPath);
+                return $result;
+	    } else { 
+		$result = $this->upload_move_files($tmpFilePath, $fileNameUnique, REAL_PATH.serverImageRelPath, true);
+                return $result;
+	    }		    
+	}
 	
-	function uploadVideoAS3($incoming_tmp, $incoming_original, $content_type) 
-	{
-       	$bucket = bucket;
-		// Create a `Aws` object using a configuration file
-		$aws =  Aws::factory(APPPATH.'config/amazoneS3.php');
-		// Get the client from the service locator by namespace
-		$client = $aws->get('s3');
-		if (!$client->doesBucketExist($bucket)) {
-			$client->createBucket(array('Bucket' => $bucket,'ACL' => 'public-read'));						
-		} 
-		$uploader = UploadBuilder::newInstance()
-			->setClient($client)
-			->setSource($incoming_tmp)
-			->setBucket($bucket)
-			->setKey('videos/'.$incoming_original) 
-			->setOption('ACL', 'public-read')
-			->setOption('ContentType', $content_type)
-			->build();
-			try {
-				$uploader->upload();
-				return true;
-			} catch (MultipartUploadException $e) {
-				$uploader->abort();
-				return false;
-			}
+    }
+    
+    
+    /*
+    /--------------------------------------------------------------------------------
+    /   function to get file extension
+    /--------------------------------------------------------------------------------
+    /   
+    / 	$fileName           = filename
+    /
+    */
+    
+    function _getFileExtension($fileName) {	
+	$fileExtension = end(explode(".", $fileName));
+	return $fileExtension;
+    }
+    
+    /*
+    /--------------------------------------------------------------------------------
+    /   function to get file extension from url
+    /--------------------------------------------------------------------------------
+    /   
+    / 	$filePath           = filepath(http)
+    /
+    */
+    
+    function _getFileExtensionUrl($filePath) {	
+        $fileExtension = pathinfo($filePath, PATHINFO_EXTENSION);
+        return $fileExtension;
+    }
+    
+
+    /*
+    /--------------------------------------------------------------------------------
+    /   function to download file using curl
+    /--------------------------------------------------------------------------------
+    /   
+    / 	$fileSrcPath           = source path 
+    / 	$fieDestPath           = Destination path
+    /
+    */
+    
+    
+    
+    /*
+    * Calculate HMAC-SHA1 according to RFC2104
+    * See http://www.faqs.org/rfcs/rfc2104.html
+    */
+    function hmacsha1($key,$data) {
+        $blocksize=64;
+        $hashfunc='sha1';
+        if (strlen($key)>$blocksize)
+            $key=pack('H*', $hashfunc($key));
+        $key=str_pad($key,$blocksize,chr(0x00));
+        $ipad=str_repeat(chr(0x36),$blocksize);
+        $opad=str_repeat(chr(0x5c),$blocksize);
+        $hmac = pack(
+                    'H*',$hashfunc(
+                        ($key^$opad).pack(
+                            'H*',$hashfunc(
+                                ($key^$ipad).$data
+                            )
+                        )
+                    )
+                );
+        return bin2hex($hmac);
+    }
+     
+    /*
+    * Used to encode a field for Amazon Auth
+    * (taken from the Amazon S3 PHP example library)
+    */
+    function hex2b64($str)
+    {
+        $raw = '';
+        for ($i=0; $i < strlen($str); $i+=2)
+        {
+            $raw .= chr(hexdec(substr($str, $i, 2)));
+        }
+        return base64_encode($raw);
+    }
+     
+        
+    function _uploadFileCurl($fileSrcPath, $fieDestPath, $videoFileUniqName) {
+        if($this->amazons3) {
+	    $bucket = bucket;
+            $acl = 'public-read';
+	    // Create a `Aws` object using a configuration file
+	    $aws =  Aws::factory(APPPATH.'config/amazoneS3.php'); //print_r($aws);
+	    // Get the client from the service locator by namespace
+	    $client = $aws->get('s3');
+            $mimeType = 'Video/mp4';
+            //$key = bucket;
+            /* Create the Amazon S3 Policy that needs to be signed */
+            $policy = '{ "expiration": "2014-12-01T12:00:00.000Z",
+              "conditions": [
+                {"acl": "public-read" },
+                {"bucket": "newsnation1" },
+                ["starts-with", "$key",  "/video/"],
+                ["content-length-range", 2048, 20971520]
+              ]';
+             
+            /*
+            * Base64 encode the Policy Document and then
+            * create HMAC SHA-1 signature of the base64 encoded policy
+            * using the secret key. Finally, encode it for Amazon Authentication.
+            */
+            $base64_policy = base64_encode($policy);
+            $signature = $this->hex2b64($this->hmacsha1('bavuLq6YmLYMmgU11M5wAjfz80tKEe42a74sP0L9', $base64_policy));
+            $params = array(
+                'key' => $videoFileUniqName,
+                'acl' => $acl,
+                'AWSAccessKeyId' => 'AKIAJ5YTAN5W5EZMA5JQ',
+                'Policy' => $policy,
+                'Signature' => $signature,
+                'Content-Type' => $mimeType,
+                'file' => $fileSrcPath
+                );               
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_VERBOSE, 1);
+                curl_setopt($ch, CURLOPT_URL, serverurl);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+                $response = curl_exec($ch);
+                curl_close($ch);
+                echo $response;
+        } else {          
+            //Here is the file we are downloading, replace spaces with %20
+            $ch = curl_init(str_replace(" ", "%20", $fileSrcPath));
+            //File to save the contents to
+            $fp = fopen($fieDestPath, 'wb');
+            //give curl the file pointer so that it can write to it
+            curl_setopt($ch, CURLOPT_FILE, $fp);
+            curl_setopt($ch, CURLOPT_HEADER, 0);
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+            $data = curl_exec($ch); //get curl response	
+            curl_close($ch);
+            fclose($fp);
+            if (filesize($fieDestPath) > 0) return true;
+        }
+    }
+    
+    
+    /*
+    /--------------------------------------------------------------------------------
+    /   function to download file using ftp
+    /--------------------------------------------------------------------------------
+    /   
+    / 	$fileSrcPath           = source path 
+    / 	$fieDestPath           = Destination path
+    /
+    */
+    
+    
+    function _downloadFileFtp($fileSrcPath, $fieDestPath, $ftp_conn) {
+        $data = ftp_get($ftp_conn, $fieDestPath, $fileSrcPath, FTP_BINARY, 0);
+        if($data == 1) {
+            if($this->amazons3) {
+                //Here is the file we are downloading, replace spaces with %20
+                $ch = curl_init(str_replace(" ", "%20", $fileSrcPath));
+                //File to save the contents to
+                $fp = fopen($fieDestPath, 'wb');
+                //give curl the file pointer so that it can write to it
+                curl_setopt($ch, CURLOPT_FILE, $fp);
+                curl_setopt($ch, CURLOPT_HEADER, 0);
+                curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+                $data = curl_exec($ch); //get curl response	
+                curl_close($ch);
+                fclose($fp);
+                if (filesize($fieDestPath) > 0) return true;
+            } else {
+                return true;
+            }
+        } else {
+            return false;   
+        }
+    }
+
+    
+    /*
+    /------------------------------------------------------------------------------------
+    /   function to move a file from one location(temp) to another location
+    /------------------------------------------------------------------------------------
+    /
+    / 	    
+    / 	$fileTempPath 	            = temporary path of a file
+    / 	$fileUniqName  	            = unique name of file
+    / 	$fileUploadPath             = destination path where file have to be uploaded
+    / 	$thumb 		            = this is to specify whether we have to create thumbnail size or not(Image file)
+    /
+    /
+    */
+    
+    
+    public function upload_move_files($fileTempPath, $fileUniqName, $fileUploadPath, $thumb = false) {
+        if (move_uploaded_file($fileTempPath,$fileUploadPath.$fileUniqName)) {
+	    if($thumb) {
+		$fileDestPath = $fileUploadPath . $fileUniqName;						
+		$smallImg = $this->create_thumbnail($fileUniqName, $fileDestPath, REAL_PATH.THUMB_SMALL_PATH, '320', '140');
+		$medImg = $this->create_thumbnail($fileUniqName, $fileDestPath,  REAL_PATH.THUMB_MEDIUM_PATH, '480', '215');
+		$largeImg = $this->create_thumbnail($fileUniqName, $fileDestPath, REAL_PATH.THUMB_LARGE_PATH, '720', '320');
+	    }
+            return true;
+        } else {
+	    echo "There was an error uploading the file, please try again!";
+            return false;
+        }
+    }
+    
+    
+    
+    function create_thumbnail($filename, $srcPath, $uploadPath, $width, $height){
+        $config['image_library'] = 'gd2';
+        $config['source_image'] = $srcPath;
+        $config['create_thumb'] = TRUE;
+        $config['maintain_ratio'] = FALSE;
+        $config['thumb_marker'] = '';
+        $config['width'] = $width;
+        $config['height'] = $height;
+        $config['new_image'] = $uploadPath.$filename;
+        $this->image_lib->initialize($config);
+        $result = $this->image_lib->resize(); 
+        if(!$this->image_lib->resize())
+        {
+                echo $this->image_lib->display_errors();exit;
+        }
+        return TRUE;
+    }
+
+    /*      purpose : function to upload an Image file from using simple form upload(without ajax)
+    * 	    parameters :
+    * 		$field 		: name of form field(file type)
+    * 		$fileUniqName  	: unique name of file
+    * 		$fileUploadPath : destination path where file have to be uploaded
+    * 		$thumb 		: this is to specify whether we have to create thumbnail size or not(Image file) 
+    */
+    
+ /*   function _uploadImage($fieldName, $fileNameUnique, $fileUploadPath, $thumb = FALSE) {
+	$config['upload_path'] = $fileUploadPath;	
+	$config['file_name'] = $fileNameUnique;
+	$this->load->library('upload', $config);
+	if (!$this->upload->do_upload($fieldName)) {
+		$this->data['error'] = array('error' => $this->upload->display_errors());
+		return False;
+	} else {
+		$upload_data = $this->upload->data();
+		if($thumb) {
+		    $srcPath = $upload_data['full_path'];						
+		    $smallImg = $this->create_thumbnail($incoming_original, $srcPath, REAL_PATH.THUMB_SMALL_PATH, '320', '140');
+		    $medImg = $this->create_thumbnail($incoming_original, $srcPath,  REAL_PATH.THUMB_MEDIUM_PATH, '480', '215');
+		    $largeImg = $this->create_thumbnail($incoming_original, $srcPath, REAL_PATH.THUMB_LARGE_PATH, '720', '320');
+		}
+		return True;
+	}
+	
+    } */
+    
+    
+    /*      purpose : function to upload a video file from using simple form upload(without ajax)
+    * 	    parameters :
+    * 		$field 		: name of form field(file type)
+    * 		$fileUniqName  	: unique name of file
+    * 		$fileUploadPath : destination path where file have to be uploaded
+    */
+
+    
+   /* function _uploadVideo($fieldName, $fileNameUnique, $fileUploadPath) {
+	$config['upload_path'] = $fileUploadPath;	
+	$config['file_name'] = $fileNameUnique;
+	$this->load->library('upload', $config);
+	if (!$this->upload->do_upload($fieldName)) {
+		$this->data['error'] = array('error' => $this->upload->display_errors());
+		return False;
+	} else {
+		$upload_data = $this->upload->data();
+		return True;
+	}
+	
+    } */
+
+    
+    /*
+    /--------------------------------------------------------------------
+    /  function to show success message
+    /--------------------------------------------------------------------
+    / 	    
+    / 	$message                    = message to be displayed
+    /
+    */
+
+    
+    function _successmsg($message) {	
+	$succMsg = sprintf('<section class="content"><div class="col-xs-12"><div class="alert alert-success alert-dismissable"><i class="fa fa-check"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>%s</div></div></section>', $message);
+	return $succMsg;
+    }
+    
+    
+    /*
+    /--------------------------------------------------------------------
+    /  function to show error message
+    /--------------------------------------------------------------------
+    / 	    
+    / 	$message                    = message to be displayed
+    /
+    */
+    
+    
+    function _errormsg($message) {	
+	$errorMsg = sprintf('<section class="content"><div class="col-xs-12"><div class="alert alert-danger alert-dismissable"><i class="fa fa-ban"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>%s</div></div></section>', $message);
+	return $errorMsg;
+    }
+    
+    
+    /*
+    /--------------------------------------------------------------------
+    /  function to show warning message
+    /--------------------------------------------------------------------
+    / 	    
+    / 	$message                    = message to be displayed
+    /
+    */
+    
+    function _warningmsg($message) {	
+	$errorMsg = sprintf('<section class="content"><div class="col-xs-12"><div class="alert alert-warning alert-dismissable"><i class="fa fa-ban"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>%s</div></div></section>', $message);
+	return $errorMsg;
+    }
+
+    /*
+    /--------------------------------------------------------------------
+    /  unction to set a file information using getid3 library
+    /--------------------------------------------------------------------
+    / 	    
+    / 	$filePath                   = Path of file
+    /
+    */    
+    
+    function getFileInfo($filePath) {
+        $this->load->library('getid3/getid3');
+        $getID3 = new GetId3;
+	$ThisFileInfo = $getID3->analyze($filePath);
+        return $ThisFileInfo;
+    }
+
+    
+     /*
+    /--------------------------------------------------------------------
+    /  unction to delete a file from server(local/s3)
+    /--------------------------------------------------------------------
+    / 	    
+    / 	$fileName                   = name of file
+    /   $fileType                   = type of file(image/video)
+    /
+    */    
+    
+    
+    function _deleteFile($fileName, $fileDir)
+    {
+        if($this->amazons3) {
+            $bucket = bucket;
+            $aws =  Aws::factory(APPPATH.'config/amazoneS3.php');
+            // Get the client from the service locator by namespace
+            $client = $aws->get('s3');
+            $newFilePath =  serverDir.$fileName;
+            $existFile = $client->doesObjectExist($bucket, $newFilePath);
+            if($existFile)
+            {
+                    $result = $client->deleteObject(array(
+                                    // Bucket is required
+                                    'Bucket' => bucket,
+                                    // Key is required
+                                    'Key' => $newFilePath,
+                    ));
+                    if($result) {
+                            return true;
+                    }
+            } else {
+                    return false;
+            }
+        } else {
+            $filePath = $fileDir.$fileName;
+            if(file_exists($filePath)){ 
+                unlink($filePath);    
+            }            
+        }
     }
 	
-	function deleteFileS3($fileName)
-	{
-		$bucket = bucket;
-		$aws =  Aws::factory(APPPATH.'config/amazoneS3.php');
-		// Get the client from the service locator by namespace
-		$client = $aws->get('s3');
-		$newFilePath =  'videos/'.$fileName;
-		$existFile = $client->doesObjectExist($bucket, $newFilePath);
-		if($existFile)
-		{
-			$result = $client->deleteObject(array(
-					// Bucket is required
-					'Bucket' => bucket,
-					// Key is required
-					'Key' => $newFilePath,
-			));
-			if($result) {
-				return true;
-			}
-		} else {
-			return false;
-		}
-	}
-	
-	function downloadFileS3($fileName, $fullPath)
-	{
-		$bucket = bucket;
-		$aws =  Aws::factory(APPPATH.'config/amazoneS3.php');
-		// Get the client from the service locator by namespace
-		$client = $aws->get('s3');
-		$newFilePath =  'videos/'.$fileName;
-		$existFile = $client->doesObjectExist($bucket, $newFilePath);
-		if($existFile)
-		{
-			try {
-				// Get the object
-				$result = $client->getObject(array(
-					'Bucket' => $bucket,
-					'Key'    => $newFilePath
-				));
+    function _downloadFile($fileName, $fullPath)
+    {
+        if($this->amazons3) {
+            $bucket = bucket;
+            $aws =  Aws::factory(APPPATH.'config/amazoneS3.php');
+            // Get the client from the service locator by namespace
+            $client = $aws->get('s3');
+            $newFilePath =  'videos/'.$fileName;
+            $existFile = $client->doesObjectExist($bucket, $newFilePath);
+            if($existFile)
+            {
+                try {
+                        // Get the object
+                        $result = $client->getObject(array(
+                                'Bucket' => $bucket,
+                                'Key'    => $newFilePath
+                        ));
 
-				// Display the object in the browser
-				header("Content-Type: {$result['ContentType']}");
-				header("Pragma: public"); // required
-				header("Expires: 0");
-				header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-				header("Cache-Control: private", false); // required for certain browsers
-				header("Content-Type: $ctype");
-				header("Content-Disposition: attachment; filename=\"" . basename($fullPath) . "\";");
-				header("Content-Transfer-Encoding: binary");
-				header("Content-Length: {$result['ContentLength']}");
-				ob_clean();
-				flush();
-				readfile($fullPath); 
-				//return $result['Body'];
-			} catch (S3Exception $e) {
-				//echo $e->getMessage() . "\n";
-				return false;
-			}
-		} else {
-			return false;
-		}
+                        // Display the object in the browser
+                        header("Content-Type: {$result['ContentType']}");
+                        header("Pragma: public"); // required
+                        header("Expires: 0");
+                        header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+                        header("Cache-Control: private", false); // required for certain browsers
+                        header("Content-Type: $ctype");
+                        header("Content-Disposition: attachment; filename=\"" . basename($fullPath) . "\";");
+                        header("Content-Transfer-Encoding: binary");
+                        header("Content-Length: {$result['ContentLength']}");
+                        ob_clean();
+                        flush();
+                        readfile($fullPath); 
+                        //return $result['Body'];
+                } catch (S3Exception $e) {
+                        //echo $e->getMessage() . "\n";
+                        return false;
+                }
+            } else {
+                    return false;
+            }
+        } else {
+            if (headers_sent())
+                die('Headers Sent');
 
-	}
+            // Required for some browsers
+            if (ini_get('zlib.output_compression'))
+                ini_set('zlib.output_compression', 'Off');
+
+            // File Exists?
+            if(file_exists($fullPath)){ 
+                // Parse Info / Get Extension
+                try {
+                        $fsize = filesize($fullPath);
+                        $path_parts = pathinfo($fullPath);
+                        $ext = strtolower($path_parts["extension"]);
+                        // Determine Content Type
+                        switch ($ext) {
+                            case "gif": $ctype = "image/gif";
+                                    break;
+                            case "png": $ctype = "image/png";
+                                    break;
+                            case "jpeg":
+                            case "jpg": $ctype = "image/jpg";
+                                    break;
+                            default: $ctype = "application/force-download";
+                        }
+
+                        header("Pragma: public"); // required
+                        header("Expires: 0");
+                        header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+                        header("Cache-Control: private", false); // required for certain browsers
+                        header("Content-Type: $ctype");
+                        header("Content-Disposition: attachment; filename=\"" . basename($fullPath) . "\";");
+                        header("Content-Transfer-Encoding: binary");
+                        header("Content-Length: " . $fsize);
+                        ob_clean();
+                        flush();
+                        readfile($fullPath);
+                        return true;
+                } catch (S3Exception $e) {
+                        //echo $e->getMessage() . "\n";
+                        return false;
+                }
+            } else {
+                return false;
+            }  
+        }            
+    }
+
 
 }

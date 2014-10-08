@@ -31,7 +31,7 @@
                                 <tr>
                                     <td><?php echo $i; ?>  </td> 
                                     <td> 
-                                        <img src="<?php echo amazonFileUrl.$thumb_val->name; ?>" width="100" height="100" /> 
+                                        <img src="<?php echo baseurl.serverImageRelPath.$thumb_val->name; ?>" width="100" height="100" /> 
                                     </td>
                                     <td><?php echo $thumb_val->name; ?>  </td>
                                     <td><?php echo $thumb_val->minetype; ?>  </td> 

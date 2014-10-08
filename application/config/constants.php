@@ -39,5 +39,66 @@ define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 define('bucket',		           'newsnation1');
 define('amazonFileUrl',		'http://'.bucket.'.s3.amazonaws.com/videos/');
 
+
+
+/*
+|--------------------------------------------------------------------------
+| File Paths(upload/play) for server(local/s3)
+|--------------------------------------------------------------------------
+|
+| 'bucket'		            = bucket name for amazon s3 server 
+| 'baseurl'		            = base url
+| 'serverVideoRelPath'		    = directory path to save video 
+| 'serverImageRelPath'		    = directory path to save image 
+| 'REAL_PATH'	                    = directory path 
+| 'THUMB_SMALL_PATH'	            = directory path(relative) to save image(small) 
+| 'THUMB_MEDIUM_PATH'		    = directory path(relative) to save image(medium) 
+| 'THUMB_LARGE_PATH'	            = directory path(relative) to save image(large) 
+| 'PER_PAGE'		            = records per page
+| 'PROFILEPIC_PATH'		    = directory path(relative) to save image(profile) 
+|
+*/
+
+$dir_path = getcwd();
+$path_nw = str_replace('\\', '/', $dir_path);
+if(isset($_SERVER['HTTP_HOST']))
+{
+    $base_url = isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on' ? 'https' : 'http';
+    $base_url .= '://'. $_SERVER['HTTP_HOST'];
+} else {
+    $base_url = 'http://localhost/';
+}
+$base_url .= str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']);
+
+define('bucket',		           'newsnation1');
+define('baseurl',		            $base_url);
+
+if(isset($config['amazons3'])) {
+    define('serverurl',	                'http://'.bucket.'.s3.amazonaws.com/');
+    define('serverDir',                 'videos/');
+    define('serverVideoRelPath',	'http://'.bucket.'.s3.amazonaws.com/videos/');
+    define('serverImageRelPath',	'http://'.bucket.'.s3.amazonaws.com/videos/');
+    define('REAL_PATH',		        '');
+    define('THUMB_SMALL_PATH',          'http://'.bucket.'.s3.amazonaws.com/videos/');
+    define('THUMB_MEDIUM_PATH',         'http://'.bucket.'.s3.amazonaws.com/videos/');
+    define('THUMB_LARGE_PATH',          'http://'.bucket.'.s3.amazonaws.com/videos/');
+    define('PROFILEPIC_PATH',           'http://'.bucket.'.s3.amazonaws.com/videos/');
+} else {
+    define('serverurl',	                baseurl);
+    define('serverDir',                 'videos/');
+    define('serverVideoRelPath',	'assets/upload/video/');
+    define('serverImageRelPath',	'assets/upload/thumbs/');
+    define('REAL_PATH',		            $path_nw.'/');
+    define('THUMB_SMALL_PATH',          'assets/upload/thumbs/small/');
+    define('THUMB_MEDIUM_PATH',         'assets/upload/thumbs/medium/');
+    define('THUMB_LARGE_PATH',          'assets/upload/thumbs/large/');
+    define('PROFILEPIC_PATH',           'assets/upload/profilepic/');
+}
+
+define('PER_PAGE',10);
+
+
+
+
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */

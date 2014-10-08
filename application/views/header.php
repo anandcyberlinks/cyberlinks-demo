@@ -34,7 +34,9 @@ $s = $this->session->all_userdata();
         <link href="<?php echo base_url(); ?>assets/css/timepicker/bootstrap-timepicker.min.css" rel="stylesheet"/>
         <!-- jquery-1.10.2 -->
         <script src="<?php echo base_url() ?>assets/js/jquery-1.10.2.js"></script>
-		
+	<script type="text/javascript">
+	    var baseurl = '<?php echo base_url(); ?>' ;    
+	</script>	
     </head>
     <body class="skin-blue">
         <!-- header logo: style can be found in header.less -->
@@ -65,7 +67,7 @@ $s = $this->session->all_userdata();
                         }
                         ?>
                         <li class="dropdown">
-                            <a href="<?php echo base_url() ?>users/index/<?php echo $lang; ?>" class="dropdown-toggle" data-toggle="dropdown">                                
+                            <a href="<?php echo base_url() ?>language/index/<?php echo $lang; ?>" class="dropdown-toggle" data-toggle="dropdown">                                
                                 <span><?php
                                     if ($lang == 'hin') {
                                         echo $welcome->loadPo('Hindi');
@@ -77,11 +79,11 @@ $s = $this->session->all_userdata();
                             <ul class="dropdown-menu">                                
                                 <!-- Menu Body -->
                                 <li>                                   
-                                    <a href="<?php echo base_url() ?>users/index/eng">English</a>                                   
+                                    <a href="<?php echo base_url() ?>language/index/eng">English</a>                                   
                                 </li>
                                 <!-- Menu Footer-->
                                 <li>                                  
-                                    <a href="<?php echo base_url() ?>users/index/hin"><?php echo $welcome->loadPo('Hindi'); ?></a>                                    
+                                    <a href="<?php echo base_url() ?>language/index/hin"><?php echo $welcome->loadPo('Hindi'); ?></a>                                    
                                 </li>
                             </ul>
                         </li>

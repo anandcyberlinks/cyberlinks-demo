@@ -60,22 +60,24 @@
 										</form>
 									</div>
 								</div>
-								<?php } 
-								 if($tab == 'Youtube') {?>
+								<?php } ?>								
+								<!-- simple upload section ends -->
+								
+								<!-- youtube upload section starts -->
+								<?php if($tab == 'Youtube') {?>
 								<div class="tab-pane active"">
-										<div class="box-header">
-											<h3 class="box-title"><?php echo  $welcome->loadPo('Youtube')." ".$welcome->loadPo('URL') ?></h3>
-										</div>
-										<!-- form start -->
-										<form action="<?php echo base_url() ?>video/youtube" enctype="multipart/form-data" method="post" accept-charset="utf-8">
-										<input type="hidden" name="redirect_url" value="<?php echo current_full_url(); ?>" />	
-										<input class="form-control" name="url" ></br>
-											<input type="submit" name="submit" value="Submit" class="btn btn-success">
-										</form>
+									<div class="box-header">
+										<h3 class="box-title"><?php echo  $welcome->loadPo('Youtube')." ".$welcome->loadPo('URL') ?></h3>
 									</div>
+									<!-- form start -->
+									<form action="<?php echo base_url() ?>video/youtube" enctype="multipart/form-data" method="post" accept-charset="utf-8">
+									<input type="hidden" name="redirect_url" value="<?php echo current_full_url(); ?>" />	
+									<input class="form-control" name="url" ></br>
+										<input type="submit" name="submit" value="Submit" class="btn btn-success">
+									</form>
 								</div>
 								<?php } ?>
-								<!-- simple upload section ends -->
+								<!-- youtube upload section ends -->
 								
 								
 								<!-- upload from other source section starts -->

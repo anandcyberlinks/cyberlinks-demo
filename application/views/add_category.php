@@ -32,7 +32,7 @@
 									<div class="row">
 										<div class="form-group col-lg-5">
 											<div class="input text">
-												<label for="CategoryCategory"><?php echo $welcome->loadPo('Category').' '.$welcome->loadPo('Name'); ?></label>
+												<label for="Category"><?php echo $welcome->loadPo('Category').' '.$welcome->loadPo('Name'); ?></label>
 												<input name="category" class="form-control" placeholder="<?php echo $welcome->loadPo('Category').' '.$welcome->loadPo('Name'); ?>" maxlength="255" type="text" id="Category" value="<?php echo set_value('category'); ?>" onblur="category_check(this.value);" />
 												<?php echo form_error('category','<span class="text-danger">','</span>'); ?>
 											</div>

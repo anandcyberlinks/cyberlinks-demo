@@ -39,7 +39,6 @@ class Role extends MY_Controller {
 
     function deletepermission() {
         $data = $_GET;
-        //print_r($data); die;
         $this->role_model->deletepermission($data);
         //$this->session->set_flashdata('message', '<section class="content"><div class="col-xs-12"><div class="alert alert-success alert-dismissable"><i class="fa fa-check"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Permission Successfully Changed</div></div></section>');
         redirect(base_url() . 'role');
@@ -72,6 +71,7 @@ class Role extends MY_Controller {
             echo '0';
         }
     }
+    
     function deleterole(){
         $id = $_GET['id'];
         $res = $this->role_model->checkrolefor($id);

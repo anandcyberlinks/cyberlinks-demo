@@ -1,3 +1,4 @@
+<?php $tab = $this->uri->segment(3); ?>
 <div class="wrapper row-offcanvas row-offcanvas-left">
 	<!-- Right side column. Contains the navbar and content of the page -->
     <aside class="right-side">                
@@ -25,14 +26,16 @@
 						<!-- Custom Tabs -->
 						<div class="nav-tabs-custom">
 							<ul class="nav nav-tabs">
-								<li class="active" ><a href="#tab_1" data-toggle="tab"><?php echo  $welcome->loadPo('From CSV') ?></a></li>
-								<li class=""><a href="#tab_2" data-toggle="tab"><?php echo  $welcome->loadPo('From FTP') ?></a></li>
+								<li class="<?=($tab==='csv')?'active':''?>" ><a href="<?php echo base_url();?>video/bulkupload/csv"><?php echo  $welcome->loadPo('From CSV') ?></a></li>
+								<li class="<?=($tab==='ftp')?'active':''?>" ><a href="<?php echo base_url();?>video/bulkupload/ftp"><?php echo  $welcome->loadPo('From FTP') ?></a></li>
 								<li class="pull-right">&nbsp;</li>
 							</ul>
 							<div class="tab-content">
-								<div class="tab-pane active" id="tab_1">
+								<!-- simple upload section starts -->
+								<?php if($tab == 'csv') {?>
+								<div class="tab-pane active" id="tab_csv">
 									<div class="box box-solid">
-										<form action="#" id="csvBulkuploadForm" method="post" accept-charset="utf-8"  enctype="multipart/form-data">
+										<form action="" id="csvBulkuploadForm" name="csvBulkuploadForm" method="post" accept-charset="utf-8"  enctype="multipart/form-data">
 											<input type="hidden" name="redirect_url" id="redirect_url" value="<?php echo base_url(); ?>video" />											
 											<div class="box-body">
 											<!-- 	<div style="display:none;"><input type="hidden" name="_method" value="POST"/></div> -->
@@ -50,14 +53,19 @@
 												<div id="csvFileList" ></div>
 										 	</div><!-- /.box-body -->
 											<div class="box-footer">
-												<button type="submit" name="Submit" id="uploadcsv" value="Upload" class="btn btn-primary btn-sm"><?php  echo  $welcome->loadPo('Upload') ?></button>
+												<button name="Submit" id="uploadcsv" value="Upload" class="btn btn-primary btn-sm"><?php  echo  $welcome->loadPo('Upload') ?></button>
 												<a href="<?php echo base_url(); ?>assets/upload/csv/punjabisongs.csv" class="btn btn-default btn-sm"><?php  echo  $welcome->loadPo('Download Sample File') ?></a>
 											</div>
 										</form>
 										 <!--<div id="target-div5"></div> -->
 									</div><!-- /.box -->
 								</div>
-								<div class="tab-pane " id="tab_2">
+								<?php } ?>
+								<!-- csv bulk upload section ends -->
+								
+								<!-- ftp bulk upload section starts -->
+								<?php if($tab == 'ftp') { ?>
+								<div class="tab-pane active" id="tab_ftp">
 									<form action="" id="ftpBulkuploadForm" method="post" accept-charset="utf-8">
 										<div style="display:none;"><input type="hidden" name="_method" value="POST"/></div>
 											<div class="box box-solid">
@@ -151,6 +159,9 @@
 											</div>	
 									</form>
 								</div>
+								<?php } ?>
+								<!-- ftp bulk upload section ends -->
+
 							</div><!-- /.tab-content -->
 						</div><!-- nav-tabs-custom -->
 					</div><!-- /.col -->
@@ -174,196 +185,3 @@
 		</div>
 	</div>
 </div>
-<script>
- function connect()
-	{					
-			var ftpserver = $( "#ftpserver" ).val();
-			var username = $( "#username" ).val();
-			var password = $( "#password" ).val();
-			var ftpPath = $( "#ftpPath" ).val();
-
-			if(ftpserver == "")
-				{
-					$('#error1').html("Please Fill the FTP Server Name").show();
-					$('#loadingmessage').hide();
-					return false;
-				}
-				else{	$('#error1').hide(); }
-				if(username == "")
-				{
-					$('#error2').html("please Fill the FTP Server Username").show();
-					$('#loadingmessage').hide();
-					return false;
-				}
-				else{ $('#error2').hide(); }
-				if(password == "")
-				{
-					$('#error3').html("Please Fill the FTP Server Password").show();
-					$('#loadingmessage').hide();
-					return false;
-				}
-				else{ $('#error3').hide(); }
-				$('#displayfileftp').html('<img src="<?php echo base_url(); ?>assets/img/loader.gif"> loading...');
-
-				$.ajax({
-					type: "POST",
-					url: "<?php echo base_url() ?>video/ftpLogin",
-					data:{ftpserver: ftpserver ,username: username,password: password,ftpPath :ftpPath },
-					success: function(response) {
-					//alert(response);
-								 var obj = $.parseJSON(response);
-								 //alert(obj);
-						 		if(obj.flag == 0)
-								{	
-									$('#displayfileftp').html('');
-									$('#ftpBulkuploadForm .loader').html('');
-									$('#msgftp').html(obj.error).fadeTo(3000, 500).slideUp(3000);
-									$('#ftpcontainer,#ftpdata ,#loadingmessage,#search').hide();
-							 	}
-								else{
-									$('#displayfileftp').html('');
-									//$('#ftpBulkuploadForm .loader').html('');
-									$('#ftpcontainer').show();
-									$('#ftpdata').html(obj);
-									$('#ftpdata,#search').show();
-									//$('#search').show();
-									//console.log(response);
-
-								}
-							}
-						});
-			 return false;
-	}
-  $(function(){
-	$(document).on('click','.ftpdir',function(){
-		var path = $(this).attr('href');
-		$('#ftpPath').val(path);
-		check();
-		return false;
-	});
- });
-function check()
-	{
-		var form = $(this);
-		$('#displayfileftp').html('');
-		var ftpserver = $( "#ftpserver" ).val();
-		var username = $( "#username" ).val();
-		var password = $( "#password" ).val();
-		var ftpPath = $( "#ftpPath" ).val();
-		$.ajax({
-			type: "POST",
-			url: "<?php echo base_url() ?>video/ftpLogin",
-			dataType: "json",
-			data:{ftpserver: ftpserver ,username: username,password: password ,ftpPath :ftpPath},
-			success: function(response) {
-			//alert(response);
-					//var obj = $.parseJSON(response);
-					$('#ftpdata').html(response);
-					$('#displayfileftp').html('');
-					//console.log( response );
-			}
-		});
-			return false;
-	 } 
-function Download()
-	{
-		$('#displayfileftp').html('<img src="<?php echo base_url(); ?>assets/img/loader.gif"> loading...');
- 		//myFunction(); // call function for Size count
-		var ftpPath = $( "#ftpPath" ).val();
-		var ftpserver = $( "#ftpserver" ).val();
-		var username = $( "#username" ).val();
-		var password = $( "#password" ).val();
-		var redirect_url = $( "#redirect_url" ).val();
- 		var chkarr = [];
-		$("input[type=checkbox]:checked").each ( function() {
-			var filePath = $(this).val();
-			var lastPart = filePath.split("/").pop();
-			chkarr.push(lastPart); 
-		});
-			/* we join the array separated by the comma */
-		var selected;
-		selected = chkarr.join(',') + ",";
-		if(selected.length > 1){
-			$.ajax({
-                type: "POST",
-                url: "<?php echo base_url() ?>video/uploadFtp",
-				data: {chk :selected  ,ftpserver: ftpserver ,username: username ,password: password ,ftpPath: ftpPath, redirect_url: redirect_url },
-				success: function(data)
-                { 	
-				
-					var obj = $.parseJSON(data);
-					if(obj.flag == 0)
-								{
-									var row_data = "";
-									$('#displayfileftp').html('');
-									row_data +='<div class="alert alert-danger alert-dismissable"><i class="fa fa-check"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> Error in downloading files'+chkarr+'</div>';
-									document.getElementById('msgftp').innerHTML = row_data;
-									$('#msgftp').html(row_data);
-								} else {
-									var row_data = "";
-									$('#displayfileftp').html('');
-									row_data +='<div class="alert alert-success alert-dismissable"><i class="fa fa-check"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>DownLoad completed successfully '+chkarr+'</div>';
-									document.getElementById('msgftp').innerHTML = row_data;
-									$('#msgftp').html(row_data);
-								}
-					
-				}				
-            });
-		}
-
-	}
-/*   function myFunction() 
-	{
-	 var myset = setInterval(function()
-		{
-			var ftpPath = $( "#ftpPath" ).val();
-			var chkarr = "";
-			$("input[type=checkbox]:checked").each ( function() {
-			chkarr =$(this).val();
-			var fsize = $(this).attr('alt');
-		 	 $.ajax({
-					type: "POST",
-					url: "<?php echo base_url() ?>video/Size_file",
-					dataType: "json",
-					data: {chk :chkarr  , ftpPath: ftpPath },
-					success: function(data)
-					{
-						if (data == 0)
-						{
-						 	clearInterval(myset);
-							$('#displayfile').html('');
-							var obj = $.parseJSON(data);
-							//alert(obj);
-						}
-						else
-						{	
-						var size = ((data/fsize)*100);
-							if(data  != fsize)
-							{	
-								var row_data = "";
-								row_data +='<div class="progress progress-striped"><div style="width: '+size+'%" class="progress-bar progress-bar-primary"></div></div>';
-							 	document.getElementById('td_'+fsize).innerHTML = row_data;
-							}
-							else
-							{
-								var row_data = "";
-								row_data +='<div class="progress progress-striped"><div style="width: '+size+'%" class="progress-bar progress-bar-primary"></div></div>';
-								var row_data1 = "";
-								row_data1 +='<div class="alert alert-success alert-dismissable"><i class="fa fa-check"></i>You downLoad File Successfully '+chkarr+'</div>';
-								document.getElementById('td_'+fsize).innerHTML = row_data;
-								$('#msgftp').html(row_data1).fadeTo(3000, 500).slideUp(3000);
-								$('#displayfile').html('');
-								clearInterval(myset); // call function for clear interval
-							}
-							
-						}
-					}
-					
-				});
-		
-		});}, 1000);
-	} */
-	
-	
-	
-</script>

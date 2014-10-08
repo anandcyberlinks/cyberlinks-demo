@@ -120,6 +120,8 @@ class User_Model extends CI_Model {
         $this->db->update('users');
         //echo $this->db->last_query(); die;
     }
+    
+
 }
     /*
      * To change this license header, choose License Headers in Project Properties.

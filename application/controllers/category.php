@@ -7,9 +7,11 @@ class Category extends MY_Controller {
 
     public $user = null;
     public $role_id = null;
+    public $uid = null;
 
     function __construct() {
         parent::__construct();
+        $this->load->config('messages');
         $this->load->model('Category_model');
         $this->load->library('form_validation');
         $this->load->library('Session');
@@ -17,6 +19,7 @@ class Category extends MY_Controller {
         $s = $this->session->all_userdata();
         $this->user = $s[0]->username;
         $this->role_id = $s[0]->role_id;
+        $this->uid = $s[0]->id;
     }
 
     protected $validation_rules = array
@@ -48,6 +51,10 @@ class Category extends MY_Controller {
     );
 
     function index() {
+        $searchterm='';
+        if($this->uri->segment(2) ==''){                
+            $this->session->unset_userdata('search_form');
+        }
         $sort = $this->uri->segment(3);
         $sort_by = $this->uri->segment(4);
         switch ($sort) {
@@ -75,44 +82,24 @@ class Category extends MY_Controller {
             default:
                 $sort = 'a.category';
         }
-        $this->load->library("pagination");
-        $config = array();
-        $config["base_url"] = base_url() . "category/index";
-        $config["total_rows"] = $this->Category_model->getRecord_count();
-        $config["per_page"] = 10;
-        $config["uri_segment"] = 3;
-        $this->pagination->initialize($config);
-        $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
-        $this->data["links"] = $this->pagination->create_links();
-        $this->data['total_rows'] = $config["total_rows"];
-        $this->data['category'] = $this->Category_model->getCategory($config["per_page"], $page, $sort, $sort_by);
-        $this->data['allParentCategory'] = $this->Category_model->getparent();
-        $this->show_view('category', $this->data);
-    }
-
-    /* 	Search Category  */
-
-    function searchCategory() {
-
         if (isset($_POST['submit']) && $_POST['submit'] == 'Search') {
             $this->session->set_userdata('search_form', $_POST);
         } elseif (isset($_POST['reset']) && $_POST['reset'] == 'Reset') {
             $this->session->unset_userdata('search_form');
         }
-        $search_for = $this->session->userdata('search_form');
+        $searchterm = $this->session->userdata('search_form');
         $this->load->library("pagination");
         $config = array();
-        $config["base_url"] = base_url() . "category/searchCategory";
-        $config["total_rows"] = count($this->Category_model->getSearchCount($search_for));
+        $config["base_url"] = base_url() . "category/index";
+        $config["total_rows"] = $this->Category_model->getRecordCount($searchterm );
         $config["per_page"] = 10;
         $config["uri_segment"] = 3;
         $this->pagination->initialize($config);
         $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
-        $this->data['category'] = $this->Category_model->getSearchCategory($config["per_page"], $page, $search_for);
         $this->data["links"] = $this->pagination->create_links();
-        $this->data["search_data"] = $search_for;
-        $this->data['allParentCategory'] = $this->Category_model->getAllParentCategory();
         $this->data['total_rows'] = $config["total_rows"];
+        $this->data['category'] = $this->Category_model->getCategory($config["per_page"], $page, $sort, $sort_by, $searchterm);
+        $this->data['allParentCategory'] = $this->Category_model->getAllCategory();
         $this->show_view('category', $this->data);
     }
 
@@ -129,40 +116,31 @@ class Category extends MY_Controller {
                 if (isset($_POST['submit']) && $_POST['submit'] == "Update") {
                     $this->form_validation->set_rules($this->validation_rules['update_Category']);
                     if ($this->form_validation->run()) {
-                        $post['id'] = $cid;
-                        $post['category'] = $this->input->post('category');
-                        $post['parent_id'] = $this->input->post('parent_id');
-                        $post['description'] = $this->input->post('description');
-                        $post['status'] = $this->input->post('status') == 'on' ? 1 : 0;
-                        $post['modified'] = date('Y-m-d');
-                        $this->Category_model->update_category($post);
+                        $_POST['id'] = $cid;
+                        $_POST['status'] = $this->input->post('status') == 'on' ? 1 : 0;
+                        $this->Category_model->_saveCategory($_POST);
                         $msg = $this->loadPo('Category Successfully Updated');
                         $this->log($this->user, $msg);
                         $this->session->set_flashdata('message', '<section class="content"><div class="col-xs-12"><div class="alert alert-success alert-dismissable"><i class="fa fa-check"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' . $msg . '</div></div></section>');
                         redirect('category');
                     } else {
-                        $this->data['allParentCategory'] = $this->Category_model->getparent();
-                        $this->data['edit'] = $this->Category_model->editCategory($cid);
+                        $this->data['allParentCategory'] = $this->Category_model->getAllCategory();
+                        $this->data['edit'] = $this->Category_model->getAllParentCategory($cid);
                         $this->show_view('edit_category', $this->data);
                     }
                 } else {
-                    $this->data['allParentCategory'] = $this->Category_model->getparent();
-                    $this->data['edit'] = $this->Category_model->editCategory($cid);
+                    $this->data['allParentCategory'] = $this->Category_model->getAllCategory();
+                    $this->data['edit'] = $this->Category_model->getAllParentCategory($cid);
                     $this->show_view('edit_category', $this->data);
                 }
             } else {
                 if (isset($_POST['submit']) && $_POST['submit'] == 'Submit') {
-                    $post['category'] = $this->input->post('category');
-                    $post['parent_id'] = $this->input->post('parent_id');
-                    $post['description'] = $this->input->post('description');
-                    $post['status'] = $this->input->post('status');
-                    $post['created'] = date('Y-m-d');
-                    $post['modified'] = date('Y-m-d');
+                    $_POST['u_id'] = $this->uid;
                     $this->form_validation->set_rules($this->validation_rules['add_category']);
                     if ($this->form_validation->run()) {
-                        $result = $this->Category_model->checkCategory($post['category']);
+                        $result = $this->Category_model->checkCategory($_POST['category'],$this->uid);
                         if ($result == 0) {
-                            $this->Category_model->saveCategory($post);
+                            $this->Category_model->_saveCategory($_POST);
                             $msg = $this->loadPo('Category has been Added Successfully');
                             $this->log($this->user, $msg);
                             $this->session->set_flashdata('message', sprintf('<section class="content"><div class="col-xs-12"><div class="alert alert-success alert-dismissable"><i class="fa fa-check"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>%s</div></div></section>', $msg));
@@ -173,11 +151,11 @@ class Category extends MY_Controller {
                             redirect('category/');
                         }
                     } else {
-                        $this->data['allParentCategory'] = $this->Category_model->getparent();
+                        $this->data['allParentCategory'] = $this->Category_model->getAllCategory();
                         $this->show_view('add_category', $this->data);
                     }
                 } else {
-                    $this->data['allParentCategory'] = $this->Category_model->getparent();
+                    $this->data['allParentCategory'] = $this->Category_model->getAllCategory();
                     $this->show_view('add_category', $this->data);
                 }
             }
@@ -194,9 +172,9 @@ class Category extends MY_Controller {
         //echo $this->role_id;
         if ($per) {
             $id = $_GET['id'];
-            $video = $this->Category_model->fetch_video($id);
+            $video = $this->Category_model->getCategoryVideo($id);
             if ($video == '0') {
-                $child = $this->Category_model->fetchChild($id);
+                $child = $this->Category_model->getCategoryChild($id);
                 if($child == '0'){
                     $this->Category_model->delete_category($id);
                     $msg = $this->loadPo('Category Successfully Deleted');
