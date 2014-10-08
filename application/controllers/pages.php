@@ -60,7 +60,7 @@
         $this->show_view('page', $data);    
         }
         
-        /* 	Add and Edit Category	 */
+        /* 	Add and Edit Page	 */
 
     function addpage() {
         $per = $this->checkpermission($this->role_id, 'add');
@@ -111,11 +111,11 @@
                             redirect('pages/');
                         }
                     } else {
-                       // $this->data['allParentCategory'] = $this->Category_model->getAllCategory();
+                       
                         $this->show_view('addpage', $this->data);
                     }
                 } else {
-                   // $this->data['allParentCategory'] = $this->Category_model->getAllCategory();
+                   
                     $this->show_view('addpage', $this->data);
                 }
             }
