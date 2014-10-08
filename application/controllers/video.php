@@ -877,13 +877,13 @@
             if(!empty($thumbInfo)){
                 $thumbCount = count($thumbInfo);
                 for($i=0; $i<$thumbCount; $i++) {
-                    $delResultThumb = $this->deleteFile($thumbInfo[$i]->name, REAL_PATH.serverImageRelPath);
-                    $delResultThumbSmall = $this->deleteFile($thumbInfo[$i]->name, REAL_PATH.serverImageRelPath);
-                    $delResultThumbMedium = $this->deleteFile($thumbInfo[$i]->name, REAL_PATH.serverImageRelPath);
-                    $delResultThumbLarge = $this->deleteFile($thumbInfo[$i]->name, REAL_PATH.serverImageRelPath);
+                    $delResultThumb = $this->_deleteFile($thumbInfo[$i]->name, REAL_PATH.serverImageRelPath);
+                    $delResultThumbSmall = $this->_deleteFile($thumbInfo[$i]->name, REAL_PATH.serverImageRelPath);
+                    $delResultThumbMedium = $this->_deleteFile($thumbInfo[$i]->name, REAL_PATH.serverImageRelPath);
+                    $delResultThumbLarge = $this->_deleteFile($thumbInfo[$i]->name, REAL_PATH.serverImageRelPath);
                 }                                   
             }                
-            $delResult = $this->deleteFile($fileName, REAL_PATH.serverVideoRelPath);
+            $delResult = $this->_deleteFile($fileName, REAL_PATH.serverVideoRelPath);
             $result = $this->videos_model->delete_video($id);
             if ($result == '1') {
                 $msg = $this->loadPo($this->config->item('success_record_delete'));

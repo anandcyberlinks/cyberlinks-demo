@@ -360,17 +360,16 @@ class Videos_model extends CI_Model {
         if($id){
             $videoFileId = $this->getVideoFileIds($id);
             $deleteKeyword = $this->deletekeywords($id);
-            /* $videoFileSrcId = $this->getVideoSrcInfo($id);
-            if($videoFileSrcId)
+            if($this->checkIfRecordsExists('video_source', 'content_id', $id))
             {
-                    $this->db->delete('video_source', array('content_id' => $id));
-            } */
+                $this->db->delete('video_source', array('content_id' => $id));
+            }
             If($videoFileId) {
                 if($this->checkIfRecordsExists('files', 'id', $videoFileId)){
                     $this->db->delete('files', array('id' => $videoFileId));
                 }
                 if($this->checkIfRecordsExists('video_flavors', 'content_id', $id)){
-                   $this->db->delete('content_id', array('content_id' => $id));
+                   $this->db->delete('video_flavors', array('content_id' => $id));
                 }
                 if($this->checkIfRecordsExists('video_thumbnails', 'content_id', $id)){
                    $this->db->delete('video_thumbnails', array('content_id' => $id));
@@ -448,22 +447,7 @@ class Videos_model extends CI_Model {
 		}
 
     }
-	
-    function getVideoSrcInfo($id) {
-        $this->db->select('id');
-        $this->db->from('video_source');
-        $this->db->where('content_id', $id);
-        $query = $this->db->get();
-		$result = $query->result();
-		if(count($result))
-		{
-			$videoSrcId = $result[0]->id;
-			return $videoSrcId;
-		} else {
-			return 0;
-		}
 
-    }
     /*function upload_detail($post) {
         $data = array(
             'content_id' => $post['content_id'],
