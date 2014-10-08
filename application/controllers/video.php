@@ -878,9 +878,9 @@
                 $thumbCount = count($thumbInfo);
                 for($i=0; $i<$thumbCount; $i++) {
                     $delResultThumb = $this->_deleteFile($thumbInfo[$i]->name, REAL_PATH.serverImageRelPath);
-                    $delResultThumbSmall = $this->_deleteFile($thumbInfo[$i]->name, REAL_PATH.serverImageRelPath);
-                    $delResultThumbMedium = $this->_deleteFile($thumbInfo[$i]->name, REAL_PATH.serverImageRelPath);
-                    $delResultThumbLarge = $this->_deleteFile($thumbInfo[$i]->name, REAL_PATH.serverImageRelPath);
+                    $delResultThumbSmall = $this->_deleteFile($thumbInfo[$i]->name, REAL_PATH.THUMB_SMALL_PATH);
+                    $delResultThumbMedium = $this->_deleteFile($thumbInfo[$i]->name, REAL_PATH.THUMB_MEDIUM_PATH);
+                    $delResultThumbLarge = $this->_deleteFile($thumbInfo[$i]->name, REAL_PATH.THUMB_LARGE_PATH);
                 }                                   
             }                
             $delResult = $this->_deleteFile($fileName, REAL_PATH.serverVideoRelPath);
