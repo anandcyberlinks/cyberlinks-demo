@@ -60,7 +60,14 @@ class Category_model extends CI_Model {
 			$this->db->where('id', $catId);
 			$this->db->update('categories', $data); 		
 		} else {
-			$this->db->set($data);
+			$catData = array(
+				'category'=>$data['category'],
+				'parent_id'=>$data['parent_id'],
+				'description'=>$data['description'],
+				'status'=>$data['status'],
+				'u_id'=>$data['u_id']
+			);
+			$this->db->set($catData);
 			$this->db->set('created','NOW()',FALSE);
 			$this->db->set('modified','NOW()',FALSE);
 			$this->db->insert('categories');

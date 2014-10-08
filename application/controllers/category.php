@@ -119,9 +119,9 @@ class Category extends MY_Controller {
                         $_POST['id'] = $cid;
                         $_POST['status'] = $this->input->post('status') == 'on' ? 1 : 0;
                         $this->Category_model->_saveCategory($_POST);
-                        $msg = $this->loadPo('Category Successfully Updated');
+                        $msg = $this->loadPo($this->config->item('success_record_update'));
                         $this->log($this->user, $msg);
-                        $this->session->set_flashdata('message', '<section class="content"><div class="col-xs-12"><div class="alert alert-success alert-dismissable"><i class="fa fa-check"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' . $msg . '</div></div></section>');
+                        $this->session->set_flashdata('message', $this->_successmsg($msg));
                         redirect('category');
                     } else {
                         $this->data['allParentCategory'] = $this->Category_model->getAllCategory();
@@ -141,13 +141,13 @@ class Category extends MY_Controller {
                         $result = $this->Category_model->checkCategory($_POST['category'],$this->uid);
                         if ($result == 0) {
                             $this->Category_model->_saveCategory($_POST);
-                            $msg = $this->loadPo('Category has been Added Successfully');
+                            $msg = $this->loadPo($this->config->item('success_record_add'));
                             $this->log($this->user, $msg);
-                            $this->session->set_flashdata('message', sprintf('<section class="content"><div class="col-xs-12"><div class="alert alert-success alert-dismissable"><i class="fa fa-check"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>%s</div></div></section>', $msg));
+                            $this->session->set_flashdata('message', $this->_successmsg($msg));
                             redirect('category');
                         } else {
-                            $msg = $this->loadPo('Category Allready exist');
-                            $this->session->set_flashdata('message', sprintf('<section class="content"><div class="col-xs-12"><div class="alert alert-danger alert-dismissable"><i class="fa fa-ban"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>%s</div></div></section>', $msg));
+                            $msg = $this->loadPo($this->config->item('warning_record_exists'));
+                            $this->session->set_flashdata('message', $this->_warningmsg($msg));
                             redirect('category/');
                         }
                     } else {
@@ -160,7 +160,7 @@ class Category extends MY_Controller {
                 }
             }
         } else {
-            $this->session->set_flashdata('message', '<section class="content"><div class="col-xs-12"><div class="alert alert-danger alert-dismissable"><i class="fa fa-ban"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Access Denined ! Contect Admin</div></div></section>');
+            $this->session->set_flashdata('message', $this->_errormsg($this->config->item('error_permission')));
             redirect(base_url() . 'category');
         }
     }
@@ -177,21 +177,18 @@ class Category extends MY_Controller {
                 $child = $this->Category_model->getCategoryChild($id);
                 if($child == '0'){
                     $this->Category_model->delete_category($id);
-                    $msg = $this->loadPo('Category Successfully Deleted');
-                    $this->session->set_flashdata('message', '<section class="content"><div class="col-xs-12"><div class="alert alert-success alert-dismissable"><i class="fa fa-check"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' . $msg . '</div></div></section>');
+                    $this->session->set_flashdata('message', $this->_successmsg($this->loadPo($this->config->item('success_record_delete'))));
                     redirect(base_url() . 'category');
                 }else{
-                    $msg = $this->loadPo('Child in this Category You Can\'t Delete this');
-                    $this->session->set_flashdata('message', '<section class="content"><div class="col-xs-12"><div class="alert alert-danger alert-dismissable"><i class="fa fa-ban"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' . $child . ' ' . $msg . '</div></div></section>');
+                    $this->session->set_flashdata('message', $this->_warningmsg($this->loadPo($this->config->item('warning_category_record'))));
                     redirect(base_url() . 'category');
                 }
             } else {
-                $msg = $this->loadPo('Video in this Category You Can\'t Delete this');
-                $this->session->set_flashdata('message', '<section class="content"><div class="col-xs-12"><div class="alert alert-danger alert-dismissable"><i class="fa fa-ban"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' . $video . ' ' . $msg . '</div></div></section>');
+                $this->session->set_flashdata('message', $this->_warningmsg($this->loadPo($this->config->item('warning_category_record'))));
                 redirect(base_url() . 'category');
             }
         } else {
-            $this->session->set_flashdata('message', '<section class="content"><div class="col-xs-12"><div class="alert alert-danger alert-dismissable"><i class="fa fa-ban"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Access Denined ! Contect Admin</div></div></section>');
+            $this->session->set_flashdata('message', $this->_errormsg($this->config->item('error_permission')));
             redirect(base_url() . 'category');
         }
     }

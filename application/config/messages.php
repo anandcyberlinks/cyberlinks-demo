@@ -21,7 +21,8 @@ $config['error_youtube_url'] = 'Invalid Youtube URL';
 
 
 $config['success_file_upload'] = 'File Uploaded successfully.';
-$config['success_file_update'] = 'File Updated successfully.';
+$config['success_record_add'] = 'Record Added successfully.';
+$config['success_record_update'] = 'Record Updated successfully.';
 $config['success_record_delete'] = 'Record Deleted successfully.';
 $config['success_image_crop'] = 'Image Croped successfully';
 $config['success_default_image_set'] = 'Default Image Updated successfully.';
@@ -43,7 +44,8 @@ $config['warning_fields_empty'] = 'Please fill all fields.';
 $config['warning_username_password'] = 'Incorrect Username/password.';
 $config['warning_fields_empty'] = 'Please fill all fields.';
 $config['warning_video_source'] = 'Video Source Already exists.';
-
+$config['warning_record_exists'] = 'Record Already exist.';
+$config['warning_category_record'] = 'Category have some records therefore you can\'t delete this';
 
 
 
