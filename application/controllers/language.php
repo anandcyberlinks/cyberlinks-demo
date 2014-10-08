@@ -3,8 +3,9 @@
 class Language extends MY_Controller {
 
 	function __construct(){
-	  parent::__construct();
-	  $this->load->library('session');
+		parent::__construct();
+		$this->load->config('messages');
+		$this->load->library('session');
 	}
 	
 	function index(){
@@ -12,22 +13,14 @@ class Language extends MY_Controller {
 		$user_lang = $this->uri->segment(3); 				
 		if(isset($user_lang)){
 			$lan=$user_lang;
-		}else{
+		} else {
 			$lan='eng';								   
 		}					
 		$this->session->set_userdata('lan',$lan);
 		if(isset($_SERVER['HTTP_REFERER']))
 		{
 			$redirect_to = str_replace(base_url(),'',$_SERVER['HTTP_REFERER']);
-			if($lan == 'hin')
-			{
-				$this->session->set_flashdata('message', '<section class="content"><div class="col-xs-12"><div class="alert alert-success alert-dismissable"><i class="fa fa-check"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>भाषा सफलतापूर्वक बदला</div></div></section>');
-			}
-			else
-			{
-				$this->session->set_flashdata('message', '<section class="content"><div class="col-xs-12"><div class="alert alert-success alert-dismissable"><i class="fa fa-check"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Languange change successfully</div></div></section>');
-			}
-			
+			$this->session->set_flashdata('message', $this->_successmsg($this->loadPo($this->config->item('success_language_change'))));
 		}
 		else
 		{

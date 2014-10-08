@@ -12,6 +12,7 @@ class Layout extends MY_Controller {
 
     function __construct() {
         parent::__construct();
+        $this->load->config('messages');
         $this->load->model('user_model');
         $this->load->library('session');
         $this->load->helper('url');
@@ -42,10 +43,11 @@ class Layout extends MY_Controller {
             $result = $this->user_model->CheckUser($data);
             if (count($result) == '1') {
                 $this->session->set_userdata($result);
-                $this->log($data['username'], 'SuccesFully Loged In');
+                $msg = $this->loadPo($this->config->item('success_login'));
+                $this->log($data['username'], $msg);
                 redirect(base_url().'video');
-            } else {
-                $this->session->set_flashdata('msg', 'Authentication Failure Try Again');
+            } else { 
+                $this->session->set_flashdata('msg', $this->_warningmsg($this->config->item('warning_auth')));
                 $this->error('error', 'Unauthorised User Try to Login With Username =>>' . $_POST['username']);
                 redirect('layout');
             }
@@ -89,7 +91,7 @@ class Layout extends MY_Controller {
                 $body = base_url() . 'layout/token/?token=' . $token[0]->token;
                 $mail = $this->sendmail($to, $subject, $body);
                 if (!$mail) {
-                    $this->session->set_flashdata('msg', 'Mail Not Sent');
+                    $this->session->set_flashdata('msg', $this->_errormsg($this->loadPo($this->config->item('error_mail_sent'))));
                     $this->error('mail', 'Email Not Sent=> trying to reset password with email =>>' . $_POST['email']);
                     redirect('layout/forgot');
                 } else {
@@ -97,7 +99,7 @@ class Layout extends MY_Controller {
                     echo 'Password reset link sent Check you mail box';
                 }
             } else {
-                $this->session->set_flashdata('msg', 'Invalid Email');
+                $this->session->set_flashdata('msg', $this->_errormsg($this->loadPo($this->config->item('error_mail_invalid'))));
                 $this->error('log', 'trying to reset password with invalid email =>>' . $_POST['email']);
                 redirect('layout/forgot');
             }
@@ -124,7 +126,7 @@ class Layout extends MY_Controller {
                             $this->user_model->password($data);
                             $this->user_model->deletetoken($_POST['id']);
                             $this->log('log', 'Password changes Scces fully using email link userid-> ' . $_POST['id']);
-                            $this->session->set_flashdata('succ', 'Password Changed Try to login');
+                            $this->session->set_flashdata('message', $this->_successmsg($this->loadPo($this->config->item('success_password_changed'))));
                             redirect(base_url());
                         } else {
                             echo 'Password And confirm Password do not match ';
@@ -134,7 +136,7 @@ class Layout extends MY_Controller {
                     $this->user_model->updateuser($data); //if token for activate user
                     $this->log('log', 'User Scces fullfully verified using Email link userid-> ' . $data['id']);
                     $this->user_model->deletetoken($data['id']);
-                    $this->session->set_flashdata('succ', 'Mail Succesfully verified');
+                    $this->session->set_flashdata('message', $this->_successmsg($this->loadPo($this->config->item('success_email_verified'))));
                     redirect(base_url());
                 }
             } else {
@@ -185,43 +187,43 @@ class Layout extends MY_Controller {
         //print_r($_FILES); DIE;
         $image_info = getimagesize($_FILES["image"]["tmp_name"]);
         $image_width = $image_info[0];
-                $fileExt = end(explode('.', $_FILES['image']['name']));
-                $allowedSize = 2; //MB
-                $allowedFileSize = $allowedSize * 1024 * 1024; // Bytes
-                $allowedExt = array('jpg', 'jpeg', 'png', 'bmp', 'gif');
-                $extns = implode(',', $allowedExt);
-                $p_image = uniqid().".".$fileExt;
-               // echo $p_image; die;
-                //echo $ext; die;
-                if (in_array($fileExt, $allowedExt)) {
-                    if ($_FILES['image']['size'] <= $allowedFileSize) {
-                        // print_r( $fileInfoArray = pathinfo($p_image));
-                        $src = $_FILES['image']['tmp_name'];
-                        $dest = PROFILEPIC_PATH.$p_image;
+        $fileExt = end(explode('.', $_FILES['image']['name']));
+        $allowedSize = 2; //MB
+        $allowedFileSize = $allowedSize * 1024 * 1024; // Bytes
+        $allowedExt = array('jpg', 'jpeg', 'png', 'bmp', 'gif');
+        $extns = implode(',', $allowedExt);
+        $p_image = uniqid().".".$fileExt;
+       // echo $p_image; die;
+        //echo $ext; die;
+        if (in_array($fileExt, $allowedExt)) {
+            if ($_FILES['image']['size'] <= $allowedFileSize) {
+                // print_r( $fileInfoArray = pathinfo($p_image));
+                $src = $_FILES['image']['tmp_name'];
+                $dest = PROFILEPIC_PATH.$p_image;
 
-                        $userData = $this->user_model->fetchuser($this->user_id);
-                        $profilePicOld = REAL_PATH.PROFILEPIC_PATH.$userData[0]->image;
-                        $isMoved = move_uploaded_file($src, $dest);
-                        if ($isMoved == true) {
-                            if(file_exists($profilePicOld)){
-                                unlink($profilePicOld);
-                            }
-                            $this->user_model->do_upload($this->user_id, $p_image);
-                            $this->session->set_flashdata('message', '<section class="content"><div class="col-xs-12"><div class="alert alert-success alert-dismissable"><i class="fa fa-check"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Image Changed Success Fully</div></div></section>');
-                            redirect(base_url() . 'layout/profile');
-                        } else {
-                            $this->session->set_flashdata('message', '<section class="content"><div class="col-xs-12"><div class="alert alert-danger alert-dismissable"><i class="fa fa-ban"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Somthing Is wrong Image not Uploaded</div></div></section>');
-                            redirect(base_url() . 'layout/profile');
-                        }
-                    } else {
-                        $this->session->set_flashdata('message', '<section class="content"><div class="col-xs-12"><div class="alert alert-danger alert-dismissable"><i class="fa fa-ban"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Please Upload Max ' . $allowedSize . ' MB</div></div></section>');
-                        redirect(base_url() . 'layout/profile');
-                        echo "";
+                $userData = $this->user_model->fetchuser($this->user_id);
+                $profilePicOld = REAL_PATH.PROFILEPIC_PATH.$userData[0]->image;
+                $isMoved = move_uploaded_file($src, $dest);
+                if ($isMoved == true) {
+                    if(file_exists($profilePicOld)){
+                        unlink($profilePicOld);
                     }
+                    $this->user_model->do_upload($this->user_id, $p_image);
+                    $this->session->set_flashdata('message', $this->_successmsg($this->loadPo($this->config->item('success_file_update'))));
+                    redirect(base_url() . 'layout/profile');
                 } else {
-                    $this->session->set_flashdata('message', '<section class="content"><div class="col-xs-12"><div class="alert alert-danger alert-dismissable"><i class="fa fa-ban"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Please Upload File With Valid Extension jpg, jpeg, png, bmp, gif</div></div></section>');
+                    $this->session->set_flashdata('message', $this->_errormsg($this->loadPo($this->config->item('error_file_upload'))));
                     redirect(base_url() . 'layout/profile');
                 }
+            } else {
+                $this->session->set_flashdata('message', $this->_errormsg($this->loadPo($this->config->item('error_file_size').$this->config->item('error_max_file_size').$allowedSize)));
+                redirect(base_url() . 'layout/profile');
+                echo "";
+            }
+        } else {
+            $this->session->set_flashdata('message', $this->_errormsg($this->loadPo($this->config->item('error_file_format'))));
+            redirect(base_url() . 'layout/profile');
+        }
     }
 
 }

@@ -12,6 +12,7 @@ class user extends MY_Controller {
 
     function __construct() {
         parent::__construct();
+        $this->load->config('messages');
         $this->load->model('super_model');
         $this->load->library('session');
         $this->load->helper('url');
@@ -26,19 +27,16 @@ class user extends MY_Controller {
     }
 
     function index() {
-        $userid = $this->user_id;
-        $s = $this->session->all_userdata();
-        $user = $s[0]->username;
         $data['welcome'] = $this;
         $this->load->library("pagination");
         $config = array();
         $config["base_url"] = base_url() . "user/index/";
-        $config["total_rows"] = $this->super_model->countuser($userid);
+        $config["total_rows"] = $this->super_model->countuser($this->user_id);
         $config["per_page"] = 10;
         $config["uri_segment"] = 3;
         $this->pagination->initialize($config);
         $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
-        $data['result'] = $this->super_model->fetchUser($userid, $config["per_page"], $page);
+        $data['result'] = $this->super_model->fetchUser($this->user_id, $config["per_page"], $page);
         $data["links"] = $this->pagination->create_links();
         $data['total_rows'] = $config["total_rows"];
         $this->show_view('users', $data);
@@ -47,16 +45,15 @@ class user extends MY_Controller {
     public function DeleteUser() {
         $per = $this->checkpermission($this->role_id, 'delete');
         if ($per) {
-            $s = $this->session->all_userdata();
-            $user = $s[0]->username;
             $data['id'] = $_GET['id'];
             $this->super_model->deleteuser($data);
-            $this->session->set_flashdata('message', '<section class="content"><div class="col-xs-12"><div class="alert alert-success alert-dismissable"><i class="fa fa-check"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' . $this->loadPo('User Successfully Deleted') . '</div></div></section>');
-            $this->log($user, 'User Successfully Deleted');
+            $msg = $this->loadPo($this->config->item('success_delete_user'));
+            $this->log($this->user, $msg);
+            $this->session->set_flashdata('message', $this->_successmsg($msg));
             redirect(base_url() . 'user');
         } else {
-            $this->log($user, 'Unauthorised Access trying to delete a user');
-            $this->session->set_flashdata('message', '<section class="content"><div class="col-xs-12"><div class="alert alert-danger alert-dismissable"><i class="fa fa-ban"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' . $this->loadPo('Access Denied') . '</div></div></section>');
+            $this->log($this->user, 'Unauthorised Access trying to delete a user');
+            $this->session->set_flashdata('message', $this->_errormsg($this->loadPo($this->config->item('error_permission'))));
             redirect(base_url() . 'user');
         }
     }
@@ -68,7 +65,7 @@ class user extends MY_Controller {
         $data['status'] = $_GET['status'];
         $this->super_model->updatestatus($data);
         $this->log($this->user, 'Status Changed For user id-> ' . $data['id']);
-        $this->session->set_flashdata('message', '<section class="content"><div class="col-xs-12"><div class="alert alert-success alert-dismissable"><i class="fa fa-check"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' . $this->loadPo('User Successfully Updated') . '</div></div></section>');
+        $this->session->set_flashdata('message', $this->_successmsg($this->loadPo($this->config->item('success_update_user'))));
         redirect(base_url() . 'user');
     }
 
@@ -98,11 +95,11 @@ class user extends MY_Controller {
                     $body = base_url() . 'layout/token/?token=' . $token[0]->token;
                     $mail = $this->sendmail($to, $subject, $body);
                     if (!$mail) {
-                        $this->session->set_flashdata('message', '<section class="content"><div class="col-xs-12"><div class="alert alert-success alert-dismissable"><i class="fa fa-check"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' . $this->loadPo('User Successfully But Activation mail was not send').'<br>'. $mail->ErrorInfo. '</div></div></section>');
+                        $this->session->set_flashdata('message', $this->_warningmsg($this->loadPo($this->config->item('success_add_user_mail_error'))));
                         redirect(base_url() . 'user');
                     } else {
                         $this->log($user, 'Activation Mail sent Successfully to ' . $_POST['email']);
-                        $this->session->set_flashdata('message', '<section class="content"><div class="col-xs-12"><div class="alert alert-success alert-dismissable"><i class="fa fa-check"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>User Successfully Addad and Activation Links Sent to Use\'s email</div></div></section>');
+                        $this->session->set_flashdata('message', $this->_successmsg($this->loadPo($this->config->item('success_add_user_mail_sent'))));
                         redirect(base_url() . 'user');
                     }
                 } else {
@@ -128,7 +125,7 @@ class user extends MY_Controller {
                 unset($_POST['submit']);
                 $this->super_model->updateuser($_POST, $_GET['id']);
                 $this->log($this->user, 'profile updated for user is ' . $_GET['id']);
-                $this->session->set_flashdata('message', '<section class="content"><div class="col-xs-12"><div class="alert alert-success alert-dismissable"><i class="fa fa-check"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' . $this->loadPo('User Successfully Updated') . '</div></div></section>');
+                $this->session->set_flashdata('message', $this->_successmsg($this->loadPo($this->config->item('success_update_user'))));
 
                 redirect(base_url() . 'user');
             } else {
@@ -137,7 +134,7 @@ class user extends MY_Controller {
                 $this->show_view('edituser', $data);
             }
         } else {
-            $this->session->set_flashdata('message', '<section class="content"><div class="col-xs-12"><div class="alert alert-danger alert-dismissable"><i class="fa fa-ban"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' . $this->loadPo('Access Denied') . '</div></div></section>');
+            $this->session->set_flashdata('message', $this->_errormsg($this->loadPo($this->config->item('error_permission'))));
             redirect(base_url() . 'user');
         }
     }

@@ -770,8 +770,8 @@ msgstr "चुने"
 msgid "List"
 msgstr "लिस्ट"
 
-msgid ""
-msgstr ""
+msgid "Language changed successfully."
+msgstr "भाषा सफलतापूर्वक बदल दिया है."
 
 msgid ""
 msgstr ""

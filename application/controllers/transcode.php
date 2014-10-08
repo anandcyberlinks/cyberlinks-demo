@@ -9,6 +9,7 @@ class Transcode extends MY_Controller {
 
     function __construct() {
         parent::__construct();
+        $this->load->config('messages');
         $this->load->model('Transcode_model');
         $this->load->library('form_validation');
         $this->load->library('Session');
@@ -195,9 +196,9 @@ class Transcode extends MY_Controller {
                     if ($this->form_validation->run()) {
                         $_POST['id'] = $tid;
                         $this->Transcode_model->_saveTranscode($_POST);
-                        $msg = $this->loadPo('Transcode Success Fully Updated');
+                        $msg = $this->loadPo($this->config->item('success_transcode_update'));
                         $this->log($this->user, $msg);
-                        $this->session->set_flashdata('message', sprintf('<section class="content"><div class="col-xs-12"><div class="alert alert-success alert-dismissable"><i class="fa fa-check"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>%s</div></div></section>', $msg));
+                        $this->session->set_flashdata('message', $this->_successmsg($msg));
                         redirect('transcode');
                     } else {
                         $this->data['allTranscode'] = $this->Transcode_model->getAllTranscode();
@@ -215,9 +216,9 @@ class Transcode extends MY_Controller {
                     if ($this->form_validation->run()) {
                         $this->Transcode_model->_saveTranscode($_POST);
                         $sess = $this->session->all_userdata();
-                        $msg = $this->loadPo('Transcode Successfully Added');
+                        $msg = $this->loadPo($this->config->item('success_transcode_add'));
                         $this->log($this->user, $msg);
-                        $this->session->set_flashdata('message', sprintf('<section class="content"><div class="col-xs-12"><div class="alert alert-success alert-dismissable"><i class="fa fa-check"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>%s</div></div></section>', $msg));
+                        $this->session->set_flashdata('message', $this->_successmsg($msg));
                         redirect('transcode');
                     } else {
                         $this->data['allTranscode'] = $this->Transcode_model->getAllTranscode();
@@ -229,7 +230,7 @@ class Transcode extends MY_Controller {
                 }
             }
         }else {
-            $this->session->set_flashdata('message', '<section class="content"><div class="col-xs-12"><div class="alert alert-danger alert-dismissable"><i class="fa fa-ban"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Access Denined ! Contect Admin</div></div></section>');
+            $this->session->set_flashdata('message', $this->_errormsg($this->loadPo($this->config->item('error_permission'))));
             redirect(base_url() . 'transcode');
         }
     }
@@ -243,12 +244,12 @@ class Transcode extends MY_Controller {
             $id = $_GET['id'];
             $allTranscode = $this->Transcode_model->getAllTranscode();
             $this->Transcode_model->delete_transcode($id);
-            $msg = $this->loadPo('Transcode Successfully Deleted');
+            $msg = $this->loadPo($this->config->item('success_transcode_delete'));
             $this->log($this->user, $msg);
-            $this->session->set_flashdata('message', sprintf('<section class="content"><div class="col-xs-12"><div class="alert alert-success alert-dismissable"><i class="fa fa-check"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>%s</div></div></section>',$msg));
+            $this->session->set_flashdata('message', $this->_successmsg($msg));
             redirect('transcode');
         } else {
-            $this->session->set_flashdata('message', '<section class="content"><div class="col-xs-12"><div class="alert alert-danger alert-dismissable"><i class="fa fa-ban"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Access Denined ! Contect Admin</div></div></section>');
+            $this->session->set_flashdata('message', $this->_errormsg($this->loadPo($this->config->item('error_permission'))));
             redirect(base_url() . 'transcode');
         }
     }

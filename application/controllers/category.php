@@ -160,7 +160,7 @@ class Category extends MY_Controller {
                 }
             }
         } else {
-            $this->session->set_flashdata('message', $this->_errormsg($this->config->item('error_permission')));
+            $this->session->set_flashdata('message', $this->_errormsg($this->loadPo($this->config->item('error_permission'))));
             redirect(base_url() . 'category');
         }
     }
@@ -188,7 +188,7 @@ class Category extends MY_Controller {
                 redirect(base_url() . 'category');
             }
         } else {
-            $this->session->set_flashdata('message', $this->_errormsg($this->config->item('error_permission')));
+            $this->session->set_flashdata('message', $this->_errormsg($this->loadPo($this->config->item('error_permission'))));
             redirect(base_url() . 'category');
         }
     }

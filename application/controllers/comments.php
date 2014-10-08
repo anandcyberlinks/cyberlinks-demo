@@ -11,6 +11,7 @@ class Comments extends MY_Controller {
 
     public function __construct() {
         parent::__construct();
+        $this->load->config('messages');
         $this->load->model('Comment_model');
         $this->load->library('session');
         $this->load->helper('url');
@@ -61,7 +62,7 @@ class Comments extends MY_Controller {
     public function deleteComment() {
         $id = $_GET['id'];
         $last_id = $this->Comment_model->deleteComment($id);
-        $this->session->set_flashdata('message', '<section class="content"><div class="col-xs-12"><div class="alert alert-success alert-dismissable"><i class="fa fa-check"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Comment Delete successfully.</div></div></section>');
+        $this->session->set_flashdata('message', $this->_successmsg($this->loadPo($this->config->item('success_record_delete'))));
         redirect('comments');
     }
 
@@ -73,7 +74,7 @@ class Comments extends MY_Controller {
             if ($this->form_validation->run()) {
                 $_POST['id'] = $this->uri->segment(3);
                 $this->Comment_model->updateComment($_POST);
-                $this->session->set_flashdata('message', '<section class="content"><div class="col-xs-12"><div class="alert alert-success alert-dismissable"><i class="fa fa-check"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Comment Update Successfully.</div></div></section>');
+                $this->session->set_flashdata('message', $this->_successmsg($this->loadPo($this->config->item('success_record_update'))));
                 redirect('comments');
             } else {
                 $id = $this->uri->segment(3);

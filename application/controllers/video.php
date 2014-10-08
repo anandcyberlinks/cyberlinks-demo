@@ -892,7 +892,7 @@
                 redirect($redirect_url);
             }
         } else {
-            $this->session->set_flashdata('message', $this->_errormsg($this->config->item('error_permission')));
+            $this->session->set_flashdata('message', $this->_errormsg($this->loadPo($this->config->item('error_permission'))));
             redirect(base_url() . 'video');
         }
     }  
@@ -1422,7 +1422,6 @@
     */  
 
     function changeStatus() {
-        $sess = $this->session->all_userdata();
         $curr_url = $_GET['redirecturl'];
         unset($_GET['redirecturl']);
         $data = $_GET;
@@ -1433,14 +1432,12 @@
         if ($data['status'] == 'inprocess') {
             $this->videos_model->deletestatus($s);
         }
-        $user = $sess[0]->username;
         $id = $data['content_id'];
-        $msg = $this->loadPo('Flower status change for Content id') . '=' . $id;
-        $this->log($user, $msg);
         if ($data['status'] == 'pending' || $data['status'] == 'inprocess') {
             //echo 'hello';
-
-            $this->session->set_flashdata('message', sprintf('<section class="content"><div class="col-xs-12"><div class="alert alert-success alert-dismissable"><i class="fa fa-check"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>%s</div></div></section>', $msg));
+            $msg = $this->loadPo($this->config->item('success_flavor_status_change'). '=' . $id);
+            $this->log($this->user, $msg);
+            $this->session->set_flashdata('message', $this->_successmsg($msg));
             redirect($curr_url);
         }
     }

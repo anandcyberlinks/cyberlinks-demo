@@ -11,6 +11,7 @@ class Role extends MY_Controller {
 
     function __construct() {
         parent::__construct();
+        $this->load->config('messages');
         $this->load->model('role_model');
         $this->load->library('session');
         $this->load->helper('url');
@@ -33,14 +34,14 @@ class Role extends MY_Controller {
     function addpermission() {
         $data = $_GET;
         $this->role_model->addpermision($data);
-        //$this->session->set_flashdata('message', '<section class="content"><div class="col-xs-12"><div class="alert alert-success alert-dismissable"><i class="fa fa-check"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Permission Successfully Changed</div></div></section>');
+        $this->session->set_flashdata('message', $this->_successmsg($this->loadPo($this->config->item('success_permission_changed'))));
         redirect(base_url() . 'role');
     }
 
     function deletepermission() {
         $data = $_GET;
         $this->role_model->deletepermission($data);
-        //$this->session->set_flashdata('message', '<section class="content"><div class="col-xs-12"><div class="alert alert-success alert-dismissable"><i class="fa fa-check"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Permission Successfully Changed</div></div></section>');
+        $this->session->set_flashdata('message', $this->_successmsg($this->loadPo($this->config->item('success_permission_deleted'))));
         redirect(base_url() . 'role');
     }
 
@@ -49,7 +50,7 @@ class Role extends MY_Controller {
             unset($_POST['submit']);
             $_POST['owner_id'] = $this->user_id;
             $this->role_model->addrole($_POST);
-            $this->session->set_flashdata('message', '<section class="content"><div class="col-xs-12"><div class="alert alert-success alert-dismissable"><i class="fa fa-check"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>'. $this->loadPo('New Role added Successfully') .'</div></div></section>');
+            $this->session->set_flashdata('message', $this->_successmsg($this->loadPo($this->config->item('success_role_add'))));
             redirect(base_url() . 'role');
         } else {
             $data['welcome'] = $this;
@@ -79,9 +80,9 @@ class Role extends MY_Controller {
                 $this->session->set_flashdata('message', '<section class="content"><div class="col-xs-12"><div class="alert alert-danger alert-dismissable"><i class="fa fa-ban"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>'.$res." ". $this->loadPo('User(s) having this role, You Can\'t Delete this') .'</div></div></section>');
                 redirect(base_url() . 'role');
         }else{
-           $this->role_model->deleterole($id);
-           $this->session->set_flashdata('message', '<section class="content"><div class="col-xs-12"><div class="alert alert-success alert-dismissable"><i class="fa fa-check"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>'.$this->loadPo('Role Deleted Successfully').'</div></div></section>');
-           redirect(base_url() . 'role');
+            $this->role_model->deleterole($id);
+            $this->session->set_flashdata('message', $this->_successmsg($this->loadPo($this->config->item('success_role_deleted'))));
+            redirect(base_url() . 'role');
         }
 }
 }
