@@ -196,6 +196,9 @@ abstract class REST_Controller extends CI_Controller
     {
         parent::__construct();
 
+        //-- gd library --//
+            $this->load->library('image_lib');
+        
         // Start the timer for how long the request takes
         $this->_start_rtime = microtime(true);
 
@@ -1539,19 +1542,164 @@ abstract class REST_Controller extends CI_Controller
         return false;
     }
 
-    //-- validate token and update on each request --//
-    public function validateToken()
-    {
-        $this->load->model('User_model');
-        $token = $this->get('token');
-        //-- validate token --//
-          $id =  $this->User_model->validateToken($token);
-          if($id <= 0){
-            $this->response(array('error' => "Invalid Token"), 404);
-          }
-        //-------------------//
-        
+	//-- validate token and update on each request --//
+    public function validateToken(){
+        $data = $this->get();
+        if(isset($data['token']) && $data['token'] != ''){
+            $token = $data['token'];
+            $this->load->model('api/User_model');
+            //-- validate token --//
+            $id =  $this->User_model->validateToken($token);
+            if($id <= 0){
+                $this->response(array('code'=>0,'error' => "Invalid Token"), 404);
+            }
+        }else{
+            $this->response(array('code'=>0,'error' => "Token Missing"), 404);
+        }
         //-- update api token --//
-            $this->User_model->update_api($token);                    
+            //$this->User_model->update_api($token);                    
+    }    
+    
+    public function paging($p)
+    {
+           //--paging limit --//
+       if($p > 1){
+           $param['limit'] = PER_PAGE * $p;
+           $param['offset'] = ($p-1) * PER_PAGE;
+       }else{
+           $param['limit'] = PER_PAGE;
+           $param['offset'] = 0;
+       }
+       return $param;
     }
+    
+    
+    public function uploadfile($incoming_tmp,$incoming_original,$path,$allowed)
+        {
+                $extension = end(explode(".", $incoming_original));    
+               
+                if (!in_array($extension, $allowed)) {                
+                    $output['error']='File format is invalid.';
+                    return $output;
+                }else{
+                   $result = $this->upload_move_file($incoming_tmp, $incoming_original, $path);                     
+                }
+                
+                if ($result) {
+                    $output['path']  = $incoming_original;
+                    return $output;
+                } else{
+                    $output['error'] = 'File upload failed.';
+                    return $output;
+                }
+        }
+        
+        public function upload_move_file($incoming_tmp,$incoming_original,$path)
+	{
+		@chmod ($path.$incoming_original, 0777);
+		if (move_uploaded_file($incoming_tmp, $path.$incoming_original))
+		{
+                    chmod($path.$incoming_original, 0666);
+                    return true ;
+		}
+		else
+		{
+                    return false ;
+		}
+	}
+        
+    function seconds_from_time($time) { 
+        list($h, $m, $s) = explode(':', $time); 
+        return ($h * 3600) + ($m * 60) + $s; 
+    } 
+    
+    function time_from_seconds($seconds) { 
+        $h = floor($seconds / 3600); 
+        $m = floor(($seconds % 3600) / 60); 
+        $s = $seconds - ($h * 3600) - ($m * 60); 
+        return sprintf('%02d:%02d:%02d', $h, $m, $s); 
+    } 
+
+    function timeago_from_timestamp($createdday){
+        
+                $today = time();    
+                 $createdday= strtotime($createdday); //mysql timestamp of when post was created  
+                 $datediff = abs($today - $createdday);  
+                 $difftext="";  
+                 $years = floor($datediff / (365*60*60*24));  
+                 $months = floor(($datediff - $years * 365*60*60*24) / (30*60*60*24));  
+                 $days = floor(($datediff - $years * 365*60*60*24 - $months*30*60*60*24)/ (60*60*24));  
+                 $hours= floor($datediff/3600);  
+                 $minutes= floor($datediff/60);  
+                 $seconds= floor($datediff);  
+                 //year checker  
+                 if($difftext=="")  
+                 {  
+                   if($years>1)  
+                    $difftext=$years." years ago";  
+                   elseif($years==1)  
+                    $difftext=$years." year ago";  
+                 }  
+                 //month checker  
+                 if($difftext=="")  
+                 {  
+                    if($months>1)  
+                    $difftext=$months." months ago";  
+                    elseif($months==1)  
+                    $difftext=$months." month ago";  
+                 }  
+                 //month checker  
+                 if($difftext=="")  
+                 {  
+                    if($days>1)  
+                    $difftext=$days." days ago";  
+                    elseif($days==1)  
+                    $difftext=$days." day ago";  
+                 }  
+                 //hour checker  
+                 if($difftext=="")  
+                 {  
+                    if($hours>1)  
+                    $difftext=$hours." hours ago";  
+                    elseif($hours==1)  
+                    $difftext=$hours." hour ago";  
+                 }  
+                 //minutes checker  
+                 if($difftext=="")  
+                 {  
+                    if($minutes>1)  
+                    $difftext=$minutes." minutes ago";  
+                    elseif($minutes==1)  
+                    $difftext=$minutes." minute ago";  
+                 }  
+                 //seconds checker  
+                 if($difftext=="")  
+                 {  
+                    if($seconds>1)  
+                    $difftext=$seconds." seconds ago";  
+                    elseif($seconds==1)  
+                    $difftext=$seconds." second ago";  
+                 }  
+                 return $difftext;  
+   
+    }
+    
+    function create_thumbnail($filename, $srcPath, $uploadPath, $width, $height){
+		$config['image_library'] = 'gd2';
+		$config['source_image'] = $srcPath;
+		$config['create_thumb'] = TRUE;
+		$config['maintain_ratio'] = FALSE;
+                $config['thumb_marker'] = '';
+		$config['width'] = $width;
+		$config['height'] = $height;
+		$config['new_image'] = $uploadPath;
+                
+		$this->image_lib->initialize($config);
+		$result = $this->image_lib->resize(); 
+		if(!$this->image_lib->resize())
+		{
+			 $this->image_lib->display_errors();exit;
+		}
+		return TRUE;
+	}
 }

@@ -97,8 +97,23 @@ if(isset($config['amazons3'])) {
 
 define('PER_PAGE',10);
 
+$thumbdimensions['small'] =  array('width'=>'320','height'=>'140');
+$thumbdimensions['medium'] =  array('width'=>'480','height'=>'215');
+$thumbdimensions['large'] =  array('width'=>'720','height'=>'320');
 
+define('THUMB_DIMENSION', serialize($thumbdimensions));
 
+//--- Splash Screen image path --/
+define('SPLASH_SCREEN_PATH','/assets/upload/splash/');
 
+$dimensions['large'] =  array('width'=>'640','height'=>'1140');
+$dimensions['medium'] =  array('width'=>'420','height'=>'750');
+$dimensions['small'] =  array('width'=>'280','height'=>'500');
+
+define('SPLASH_SCREEN_DIMENSION', serialize($dimensions));
+
+define('VAST_PATH','./assets/ads/vast/');
+define('IMG_PATH','./assets/img/');
+define('CSV_PATH','./assets/ads/csv/');
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */

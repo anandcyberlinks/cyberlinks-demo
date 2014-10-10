@@ -1,6 +1,6 @@
 <?php
 
-
+  ini_set('display_errors',1);
 
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
@@ -353,7 +353,7 @@ class MY_Controller extends CI_Controller {
     /
     */
     
-    function _upload($tmpFilePath, $fileNameUnique) {
+    function _upload($tmpFilePath, $fileNameUnique, $splash=false) {
 	$fileInfo = $this->getFileInfo($tmpFilePath);
 	$mimeType = $fileInfo['mime_type']; 
 	list($mimeTypeN,$binary)  = explode("/", $mimeType); 
@@ -386,14 +386,78 @@ class MY_Controller extends CI_Controller {
 	    if($mimeTypeN == 'video') {
 		$result = $this->upload_move_files($tmpFilePath, $fileNameUnique, REAL_PATH.serverVideoRelPath);
                 return $result;
-	    } else { 
-		$result = $this->upload_move_files($tmpFilePath, $fileNameUnique, REAL_PATH.serverImageRelPath, true);
+	    } else {
+                if($splash){
+                    $result = $this->upload_move_files($tmpFilePath, $fileNameUnique, REAL_PATH.SPLASH_SCREEN_PATH, false, $splash);
+                } else {
+                    $result = $this->upload_move_files($tmpFilePath, $fileNameUnique, REAL_PATH.serverImageRelPath, true);
+                }
                 return $result;
 	    }		    
 	}
 	
     }
     
+    
+        
+    /*
+    /------------------------------------------------------------------------------------
+    /   function to move a file from one location(temp) to another location
+    /------------------------------------------------------------------------------------
+    /
+    / 	    
+    / 	$fileTempPath 	            = temporary path of a file
+    / 	$fileUniqName  	            = unique name of file
+    / 	$fileUploadPath             = destination path where file have to be uploaded
+    / 	$thumb 		            = this is to specify whether we have to create thumbnail size or not(Image file)
+    /
+    /
+    */
+    
+    
+    public function upload_move_files($fileTempPath, $fileUniqName, $fileUploadPath, $thumb = false, $splash = false) {
+        try{
+        if (move_uploaded_file($fileTempPath,$fileUploadPath.$fileUniqName)) {
+            $fileDestPath = $fileUploadPath . $fileUniqName;
+	    /*if($thumb) {
+		$fileDestPath = $fileUploadPath . $fileUniqName;						
+		$smallImg = $this->create_thumbnail($fileUniqName, $fileDestPath, REAL_PATH.THUMB_SMALL_PATH, '320', '140');
+		$medImg = $this->create_thumbnail($fileUniqName, $fileDestPath,  REAL_PATH.THUMB_MEDIUM_PATH, '480', '215');
+		$largeImg = $this->create_thumbnail($fileUniqName, $fileDestPath, REAL_PATH.THUMB_LARGE_PATH, '720', '320');
+	    }*/
+            if($thumb) {
+                $thumbdimensions = unserialize(THUMB_DIMENSION);
+                foreach($thumbdimensions as $key=>$value){
+                    if($key == 'small') {
+                        $path = REAL_PATH.THUMB_SMALL_PATH;
+                    } else if($key == 'medium') {
+                        $path = REAL_PATH.THUMB_MEDIUM_PATH;
+                    } else if($key == 'large') {
+                        $path = REAL_PATH.THUMB_LARGE_PATH;
+                    }
+                    $img = $this->create_thumbnail($fileUniqName, $fileDestPath, $path, $value['width'], $value['height']);                                    
+                    $fileNameNw='';
+                }
+	    }
+            if($splash) {
+                $fileExt = $this->_getFileExtension($fileUniqName); 
+                $splashdimensions = unserialize(SPLASH_SCREEN_DIMENSION);
+                foreach($splashdimensions as $key=>$value){
+                    $resizefilename = current(explode(".", $fileUniqName));
+                    $fileNameNw = $resizefilename. '_'.$key.'.'.$fileExt;
+                    $img = $this->create_thumbnail($fileNameNw, $fileDestPath, REAL_PATH . SPLASH_SCREEN_PATH, $value['width'], $value['height']);                                    
+                    $fileNameNw='';
+                }
+	    }
+            return true;
+        } else {
+	    echo "There was an error uploading the file, please try again!";
+            return false;
+        }
+        } catch(Exception $e){
+            echo $e; exit;
+        }
+    }
     
     /*
     /--------------------------------------------------------------------------------
@@ -570,37 +634,7 @@ class MY_Controller extends CI_Controller {
         }
     }
 
-    
-    /*
-    /------------------------------------------------------------------------------------
-    /   function to move a file from one location(temp) to another location
-    /------------------------------------------------------------------------------------
-    /
-    / 	    
-    / 	$fileTempPath 	            = temporary path of a file
-    / 	$fileUniqName  	            = unique name of file
-    / 	$fileUploadPath             = destination path where file have to be uploaded
-    / 	$thumb 		            = this is to specify whether we have to create thumbnail size or not(Image file)
-    /
-    /
-    */
-    
-    
-    public function upload_move_files($fileTempPath, $fileUniqName, $fileUploadPath, $thumb = false) {
-        if (move_uploaded_file($fileTempPath,$fileUploadPath.$fileUniqName)) {
-	    if($thumb) {
-		$fileDestPath = $fileUploadPath . $fileUniqName;						
-		$smallImg = $this->create_thumbnail($fileUniqName, $fileDestPath, REAL_PATH.THUMB_SMALL_PATH, '320', '140');
-		$medImg = $this->create_thumbnail($fileUniqName, $fileDestPath,  REAL_PATH.THUMB_MEDIUM_PATH, '480', '215');
-		$largeImg = $this->create_thumbnail($fileUniqName, $fileDestPath, REAL_PATH.THUMB_LARGE_PATH, '720', '320');
-	    }
-            return true;
-        } else {
-	    echo "There was an error uploading the file, please try again!";
-            return false;
-        }
-    }
-    
+   
     
     
     function create_thumbnail($filename, $srcPath, $uploadPath, $width, $height){
@@ -778,6 +812,17 @@ class MY_Controller extends CI_Controller {
         }
     }
 	
+        
+    /*
+    /--------------------------------------------------------------------
+    /  function to download a file from server(local/s3)
+    /--------------------------------------------------------------------
+    / 	    
+    / 	$fileName                   = name of file
+    /   $fullPath                   = path of file(image/video)
+    /
+    */  
+    
     function _downloadFile($fileName, $fullPath)
     {
         if($this->amazons3) {
@@ -865,6 +910,124 @@ class MY_Controller extends CI_Controller {
             }  
         }            
     }
+    
+    /*
+    /--------------------------------------------------------------------
+    /  function to get url content
+    /--------------------------------------------------------------------
+    / 	    
+    / 	$url                   = url
+    /
+    */ 
+    
+    function get_urlcontent($url) {
+        $response = "";
+        $ch = curl_init();
+        // define options
+        $optArray = array(
+            CURLOPT_URL => $url,
+            CURLOPT_RETURNTRANSFER => true
+        );
+        // apply those options
+        curl_setopt_array($ch, $optArray);
+        // execute request and get response
+        $result = curl_exec($ch);
+        return str_replace(' ','',$result);
+        for($i = 0;$i <= strlen($result);$i++){
+            echo ord($result[$i]).'----'.$result[$i];
+            echo '<br/>';
+        }
+    }
 
+	
+    public function readCsvFile($file)
+    {
+        $i = 0;
+       $row=1;
+        if (($handle = fopen($file, "r")) !== FALSE) {
+            while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+                $num = count($data);
+              //  echo "<p> $num fields in line $row: <br /></p>\n";
+                if($row == 1){ $row++; continue; }
+                
+                if(strtolower($data[0]) == 'video'){
+                    $xmlfile =  $this->createVideoXml($data[4],$data[1],$data[3]);                        
+                }
+                if(strtolower($data[0]) == 'banner'){
+                    $xmlfile =  $this->createBannerXml($data[4],$data[1]);
+                }
+                $result[$i]['type'] = $data[0];
+                $result[$i]['filepath'] = $xmlfile;
+                $result[$i]['offset'] = $data[2];
+                $i++;                  
+            }
+           
+            fclose($handle);
+            return serialize($result);
+        }
+    }
+        
+    public function createVideoXml($title,$file,$duration)
+    {
+        $path =VAST_PATH;
+        $filename = 'video'.str_replace(' ','-',$title);
+        $filename .= '-'.date('ymdhis').rand();
+        $this->load->helper('xml');
+        $dom = xml_dom();
+        $video = xml_add_child($dom, 'VAST');
+        xml_add_attribute($video, 'version', '2.0');
+        $ad = xml_add_child($video, 'Ad');
+        $inline = xml_add_child($ad, 'InLine');	
+        $adsystem  = xml_add_child($inline, 'AdSystem','demo video');
+        $adtitle  = xml_add_child($inline, 'AdTitle',$title);
+        $creatives = xml_add_child($inline, 'Creatives');
+        $creative = xml_add_child($creatives, 'Creative');
+        $linear = xml_add_child($creative, 'Linear');
+        $duration = xml_add_child($linear, 'Duration',$duration);
+        $mediafiles  = xml_add_child($linear, 'MediaFiles');
+        $mediafile = xml_add_child($mediafiles, 'MediaFile',$file);
+        xml_add_attribute($mediafile,'type','video/mp4');
+        xml_add_attribute($mediafile,'bitrate','300');
+        xml_add_attribute($mediafile,'width','480');
+        xml_add_attribute($mediafile,'height','270');
+       
+        $xml = xml_print($dom,true);
+
+        $xmlobj=new SimpleXMLElement($xml);           
+        $xmlobj->saveXML($path.$filename.".xml");
+        return $path.$filename.".xml";
+    }
+        
+    public function createBannerXml($title,$file)
+    {
+        $path = VAST_PATH;
+        $filename = 'banner'.str_replace(' ','-',$title);
+        $filename .= '-'.date('ymdhis');
+        $this->load->helper('xml');
+        $dom = xml_dom();
+        $video = xml_add_child($dom, 'VAST');
+        xml_add_attribute($video, 'version', '2.0');
+        $ad = xml_add_child($video, 'Ad');
+        $inline = xml_add_child($ad, 'InLine');	
+        $adsystem  = xml_add_child($inline, 'AdSystem','demo video');
+        $adtitle  = xml_add_child($inline, 'AdTitle',$title);
+        $creatives = xml_add_child($inline, 'Creatives');
+        $creative = xml_add_child($creatives, 'Creative');
+        $linear = xml_add_child($creative, 'NonLinearAds');
+        $nonlinear  = xml_add_child($linear, 'NonLinear');
+        $staticsource = xml_add_child($nonlinear, 'StaticResource',$file);
+        xml_add_child($nonlinear, 'NonLinearClickThrough','url');                      
+        xml_add_attribute($staticsource,'creativeType',"image/jpeg");
+        xml_add_attribute($nonlinear,'width','480');
+        xml_add_attribute($nonlinear,'height','270');
+        xml_add_attribute($nonlinear,'minSuggestedDuration','00:00:15');
+       
+        $xml = xml_print($dom,true);
+
+        $xmlobj=new SimpleXMLElement($xml);           
+        $xmlobj->saveXML($path.$filename.".xml");
+        return $path.$filename.".xml";
+    }
 
 }
+
