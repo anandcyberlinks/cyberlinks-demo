@@ -1,16 +1,52 @@
+/*!
 @import url(//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,300italic,400italic,600italic);
-
 @import url(//fonts.googleapis.com/css?family=Kaushan+Script);
-/*! 
- *   AdminLTE v1.2
- *   Author: AlmsaeedStudio.com
- *   License: Open source - MIT
- *           Please visit http://opensource.org/licenses/MIT for more information
-!*/
-/*
-    Core: General style
-----------------------------
 */
+
+@font-face {
+  font-family: 'Kaushan Script';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Kaushan Script'), local('KaushanScript-Regular'), url(../fonts/KaushanScript-Regular_400.woff) format('woff');
+}
+
+@font-face {
+  font-family: 'Source Sans Pro';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Source Sans Pro Light'), local('SourceSansPro-Light'), url(../fonts/SourceSansPro-Light_300.woff) format('woff');
+}
+@font-face {
+  font-family: 'Source Sans Pro';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Source Sans Pro'), local('SourceSansPro-Regular'), url(../fonts/SourceSansPro-Regular_400.woff) format('woff');
+}
+@font-face {
+  font-family: 'Source Sans Pro';
+  font-style: normal;
+  font-weight: 600;
+  src: local('Source Sans Pro Semibold'), local('SourceSansPro-Semibold'), url(../fonts/SourceSansPro-Semibold_600.woff) format('woff');
+}
+@font-face {
+  font-family: 'Source Sans Pro';
+  font-style: italic;
+  font-weight: 300;
+  src: local('Source Sans Pro Light Italic'), local('SourceSansPro-LightIt'), url(../fonts/SourceSansPro-LightIt_300.woff) format('woff');
+}
+@font-face {
+  font-family: 'Source Sans Pro';
+  font-style: italic;
+  font-weight: 400;
+  src: local('Source Sans Pro Italic'), local('SourceSansPro-It'), url(../fonts/SourceSansPro-It_400.woff) format('woff');
+}
+@font-face {
+  font-family: 'Source Sans Pro';
+  font-style: italic;
+  font-weight: 600;
+  src: local('Source Sans Pro Semibold Italic'), local('SourceSansPro-SemiboldIt'), url(../fonts/SourceSansPro-SemiboldIt_600.woff) format('woff');
+}
+
 html,
 body {
   overflow-x: hidden!important;
