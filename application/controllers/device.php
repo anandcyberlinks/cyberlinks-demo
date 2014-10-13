@@ -119,6 +119,7 @@ class Device extends MY_Controller
     {
 		//-- check if already exists --//
 		$splashArr = $this->Device_model->checkSplash($uid);
+		
 		if($splashArr){
 			foreach($splashArr as $row){
 				$splash_id = $row->splash_id;
@@ -130,6 +131,9 @@ class Device extends MY_Controller
 					$this->Device_model->delete_file($row->file_id);
 			//-- delete files from folder --//
 				unlink($row->absolute_path);
+				}
+				if(file_exists($row->originalFilePath)){
+					unlink($row->originalFilePath);
 				}
 			//-- delete from splash dimenstion --//                        
 				$this->Device_model->delete_splash_dimension($uid);                    
@@ -152,9 +156,9 @@ class Device extends MY_Controller
 			$this->session->set_flashdata('message', $this->_errormsg($msg));
 			redirect('device/index');  
 		} else {			
-			$videoresult = $this->_upload($tmpFilePath, $fileUniqueName, true);  exit;		 
+			$videoresult = $this->_upload($tmpFilePath, $fileUniqueName, true);  		 
 			if ($videoresult) {			 
-				list($width, $height, $type, $attr) = getimagesize(REAL_PATH . SPLASH_SCREEN_PATH . $incoming_original);
+				list($width, $height, $type, $attr) = getimagesize(REAL_PATH . SPLASH_SCREEN_PATH . $fileUniqueName);
 				switch ($type) {
 					case "1":
 						$imageType = 'image/gif';
@@ -166,46 +170,30 @@ class Device extends MY_Controller
 						$imageType = 'image/png';
 						break;
 				}
-				 //-- original file upload ---//
+				 //-- splash file upload ---//
 				$type = 'thumbnail';
-				$fileData['filename'] = $incoming_original;
+				$fileData['filename'] = $fileUniqueName;
 				$fileData['type'] = $type;
 				$fileData['minetype'] = $imageType;
 				$fileData['width'] = $width;
 				$fileData['height'] = $height;
-				$fileData['relative_path'] = SPLASH_SCREEN_PATH . $incoming_original;
-				$fileData['absolute_path'] = REAL_PATH . SPLASH_SCREEN_PATH . $incoming_original;
+				$fileData['relative_path'] = SPLASH_SCREEN_PATH . $fileUniqueName;
+				$fileData['absolute_path'] = REAL_PATH . SPLASH_SCREEN_PATH . $fileUniqueName;
 				$fileData['status'] = '0';
 				$fileData['uid'] = $this->uid;
 				$fileData['created'] = date('Y-m-d');
 				$data_postFile = @serialize($fileData);
 				$dataFile = base64_encode($data_postFile);
 				$fileData['info'] = $dataFile;
-				$last_id = $this->videos_model->_saveThumb($fileData);
-				$msg = $this->loadPo($this->config->item('success_file_upload'));
-				$this->log($this->user, $msg);
-				$this->session->set_flashdata('message', $this->_successmsg($msg));
-				redirect($redirect_url);
-				
-				$file_id = $this->videos_model->insert_file($fileData);                            
-										   
-				//-- splash screen table insert --//
-				if($file_id>0){
-					$data_splash['user_id'] = $this->uid;
-					$data_splash['file_id'] = $file_id;
-					$data_splash['status'] = 1;
-					if($splashArr){					
-						$this->Device_model->update_splash_screen($data_splash,$uid);				     
-					}else{
-						$splash_id = $this->Device_model->insert_splash_screen($data_splash);                                    
-					}
-				}
+				$splash_id = $this->Device_model->_saveSplash($fileData,$splash_id);
 		 
-					//------------------------------//
+				//------------------------------//
 					
-				//-- thumbnails file upload --//
+				//-- splash dimensions --//
 				foreach($dimensions as $key=>$row){
 					$type = 'thumbnail';
+					$fileData1['splash_id'] = $splash_id;
+					$fileData1['key'] = $key;
 					$fileData1['filename'] = $resizefilename.'_'.$key.'.'.$fileExt;
 					$fileData1['type'] = $type;
 					$fileData1['minetype'] = $imageType;
@@ -219,38 +207,16 @@ class Device extends MY_Controller
 					$data_postFile = @serialize($fileData1);
 					$dataFile = base64_encode($data_postFile);
 					$fileData1['info'] = $dataFile;
-					$file_id = $this->videos_model->insert_file($fileData1);                            
+					$dimension_id = $this->Device_model->_saveDimension($fileData1);             
 					
-					if ($file_id>0) {
-						//-- insert splash dimenstions --//
-						$splash_dimension['user_id'] = $this->uid;
-						$splash_dimension['width'] = $row['width'];
-						$splash_dimension['height'] = $row['height'];
-						$splash_dimension['dimension_name'] = $key;
-						$splash_dimension['status'] = 1;
-					   $dimension_id = $this->Device_model->insert_splash_dimension($splash_dimension);
-						
-						//-- insert dimension image --// 
-					   if($dimension_id>0){
-							$dimension_image['splash_id'] = $splash_id;
-							$dimension_image['dimension_id'] = $dimension_id;
-							$dimension_image['file_id'] = $file_id;
-							$dimension_image['status'] = 1;
-							$this->Device_model->insert_splash_dimension_image($dimension_image);
-					   }
-						//------------------------------//
-					}
+					//------------------------------//
 				}
-				
-				$msg = $this->loadPo($this->config->item('success_file_upload'));
-				$this->log($this->user, $msg);
-				$this->session->set_flashdata('message', $this->_successmsg($msg));
-				redirect('device/index');
-			} else {
-				$msg = $this->loadPo($this->config->item('error_file_upload'));
-				$data['message'] = $this->_errormsg($msg);
-				$this->show_video_view('videoEditThumbnail', $data);
-			}	redirect('device/index');                        
-		}
+			}
+			
+			$msg = $this->loadPo($this->config->item('success_file_upload'));
+			$this->log($this->user, $msg);
+			$this->session->set_flashdata('message', $this->_successmsg($msg));
+			redirect('device/index');
+		}                    
 	}
 }

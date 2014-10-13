@@ -80,14 +80,14 @@
                 </a>
             </li>
             <?php } ?>
-	     <?php /* ?><?php if($s[0]->role == 'Admin') {
+	    <?php if($s[0]->role == 'Admin') {
                 ?>
             <li class="<?=($this->uri->segment(1)=='device')?'active':''?>">
                 <a href="<?php echo base_url() ?>device">
                     <i class="fa fa-fw fa-list-alt"></i> <span><?php echo $welcome->loadPo('Device'); ?></span>
                 </a>
             </li>
-            <?php } ?> <?php /*/ ?>
+            <?php } ?>
 
 	    <?php /* ?>
 			<li class="<?=($this->uri->segment(1)=='comments')?'active':''?>">

@@ -60,7 +60,9 @@
                                                     </div>
                                                      
                                                 </div><!-- /.box -->
-                                                <div><img width=280 height=500 src="<?php echo base_url().$splash_screen;?>"></div>
+                                                <?php if(isset($splash_screen)) { ?>
+                                                    <div><img width=280 height=500 src="<?php echo base_url().$splash_screen;?>"></div>
+                                                <?php } ?>
                                             </div><!--/.col (left) -->
                                             
                                             <div class="col-md-6">
