@@ -49,10 +49,12 @@ class Device extends MY_Controller
 		$result = $this->Device_model->checkSplash($this->uid);
 		if(!empty($result)){
 			$this->data['splash_screen'] = $result[0]->relative_path;
+			$dimension = $this->Device_model->getDimensions($this->uid);   
 		} else {
 			$this->data['splash_screen'] = '';
+			$dimension = unserialize(SPLASH_SCREEN_DIMENSION);
 		}
-		$dimensions = unserialize(SPLASH_SCREEN_DIMENSION);
+		//$dimensions = unserialize(SPLASH_SCREEN_DIMENSION);
         switch ($tab) {
             case "Flavors":
                 $this->show_view('video_settings', $this->data);
@@ -68,7 +70,7 @@ class Device extends MY_Controller
             default:
                 $this->data['tab'] = 'Splash';
                 //-- get splash screen dimensions ----//        
-                $this->data['result'] = $this->Device_model->getDimensions($this->uid);        
+                $this->data['result'] = $dimension;      
                 $this->show_view('device_settings', $this->data);
         }
     }
