@@ -119,6 +119,8 @@ class Device extends MY_Controller
     
     function uploadSplashScreen($uid,$dimensions=array())
     {
+				echo '<pre>';print_r($dimensions);echo '</pre>'; exit;
+
 		//-- check if already exists --//
 		$splashArr = $this->Device_model->checkSplash($uid);
 		
