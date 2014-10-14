@@ -43,6 +43,7 @@ $config['success_login'] = 'SuccesFully Loged In';
 $config['success_email_verified'] = 'Mail Succesfully verified';
 $config['success_password_changed'] = 'Password Changed Successfully.';
 $config['success_role_add'] = 'Role added successfully';
+$config['success_genre_add'] = 'Genre added successfully';
 $config['success_permission_changed'] = 'Permission changed successfully';
 $config['success_permission_deleted'] = 'Permission deleted successfully';
 $config['success_role_deleted'] = 'Role deleted successfully.';
