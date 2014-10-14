@@ -88,7 +88,14 @@
                 </a>
             </li>
             <?php } ?>
-
+	    <?php if($s[0]->role == 'Admin') {
+                ?>
+            <li class="<?=($this->uri->segment(1)=='youtube')?'active':''?>">
+                <a href="<?php echo base_url() ?>youtubevideo">
+                    <i class="fa fa-fw fa-list-alt"></i> <span><?php echo $welcome->loadPo('Youtube'); ?></span>
+                </a>
+            </li>
+            <?php } ?>
 	    <?php /* ?>
 			<li class="<?=($this->uri->segment(1)=='comments')?'active':''?>">
                 <a href="<?php echo base_url() ?>comments">
