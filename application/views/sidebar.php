@@ -38,7 +38,7 @@
 					<li class="<?=($this->uri->segment(2)=='live_streaming')?'active':''?>"><a href="<?php echo base_url() ?>video/live_streaming"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('Live Streaming'); ?> </a></li>			  
 				</ul>
             </li>
-			<li class="treeview <?=(($this->uri->segment(1)=='category') || ($this->uri->segment(1)=='transcode'))?'active':''?>">
+			<li class="treeview <?=(($this->uri->segment(1)=='category') || ($this->uri->segment(1)=='transcode') || ($this->uri->segment(1)=='youtubevideo'))?'active':''?>">
                 <a href="#">
                     <i class="fa fa-laptop"></i>
                     <span><?php echo $welcome->loadPo('Utility'); ?></span>
@@ -47,7 +47,8 @@
                 <ul class="treeview-menu">
                     <li class="<?=($this->uri->segment(1)==='category')?'active':''?>"><a href="<?php echo base_url() ?>category"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('Category'); ?></a></li>
                     <!--<li class="<?=($this->uri->segment(1)==='transcode')?'active':''?>"><a href="<?php echo base_url() ?>transcode"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('Transcode'); ?></a></li>         -->           
-                </ul>
+		    <li class="<?=($this->uri->segment(1)==='youtubevideo')?'active':''?>"><a href="<?php echo base_url() ?>youtubevideo"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('Youtube'); ?></a></li>
+		</ul>
             </li>
 	    <li class="<?=($this->uri->segment(1)=='pages')?'active':''?>">
                 <a href="<?php echo base_url() ?>pages">
@@ -88,14 +89,7 @@
                 </a>
             </li>
             <?php } ?>
-	    <?php if($s[0]->role == 'Admin') {
-                ?>
-            <li class="<?=($this->uri->segment(1)=='youtube')?'active':''?>">
-                <a href="<?php echo base_url() ?>youtubevideo">
-                    <i class="fa fa-fw fa-list-alt"></i> <span><?php echo $welcome->loadPo('Youtube'); ?></span>
-                </a>
-            </li>
-            <?php } ?>
+
 	    <?php /* ?>
 			<li class="<?=($this->uri->segment(1)=='comments')?'active':''?>">
                 <a href="<?php echo base_url() ?>comments">
