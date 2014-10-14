@@ -30,6 +30,13 @@ class Genre extends MY_Controller {
                 'label' => 'Genre name',
                 'rules' => 'trim|required'
             )
+        ),
+        'edit_genre' => array(
+            array(
+                'field' => 'genre_name',
+                'label' => 'Genre name',
+                'rules' => 'trim|required'
+            )
         )
     );
 
@@ -97,8 +104,37 @@ class Genre extends MY_Controller {
     }
     
     function addgenre() {
-        ini_set('display_errors', 1);
-        if (isset($_POST['submit'])) {
+        if (isset($_GET['action'])) {
+                $id = $_GET['action'];
+                $cid = base64_decode($id);
+            }
+            if (isset($cid)) {
+        if ((isset($_POST['update']) && $_POST['update'] == 'Update')) {
+           unset($_POST['update']);
+           $_POST['id'] = $cid;
+           //print_r($_POST); die();
+         //   echo '<pre>';print_r($_POST);echo '</pre>';
+
+            $this->form_validation->set_rules($this->validation_rules['edit_genre']);
+                    if ($this->form_validation->run()) {   
+                $this->Genre_model->addgenre($_POST);
+                $this->session->set_flashdata('message', $this->_successmsg($this->loadPo($this->config->item('success_genre_add'))));
+                redirect(base_url() . 'genre');
+            }
+            else{
+                $data['welcome'] = $this;
+                $data['genreName'] = $this->Genre_model->genreName($cid);
+                $this->show_view('editgenre', $data);
+                }
+                
+                } else {
+                $data['welcome'] = $this;
+                                $data['genreName'] = $this->Genre_model->genreName($cid);
+
+                $this->show_view('editgenre', $data);
+            }
+            }else{
+               if ((isset($_POST['submit']) && $_POST['submit'] == 'Submit')) {
            
             unset($_POST['submit']);
          //   echo '<pre>';print_r($_POST);echo '</pre>';
@@ -117,10 +153,17 @@ class Genre extends MY_Controller {
                 } else {
                 $data['welcome'] = $this;
                 $this->show_view('addgenre', $data);
+            } 
             }
-    
 
-    }  
+    }
+    
+    function deleteGenre(){
+       $id = $_GET['id'];
+       $this->Genre_model->delete_genre($id);
+                    $this->session->set_flashdata('message', $this->_successmsg($this->loadPo($this->config->item('success_record_delete'))));
+                    redirect(base_url() . 'genre');
+    }
 
 }
 

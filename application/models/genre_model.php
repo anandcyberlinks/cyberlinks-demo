@@ -14,8 +14,31 @@ class Genre_model extends CI_Model {
 	}
 	
 	function addgenre($data){
-        $this->db->insert('genres', $data);
+		if(isset($data['id'])){
+			$catId = $data['id'];
+			$data = $_POST;
+			$this->db->set('modified','NOW()',FALSE);
+			$this->db->where('id', $catId);
+			$this->db->update('genres', $data); 		
+		} 
+		else
+		{
+			$this->db->insert('genres', $data);
+		}
     }
+    
+    function genreName($id){
+	$this->db->select('genre_name');
+	$this->db->where('id', $id);
+	$query = $this->db->get('genres');
+	return $query->result();
+    }
+    
+    function delete_genre($id)
+	{
+		$this->db->delete('genres', array('id' => $id)); 	
+		return 1;
+	}
 	
 	
         

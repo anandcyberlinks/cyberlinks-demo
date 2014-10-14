@@ -58,7 +58,7 @@
 									<thead>
 										<tr>
 											<th><a href="<?php echo base_url();?>genre/index/genre_name/<?php echo (!empty($show_c))?$show_c:'desc';?>"><?php echo $welcome->loadPo('Genre').' '.$welcome->loadPo('Name'); ?></a></th>
-											
+											<th><?php echo $welcome->loadPo('Action'); ?></th>
 											
 										</tr>
 									</thead>
@@ -69,7 +69,12 @@
 											foreach($category as $cat) { ?>
 											<tr>
 												<td><?php echo $cat->genre_name;?></td>
-												
+												<td>
+													<a href="<?php echo base_url(); ?>genre/addgenre?action=<?php echo base64_encode($cat->id);?>" class="btn btn-info btn-sm"><?php echo $welcome->loadPo('Edit'); ?></a>&nbsp;
+													
+													<a class="confirm" onclick="return delete_genre(<?php echo $cat->id;?>);" href="" ><button class="btn btn-danger btn-sm" data-toggle="modal" data-target=".bs-example-modal-sm" ><?php echo $welcome->loadPo('Delete'); ?></button></a>
+																									
+												</td>
 												
 											</tr>
 										<?php }}else{?>
@@ -121,13 +126,13 @@
 </div><!-- ./wrapper -->
 
 <script>
-	function delete_category(id)
+	function delete_genre(id)
 	{
-		bootbox.confirm("<?php echo $welcome->loadPo('Are you sure you want to delete').' '.$welcome->loadPo('Category'); ?>", function(confirmed) 
+		bootbox.confirm("<?php echo $welcome->loadPo('Are you sure you want to delete').' '.$welcome->loadPo('Genre'); ?>", function(confirmed) 
 		{
 			if (confirmed) 
 			{
-				location.href = '<?php echo base_url();?>category/deleteCategory?id='+id ;
+				location.href = '<?php echo base_url();?>genre/deleteGenre?id='+id ;
 			}
 		})
 	}
