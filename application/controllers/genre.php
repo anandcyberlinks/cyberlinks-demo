@@ -118,7 +118,7 @@ class Genre extends MY_Controller {
             $this->form_validation->set_rules($this->validation_rules['edit_genre']);
                     if ($this->form_validation->run()) {   
                 $this->Genre_model->addgenre($_POST);
-                $this->session->set_flashdata('message', $this->_successmsg($this->loadPo($this->config->item('success_genre_add'))));
+                $this->session->set_flashdata('message', $this->_successmsg($this->loadPo($this->config->item('success_genre_update'))));
                 redirect(base_url() . 'genre');
             }
             else{
@@ -161,7 +161,7 @@ class Genre extends MY_Controller {
     function deleteGenre(){
        $id = $_GET['id'];
        $this->Genre_model->delete_genre($id);
-                    $this->session->set_flashdata('message', $this->_successmsg($this->loadPo($this->config->item('success_record_delete'))));
+                    $this->session->set_flashdata('message', $this->_successmsg($this->loadPo($this->config->item('success_genre_delete'))));
                     redirect(base_url() . 'genre');
     }
 
