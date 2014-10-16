@@ -179,27 +179,24 @@ class Dform extends MY_Controller {
                 $id = $_GET['action'];
                 $cid = base64_decode($id);
             }
-            $this->data['fieldtype']  = array(1=>"text",2=>"textarea",3=>"radio",4=>"checkbox");
+             $this->data['fieldtype']  = array(1=>"text",2=>"textarea",3=>"radio",4=>"checkbox");
             if (isset($cid)) {
                 if (isset($_POST['submit']) && $_POST['submit'] == "Update") {
-                    $this->form_validation->set_rules($this->validation_rules['update_Category']);
-                    if ($this->form_validation->run()) {
+                    $this->form_validation->set_rules($this->validation_rules['add_field']);
+                    if ($this->form_validation->run()){
                         $_POST['id'] = $cid;
-                        $_POST['status'] = $this->input->post('status') == 'on' ? 1 : 0;
-                        $this->Advance_model->_saveCategory($_POST);
+                        $this->Advance_model->_saveFields($_POST);
                         $msg = $this->loadPo($this->config->item('success_record_update'));
                         $this->log($this->user, $msg);
                         $this->session->set_flashdata('message', $this->_successmsg($msg));
-                        redirect('category');
+                        redirect('dform/field/?id='.$_GET['id']);
                     } else {
-                        $this->data['allParentCategory'] = $this->Advance_model->getAllCategory();
-                        $this->data['edit'] = $this->Advance_model->getAllParentCategory($cid);
-                        $this->show_view('edit_category', $this->data);
+                        $this->data['edit'] = $this->Advance_model->getFieldsdata($cid);
+                        $this->show_view('edit_fields', $this->data);
                     }
                 } else {
-                    $this->data['allParentCategory'] = $this->Advance_model->getAllCategory();
-                    $this->data['edit'] = $this->Advance_model->getAllParentCategory($cid);
-                    $this->show_view('edit_category', $this->data);
+                    $this->data['edit'] = $this->Advance_model->getFieldsdata($cid);
+                    $this->show_view('edit_fields', $this->data);
                 }
             } else {
                 if (isset($_POST['submit']) && $_POST['submit'] == 'Submit') {
@@ -255,6 +252,15 @@ class Dform extends MY_Controller {
         } else {
             $this->session->set_flashdata('message', $this->_errormsg($this->loadPo($this->config->item('error_permission'))));
             redirect(base_url() . 'category');
+        }
+    }
+    function checkform(){
+        $data['form_name'] = $_GET['form_name'];
+        $result = $this->Advance_model->checkform($data);
+        if (count($result) == '0') {
+            echo '1';
+        } else {
+            echo '0';
         }
     }
 

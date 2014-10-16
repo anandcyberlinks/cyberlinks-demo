@@ -65,7 +65,7 @@
 													<?php }?>
 												</td>
 												<td>
-													<a href="<?php echo base_url(); ?>category/addCategory?action=<?php echo base64_encode($cat->id);?>" class="btn btn-info btn-sm"><?php echo $welcome->loadPo('Edit'); ?></a>&nbsp;
+													<a href="<?php echo base_url(); ?>dform/addFields?action=<?php echo base64_encode($cat->id);?>&id=<?php echo $_GET['id'] ?>" class="btn btn-info btn-sm"><?php echo $welcome->loadPo('Edit'); ?></a>&nbsp;
 													<a class="confirm" onclick="return delete_field(<?php echo $cat->id; ?>, '<?php echo base_url() . 'dform/deletefield' ?>', '<?php echo current_full_url(); ?>');" href="" ><button class="btn btn-danger btn-sm" data-toggle="modal" data-target=".bs-example-modal-sm" ><?php echo $welcome->loadPo('Delete'); ?></button></a>
 																									
 												</td>

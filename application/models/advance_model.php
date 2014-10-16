@@ -48,12 +48,15 @@ class Advance_model extends CI_Model {
 	
 	/*	Save Category  */
 	function _saveFields($postdata){
+		//print_r($_POST); die;
 		if(isset($postdata['id'])){
 			$fid = $postdata['id'];
 			$data = array(
-				'category'=>$postdata['category'],
-				'parent_id'=>$postdata['parent_id'],
-				'description'=>$postdata['description'],
+				'field_title'=>$postdata['field_title'],
+				'field_name'=>$postdata['field_name'],
+				'field_type'=>$postdata['field_type'],
+				'field_options'=>$postdata['field_options'],
+				'field_validate'=>$postdata['field_validate'],
 				'status'=>$postdata['status']	
 			);
 			$this->db->set('modified','NOW()',FALSE);
@@ -103,5 +106,17 @@ class Advance_model extends CI_Model {
 		$this->db->delete('fields', array('form_id' => $id));
 		return 1;
 	}
-
+	
+	function checkform($data){
+		$this->db->where('form_name', $data['form_name']);
+		$query = $this->db->get('forms');
+		return $query->result();
+	}
+	
+	function getFieldsdata($id){
+		$this->db->where('id', $id);
+		$query = $this->db->get('fields');
+		//echo $this->db->last_query();
+		return $query->result();
+	}
 }

@@ -7,7 +7,7 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            <?php echo $welcome->loadPo('Add Role') ?>
+            <?php echo $welcome->loadPo('Add Form') ?>
             <small><?php echo $welcome->loadPo('New Form') ?></small>
             </h1>
         <ol class="breadcrumb">
@@ -22,7 +22,7 @@
             <div class="col-xs-12">
                 <div class="box">
                     <div class="box-header">
-                        <h3 class="box-title"><?php echo $welcome->loadPo('New Role') ?></h3>                                    
+                        <h3 class="box-title"><?php echo $welcome->loadPo('New Form') ?></h3>                                    
                     </div><!-- /.box-header -->
                     <div class="box-body table-responsive">
                         <form action="" method="POST" id="registerId">
