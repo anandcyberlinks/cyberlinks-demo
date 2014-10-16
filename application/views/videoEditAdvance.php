@@ -9,8 +9,8 @@
 
 			foreach($advance as $advance_val){
 			?>
-			<div class="form-group col-lg-6">
-                            <label for="exampleInputEmail1"><?php echo $advance_val->field_title; ?></label>
+			<div class="form-group col-lg-12">
+                            <label for="exampleInputEmail1"><?php echo $advance_val->field_title; ?>:-</label>
                             <?php if($advance_val->field_type=="text"){?>
 			    <input name="<?php echo $advance_val->field_name;?>" class="form-control" id="<?php echo $advance_val->field_name;?>" type="text" placeholder="Enter Content Title"  value=""/>
 			 <?php } else if($advance_val->field_type=="textarea"){?>
@@ -21,10 +21,8 @@
 			for($y=0;$y<$count;$y++){
 			?>
 			&nbsp;&nbsp;<input type="<?php echo $advance_val->field_type;?>"  name="<?php echo $welcome->loadPo('Status') ?>"  />&nbsp;&nbsp;<?php echo $arrRadioOption[$y];
-			} 
-			 
+			}
 			 ?>
-		 
 			 <?php }?>
                          <?php echo form_error($advance_val->field_name, '<span class="text-danger">', '</span>');?>
                         </div><?php
@@ -43,6 +41,9 @@
 
 		       }
                       ?>
+		      	<div class="form-group col-lg-12">
+		      	    <input type="submit" name="submit" value="Submit" class="btn btn-success">
+			</div>
 	           </form>
     </div>
 </div><!-- /.tab-content -->

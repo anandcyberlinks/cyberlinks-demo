@@ -41,7 +41,7 @@
 								<table id="example1" class="table table-bordered table-striped">
 									<thead>
 										<tr>
-											<th><a href="<?php echo base_url();?>category/index/category/<?php echo (!empty($show_c))?$show_c:'desc';?>"><?php echo $welcome->loadPo('Field').' '.$welcome->loadPo('Name'); ?></a></th>
+											<th><?php echo $welcome->loadPo('Field').' '.$welcome->loadPo('Name'); ?></th>
 											<th><?php echo $welcome->loadPo('Field Title'); ?></th>
 											<th><?php echo $welcome->loadPo('Field Type'); ?></th>
 											<th><?php echo $welcome->loadPo('Status'); ?></th>

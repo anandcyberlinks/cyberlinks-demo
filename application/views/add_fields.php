@@ -41,7 +41,7 @@
 										<div class="form-group col-lg-5">
 											<div class="input text">
 												<label for="Category"><?php echo $welcome->loadPo('Field').' '.$welcome->loadPo('Name'); ?></label>
-												<input name="field_name" class="form-control" placeholder="<?php echo $welcome->loadPo('Field').' '.$welcome->loadPo('Name'); ?>" maxlength="255" type="text" id="Category" value="<?php echo set_value('category'); ?>" onblur="category_check(this.value);" />
+												<input name="field_name" readonly="readonly" value="<?php echo uniqid(); ?>" class="form-control" placeholder="<?php echo $welcome->loadPo('Field').' '.$welcome->loadPo('Name'); ?>" maxlength="255" type="text" id="Category" value="<?php echo set_value('category'); ?>" onblur="category_check(this.value);" />
 												<?php echo form_error('field_name','<span class="text-danger">','</span>'); ?>
 											</div>
 										</div>
