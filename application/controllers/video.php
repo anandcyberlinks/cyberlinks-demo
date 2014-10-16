@@ -184,7 +184,8 @@
                 $this->videoprofile();
                 break;
             case "Advanced":
-                $this->show_video_view('videoEditAdvance', $this->data);
+		 $this->videoprofileadvance();
+                //$this->show_video_view('videoEditAdvance', $this->data);
                 break;
             case "Scheduling":
                 $this->video_scheduling();
@@ -253,6 +254,20 @@
         }
     }
     
+
+
+   /*
+   /--------------------------------------------------
+   /    function used for video advance
+   /-------------------------------------------------- 
+   */
+
+     function videoprofileadvance(){
+         $id = $this->uid; 
+	 $this->data['advance'] = $this->videos_model->get_videofieldadvance($id);
+	 $this->show_video_view('videoEditAdvance', $this->data);
+     }
+
     /*
     /----------------------------------------------------------------
     /   function used for video scheduling

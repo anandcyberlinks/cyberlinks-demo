@@ -509,6 +509,8 @@ class Videos_model extends CI_Model {
         return true;
     }
 
+
+	
     /*function checkvideoexist($data) {
         $this->db->from('contents');
         $this->db->where('title', $data);
@@ -828,5 +830,69 @@ class Videos_model extends CI_Model {
 	}
 
         
+
+    /*
+    /--------------------------------------------------------------- 
+    / Advance Video save Start
+    /---------------------------------------------------------------
+   */
+
+    function get_videofieldadvance($id) {
+        $this->db->select('*');
+        $this->db->from('fields');
+        $this->db->where('uid', $id);
+        $query = $this->db->get(); 
+      //echo $this->db->last_query();die();
+        return $query->result();
+    }
+	
+   /*
+	    function get_videofieldadvance($id) {
+        $this->db->select('*');
+        $this->db->from('fields a');
+        $this->db->where('a.uid', $id);
+	$this->db->join('forms b','b.uid = a.uid','right');
+        $this->db->where('b.form_name', "extra_field");
+        $query = $this->db->get(); 
+        echo $this->db->last_query();die();
+        return $query->result();
+    }
+
+   */	
+    function save_videofieldvalueadvance($value) {
+        $this->db->set($value);
+        $this->db->insert('field_value');
+        $this->result = $this->db->insert_id();
+        return $this->result;
+    }
+
+    function get_videofieldvalueadvance($id) {
+        $this->db->select('*');
+        $this->db->from('field_value');
+        $this->db->where('content_id', $id);
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    function update_videofieldvalueadvance($post) {
+        $data = array(
+            'schedule' => $post['schedule'],
+            'startDate' => $post['startDate'],
+            'endDate' => $post['endDate'],
+            'content_id' => $post['content_id'],
+        );
+        $this->db->set('modified','NOW()',FALSE);
+        $this->db->where('content_id', $post['content_id']);
+        $this->db->update('field_value', $data);
+        return true;
+    }
+
+    /*
+    /--------------------------------------------------------------- 
+    / Advance Video save End
+    /---------------------------------------------------------------
+   */
+
+
 
 }

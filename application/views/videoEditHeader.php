@@ -28,12 +28,12 @@
 											} else {
 												echo $_GET['action'];
 											} ?>"><?php echo $welcome->loadPo('Basic') ?></a></li>
-								<?php /* ?><li class="<?= ($this->uri->segment(3) === 'Advanced') ? 'active' : '' ?>" ><a href="<?php echo base_url(); ?>video/videoOpr/Advanced?action=<?php if (isset($id) && $id != "") {
+								<li class="<?= ($this->uri->segment(3) === 'Advanced') ? 'active' : '' ?>" ><a href="<?php echo base_url(); ?>video/videoOpr/Advanced?action=<?php if (isset($id) && $id != "") {
 												echo base64_encode($id) . '&';
 											} else {
 												echo $_GET['action'];
 											} ?>"><?php echo $welcome->loadPo('Advanced') ?></a></li>
-                                <li class="<?= ($this->uri->segment(3) === 'Scheduling') ? 'active' : '' ?>" ><a href="<?php echo base_url(); ?>video/videoOpr/Scheduling?action=<?php if (isset($id) && $id != "") {
+                                <?php /* ?><li class="<?= ($this->uri->segment(3) === 'Scheduling') ? 'active' : '' ?>" ><a href="<?php echo base_url(); ?>video/videoOpr/Scheduling?action=<?php if (isset($id) && $id != "") {
                                                 echo base64_encode($id) . '&';
                                             } else {
                                                 echo $_GET['action'];

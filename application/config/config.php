@@ -15,7 +15,7 @@
 |
 */
 
-$config['base_url']	= 'http://localhost/final/';
+$config['base_url']	= 'http://localhost/multitvfinal/';
 /*
 |--------------------------------------------------------------------------
 | Index File
