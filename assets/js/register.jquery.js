@@ -14,6 +14,10 @@ $(document).ready(function(){
         'email':true,
         'remote':'checkemail'
       },
+      'form_name':{
+        'required':true,
+        'remote':'checkform'
+      },
       'name':{
         'required':true,
         'minlength':4,
@@ -73,11 +77,15 @@ $(document).ready(function(){
       'required':'Email should not be blank',
       'email':'Please enter valid email Id',
       'remote':'Email already taken'
-
     },
-    'name':{
-      'required':'Role should not be blank',
-      'remote':'Role Name already taken'
+    
+        'email':{
+      'required':'Email should not be blank',
+      'email':'Please enter valid email Id',
+      'remote':'Email already taken'
+    },
+    'form_name':{
+      'remote':'Form Name already taken'
     },
     'days':{
       'number':'Please enter valid duration in Days'
