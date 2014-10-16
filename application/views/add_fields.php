@@ -26,6 +26,8 @@
 							</div><!-- /.box-header -->
 							<!-- form start -->
 							<form action="" id="CategoryForm" method="post" accept-charset="utf-8">
+							
+								
 								<div class="box-body">
 									<div class="row">
 										<div class="form-group col-lg-5">
@@ -90,9 +92,9 @@
 									</div>
 								</div><!-- /.box-body -->
 								<div class="box-footer">									
-									<input type="hidden" name="form_id" id="form_id" value="1"/>
+									<input type="hidden" name="form_id" id="form_id" value="<?php echo $_GET['id'] ?>"/>
 									<button type="submit" name="submit" value="Submit" class="btn btn-primary"><?php echo $welcome->loadPo('Submit'); ?></button>
-									<a href="<?php echo base_url(); ?>category" class="btn btn-default"><?php echo $welcome->loadPo('Cancel'); ?></a>
+									<a href="<?php echo base_url(); ?>dform/field/?id=<?php echo $_GET['id'] ?>" class="btn btn-default"><?php echo $welcome->loadPo('Cancel'); ?></a>
 								</div>
 							</form>
 						</div><!-- /.box -->

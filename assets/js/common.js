@@ -272,6 +272,30 @@ $(function(){
 							})
 	}
 	
+	function delete_field(id,url,curl)
+	{ 
+	  bootbox.confirm("Are you sure you want to Delete Field", function(confirmed) 
+							{
+								if (confirmed) 
+								{
+									location.href = url+'?id='+id+'&curl='+curl ;
+								}
+							})
+	}
+	
+	function delete_form(id,url,curl)
+	{ 
+	  bootbox.confirm("Are you sure you want to Delete Form", function(confirmed) 
+							{
+								if (confirmed) 
+								{
+									location.href = url+'?id='+id+'&curl='+curl ;
+								}
+							})
+	}
+	
+	
+	
 	function delete_comment(id)
 	{ 
 	  bootbox.confirm("Are you sure you want to Delete video", function(confirmed) 

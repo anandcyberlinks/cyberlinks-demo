@@ -112,7 +112,7 @@ class Dform extends MY_Controller {
         $this->data['total_rows'] = $config["total_rows"];
         $this->data['form_name'] = $this->Advance_model->fetchFormName($_GET['id']);
         $this->data['field'] = $this->Advance_model->getField($config["per_page"], $page, $sort, $sort_by, $searchterm, $_GET['id']);
-        $this->show_view('advance', $this->data);
+        $this->show_view('fields', $this->data);
     }
 
     /* 	Add and Edit Form	 */
@@ -153,7 +153,6 @@ class Dform extends MY_Controller {
                     unset($_POST['submit']);
                     $this->form_validation->set_rules($this->validation_rules['add_Form']);
                     if ($this->form_validation->run()) {
-                        
                             $this->Advance_model->_saveForm($_POST);
                             $msg = $this->loadPo($this->config->item('success_record_add'));
                             $this->log($this->user, $msg);
@@ -172,11 +171,8 @@ class Dform extends MY_Controller {
         }
     }
 
-    
      /* 	Add and Edit Category	 */
-
     function addFields(){
-        $form_id = $this->uri->segment(3);
         $per = $this->checkpermission($this->role_id, 'add');
         if ($per) {
             if (isset($_GET['action'])) {
@@ -208,15 +204,14 @@ class Dform extends MY_Controller {
             } else {
                 if (isset($_POST['submit']) && $_POST['submit'] == 'Submit') {
                     $_POST['uid'] = $this->uid;
-                    $_POST['form_id'] = $form_id;
                     unset($_POST['submit']);
                     $this->form_validation->set_rules($this->validation_rules['add_field']);
                     if ($this->form_validation->run()) {
-                            $this->Advance_model->_saveFields($_POST);
-                            $msg = $this->loadPo($this->config->item('success_record_add'));
-                            $this->log($this->user, $msg);
-                            $this->session->set_flashdata('message', $this->_successmsg($msg));
-                            redirect('advance');
+                        $this->Advance_model->_saveFields($_POST);
+                        $msg = $this->loadPo($this->config->item('success_record_add'));
+                        $this->log($this->user, $msg);
+                        $this->session->set_flashdata('message', $this->_successmsg($msg));
+                        redirect('dform/field/?id='.$_GET['id']);
                     } else {
                         $this->show_view('add_fields', $this->data);
                     }
@@ -229,28 +224,34 @@ class Dform extends MY_Controller {
             redirect(base_url() . 'category');
         }
     }
-    /* 	Delete Category */
+    
+    
+    /* 	Delete Field */
 
-    function deleteCategory() {
+    function deletefield() {
         $per = $this->checkpermission($this->role_id, 'delete');
         //echo $this->role_id;
         if ($per) {
-            $id = $_GET['id'];
-            $video = $this->Advance_model->getCategoryVideo($id);
-            if ($video == '0') {
-                $child = $this->Advance_model->getCategoryChild($id);
-                if($child == '0'){
-                    $this->Advance_model->delete_category($id);
-                    $this->session->set_flashdata('message', $this->_successmsg($this->loadPo($this->config->item('success_record_delete'))));
-                    redirect(base_url() . 'category');
-                }else{
-                    $this->session->set_flashdata('message', $this->_warningmsg($this->loadPo($this->config->item('warning_category_record'))));
-                    redirect(base_url() . 'category');
-                }
-            } else {
-                $this->session->set_flashdata('message', $this->_warningmsg($this->loadPo($this->config->item('warning_category_record'))));
-                redirect(base_url() . 'category');
-            }
+            $this->Advance_model->deleteField($_GET['id']);
+            $msg = $this->loadPo($this->config->item('success_record_Deleted'));
+            $this->log($this->user, $msg);
+            $this->session->set_flashdata('message', $this->_successmsg($msg));
+            redirect($_GET['curl']);
+        } else {
+            $this->session->set_flashdata('message', $this->_errormsg($this->loadPo($this->config->item('error_permission'))));
+            redirect(base_url() . 'category');
+        }
+    }
+    
+    function deleteform() {
+        $per = $this->checkpermission($this->role_id, 'delete');
+        //echo $this->role_id;
+        if ($per) {
+            $this->Advance_model->deleteForm($_GET['id']);
+            $msg = $this->loadPo($this->config->item('success_record_Deleted'));
+            $this->log($this->user, $msg);
+            $this->session->set_flashdata('message', $this->_successmsg($msg));
+            redirect($_GET['curl']);
         } else {
             $this->session->set_flashdata('message', $this->_errormsg($this->loadPo($this->config->item('error_permission'))));
             redirect(base_url() . 'category');

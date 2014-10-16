@@ -41,30 +41,32 @@ class Advance_model extends CI_Model {
 	function getfield($limit, $start, $sort='', $sort_by='', $data, $id){
 		$this->db->where('form_id', $id);
 		$this->db->limit($limit, $start);
-		$query = $this->db->get('fields'); 		
+		$query = $this->db->get('fields');
+		//echo $this->db->last_query(); die;
 		return $query->result();
 	}
 	
 	/*	Save Category  */
 	function _saveFields($postdata){
-		if(isset($data['id'])){
-			$catId = $data['id'];
+		if(isset($postdata['id'])){
+			$fid = $postdata['id'];
 			$data = array(
-				'category'=>$data['category'],
-				'parent_id'=>$data['parent_id'],
-				'description'=>$data['description'],
-				'status'=>$data['status']	
+				'category'=>$postdata['category'],
+				'parent_id'=>$postdata['parent_id'],
+				'description'=>$postdata['description'],
+				'status'=>$postdata['status']	
 			);
 			$this->db->set('modified','NOW()',FALSE);
-			$this->db->where('id', $catId);
-			$this->db->update('categories', $data); 		
+			$this->db->where('id', $fid);
+			$this->db->update('fields', $data); 		
 		} else {
 			$this->db->set('created','NOW()',FALSE);
 			$this->db->set('modified','NOW()',FALSE);
 			$this->db->insert('fields',$postdata);
-			$catId = $this->db->insert_id();
+			//echo $this->db->last_query(); die;
+			$fid = $this->db->insert_id();
 		}
-		return $catId;
+		return $fid;
 	}
 
 	
@@ -90,10 +92,14 @@ class Advance_model extends CI_Model {
 		$query = $this->db->get('forms');
 		return $query->result();
 	}
-	/*	Delete Category  */
-	function delete_category($id)
-	{
-		$this->db->delete('categories', array('id' => $id)); 	
+	/*	Delete Field  */
+	function deleteField($id){
+		$this->db->delete('fields', array('id' => $id)); 	
+		return 1;
+	}
+	
+	function deleteForm($id){
+		$this->db->delete('forms', array('id' => $id)); 	
 		return 1;
 	}
 
