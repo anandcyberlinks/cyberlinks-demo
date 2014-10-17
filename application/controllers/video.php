@@ -263,9 +263,42 @@
    */
 
      function videoprofileadvance(){
-         $id = $this->uid; 
-	 $this->data['advance'] = $this->videos_model->get_videofieldadvance($id);
-	 $this->show_video_view('videoEditAdvance', $this->data);
+         $id = $this->uid;
+         $cid = base64_decode($_REQUEST['action']);
+	 $this->data['advance'] = $this->videos_model->get_videofieldadvance($id, $cid);
+        // echo "<pre>";
+        // print_r($this->data['advance']);
+        $GetData =array();
+        foreach($this->data['advance'] as $key => $val){
+           // echo $val[$key]['field_id'];
+              //print_r($val->field_id);
+         $GetData[$val->field_id]= $this->videos_model->fetchvalue($cid, $val->field_id);
+        } 
+        $value=array();
+        $data1= array();
+	 if(isset($_REQUEST['submit']) && $_REQUEST['submit'] =="Submit"){
+            $curl = $_POST['curl'];
+            unset($_POST['curl']);
+	     unset($_POST['submit']);
+            foreach ($_POST as $keyadvance => $values){
+            //echo $keyadvance."==>".$values."<br>";
+            $value[$keyadvance]= $values;
+            
+            $val = $this->videos_model->get_videofieldvalueadvance($keyadvance);
+             if(isset($val[0]->value)){
+                $val1[$keyadvance] = $val[0]->value;
+             }
+        }
+        
+       
+        $this->videos_model->save_videofieldvalueadvance($value);
+        $msg = $this->loadPo($this->config->item('success_record_update'));
+                $this->log($this->user, $msg);
+                $this->session->set_flashdata('message', $this->_successmsg($msg));
+         redirect($curl);
+        }
+         $this->data['fvalue'] = $GetData;
+        $this->show_video_view('videoEditAdvance', $this->data);
      }
 
     /*

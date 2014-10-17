@@ -837,41 +837,88 @@ class Videos_model extends CI_Model {
     /---------------------------------------------------------------
    */
 
-    function get_videofieldadvance($id) {
+   /* function get_videofieldadvance($id) {
         $this->db->select('*');
         $this->db->from('fields');
         $this->db->where('uid', $id);
         $query = $this->db->get(); 
       //echo $this->db->last_query();die();
         return $query->result();
+    }*/
+    function get_videofieldadvance($id) {
+        $this->db->select('a.id as field_id, a.uid,a.form_id,a.field_title,a.field_name,a.field_type,a.field_options,a.field_validate,a.status');
+        $this->db->from('fields a');
+        $this->db->where('uid', $id);
+        $query = $this->db->get(); 
+      //echo $this->db->last_query();die();
+        return $query->result();
     }
 	
-   /*
-	    function get_videofieldadvance($id) {
-        $this->db->select('*');
-        $this->db->from('fields a');
-        $this->db->where('a.uid', $id);
+  
+   /* function get_videofieldadvance($id, $cid) {
+        $this->db->select('a.id as field_id, a.uid,a.form_id,a.field_title,a.field_name,a.field_type,a.field_options,a.field_validate,a.status,c.value');
+        $this->db->from('field_value c');       
+	$this->db->join('fields a','a.id = c.field_id','right');
 	$this->db->join('forms b','b.uid = a.uid','right');
+        $this->db->where('a.uid', $id);
+         $this->db->where('c.content_id', $cid);
+	//$this->db->join('forms b','b.uid = a.uid','right');
         $this->db->where('b.form_name', "extra_field");
         $query = $this->db->get(); 
-        echo $this->db->last_query();die();
+       //echo $this->db->last_query();die();
         return $query->result();
-    }
+    }*/
 
-   */	
+    function fetchvalue($cid, $fid){
+        $this->db->select('id, value');
+        $this->db->where('content_id', $cid);
+        $this->db->where('field_id', $fid);
+        $query = $this->db->get('field_value');
+          return $query->result();
+       // print_r($query->result());
+    }
+    
+   	
     function save_videofieldvalueadvance($value) {
-        $this->db->set($value);
-        $this->db->insert('field_value');
-        $this->result = $this->db->insert_id();
-        return $this->result;
-    }
+	 //print_r($value);
+	 //die();
+	$cid = base64_decode($value['cid']);
+	
+	unset($value['cid']);
+	foreach($value as $key=>$val){ 
+        $result = $this->get_videofieldvalueadvance($key, $cid);
 
-    function get_videofieldvalueadvance($id) {
-        $this->db->select('*');
+	//echo $key."=>".$val;
+        $this->db->set('content_id',$cid);
+	$this->db->set('field_id',$key);
+	$this->db->set('value',$val);
+        if(count($result) == 0){
+            $this->db->insert('field_value');
+        }else{
+            $this->db->where('field_id', $key);
+             $this->db->where('content_id', $cid);
+            $this->db->update('field_value');
+        }
+        $id[] = $this->result = $this->db->insert_id();
+	}
+ 
+        //$this->result = $this->db->insert_id();
+       // echo count($id);
+      // return $query->result();
+    }
+    
+    
+
+    function get_videofieldvalueadvance($id, $cid) {
+        
+        $this->db->select('value');
         $this->db->from('field_value');
-        $this->db->where('content_id', $id);
+        $this->db->where('field_id', $id);
+        $this->db->where('content_id', $cid);
         $query = $this->db->get();
+
         return $query->result();
+
     }
 
     function update_videofieldvalueadvance($post) {

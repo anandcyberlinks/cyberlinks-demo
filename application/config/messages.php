@@ -24,6 +24,7 @@ $config['error_mail_invalid'] = 'Invalid Email';
 
 
 
+
 $config['success_file_upload'] = 'File Uploaded successfully.';
 $config['success_file_update'] = 'File Updated successfully.';
 $config['success_record_add'] = 'Record Added successfully.';
