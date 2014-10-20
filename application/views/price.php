@@ -1,3 +1,4 @@
+<?php if(count($result) !='0') { ?>
 <form action="<?php echo base_url()?>package/price" method="POST" id="registerId">
 <div id="video">
     <table class="table table-bordered table-hover dataTable">
@@ -6,7 +7,7 @@
             <td>Days</td>
             <td>Price</td>
         </tr>
-<?php if(count($result) !='0') { foreach($result as $value){?>
+<?php foreach($result as $value){?>
     <tr>
         <td><?php echo $value->name; ?></td>
         <td><?php echo $value->days; ?></td>
