@@ -340,7 +340,7 @@ function delete_page(id,url)
 	
 	function delete_user(id)
 	{ 
-	  bootbox.confirm("Are you sure you want to Delete video", function(confirmed) 
+	  bootbox.confirm("Are you sure you want to Delete", function(confirmed) 
 							{
 								if (confirmed) 
 								{
