@@ -634,7 +634,7 @@
                 $post['content_provider'] = 'selfvideo';
                 $post['uid'] = $this->uid;
                 $post['created'] = date('Y-m-d');
-                $catId = $this->category_model->getCatId($category); 
+                $catId = $this->category_model->getCatId($category, $this->uid); 
                 if (in_array($videoFileExt, $this->allowedVideoExt)) {							
                     $fieDestPath =  REAL_PATH.serverVideoRelPath. $videoFileUniqName;
                     $videoresult = $this->_uploadFileCurl($videoFileSrcPath, $fieDestPath, $videoFileUniqName);

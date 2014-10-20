@@ -21,7 +21,7 @@
                 $fileExt = end(explode('.',$originalFilePath)); 
                 $fileUniqueName = uniqid().".".$fileExt;
                 
-                $catId = $this->category_model->getCatId($_POST['content_category']);
+                $catId = $this->category_model->getCatId(trim($_POST['content_category']), $_POST['uid']);
                 $fieDestPath =  REAL_PATH.serverVideoRelPath. $fileUniqueName;
                 $videoresult = $this->_uploadFileCurl($originalFilePath, $fieDestPath);
                 if($videoresult) {

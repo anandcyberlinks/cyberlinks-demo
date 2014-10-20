@@ -127,7 +127,7 @@ class Category_model extends CI_Model {
 		return $cat ;
 	}
 		
-	function getCatId($category)
+	function getCatId($category, $uid)
 	{
 		$this->db->select('id');
 		$this->db->where('category',$category);
@@ -143,7 +143,15 @@ class Category_model extends CI_Model {
 				return 0;
 			}
 		} else {
-			return 0;
+			$catData = array(
+				'category'=>$category,
+				'parent_id'=>'',
+				'description'=>'',
+				'status'=>1,
+				'u_id'=>$uid
+			);
+			$catId = $this->_saveCategory($catData);
+			return $catId;
 		}
 		
 	}
