@@ -75,7 +75,7 @@ class Video extends REST_Controller
        }
         //echo '<pre>';print_r($finalResult);
       
-        if($finalResult)
+        if(isset($finalResult))
         {
             $this->response(array('code'=>1,'result'=>$finalResult), 200); // 200 being the HTTP response code
         }else{
