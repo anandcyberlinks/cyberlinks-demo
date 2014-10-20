@@ -73,7 +73,6 @@ class Package_model extends CI_Model{
     }
     function deletePac($id){
         $this->db->delete('package', array('id'=>$id));
-        echo $this->db->last_query(); die;
     }
     
     function get_dyration($uid, $pid){
