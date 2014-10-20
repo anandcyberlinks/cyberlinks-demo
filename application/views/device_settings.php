@@ -75,7 +75,7 @@
                                                     <div class="box-body">                                                       
                                                         <input id="loc_tot" name="loc_tot" value="" type='hidden'>
                                                        <div id="InputsWrapper">                                                                                                        
-                                                    <?php if($result){
+                                                    <?php if(isset($result)){
                                                         $i=0;                                                       
                                                    foreach($result as $row){
                                                    $i++;
