@@ -162,12 +162,21 @@ class MY_Controller extends CI_Controller {
             redirect(base_url().'layout');
         }
     }
-
+### package ####
     function countVideo($package_id){
             $this->db->where('package_id', $package_id);
             $query = $this->db->get('package_video');
             return count($query->result());
     }
+    
+            function check($cid, $pk_id){
+            $this->db->where('content_id', $cid);
+            $this->db->where('package_id', $pk_id);
+            $query = $this->db->get('package_video');
+           // echo $this->db->last_query();
+            return count($query->result());
+        }
+
     
     public function show_video_view($view, $data = '') {
         $s = $this->session->all_userdata();
