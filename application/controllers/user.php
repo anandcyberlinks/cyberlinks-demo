@@ -83,6 +83,7 @@ class user extends MY_Controller {
             if (count($result) == '0') {
                 $result = $this->super_model->Checkusername($data);
                 if (count($result) == '0') {
+                    $_POST['token'] = uniqid();
                     $this->super_model->inseruser($_POST);
                     $this->log($this->user, 'New user successfully inserted with username-> ' . $_POST['username']);
                     $email = $this->super_model->Checkemail($data);

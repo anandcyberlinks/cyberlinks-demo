@@ -68,7 +68,6 @@ class User_Model extends CI_Model {
     }
 
     public function inseruser($data) {
-        $this->db->set('token', uniqid());
         $this->db->insert('users', $data);
         //echo $this->db->last_query();
         return $this->db->insert_id();
