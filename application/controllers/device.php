@@ -98,7 +98,7 @@ class Device extends MY_Controller
 			else{
 				$msg = $this->loadPo($this->config->item('error_file_upload'));
 				$this->log($this->user, $msg);
-				$data['message'] = $this->_errormsg($msg);
+				$this->session->set_flashdata('message', $this->_errormsg($msg));
 				redirect('device/index');
 			}		
 		}
@@ -111,7 +111,7 @@ class Device extends MY_Controller
             } else{
 				$msg = $this->loadPo($this->config->item('error_file_upload'));
 				$this->log($this->user, $msg);
-				$data['message'] = $this->_errormsg($msg);
+				$this->session->set_flashdata('message', $this->_errormsg($msg));
 				redirect('device/index');
 			}
         }
@@ -151,7 +151,7 @@ class Device extends MY_Controller
 		$fileUniqueName = uniqid().".".$fileExt;
 		$resizefilename = current(explode(".", $fileUniqueName));
 
-		if(empty(array_filter($dimensions))){			
+		if(empty($dimensions)){			
 			$dimensions = unserialize(SPLASH_SCREEN_DIMENSION);
 		}
 	
