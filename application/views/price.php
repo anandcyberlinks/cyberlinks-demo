@@ -6,7 +6,7 @@
             <td>Days</td>
             <td>Price</td>
         </tr>
-<?php foreach($result as $value){?>
+<?php if(count($result) !='0') { foreach($result as $value){?>
     <tr>
         <td><?php echo $value->name; ?></td>
         <td><?php echo $value->days; ?></td>
@@ -21,3 +21,6 @@
 <input type="hidden" name="package_id" value="<?php echo $this->uri->segment(3)?>">
 <input class="btn btn-success" type="submit" name="submit" value="submit">
 </form>
+<?php }else{
+    echo "No Duration Found";
+    } ?>

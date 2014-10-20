@@ -73,6 +73,7 @@ class Package_model extends CI_Model{
     }
     function deletePac($id){
         $this->db->delete('package', array('id'=>$id));
+
     }
     
     function get_dyration($uid, $pid){
@@ -80,11 +81,14 @@ class Package_model extends CI_Model{
         $this->db->from('duration');
         $this->db->join('package_price', 'duration.id=package_price.duration_id', 'left');
         $this->db->where('duration.uid', $uid);
+        
         $this->db->where('package_price.package_id', $pid);
+        $this->db->where('duration.status', '1');
         $query = $this->db->get();
         if(count($query->result())!='0'){
             return $query->result();
         }else{
+           $this->db->where('duration.status', '1');
            $query = $this->db->get('duration');
            return $query->result();
            
