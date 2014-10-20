@@ -38,7 +38,7 @@
 					<li class="<?=($this->uri->segment(2)=='live_streaming')?'active':''?>"><a href="<?php echo base_url() ?>video/live_streaming"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('Live Streaming'); ?> </a></li>	 */ ?>     		  
 				</ul>
             </li>
-			<li class="treeview <?=(($this->uri->segment(1)=='category') || ($this->uri->segment(1)=='transcode') || ($this->uri->segment(1)=='dform') || ($this->uri->segment(1)=='youtubevideo'))?'active':''?>">
+			<li class="treeview <?=(($this->uri->segment(1)=='category') || ($this->uri->segment(1)=='transcode') || ($this->uri->segment(1)=='dform') || ($this->uri->segment(1)=='subscription') || ($this->uri->segment(1)=='youtubevideo'))?'active':''?>">
                 <a href="#">
                     <i class="fa fa-laptop"></i>
                     <span><?php echo $welcome->loadPo('Utility'); ?></span>
@@ -49,6 +49,7 @@
                     <!--<li class="<?=($this->uri->segment(1)==='transcode')?'active':''?>"><a href="<?php echo base_url() ?>transcode"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('Transcode'); ?></a></li>         -->           
 		    <li class="<?=($this->uri->segment(1)==='youtubevideo')?'active':''?>"><a href="<?php echo base_url() ?>youtubevideo"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('Youtube'); ?></a></li>
 		    <li class="<?=($this->uri->segment(1)==='dform')?'active':''?>"><a href="<?php echo base_url() ?>dform"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('Advance'); ?></a></li>
+		    <li class="<?=($this->uri->segment(1)==='subscription')?'active':''?>"><a href="<?php echo base_url() ?>subscription"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('Subscription'); ?></a></li>
 
 		</ul>
             </li>

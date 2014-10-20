@@ -2,12 +2,10 @@
 
 class Category_model extends CI_Model {
 
-	function __construct()
-	{
+	function __construct(){
 		parent::__construct();
 		$this->load->database();
 	}
-	
 	/* Get Record Count */
 	function getRecordCount($uid, $data=''){
 		$this->db->select('a.*,b.category as parent');

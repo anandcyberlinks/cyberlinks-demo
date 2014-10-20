@@ -104,7 +104,18 @@ $(function(){
 			
 		});
 	});	
-	
+		$('a.confirm_delete_subs').click(function(e) {
+		e.preventDefault();
+		var location = $(this).attr('href');
+		bootbox.confirm('Are you sure you want to Delete Subscription', function(confirmed) 
+		{
+			if (confirmed) 
+			{
+				window.location.replace(location);
+			}
+			
+		});
+	});
 
 
 	/* other functions */
@@ -139,7 +150,37 @@ $(function(){
 		$('#playerModel #jsplayerV').html(str);
 	});
 	
+	$('.manaegvideo').on('click', function() {
+        var url = $(this).attr('link');
+        $.ajax({
+            type: "GET",
+            url: url,
+            dataType: "html",
+            success: function(response) {
+                bootbox.dialog({
+		    message: response,
+		    title: "Select Your Video",
+		});
+            }
+        });
+
+    });
 	
+    	$('.price').on('click', function() {
+        var url = $(this).attr('link');
+        $.ajax({
+            type: "GET",
+            url: url,
+            dataType: "html",
+            success: function(response) {
+                bootbox.dialog({
+		    message: response,
+		    title: "Price",
+		});
+            }
+        });
+
+    });
 	/* 6_8_14*/	
 
 });

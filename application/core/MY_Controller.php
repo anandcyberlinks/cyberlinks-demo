@@ -163,6 +163,12 @@ class MY_Controller extends CI_Controller {
         }
     }
 
+    function countVideo($package_id){
+            $this->db->where('package_id', $package_id);
+            $query = $this->db->get('package_video');
+            return count($query->result());
+    }
+    
     public function show_video_view($view, $data = '') {
         $s = $this->session->all_userdata();
         $tmp = $s['0'];
