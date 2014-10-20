@@ -72,7 +72,10 @@
                             $data_postFile = @serialize($fileData);
                             $dataFile = base64_encode($data_postFile);
                             $fileData['info'] = $dataFile;
-                            $last_id = $this->videos_model->_saveThumb($fileData);
+                            $lastThumbId = $this->videos_model->_saveThumb($fileData);
+                            if($lastThumbId){
+                                $result = $this->videos_model->setDefaultImg($last_id, $lastThumbId);
+                            }                            
                         }                        
                     }
                 }else{

@@ -324,7 +324,7 @@ class Videos_model extends CI_Model {
             $this->db->insert('video_thumbnails');            
             $thumbId = $this->db->insert_id();
         }
-        return $thumbId;
+        return $fid;
     }
 
     
