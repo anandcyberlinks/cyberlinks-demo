@@ -26,7 +26,7 @@
                 $videoresult = $this->_uploadFileCurl($originalFilePath, $fieDestPath);
                 if($videoresult) {
                     $_POST['filename'] = $fileUniqueName;
-                    $_POST['content_category'] = $catId;
+                    $_POST['category'] = $catId;
                     $_POST['relative_path'] = serverVideoRelPath . $fileUniqueName;
                     $_POST['absolute_path'] = REAL_PATH.serverVideoRelPath.$fileUniqueName;
                     $_POST['status'] = '1';
