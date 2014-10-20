@@ -97,7 +97,8 @@ class Advance_model extends CI_Model {
 	}
 	/*	Delete Field  */
 	function deleteField($id){
-		$this->db->delete('fields', array('id' => $id)); 	
+		$this->db->delete('fields', array('id' => $id));
+		$this->db->delete('field_value', array('field_id' => $id));
 		return 1;
 	}
 	

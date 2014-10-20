@@ -167,7 +167,7 @@ class Videos_model extends CI_Model {
     }
     
     
-    function get_videocount($uid, $data='') {
+    function get_videocount($uid, $data=''){
         $timeStart = " 00:00:00";
         $timeEnd = " 23:59:59";
         $id = $this->get_ownerid($uid);

@@ -28,8 +28,6 @@ class Youtubevideo extends MY_Controller
 	$this->allowedImageExt = array('gif', 'png', 'jpeg', 'jpg');
 
     }
-
-	
     function index() {
         $this->data['welcome'] = $this;
 	if (isset($_POST['submit']) && ($_POST['submit']=='Search')) {

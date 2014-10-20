@@ -147,8 +147,7 @@ class Dform extends MY_Controller {
                         $this->show_view('edit_form', $this->data);
                 }
             } else {
-                
-                if (isset($_POST['submit']) && $_POST['submit'] == 'Submit') {
+           if (isset($_POST['submit']) && $_POST['submit'] == 'Submit') {
                     $_POST['uid'] = $this->uid;
                     unset($_POST['submit']);
                     $this->form_validation->set_rules($this->validation_rules['add_Form']);
@@ -170,11 +169,11 @@ class Dform extends MY_Controller {
             redirect(base_url() . 'dform');
         }
     }
-
-     /* 	Add and Edit Category	 */
+    
+     /*Add and Edit Category	 */
     function addFields(){
         $per = $this->checkpermission($this->role_id, 'add');
-        if ($per) {
+        if ($per){
             if (isset($_GET['action'])) {
                 $id = $_GET['action'];
                 $cid = base64_decode($id);
@@ -221,11 +220,9 @@ class Dform extends MY_Controller {
             redirect(base_url() . 'category');
         }
     }
-    
-    
     /* 	Delete Field */
 
-    function deletefield() {
+    function deletefield(){
         $per = $this->checkpermission($this->role_id, 'delete');
         //echo $this->role_id;
         if ($per) {
