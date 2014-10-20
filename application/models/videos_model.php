@@ -638,15 +638,18 @@ class Videos_model extends CI_Model {
 
     /* function added for status */
     	
-    function getstatus($limit, $start) {
-	
+    function getstatus($uid, $limit, $start) {
+	$id = $this->get_ownerid($uid);
+        array_push($id, $uid);
+        
 	$this->db->select('c.id,c.title,categories.category,f.*,vf.created as assignedTime,vf.status,fv.path as previewPath,fv.created as completedTime');
 	$this->db->from('video_flavors vf');
 	$this->db->join('flavored_video fv', 'vf.id = fv.flavor_id', 'left');
 	$this->db->join('flavors f', 'f.id = vf.flavor_id', 'left');
 	$this->db->join('contents c', 'vf.content_id = c.id', 'left');
 	$this->db->join('categories', 'categories.id = c.category', 'left'); 
-	$this->db->where('vf.content_id >', 0);  
+	$this->db->where('vf.content_id >', 0);
+        $this->db->where_in('c.uid', $id); 
 	$this->db->order_by('c.id', 'DESC');
 	$this->db->limit($limit, $start);
         $query = $this->db->get();
@@ -655,7 +658,10 @@ class Videos_model extends CI_Model {
         return $data;
     } 
 
-    function getstatuscount() {
+    function getstatuscount($uid) {
+        $id = $this->get_ownerid($uid);
+        array_push($id, $uid);
+        
         $this->db->select('a.flavor_name, a.bitrate, a.video_bitrate, a.width, a.height,
             b.flavor_id, b.content_id, b.status, b.created as assignedTime,
             c.title, c.category as catId,
@@ -666,6 +672,12 @@ class Videos_model extends CI_Model {
         $this->db->join('contents c', 'b.content_id = c.id');
 	$this->db->join('categories d', 'd.category = d.id', 'left');
         $this->db->join('flavored_video e', 'a.id = e.flavor_id','left');
+        
+        
+        
+        $this->db->where_in('c.uid', $id); 
+        
+        
         $query = $this->db->get();
         return count($query->result());
     }    

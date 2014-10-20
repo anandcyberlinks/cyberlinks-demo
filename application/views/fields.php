@@ -1,4 +1,3 @@
-
 <div class="wrapper row-offcanvas row-offcanvas-left">
 	<!-- Right side column. Contains the navbar and content of the page -->
     <aside class="right-side">                
@@ -29,11 +28,9 @@
 									<a href="<?php echo base_url(); ?>dform/addFields?id=<?php echo $_GET['id']; ?>" class="btn btn-success btn-sm"><?php echo $welcome->loadPo('Fields').' '.$welcome->loadPo('Add'); ?></a>
 								</div>
 							</div><!-- /.box-header -->
-       
-						</div><!-- /.box -->
+					</div><!-- /.box -->
 					</div><!--/.col (left) -->
 				</div>
-
 				<div class="row">
 					<div class="col-xs-12">
 						<div class="box">

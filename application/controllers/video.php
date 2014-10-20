@@ -4,7 +4,6 @@
         exit('No direct script access allowed');
     
     class Video extends MY_Controller {
-    
         public $user = null;
         public $role_id = null;
         public $uid = null;
@@ -1451,14 +1450,14 @@
         $this->load->library("pagination");
         $config = array();
         $config["base_url"] = base_url() . "video/video_status";
-        $config["total_rows"] = $this->videos_model->getstatuscount();
+        $config["total_rows"] = $this->videos_model->getstatuscount($this->uid);
         $config["per_page"] = 10;
         $config["uri_segment"] = 3;
         $this->pagination->initialize($config);
         $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
         $data["links"] = $this->pagination->create_links();
         $data['welcome'] = $this;
-        $data['status'] = $this->videos_model->getstatus($config["per_page"], $page);
+        $data['status'] = $this->videos_model->getstatus($this->uid, $config["per_page"], $page);
         $data['total_rows'] = $config["total_rows"];
         $this->show_view('video_status', $data);
     }

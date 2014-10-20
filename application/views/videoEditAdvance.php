@@ -1,5 +1,4 @@
 <?php if(count($advance)!='0'){ ?>
-
 <div class="tab-pane active" id="tab_1">
     <div class="box box-solid">
         <div class="box-body">
