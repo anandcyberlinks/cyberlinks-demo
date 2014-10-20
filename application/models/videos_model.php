@@ -24,6 +24,7 @@ class Videos_model extends CI_Model {
      */
     
     function _saveVideo($data){
+
         $contents['title'] = $data['content_title'];
         if(isset($data['description'])){
             $contents['description'] = $data['description'];
@@ -58,10 +59,14 @@ class Videos_model extends CI_Model {
         }else{
             ###inserting data in contents table and return id###
             $contents['uid'] = $data['uid'];
+            if(isset($data['category'])){
+                $contents['category'] = $data['category'];
+            }
             $this->db->set($contents);
             $this->db->set('created','NOW()',FALSE);
             $this->db->insert('contents');
             $cid = $this->db->insert_id();
+            echo $this->db->last_query(); die();
             
             ###inserting data in video_detail table with contents_id###
             $this->db->set('content_id', $cid);
@@ -659,7 +664,7 @@ class Videos_model extends CI_Model {
         $this->db->from('flavors a');
         $this->db->join('video_flavors b', 'a.id = b.flavor_id');
         $this->db->join('contents c', 'b.content_id = c.id');
-		$this->db->join('categories d', 'd.category = d.id', 'left');
+	$this->db->join('categories d', 'd.category = d.id', 'left');
         $this->db->join('flavored_video e', 'a.id = e.flavor_id','left');
         $query = $this->db->get();
         return count($query->result());
@@ -829,7 +834,19 @@ class Videos_model extends CI_Model {
             return $query->result();
 	}
 
-        
+    function get_videocountstatus($uid, $status) {
+        $this->db->select('b.flavor_id, b.content_id, b.status');
+        $this->db->from('flavors a');
+        $this->db->where('c.uid', $uid);
+        if($status){
+            $this->db->where('b.status', $status);
+        }
+        $this->db->join('video_flavors b', 'a.id = b.flavor_id');
+        $this->db->join('contents c', 'b.content_id = c.id');
+        $this->db->join('flavored_video e', 'a.id = e.flavor_id','left');
+        $query = $this->db->get();
+        return count($query->result());
+    }
 
     /*
     /--------------------------------------------------------------- 
