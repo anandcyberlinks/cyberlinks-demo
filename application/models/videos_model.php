@@ -363,14 +363,14 @@ class Videos_model extends CI_Model {
     }*/
     function delete_video($id) {
         if($id){
-            $videoFileId = $this->getVideoFileIds($id);
+            $videoFileId = $this->getVideoFileIds($id); 
             $deleteKeyword = $this->deletekeywords($id);
             /*if($this->checkIfRecordsExists('video_source', 'content_id', $id))
             {
                 $this->db->delete('video_source', array('content_id' => $id));
             }*/
             
-            If($videoFileId) {
+            //If($videoFileId) {
                 if($this->checkIfRecordsExists('contents', 'id', $id)){
                     $this->db->delete('contents', array('id' => $id));
                 }
@@ -394,9 +394,9 @@ class Videos_model extends CI_Model {
                 }
                 //$this->db->delete('wowza_video', array('content_id' => $id));
                 return 1;
-            } else {
-                    return 0;
-            }
+            //} else {
+                    //return 0;
+            //}
         } else {
         return 0;
         }
