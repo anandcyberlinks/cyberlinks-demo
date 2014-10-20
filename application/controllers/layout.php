@@ -14,6 +14,7 @@ class Layout extends MY_Controller {
         parent::__construct();
         $this->load->config('messages');
         $this->load->model('user_model');
+        $this->load->model('videos_model');
         $this->load->library('session');
         $this->load->helper('url');
         $session = $this->session->all_userdata();
@@ -34,7 +35,7 @@ class Layout extends MY_Controller {
         $s = $this->session->all_userdata();
         $tmp = @$s['0'];
         if (isset($tmp->id)) {
-            redirect(base_url().'video');
+            redirect(base_url().'layout/dashboard');
         }
         #################################
         if (isset($_POST['login'])) {
@@ -45,9 +46,10 @@ class Layout extends MY_Controller {
                 $this->session->set_userdata($result);
                 $msg = $this->loadPo($this->config->item('success_login'));
                 $this->log($data['username'], $msg);
-                redirect(base_url().'video');
+                redirect(base_url().'layout/dashboard');
             } else { 
-                $this->session->set_flashdata('msg', $this->_warningmsg($this->config->item('warning_auth')));
+                $this->session->set_flashdata('msg', $this->config->item('warning_auth'));
+                
                 $this->error('error', 'Unauthorised User Try to Login With Username =>>' . $_POST['username']);
                 redirect('layout');
             }
@@ -63,6 +65,9 @@ class Layout extends MY_Controller {
     function dashboard() {
         $data['result'] = $this->session->all_userdata();
         $data['welcome'] = $this;
+        $data['totalvideos'] = $this->videos_model->get_videocountstatus($this->user_id, '');
+        $data['pendingvideos'] = $this->videos_model->get_videocountstatus($this->user_id, 'pending') ;
+        $data['transcodedvideos'] = $this->videos_model->get_videocountstatus($this->user_id, 'completed') ;
         $this->show_view('dashboard', $data);
     }
 
