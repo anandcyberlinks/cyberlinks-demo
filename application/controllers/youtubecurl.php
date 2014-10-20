@@ -114,6 +114,7 @@
                                     $params['content_category'] = isset($_GET['cat']) ? $_GET['cat'] : '';
                                     $params['description'] = $data['content']['descritpion'];
                                     $params['filename'] = $basepath;
+                                    $params['thumbfilename'] = sprintf('http://img.youtube.com/vi/%s/0.jpg',$id);
                                     $params['tags'] = $data['content']['keywords'];    
                                 }
                                 
