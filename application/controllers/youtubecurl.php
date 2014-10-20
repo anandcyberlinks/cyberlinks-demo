@@ -16,14 +16,19 @@
     function index() {
         if (isset($_POST) && (!empty($_POST))) {
             if($this->file_exists($_POST['filename'])) {
-                
+                $userId = $_POST['uid'];
                 $originalFilePath = $_POST['filename'];
-                $fileExt = end(explode('.',$originalFilePath)); 
+                $originalThumbFilePath = $_POST['thumbfilename'];
+                $fileExt = end(explode('.',$originalFilePath));
+                $thumbFileExt = end(explode('.',$originalThumbFilePath)); 
                 $fileUniqueName = uniqid().".".$fileExt;
+                $thumbFileUniqueName = uniqid().".".$thumbFileExt;
                 
-                $catId = $this->category_model->getCatId(trim($_POST['content_category']), $_POST['uid']);
+                $catId = $this->category_model->getCatId(trim($_POST['content_category']), $userId);
                 $fieDestPath =  REAL_PATH.serverVideoRelPath. $fileUniqueName;
                 $videoresult = $this->_uploadFileCurl($originalFilePath, $fieDestPath);
+                $thumbFieDestPath =  REAL_PATH.serverImageRelPath. $thumbFileUniqueName;
+                $thumbresult = $this->_uploadFileCurl($originalThumbFilePath, $thumbFieDestPath, false, true);
                 if($videoresult) {
                     $_POST['filename'] = $fileUniqueName;
                     $_POST['category'] = $catId;
@@ -37,7 +42,38 @@
                     $post_key = $_POST['tags'];
                     $last_id = $this->videos_model->_saveVideo($_POST);
                     if($last_id){
-                        $this->videos_model->_setKeyword($post_key, $last_id);                    
+                        $this->videos_model->_setKeyword($post_key, $last_id);  //save keyword
+                        /* save thumb */
+                        if($thumbresult) {
+                            list($width, $height, $type, $attr) = getimagesize($thumbFieDestPath);
+                            switch ($type) {
+                                case "1":
+                                        $imageType = 'image/gif';
+                                        break;
+                                case "2":
+                                        $imageType = 'image/jpg';
+                                        break;
+                                case "3":
+                                        $imageType = 'image/png';
+                                        break;
+                            }
+                            $type = 'thumbnail';
+                            $fileData = array();
+                            $fileData['content_id'] = $last_id;
+                            $fileData['filename'] = $thumbFileUniqueName;
+                            $fileData['type'] = $type;
+                            $fileData['minetype'] = $imageType;
+                            $fileData['width'] = $width;
+                            $fileData['height'] = $height;
+                            $fileData['relative_path'] = serverImageRelPath.$thumbFileUniqueName;
+                            $fileData['absolute_path'] = REAL_PATH.serverImageRelPath.$thumbFileUniqueName;
+                            $fileData['status'] = '0';
+                            $fileData['uid'] = $userId;
+                            $data_postFile = @serialize($fileData);
+                            $dataFile = base64_encode($data_postFile);
+                            $fileData['info'] = $dataFile;
+                            $last_id = $this->videos_model->_saveThumb($fileData);
+                        }                        
                     }
                 }else{
                     echo 'file copy problem';
@@ -97,13 +133,27 @@
         }
     }
     
-    function _uploadFileCurl($originalFilePath, $fieDestPath, $fileUniqueName = null){
+    function _uploadFileCurl($originalFilePath, $fieDestPath, $fileUniqueName = null, $thumb = null){
         if($this->isRemoteFile($originalFilePath)){
             echo 'server copy';
         }else{
             if (!copy($originalFilePath, $fieDestPath)) {
                 return false;
             }else{
+                if($thumb) {
+                    $thumbdimensions = unserialize(THUMB_DIMENSION);
+                    foreach($thumbdimensions as $key=>$value){
+                        if($key == 'small') {
+                            $path = REAL_PATH.THUMB_SMALL_PATH;
+                        } else if($key == 'medium') {
+                            $path = REAL_PATH.THUMB_MEDIUM_PATH;
+                        } else if($key == 'large') {
+                            $path = REAL_PATH.THUMB_LARGE_PATH;
+                        }
+                        $img = $this->create_thumbnail($fileUniqueName, $fieDestPath, $path, $value['width'], $value['height']);                                    
+                        $fileNameNw='';
+                    }
+                }
                 return true;    
             }
         }
