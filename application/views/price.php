@@ -12,7 +12,6 @@
         <td><?php echo $value->name; ?></td>
         <td><?php echo $value->days; ?></td>
         <td><input type="number" name="prive[<?php echo $value->id?>]" value="<?php if(isset($value->price)){ echo $value->price; } ?>" required></td>
-        
     </tr>
 <?php } ?>
 
@@ -24,4 +23,4 @@
 </form>
 <?php }else{
     echo "No Duration Found";
-    } ?>
+} ?>
