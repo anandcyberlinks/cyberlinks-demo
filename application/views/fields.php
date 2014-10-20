@@ -41,7 +41,6 @@
 								<table id="example1" class="table table-bordered table-striped">
 									<thead>
 										<tr>
-											<th><?php echo $welcome->loadPo('Field').' '.$welcome->loadPo('Name'); ?></th>
 											<th><?php echo $welcome->loadPo('Field Title'); ?></th>
 											<th><?php echo $welcome->loadPo('Field Type'); ?></th>
 											<th><?php echo $welcome->loadPo('Status'); ?></th>
@@ -54,7 +53,6 @@
 										{
 											foreach($field as $cat) { ?>
 											<tr id="categ_<?php echo $cat->id;?>">
-												<td><?php echo $cat->field_name; ?></td>
 												<td><?php echo $cat->field_title; ?></td>
 												<td><?php echo $cat->field_type; ?></td>
 												<td>

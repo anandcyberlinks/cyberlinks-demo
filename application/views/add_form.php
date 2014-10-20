@@ -22,7 +22,7 @@
             <div class="col-xs-12">
                 <div class="box">
                     <div class="box-header">
-                        <h3 class="box-title"><?php echo $welcome->loadPo('New Form') ?></h3>                                    
+                        <h3 class="box-title"><?php echo $welcome->loadPo('New Form000') ?></h3>                                    
                     </div><!-- /.box-header -->
                     <div class="box-body table-responsive">
                         <form action="" method="POST" id="registerId">
@@ -35,7 +35,7 @@
                         
                         
                         <input type="submit" name="submit"value="<?php echo $welcome->loadPo('Submit') ?>" class="btn btn-success">&nbsp;
-                        <a class="btn btn-warning" href="<?php echo base_url() ?>role"><i class="fa fa-fw fa-mail-reply"></i><?php echo $welcome->loadPo('Cancel') ?></a>
+                        <a class="btn btn-warning" href="<?php echo base_url() ?>dform"><i class="fa fa-fw fa-mail-reply"></i><?php echo $welcome->loadPo('Cancel') ?></a>
                         </form>
                     </div>
                 </div><!-- /.box-body -->
