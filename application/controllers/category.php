@@ -91,14 +91,14 @@ class Category extends MY_Controller {
         $this->load->library("pagination");
         $config = array();
         $config["base_url"] = base_url() . "category/index";
-        $config["total_rows"] = $this->Category_model->getRecordCount($searchterm );
+        $config["total_rows"] = $this->Category_model->getRecordCount($this->uid,$searchterm );
         $config["per_page"] = 10;
         $config["uri_segment"] = 3;
         $this->pagination->initialize($config);
         $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
         $this->data["links"] = $this->pagination->create_links();
         $this->data['total_rows'] = $config["total_rows"];
-        $this->data['category'] = $this->Category_model->getCategory($config["per_page"], $page, $sort, $sort_by, $searchterm);
+        $this->data['category'] = $this->Category_model->getCategory($this->uid, $config["per_page"], $page, $sort, $sort_by, $searchterm);
         $this->data['allParentCategory'] = $this->Category_model->getAllCategory();
         $this->show_view('category', $this->data);
     }
