@@ -66,7 +66,7 @@ class Videos_model extends CI_Model {
             $this->db->set('created','NOW()',FALSE);
             $this->db->insert('contents');
             $cid = $this->db->insert_id();
-            echo $this->db->last_query(); die();
+            $this->db->last_query(); 
             
             ###inserting data in video_detail table with contents_id###
             $this->db->set('content_id', $cid);
