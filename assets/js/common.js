@@ -323,7 +323,16 @@ $(function(){
 								}
 							})
 	}
-	
+		function delete_pack(id)
+	{ 
+	  bootbox.confirm("Are you sure you want to Package", function(confirmed) 
+							{
+								if (confirmed) 
+								{
+									location.href = 'package/deletePackage/'+id ;
+								}
+							})
+	}
 	function delete_form(id,url,curl)
 	{ 
 	  bootbox.confirm("Are you sure you want to Delete Form", function(confirmed) 
