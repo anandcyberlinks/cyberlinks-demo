@@ -38,7 +38,8 @@
 											<th><?php echo $welcome->loadPo('Package Name'); ?></th>
 											<th><?php echo $welcome->loadPo('Status'); ?></th>
 											<th><?php echo $welcome->loadPo('Type'); ?></th>
-											<th><?php echo $welcome->loadPo('Manage'); ?></th>
+											<th><?php echo $welcome->loadPo('Manage Price'); ?></th>
+											<th><?php echo $welcome->loadPo('Manage Video'); ?></th>
 											<th><?php echo $welcome->loadPo('Action'); ?></th>
 										</tr>
 									</thead>
@@ -55,7 +56,9 @@
 														<a href="<?php echo base_url(); ?>package/changeStatus/<?php echo $subData->id; ?>/1"><img src="/mobiletv/assets/img/test-fail-icon.png" alt="Inactive" /></a>
 													<?php }?>
 												</td>
-												<td><?php echo ucfirst($subData->package_type); if($subData->package_type == 'paid'){?> <a href="#" link="<?php echo base_url()?>package/price/<?php echo $subData->id; ?>" class="price">Manage Price</a><?php } ?></td>
+												<td><?php echo ucfirst($subData->package_type); ?></td>
+
+												<td><a href="#" link="<?php echo base_url()?>package/price/<?php echo $subData->id; ?>?type=package" class="price">Manage Price</a></td>
 												<td>
 													<a href="#" class="manaegvideo" link="<?php echo base_url() ?>package/video_detail/<?php echo $subData->id; ?>">Manage Videos, </a>Total <?php echo $welcome->countVideo($subData->id); ?>
 												</td>

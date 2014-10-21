@@ -38,9 +38,7 @@
                             <input type="text" name="package_name" placeholder="<?php echo $welcome->loadPo('Package Name') ?>" class="form-control">
                         </div>
                         <label for="package_name" generated="true" class="error"></label><br>
-                        <input type="radio" name="package_type" class="package_type" value="free">Free
-                        <input type="radio" name="package_type" class="package_type" value="paid" checked>Paid
-                            <br> <br>
+                        <br>
                         <input type="submit" name="submit"value="<?php echo $welcome->loadPo('Submit') ?>" class="btn btn-success">&nbsp;
                         <a class="btn btn-warning" href="<?php echo base_url() ?>package"><i class="fa fa-fw fa-mail-reply"></i><?php echo $welcome->loadPo('Cancel') ?></a>
                         </form>

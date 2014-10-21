@@ -59,9 +59,9 @@ class Package_model extends CI_Model{
         $this->db->update('package');
     }
     function videoPackage($data){
-        
         //echo '<pre>';print_r($data['content_id']);echo '</pre>';
         $package_id = $data['package_id'];
+       // print_r($data); die;
         $count = count($data['content_id']);
         $this->db->where('package_id', $package_id);
         $this->db->delete('package_video');
@@ -77,12 +77,12 @@ class Package_model extends CI_Model{
     }
     
     function get_dyration($uid, $pid){
-        $this->db->select('duration.*, package_price.price');
+        $this->db->select('duration.*, price.price');
         $this->db->from('duration');
-        $this->db->join('package_price', 'duration.id=package_price.duration_id', 'left');
+        $this->db->join('price', 'duration.id=price.duration_id', 'left');
         $this->db->where('duration.uid', $uid);
         
-        $this->db->where('package_price.package_id', $pid);
+        $this->db->where('price.content_id', $pid);
         $this->db->where('duration.status', '1');
         $query = $this->db->get();
         if(count($query->result())!='0'){
@@ -94,26 +94,46 @@ class Package_model extends CI_Model{
            
         }
     }
-    function checkprice($package_id, $duration_id){
-        $this->db->where('package_id', $package_id);
+    function checkprice($content_id, $content_type, $duration_id){
+        $this->db->where('content_id', $content_id);
         $this->db->where('duration_id', $duration_id);
-        $query = $this->db->get('package_price');
+        $this->db->where('content_type', $content_type);
+        $query = $this->db->get('price');
         return count($query->result());
     }
     function insertprice($data){
-        $package_id = $data['package_id'];
+        if($data['package_type']=='free'){
+            $this->db->delete('price', array('content_id'=>$data['content_id'], 'content_type'=>$data['content_type']));
+            //echo $this->db->last_query(); die();
+        }
+        
+        if($data['content_type']=='video'){
+                $this->db->set('content_type', $data['package_type']);
+                $this->db->where('id', $data['content_id']);
+                $this->db->update('contents');
+        }
+        if($data['content_type']=='package'){
+            $this->db->set('package_type', $data['package_type']);
+            $this->db->where('id', $data['content_id']);
+            $this->db->update('package');
+        }
+        
+        if($data['package_type']=='paid'){
+        $content_id = $data['content_id'];
+        $this->db->set('content_type',$data['content_type']);
         foreach($data['prive'] as $key=>$val){
-            $this->db->set('package_id',$package_id);
+            $this->db->set('content_id',$content_id);
             $this->db->set('duration_id',$key);
             $this->db->set('price',$val);
             
-            if($this->checkprice($package_id, $key)=='0'){
-                $this->db->insert('package_price');
+            if($this->checkprice($content_id, $data['content_type'],  $key)=='0'){
+                $this->db->insert('price');
             }else{
-                $this->db->where('package_id',$package_id);
+                $this->db->where('content_id',$content_id);
                 $this->db->where('duration_id',$key);
-                $this->db->update('package_price');
+                $this->db->update('price');
             }
+        }
         }
     }
     

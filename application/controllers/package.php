@@ -55,7 +55,7 @@ class Package extends MY_Controller {
         if(isset($_POST['submit'])){
             unset($_POST['submit']);
             $this->Package_model->insertprice($_POST);
-            redirect(base_url().'package');
+            redirect(base_url().$_POST['content_type']);
         }
         $id = $this->uri->segment(3);
         $data['result'] = $this->Package_model->get_dyration($this->uid, $id);
