@@ -844,17 +844,22 @@ class Videos_model extends CI_Model {
             return $query->result();
 	}
 
-    function get_videocountstatus($uid, $status) {
+    function get_videocountstatus($uid, $status, $inprocess=false) {
         $this->db->select('b.flavor_id, b.content_id, b.status');
         $this->db->from('flavors a');
         $this->db->where('c.uid', $uid);
         if($status){
             $this->db->where('b.status', $status);
         }
+        if($inprocess){
+            $this->db->where('b1.status', 'inprocess');
+            $this->db->join('video_flavors b1', 'a.id = b1.flavor_id');
+        }
         $this->db->join('video_flavors b', 'a.id = b.flavor_id');
         $this->db->join('contents c', 'b.content_id = c.id');
         $this->db->join('flavored_video e', 'a.id = e.flavor_id','left');
         $query = $this->db->get();
+     echo   $this->db->last_query(); echo "<br/>";
         return count($query->result());
     }
 

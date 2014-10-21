@@ -47,7 +47,7 @@
                            <?php if(isset($transcodedvideos)) { echo $transcodedvideos; } else { echo '0'; } ?>
                         </h3>
                         <p>
-                            <?php echo $welcome->loadPo('Transcoded Videos'); ?>
+                            <?php echo $welcome->loadPo('Total Transcode Jobs'); ?>
                         </p>
                     </div>
                     <div class="icon">
@@ -66,7 +66,7 @@
                             <?php if(isset($pendingvideos)) { echo $pendingvideos; } else { echo '0'; } ?>
                         </h3>
                         <p>
-                            <?php echo $welcome->loadPo('In Process Videos'); ?>
+                            <?php echo $welcome->loadPo('In-process Videos'); ?>
                         </p>
                     </div>
                     <div class="icon">
@@ -82,7 +82,7 @@
                 <div class="small-box bg-red">
                     <div class="inner">
                         <h3>
-                            <?php if(isset($transcodedvideos)) { echo $transcodedvideos; } else { echo '0'; } ?>
+                            <?php if((isset($transcodedvideos)) && (isset($totalvideos))) { echo $transcodedvideos/$totalvideos; } else { echo '0'; } ?>%
                         </h3>
                         <p>
                             <?php echo $welcome->loadPo('Convert Rate'); ?>
