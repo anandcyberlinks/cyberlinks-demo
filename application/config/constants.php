@@ -83,6 +83,11 @@ if(isset($config['amazons3'])) {
     define('THUMB_MEDIUM_PATH',         'http://'.bucket.'.s3.amazonaws.com/videos/');
     define('THUMB_LARGE_PATH',          'http://'.bucket.'.s3.amazonaws.com/videos/');
     define('PROFILEPIC_PATH',           'http://'.bucket.'.s3.amazonaws.com/videos/');
+    define('CATEGORY_PATH',           'assets/upload/category/');
+    define('CATEGORY_SMALL_PATH',           'assets/upload/category/small/');
+    define('CATEGORY_MEDIUM_PATH',           'assets/upload/category/medium/');
+    define('CATEGORY_LARGE_PATH',           'assets/upload/category/large/');
+
 } else {
     define('serverurl',	                baseurl);
     define('serverDir',                 'videos/');
@@ -93,6 +98,10 @@ if(isset($config['amazons3'])) {
     define('THUMB_MEDIUM_PATH',         'assets/upload/thumbs/medium/');
     define('THUMB_LARGE_PATH',          'assets/upload/thumbs/large/');
     define('PROFILEPIC_PATH',           'assets/upload/profilepic/');
+    define('CATEGORY_PATH',           'assets/upload/category/');
+    define('CATEGORY_SMALL_PATH',           'assets/upload/category/small/');
+    define('CATEGORY_MEDIUM_PATH',           'assets/upload/category/medium/');
+    define('CATEGORY_LARGE_PATH',           'assets/upload/category/large/');
 }
 
 define('PER_PAGE',10);
@@ -100,6 +109,16 @@ define('PER_PAGE',10);
 //--- Video Upload path --/
 define('VIDEO_UPLOAD_PATH','assets/upload/video/');
 
+
+//--- Category image path --/
+
+$categorydimensions['small'] =  array('width'=>'320','height'=>'140');
+$categorydimensions['medium'] =  array('width'=>'480','height'=>'215');
+$categorydimensions['large'] =  array('width'=>'720','height'=>'320');
+
+define('CATEGORY_DIMENSION', serialize($categorydimensions));
+
+//--- Thumb image path --/
 
 $thumbdimensions['small'] =  array('width'=>'320','height'=>'140');
 $thumbdimensions['medium'] =  array('width'=>'480','height'=>'215');

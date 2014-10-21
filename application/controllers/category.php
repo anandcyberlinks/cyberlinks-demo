@@ -8,11 +8,13 @@ class Category extends MY_Controller {
     public $user = null;
     public $role_id = null;
     public $uid = null;
+    public $allowedImageExt;
 
     function __construct() {
         parent::__construct();
         $this->load->config('messages');
         $this->load->model('Category_model');
+        $this->load->model('videos_model');
         $this->load->library('form_validation');
         $this->load->library('Session');
         $this->data['welcome'] = $this;
@@ -20,6 +22,8 @@ class Category extends MY_Controller {
         $this->user = $s[0]->username;
         $this->role_id = $s[0]->role_id;
         $this->uid = $s[0]->id;
+        $this->allowedImageExt = array('gif', 'png', 'jpeg', 'jpg');
+
     }
 
     protected $validation_rules = array
@@ -116,6 +120,17 @@ class Category extends MY_Controller {
                 if (isset($_POST['submit']) && $_POST['submit'] == "Update") {
                     $this->form_validation->set_rules($this->validation_rules['update_Category']);
                     if ($this->form_validation->run()) {
+                        $catOldFileId = $_POST['catOldFileId'];
+                        if (isset($_FILES['categoryImage']['tmp_name']) && $_FILES['categoryImage']['tmp_name'] != "") {
+                            if(isset($catOldFileId)){
+                                $result = $this->delCatImage($catOldFileId);                                
+                            }
+                            
+                            $file_id = $this->uploadCategoryImg($_FILES['categoryImage']["tmp_name"], $_FILES['categoryImage']["name"]);
+                        } else {
+                            $file_id = $catOldFileId;
+                        }
+                        $_POST['file_id'] = $file_id; 
                         $_POST['id'] = $cid;
                         $_POST['status'] = $this->input->post('status') == 'on' ? 1 : 0;
                         $this->Category_model->_saveCategory($_POST);
@@ -135,6 +150,14 @@ class Category extends MY_Controller {
                 }
             } else {
                 if (isset($_POST['submit']) && $_POST['submit'] == 'Submit') {
+                    if (isset($_FILES['categoryImage']['tmp_name']) && $_FILES['categoryImage']['tmp_name'] != "") {
+                        $fileId = $this->uploadCategoryImg($_FILES['categoryImage']["tmp_name"], $_FILES['categoryImage']["name"]);
+                    }
+                    if($fileId){
+                        $_POST['file_id'] = $fileId;
+                    } else {
+                        $_POST['file_id'] = '';
+                    }
                     $_POST['u_id'] = $this->uid;
                     $this->form_validation->set_rules($this->validation_rules['add_category']);
                     if ($this->form_validation->run()) {
@@ -164,7 +187,61 @@ class Category extends MY_Controller {
             redirect(base_url() . 'category');
         }
     }
+    
+    function uploadCategoryImg($tmpFilePath, $fileName, $id=null){
+        $fileExt = $this->_getFileExtension($fileName); 
+        $fileUniqueName = uniqid() . "." . $fileExt;
+        if (!in_array($fileExt, $this->allowedImageExt)) {
+            $msg = $this->loadPo($this->config->item('error_file_format'));
+            $this->log($this->user, $msg);
+            $this->data['error'] = $msg;
+            $this->show_video_view('add_category', $this->data);                
+        } else {
+            $result = $this->_upload($tmpFilePath, $fileUniqueName, 'category');
+            if($result){
+                list($width, $height, $type, $attr) = getimagesize(REAL_PATH.CATEGORY_PATH.$fileUniqueName);
+                switch ($type) {
+                        case "1":
+                                $imageType = 'image/gif';
+                                break;
+                        case "2":
+                                $imageType = 'image/jpg';
+                                break;
+                        case "3":
+                                $imageType = 'image/png';
+                                break;
+                }
+                $type = 'thumbnail';
+                $fileData['filename'] = $fileUniqueName;
+                $fileData['type'] = $type;
+                $fileData['minetype'] = $imageType;
+                $fileData['width'] = $width;
+                $fileData['height'] = $height;
+                $fileData['relative_path'] = CATEGORY_PATH.$fileUniqueName;
+                $fileData['absolute_path'] = REAL_PATH.CATEGORY_PATH.$fileUniqueName;
+                $fileData['status'] = '0';
+                $fileData['uid'] = $this->uid;
+                $fileData['created'] = date('Y-m-d');
+                $data_postFile = @serialize($fileData);
+                $dataFile = base64_encode($data_postFile);
+                $fileData['info'] = $dataFile;
+                $fid = $this->Category_model->_saveFile($fileData);
+            }
+        }
+        return $fid;
+    }
 
+    public function delCatImage($file_id) {
+        $fileName = $this->videos_model->getThumbImgName($file_id);
+        if($fileName) {
+            $delResultThumb = $this->_deleteFile($fileName, REAL_PATH.CATEGORY_PATH);
+            $delResultThumbSmall = $this->_deleteFile($fileName, REAL_PATH.CATEGORY_SMALL_PATH);
+            $delResultThumbMedium = $this->_deleteFile($fileName, REAL_PATH.CATEGORY_MEDIUM_PATH);
+            $delResultThumbLarge = $this->_deleteFile($fileName, REAL_PATH.CATEGORY_LARGE_PATH);
+            $result = $this->Category_model->delCategoryImage($file_id);
+        }
+    }
+    
     /* 	Delete Category */
 
     function deleteCategory() {

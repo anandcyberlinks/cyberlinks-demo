@@ -24,10 +24,11 @@
 									<a href="<?php echo base_url(); ?>category" class="btn btn-default btn-sm"><?php echo $welcome->loadPo('Back'); ?></a>
 								</div>
 							</div><!-- /.box-header -->
+							<link href="<?php echo base_url();?>assets/css/colorpicker/bootstrap-colorpicker.min.css" rel="stylesheet" type="text/css" />
 							<!-- form start -->
 							<?php  foreach ($edit as $value){?> 							
-							<form action="" id="CategoryCategoryoprForm" method="post" accept-charset="utf-8">
-								
+							<form action="" id="CategoryCategoryoprForm" method="post" accept-charset="utf-8" enctype="multipart/form-data">
+								<input type="hidden" name="catOldFileId" id="catOldFileId" value="<?php echo $value->file_id; ?>" />
 								<div class="box-body">
 									<div class="row">
 										<div class="form-group col-lg-5">
@@ -66,6 +67,34 @@
 											<?php echo form_error('description','<span class="text-danger">','</span>'); ?>
 										</div>
 									</div>
+									<div class="row"> 
+										<div class="form-group col-lg-5">
+											<label for="categoryColor"><?php echo $welcome->loadPo('Color'); ?></label>
+											<div class="input-group my-colorpicker">                                            
+												<div class="input text">
+													<input name="color" class="form-control" placeholder="<?php echo $welcome->loadPo('Color'); ?>" type="text" value="<?php echo $value->color;?>" id="color"/>
+												</div>                                                
+												<div class="input-group-addon">
+													<i></i>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="row"> 
+										<div class="form-group col-lg-5">
+											<label for="categoryImage"><?php echo $welcome->loadPo('Image'); ?></label>&nbsp;&nbsp;
+											<span class="btn btn-default btn-file btn-sm">
+												<?php echo  $welcome->loadPo('Choose Media') ?> <input name="categoryImage"  id="categoryImage"  atr="files" type="file"/>
+											</span>
+										</div>
+									</div>
+									<?php if((isset($value->filename)) && ($value->filename !='')){ ?>
+									<div class="row">
+										<div class="form-group col-lg-5">
+											<img src="<?php echo baseurl.CATEGORY_SMALL_PATH.$value->filename; ?>"  />
+										</div>
+									</div>
+									<?php } ?>
 									<div class="row">    
 										<div class="form-group col-lg-5">
 											<label for="Status"><?php echo $welcome->loadPo('Status'); ?></label>&nbsp;&nbsp;
@@ -80,6 +109,14 @@
 								</div>
 							</form>
 							<?php } ?>
+							<script src="<?php echo base_url();?>assets/js/plugins/colorpicker/bootstrap-colorpicker.min.js" type="text/javascript"></script>
+							<script>
+								$(function(){
+									//Colorpicker
+									$('.my-colorpicker').colorpicker();
+								});
+							</script>
+
 						</div><!-- /.box -->
 					</div><!--/.col (left) -->
 				</div>		

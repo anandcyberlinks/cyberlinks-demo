@@ -91,8 +91,7 @@ class MY_Controller extends CI_Controller {
     function get_youtube($url){
         $id = $this->getYoutubeIdFromUrl($url);
         $html = $this->get_data($url);
-        $data = $this->get_meta_tags($html);
-        
+        $data = $this->get_meta_tags($html);      
         
         $youtube = sprintf('http://gdata.youtube.com/feeds/api/videos/%s?v=2&alt=json',$id);
         //$youtube = "http://www.youtube.com/oembed?url=". $url ."&format=json"; 
@@ -368,7 +367,7 @@ class MY_Controller extends CI_Controller {
     /
     */
     
-    function _upload($tmpFilePath, $fileNameUnique, $splash=false) {
+    function _upload($tmpFilePath, $fileNameUnique, $type) {
 	$fileInfo = $this->getFileInfo($tmpFilePath);
 	$mimeType = $fileInfo['mime_type']; 
 	list($mimeTypeN,$binary)  = explode("/", $mimeType); 
@@ -399,14 +398,10 @@ class MY_Controller extends CI_Controller {
 
 	} else { 
 	    if($mimeTypeN == 'video') {
-		$result = $this->upload_move_files($tmpFilePath, $fileNameUnique, REAL_PATH.serverVideoRelPath);
+                $result = $this->upload_move_files($tmpFilePath, $fileNameUnique, $type);
                 return $result;
 	    } else {
-                if($splash){
-                    $result = $this->upload_move_files($tmpFilePath, $fileNameUnique, REAL_PATH.SPLASH_SCREEN_PATH, false, $splash);
-                } else {
-                    $result = $this->upload_move_files($tmpFilePath, $fileNameUnique, REAL_PATH.serverImageRelPath, true);
-                }
+                $result = $this->upload_move_files($tmpFilePath, $fileNameUnique, $type);
                 return $result;
 	    }		    
 	}
@@ -430,45 +425,63 @@ class MY_Controller extends CI_Controller {
     */
     
     
-    public function upload_move_files($fileTempPath, $fileUniqName, $fileUploadPath, $thumb = false, $splash = false) {
+    public function upload_move_files($fileTempPath, $fileUniqName, $type) {
+        switch($type){
+            case 'thumb':
+                $fileUploadPath = REAL_PATH.serverImageRelPath;
+                $dimensions = unserialize(THUMB_DIMENSION);
+                $pathSmall = REAL_PATH.THUMB_SMALL_PATH;
+                $pathMedium = REAL_PATH.THUMB_SMALL_PATH;
+                $pathLarge = REAL_PATH.THUMB_SMALL_PATH;
+                break;
+            case 'splash':
+                $fileUploadPath = REAL_PATH.SPLASH_SCREEN_PATH;
+                $dimensions = unserialize(SPLASH_SCREEN_DIMENSION);
+                $pathSmall = REAL_PATH.SPLASH_SCREEN_PATH;
+                $pathMedium = REAL_PATH.SPLASH_SCREEN_PATH;
+                $pathLarge = REAL_PATH.SPLASH_SCREEN_PATH;
+                break;
+            case 'category':
+                $fileUploadPath =  REAL_PATH.CATEGORY_PATH;
+                $dimensions = unserialize(CATEGORY_DIMENSION);
+                $pathSmall = REAL_PATH.CATEGORY_SMALL_PATH;
+                $pathMedium = REAL_PATH.CATEGORY_MEDIUM_PATH;
+                $pathLarge = REAL_PATH.CATEGORY_LARGE_PATH;
+                break;
+            case 'video':
+                $fileUploadPath =  REAL_PATH.serverVideoRelPath;
+                $dimensions = '';
+                break;            
+        }        
         try{
-        if (move_uploaded_file($fileTempPath,$fileUploadPath.$fileUniqName)) {
-            $fileDestPath = $fileUploadPath . $fileUniqName;
-	    /*if($thumb) {
-		$fileDestPath = $fileUploadPath . $fileUniqName;						
-		$smallImg = $this->create_thumbnail($fileUniqName, $fileDestPath, REAL_PATH.THUMB_SMALL_PATH, '320', '140');
-		$medImg = $this->create_thumbnail($fileUniqName, $fileDestPath,  REAL_PATH.THUMB_MEDIUM_PATH, '480', '215');
-		$largeImg = $this->create_thumbnail($fileUniqName, $fileDestPath, REAL_PATH.THUMB_LARGE_PATH, '720', '320');
-	    }*/
-            if($thumb) {
-                $thumbdimensions = unserialize(THUMB_DIMENSION);
-                foreach($thumbdimensions as $key=>$value){
-                    if($key == 'small') {
-                        $path = REAL_PATH.THUMB_SMALL_PATH;
-                    } else if($key == 'medium') {
-                        $path = REAL_PATH.THUMB_MEDIUM_PATH;
-                    } else if($key == 'large') {
-                        $path = REAL_PATH.THUMB_LARGE_PATH;
+            if (move_uploaded_file($fileTempPath,$fileUploadPath.$fileUniqName)) {
+                $fileDestPath = $fileUploadPath . $fileUniqName;
+                if($type != 'video'){
+                    foreach($dimensions as $key=>$value){
+                        if($key == 'small') {
+                            $path = $pathSmall;
+                        } else if($key == 'medium') {
+                            $path = $pathMedium;
+                        } else if($key == 'large') {
+                            $path = $pathLarge;
+                        }
+                        
+                        if($type == 'splash'){
+                            $fileExt = $this->_getFileExtension($fileUniqName);
+                            $filename = $resizefilename. '_'.$key.'.'.$fileExt;
+                        } else {
+                            $filename = $fileUniqName;
+                        }
+                        $img = $this->create_thumbnail($filename, $fileDestPath, $path, $value['width'], $value['height']);                                    
+                        $filename='';
                     }
-                    $img = $this->create_thumbnail($fileUniqName, $fileDestPath, $path, $value['width'], $value['height']);                                    
-                    $fileNameNw='';
-                }
-	    }
-            if($splash) {
-                $fileExt = $this->_getFileExtension($fileUniqName); 
-                $splashdimensions = unserialize(SPLASH_SCREEN_DIMENSION);
-                foreach($splashdimensions as $key=>$value){
-                    $resizefilename = current(explode(".", $fileUniqName));
-                    $fileNameNw = $resizefilename. '_'.$key.'.'.$fileExt;
-                    $img = $this->create_thumbnail($fileNameNw, $fileDestPath, REAL_PATH . SPLASH_SCREEN_PATH, $value['width'], $value['height']);                                    
-                    $fileNameNw='';
-                }
-	    }
-            return true;
-        } else {
-	    echo "There was an error uploading the file, please try again!";
-            return false;
-        }
+                    
+                }                
+                return true;
+            } else {
+                echo "There was an error uploading the file, please try again!";
+                return false;
+            }
         } catch(Exception $e){
             echo $e; exit;
         }
@@ -555,6 +568,7 @@ class MY_Controller extends CI_Controller {
      
         
     function _uploadFileCurl($fileSrcPath, $fieDestPath, $videoFileUniqName) {
+       
         if($this->amazons3) {
 	    $bucket = bucket;
             $acl = 'public-read';
@@ -597,16 +611,16 @@ class MY_Controller extends CI_Controller {
                 $response = curl_exec($ch);
                 curl_close($ch);
                 echo $response;
-        } else {          
+        } else {
+            //File to save the contents to
+            $fp = fopen($fieDestPath, 'w+');
             //Here is the file we are downloading, replace spaces with %20
             $ch = curl_init(str_replace(" ", "%20", $fileSrcPath));
-            //File to save the contents to
-            $fp = fopen($fieDestPath, 'wb');
             //give curl the file pointer so that it can write to it
             curl_setopt($ch, CURLOPT_FILE, $fp);
             curl_setopt($ch, CURLOPT_HEADER, 0);
             curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-            $data = curl_exec($ch); //get curl response	
+            $data = curl_exec($ch); //get curl response	 
             curl_close($ch);
             fclose($fp);
             if (filesize($fieDestPath) > 0) return true;

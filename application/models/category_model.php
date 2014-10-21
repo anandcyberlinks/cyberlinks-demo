@@ -52,6 +52,8 @@ class Category_model extends CI_Model {
 				'category'=>$data['category'],
 				'parent_id'=>$data['parent_id'],
 				'description'=>$data['description'],
+				'color'=>$data['color'],
+				'file_id'=>$data['file_id'],
 				'status'=>$data['status']	
 			);
 			$this->db->set('modified','NOW()',FALSE);
@@ -62,6 +64,8 @@ class Category_model extends CI_Model {
 				'category'=>$data['category'],
 				'parent_id'=>$data['parent_id'],
 				'description'=>$data['description'],
+				'color'=>$data['color'],
+				'file_id'=>$data['file_id'],
 				'status'=>$data['status'],
 				'u_id'=>$data['u_id']
 			);
@@ -73,13 +77,35 @@ class Category_model extends CI_Model {
 		}
 		return $catId;
 	}
+	
+	function _saveFile($data){
+        $filename = $data['filename'];
+        if(isset($filename)){
+            ###inserting file detail data in files table and return id###
+            $file['name'] = $data['filename'];
+            $file['type'] = $data['type'];
+            $file['minetype'] = $data['minetype'];
+            $file['relative_path'] = $data['relative_path'];
+            $file['absolute_path'] = $data['absolute_path'];
+            $file['status'] = $data['status'];
+            $file['uid'] = $data['uid'];
+            $file['info'] = $data['info'];
+            $this->db->set($file);
+            $this->db->set('created','NOW()',FALSE);
+            $this->db->insert('files');
+            $fid = $this->db->insert_id();
+
+        }
+        return $fid;
+    }
 		
 	/*	Get All Parent Cetogory  */	
 	function getAllParentCategory($id='')
 	{
-		$this->db->select('a.*,b.category as parent');
+		$this->db->select('a.*,b.category as parent, f.name as filename');
 		$this->db->from('categories a');  
-		$this->db->join('categories b','a.parent_id = b.id','left');		
+		$this->db->join('categories b','a.parent_id = b.id','left');
+		$this->db->join('files f','a.file_id = f.id','left');	
 		$this->db->order_by('b.category', 'asc');
 		if($id !=''){ 
 			$this->db->where('a.id',$id);
@@ -152,6 +178,11 @@ class Category_model extends CI_Model {
 			return $catId;
 		}
 		
+	}
+	
+	function delCategoryImage($fileId){
+		$this->db->delete('files', array('id' => $fileId)); 	
+		return 1;
 	}
 	
 }

@@ -328,8 +328,6 @@ class Videos_model extends CI_Model {
     }
 
     
-    
-    
     function get_category($uid,$relation = false) {
         $this->db->select('child.id,child.category,child.parent_id,parent.category as parent');
         $this->db->from('categories child');
