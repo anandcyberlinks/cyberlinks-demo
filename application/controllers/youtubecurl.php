@@ -18,17 +18,19 @@
             if($this->file_exists($_POST['filename'])) {
                 $userId = $_POST['uid'];
                 $originalFilePath = $_POST['filename'];
-                $originalThumbFilePath = $_POST['thumbfilename'];
                 $fileExt = end(explode('.',$originalFilePath));
+                $fileUniqueName = uniqid().".".$fileExt;                
+                $fieDestPath =  REAL_PATH.serverVideoRelPath. $fileUniqueName;
+                $videoresult = $this->_uploadFileCurl($originalFilePath, $fieDestPath, $fileUniqueName);
+                
+                $originalThumbFilePath = $_POST['thumbfilename']; 
+                //$originalThumbFilePath = 'http://img.youtube.com/vi/pxofwuWTs7c/0.jpg';
                 $thumbFileExt = end(explode('.',$originalThumbFilePath)); 
-                $fileUniqueName = uniqid().".".$fileExt;
                 $thumbFileUniqueName = uniqid().".".$thumbFileExt;
+                $thumbFieDestPath =  REAL_PATH.serverImageRelPath. $thumbFileUniqueName;
+                $thumbresult = $this->_uploadFileCurl($originalThumbFilePath, $thumbFieDestPath, $thumbFileUniqueName, true);
                 
                 $catId = $this->category_model->getCatId(trim($_POST['content_category']), $userId);
-                $fieDestPath =  REAL_PATH.serverVideoRelPath. $fileUniqueName;
-                $videoresult = $this->_uploadFileCurl($originalFilePath, $fieDestPath);
-                $thumbFieDestPath =  REAL_PATH.serverImageRelPath. $thumbFileUniqueName;
-                $thumbresult = $this->_uploadFileCurl($originalThumbFilePath, $thumbFieDestPath, false, true);
                 if($videoresult) {
                     $_POST['filename'] = $fileUniqueName;
                     $_POST['category'] = $catId;
@@ -137,25 +139,38 @@
         }
     }
     
-    function _uploadFileCurl($originalFilePath, $fieDestPath, $fileUniqueName = null, $thumb = null){
+    function _uploadFileCurl($originalFilePath, $fieDestPath, $fileUniqueName, $thumb=false){
         if($this->isRemoteFile($originalFilePath)){
-            echo 'server copy';
-        }else{
+        }else{ 
             if (!copy($originalFilePath, $fieDestPath)) {
                 return false;
             }else{
-                if($thumb) {
-                    $thumbdimensions = unserialize(THUMB_DIMENSION);
-                    foreach($thumbdimensions as $key=>$value){
-                        if($key == 'small') {
-                            $path = REAL_PATH.THUMB_SMALL_PATH;
-                        } else if($key == 'medium') {
-                            $path = REAL_PATH.THUMB_MEDIUM_PATH;
-                        } else if($key == 'large') {
-                            $path = REAL_PATH.THUMB_LARGE_PATH;
+                if($thumb){ 
+                    //File to save the contents to
+                    $fp = fopen($fieDestPath, 'w+');
+                    //Here is the file we are downloading, replace spaces with %20
+                    $ch = curl_init(str_replace(" ", "%20", $originalFilePath));
+                    //give curl the file pointer so that it can write to it
+                    curl_setopt($ch, CURLOPT_FILE, $fp);
+                    curl_setopt($ch, CURLOPT_HEADER, 0);
+                    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+                    $data = curl_exec($ch); //get curl response	 
+                    curl_close($ch);
+                    fclose($fp);
+                    if (filesize($fieDestPath) > 0) {
+                        $thumbdimensions = unserialize(THUMB_DIMENSION);
+                        foreach($thumbdimensions as $key=>$value){
+                            if($key == 'small') {
+                                $path = REAL_PATH.THUMB_SMALL_PATH;
+                            } else if($key == 'medium') {
+                                $path = REAL_PATH.THUMB_MEDIUM_PATH;
+                            } else if($key == 'large') {
+                                $path = REAL_PATH.THUMB_LARGE_PATH;
+                            }
+                            $img = $this->create_thumbnail($fileUniqueName, $fieDestPath, $path, $value['width'], $value['height']);                                    
+                            //$fileNameNw='';
                         }
-                        $img = $this->create_thumbnail($fileUniqueName, $fieDestPath, $path, $value['width'], $value['height']);                                    
-                        $fileNameNw='';
+    
                     }
                 }
                 return true;    
@@ -180,9 +195,9 @@
     }
     
     function isRemoteFile($url){
-        if(strpos('http://',$url) !== false){
+        if(strpos('http://',$url) !== false){            
             return true;
-        }else{
+        }else{ 
             return false;
         }
     }
