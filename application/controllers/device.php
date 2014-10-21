@@ -152,7 +152,7 @@ class Device extends MY_Controller
 			$this->session->set_flashdata('message', $this->_errormsg($msg));
 			redirect('device/index');  
 		} else {			
-			$videoresult = $this->_upload($tmpFilePath, $fileUniqueName, true);  		 
+			$videoresult = $this->_upload($tmpFilePath, $fileUniqueName, 'splash');  		 
 			if ($videoresult) {			 
 				list($width, $height, $type, $attr) = getimagesize(REAL_PATH . SPLASH_SCREEN_PATH . $fileUniqueName);
 				switch ($type) {

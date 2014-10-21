@@ -65,9 +65,9 @@ class Layout extends MY_Controller {
     function dashboard() {
         $data['result'] = $this->session->all_userdata();
         $data['welcome'] = $this;
-        $data['totalvideos'] = $this->videos_model->get_videocountstatus($this->user_id, '');
+        $data['totalvideos'] = $this->videos_model->get_videocount($this->user_id, '');
+        $data['transcodedvideos'] = $this->videos_model->get_videocountstatus($this->user_id, '');
         $data['pendingvideos'] = $this->videos_model->get_videocountstatus($this->user_id, 'pending',true) ;        
-        $data['transcodedvideos'] = $this->videos_model->get_videocountstatus($this->user_id, 'completed') ;
         $this->show_view('dashboard', $data);
     }
 

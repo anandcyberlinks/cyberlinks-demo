@@ -468,6 +468,7 @@ class MY_Controller extends CI_Controller {
                         
                         if($type == 'splash'){
                             $fileExt = $this->_getFileExtension($fileUniqName);
+                            $resizefilename = current(explode(".", $fileUniqName));
                             $filename = $resizefilename. '_'.$key.'.'.$fileExt;
                         } else {
                             $filename = $fileUniqName;
