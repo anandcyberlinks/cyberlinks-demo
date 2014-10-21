@@ -25,16 +25,16 @@
                 <div class="small-box bg-aqua">
                     <div class="inner">
                         <h3>
-                            150
+                            <?php if(isset($totalvideos)) { echo $totalvideos; } else { echo '0'; } ?>
                         </h3>
                         <p>
-                           <?php echo $welcome->loadPo('New Orders'); ?> 
+                           <?php echo $welcome->loadPo('Total Videos'); ?> 
                         </p>
                     </div>
                     <div class="icon">
                         <i class="ion ion-bag"></i>
                     </div>
-                    <a href="#" class="small-box-footer">
+                    <a href="<?php echo base_url() ?>video" class="small-box-footer">
                         <?php echo $welcome->loadPo('More info'); ?> <i class="fa fa-arrow-circle-right"></i>
                     </a>
                 </div>
@@ -44,16 +44,16 @@
                 <div class="small-box bg-green">
                     <div class="inner">
                         <h3>
-                            53<sup style="font-size: 20px">%</sup>
+                           <?php if(isset($transcodedvideos)) { echo $transcodedvideos; } else { echo '0'; } ?>
                         </h3>
                         <p>
-                            <?php echo $welcome->loadPo('Bounce Rate'); ?>
+                            <?php echo $welcome->loadPo('Transcoded Videos'); ?>
                         </p>
                     </div>
                     <div class="icon">
                         <i class="ion ion-stats-bars"></i>
                     </div>
-                    <a href="#" class="small-box-footer">
+                    <a href="<?php echo base_url() ?>video/video_status" class="small-box-footer">
                         <?php echo $welcome->loadPo('More info'); ?> <i class="fa fa-arrow-circle-right"></i>
                     </a>
                 </div>
@@ -63,16 +63,16 @@
                 <div class="small-box bg-yellow">
                     <div class="inner">
                         <h3>
-                            44
+                            <?php if(isset($pendingvideos)) { echo $pendingvideos; } else { echo '0'; } ?>
                         </h3>
                         <p>
-                            <?php echo $welcome->loadPo('User Registrations'); ?>
+                            <?php echo $welcome->loadPo('In Process Videos'); ?>
                         </p>
                     </div>
                     <div class="icon">
                         <i class="ion ion-person-add"></i>
                     </div>
-                    <a href="#" class="small-box-footer">
+                    <a href="<?php echo base_url() ?>video/video_status" class="small-box-footer">
                         <?php echo $welcome->loadPo('More info'); ?> <i class="fa fa-arrow-circle-right"></i>
                     </a>
                 </div>
@@ -82,10 +82,10 @@
                 <div class="small-box bg-red">
                     <div class="inner">
                         <h3>
-                            65
+                            <?php if(isset($transcodedvideos)) { echo $transcodedvideos; } else { echo '0'; } ?>
                         </h3>
                         <p>
-                            <?php echo $welcome->loadPo('Unique Visitors'); ?>
+                            <?php echo $welcome->loadPo('Convert Rate'); ?>
                         </p>
                     </div>
                     <div class="icon">
