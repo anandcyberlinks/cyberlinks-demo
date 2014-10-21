@@ -171,6 +171,8 @@ class Category_model extends CI_Model {
 				'category'=>$category,
 				'parent_id'=>'',
 				'description'=>'',
+				'color'=>'',
+				'file_id'=>'',
 				'status'=>1,
 				'u_id'=>$uid
 			);
