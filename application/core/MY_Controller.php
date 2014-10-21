@@ -431,8 +431,8 @@ class MY_Controller extends CI_Controller {
                 $fileUploadPath = REAL_PATH.serverImageRelPath;
                 $dimensions = unserialize(THUMB_DIMENSION);
                 $pathSmall = REAL_PATH.THUMB_SMALL_PATH;
-                $pathMedium = REAL_PATH.THUMB_SMALL_PATH;
-                $pathLarge = REAL_PATH.THUMB_SMALL_PATH;
+                $pathMedium = REAL_PATH.THUMB_MEDIUM_PATH;
+                $pathLarge = REAL_PATH.THUMB_LARGE_PATH;
                 break;
             case 'splash':
                 $fileUploadPath = REAL_PATH.SPLASH_SCREEN_PATH;
