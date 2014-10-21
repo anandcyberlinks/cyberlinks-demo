@@ -137,7 +137,20 @@ class Package_model extends CI_Model{
         }
         }
     }
-    
+    function getType($id, $type){
+        if($type == 'video'){
+            $this->db->select('content_type as type');
+            $this->db->from('contents');
+            $this->db->where('id', $id);
+        }
+        if($type == 'package'){
+            $this->db->select('package_type as type');
+            $this->db->from('package');
+            $this->db->where('id', $id);
+        }
+        $query = $this->db->get();
+        return  $query->result();
+    }
     public function Checkemail($data) {
         $name = $data['package_name'];
         $this->db->select('*');

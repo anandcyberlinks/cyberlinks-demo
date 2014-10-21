@@ -58,6 +58,8 @@ class Package extends MY_Controller {
             redirect(base_url().$_POST['content_type']);
         }
         $id = $this->uri->segment(3);
+        
+        $data['type'] = $this->Package_model->getType($id, $_GET['type']);
         $data['result'] = $this->Package_model->get_dyration($this->uid, $id);
         $this->load->view('price', $data);
     }
