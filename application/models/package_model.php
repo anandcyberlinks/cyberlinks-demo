@@ -120,8 +120,9 @@ class Package_model extends CI_Model{
         
         if($data['package_type']=='paid'){
         $content_id = $data['content_id'];
-        $this->db->set('content_type',$data['content_type']);
+        
         foreach($data['prive'] as $key=>$val){
+            $this->db->set('content_type',$data['content_type']);
             $this->db->set('content_id',$content_id);
             $this->db->set('duration_id',$key);
             $this->db->set('price',$val);
