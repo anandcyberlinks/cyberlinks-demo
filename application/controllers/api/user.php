@@ -24,19 +24,10 @@ class User extends REST_Controller
        parent::__construct();
        $this->load->helper('url');
        $this->load->model('api/User_model');
+       $this->admin_token =$this->get('token');
    }
        
-   function splash_get()
-   {
-       $project = $this->get('project');
-       $result = $this->User_model->getsplash($project);
-       if($result){
-           $result->logo = base_url().PROFILEPIC_PATH.$result->logo;
-           $this->response(array('code'=>1,'result'=>$result), 200); // 200 being the HTTP response code
-       }
-       
-   }
-   
+    
    function base64_to_jpeg($base64_string, $output_file,$extension) {
         
 	$img = $base64_string;
@@ -61,6 +52,14 @@ class User extends REST_Controller
     function add_post()
     {
        $token = sha1($this->post('email').$this->post('password').rand());
+       
+       //-- check if Admin token is valid --//
+	    $owner_id =  $this->User_model->checkAdminToken($this->admin_token);
+	    if($owner_id <= 0){
+		$this->response(array('code'=>0,'error' => "Invalid Token"), 404);
+	    }
+       //-----------------------------------//
+       
        $ext = 'jpg';//$this->post('ext');
         //---- Upload logo image for user --//
         if($ext !=''){
@@ -86,7 +85,8 @@ class User extends REST_Controller
                     //$_POST['file'] = $_POST['logo'];
                 }
         }
-        $data = array( 
+        $data = array(
+	    'owner_id' => $owner_id,
             'first_name' => $this->post('firstname'), 
             'last_name' => $this->post('lastname'),
             'gender' => $this->post('gender'),
@@ -353,6 +353,14 @@ class User extends REST_Controller
     {
         $provider = $this->post('provider');
         $userdetails = json_decode($this->post('social'));
+	       
+       //-- check if Admin token is valid --//
+	   $owner_id =  $this->User_model->checkAdminToken($this->admin_token);
+	    if($owner_id <= 0){
+		$this->response(array('code'=>0,'error' => "Invalid Token"), 404);
+	    }
+       //-----------------------------------//
+       
         //print_r($userdetails);die;
         if($provider=='facebook'){
             $firstname = $userdetails->first_name;
@@ -384,7 +392,7 @@ class User extends REST_Controller
             $token = sha1($socialid.rand());
             //echo '<pre>'; print_r($userdetails);die;
         }
-                
+                	
         //-- check if social account is already exist --//
             $uid = $this->User_model->loginuser($email, $password);
             

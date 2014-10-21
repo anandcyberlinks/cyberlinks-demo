@@ -17,7 +17,7 @@
 require APPPATH.'/libraries/REST_Controller.php';
 
 class Video extends REST_Controller
-{       
+{
    function __construct()
    {
        parent::__construct();	
@@ -26,14 +26,14 @@ class Video extends REST_Controller
        
        //-- validate token --//
        $token = $this->get('token');
-       $this->validateToken($token);
+       $this->owner_id = $this->validateToken($token);
        
        //--paging limit --//
           $this->param =  $this->paging($this->get('p'));
    }   
    
     public function category_get()
-    {
+    { 
        $result = $this->Video_model->categorylist();
        /*array_walk ( $result, function (&$key) {           
            $key->thumbnail_path = base_url().$key->thumbnail_path;           

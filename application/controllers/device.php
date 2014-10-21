@@ -46,10 +46,10 @@ class Device extends MY_Controller
         $this->data['welcome'] = $this;
         $tab = $this->uri->segment(3);
         $this->data['tab'] = $tab;
-		$result = $this->Device_model->checkSplash($this->uid);
+		$result = $this->Device_model->checkSplash($this->uid);		
 		if(!empty($result)){
 			$this->data['splash_screen'] = $result[0]->relative_path;
-			$dimension = $this->Device_model->getDimensions($this->uid);   
+			$dimension = $this->Device_model->getDimensions($this->uid);			
 		} else {
 			$this->data['splash_screen'] = '';
 			$dimension = unserialize(SPLASH_SCREEN_DIMENSION);
@@ -57,16 +57,8 @@ class Device extends MY_Controller
 		//$dimensions = unserialize(SPLASH_SCREEN_DIMENSION);
         switch ($tab) {
             case "Flavors":
-                $this->show_view('video_settings', $this->data);
-                break;
-            case "Player":
-                $this->data['playerData'] = $this->videos_model->getPlayerData($this->uid);
-                $this->show_view('video_settings', $this->data);
-                break;
-			case "country":
-                $this->data['countryData'] = $this->videos_model->getCountryList();
-                $this->show_view('video_settings', $this->data);
-                break;
+              //  $this->show_view('video_settings', $this->data);
+                break;        
             default:
                 $this->data['tab'] = 'Splash';
                 //-- get splash screen dimensions ----//        
@@ -119,7 +111,7 @@ class Device extends MY_Controller
     
     function uploadSplashScreen($uid,$dimensions=array())
     {
-				echo '<pre>';print_r($dimensions);echo '</pre>'; exit;
+				//echo '<pre>';print_r($dimensions);echo '</pre>'; exit;
 
 		//-- check if already exists --//
 		$splashArr = $this->Device_model->checkSplash($uid);

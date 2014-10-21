@@ -22,6 +22,8 @@ class Splash extends REST_Controller
     {
        $id = $this->get('token');       
        $result = $this->Splash_model->getdetails($id);
+       $userid='';
+       if(count($result)>0){
        foreach($result as $key){
             
                if($key->dimension_name !=''){
@@ -33,15 +35,12 @@ class Splash extends REST_Controller
                if($key->user_id != $userid){
                    $userid = $key->user_id;
                    $finalResult['user_id'] = $userid;
+                   $finalResult['token'] = $key->token;
                    $finalResult['logo'] = base_url().PROFILEPIC_PATH.$key->logo;
                }else{
                    $finalResult['image'] = $thumbArray;
                }
-            }
-            
-           //echo '<pre>';print_r($finalResult);die;
-        if($finalResult)
-        {
+            }       
             $this->response(array('code'=>1,'result'=>$finalResult), 200); // 200 being the HTTP response code
         }else{
             $this->response(array('code'=>0,'error' => 'No record found'), 404);
