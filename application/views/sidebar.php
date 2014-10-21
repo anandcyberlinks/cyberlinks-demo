@@ -15,15 +15,12 @@
         <!-- /.search form -->
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu">
-            <!---
-            <li class="<?=($this->uri->segment(1)=='layout')?'active':''?>">
-                <a href="<?php echo base_url() ?>layout">
+	    <li class="<?=($this->uri->segment(1)=='layout')?'active':''?>">
+                <a href="<?php echo base_url() ?>layout/dashboard">
                     <i class="fa fa-dashboard"></i> <span><?php echo $welcome->loadPo('Dashboard'); ?></span>
                 </a>
             </li>
-            --->
-            
-            <li class="treeview <?=(($this->uri->segment(1)=='video') || ($this->uri->segment(1)=='video_settings'))?'active':''?>">
+	    <li class="treeview <?=(($this->uri->segment(1)=='video') || ($this->uri->segment(1)=='video_settings'))?'active':''?>">
                 <a href="#">
                     <i class="fa fa-play-circle"></i>
                     <span><?php echo $welcome->loadPo('Video'); ?></span>
