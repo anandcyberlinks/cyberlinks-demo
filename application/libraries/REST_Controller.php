@@ -1550,14 +1550,17 @@ abstract class REST_Controller extends CI_Controller
             $this->load->model('api/User_model');
             //-- validate token --//
             $id =  $this->User_model->validateToken($token);
-            if($id <= 0){
+            if($id > 0){
+            //-- update api token --//
+                //$this->User_model->update_api($token);
+                return $id;
+            }else{
                 $this->response(array('code'=>0,'error' => "Invalid Token"), 404);
             }
         }else{
             $this->response(array('code'=>0,'error' => "Token Missing"), 404);
         }
-        //-- update api token --//
-            //$this->User_model->update_api($token);                    
+                            
     }    
     
     public function paging($p)

@@ -122,9 +122,10 @@ class User_model extends CI_Model {
        if($token == ''){
            $token='';
        }
-        $this->db->select('id');
-	$this->db->from('api_token');
-        $this->db->where('token',$token);
+        $this->db->select('t.owner_id as id');
+	$this->db->from('api_token t');
+	$this->db->join('users u','t.owner_id=u.id','inner');
+        $this->db->where('t.token',$token);
         //$this->db->where('status',0);
         //$this->db->where('DATE_ADD(hit_time, INTERVAL 15 MINUTE) >', 'NOW()',FALSE);
         $query = $this->db->get();
@@ -237,5 +238,18 @@ function delete_user($id){
         $this->db->where('id', $id);
         $this->db->update('users');
 	 return true;
+  }
+  
+  function checkAdminToken($token){
+      $this->db->select('a.id');
+      $this->db->from('users a');              
+      $this->db->where('a.token',$token);    
+      $query = $this->db->get();
+        //echo '<br>'.$this->db->last_query();die;
+      $result = $query->row();
+      if($result)
+         return $result->id;
+      else
+         return 0;
   }
 }

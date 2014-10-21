@@ -75,18 +75,19 @@
                                                     <div class="box-body">                                                       
                                                         <input id="loc_tot" name="loc_tot" value="" type='hidden'>
                                                        <div id="InputsWrapper">                                                                                                        
-                                                    <?php if(isset($result)){
-                                                        $i=0;                                                       
-                                                   foreach($result as $row){
+
+                                                    <?php if(count($result)>0){
+                                                    $i=0;                                                       
+                                                   foreach($result as $key=>$row){
                                                    $i++;
                                                    ?>
                                                     <div style='padding:5px;'>  
                                                         
-                                                        Width: <input style="width:50px" maxlength="4" type='text' id="w_splash_<?php echo $i?>" name='wsplash[]' value='<?php echo $row->width?>' >
-                                                        Hight: <input style="width:50px" maxlength="4" type='text' id="h_splash_<?php echo $i?>" name='hsplash[]' value='<?php echo $row->height?>' >
-                                                        <input type='hidden' name='dimension[]' value="<?php echo $row->dimension_name;?>">
+                                                        Width: <input style="width:50px" maxlength="4" type='text' id="w_splash_<?php echo $i?>" name='wsplash[]' value='<?php echo $row['width']?>' >
+                                                        Hight: <input style="width:50px" maxlength="4" type='text' id="h_splash_<?php echo $i?>" name='hsplash[]' value='<?php echo $row['height']?>' >
+                                                        <input type='hidden' name='dimension[]' value="<?php echo (array_key_exists('dimension_name', $row) ?$row['dimension_name']:$key);?>">
                                                         
-                                                        <?php echo $row->dimension_name  ?>
+                                                        <?php echo (array_key_exists('dimension_name', $row) ?$row['dimension_name']:$key);?>
                                                     </div>
                                                    <?php } }?>
                                                   <!--<div><a href="#" id="AddMoreFileBox" class="btn btn-info">Add More</a></div>-->

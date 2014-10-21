@@ -22,7 +22,7 @@ class Device_model extends CI_Model{
         $this->db->where('a.status',1);
         $query = $this->db->get();
        // echo $this->db->last_query();
-        return $query->result();
+        return $query->result_array();
     }
     
     function checkSplash($id)

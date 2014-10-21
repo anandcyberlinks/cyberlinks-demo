@@ -16,7 +16,7 @@ class Video_model extends CI_Model {
    }
   
    public function categorylist()
-   {
+   {      
        // $this->db->select('a.id,a.category,a.description,b.relative_path as thumbnail_path');
 	$this->db->select('a.id,a.category,GROUP_CONCAT(CONCAT_WS(",",a.id,b.id) SEPARATOR ",") as catids,a.color,c.name as thumbnail',false);
 	$this->db->from('categories a');
@@ -24,6 +24,7 @@ class Video_model extends CI_Model {
         $this->db->join('files c','a.file_id=c.id','left'); //-- to be deleted temporary for channels--//
         $this->db->where('a.status','1');
         $this->db->where('a.parent_id','0');
+	$this->db->where('a.u_id',$this->owner_id);
         $this->db->group_by('a.id');
         $query = $this->db->get();    
        //echo '<br>'.$this->db->last_query();
@@ -132,6 +133,7 @@ class Video_model extends CI_Model {
         $this->db->where('a.status','1');
         $this->db->where_in('a.category',$id);
         $this->db->where('g.flavor_name',$device);
+	$this->db->where('a.uid',$this->owner_id);
         $this->db->order_by('a.id desc');
         $this->db->group_by('a.id');
         $query = $this->db->get();    
@@ -163,6 +165,7 @@ class Video_model extends CI_Model {
         $this->db->where('a.status','1');
         $this->db->where('a.feature_video','1');
         $this->db->where('g.flavor_name',$device);
+	$this->db->where('a.uid',$this->owner_id);
         $this->db->order_by('a.created desc');
         $this->db->group_by('a.id');
         $query = $this->db->get();    
@@ -188,6 +191,7 @@ class Video_model extends CI_Model {
         $this->db->where('a.status','1');
         $this->db->where_in('a.category',$data['id']);
 	$this->db->where('g.flavor_name',$data['device']);
+	$this->db->where('a.uid',$this->owner_id);
         $this->db->order_by('a.id desc');
         $this->db->group_by('a.id');
 	$this->db->limit($data['limit']);
@@ -218,6 +222,7 @@ class Video_model extends CI_Model {
         $this->db->join('files c3', 'h.file_id = c3.id', 'left');
         $this->db->where('a.status','1');        
         $this->db->where('g.flavor_name',$device);
+	$this->db->where('a.uid',$this->owner_id);
         $this->db->order_by('a.id desc');
         $this->db->group_by('a.id');
         $query = $this->db->get();    
@@ -248,6 +253,7 @@ class Video_model extends CI_Model {
         $this->db->join('genres i','b.genre_id=i.id','left');
         $this->db->where('a.status','1');
         $this->db->where('g.flavor_name',$data['device']);
+	$this->db->where('a.uid',$this->owner_id);
         $this->db->group_by('a.id');
                                
                 if(isset($data['keywords'])&& $data['keywords']!='')
@@ -304,6 +310,7 @@ class Video_model extends CI_Model {
 	$this->db->join('user_favorites i', 'i.content_id = a.id', 'left');
         $this->db->where('a.status','1');
         $this->db->where('a.id',$id);
+	$this->db->where('a.uid',$this->owner_id);
         $query = $this->db->get();
         // echo '<br>'.$this->db->last_query();die;
         return $query->row();
@@ -339,6 +346,7 @@ class Video_model extends CI_Model {
         $this->db->where('g.flavor_name',$arrVal['device']);
         $this->db->where('b.genre_id',$arrVal['type']);
         $this->db->where('a.category',$arrVal['category_id']);
+	$this->db->where('a.uid',$this->owner_id);
 	
         $this->db->group_by('a.id');
         $query = $this->db->get();    
@@ -370,6 +378,7 @@ class Video_model extends CI_Model {
         $this->db->where_in('a.category',$data['id']);
 	$this->db->where('g.flavor_name',$data['device']);
 	$this->db->where('b.views > ',0);
+	$this->db->where('a.uid',$this->owner_id);
         $this->db->order_by('b.views desc');        
 	$this->db->limit($data['limit']);
 	
@@ -404,8 +413,9 @@ class Video_model extends CI_Model {
         $this->db->join('files c3', 'h.file_id = c3.id', 'left');
         $this->db->join('likes i', 'i.content_id = a.id', 'inner');
         $this->db->where('a.status','1');
-        $this->db->where('a.category',$category_id);        
+        $this->db->where('a.category',$category_id);
         $this->db->where('g.flavor_name',$device);
+	$this->db->where('a.uid',$this->owner_id);
         $this->db->order_by('a.id desc');
         $this->db->group_by('a.id');
         $query = $this->db->get();    
@@ -438,6 +448,7 @@ class Video_model extends CI_Model {
         $this->db->where('a.category',$data['id']);
         $this->db->where('i.user_id',$data['user_id']);
         $this->db->where('g.flavor_name',$data['device']);
+	$this->db->where('a.uid',$this->owner_id);
         $this->db->order_by('a.id desc');
         $this->db->group_by('a.id');
         $query = $this->db->get();    
