@@ -88,7 +88,7 @@
                                             <th><a href="<?php echo base_url(); ?>video/index/user/<?php echo (!empty($show_u)) ? $show_u : 'asc'; ?>"><?php echo $welcome->loadPo('User') ?></a></th>
                                             <th><a href="<?php echo base_url(); ?>video/index/status/<?php echo (!empty($show_s)) ? $show_s : 'asc'; ?>"><?php echo $welcome->loadPo('Status') ?></a></th>
                                             <th><?php echo $welcome->loadPo('Type') ?></th>
-                                            <th><?php echo $welcome->loadPo('Manage Price') ?></th>
+                                            <th><?php echo $welcome->loadPo('Price') ?></th>
                                             <th><?php echo $welcome->loadPo('Preview') ?></th>
                                             <th><a href="<?php echo base_url(); ?>video/index/created/<?php echo (!empty($show_ca)) ? $show_ca : 'asc'; ?>"><?php echo $welcome->loadPo('Publish Date') ?></a></th>
                                             <th align="center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $welcome->loadPo('Action') ?></th>
@@ -98,7 +98,7 @@
                                     <tbody>
                                         <?php foreach ($result as $value) { ?>
                                         <tr id="<?php echo $value->id ?>">
-                                                <td  width="350"><a href="<?php echo base_url(); ?>video/detail/<?php echo $value->id; ?>"><?php echo substr($value->title, 0, 45); ?>...</td>
+                                                <td  width="350"><a href="<?php echo base_url(); ?>video/detail/<?php echo $value->id; ?>"><?php echo strlen($value->title) > 40 ?  substr($value->title,0,40).'...' : $value->title; ?></td>
                                                 <td><?php echo $value->category; ?></td>
                                                 <td><?php echo $value->username; ?></td>
                                                 <td><?php if ($value->status == 1) { ?>
@@ -107,7 +107,7 @@
                                                         <img src="<?php echo base_url(); ?>assets/img/test-fail-icon.png" alt="Active" />
                                                     <?php } ?></td>
                                                 <td><?php echo ucfirst($value->content_type); ?></td>
-                                                <td><a href="#" link="<?php echo base_url()?>package/price/<?php echo $value->id; ?>?type=video" class="price">Manage Price</a></td>
+                                                <td><a href="#" link="<?php echo base_url()?>package/price/<?php echo $value->id; ?>?type=video" class="price">Price</a></td>
                                                 <td style='text-align:center'>
                                                     <?php if(in_array($value->minetype,array('video/wmv','video/avi'))) { ?>
                                                     --
