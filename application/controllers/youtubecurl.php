@@ -21,15 +21,29 @@
                 $fileExt = end(explode('.',$originalFilePath));
                 $fileUniqueName = uniqid().".".$fileExt;                
                 $fieDestPath =  REAL_PATH.serverVideoRelPath. $fileUniqueName;
-                $videoresult = $this->_uploadFileCurl($originalFilePath, $fieDestPath, $fileUniqueName);
+                $videoresult = $this->_uploadFileCurl($originalFilePath, $fieDestPath);
                 
                 $originalThumbFilePath = $_POST['thumbfilename']; 
                 //$originalThumbFilePath = 'http://img.youtube.com/vi/pxofwuWTs7c/0.jpg';
                 $thumbFileExt = end(explode('.',$originalThumbFilePath)); 
                 $thumbFileUniqueName = uniqid().".".$thumbFileExt;
                 $thumbFieDestPath =  REAL_PATH.serverImageRelPath. $thumbFileUniqueName;
-                $thumbresult = $this->_uploadFileCurl($originalThumbFilePath, $thumbFieDestPath, $thumbFileUniqueName, true);
-                
+                $thumbresult = $this->_uploadFileCurl($originalThumbFilePath, $thumbFieDestPath);
+                if ($thumbresult) {
+                    $thumbdimensions = unserialize(THUMB_DIMENSION);
+                    foreach($thumbdimensions as $key=>$value){
+                        if($key == 'small') {
+                            $path = REAL_PATH.THUMB_SMALL_PATH;
+                        } else if($key == 'medium') {
+                            $path = REAL_PATH.THUMB_MEDIUM_PATH;
+                        } else if($key == 'large') {
+                            $path = REAL_PATH.THUMB_LARGE_PATH;
+                        }
+                        $img = $this->create_thumbnail($thumbFileUniqueName, $thumbFieDestPath, $path, $value['width'], $value['height']);                                    
+                        //$fileNameNw='';
+                    }
+
+                }
                 $catId = $this->category_model->getCatId(trim($_POST['content_category']), $userId);
                 if($videoresult) {
                     $_POST['filename'] = $fileUniqueName;
@@ -139,41 +153,27 @@
         }
     }
     
-    function _uploadFileCurl($originalFilePath, $fieDestPath, $fileUniqueName, $thumb=false){
+    function _uploadFileCurl($originalFilePath, $fieDestPath){
         if($this->isRemoteFile($originalFilePath)){
+            //File to save the contents to
+            $fp = fopen($fieDestPath, 'w+');
+            //Here is the file we are downloading, replace spaces with %20
+            $ch = curl_init(str_replace(" ", "%20", $originalFilePath));
+            //give curl the file pointer so that it can write to it
+            curl_setopt($ch, CURLOPT_FILE, $fp);
+            curl_setopt($ch, CURLOPT_HEADER, 0);
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+            $data = curl_exec($ch); //get curl response	 
+            curl_close($ch);
+            fclose($fp);
+            if(filesize($fieDestPath)){
+                return true;    
+            }
         }else{ 
             if (!copy($originalFilePath, $fieDestPath)) {
                 return false;
             }else{
-                if($thumb){ 
-                    //File to save the contents to
-                    $fp = fopen($fieDestPath, 'w+');
-                    //Here is the file we are downloading, replace spaces with %20
-                    $ch = curl_init(str_replace(" ", "%20", $originalFilePath));
-                    //give curl the file pointer so that it can write to it
-                    curl_setopt($ch, CURLOPT_FILE, $fp);
-                    curl_setopt($ch, CURLOPT_HEADER, 0);
-                    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-                    $data = curl_exec($ch); //get curl response	 
-                    curl_close($ch);
-                    fclose($fp);
-                    if (filesize($fieDestPath) > 0) {
-                        $thumbdimensions = unserialize(THUMB_DIMENSION);
-                        foreach($thumbdimensions as $key=>$value){
-                            if($key == 'small') {
-                                $path = REAL_PATH.THUMB_SMALL_PATH;
-                            } else if($key == 'medium') {
-                                $path = REAL_PATH.THUMB_MEDIUM_PATH;
-                            } else if($key == 'large') {
-                                $path = REAL_PATH.THUMB_LARGE_PATH;
-                            }
-                            $img = $this->create_thumbnail($fileUniqueName, $fieDestPath, $path, $value['width'], $value['height']);                                    
-                            //$fileNameNw='';
-                        }
-    
-                    }
-                }
-                return true;    
+                return true;
             }
         }
     }

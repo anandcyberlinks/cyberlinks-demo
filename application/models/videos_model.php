@@ -859,7 +859,7 @@ class Videos_model extends CI_Model {
         $this->db->join('contents c', 'b.content_id = c.id');
         $this->db->join('flavored_video e', 'a.id = e.flavor_id','left');
         $query = $this->db->get();
-     echo   $this->db->last_query(); echo "<br/>";
+     //echo   $this->db->last_query(); echo "<br/>";
         return count($query->result());
     }
 
