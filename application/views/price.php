@@ -1,10 +1,11 @@
 <?php if(count($result) !='0') { ?>
 <form action="<?php echo base_url()?>package/price" method="POST" id="registerId">
-
-<label for="package_name" generated="true" class="error"></label><br>
-    <input type="radio" name="package_type" class="package_type" value="free" <?php if($type['0']->type == 'free'){ echo "checked";} ?>/>Free
-    <input type="radio" name="package_type" class="package_type" value="paid" <?php if($type['0']->type == 'paid'){ echo "checked";} ?>/>Paid
-<br>
+    <table class="table table-bordered table-hover dataTable">
+<tr>
+    <td><input type="radio" name="package_type" class="package_type" value="free" <?php if($type['0']->type == 'free'){ echo "checked";} ?>/>&nbsp;Free</td>
+    <td><input type="radio" name="package_type" class="package_type" value="paid" <?php if($type['0']->type == 'paid'){ echo "checked";} ?>/>&nbsp;Paid</td>
+</tr>
+</table>
 <div class="video">
     <table class="table table-bordered table-hover dataTable">
         <tr>
@@ -21,7 +22,6 @@
 <?php } ?>
     </table>
 </div>
-<br>
 <input type="hidden" name="content_id" value="<?php echo $this->uri->segment(3)?>">
 <input type="hidden" name="content_type" value="<?php echo $_GET['type']?>">
 <input class="btn btn-success" type="submit" name="submit" value="submit">
@@ -29,7 +29,6 @@
 <?php }else{
     echo "No Duration Found";
 } ?>
-
 <script src="<?php echo base_url(); ?>assets/js/jquery-1.10.2.js"></script>
 <script>
     $(function(){
