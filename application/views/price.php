@@ -6,7 +6,7 @@
     <td><input type="radio" name="package_type" class="package_type" value="paid" <?php if($type['0']->type == 'paid'){ echo "checked";} ?>/>&nbsp;Paid</td>
 </tr>
 </table>
-<div class="video">
+<div class="video hide">
     <table class="table table-bordered table-hover dataTable">
         <tr>
             <td>Duration Name</td>
@@ -33,8 +33,11 @@
 <script>
     $(function(){
         if('<?php echo $type['0']->type; ?>'=="free"){
-                $(".video").hide();
+            $(".video").hide();
+        }else{
+            $(".video").show();
         }
+        
         $('.package_type').on('change',function(){
             if($(this).attr("value")=="free"){
                 $(".video").hide();
