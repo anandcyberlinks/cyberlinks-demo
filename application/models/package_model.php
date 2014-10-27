@@ -5,24 +5,30 @@ class Package_model extends CI_Model{
         parent::__construct();
         $this->load->database();
     }
-    function get_video($uid){
-        $id = $this->get_ownerid($uid);
-        array_push($id, $uid);
-        $this->db->select('a.*, b.category , c.username, e.name as file,e.minetype');
+    function get_video($id){
+        $this->db->select('a.*, b.category , e.name as file,e.minetype, c.id as vpid');
         $this->db->from('contents a');
-        $this->db->where_in('a.uid', $id); 
+        
         $this->db->join('categories b', 'a.category = b.id', 'left');
-        $this->db->join('users c', 'a.uid = c.id', 'left');
+        $this->db->join('package_video c', 'a.id = c.content_id', 'left');
         $this->db->join('videos d', 'a.id = d.content_id', 'left');
         $this->db->join('files e', 'd.file_id = e.id', 'left');
         //$this->db->join('video_rating f', 'a.id = f.content_id', 'left');
         $this->db->group_by('a.id');
+        $this->db->where('c.package_id', $id); 
         $query = $this->db->get();
        //echo $this->db->last_query();
         
         $data = $query->result();
         return $data;
     }
+    function getPack($id){
+        $this->db->select('name');
+        $this->db->where('id', $id);
+        $query = $this->db->get('package');
+        return $query->result();
+    }
+    
     function get_ownerid($uid){
         $this->db->select('id');
         $this->db->where('owner_id', $uid);
@@ -157,5 +163,140 @@ class Package_model extends CI_Model{
         $this->db->where('name', $name);
         $query = $this->db->get('package');
         return $query->result();
+    }
+    
+    
+    function get_category($uid,$relation = false) {
+        $this->db->select('child.id,child.category,child.parent_id,parent.category as parent');
+        $this->db->from('categories child');
+        $this->db->join('categories parent', 'child.parent_id = parent.id', 'left');
+        $this->db->where('child.u_id', $uid);
+        $this->db->order_by('child.category', 'asc');
+        $query = $this->db->get();
+        $result = $query->result();
+        
+        $category = array();
+        if($relation === false){
+            foreach($result as $key=>$val){
+                $category[$val->id] = ucfirst(strtolower($val->category));
+            }
+        }else{
+            foreach($result as $key=>$val){
+                if($val->parent_id > 0){
+                    $category[$val->parent][$val->id] = ucfirst(strtolower($val->category));
+                }else{
+                    $category[$val->id] = ucfirst(strtolower($val->category));
+                }
+            }
+        }
+        return $category;
+    }
+    
+            
+    function get_allvideo($ids, $uid, $limit, $start, $sort = '', $sort_by = '', $data){
+        $timeStart = " 00:00:00";
+        $timeEnd = " 23:59:59";
+        $id = $this->get_ownerid($uid);
+        array_push($id, $uid);
+        $this->db->select('a.*, b.category , c.username, e.name as file,e.minetype');        
+        $this->db->from('contents a');
+        $this->db->where_in('a.uid', $id); 
+        $this->db->where_not_in('a.id', $ids);
+        $this->db->join('categories b', 'a.category = b.id', 'left');
+        $this->db->join('users c', 'a.uid = c.id', 'left');
+        $this->db->join('videos d', 'a.id = d.content_id', 'left');
+        $this->db->join('files e', 'd.file_id = e.id', 'left');
+        //$this->db->join('video_rating f', 'a.id = f.content_id', 'left');
+        if (isset($data['content_title']) && $data['content_title'] != '') {
+            $this->db->like('title', trim($data['content_title']));
+        }
+        if (isset($data['category']) && $data['category'] != '') {
+            $this->db->where('a.category', $data['category']);
+        }
+        if ((isset($data['datepickerstart']) && $data['datepickerstart'] != '') && (isset($data['datepickerend']) && $data['datepickerend'] != '')) {
+            $date = str_replace('/', '-', $data['datepickerstart']);
+            $datestart = date('y-m-d', strtotime($date));
+            $date = str_replace('/', '-', $data['datepickerend']);
+            $dateend = date('y-m-d', strtotime($date));
+            $dateTimeStart = $datestart . $timeStart;
+            $dateTimeEnd = $dateend . $timeEnd;
+            $this->db->where("a.created BETWEEN '$dateTimeStart' and '$dateTimeEnd'", NULL, FALSE);
+        } else {
+            if (isset($data['datepickerstart']) && $data['datepickerstart'] != '') {
+                $date = str_replace('/', '-', $data['datepickerstart']);
+                $datestart = date('y-m-d', strtotime($date));
+                $dateTimeStart = $datestart . $timeStart;
+                $dateTimeEnd = $datestart . $timeEnd;
+                $this->db->where("a.created BETWEEN '$dateTimeStart' and '$dateTimeEnd'", NULL, FALSE);
+            }
+            if (isset($data['datepickerend']) && $data['datepickerend'] != '') {
+                $date = str_replace('/', '-', $data['datepickerend']);
+                $dateend = date('y-m-d', strtotime($date));
+                $dateTimeStart = $dateend . $timeStart;
+                $dateTimeEnd = $dateend . $timeEnd;
+                $this->db->where("a.created BETWEEN '$dateTimeStart' and '$dateTimeEnd'", NULL, FALSE);
+            }
+        }
+
+        $this->db->group_by('a.id');
+        $this->db->order_by($sort, $sort_by);
+        $this->db->limit($limit, $start);
+        $query = $this->db->get();
+        //echo $this->db->last_query();
+        
+        $data = $query->result();
+        return $data;
+    }
+    function get_videocount($uid, $data='', $ids){
+        $timeStart = " 00:00:00";
+        $timeEnd = " 23:59:59";
+        $id = $this->get_ownerid($uid);
+        array_push($id, $uid);
+        $this->db->select('contents.*');
+        $this->db->from('contents');
+        $this->db->join('categories', 'contents.category = categories.id', 'left');
+        $this->db->where_in('contents.uid', $id);
+        $this->db->where_not_in('contents.id', $ids);
+        if (isset($data['content_title']) && $data['content_title'] != '') {
+            $this->db->like('title', trim($data['content_title']));
+        }
+        if (isset($data['category']) && $data['category'] != '') {
+            $this->db->where('contents.category', $data['category']);
+        }
+        if ((isset($data['datepickerstart']) && $data['datepickerstart'] != '') && (isset($data['datepickerend']) && $data['datepickerend'] != '')) {
+            $date = str_replace('/', '-', $data['datepickerstart']);
+            $datestart = date('y-m-d', strtotime($date));
+            $date = str_replace('/', '-', $data['datepickerend']);
+            $dateend = date('y-m-d', strtotime($date));
+            $dateTimeStart = $datestart . $timeStart;
+            $dateTimeEnd = $dateend . $timeEnd;
+            $this->db->where("contents.created BETWEEN '$dateTimeStart' and '$dateTimeEnd'", NULL, FALSE);
+        } else {
+            if (isset($data['datepickerstart']) && $data['datepickerstart'] != '') {
+                $date = str_replace('/', '-', $data['datepickerstart']);
+                $datestart = date('y-m-d', strtotime($date));
+                $dateTimeStart = $datestart . $timeStart;
+                $dateTimeEnd = $datestart . $timeEnd;
+                $this->db->where("contents.created BETWEEN '$dateTimeStart' and '$dateTimeEnd'", NULL, FALSE);
+            }
+            if (isset($data['datepickerend']) && $data['datepickerend'] != '') {
+                $date = str_replace('/', '-', $data['datepickerend']);
+                $dateend = date('y-m-d', strtotime($date));
+                $dateTimeStart = $dateend . $timeStart;
+                $dateTimeEnd = $dateend . $timeEnd;
+                $this->db->where("contents.created BETWEEN '$dateTimeStart' and '$dateTimeEnd'", NULL, FALSE);
+            }
+        }
+
+        $query = $this->db->get();
+        //echo $this->db->last_query();
+        return count($query->result());
+    }
+    function add_video($pid, $cid){
+        $data = array('package_id'=>$pid, 'content_id'=>$cid);
+        $this->db->insert('package_video', $data);
+    }
+    function delete_vid($id){
+        $this->db->delete('package_video', array('id'=>$id));
     }
 }
