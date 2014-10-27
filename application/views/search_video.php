@@ -107,7 +107,7 @@
                                                         <img src="<?php echo base_url(); ?>assets/img/test-fail-icon.png" alt="Active" />
                                                     <?php } ?></td>
                                                 <td><?php echo ucfirst($value->content_type); ?></td>
-                                                <td><a href="#" link="<?php echo base_url()?>package/price/<?php echo $value->id; ?>?type=video" class="price">Price</a></td>
+                                                <td><a href="javascript:void(0)" link="<?php echo base_url()?>package/price/<?php echo $value->id; ?>?type=video" class="price">Price</a></td>
                                                 <td style='text-align:center'>
                                                     <?php if(in_array($value->minetype,array('video/wmv','video/avi'))) { ?>
                                                     --

@@ -166,23 +166,18 @@ $(function(){
 
     });
 	
-    	$('.price').on('click', function() {
-        var url = $(this).attr('link');
-        $.ajax({
-            type: "GET",
-            url: url,
-            dataType: "html",
-            success: function(response) {
-                bootbox.dialog({
-		    message: response,
-		    title: "Price",
-		});
-            }
-        });
-
+    $('.price').on('click', function() {
+	var url = $(this).attr('link');
+	bootbox.dialog({message:'wait...',title: "Price"});
+	$.ajax({
+	    type: "GET",
+	    url: url,
+	    dataType: "html",
+	    success: function(response) {
+		$('.modal-dialog .modal-content .modal-body .bootbox-body').html(response);
+	    }
+	});
     });
-	/* 6_8_14*/	
-
 });
 
 /*  function to crop thumbnail image(ry) */
