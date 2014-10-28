@@ -22,9 +22,10 @@
 <?php } ?>
     </table>
 </div>
-<input type="hidden" name="content_id" value="<?php echo $this->uri->segment(3)?>">
-<input type="hidden" name="content_type" value="<?php echo $_GET['type']?>">
-<input class="btn btn-success" type="submit" name="submit" value="submit">
+<input type="hidden" name="content_id" value="<?php echo $this->uri->segment(3)?>" />
+<input type="hidden" name="content_type" value="<?php echo $_GET['type']?>" />
+<input class="btn btn-success" type="submit" name="submit" value="Submit" />
+<input class="btn btn-warning bootbox-close-button" type="button"  value="Cancel" />
 </form>
 <?php }else{
     echo "No Duration Found";
