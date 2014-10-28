@@ -16,7 +16,9 @@
             <?php if (isset($error) && !empty($error)) { ?><div id="msg_div"><?php echo $error; ?></div><?php } ?>
         </div>
         <!-- Main content -->
-        <section class="content"> 
+        <section class="content">
+            <?php $search = $this->session->userdata('search_form');
+            ?></pre>
             <div id="content">
                 <div class="row">
                     <!-- left column -->
@@ -31,7 +33,7 @@
                                         <div class="form-group col-lg-4">
                                             <div class="input text">
                                                 <label for=""><?php echo $welcome->loadPo('Title') ?></label>
-                                                <input type="text" name="content_title" id="content_title" class="form-control" value="<?php echo (isset($search_data['content_title'])) ? $search_data['content_title'] : ''; ?>" placeholder="<?php echo $welcome->loadPo('Title') ?>">
+                                                <input type="text" name="content_title" id="content_title" class="form-control" value="<?php echo (isset($search['content_title'])) ? $search['content_title'] : ''; ?>" placeholder="<?php echo $welcome->loadPo('Title') ?>">
                                             </div>
                                         </div>
                                         <div class="form-group col-lg-4">
@@ -41,8 +43,8 @@
                                                     <option value=""><?php echo $welcome->loadPo('Select') ?></option>
                                                     <?php foreach ($category as $key=>$val) { ?>
                                                         <option value="<?php echo $key; ?>" <?php
-                                                        if (isset($search_data['category'])) {
-                                                            if ($key == $search_data['category']) {
+                                                        if (isset($search['category'])) {
+                                                            if ($key == $search['category']) {
                                                                 echo 'selected';
                                                             }
                                                         }
@@ -56,13 +58,13 @@
                                         <div class="form-group col-lg-4">
                                             <div class="input text">
                                                 <label for="url"><?php echo $welcome->loadPo('Start Date') ?></label>
-                                                <input type="text" class="form-control"  id="datepickerstart" name="datepickerstart" placeholder="<?php echo $welcome->loadPo('Start Date') ?>" value="<?php echo (isset($search_data['datepickerstart'])) ? $search_data['datepickerstart'] : ''; ?>" >											
+                                                <input type="text" class="form-control"  id="datepickerstart" name="datepickerstart" placeholder="<?php echo $welcome->loadPo('Start Date') ?>" value="<?php echo (isset($search['datepickerstart'])) ? $search['datepickerstart'] : ''; ?>" >											
                                             </div>
                                         </div>
                                         <div class="form-group col-lg-4">
                                             <div class="input text">
                                                 <label for="url"><?php echo $welcome->loadPo('End Date') ?></label>
-                                                <input type="text" class="form-control"  id="datepickerend" name="datepickerend" placeholder="<?php echo $welcome->loadPo('End Date') ?>" value="<?php echo (isset($search_data['datepickerend'])) ? $search_data['datepickerend'] : ''; ?>">
+                                                <input type="text" class="form-control"  id="datepickerend" name="datepickerend" placeholder="<?php echo $welcome->loadPo('End Date') ?>" value="<?php echo (isset($search['datepickerend'])) ? $search['datepickerend'] : ''; ?>">
                                             </div>
                                         </div>
                                     </div>

@@ -81,9 +81,9 @@
 												<td><?php echo $subData->name; ?></td>
 												<td>
 													<?php if($subData->status == '1'){?>
-														<a href="<?php echo base_url(); ?>subscription/changeStatus/<?php echo $subData->id; ?>/0"><img src="/mobiletv/assets/img/test-pass-icon.png" alt="Active" /></a>
+														<a href="<?php echo base_url(); ?>subscription/changeStatus/<?php echo $subData->id; ?>/0"><img src="<?php echo base_url(); ?>assets/img/test-pass-icon.png" alt="Active" /></a>
 													<?php }else{?>
-														<a href="<?php echo base_url(); ?>subscription/changeStatus/<?php echo $subData->id; ?>/1"><img src="/mobiletv/assets/img/test-fail-icon.png" alt="Inactive" /></a>
+														<a href="<?php echo base_url(); ?>subscription/changeStatus/<?php echo $subData->id; ?>/1"><img src="<?php echo base_url(); ?>assets/img/test-fail-icon.png" alt="Inactive" /></a>
 													<?php }?>
 												</td>
 												<td><?php echo $subData->days; ?></td>

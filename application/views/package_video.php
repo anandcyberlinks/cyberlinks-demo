@@ -25,8 +25,6 @@
                             <div class="box-header col-md-6">
                                 <h3 class="box-tittle">Package Name :- <?php echo ucfirst($package[0]->name); ?></h3>
                             </div>
-                            <div class="pull-right"><h3>Total Videos :- <?php echo count($result); ?></h3></div>
-
                         </div>
                     </div>
                 </div>
