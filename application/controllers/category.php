@@ -153,7 +153,7 @@ class Category extends MY_Controller {
                     if (isset($_FILES['categoryImage']['tmp_name']) && $_FILES['categoryImage']['tmp_name'] != "") {
                         $fileId = $this->uploadCategoryImg($_FILES['categoryImage']["tmp_name"], $_FILES['categoryImage']["name"]);
                     }
-                    if($fileId){
+                    if(isset($fileId)){
                         $_POST['file_id'] = $fileId;
                     } else {
                         $_POST['file_id'] = '';
