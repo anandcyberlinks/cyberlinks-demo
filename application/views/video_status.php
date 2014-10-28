@@ -132,7 +132,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick='stopvideo()'><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick='stopvideo("jsplayerV")'><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                 <h4 class="modal-title" id="myModalLabel"><?php echo $welcome->loadPo('Video')." : ". $welcome->loadPo('Preview'); ?></h4>
             </div>
             <div class="modal-body no-padding">

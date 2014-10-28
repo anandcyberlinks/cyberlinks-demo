@@ -142,8 +142,8 @@ $(function(){
 		var str = '<script type="text/javascript">';
 		str += 'jwplayer("jsplayerV").setup({ ';
 		str += 'primary: "html5",';
-        str += 'width: 600,';
-        str += 'height: 600/1.5,';
+		str += 'width: 600,';
+		str += 'height: 600/1.5,';
 		str += 'file: ' + '"' + file_path + '"';
 		str += '});';
 		str += '<\/script>';
@@ -292,9 +292,8 @@ $(function(){
 		$('#myModal #prevElement').html(str);
 	});
 	
-    function stopvideo()
-    {
-        jwplayer('prevElement').stop();
+    function stopvideo(id){
+	jwplayer(id).stop();
     }
  
     function delete_video(id,url,curl)
