@@ -29,7 +29,7 @@
 <?php }else{
     echo "No Duration Found";
 } ?>
-<script src="<?php echo base_url(); ?>assets/js/jquery-1.10.2.js"></script>
+
 <script>
     $(function(){
         var type = '<?php echo $type['0']->type; ?>';
