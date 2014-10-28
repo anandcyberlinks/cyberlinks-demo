@@ -65,4 +65,4 @@
     </div><!-- /.modal -->
 </div>
 <?php }else{
-    echo "No Dinamic Fields/Forms Available"; } ?>
+    echo "No record found"; } ?>
