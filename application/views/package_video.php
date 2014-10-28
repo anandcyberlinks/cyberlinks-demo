@@ -64,7 +64,8 @@
                                     </tbody>
                                 </table>
                                 <br>
-                                <a href="<?php echo base_url()."package/addVideo/".$this->uri->segment(3) ?>" class="btn btn-success">Add More</a>
+                                <a href="<?php echo base_url()."package/addVideo/".$this->uri->segment(3) ?>" class="btn btn-success">Add Video</a>
+                                <a href="<?php echo base_url(); ?>package" class="btn btn-primary">Back</a>
                             </div>		
                             <!-- Pagination end -->
                         </div><!-- /.box-body -->
