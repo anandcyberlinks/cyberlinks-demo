@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 <?php
 $s = $this->session->all_userdata();
-
     $width = '180';
     $height = "45";
-
 ?>
 <html>
     <head>

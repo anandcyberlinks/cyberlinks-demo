@@ -22,7 +22,7 @@
             </li>
 	    <li class="treeview <?=(($this->uri->segment(1)=='video') || ($this->uri->segment(1)=='video_settings'))?'active':''?>">
                 <a href="#">
-                    <i class="fa fa-play-circle"></i>
+                    <i class="fa fa-video-camera"></i>
                     <span><?php echo $welcome->loadPo('Video'); ?></span>
                     <i class="fa fa-angle-left pull-right"></i>
                 </a>
@@ -53,7 +53,7 @@
             </li>
 	    <li class="<?=($this->uri->segment(1)=='pages')?'active':''?>">
                 <a href="<?php echo base_url() ?>pages">
-                    <i class="glyphicon glyphicon-th-list"></i> <span><?php echo $welcome->loadPo('CMS Pages'); ?></span>
+                    <i class="fa fa-file-text-o"></i> <span><?php echo $welcome->loadPo('Static Pages'); ?></span>
                 </a>
             </li>
             <?php $s = $this->session->all_userdata();
@@ -62,7 +62,7 @@
             
             <li class="<?=($this->uri->segment(1)=='user')?'active':''?>">
                 <a href="<?php echo base_url() ?>user">
-                    <i class="fa fa-user"></i> <span><?php echo $welcome->loadPo('Users'); ?></span>
+                    <i class="fa fa-users"></i> <span><?php echo $welcome->loadPo('Users'); ?></span>
                 </a>
             </li>
             <?php } ?>
@@ -86,7 +86,7 @@
                 ?>
             <li class="<?=($this->uri->segment(1)=='device')?'active':''?>">
                 <a href="<?php echo base_url() ?>device">
-                    <i class="fa fa-fw fa-list-alt"></i> <span><?php echo $welcome->loadPo('Device'); ?></span>
+                    <i class="fa fa-fw fa-mobile"></i> <span><?php echo $welcome->loadPo('Device'); ?></span>
                 </a>
             </li>
             <?php } ?>
