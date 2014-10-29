@@ -82,7 +82,7 @@
                 <div class="small-box bg-red">
                     <div class="inner">
                         <h3>
-                            <?php if((isset($transcodedvideos)) && (isset($totalvideos))) { echo  round((($transcodedvideos-$pendingvideos)/$transcodedvideos)*100, 2); } else { echo '0'; } ?>%
+                            <?php if((isset($transcodedvideos)) && (($transcodedvideos)!='0') && (isset($totalvideos))) { echo  round((($transcodedvideos-$pendingvideos)/$transcodedvideos)*100, 2); } else { echo '0'; } ?>%
                         </h3>
                         <p>
                             <?php echo $welcome->loadPo('Convert Rate'); ?>
