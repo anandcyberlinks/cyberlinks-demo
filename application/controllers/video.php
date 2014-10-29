@@ -174,34 +174,40 @@
     */
 
     function videoOpr() {
-        $this->data['welcome'] = $this;
-        $this->data['id'] = base64_decode(@$_GET['action']);
-        $this->data['result'] = $this->videos_model->edit_profile($this->data['id']);
-        $tab = $this->uri->segment(3);
-        switch ($tab) {
-            case "Basic":
-                $this->videoprofile();
-                break;
-            case "Advanced":
-		 $this->videoprofileadvance();
-                //$this->show_video_view('videoEditAdvance', $this->data);
-                break;
-            case "Scheduling":
-                $this->video_scheduling();
-                break;
-            case "Thumbnail":
-                $this->thumbnails();
-                break;
-            case "Flavor":
-                $this->flavors();
-                //	$this->show_video_view('videoEditFlavor',$this->data);
-                break;
-            case "Promo":
-                $this->promo();
-                //	$this->show_video_view('videoEditFlavor',$this->data);
-                break;
-            default:
-                $this->show_video_view('videoEditBasic', $this->data);
+        $per = $this->checkpermission($this->role_id, 'add');
+        if ($per){
+            $this->data['welcome'] = $this;
+            $this->data['id'] = base64_decode(@$_GET['action']);
+            $this->data['result'] = $this->videos_model->edit_profile($this->data['id']);
+            $tab = $this->uri->segment(3);
+            switch ($tab) {
+                case "Basic":
+                    $this->videoprofile();
+                    break;
+                case "Advanced":
+                     $this->videoprofileadvance();
+                    //$this->show_video_view('videoEditAdvance', $this->data);
+                    break;
+                case "Scheduling":
+                    $this->video_scheduling();
+                    break;
+                case "Thumbnail":
+                    $this->thumbnails();
+                    break;
+                case "Flavor":
+                    $this->flavors();
+                    //	$this->show_video_view('videoEditFlavor',$this->data);
+                    break;
+                case "Promo":
+                    $this->promo();
+                    //	$this->show_video_view('videoEditFlavor',$this->data);
+                    break;
+                default:
+                    $this->show_video_view('videoEditBasic', $this->data);
+            }
+        }else{
+            $this->session->set_flashdata('message', $this->_errormsg($this->loadPo($this->config->item('error_permission'))));
+            redirect(base_url() . 'video');
         }
     }
 
