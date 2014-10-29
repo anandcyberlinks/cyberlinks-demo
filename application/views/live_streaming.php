@@ -50,7 +50,8 @@
 <script type="text/javascript">jwplayer.key = "BC9ahgShNRQbE4HRU9gujKmpZItJYh5j/+ltVg==";</script>
 <script>
     jwplayer("player_2G").setup({
-        file: "http://54.255.176.172:1935/live/smil:mystream.smil/playlist.m3u8",
+        // file: "http://54.255.176.172:1935/live/smil:mystream.smil/playlist.m3u8",
+        file: "rtmp://54.208.234.47:1935/live/mytest1",
         height: 400,
         width: 600
     });
