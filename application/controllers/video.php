@@ -493,7 +493,6 @@
         if($matches){
             $post = array();
             $tmp = $this->get_youtube($videoUrl);
-            
             $youtubeData = $tmp['detail']['entry']->{'media$group'};
             $post['content_title'] = $tmp['detail']['entry']->{'title'}->{'$t'};
             $post['description'] = $youtubeData->{'media$description'}->{'$t'};
@@ -506,7 +505,7 @@
             $post['relative_path'] = $videoUrl;
             $post['absolute_path'] = $videoUrl;
             $post['status'] = '0';
-            $post['type'] = 'Youtube';
+            $post['type'] = 'youtube';
             $post['minetype'] = "";
             $post['info'] = base64_encode($videoUrl);
             $last_id = $this->videos_model->_saveVideo($post);
