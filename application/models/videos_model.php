@@ -844,23 +844,14 @@ class Videos_model extends CI_Model {
             return $query->result();
 	}
 
-    function get_videocountstatus($uid, $status, $inprocess=false) {
-        $this->db->select('b.flavor_id, b.content_id, b.status');
-        $this->db->from('flavors a');
-        $this->db->where('c.uid', $uid);
-        if($status){
-            $this->db->where('b.status', $status);
-        }
-        if($inprocess){
-            $this->db->where('b1.status', 'inprocess');
-            $this->db->join('video_flavors b1', 'a.id = b1.flavor_id');
-        }
-        $this->db->join('video_flavors b', 'a.id = b.flavor_id');
-        $this->db->join('contents c', 'b.content_id = c.id');
-       // $this->db->join('flavored_video e', 'a.id = e.flavor_id','left');
-        $query = $this->db->get();
-     //echo   $this->db->last_query(); echo "<br/>";
-        return count($query->result());
+    function get_videocountstatus($uid) {
+         $query = sprintf("SELECT c.uid,SUM(1) as total_video, SUM(IF(f.type = 'youtube',1,0)) as youtube_video,vf.tj as total_jobs,vf.tcomp as completed_jobs,vf.tpend as pending_jobs,vf.tinpro as inprocess_jobs
+        FROM `contents` c 
+        left join videos v on v.content_id = c.id
+        left join files f on f.id = v.file_id
+        left join ( SELECT c.uid as uid, SUM(1) as tj, SUM(IF(vf.status = 'completed',1,0)) as tcomp, SUM(IF(vf.status = 'pending',1,0)) as tpend,SUM(IF(vf.status = 'inprocess',1,0)) as tinpro FROM `video_flavors` vf left join contents c on c.id = vf.content_id where c.uid = %d ) vf on vf.uid = c.uid WHERE c.uid = %d ",$uid,$uid);
+        $res = $this->db->query($query);
+        return $res->result();
     }
 
     /*

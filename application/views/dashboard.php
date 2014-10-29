@@ -20,76 +20,114 @@
     <section class="content">
         <!-- Small boxes (Stat box) -->
         <div class="row">
-            <div class="col-lg-3 col-xs-6">
+            <div class="col-lg-2 col-xs-6">
                 <!-- small box -->
-                <div class="small-box bg-aqua">
+                <div class="small-box bg-green">
                     <div class="inner">
                         <h3>
-                            <?php if(isset($totalvideos)) { echo $totalvideos; } else { echo '0'; } ?>
+                            <?php echo $videos[0]->total_video ?>
                         </h3>
                         <p>
                            <?php echo $welcome->loadPo('Total Videos'); ?> 
                         </p>
                     </div>
                     <div class="icon">
-                        <i class="ion ion-bag"></i>
+                        <i class="fa fa-video-camera"></i>
                     </div>
                     <a href="<?php echo base_url() ?>video" class="small-box-footer">
                         <?php echo $welcome->loadPo('More info'); ?> <i class="fa fa-arrow-circle-right"></i>
                     </a>
                 </div>
             </div><!-- ./col -->
-            <div class="col-lg-3 col-xs-6">
+            <div class="col-lg-2 col-xs-6">
                 <!-- small box -->
-                <div class="small-box bg-green">
+                <div class="small-box bg-light-blue">
                     <div class="inner">
                         <h3>
-                           <?php if(isset($transcodedvideos)) { echo $transcodedvideos; } else { echo '0'; } ?>
+                            <?php echo $videos[0]->youtube_video ?>
                         </h3>
                         <p>
-                            <?php echo $welcome->loadPo('Total Transcode Jobs'); ?>
+                           <?php echo $welcome->loadPo('Youtube Videos'); ?> 
                         </p>
                     </div>
                     <div class="icon">
-                        <i class="ion ion-stats-bars"></i>
+                        <i class="fa fa-video-camera"></i>
                     </div>
-                    <a href="<?php echo base_url() ?>video/video_status" class="small-box-footer">
+                    <a href="<?php echo base_url() ?>video" class="small-box-footer">
                         <?php echo $welcome->loadPo('More info'); ?> <i class="fa fa-arrow-circle-right"></i>
                     </a>
                 </div>
-            </div><!-- ./col -->
-            <div class="col-lg-3 col-xs-6">
+            </div>
+            <div class="col-lg-2 col-xs-6">
                 <!-- small box -->
-                <div class="small-box bg-yellow">
+                <div class="small-box bg-fuchsia">
                     <div class="inner">
                         <h3>
-                            <?php if(isset($pendingvideos)) { echo $pendingvideos; } else { echo '0'; } ?>
+                            <?php echo $videos[0]->total_jobs ?>
                         </h3>
                         <p>
-                            <?php echo $welcome->loadPo('In-process Videos'); ?>
+                           <?php echo $welcome->loadPo('Total Jobs'); ?> 
                         </p>
                     </div>
                     <div class="icon">
-                        <i class="ion ion-person-add"></i>
+                        <i class="fa fa-forward"></i>
                     </div>
-                    <a href="<?php echo base_url() ?>video/video_status" class="small-box-footer">
+                    <a href="<?php echo base_url() ?>video" class="small-box-footer">
                         <?php echo $welcome->loadPo('More info'); ?> <i class="fa fa-arrow-circle-right"></i>
                     </a>
                 </div>
-            </div><!-- ./col -->
-            <div class="col-lg-3 col-xs-6">
+            </div>
+            <div class="col-lg-2 col-xs-6">
                 <!-- small box -->
                 <div class="small-box bg-red">
                     <div class="inner">
                         <h3>
-                            <?php if((isset($transcodedvideos)) && (($transcodedvideos)!='0') && (isset($totalvideos))) { echo  round((($transcodedvideos-$pendingvideos)/$transcodedvideos)*100, 2); } else { echo '0'; } ?>%
+                           <?php echo $videos[0]->completed_jobs ?>
                         </h3>
                         <p>
-                            <?php echo $welcome->loadPo('Convert Rate'); ?>
+                            <?php echo $welcome->loadPo('Completed Jobs'); ?>
                         </p>
                     </div>
                     <div class="icon">
-                        <i class="ion ion-pie-graph"></i>
+                        <i class="fa fa-thumbs-up"></i>
+                    </div>
+                    <a href="<?php echo base_url() ?>video/video_status" class="small-box-footer">
+                        <?php echo $welcome->loadPo('More info'); ?> <i class="fa fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div><!-- ./col -->
+            <div class="col-lg-2 col-xs-6">
+                <!-- small box -->
+                <div class="small-box bg-yellow">
+                    <div class="inner">
+                        <h3>
+                            <?php echo $videos[0]->inprocess_jobs ?>
+                        </h3>
+                        <p>
+                            <?php echo $welcome->loadPo('In-process Jobs'); ?>
+                        </p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-clock-o"></i>
+                    </div>
+                    <a href="<?php echo base_url() ?>video/video_status" class="small-box-footer">
+                        <?php echo $welcome->loadPo('More info'); ?> <i class="fa fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div><!-- ./col -->
+            <div class="col-lg-2 col-xs-6">
+                <!-- small box -->
+                <div class="small-box bg-purple">
+                    <div class="inner">
+                        <h3>
+                            <?php echo $videos[0]->pending_jobs ?>
+                        </h3>
+                        <p>
+                            <?php echo $welcome->loadPo('Pending Jobs'); ?>
+                        </p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-thumbs-down"></i>
                     </div>
                     <a href="#" class="small-box-footer">
                         <?php echo $welcome->loadPo('More info'); ?> <i class="fa fa-arrow-circle-right"></i>
