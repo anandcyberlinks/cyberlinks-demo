@@ -174,7 +174,7 @@
     */
 
     function videoOpr() {
-        $per = $this->checkpermission($this->role_id, 'edit');
+        $per = $this->checkpermission($this->role_id, 'add');
         if ($per){
             $this->data['welcome'] = $this;
             $this->data['id'] = base64_decode(@$_GET['action']);
