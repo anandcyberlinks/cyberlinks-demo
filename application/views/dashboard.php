@@ -11,10 +11,10 @@
         </ol>
     </section>
 	<div>
-			<div id="msg_div">
-				<?php echo $this->session->flashdata('message');?>
-			</div>	
-		</div>
+            <div id="msg_div">
+                <?php echo $this->session->flashdata('message');?>
+            </div>	
+	</div>
 
     <!-- Main content -->
     <section class="content">
@@ -138,8 +138,21 @@
 
         <!-- top row -->
         <div class="row">
-            <div class="col-xs-12 connectedSortable">
-
+            <div class="col-xs-6">
+<!-- Custom tabs (Charts with tabs)-->
+                            <div class="nav-tabs-custom">
+                                <!-- Tabs within a box -->
+                                <ul class="nav nav-tabs pull-right">
+                                    <li class="active"><a href="#revenue-chart" data-toggle="tab">Area</a></li>
+                                    <li><a href="#sales-chart" data-toggle="tab">Donut</a></li>
+                                    <li class="pull-left header"><i class="fa fa-inbox"></i> Users Video</li>
+                                </ul>
+                                <div class="tab-content no-padding">
+                                    <!-- Morris chart - Sales -->
+                                    <div class="chart tab-pane active" id="revenue-chart" style="position: relative; height: 300px;"></div>
+                                    <div class="chart tab-pane" id="sales-chart" style="position: relative; height: 300px;"></div>
+                                </div>
+                            </div><!-- /.nav-tabs-custom -->
             </div><!-- /.col -->
         </div>
         <!-- /.row -->
