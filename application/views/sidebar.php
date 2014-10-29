@@ -73,24 +73,17 @@
                     <i class="fa fa-fw fa-minus-circle"></i> <span><?php echo $welcome->loadPo('User Role'); ?></span>
                 </a>
             </li>
-            <?php } ?>
-	    <?php if($s[0]->role == 'Admin') {
-                ?>
-            <li class="<?=($this->uri->segment(1)=='apilist')?'active':''?>">
-                <a href="<?php echo base_url() ?>apilist">
-                    <i class="fa fa-fw fa-list-alt"></i> <span><?php echo $welcome->loadPo('API'); ?></span>
-                </a>
-            </li>
-            <?php } ?>
-	    <?php if($s[0]->role == 'Admin') {
-                ?>
             <li class="<?=($this->uri->segment(1)=='device')?'active':''?>">
                 <a href="<?php echo base_url() ?>device">
                     <i class="fa fa-fw fa-mobile"></i> <span><?php echo $welcome->loadPo('Device'); ?></span>
                 </a>
             </li>
             <?php } ?>
-
+            <li class="<?=($this->uri->segment(1)=='apilist')?'active':''?>">
+                <a href="<?php echo base_url() ?>apilist">
+                    <i class="fa fa-fw fa-list-alt"></i> <span><?php echo $welcome->loadPo('API'); ?></span>
+                </a>
+            </li>
 	    <?php /* ?>
 			<li class="<?=($this->uri->segment(1)=='comments')?'active':''?>">
                 <a href="<?php echo base_url() ?>comments">

@@ -51,7 +51,7 @@
                         </p>
                     </div>
                     <div class="icon">
-                        <i class="fa fa-video-camera"></i>
+                        <i class="fa fa-youtube-play"></i>
                     </div>
                     <a href="<?php echo base_url() ?>video" class="small-box-footer">
                         <?php echo $welcome->loadPo('More info'); ?> <i class="fa fa-arrow-circle-right"></i>
