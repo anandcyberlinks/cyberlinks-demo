@@ -127,7 +127,7 @@
                                 if($data['content']['title'] != ''){
                                     $params['uid'] = isset($_GET['uid']) ? $_GET['uid'] : '1';
                                     $params['content_token'] = $id;
-                                    $params['type'] = 'youtube';
+                                    $params['content_from'] = 'youtube';
                                     $params['content_title'] = $data['content']['title'];
                                     $params['content_category'] = isset($_GET['cat']) ? $_GET['cat'] : '';
                                     $params['description'] = $data['content']['descritpion'];
