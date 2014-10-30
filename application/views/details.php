@@ -71,6 +71,7 @@
         image: "<?php echo base_url().THUMB_LARGE_PATH. $thumbnail_path;?>",       
         width: "100%",
  aspectratio: "16:9",
+ stretching: "exactfit",
 //autostart: 1,
         logo: {
         file: "<?php echo base_url()?>assets/img/logo.jpg",        
