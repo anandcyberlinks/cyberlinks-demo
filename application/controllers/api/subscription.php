@@ -26,16 +26,18 @@ class Subscription extends REST_Controller
         
        //-- validate token --//
        $token = $this->get('token');
-       $this->owner_id = $this->validateToken($token);
-       
+      $action = $this->get('action');
+      if($action != 'success'){
+        $this->owner_id = $this->validateToken($token);
+      }
        //--paging limit --//
           $this->param =  $this->paging($this->get('p'));
    }
    
    function list_get()
    {
-        $result =  $this->subscription_model->getlist();
-        echo '<pre>';print_r($result);
+         $data = $this->get();
+        $result =  $this->subscription_model->getlist($data);        
         if($result)
         {         
             $this->response(array('code'=>1,'result'=>$result), 200); // 200 being the HTTP response code
@@ -101,7 +103,8 @@ class Subscription extends REST_Controller
    function payment_post()
    {
       $post = $this->post();
-      $result =  $this->paypal_model->saveOrder($post);
+      //$this->response($post);die;
+      $result =  $this->subscription_model->saveOrder($post);
       if($result)
          $this->response(array('output'=>1), 200); // 200 being the HTTP response code
       else

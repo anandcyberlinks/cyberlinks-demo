@@ -11,26 +11,27 @@ class Checkout extends My_Controller
 
     function index()
     {
-        
+        $token = @$_REQUEST['token'];
         $paymentMode = $this->config->item('PayPalMode');
         $p = new paypal_class(); // paypal class
         $p->admin_mail 	= $this->config->item('PayerEmailId'); // set notification email
         $p->currency 	= $this->config->item('currency'); // set notification email
        
         $action = @$_REQUEST["action"];
-        $_REQUEST['invoice'] = date("His").rand(1234, 9632);
+        $invoice = date("His").rand(1234, 9632);
         $_REQUEST['cmd'] = '_cart';
         $cart = json_decode(@$_REQUEST['cart'],true);
         
 	    if(isset($action)) {
 		switch($action){
 		    case "process": // case process insert the form data in DB and process to the paypal			    
-			if(count($cart)>0){    
+			if(count($cart)>0){
+                            $_REQUEST['invoice'] = $invoice;
                             $curl = curl_init();
                             // Set some options - we are passing in a useragent too here
                             curl_setopt_array($curl, array(
                                 CURLOPT_RETURNTRANSFER => 1,
-                                CURLOPT_URL => base_url().'api/subscription/checkout/token/b26845e897ff92d4c8b968f99af48a3b42bffcbb',
+                                CURLOPT_URL => base_url().'api/subscription/checkout/token/'.$token,
                                 CURLOPT_USERAGENT => 'Checkout',
                                 CURLOPT_POST => 1,
                                 CURLOPT_POSTFIELDS => $_REQUEST
@@ -75,7 +76,7 @@ class Checkout extends My_Controller
 		    break;
 		    
 		    case "success": // success case to show the user payment got success
-				//$this->paypal_model->updateOrderStatus('');
+				//$this->paypal_model->updateOrderStatus('');                           
 			    echo "<h1>Payment Transaction Done Successfully</h1>";
 		    break;
 		    
@@ -87,8 +88,8 @@ class Checkout extends My_Controller
                                 //-- post cancel order---//
                                     $curl = curl_init();
                                     curl_setopt_array($curl,array( CURLOPT_RETURNTRANSFER => 1,
-                                        CURLOPT_URL => base_url().'api/subscription/cancel/token/b26845e897ff92d4c8b968f99af48a3b42bffcbb',
-                                        CURLOPT_USERAGENT => 'Cancel order',
+                                        CURLOPT_URL => base_url().'api/subscription/cancel/token/'.$token,
+                                        CURLOPT_USERAGENT => 'Cancel',
                                         CURLOPT_POST => 1,
                                         CURLOPT_POSTFIELDS => $_REQUEST
                                     ));  
@@ -105,30 +106,28 @@ class Checkout extends My_Controller
 		    break;
 		    
 		    case "ipn": // IPN case to receive payment information. this case will not displayed in browser. This is server to server communication. PayPal will send the transactions each and every details to this case in secured POST menthod by server to server. 
-			    $trasaction_id  = $_REQUEST["txn_id"];
-			    $payment_status = strtolower($_REQUEST["payment_status"]);
-			    $invoice		= $_REQUEST["invoice"];
+			    //$trasaction_id  = $_REQUEST["txn_id"];
+			    //$payment_status = strtolower($_REQUEST["payment_status"]);
+			   // $invoice		= $_REQUEST["invoice"];
 			    if ($p->validate_ipn()){ // validate the IPN, do the others stuffs here as per your app logic				
                                 //-- post paypal ipn ---//
                                     $curl = curl_init();
                                     curl_setopt_array($curl,array( CURLOPT_RETURNTRANSFER => 1,
-                                        CURLOPT_URL => base_url().'api/subscription/payment/token/b26845e897ff92d4c8b968f99af48a3b42bffcbb',
-                                        CURLOPT_USERAGENT => 'Cancel order',
+                                        CURLOPT_URL => base_url().'api/subscription/payment/action/success/token/'.$token,
+                                        CURLOPT_USERAGENT => 'Completed',
                                         CURLOPT_POST => 1,
                                         CURLOPT_POSTFIELDS => $_REQUEST
-                                    ));  
+                                    ));
                                 //-----------------------//                               
 				 // Send the request & save response to $resp
                                 $resp = curl_exec($curl);
                                
                                  // Close request to clear up some resources
                                  curl_close($curl);                                                                
-				    $subject = 'Instant Payment Notification - Recieved Payment';
-                                    echo $subject;
+				    $subject = 'Instant Payment Notification - Recieved Payment';                                    
 				    $p->send_report($subject); // Send the notification about the transaction
 			    }else{
-				    $subject = 'Instant Payment Notification - Payment Fail';
-                                    echo $subject;
+				    $subject = 'Instant Payment Notification - Payment Fail';                                    
 				    $p->send_report($subject); // failed notification
 			    }
 		    break;
