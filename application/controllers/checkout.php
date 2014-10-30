@@ -7,7 +7,6 @@ class Checkout extends My_Controller
         $this->load->helper('url');        
 	$this->load->config('credentials');	   
         $this->load->library('paypal_class');
-	$this->load->model('paypal_model');
     }
 
     function index()
