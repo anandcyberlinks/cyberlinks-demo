@@ -30,6 +30,11 @@ class Videos_model extends CI_Model {
             $contents['description'] = $data['description'];
             $contents['status'] = $data['status'];
         }
+	
+	if(isset($data['content_token'])){
+            $contents['content_token'] = $data['content_token'];
+        }
+	
         if(isset($data['content_id'])){
             $cid = $data['content_id'];
             $contents['category'] = $data['content_category'];
@@ -38,24 +43,7 @@ class Videos_model extends CI_Model {
             $this->db->where('id', $cid);
             $this->db->set($contents);
             $this->db->update('contents');
-            /* video detail
-            $detail = array();
-            if(isset($data['star_cast'])){
-                $detail['star_cast'] = $data['star_cast'];    
-            }
-            if(isset($data['director'])){
-                $detail['director'] = $data['director'];    
-            }
-            if(isset($data['music_director'])){
-                $detail['music_director'] = $data['music_director'];    
-            }
-            if(isset($data['producer'])){
-                $detail['producer'] = $data['producer'];    
-            }
-            $this->db->where('content_id', $cid);
-            $this->db->set($detail);
-            $this->db->update('video_detail');
-            **/
+            
         }else{
             ###inserting data in contents table and return id###
             $contents['uid'] = $data['uid'];

@@ -53,7 +53,7 @@
                     $_POST['status'] = '1';
                     $_POST['type'] = $fileExt;
                     $_POST['minetype'] = "video/" . $fileExt;
-                    $_POST['info'] = base64_encode($fileUniqueName);
+                    $_POST['info'] = $_POST['info'];
                     $_POST['status'] =  1;
                     $post_key = $_POST['tags'];
                     $last_id = $this->videos_model->_saveVideo($_POST);
@@ -126,12 +126,14 @@
                                 $params = array();
                                 if($data['content']['title'] != ''){
                                     $params['uid'] = isset($_GET['uid']) ? $_GET['uid'] : '1';
+                                    $params['content_token'] = $id;
                                     $params['content_title'] = $data['content']['title'];
                                     $params['content_category'] = isset($_GET['cat']) ? $_GET['cat'] : '';
                                     $params['description'] = $data['content']['descritpion'];
                                     $params['filename'] = $basepath;
                                     $params['thumbfilename'] = sprintf('http://img.youtube.com/vi/%s/0.jpg',$id);
-                                    $params['tags'] = $data['content']['keywords'];    
+                                    $params['tags'] = $data['content']['keywords'];
+                                    $params['info'] = serialize($data);
                                 }
                                 
                                 $ch = curl_init();  
