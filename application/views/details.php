@@ -15,7 +15,7 @@
 */
 </script>
 </head>
-<body>
+<body style='background:#000'>
         <div id="myElement" style='width:100%;height:100%'></div>
        
 <script type="text/javascript" src="<?php echo base_url(); ?>./assets/js/jwplayer.js" ></script>
@@ -32,7 +32,9 @@
 }
 ?>
 <script>
-    
+    function autoplay() {
+	jwplayer().play(true); //-- auto play for mobile	
+    }
     function addview(){
         var id = "<?php echo $content_id;?>";
                     $.ajax({
@@ -62,7 +64,7 @@
         image: "<?php echo base_url().THUMB_LARGE_PATH. $thumbnail_path;?>",       
         width: "100%",
  aspectratio: "16:9",
-autostart: 1,
+//autostart: 1,
         logo: {
         file: "<?php echo base_url()?>assets/img/logo.jpg",        
         },
@@ -89,6 +91,8 @@ autostart: 1,
         //skin: "myCoolSkin/roundster.xml",       
     });
         
+	autoplay();
+	
     //-- get count for video views ---//
      var duration;  
       var pos=0;
