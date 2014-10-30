@@ -106,20 +106,7 @@
         
     }
     
-    function tttt(){
-        $query = sprintf('select * from contents c left join videos v on v.content_id = c.id left join files f on f.id = v.file_id limit 0,5 ');
-        $resultset = $this->db->query($query);
-        $data = $resultset->result();
-        
-        $content = array();
-        foreach($data as $key=>$val){
-            $content[$val->id] = md5_file($val->absolute_path);
-        }
-        
-        echo '<pre>';print_r($content);echo '</pre>';
-        exit;
-    }
-    
+
     function getvideo(){
         $postUrl = 'http://localhost/multitvfinal/youtubecurl';
         $folderPath = $_GET['url'];
@@ -134,31 +121,35 @@
                             if(strtolower($extension) == 'mp4'){
                                 
                                 $id = str_replace('.mp4','',$file);
-                                $url = sprintf('http://www.youtube.com/watch?v=%s',$id);
-                                $data = $this->get_youtube($url);
-                                
-                                $params = array();
-                                if($data['content']['title'] != ''){
-                                    $params['uid'] = isset($_GET['uid']) ? $_GET['uid'] : '1';
-                                    $params['content_token'] = $id;
-                                    $params['content_from'] = 'youtube';
-                                    $params['content_title'] = $data['content']['title'];
-                                    $params['content_category'] = isset($_GET['cat']) ? $_GET['cat'] : '';
-                                    $params['description'] = $data['content']['descritpion'];
-                                    $params['filename'] = $basepath;
-                                    $params['thumbfilename'] = sprintf('http://img.youtube.com/vi/%s/0.jpg',$id);
-                                    $params['tags'] = $data['content']['keywords'];
-                                    $params['info'] = serialize($data);
-                                }
-                                
-                                $ch = curl_init();  
-                                curl_setopt($ch,CURLOPT_URL,$postUrl);
-                                curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
-                                curl_setopt($ch,CURLOPT_HEADER, false); 
-                                curl_setopt($ch,CURLOPT_POST, count($params));
-                                curl_setopt($ch,CURLOPT_POSTFIELDS, $params);    
-                                $output = curl_exec($ch);
-                                curl_close($ch);
+                                $ifVideoExists = $this->videos_model->checkIfYoutubeVideoExists($id);
+                                if($ifVideoExists)
+                                {
+                                    $url = sprintf('http://www.youtube.com/watch?v=%s',$id);
+                                    $data = $this->get_youtube($url);                                    
+                                    $params = array();
+                                    if($data['content']['title'] != ''){
+                                        $params['uid'] = isset($_GET['uid']) ? $_GET['uid'] : '1';
+                                        $params['content_token'] = $id;
+                                        $params['content_from'] = 'youtube';
+                                        $params['content_title'] = $data['content']['title'];
+                                        $params['content_category'] = isset($_GET['cat']) ? $_GET['cat'] : '';
+                                        $params['description'] = $data['content']['descritpion'];
+                                        $params['filename'] = $basepath;
+                                        $params['thumbfilename'] = sprintf('http://img.youtube.com/vi/%s/0.jpg',$id);
+                                        $params['tags'] = $data['content']['keywords'];
+                                        $params['info'] = serialize($data);
+                                    }
+                                    
+                                    $ch = curl_init();  
+                                    curl_setopt($ch,CURLOPT_URL,$postUrl);
+                                    curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
+                                    curl_setopt($ch,CURLOPT_HEADER, false); 
+                                    curl_setopt($ch,CURLOPT_POST, count($params));
+                                    curl_setopt($ch,CURLOPT_POSTFIELDS, $params);    
+                                    $output = curl_exec($ch);
+                                    curl_close($ch);
+
+                                } 
                             }
                         }
                     }
@@ -275,4 +266,5 @@
         return $res;
     }
     
+   
 }

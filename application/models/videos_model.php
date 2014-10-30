@@ -951,5 +951,19 @@ class Videos_model extends CI_Model {
    */
 
 
+    function checkIfYoutubeVideoExists($id){
+        
+        $this->db->select('id');
+        $this->db->from('contents');
+        $this->db->where('content_token', $id);
+        $query = $this->db->get();
+        $result = $query->result();
+        if(count($result) > 0){
+            return true;
+        }else{
+            return false;
+        }
+
+    }
 
 }
