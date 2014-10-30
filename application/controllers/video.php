@@ -454,7 +454,7 @@
                     $data['message'] = $this->_errormsg($message);
                     echo json_encode($data);
                 } else {
-                    $videoresult = $this->_upload($tmpFilePath, $fileUniqueName); 
+                    $videoresult = $this->_upload($tmpFilePath, $fileUniqueName, 'video'); 
                     if($videoresult) {
                         $data = array();
                         $data['content_title'] = $fileUniqueName;
@@ -936,6 +936,11 @@
                 }                                   
             }                
             $delResult = $this->_deleteFile($fileName, REAL_PATH.serverVideoRelPath);
+            $videoFileExt = $this->_getFileExtension($fileName);
+            $fileNameInitial = basename($fileName, $videoFileExt);
+            $delResult_2g = $this->_deleteFile($fileNameInitial.'_2g.mp4', REAL_PATH.serverVideoRelPath);
+            $delResult_3g = $this->_deleteFile($fileNameInitial.'_3g.mp4', REAL_PATH.serverVideoRelPath);
+            $delResult_hd = $this->_deleteFile($fileNameInitial.'_hd.mp4', REAL_PATH.serverVideoRelPath);
             $result = $this->videos_model->delete_video($id);
             if ($result == '1') {
                 $msg = $this->loadPo($this->config->item('success_record_delete'));
@@ -1171,7 +1176,7 @@
                     $this->data['error'] = $msg;
                     $this->show_video_view('videoEditThumbnail', $this->data);                
                 } else {
-                    $videoresult = $this->_upload($tmpFileName, $fileUniqueName); 
+                    $videoresult = $this->_upload($tmpFileName, $fileUniqueName, 'thumb'); 
                     if($videoresult) {
                         list($width, $height, $type, $attr) = getimagesize(REAL_PATH.serverImageRelPath.$fileUniqueName);
                         switch ($type) {
@@ -1272,7 +1277,7 @@
                 imagejpeg($dst_r, $fileDestPath, $jpeg_quality);
                 break;
         }
-                $result = $this->_upload($fileSrcPath, $fileUniqueName);
+                $result = $this->_upload($fileSrcPath, $fileUniqueName, 'thumb');
                 if($result) {
                     $type = 'thumbnail';
                     $fileData = array();
