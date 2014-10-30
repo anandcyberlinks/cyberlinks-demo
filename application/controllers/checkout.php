@@ -59,7 +59,7 @@ class Checkout extends My_Controller
                                  $p->add_field('cmd', $_REQUEST["cmd"]); // cmd should be _cart for cart checkout
                                  $p->add_field('upload', '1');
                                  $p->add_field('return', $this->config->item('PayPalReturnURL')); // return URL after the transaction got over
-                                 $p->add_field('cancel_return', $this->config->item('PayPalCancelURL').'&invoiceno='.$_POST["invoice"]); // cancel URL if the trasaction was cancelled during half of the transaction
+                                 $p->add_field('cancel_return', $this->config->item('PayPalCancelURL').'&invoiceno='.$_REQUEST["invoice"]); // cancel URL if the trasaction was cancelled during half of the transaction
                                  //$p->add_field('cancel_return', $this->config->item('PayPalCancelURL')); // cancel URL if the trasaction was cancelled during half of the transaction
                                  $p->add_field('notify_url', $this->config->item('PayPalIpnURL')); // Notify URL which received IPN (Instant Payment Notification)
                                  $p->add_field('currency_code', $this->config->item('PayPalCurrencyCode'));
