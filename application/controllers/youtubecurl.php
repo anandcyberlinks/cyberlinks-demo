@@ -106,6 +106,20 @@
         
     }
     
+    function tttt(){
+        $query = sprintf('select * from contents c left join videos v on v.content_id = c.id left join files f on f.id = v.file_id  ');
+        $resultset = $this->db->query($query);
+        $data = $resultset->result();
+        
+        $content = array();
+        foreach($data as $key=>$val){
+            $content[$val->id] = md5_file($val->absolute_path);
+        }
+        
+        echo '<pre>';print_r($content);echo '</pre>';
+        exit;
+    }
+    
     function getvideo(){
         $postUrl = 'http://localhost/multitvfinal/youtubecurl';
         $folderPath = $_GET['url'];
