@@ -181,12 +181,28 @@ code {
         
         <p><strong>Users Webservice</strong></p>
 <ul><li><strong> Edit Profile: </strong>
-    <form action="<?php echo site_url('api/user/edit/token/1234567890/id/35');?>" method='post' enctype='multipart/form-data'>
+    <form action="<?php echo site_url('api/user/edit/token/4f370b46a5aa21796f47e8ecb639ab0ed17b07f5/id/32');?>" method='post' enctype='multipart/form-data'>
     First Name: <input type='text' name='firstname'>
     Last Name: <input type='text' name='lastname'>
     Gender: <input type='radio' name='gender' value='Male' checked> Male <input type='radio' name='gender' value='Female'> Female
     Phone no. : <input type='text' name='phone'>
     Picture : <input type='file' name='pic'>   
+    <input type='submit' value='submit'>
+    </form>        
+    </li>
+    <br> 
+</ul>
+
+
+ <p><strong>Checkout Webservice</strong></p>
+<ul><li><strong> Checkout: </strong>
+    <form action="<?php echo site_url('checkout?token=1234567890');?>" method='post' enctype='multipart/form-data'>
+    First Name: <input type='text' name='cart' value='[{"subscription_id":"1","subscription_name":"daily","amount":"5"},{"subscription_id":"2","subscription_name":"monthly","amount":"20"},{"subscription_id":"3","subscription_name":"yearly","amount":"50"}]'>   
+    userid. : <input type='text' name='user_id'>
+    user name : <input type='text' name='user_name'>
+    email : <input type='text' name='user_email'> 
+    total amt : <input type='text' name='total_amount'>
+    action : <input type='text' name='action' value='process'>  
     <input type='submit' value='submit'>
     </form>        
     </li>
