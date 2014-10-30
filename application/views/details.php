@@ -32,6 +32,13 @@
 }
 ?>
 <script>
+	
+	function playVideo(){    		
+		player.bind("finish", function() {
+		    jwplayer().play(true);
+		});
+	}
+
     function autoplay() {
 	jwplayer().play(true); //-- auto play for mobile	
     }
@@ -170,6 +177,10 @@ jwplayer().onComplete(function () {
 */    
     
 //});
+
+$(document).ready(function(){    
+    AndroidApp.startVideo();    
+});
 </script>
 
 </body>
