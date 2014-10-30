@@ -122,8 +122,8 @@
                                 
                                 $id = str_replace('.mp4','',$file);
                                 $ifVideoExists = $this->videos_model->checkIfYoutubeVideoExists($id);
-                                if($ifVideoExists)
-                                {
+                                if($ifVideoExists !== true){
+                                    
                                     $url = sprintf('http://www.youtube.com/watch?v=%s',$id);
                                     $data = $this->get_youtube($url);                                    
                                     $params = array();
