@@ -107,7 +107,7 @@
     }
     
     function tttt(){
-        $query = sprintf('select * from contents c left join videos v on v.content_id = c.id left join files f on f.id = v.file_id  ');
+        $query = sprintf('select * from contents c left join videos v on v.content_id = c.id left join files f on f.id = v.file_id limit 0,5 ');
         $resultset = $this->db->query($query);
         $data = $resultset->result();
         
