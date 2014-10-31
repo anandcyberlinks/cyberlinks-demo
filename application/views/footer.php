@@ -1,7 +1,5 @@
 		<script src="<?php echo base_url() ?>assets/js/jquery-1.8.2.min.js" type="text/javascript"></script>
 		<script src="<?php echo base_url() ?>assets/js/AdminLTE/app.js" type="text/javascript"></script>
-		<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jwplayer.js" ></script>
-		<script type="text/javascript">jwplayer.key = "BC9ahgShNRQbE4HRU9gujKmpZItJYh5j/+ltVg==";</script>
 		<!-- jcrop -->
 		<script src="<?php echo base_url()?>assets/js/jcrop/jquery.Jcrop.js"></script>			
 		<!-- Bootstrap -->
