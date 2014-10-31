@@ -68,6 +68,8 @@ class Checkout extends My_Controller
                                  //$p->dump_fields();die;
                                  $p->submit_paypal_post(); // POST it to paypal
                                 
+                            }else{
+                                echo $result['error'];
                             }
                         }
                             //$this->paypal_model->saveData($_POST);
@@ -75,8 +77,7 @@ class Checkout extends My_Controller
 			    //$p->dump_fields(); // Show the posted values for a reference, comment this line before app goes live
 		    break;
 		    
-		    case "success": // success case to show the user payment got success
-				//$this->paypal_model->updateOrderStatus('');                           
+		    case "success": // success case to show the user payment got success				                            
 			    echo "<h1>Payment Transaction Done Successfully</h1>";
 		    break;
 		    
@@ -88,7 +89,7 @@ class Checkout extends My_Controller
                                 //-- post cancel order---//
                                     $curl = curl_init();
                                     curl_setopt_array($curl,array( CURLOPT_RETURNTRANSFER => 1,
-                                        CURLOPT_URL => base_url().'api/subscription/cancel/token/'.$token,
+                                        CURLOPT_URL => base_url().'api/subscription/cancel',
                                         CURLOPT_USERAGENT => 'Cancel',
                                         CURLOPT_POST => 1,
                                         CURLOPT_POSTFIELDS => $_REQUEST
@@ -99,10 +100,12 @@ class Checkout extends My_Controller
                                
                                  // Close request to clear up some resources
                                  curl_close($curl);
-                                 $result = json_decode($resp,true);
-                                 
-                                 echo "<h1>Transaction Cancelled";
-                               
+                                 $result = json_decode($resp,true);                                 
+                                 if($result['output']==1){
+                                    echo "<h2>Transaction Cancelled</h2>";
+                                 }else{
+                                    echo $result['error'];
+                                 }
 		    break;
 		    
 		    case "ipn": // IPN case to receive payment information. this case will not displayed in browser. This is server to server communication. PayPal will send the transactions each and every details to this case in secured POST menthod by server to server. 
@@ -113,7 +116,7 @@ class Checkout extends My_Controller
                                 //-- post paypal ipn ---//
                                     $curl = curl_init();
                                     curl_setopt_array($curl,array( CURLOPT_RETURNTRANSFER => 1,
-                                        CURLOPT_URL => base_url().'api/subscription/payment/action/success/token/'.$token,
+                                        CURLOPT_URL => base_url().'api/subscription/ipn',
                                         CURLOPT_USERAGENT => 'Completed',
                                         CURLOPT_POST => 1,
                                         CURLOPT_POSTFIELDS => $_REQUEST

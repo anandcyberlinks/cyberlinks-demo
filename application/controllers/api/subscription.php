@@ -26,8 +26,10 @@ class Subscription extends REST_Controller
         
        //-- validate token --//
        $token = $this->get('token');
-      $action = $this->get('action');
-      if($action != 'success'){
+     // $action = $this->get('action');
+      $action = $this->uri->segment(3);
+      
+      if($action != 'ipn' && $action != 'cancel'){
         $this->owner_id = $this->validateToken($token);
       }
        //--paging limit --//
@@ -72,7 +74,7 @@ class Subscription extends REST_Controller
          //--------------------------//
          if($order_id > 0){
                      
-            foreach($cart as $row){         
+            foreach($cart as $row){
                 //-- insert cart item in order detail table --//
                 $row['order_id'] = $order_id;
                  $id = $this->subscription_model->saveOrderDetails($row);               
@@ -80,34 +82,33 @@ class Subscription extends REST_Controller
                      //-- deleta order --//
                         $this->subscription_model->delete_order($order_id);
                      //--------------//
-                     $this->response(array('output'=>0), 404);
+                     $this->response(array('output'=>0,'error'=>'Checkout failed.'), 404);
                    }
             }            
             $this->response(array('output'=>1), 200); // 200 being the HTTP response code
         }else{
-            $this->response(array('output'=>0), 404);
+            $this->response(array('output'=>0,'error'=>'Checkout failed.'), 404);
         }
         }
    }
    
    function cancel_post()
-   {
-      $invoice_no = $this->post('invoice_no');
-      $result = $this->subscription_model->updateOrderStatus($invoice_no, 'failed');
+   {      
+      $invoice_no = $this->post('invoiceno');      
+      $result = $this->subscription_model->updateOrderStatus($invoice_no, 'cancelled');
       if($result)
          $this->response(array('output'=>1), 200); // 200 being the HTTP response code
       else
-         $this->response(array('output'=>0), 404);
+         $this->response(array('output'=>0,'error'=>'Checkout failed.'), 404);
    }
    
-   function payment_post()
+   function ipn_post()
    {
-      $post = $this->post();
-      //$this->response($post);die;
+      $post = $this->post();      
       $result =  $this->subscription_model->saveOrder($post);
       if($result)
          $this->response(array('output'=>1), 200); // 200 being the HTTP response code
       else
-         $this->response(array('output'=>0), 404);
+         $this->response(array('output'=>0,'error'=>'Checkout failed.'), 404);
    }
 }
