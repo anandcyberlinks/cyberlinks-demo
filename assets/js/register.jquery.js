@@ -5,6 +5,9 @@ $(document).ready(function(){
         'required':true,
         'minlength':5
       },
+      'url':{
+        'required':true,
+      },
       'first_name':{
         'required':true,
         'minlength':4

@@ -95,7 +95,7 @@ $(function(){
  	$('a.confirm_delete').click(function(e) {
 		e.preventDefault();
 		var location = $(this).attr('href');
-		bootbox.confirm('Are you sure you want to Delete Image', function(confirmed) 
+		bootbox.confirm('Are you sure you want to Delete', function(confirmed) 
 		{
 			if (confirmed) 
 			{
@@ -303,6 +303,17 @@ $(function(){
 								if (confirmed) 
 								{
 									location.href = url+'?id='+id+'&curl='+curl ;
+								}
+							})
+	}
+        
+        function delete_url(url)
+	{
+	  bootbox.confirm("Are you sure you want to Delete", function(confirmed) 
+							{
+								if (confirmed) 
+								{
+									location.href = url;
 								}
 							})
 	}
