@@ -1519,10 +1519,10 @@
         }
     }
 
-
-
-   
-    
+    function rendervideo(){
+        $data['path'] = base64_decode($_GET['path']);
+        $this->load->view('rendervideo',$data);    
+    }
 }
     
         

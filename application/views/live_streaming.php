@@ -1,3 +1,4 @@
+
 <style>
     .error{
         color: red;
@@ -21,63 +22,38 @@
 			<?php echo $this->session->flashdata('message');?>
                     </div>	
 		</div>
-		<!-- Main content -->
 		<section class="content">
-			<div id="content">
-				<div class="row">
-					<div class="col-md-12">
-						<!-- Custom Tabs -->
-						<div class="nav-tabs-custom">
-							<ul class="nav nav-tabs">
-								<li class="active"><a href="javascript:void(0)" ><?php echo $welcome->loadPo('Live Stream'); ?></a></li>
-							</ul>
-							<div class="tab-content">
-                                                            <div class="row">
-                                                                <div class="col-lg-12">
-                                                                    <form action="" method="post" id="registerId">
-                                                                        <div class="col-lg-9">
-                                                                            <input class="form-control" type="text" value="<?php if(count($url)!='0'){ echo $url[0]->value; } ?>" name="url" placeholder="Livestrem URL" />
-                                                                        </div>
-                                                                        <div class="col-lg-3">
-                                                                            <?php if(count($url)!='0'){ ?>
-                                                                            <a onclick="return delete_url('<?php echo base_url().'video/deleteLive'; ?>');" href="" ><button class="btn btn-danger btn-sm" data-toggle="modal" data-target=".bs-example-modal-sm" >Delete</button></a>
-                                                                            <?php } ?>
-                                                                            <input name="save" type="submit" value="Save" class="btn btn-success btn-sm">
-                                                                        </div>
-                                                                    </form>
-                                                                    <div class="clearfix"><br></div>
-                                                                <?php if(count($url)!='0'){ ?>
-                                                                <div class="col-lg-12">
-                                                                    <div class="tab-pane active" id="tab_2G">
-									<div class="box box-solid">
-										<div class="box-body no-padding" id="player_2G">
-										
-										</div><!-- /.box-body -->
-									</div><!-- /.box -->
-                                                                    </div>
-								</div>
-                                                                </div>
-                                                            </div>
-							</div><!-- /.tab-content -->
-						</div><!-- nav-tabs-custom -->
-					</div><!-- /.col -->
-				</div> <!-- /.row -->
-			</div>
-		</section><!-- /.content -->
+		    <div class="box box-primary">
+			<div class="box-header">
+			    <h3 class="box-title">Live Stream</h3>
+			</div><!-- /.box-header -->
+			<!-- form start -->
+			<form action="" method="post" id="registerId">
+			    <div class="box-body">
+				<div class="form-group">
+				    <div class="row">
+					<div class="col-md-9">
+					    <input class="form-control" type="text" value="<?php if(count($url)!='0'){ echo $url[0]->value; } ?>" name="url" placeholder="Livestrem URL" />
+					</div>
+					<div class="col-md-3">
+					    <?php if(count($url)!='0'){ ?>
+					    <a onclick="return delete_url('<?php echo base_url().'video/deleteLive'; ?>');" href="" ><button class="btn btn-danger btn-sm" data-toggle="modal" data-target=".bs-example-modal-sm" >Delete</button></a>
+					    <?php } ?>
+					    <input name="save" type="submit" value="Save" class="btn btn-success btn-sm">
+					</div>
+				    </div>
+				</div>
+			    </div><!-- /.box-body -->
+			</form>
+		    </div>
+		    
+		    <?php if(count($url)!='0'){ ?>
+		    <div class="box box-success">
+			<div class="box-body">
+			    <iframe width="100%" height="400px" src='<?=base_url().'video/rendervideo/?path='.base64_encode($url[0]->value) ?>' allowfullscreen="" frameborder="0"></iframe>
+			</div><!-- /.box-body -->
+		    </div>
+		    <?php } ?>
+		</section>
     </aside><!-- /.right-side -->
 </div><!-- ./wrapper -->
-<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jwplayer.js" ></script>
-<script type="text/javascript">jwplayer.key = "BC9ahgShNRQbE4HRU9gujKmpZItJYh5j/+ltVg==";</script>
-<script>
-    jwplayer("player_2G").setup({
-        file: "<?php echo $url[0]->value;?>",
-        height: 400,
-        width: 750
-    });
-</script>
-                                                                <?php }  else {
-      
-
-     echo 'No Livestream URL Please Add';
-                                                                } ?>
-
