@@ -10,14 +10,12 @@ class Subscription_model extends CI_Model{
     }
     
     function getlist($data)
-    {        
+    {
         $this->db->select('d.name,d.days,p.duration_id as subscription_id,p.content_id,p.content_type as type,p.price');
         $this->db->from('duration d');
-        $this->db->join('price p','d.id=p.duration_id','inner');
+        $this->db->join('price p','d.id=p.duration_id','inner');       
         $this->db->where('d.uid',$this->owner_id);
-        $this->db->where('p.content_id',$data['id']);
-        $this->db->where('p.content_type',$data['type'] );
-        
+        $this->db->where('p.content_id',$data['id']);        
         $query = $this->db->get();
        //echo $this->db->last_query();
        return $query->result();
@@ -50,7 +48,7 @@ class Subscription_model extends CI_Model{
 	    $orderData = array(
 		'trasaction_id'=>$data['txn_id'],
 		'status'=>strtolower($data["payment_status"])
-	    );
+	    );            
 	    $this->db->set('modified','NOW()',FALSE);
 	    $this->db->where('invoice', $data['invoice']);
 	    $this->db->update('order', $orderData); 		

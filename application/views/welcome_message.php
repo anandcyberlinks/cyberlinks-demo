@@ -109,7 +109,7 @@ code {
 	<li><a href="<?php echo site_url('/api/video/list/id/1');?>">Video list</a></li>
 	<li><a href="<?php echo site_url('/api/video/detail/id/1');?>">Video details</a></li>
         <li>Video Search: 
-            <form action="<?php echo site_url('api/video/search/token/c30105e18b6024aad9b8ab5d498030b76a8acf66');?>" method='post'>
+            <form action="<?php echo site_url('api/video/search/token/1234567890');?>" method='post'>
    Title: <input type='text' name='title'>
     Category: <select name='category'>
         <option value='' selected>Select</option>
@@ -181,7 +181,7 @@ code {
         
         <p><strong>Users Webservice</strong></p>
 <ul><li><strong> Edit Profile: </strong>
-    <form action="<?php echo site_url('api/user/edit/token/4f370b46a5aa21796f47e8ecb639ab0ed17b07f5/id/32');?>" method='post' enctype='multipart/form-data'>
+    <form action="<?php echo site_url('api/user/edit/token/1234567890/id/32');?>" method='post' enctype='multipart/form-data'>
     First Name: <input type='text' name='firstname'>
     Last Name: <input type='text' name='lastname'>
     Gender: <input type='radio' name='gender' value='Male' checked> Male <input type='radio' name='gender' value='Female'> Female
@@ -197,7 +197,7 @@ code {
  <p><strong>Checkout Webservice</strong></p>
 <ul><li><strong> Checkout: </strong>
     <form action="<?php echo site_url('checkout?token=1234567890');?>" method='post' enctype='multipart/form-data'>
-    First Name: <input type='text' name='cart' value='[{"subscription_id":"1","subscription_name":"daily","amount":"5"},{"subscription_id":"2","subscription_name":"monthly","amount":"20"},{"subscription_id":"3","subscription_name":"yearly","amount":"50"}]'>   
+    Cart: <input type='text' name='cart' value='[{"subscription_id":"1","subscription_name":"daily","amount":"5"},{"subscription_id":"2","subscription_name":"monthly","amount":"20"},{"subscription_id":"3","subscription_name":"yearly","amount":"50"}]'>   
     userid. : <input type='text' name='user_id'>
     user name : <input type='text' name='user_name'>
     email : <input type='text' name='user_email'> 
