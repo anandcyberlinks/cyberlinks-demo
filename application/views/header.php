@@ -31,10 +31,10 @@ $s = $this->session->all_userdata();
         <link href="<?php echo base_url() ?>assets/css/tagit.ui-zendesk.css" rel="stylesheet" type="text/css">
         <link href="<?php echo base_url(); ?>assets/css/timepicker/bootstrap-timepicker.min.css" rel="stylesheet"/>
         <!-- jquery-1.10.2 -->
+        <script type="text/javascript">var baseurl = '<?php echo base_url(); ?>' ; </script>
         <script src="<?php echo base_url() ?>assets/js/jquery-1.10.2.js"></script>
-	<script type="text/javascript">
-	    var baseurl = '<?php echo base_url(); ?>' ;    
-	</script>	
+        <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jwplayer.js" ></script>
+        <script type="text/javascript">jwplayer.key = "BC9ahgShNRQbE4HRU9gujKmpZItJYh5j/+ltVg==";</script>	
     </head>
     <body class="skin-blue">
         <!-- header logo: style can be found in header.less -->
