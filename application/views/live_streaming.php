@@ -1,3 +1,8 @@
+<style>
+    .error{
+        color: red;
+    }
+</style>
 <div class="wrapper row-offcanvas row-offcanvas-left">
 	<!-- Right side column. Contains the navbar and content of the page -->
     <aside class="right-side">                
@@ -11,10 +16,10 @@
 			</ol>
 		</section>
 		<div>
-			<div id="msg_div">	
-				<?php if(isset($msg)) { echo $msg;  } ?> 
-				<?php echo $this->session->flashdata('message');?>
-			</div>	
+                    <div id="msg_div">	
+			<?php if(isset($msg)) { echo $msg;  } ?> 
+			<?php echo $this->session->flashdata('message');?>
+                    </div>	
 		</div>
 		<!-- Main content -->
 		<section class="content">
@@ -25,19 +30,34 @@
 						<div class="nav-tabs-custom">
 							<ul class="nav nav-tabs">
 								<li class="active"><a href="javascript:void(0)" ><?php echo $welcome->loadPo('Live Stream'); ?></a></li>
-								<li class="pull-right">&nbsp;</li>
 							</ul>
 							<div class="tab-content">
-								<div class="tab-pane active" id="tab_2G">
+                                                            <div class="row">
+                                                                <div class="col-lg-12">
+                                                                    <form action="" method="post" id="registerId">
+                                                                        <div class="col-lg-9">
+                                                                            <input class="form-control" type="text" value="<?php if(count($url)!='0'){ echo $url[0]->value; } ?>" name="url" placeholder="Livestrem URL" />
+                                                                        </div>
+                                                                        <div class="col-lg-3">
+                                                                            <?php if(count($url)!='0'){ ?>
+                                                                            <a onclick="return delete_url('<?php echo base_url().'video/deleteLive'; ?>');" href="" ><button class="btn btn-danger btn-sm" data-toggle="modal" data-target=".bs-example-modal-sm" >Delete</button></a>
+                                                                            <?php } ?>
+                                                                            <input name="save" type="submit" value="Save" class="btn btn-success btn-sm">
+                                                                        </div>
+                                                                    </form>
+                                                                    <div class="clearfix"><br></div>
+                                                                <?php if(count($url)!='0'){ ?>
+                                                                <div class="col-lg-12">
+                                                                    <div class="tab-pane active" id="tab_2G">
 									<div class="box box-solid">
 										<div class="box-body no-padding" id="player_2G">
 										
 										</div><!-- /.box-body -->
-										<div class="box-footer">
-											<a class="btn btn-primary btn-sm" href="<?php echo base_url(); ?>video"><?php echo $welcome->loadPo('Back'); ?></a>
-										</div>
 									</div><!-- /.box -->
+                                                                    </div>
 								</div>
+                                                                </div>
+                                                            </div>
 							</div><!-- /.tab-content -->
 						</div><!-- nav-tabs-custom -->
 					</div><!-- /.col -->
@@ -50,11 +70,14 @@
 <script type="text/javascript">jwplayer.key = "BC9ahgShNRQbE4HRU9gujKmpZItJYh5j/+ltVg==";</script>
 <script>
     jwplayer("player_2G").setup({
-        // file: "http://54.255.176.172:1935/live/smil:mystream.smil/playlist.m3u8",
-        file: "rtmp://54.208.234.47:1935/live/mytest1",
+        file: "<?php echo $url[0]->value;?>",
         height: 400,
-        width: 600
+        width: 750
     });
 </script>
+                                                                <?php }  else {
+      
 
+     echo 'No Livestream URL Please Add';
+                                                                } ?>
 

@@ -7,6 +7,28 @@ class Videos_model extends CI_Model {
         $this->load->database();
         $this->load->helper('url');
     }
+    
+    /*
+     * Function for live streaming
+     */
+    function saveUrl($url, $uid){
+        $this->db->delete('options', array('user_id'=>$uid, 'key'=>'livestream'));
+        $this->db->insert('options', array('user_id'=>$uid, 'key'=>'livestream', 'value'=>$url));
+    }
+    
+    function getLivestream($uid){
+        $this->db->select('value');
+        $this->db->where('user_id', $uid);
+        $this->db->where('key', 'livestream');
+        $query = $this->db->get('options');
+        return $query->result();
+    }
+    
+    function deleteUrl($uid){
+       $this->db->delete('options', array('user_id'=>$uid, 'key'=>'livestream')); 
+    }
+
+
     /**
      *Function for Save and update video created by arshad
      *$data = array();

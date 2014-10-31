@@ -1130,10 +1130,27 @@
     */
     
     function live_streaming() {
+        if(isset($_POST['save'])){
+            $this->videos_model->saveUrl($_POST['url'], $this->uid);
+            $msg = $this->loadPo($this->config->item('success_record_update'));
+            $this->log($this->user, $msg);
+            $this->session->set_flashdata('message', $this->_successmsg($msg));
+            redirect(base_url()."video/live_streaming");
+        }
+        $data['url'] = $this->videos_model->getLivestream($this->uid);
         $data['welcome'] = $this;
         $this->show_view('live_streaming', $data);
     }
     
+    function deleteLive(){
+        $this->videos_model->deleteUrl($this->uid);
+        $msg = $this->loadPo($this->config->item('success_record_delete'));
+        $this->log($this->user, $msg);
+        $this->session->set_flashdata('message', $this->_successmsg($msg));
+        redirect(base_url()."video/live_streaming");
+    }
+
+
     /*
     / ********************************************************************************
     /   Thumbnail Section Starts

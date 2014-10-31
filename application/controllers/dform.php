@@ -253,7 +253,7 @@ class Dform extends MY_Controller {
     }
     function checkform(){
         $data['form_name'] = $_GET['form_name'];
-        $result = $this->Advance_model->checkform($data);
+        $result = $this->Advance_model->checkform($data, $this->uid);
         if (count($result) == '0') {
             echo '1';
         } else {

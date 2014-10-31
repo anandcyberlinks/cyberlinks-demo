@@ -108,8 +108,9 @@ class Advance_model extends CI_Model {
 		return 1;
 	}
 	
-	function checkform($data){
+	function checkform($data, $uid){
 		$this->db->where('form_name', $data['form_name']);
+                $this->db->where('uid', $uid);
 		$query = $this->db->get('forms');
 		return $query->result();
 	}
