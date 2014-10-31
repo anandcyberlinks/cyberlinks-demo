@@ -15,6 +15,7 @@
             $this->load->config('messages');
             $this->load->model('videos_model');
             $this->load->model('category_model');
+            $this->load->model('Genre_model');
             $this->load->library('session');
             $this->load->library('form_validation');
             $this->load->library('csvreader');
@@ -242,6 +243,7 @@
                     $this->data['thumbnails_info'] = $this->videos_model->get_thumbs($vid);
                     $this->data['content_id'] = $vid;
                     $this->data['category'] = $this->videos_model->get_category($this->uid);
+                    $this->data['genre'] = $this->Genre_model->getAllGenre();
                     $this->data['setting'] = $this->videos_model->getsetting($vid);
                     $this->data['countryData'] = $this->videos_model->getCountryList(); 
                     $this->show_video_view('videoEditBasic', $this->data);
@@ -252,6 +254,7 @@
                 $this->data['thumbnails_info'] = $this->videos_model->get_thumbs($vid);
                 $this->data['content_id'] = $vid;
                 $this->data['category'] = $this->videos_model->get_category($this->uid);
+                $this->data['genre'] = $this->Genre_model->getAllGenre();
                 $this->data['setting'] = $this->videos_model->getsetting($vid);
                 $this->data['countryData'] = $this->videos_model->getCountryList(); 
                 $this->show_video_view('videoEditBasic', $this->data);

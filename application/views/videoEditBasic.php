@@ -31,7 +31,18 @@
                         <div class="form-group col-lg-12">
                             <label for="exampleInputEmail1"><?php echo $welcome->loadPo('Keywords') ?></label>
                             <input name="tags" class="form-control" id="myTags" type="text" placeholder="Enter keywords"  value="<?php echo $result['keywords']; ?> " /> 
-    <?php echo form_error('content_keyword', '<span class="text-danger">', '</span>'); ?>
+			    <?php echo form_error('content_keyword', '<span class="text-danger">', '</span>'); ?>
+                        </div>
+			<div class="form-group col-lg-12">
+                            <label for="exampleInputEmail1"><?php echo $welcome->loadPo('Genre') ?></label>
+                            <select name="genre" class="form-control" id="genre" type="text" placeholder="Select Genre">						
+                                <option value="">--<?php echo $welcome->loadPo('Select') . ' ' . $welcome->loadPo('Genre') ?>--</option>
+                                <?php foreach($genre as $val) { ?>
+                                    <option value="<?php echo $val->id; ?>" <?php echo (isset($result['genre']) && $result['genre'] == $val->id) ? "selected='selected'" : ''; ?> ><?php echo $val->genre_name; ?></option>
+                                    <?php echo $key ?>"><?php echo  $val ?></option>-->
+                                <?php } ?>										
+                            </select>
+			    <?php echo form_error('content_keyword', '<span class="text-danger">', '</span>'); ?>
                         </div>
                         <div class="form-group col-lg-12">
                             <label>

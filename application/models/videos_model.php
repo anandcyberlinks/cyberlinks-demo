@@ -55,12 +55,13 @@ class Videos_model extends CI_Model {
 	
 	if(isset($data['content_token'])){
             $contents['content_token'] = $data['content_token'];
-        }
-	
+        }	
 	if(isset($data['content_from'])){
             $contents['type'] = $data['content_from'];
-        }
-	
+        }        
+        if(isset($data['genre'])){
+            $contents['genre'] = $data['genre'];
+        }	
         if(isset($data['content_id'])){
             $cid = $data['content_id'];
             $contents['category'] = $data['content_category'];

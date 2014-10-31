@@ -41,6 +41,10 @@ class Genre extends MY_Controller {
     );
 
     function index() {
+        $searchterm='';
+        if($this->uri->segment(2) ==''){                
+            $this->session->unset_userdata('search_form');
+        }
         $sort = $this->uri->segment(3);
         $sort_by = $this->uri->segment(4);
         switch ($sort) {
@@ -62,44 +66,24 @@ class Genre extends MY_Controller {
             default:
                 $sort = 'genre_name';
         }
-        $this->load->library("pagination");
-        $config = array();
-        $config["base_url"] = base_url() . "genre/index";
-        $config["total_rows"] = $this->Genre_model->getRecord_count();
-        $config["per_page"] = 10;
-        $config["uri_segment"] = 3;
-        $this->pagination->initialize($config);
-        $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
-        $this->data["links"] = $this->pagination->create_links();
-        $this->data['total_rows'] = $config["total_rows"];
-        $this->data['category'] = $this->Genre_model->getGenre($config["per_page"], $page, $sort, $sort_by);
-      //  $this->data['allParentCategory'] = $this->Genre_model->getparent($this->user_id);
-        $this->show_view('genre', $this->data);
-    }
-
-    /* 	Search Category  */
-
-    function searchGenre() {
-
         if (isset($_POST['submit']) && $_POST['submit'] == 'Search') {
             $this->session->set_userdata('search_form', $_POST);
         } elseif (isset($_POST['reset']) && $_POST['reset'] == 'Reset') {
             $this->session->unset_userdata('search_form');
         }
-        $search_for = $this->session->userdata('search_form');
+        $searchterm = $this->session->userdata('search_form');
         $this->load->library("pagination");
         $config = array();
-        $config["base_url"] = base_url() . "genre/searchgenre";
-        $config["total_rows"] = count($this->Genre_model->getSearchCount($search_for));
+        $config["base_url"] = base_url() . "genre/index";
+        $config["total_rows"] = $this->Genre_model->getRecordCount($searchterm );
         $config["per_page"] = 10;
         $config["uri_segment"] = 3;
         $this->pagination->initialize($config);
         $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
-        $this->data['category'] = $this->Genre_model->getSearchGenre($config["per_page"], $page, $search_for);
         $this->data["links"] = $this->pagination->create_links();
-        $this->data["search_data"] = $search_for;
-       // $this->data['allParentCategory'] = $this->Genre_model->getparent();
         $this->data['total_rows'] = $config["total_rows"];
+        $this->data['category'] = $this->Genre_model->getGenre($config["per_page"], $page, $sort, $sort_by, $searchterm );
+      //  $this->data['allParentCategory'] = $this->Genre_model->getparent($this->user_id);
         $this->show_view('genre', $this->data);
     }
     
@@ -114,7 +98,7 @@ class Genre extends MY_Controller {
                 $_POST['id'] = $cid;
                 $this->form_validation->set_rules($this->validation_rules['edit_genre']);
                 if ($this->form_validation->run()) {   
-                    $this->Genre_model->addgenre($_POST);
+                    $this->Genre_model->saveGenre($_POST);
                     $this->session->set_flashdata('message', $this->_successmsg($this->loadPo($this->config->item('success_record_update'))));
                     redirect(base_url() . 'genre');
                 } else {
@@ -140,7 +124,7 @@ class Genre extends MY_Controller {
                     } else {        
                         $this->form_validation->set_rules($this->validation_rules['add_genre']);
                         if ($this->form_validation->run()) {   
-                            $this->Genre_model->addgenre($_POST);
+                            $this->Genre_model->saveGenre($_POST);
                             $this->session->set_flashdata('message', $this->_successmsg($this->loadPo($this->config->item('success_record_add'))));
                             redirect(base_url() . 'genre');
                         } else {
