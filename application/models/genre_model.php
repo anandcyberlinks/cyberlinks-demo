@@ -101,6 +101,14 @@ class Genre_model extends CI_Model {
 		return $query->result();
 	}
 	
+	function checkIfGenreExists($genre){
+		$this->db->select('id');
+		$this->db->where('genre_name', $genre);
+		$query = $this->db->get('genres');
+		$result = $query->result();
+		return count($result); 		
+	}
+	
 	
 	
 }
