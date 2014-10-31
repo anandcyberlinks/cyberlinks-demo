@@ -79,13 +79,6 @@
 									</tbody>
 								</table>
 								<!-- Pagination start --->
-								<div class="row pull-right">
-									<div class="col-xs-12">
-										<div class="dataTables_paginate paging_bootstrap">
-											<ul class="pagination"><li><?php echo $links ?></li></ul> 
-										</div>
-									</div>
-								</div>
 								<!-- Pagination end -->
 							</div><!-- /.box-body -->
 						</div><!-- /.box -->

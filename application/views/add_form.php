@@ -28,6 +28,7 @@
                         <form action="" method="POST" id="registerId">
                          <div class="input-group"><label><?php echo $welcome->loadPo('Form Name') ?></label>
                             <input type="text" name="form_name" placeholder="<?php echo $welcome->loadPo('Form Name') ?>" class="form-control">
+                            <p class="help-block">Example:- extra_fields</p>
                         </div><label for="name" generated="true" class="error"></label><br>
                         <div class="input-group"><label> <?php echo $welcome->loadPo('Status') ?></label> &nbsp;<input type="hidden" name="status" value="0" class="form-control">
                         <input type="checkbox" name="status" value="1"/>

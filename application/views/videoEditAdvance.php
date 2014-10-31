@@ -15,11 +15,11 @@
 			     
 			?>
 			<div class="form-group col-lg-12">
-                            <label for="exampleInputEmail1"><?php echo $advance_val->field_title; ?>:-</label>
+                            <label for="exampleInputEmail1"><?php echo $advance_val->field_title; ?></label>
                             <?php if($advance_val->field_type=="text"){?>
-			    <input name="<?php echo $advance_val->field_id;?>" class="form-control" id="<?php echo $advance_val->field_name;?>" type="text" placeholder="Enter Content Title"   value="<?php echo $value_field[$advance_val->field_id];?>" <?php if($advance_val->field_validate == 1){ echo "required";} ?> />
+			    <input name="<?php echo $advance_val->field_id;?>" class="form-control" id="<?php echo $advance_val->field_name;?>" type="text" placeholder="<?php echo $advance_val->field_title; ?>"   value="<?php echo $value_field[$advance_val->field_id];?>" <?php if($advance_val->field_validate == 1){ echo "required";} ?> />
 			 <?php } else if($advance_val->field_type=="textarea"){?>
-			  <textarea class="textarea" placeholder="Place some text here" style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;" name="<?php echo $advance_val->field_id;?>" id="<?php echo $advance_val->field_name;?>"> </textarea>
+			  <textarea class="textarea" placeholder="<?php echo $advance_val->field_title; ?>" style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;" name="<?php echo $advance_val->field_id;?>" id="<?php echo $advance_val->field_name;?>"> </textarea>
                         <?php }  else if(($advance_val->field_type=="radio")||($advance_val->field_type=="checkbox")){
 			$arrRadioOption  = explode(",", $advance_val->field_options);
 			$count = count($arrRadioOption);
