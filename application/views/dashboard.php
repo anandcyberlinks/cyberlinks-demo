@@ -286,6 +286,8 @@
 				xkey: 'y',
 				ykeys: ['value'],
 				labels: ['Videos'],
+				xLabelAngle : 35,
+				parseTime : false,
 				lineColors: data.color,
 				hideHover: 'auto'
 			    });

@@ -107,7 +107,7 @@ class Layout extends MY_Controller {
                 $totalDays = date('t',mktime(0,0,0,$month,1,$year));
                 $fields = array();
                 for($i=1;$i<=$totalDays;$i++){
-                    $fields[] = sprintf("SUM(if(c.created between '%s' AND '%s',1,0)) as '%s' ",date('Y-m-d G:i:s',mktime(0,0,0,$month,$i,$year)),date('Y-m-d G:i:s',mktime(23,59,59,$month,$i,$year)),date('Y-m-d',mktime(23,59,59,$month,$i,$year)));
+                    $fields[] = sprintf("SUM(if(c.created between '%s' AND '%s',1,0)) as '%s' ",date('Y-m-d G:i:s',mktime(0,0,0,$month,$i,$year)),date('Y-m-d G:i:s',mktime(23,59,59,$month,$i,$year)),date('M d',mktime(23,59,59,$month,$i,$year)));
                 }
                 $query = sprintf('select %s from contents c where uid = %d', implode(',',$fields),$this->user_id);
                 $dataset = $this->db->query($query)->result();
