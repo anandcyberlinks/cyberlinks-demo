@@ -75,7 +75,7 @@ class Layout extends MY_Controller {
         switch($type){
             case 'category_video' :
                 $query = sprintf('SELECT 
-                                cat.id,cat.category,SUM(1) as total
+                                cat.id,cat.category,SUM(if(c.id is null,0,1)) as total
                                 FROM `categories` cat
                                 left join contents c on c.category = cat.id
                                 where (cat.u_id = %d OR cat.parent_id = %d)
@@ -89,7 +89,7 @@ class Layout extends MY_Controller {
             case 'users_video' :
                     $query = sprintf('SELECT u.id,
                                     concat(u.first_name,\' \',u.last_name) as name,
-                                    SUM(1) as total 
+                                    SUM(if(c.id is null,0,1)) as total 
                                     FROM `users` u 
                                     left join contents c on c.uid = u.id
                                     where u.id = %d OR u.owner_id = %d
