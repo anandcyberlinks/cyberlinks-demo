@@ -69,6 +69,41 @@ class Layout extends MY_Controller {
         //print_r(['videos'])
         $this->show_view('dashboard', $data);
     }
+    
+    function dashboardchart($type = null){
+        $result = array();
+        switch($type){
+            case 'category_video' :
+                $query = sprintf('SELECT 
+                                cat.id,cat.category,SUM(1) as total
+                                FROM `categories` cat
+                                left join contents c on c.category = cat.id
+                                where (cat.u_id = %d OR cat.parent_id = %d)
+                                group by cat.id',$this->user_id,$this->user_id);
+                $dataset = $this->db->query($query)->result();
+                $result['color'] = $this->randColor(count($dataset));
+                foreach($dataset as $key=>$val){
+                    $result['data'][] = array('label'=>ucwords($val->category),'value'=>$val->total);   
+                }
+                break;
+        }
+        echo json_encode($result);
+        exit;
+    }
+    
+    function randColor( $numColors ) {
+        $chars = "ABCDEF0123456789";   
+        $size = strlen( $chars );
+        $str = array();
+        for( $i = 0; $i < $numColors; $i++ ) {
+            $tmp = '#';
+            for( $j = 0; $j < 6; $j++ ) {
+                $tmp .= $chars[ rand( 0, $size - 1 ) ];
+            }
+            $str[$i] = $tmp;
+        }
+        return $str;
+    }
 
     function logout() {
         $this->log($user, 'SuccesFully Loged Out');

@@ -1,3 +1,4 @@
+<link href="<?=base_url()?>assets/css/morris/morris.css" rel="stylesheet" type="text/css" />
 <aside class="right-side">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -136,31 +137,53 @@
             </div><!-- ./col -->
         </div><!-- /.row -->
 
-        <!-- top row -->
         <div class="row">
-            <div class="col-xs-6">
-<!-- Custom tabs (Charts with tabs)-->
-                            <div class="nav-tabs-custom">
-                                <!-- Tabs within a box -->
-                                <ul class="nav nav-tabs pull-right">
-                                    <li class="active"><a href="#revenue-chart" data-toggle="tab">Area</a></li>
-                                    <li><a href="#sales-chart" data-toggle="tab">Donut</a></li>
-                                    <li class="pull-left header"><i class="fa fa-inbox"></i> Users Video</li>
-                                </ul>
-                                <div class="tab-content no-padding">
-                                    <!-- Morris chart - Sales -->
-                                    <div class="chart tab-pane active" id="revenue-chart" style="position: relative; height: 300px;"></div>
-                                    <div class="chart tab-pane" id="sales-chart" style="position: relative; height: 300px;"></div>
-                                </div>
-                            </div><!-- /.nav-tabs-custom -->
-            </div><!-- /.col -->
-        </div>
-        <!-- /.row -->
-
-        <!-- Main row -->
-        <div class="row">
-            <!-- Left col -->
-            <!-- right col (We are only adding the ID to make the widgets sortable)-->
+	    <section class="col-lg-6"> 
+		<!-- Box (with bar chart) -->
+		<div class="box box-danger" id="category-chart">
+		    <div class="box-header">
+			<!-- tools box -->
+			<div class="pull-right box-tools">
+			    <button class="btn btn-danger btn-sm refresh-btn" data-toggle="tooltip" title="Reload"><i class="fa fa-refresh"></i></button>
+			    <button class="btn btn-danger btn-sm" data-widget='collapse' data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+			</div><!-- /. tools -->
+			<h3 class="box-title">Category Video</h3>
+		    </div><!-- /.box-header -->
+		    <div class="box-body no-padding">
+			<div class="row">
+			    <div class="col-sm-10">
+				<div class="chart" id="category-chart-div" style="height: 250px;"></div>
+			    </div>
+			</div><!-- /.row - inside box -->
+		    </div><!-- /.box-body -->
+		</div><!-- /.box -->
+	    </section><!-- /.Left col -->
         </div><!-- /.row (main row) -->
+	<script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+        <script src="<?=base_url()?>assets/js/plugins/morris/morris.min.js" type="text/javascript"></script>
+	<script>
+	    $(function(){
+		$('#category-chart-div').html(loaderCenter);
+		$.ajax({
+		    type: "GET",
+		    url: '<?=base_url()?>layout/dashboardchart/category_video',
+		    dataType: "html",
+		    success: function(response) {
+			var data = $.parseJSON(response);
+			$('#category-chart-div').html('');
+			var donut = new Morris.Donut({
+			    element: 'category-chart-div',
+			    resize: true,
+			    colors: data.color,
+			    data: data.data,
+			    hideHover: 'auto'
+			});
+		    }
+		});
+	    });
+	</script>
+                
+
+        
     </section><!-- /.content -->
 </aside><!-- /.right-side -->
