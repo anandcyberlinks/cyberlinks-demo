@@ -140,14 +140,13 @@
         <div class="row">
 	    <section class="col-lg-6"> 
 		<!-- Box (with bar chart) -->
-		<div class="box box-danger" id="category-chart">
+		<div class="box box-danger">
 		    <div class="box-header">
 			<!-- tools box -->
 			<div class="pull-right box-tools">
-			    <button class="btn btn-danger btn-sm refresh-btn" data-toggle="tooltip" title="Reload"><i class="fa fa-refresh"></i></button>
 			    <button class="btn btn-danger btn-sm" data-widget='collapse' data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
 			</div><!-- /. tools -->
-			<h3 class="box-title">Category Video</h3>
+			<h3 class="box-title">Category Videos</h3>
 		    </div><!-- /.box-header -->
 		    <div class="box-body no-padding">
 			<div class="row">
@@ -158,6 +157,27 @@
 		    </div><!-- /.box-body -->
 		</div><!-- /.box -->
 	    </section><!-- /.Left col -->
+	    
+	    <section class="col-lg-6"> 
+		<!-- Box (with bar chart) -->
+		<div class="box box-danger">
+		    <div class="box-header">
+			<!-- tools box -->
+			<div class="pull-right box-tools">
+			    <button class="btn btn-danger btn-sm" data-widget='collapse' data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+			</div><!-- /. tools -->
+			<h3 class="box-title">User Videos</h3>
+		    </div><!-- /.box-header -->
+		    <div class="box-body no-padding">
+			<div class="row">
+			    <div class="col-sm-10">
+				<div class="chart" id="uservideo-chart-div" style="height: 250px;"></div>
+			    </div>
+			</div><!-- /.row - inside box -->
+		    </div><!-- /.box-body -->
+		</div><!-- /.box -->
+	    </section><!-- /.Left col -->
+	    
         </div><!-- /.row (main row) -->
 	<script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
         <script src="<?=base_url()?>assets/js/plugins/morris/morris.min.js" type="text/javascript"></script>
@@ -180,6 +200,25 @@
 			});
 		    }
 		});
+		
+		$('#uservideo-chart-div').html(loaderCenter);
+		$.ajax({
+		    type: "GET",
+		    url: '<?=base_url()?>layout/dashboardchart/users_video',
+		    dataType: "html",
+		    success: function(response) {
+			var data = $.parseJSON(response);
+			$('#uservideo-chart-div').html('');
+			var donut = new Morris.Donut({
+			    element: 'uservideo-chart-div',
+			    resize: true,
+			    colors: data.color,
+			    data: data.data,
+			    hideHover: 'auto'
+			});
+		    }
+		});
+		
 	    });
 	</script>
                 

@@ -86,6 +86,20 @@ class Layout extends MY_Controller {
                     $result['data'][] = array('label'=>ucwords($val->category),'value'=>$val->total);   
                 }
                 break;
+            case 'users_video' :
+                    $query = sprintf('SELECT u.id,
+                                    concat(u.first_name,\' \',u.last_name) as name,
+                                    SUM(1) as total 
+                                    FROM `users` u 
+                                    left join contents c on c.uid = u.id
+                                    where u.id = %d OR u.owner_id = %d
+                                    group by u.id ',$this->user_id,$this->user_id);
+                $dataset = $this->db->query($query)->result();
+                $result['color'] = $this->randColor(count($dataset));
+                foreach($dataset as $key=>$val){
+                    $result['data'][] = array('label'=>ucwords($val->name),'value'=>$val->total);   
+                }
+                break;
         }
         echo json_encode($result);
         exit;
