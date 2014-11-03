@@ -66,7 +66,8 @@ class Layout extends MY_Controller {
         $data['result'] = $this->session->all_userdata();
         $data['welcome'] = $this;
         $data['videos'] = $this->videos_model->get_videocountstatus($this->user_id);
-        //print_r(['videos'])
+        $data['years'] = array(2012=>2012,2013=>2013,2014=>2014);
+        $data['months'] = array(1=>"Jan",2=>"Feb",3=>'Mar',4=>'Apr',5=>'May',6=>'Jun',7=>'Jul',8=>'Aug',9=>'Sep',10=>'Oct',11=>'Nov',12=>'Dec'); 
         $this->show_view('dashboard', $data);
     }
     
@@ -98,6 +99,21 @@ class Layout extends MY_Controller {
                 $result['color'] = $this->randColor(count($dataset));
                 foreach($dataset as $key=>$val){
                     $result['data'][] = array('label'=>ucwords($val->name),'value'=>$val->total);   
+                }
+                break;
+            case 'dailyvideo' :
+                $month = $_GET['month'];
+                $year = $_GET['year'];
+                $totalDays = date('t',mktime(0,0,0,$month,1,$year));
+                $fields = array();
+                for($i=1;$i<=$totalDays;$i++){
+                    $fields[] = sprintf("SUM(if(c.created between '%s' AND '%s',1,0)) as '%s' ",date('Y-m-d G:i:s',mktime(0,0,0,$month,$i,$year)),date('Y-m-d G:i:s',mktime(23,59,59,$month,$i,$year)),date('Y-m-d',mktime(23,59,59,$month,$i,$year)));
+                }
+                $query = sprintf('select %s from contents c where uid = %d', implode(',',$fields),$this->user_id);
+                $dataset = $this->db->query($query)->result();
+                $result['color'] = $this->randColor(1);
+                foreach($dataset[0] as $key=>$val){
+                    $result['data'][] = array('y'=>$key,'value'=>$val);   
                 }
                 break;
         }

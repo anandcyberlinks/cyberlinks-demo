@@ -177,8 +177,55 @@
 		    </div><!-- /.box-body -->
 		</div><!-- /.box -->
 	    </section><!-- /.Left col -->
-	    
         </div><!-- /.row (main row) -->
+	
+	<div class="row">
+	    <section class="col-lg-12"> 
+		<!-- Box (with bar chart) -->
+		<div class="box box-danger">
+		    <div class="box-header">
+			<!-- tools box -->
+			<div class="pull-right box-tools">
+			    <button class="btn btn-danger btn-sm" data-widget='collapse' data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+			</div><!-- /. tools -->
+			<div class="pull-right box-tools">
+			    <select class="form-control onchange" id="year">
+				<?php
+				    foreach($years as $key=>$val){
+					if($key == date('Y'))
+					echo sprintf('<option value="%s" selected="selected">%s</option>',$key,$val);
+					else
+					echo sprintf('<option value="%s">%s</option>',$key,$val);
+				    }
+				?>
+			    </select>
+			</div>
+			<div class="pull-right box-tools">
+			    <select class="form-control onchange" id="month">
+				<?php
+				    foreach($months as $key=>$val){
+					if($key == date('m'))
+					echo sprintf('<option value="%s" selected="selected">%s</option>',$key,$val);
+					else
+					echo sprintf('<option value="%s">%s</option>',$key,$val);
+				    }
+				?>
+			    </select>
+			</div>
+			
+		    <h3 class="box-title">Daily Videos</h3>
+		    </div><!-- /.box-header -->
+		    <div class="box-body no-padding">
+			<div class="row">
+			    <div class="col-sm-12">
+				<div class="chart" id="dailyvideo-chart-div" style="height: 250px;"></div>
+			    </div>
+			</div><!-- /.row - inside box -->
+		    </div><!-- /.box-body -->
+		</div><!-- /.box -->
+	    </section><!-- /.Left col -->
+	</div>
+	
 	<script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
         <script src="<?=base_url()?>assets/js/plugins/morris/morris.min.js" type="text/javascript"></script>
 	<script>
@@ -219,6 +266,33 @@
 		    }
 		});
 		
+		$('.onchange').on('change',function(){
+		    dailyGraph();
+		});
+		
+		function dailyGraph(){
+		    $('#dailyvideo-chart-div').html(loaderCenter);
+		    $.ajax({
+			type: "GET",
+			url: '<?=base_url()?>layout/dashboardchart/dailyvideo?month=' + $('#month').val() + '&year=' + $('#year').val(),
+			dataType: "html",
+			success: function(response) {
+			    var data = $.parseJSON(response);
+			    $('#dailyvideo-chart-div').html('');
+			    var line = new Morris.Line({
+				element: 'dailyvideo-chart-div',
+				resize: true,
+				data:  data.data,
+				xkey: 'y',
+				ykeys: ['value'],
+				labels: ['Videos'],
+				lineColors: data.color,
+				hideHover: 'auto'
+			    });
+			}
+		    });
+		}
+		dailyGraph();
 	    });
 	</script>
                 
