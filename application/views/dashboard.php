@@ -26,7 +26,7 @@
                 <div class="small-box bg-green">
                     <div class="inner">
                         <h3>
-                            <?php echo $videos[0]->total_video ?>
+                            <?php echo $videos[0]->total_video > 0 ? $videos[0]->total_video : 0  ?>
                         </h3>
                         <p>
                            <?php echo $welcome->loadPo('Total Videos'); ?> 
@@ -45,7 +45,7 @@
                 <div class="small-box bg-light-blue">
                     <div class="inner">
                         <h3>
-                            <?php echo $videos[0]->youtube_video ?>
+                            <?php echo $videos[0]->youtube_video > 0 ? $videos[0]->youtube_video : 0 ?>
                         </h3>
                         <p>
                            <?php echo $welcome->loadPo('Youtube Videos'); ?> 
@@ -64,7 +64,7 @@
                 <div class="small-box bg-fuchsia">
                     <div class="inner">
                         <h3>
-                            <?php echo $videos[0]->total_jobs ?>
+                            <?php echo $videos[0]->total_jobs > 0 ? $videos[0]->total_jobs : 0 ?>
                         </h3>
                         <p>
                            <?php echo $welcome->loadPo('Total Jobs'); ?> 
@@ -83,7 +83,7 @@
                 <div class="small-box bg-red">
                     <div class="inner">
                         <h3>
-                           <?php echo $videos[0]->completed_jobs ?>
+                           <?php echo $videos[0]->completed_jobs > 0 ? $videos[0]->completed_jobs : 0 ?>
                         </h3>
                         <p>
                             <?php echo $welcome->loadPo('Completed Jobs'); ?>
@@ -102,7 +102,7 @@
                 <div class="small-box bg-yellow">
                     <div class="inner">
                         <h3>
-                            <?php echo $videos[0]->inprocess_jobs ?>
+                            <?php echo $videos[0]->inprocess_jobs > 0 ? $videos[0]->inprocess_jobs : 0 ?>
                         </h3>
                         <p>
                             <?php echo $welcome->loadPo('In-process Jobs'); ?>
@@ -121,7 +121,7 @@
                 <div class="small-box bg-purple">
                     <div class="inner">
                         <h3>
-                            <?php echo $videos[0]->pending_jobs ?>
+                            <?php echo $videos[0]->pending_jobs > 0 ? $videos[0]->pending_jobs : 0 ?>
                         </h3>
                         <p>
                             <?php echo $welcome->loadPo('Pending Jobs'); ?>
