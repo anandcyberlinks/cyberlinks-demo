@@ -82,14 +82,14 @@
                         redirect('pages');
                     } else {
                        
-                        $this->data['result'] = $this->page_model->editPagedata();
+                        $this->data['result'] = $this->page_model->editPagedata($pageid);
                         $this->show_view('editpage', $this->data);
                     }
                 } else {
                      // $s = $this->page_model->editPagedata($pageid);
                   //    echo '<pre>';print_r($s);echo '</pre>';
                    $this->data['result'] = $this->page_model->editPagedata($pageid);
-                    $this->show_view('editpage', $this->data);
+                   $this->show_view('editpage', $this->data);
                 }
             } else {
                 if (isset($_POST['submit']) && $_POST['submit'] == 'Submit') {

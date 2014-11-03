@@ -32,14 +32,16 @@
                             <div class="form-group">
                                 <label>Page Title</label>
                                 <input class="form-control" name=page_title placeholder="Page Title" type="text" value="<?php echo $result[0]->page_title; ?>">
+                            <?php echo form_error('page_title', '<span class="text-danger">', '</span>'); ?>
                             </div>
                             <div class="form-group">
                                 <label>Page Description</label>
-                                <div class='box-body pad'>
+                               
                                     <textarea id="editor1" name="page_description" rows="10" cols="80" >
                                         <?php echo $result[0]->page_description; ?>
-                                    </textarea>                        
-                                </div>
+                                    </textarea> 
+                                    <?php echo form_error('page_description', '<span class="text-danger">', '</span>'); ?>
+                                
                             </div>
                             <div class="row">    
                                 <div class="form-group col-lg-5">
