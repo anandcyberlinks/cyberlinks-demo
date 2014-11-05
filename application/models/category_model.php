@@ -187,5 +187,21 @@ class Category_model extends CI_Model {
 		return 1;
 	}
 	
+	function checkToken($uid){
+		$this->db->select('token');
+		$this->db->where('owner_id',$uid);
+		$this->db->from('api_token');  	
+		$query = $this->db->get();
+		$result = $query->result();
+		if(count($result)==0){
+			$token = uniqid();
+			$this->db->insert('api_token', array('owner_id'=>$uid, 'token'=> $token));
+			return $token;
+		}else{
+			return $result[0]->token;
+			
+		}
+	}
+	
 }
 ?>
