@@ -2,6 +2,15 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 require APPPATH.'/libraries/REST_Controller.php';
 
+/***
+ * Some basic token are reserved here
+ * at : application token { pass every time in every request}
+ * st : pagination start with
+ * lt : limit of result
+ * on : ordered field name else default on id with ascending
+ * od : asc/desc ascending and descending of result
+ */ 
+ 
 class Apis extends REST_Controller{
     
     public $app = '';
@@ -11,6 +20,8 @@ class Apis extends REST_Controller{
      */ 
     function __construct(){
         parent::__construct();
+        $this->load->helper('url');
+        
         $qString = $this->get();
         if(isset($qString['at']) && $qString['at'] != ''){
             $flag = $this->validrequest($qString['at']);
