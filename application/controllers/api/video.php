@@ -55,15 +55,15 @@ class Video extends REST_Controller
            if(isset($thumbnails)){
             foreach($thumbnails as $data){
                 //$thumbArray[$data['type']] = $data['image_path'];
-                $thumbArray['small'] = base_url().CATEGORY_SMALL_PATH.$data['image_path'];
-                $thumbArray['medium'] = base_url().CATEGORY_MEDIUM_PATH.$data['image_path'];
-                $thumbArray['large'] = base_url().CATEGORY_LARGE_PATH.$data['image_path'];
+                $thumbArray['small'] = base_url().THUMB_SMALL_PATH.$data['image_path'];
+                $thumbArray['medium'] = base_url().THUMB_MEDIUM_PATH.$data['image_path'];
+                $thumbArray['large'] = base_url().THUMB_LARGE_PATH.$data['image_path'];
             }
            }
            }else{ //-- to be deleted temporary for channels category --//
-               $thumbArray['small'] = base_url().CATEGORY_SMALL_PATH.$row->thumbnail;
-               $thumbArray['medium'] = base_url().CATEGORY_MEDIUM_PATH.$row->thumbnail;
-               $thumbArray['large'] = base_url().CATEGORY_LARGE_PATH.$row->thumbnail;
+               $thumbArray['small'] = base_url().THUMB_SMALL_PATH.$row->thumbnail;
+               $thumbArray['medium'] = base_url().THUMB_MEDIUM_PATH.$row->thumbnail;
+               $thumbArray['large'] = base_url().THUMB_LARGE_PATH.$row->thumbnail;
            }
            //-- final array for category ---//
            $finalResult[$i]['id'] = $row->id;
@@ -194,11 +194,36 @@ class Video extends REST_Controller
        
        //-----get featured video---------------//
        $result = $this->Video_model->allvideo($device,$this->param);
-       //$total_record = $this->Video_model->allvideo($device);
-       //print_r($total_record);
+       foreach($result as $key=>$val){
+            $likes = $this->Video_model->like_count($val->content_id);
+            $rating =  $this->Video_model->getAverageRating($val->content_id);
+            $duration = $this->time_from_seconds($val->duration);
+            
+            if($val->thumbnail_path !='') {
+            $thumbArray['small'] = base_url().THUMB_SMALL_PATH.$val->thumbnail_path;
+            $thumbArray['medium'] = base_url().THUMB_MEDIUM_PATH.$val->thumbnail_path;
+            $thumbArray['large'] = base_url().THUMB_LARGE_PATH.$val->thumbnail_path;
+            }else{
+                 $thumbArray['small']='';
+                 $thumbArray['medium']='';
+                 $thumbArray['large']='';
+            }
+            $tmp = $this->Video_model->video_play($val->content_id,$this->get('device'));   
+            
+            $result[$key]->url = $tmp->video_path;     
+            $result[$key]->duration = $duration;
+            $result[$key]->likes = $likes;
+            $result[$key]->rating = $rating;
+            $result[$key]->image = $thumbArray; 
+            unset($result[$key]->info);
+       }
+       
+       /*
        array_walk ( $result, function (&$key) { 
                 //-- get total likes --//
-                $likes = $this->Video_model->like_count($key->content_id);                
+                
+                echo $likes = $this->Video_model->like_count($key->content_id);                
+                exit;
                 //-- get rating --//
                    $rating =  $this->Video_model->getAverageRating($key->content_id);
                 //-- video duration --//
@@ -218,6 +243,7 @@ class Video extends REST_Controller
            $key->rating = $rating;
            $key->image = $thumbArray;          
             } );
+         */
        
         if($result)
         {           
