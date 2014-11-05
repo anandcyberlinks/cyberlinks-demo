@@ -43,7 +43,7 @@
                                                 <ul class="sidebar-menu nav nav-pills nav-stacked">
                                                     <?php /*/ ?><li class="<?php if($tab == 'users') { echo 'active'; } else { } ?>"><a href="<?php echo base_url(); ?>apilist/indexapilist/index?action=<?php echo base64_encode('users'); ?>"><i class="fa fa-user"></i> Users</a></li><?php /*/ ?>
                                                     <li class="<?php if($tab == 'category') { echo 'active'; } else { } ?>"><a href="<?php echo base_url(); ?>apilist/index?action=<?php echo base64_encode('category'); ?>"><i class="fa fa-list-ul"></i> Category</a></li>
-                                                    <li class="treeview <?php echo (($tab == 'videoslist') || ($tab == 'categoryvideos') || ($tab == 'mostpopular') || ($tab == 'relatedvideos') || ($tab == 'featuredvideos') || ($tab == 'recentvideos')  || ($tab == 'recentvideos'))?'active':''; ?>">
+                                                    <li class="treeview <?php echo (($tab == 'videoslist') || ($tab == 'categoryvideos') || ($tab == 'videodetails') || ($tab == 'mostpopular') || ($tab == 'relatedvideos') || ($tab == 'featuredvideos') || ($tab == 'recentvideos')  || ($tab == 'recentvideos'))?'active':''; ?>">
 														<a href=""><i class="fa fa-play-circle"></i> Video<i class="fa fa-angle-left pull-right"></i></a> 
 														<ul class="treeview-menu">
 															<li class="<?php echo ($tab == 'videoslist')?'active':'';?>"><a href="<?php echo base_url(); ?>apilist/index?action=<?php echo base64_encode('videoslist'); ?>"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('Videos List'); ?></a></li>

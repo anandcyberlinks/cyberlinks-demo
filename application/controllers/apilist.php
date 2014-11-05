@@ -8,6 +8,7 @@ class Apilist extends MY_Controller {
     public $user = null;
     public $role_id = null;
     public $uid = null;
+    public $usertoken = null;
 
     function __construct() {
         parent::__construct();
@@ -21,6 +22,7 @@ class Apilist extends MY_Controller {
         $this->user = $s[0]->username;
         $this->role_id = $s[0]->role_id;
         $this->uid = $s[0]->id;
+        $this->usertoken = $this->Category_model->checkToken($this->uid); 
     }
 
 
@@ -38,17 +40,17 @@ class Apilist extends MY_Controller {
                 $this->data['response'] = '';
                 break;
             case "category":
-                $url = base_url().'api/video/category/token/1234567890';
+                $url = base_url().'api/video/category/token/'.$this->usertoken;
                 $this->data['url'] = $url;
                 $this->data['response'] = $this->get_urlcontent($url);
                 break;
             case "videoslist":
-                $url = base_url().'api/video/all/token/1234567890';
+                $url = base_url().'api/video/all/token/'.$this->usertoken;
                 $this->data['url'] = $url;
                 $this->data['response'] = $this->get_urlcontent($url);
                 break;
             case "categoryvideos":
-                $url = base_url().'api/video/list/device/3g/p/1/token/1234567890';
+                $url = base_url().'api/video/list/device/3g/p/1/token/'.$this->usertoken;
                 $urlfull = $url.'/id/'.$catId;
                 $this->data['url'] = $urlfull;
                 $this->data['catIdN'] = $catId; 
@@ -56,12 +58,12 @@ class Apilist extends MY_Controller {
                 $this->data['response'] = $this->get_urlcontent($urlfull);
                 break;
             case "videodetails":
-                $url = base_url().'api/video/detail/id/1/device/3g/token/1234567890';
+                $url = base_url().'api/video/detail/id/1/device/3g/token/'.$this->usertoken;
                 $this->data['url'] = $url;
                 $this->data['response'] = $this->get_urlcontent($url);
                 break;
             case "mostpopular":
-                $url = base_url().'api/video/popular/l/1/device/3g/token/1234567890';
+                $url = base_url().'api/video/popular/l/1/device/3g/token/'.$this->usertoken;
                 $urlfull = $url.'/id/'.$catId;
                 $this->data['url'] = $urlfull;
                 $this->data['catIdN'] = $catId; 
@@ -69,7 +71,7 @@ class Apilist extends MY_Controller {
                 $this->data['response'] = $this->get_urlcontent($urlfull);
                 break;
             case "relatedvideos":
-                $url = base_url().'api/video/related/type/2/id/1/device/3g/token/1234567890';
+                $url = base_url().'api/video/related/type/2/id/1/device/3g/token/'.$this->usertoken;
                 $urlfull = $url.'/category_id/'.$catId;
                 $this->data['url'] = $urlfull;
                 $this->data['catIdN'] = $catId; 
@@ -77,7 +79,7 @@ class Apilist extends MY_Controller {
                 $this->data['response'] = $this->get_urlcontent($urlfull);
                 break;
             case "recentvideos":
-                $url = base_url().'api/video/latest/l/1/device/3g/token/1234567890';
+                $url = base_url().'api/video/latest/l/1/device/3g/token/'.$this->usertoken;
                 $urlfull = $url.'/id/'.$catId;
                 $this->data['url'] = $urlfull;
                 $this->data['catIdN'] = $catId; 
@@ -85,12 +87,12 @@ class Apilist extends MY_Controller {
                 $this->data['response'] = $this->get_urlcontent($urlfull);
                 break;
             case "featuredvideos":
-                $url = base_url().'api/video/featured/token/1234567890';
+                $url = base_url().'api/video/featured/token/'.$this->usertoken;
                 $this->data['url'] = $url;
                 $this->data['response'] = $this->get_urlcontent($url);
                 break;
             default:
-                $url = base_url().'api/video/category/token/1234567890';
+                $url = base_url().'api/video/category/token/'.$this->usertoken;
                 $this->data['url'] = $url;
                 $this->data['response'] = $this->get_urlcontent($url);
         }
