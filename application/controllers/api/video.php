@@ -195,18 +195,19 @@ class Video extends REST_Controller
        //-----get featured video---------------//
        $result = $this->Video_model->allvideo($device,$this->param);
        foreach($result as $key=>$val){
+            
             $likes = $this->Video_model->like_count($val->content_id);
             $rating =  $this->Video_model->getAverageRating($val->content_id);
             $duration = $this->time_from_seconds($val->duration);
             
-            if($val->thumbnail_path !='') {
+            if($val->thumbnail_path =='abc') {
             $thumbArray['small'] = base_url().THUMB_SMALL_PATH.$val->thumbnail_path;
             $thumbArray['medium'] = base_url().THUMB_MEDIUM_PATH.$val->thumbnail_path;
             $thumbArray['large'] = base_url().THUMB_LARGE_PATH.$val->thumbnail_path;
             }else{
-                 $thumbArray['small']='';
-                 $thumbArray['medium']='';
-                 $thumbArray['large']='';
+                 $thumbArray['small']= sprintf('http://img.youtube.com/vi/%s/2.jpg',$val->content_token);
+                 $thumbArray['medium']= sprintf('http://img.youtube.com/vi/%s/1.jpg',$val->content_token);
+                 $thumbArray['large']= sprintf('http://img.youtube.com/vi/%s/0.jpg',$val->content_token);
             }
             $tmp = $this->Video_model->video_play($val->content_id,$this->get('device'));   
             

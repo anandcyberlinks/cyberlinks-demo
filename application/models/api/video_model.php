@@ -204,7 +204,7 @@ class Video_model extends CI_Model {
    {
         if($param){
             $this->db->limit($param['limit'],$param['offset']);
-            $this->db->select('a.category as category_id,d.category,a.id as content_id,a.title,a.description,a.type,c3.name as thumbnail_path,d.id as category_id,d.category as category_name,b.views as total_view,c1.info,b.duration');
+            $this->db->select('a.content_token,a.category as category_id,d.category,a.id as content_id,a.title,a.description,a.type,c3.name as thumbnail_path,d.id as category_id,d.category as category_name,b.views as total_view,c1.info,b.duration');
         }else{
             $this->db->select('count(a.id) as total');
         }
