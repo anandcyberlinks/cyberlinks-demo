@@ -55,15 +55,15 @@ class Video extends REST_Controller
            if(isset($thumbnails)){
             foreach($thumbnails as $data){
                 //$thumbArray[$data['type']] = $data['image_path'];
-                $thumbArray['small'] = base_url().THUMB_SMALL_PATH.$data['image_path'];
-                $thumbArray['medium'] = base_url().THUMB_MEDIUM_PATH.$data['image_path'];
-                $thumbArray['large'] = base_url().THUMB_LARGE_PATH.$data['image_path'];
+                $thumbArray['small'] = base_url().CATEGORY_SMALL_PATH.$data['image_path'];
+                $thumbArray['medium'] = base_url().CATEGORY_MEDIUM_PATH.$data['image_path'];
+                $thumbArray['large'] = base_url().CATEGORY_LARGE_PATH.$data['image_path'];
             }
            }
            }else{ //-- to be deleted temporary for channels category --//
-               $thumbArray['small'] = base_url().THUMB_SMALL_PATH.$row->thumbnail;
-               $thumbArray['medium'] = base_url().THUMB_MEDIUM_PATH.$row->thumbnail;
-               $thumbArray['large'] = base_url().THUMB_LARGE_PATH.$row->thumbnail;
+               $thumbArray['small'] = base_url().CATEGORY_SMALL_PATH.$row->thumbnail;
+               $thumbArray['medium'] = base_url().CATEGORY_MEDIUM_PATH.$row->thumbnail;
+               $thumbArray['large'] = base_url().CATEGORY_LARGE_PATH.$row->thumbnail;
            }
            //-- final array for category ---//
            $finalResult[$i]['id'] = $row->id;
