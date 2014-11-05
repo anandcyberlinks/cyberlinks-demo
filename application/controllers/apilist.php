@@ -54,7 +54,7 @@ class Apilist extends MY_Controller {
                 $urlfull = $url.'/id/'.$catId;
                 $this->data['url'] = $urlfull;
                 $this->data['catIdN'] = $catId; 
-                $this->data['categoryData'] = $this->Category_model->getAllParentCategory();
+                $this->data['categoryData'] = $this->Category_model->getAllCatList($this->uid);
                 $this->data['response'] = $this->get_urlcontent($urlfull);
                 break;
             case "videodetails":
@@ -67,7 +67,7 @@ class Apilist extends MY_Controller {
                 $urlfull = $url.'/id/'.$catId;
                 $this->data['url'] = $urlfull;
                 $this->data['catIdN'] = $catId; 
-                $this->data['categoryData'] = $this->Category_model->getAllParentCategory();
+                $this->data['categoryData'] = $this->Category_model->getAllCatList($this->uid);
                 $this->data['response'] = $this->get_urlcontent($urlfull);
                 break;
             case "relatedvideos":
@@ -75,7 +75,7 @@ class Apilist extends MY_Controller {
                 $urlfull = $url.'/category_id/'.$catId;
                 $this->data['url'] = $urlfull;
                 $this->data['catIdN'] = $catId; 
-                $this->data['categoryData'] = $this->Category_model->getAllParentCategory();
+                $this->data['categoryData'] = $this->Category_model->getAllCatList($this->uid);
                 $this->data['response'] = $this->get_urlcontent($urlfull);
                 break;
             case "recentvideos":
@@ -83,7 +83,7 @@ class Apilist extends MY_Controller {
                 $urlfull = $url.'/id/'.$catId;
                 $this->data['url'] = $urlfull;
                 $this->data['catIdN'] = $catId; 
-                $this->data['categoryData'] = $this->Category_model->getAllParentCategory();
+                $this->data['categoryData'] = $this->Category_model->getAllCatList($this->uid);
                 $this->data['response'] = $this->get_urlcontent($urlfull);
                 break;
             case "featuredvideos":

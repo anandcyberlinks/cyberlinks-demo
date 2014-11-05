@@ -114,6 +114,19 @@ class Category_model extends CI_Model {
 		return $query->result() ;
 	}
 	
+		/*	Get All Parent Cetogory  */	
+	function getAllCatList($uid)
+	{
+		$this->db->select('a.*,b.category as parent, f.name as filename');
+		$this->db->from('categories a');  
+		$this->db->join('categories b','a.parent_id = b.id','left');
+		$this->db->join('files f','a.file_id = f.id','left');	
+		$this->db->order_by('b.category', 'asc');
+		$this->db->where('a.u_id',$uid);
+		$query = $this->db->get();
+		return $query->result() ;
+	}
+	
 	/*	Delete Category  */
 	function delete_category($id)
 	{
