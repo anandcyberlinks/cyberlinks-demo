@@ -15,7 +15,7 @@ class Category extends Apis{
                             f.relative_path
                             from categories c
                             left join files f on f.id = c.file_id
-                            where c.u_id  = "%d" limit %d,%d ',$this->app->id);
+                            where c.u_id  = "%d" ',$this->app->id);
 
         $dataset = $this->db->query($query)->result();
         foreach($dataset as $key=>$val){
