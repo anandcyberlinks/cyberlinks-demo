@@ -111,7 +111,7 @@ class Video_model extends CI_Model {
    }
    */
    public function videolist($id,$device, $param=array())
-   {      
+   {
        if($param){
             $this->db->limit($param['limit'],$param['offset']);
             $this->db->select('a.category as category_id,d.category,a.id as content_id,a.title,a.description,a.type,a.content_type,c3.name as thumbnail_path,d.id as category_id,d.category as category_name,b.views as total_view,c1.info,b.duration,e.path as video_path');
@@ -175,7 +175,9 @@ class Video_model extends CI_Model {
    
    public function videolatest($data)
    {
-     
+     if(@$data['id']>0){
+      $this->db->where_in('a.category',$data['id']);
+     }
 	 $this->db->select('a.category as category_id,d.category,a.id as content_id,a.title,a.description,a.type,c3.name as thumbnail_path,d.id as category_id,d.category as category_name,b.views as total_view,c1.info,b.duration,e.path as video_path');
         $this->db->from('contents a');
         $this->db->join('videos b', 'a.id = b.content_id', 'left');        
@@ -189,7 +191,7 @@ class Video_model extends CI_Model {
         $this->db->join('video_thumbnails h','h.content_id=a.id AND h.default_thumbnail=1','left');
         $this->db->join('files c3', 'h.file_id = c3.id', 'left');
         $this->db->where('a.status','1');
-        $this->db->where_in('a.category',$data['id']);
+       // $this->db->where_in('a.category',$data['id']);
 	$this->db->where('g.flavor_name',$data['device']);
 	$this->db->where('a.uid',$this->owner_id);
         $this->db->order_by('a.id desc');
@@ -356,6 +358,9 @@ class Video_model extends CI_Model {
    
    public function popularvideo($data=array(),$param=array())
    {
+      if(@$data['id']>0){
+	 $this->db->where_in('a.category',$data['id']);
+      }
         if($param){
             $this->db->limit($param['limit'],$param['offset']);
              $this->db->select('a.category as category_id,d.category,a.id as content_id,a.title,a.description,a.type,c3.name as thumbnail_path,d.id as category_id,d.category as category_name,b.views as total_view,c1.info,b.duration,e.path as video_path');
@@ -375,7 +380,7 @@ class Video_model extends CI_Model {
         $this->db->join('video_thumbnails h','h.content_id=a.id AND h.default_thumbnail=1','left');
         $this->db->join('files c3', 'h.file_id = c3.id', 'left');
         $this->db->where('a.status','1');
-        $this->db->where_in('a.category',$data['id']);
+       // $this->db->where_in('a.category',$data['id']);
 	$this->db->where('g.flavor_name',$data['device']);
 	$this->db->where('b.views > ',0);
 	$this->db->where('a.uid',$this->owner_id);
@@ -425,6 +430,10 @@ class Video_model extends CI_Model {
    
    function favorite_list($data,$param=array())
    {
+      if(@$data['id']>0){
+	 $this->db->where_in('a.category',$data['id']);
+      }
+      
        if($param){
             $this->db->limit($param['limit'],$param['offset']);
             $this->db->select('a.category as category_id,d.category,a.id as content_id,a.title,a.description,a.type,c3.name as thumbnail_path,d.id as category_id,d.category as category_name,b.views as total_view,c1.info,b.duration');
@@ -445,7 +454,7 @@ class Video_model extends CI_Model {
         $this->db->join('files c3', 'h.file_id = c3.id', 'left');
         $this->db->join('user_favorites i', 'i.content_id = a.id', 'inner');
         $this->db->where('a.status','1');
-        $this->db->where('a.category',$data['id']);
+        //$this->db->where('a.category',$data['id']);
         $this->db->where('i.user_id',$data['user_id']);
         $this->db->where('g.flavor_name',$data['device']);
 	$this->db->where('a.uid',$this->owner_id);
