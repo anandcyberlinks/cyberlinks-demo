@@ -28,13 +28,21 @@ class Users extends Apis{
         $query = sprintf('select u.username,u.email,
                             u.first_name,u.last_name,
                             u.gender,u.language,
-                            f.relative_path as "splash" from users u 
+                            f.relative_path as "splash",
+                            logo.relative_path as `logo`
+                            from users u 
+                            left join `files` logo on logo.id = u.image
                             left join `splash_screen` ss on ss.user_id = u.id
                             left join files f on f.id = ss.file_id
                             where u.token  = "%s" ',$qs['at']);
         
         $dataset = $this->db->query($query)->result();
         array_walk($dataset,function(&$dataset){
+            if($dataset->logo!=''){
+                $base_url = strpos('http://',$dataset->logo) > 0 ? '' : base_url();
+                $dataset->logo = $base_url.$dataset->logo;
+            }
+            
             $base_url = strpos('http://',$dataset->splash) > 0 ? '' : base_url();
             $dataset->splash = $base_url.$dataset->splash;
         });
