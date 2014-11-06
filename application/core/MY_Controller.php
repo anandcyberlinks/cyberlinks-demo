@@ -141,7 +141,7 @@ class MY_Controller extends CI_Controller {
         $this->db->where('type', 'logo');
         $query = $this->db->get('files');
         $result = $query->result();
-        if ($result[0]->absolute_path != "") {
+        if (count($result) !=  '0') {
             return $result[0]->absolute_path;
         } else {
             return base_url() . 'assets/img/avatar3.png';
