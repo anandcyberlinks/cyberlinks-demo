@@ -146,7 +146,7 @@ class Video_model extends CI_Model {
    {      
        if($param){
             $this->db->limit($param['limit'],$param['offset']);
-            $this->db->select('a.category as category_id,d.category,a.id as content_id,a.title,a.description,a.type,c3.name as thumbnail_path,d.id as category_id,d.category as category_name,b.views as total_view,c1.info,b.duration');
+            $this->db->select('a.category as category_id,a.content_type,d.category,a.id as content_id,a.title,a.description,a.type,c3.name as thumbnail_path,d.id as category_id,d.category as category_name,b.views as total_view,c1.info,b.duration');
         }else{
             $this->db->select('count(a.id) as total');
         }
@@ -178,7 +178,7 @@ class Video_model extends CI_Model {
      if(@$data['id']>0){
       $this->db->where_in('a.category',$data['id']);
      }
-	 $this->db->select('a.category as category_id,d.category,a.id as content_id,a.title,a.description,a.type,c3.name as thumbnail_path,d.id as category_id,d.category as category_name,b.views as total_view,c1.info,b.duration,e.path as video_path');
+	 $this->db->select('a.category as category_id,a.content_type,d.category,a.id as content_id,a.title,a.description,a.type,c3.name as thumbnail_path,d.id as category_id,d.category as category_name,b.views as total_view,c1.info,b.duration,e.path as video_path');
         $this->db->from('contents a');
         $this->db->join('videos b', 'a.id = b.content_id', 'left');        
         $this->db->join('files c1', 'b.file_id = c1.id', 'left');
@@ -206,7 +206,7 @@ class Video_model extends CI_Model {
    {
         if($param){
             $this->db->limit($param['limit'],$param['offset']);
-            $this->db->select('a.content_token,a.category as category_id,d.category,a.id as content_id,a.title,a.description,a.type,c3.name as thumbnail_path,d.id as category_id,d.category as category_name,b.views as total_view,c1.info,b.duration');
+            $this->db->select('a.content_token,a.content_type,a.category as category_id,d.category,a.id as content_id,a.title,a.description,a.type,c3.name as thumbnail_path,d.id as category_id,d.category as category_name,b.views as total_view,c1.info,b.duration');
         }else{
             $this->db->select('count(a.id) as total');
         }
@@ -236,7 +236,7 @@ class Video_model extends CI_Model {
    {
        if($param){
             $this->db->limit($param['limit'],$param['offset']);
-            $this->db->select('a.category as category_id,d.category,a.id as content_id,a.title,a.description,a.type,c3.name as thumbnail_path,d.id as category_id,d.category as category_name,b.views as total_view,c1.info,b.duration');
+            $this->db->select('a.category as category_id,a.content_type,d.category,a.id as content_id,a.title,a.description,a.type,c3.name as thumbnail_path,d.id as category_id,d.category as category_name,b.views as total_view,c1.info,b.duration');
         }else{
             $this->db->select('count(a.id) as total');
         }
@@ -298,7 +298,7 @@ class Video_model extends CI_Model {
    
    public function videodetails($id)
    {
-        $this->db->select('a.id as content_id,i.id as favorite,a.title,a.description,a2.star_cast,a2.director,a2.music_director,a2.producer,b.views,c1.name as thumbnail_path,d.id as category_id,d.category as category_name,b.genre_id as type_id,b1.genre_name as type,b.duration');
+        $this->db->select('a.id as content_id,a.content_type,i.id as favorite,a.title,a.description,a2.star_cast,a2.director,a2.music_director,a2.producer,b.views,c1.name as thumbnail_path,d.id as category_id,d.category as category_name,b.genre_id as type_id,b1.genre_name as type,b.duration');
 	$this->db->from('contents a');
         $this->db->join('video_detail a2', 'a.id = a2.content_id', 'left');
         $this->db->join('videos b', 'a.id = b.content_id', 'left');
@@ -323,7 +323,7 @@ class Video_model extends CI_Model {
    {
         if($param){
             $this->db->limit($param['limit'],$param['offset']);
-            $this->db->select('a.category as category_id,d.category,a.id as content_id,a.title,a.description,a2.star_cast,a2.director,a2.music_director,a2.producer,c3.name as thumbnail_path,d.id as category_id,d.category as category_name,b.views as total_view,c1.info,b.duration');
+            $this->db->select('a.category as category_id,a.content_type,d.category,a.id as content_id,a.title,a.description,a2.star_cast,a2.director,a2.music_director,a2.producer,c3.name as thumbnail_path,d.id as category_id,d.category as category_name,b.views as total_view,c1.info,b.duration');
         }else{
             $this->db->select('count(a.id) as total');
         }
@@ -363,11 +363,11 @@ class Video_model extends CI_Model {
       }
         if($param){
             $this->db->limit($param['limit'],$param['offset']);
-             $this->db->select('a.category as category_id,d.category,a.id as content_id,a.title,a.description,a.type,c3.name as thumbnail_path,d.id as category_id,d.category as category_name,b.views as total_view,c1.info,b.duration,e.path as video_path');
+             $this->db->select('a.category as category_id,a.content_type,d.category,a.id as content_id,a.title,a.description,a.type,c3.name as thumbnail_path,d.id as category_id,d.category as category_name,b.views as total_view,c1.info,b.duration,e.path as video_path');
         }else{
             $this->db->select('count(a.id) as total');
         }
-	$this->db->select('a.category as category_id,d.category,a.id as content_id,a.title,a.description,a.type,c3.name as thumbnail_path,d.id as category_id,d.category as category_name,b.views as total_view,c1.info,b.duration,e.path as video_path');
+	$this->db->select('a.category as category_id,a.content_type,d.category,a.id as content_id,a.title,a.description,a.type,c3.name as thumbnail_path,d.id as category_id,d.category as category_name,b.views as total_view,c1.info,b.duration,e.path as video_path');
         $this->db->from('contents a');	
         $this->db->join('videos b', 'a.id = b.content_id', 'left');        
         $this->db->join('files c1', 'b.file_id = c1.id', 'left');
@@ -396,7 +396,7 @@ class Video_model extends CI_Model {
    {
        if($param){
             $this->db->limit($param['limit'],$param['offset']);
-            $this->db->select('a.category as category_id,d.category,a.id as content_id,a.title,a.description,a.type,c3.name as thumbnail_path,d.id as category_id,d.category as category_name,b.views as total_view,c1.info,b.duration');
+            $this->db->select('a.category as category_id,a.content_type,d.category,a.id as content_id,a.title,a.description,a.type,c3.name as thumbnail_path,d.id as category_id,d.category as category_name,b.views as total_view,c1.info,b.duration');
         }else{
             $this->db->select('count(a.id) as total');
         }
@@ -436,7 +436,7 @@ class Video_model extends CI_Model {
       
        if($param){
             $this->db->limit($param['limit'],$param['offset']);
-            $this->db->select('a.category as category_id,d.category,a.id as content_id,a.title,a.description,a.type,c3.name as thumbnail_path,d.id as category_id,d.category as category_name,b.views as total_view,c1.info,b.duration');
+            $this->db->select('a.category as category_id,a.content_type,d.category,a.id as content_id,a.title,a.description,a.type,c3.name as thumbnail_path,d.id as category_id,d.category as category_name,b.views as total_view,c1.info,b.duration');
         }else{
             //$this->db->select('count(a.id) as total');
         }
