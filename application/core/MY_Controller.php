@@ -136,12 +136,13 @@ class MY_Controller extends CI_Controller {
         $s = $this->session->all_userdata();
         $tmp = $s['0'];
         $id = $tmp->id;
-        $this->db->select('image');
-        $this->db->where('id', $id);
-        $query = $this->db->get('users');
+        $this->db->select('absolute_path');
+        $this->db->where('uid', $id);
+        $this->db->where('type', 'logo');
+        $query = $this->db->get('files');
         $result = $query->result();
-        if ($result[0]->image != "") {
-            return baseurl.PROFILEPIC_PATH. $result[0]->image;
+        if ($result[0]->absolute_path != "") {
+            return $result[0]->absolute_path;
         } else {
             return base_url() . 'assets/img/avatar3.png';
         }
@@ -451,7 +452,7 @@ class MY_Controller extends CI_Controller {
             case 'video':
                 $fileUploadPath =  REAL_PATH.serverVideoRelPath;
                 $dimensions = '';
-                break;            
+                break;
         }        
         try{
             if (move_uploaded_file($fileTempPath,$fileUploadPath.$fileUniqName)) {

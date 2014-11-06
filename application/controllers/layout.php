@@ -30,7 +30,7 @@ class Layout extends MY_Controller {
      * Function for user login
      */
 
-    public function index() {
+    public function index(){
         ###check user session #######
         $s = $this->session->all_userdata();
         $tmp = @$s['0'];
@@ -261,7 +261,7 @@ class Layout extends MY_Controller {
         $allowedFileSize = $allowedSize * 1024 * 1024; // Bytes
         $allowedExt = array('jpg', 'jpeg', 'png', 'bmp', 'gif');
         $extns = implode(',', $allowedExt);
-        $p_image = uniqid().".".$fileExt;
+        $p_image = uniqid()."_".$this->user_id.".".$fileExt;
        // echo $p_image; die;
         //echo $ext; die;
         if (in_array($fileExt, $allowedExt)) {
@@ -277,7 +277,7 @@ class Layout extends MY_Controller {
                     if(file_exists($profilePicOld)){
                         unlink($profilePicOld);
                     }
-                    $this->user_model->do_upload($this->user_id, $p_image);
+                    $this->user_model->do_upload($this->user_id, base_url().$dest);
                     $this->session->set_flashdata('message', $this->_successmsg($this->loadPo($this->config->item('success_file_update'))));
                     redirect(base_url() . 'layout/profile');
                 } else {

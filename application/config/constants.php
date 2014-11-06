@@ -77,6 +77,7 @@ if(isset($config['amazons3'])) {
     define('serverurl',	                'http://'.bucket.'.s3.amazonaws.com/');
     define('serverDir',                 'videos/');
     define('serverVideoRelPath',	'http://'.bucket.'.s3.amazonaws.com/videos/');
+    define('serverLogoRelPath',          'http://'.bucket.'.s3.amazonaws.com/videos/');
     define('serverImageRelPath',	'http://'.bucket.'.s3.amazonaws.com/videos/');
     define('REAL_PATH',		        '');
     define('THUMB_SMALL_PATH',          'http://'.bucket.'.s3.amazonaws.com/videos/');
@@ -92,6 +93,7 @@ if(isset($config['amazons3'])) {
     define('serverurl',	                baseurl);
     define('serverDir',                 'videos/');
     define('serverVideoRelPath',	'assets/upload/video/');
+    define('serverLogoRelPath',          'assets/upload/logo/');
     define('serverImageRelPath',	'assets/upload/thumbs/');
     define('REAL_PATH',		            $path_nw.'/');
     define('THUMB_SMALL_PATH',          'assets/upload/thumbs/small/');

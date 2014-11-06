@@ -115,9 +115,19 @@ class User_Model extends CI_Model {
     }
 
     function do_upload($user_id, $image) {
-        $this->db->where('id', $user_id);
-        $this->db->set('image', $image);
-        $this->db->update('users');
+        $this->db->where('uid', $user_id);
+        $this->db->where('type', 'logo');
+        $temp = $this->db->get('files')->result();
+        if(count($temp) == '0'){
+            $this->db->insert('files', array('uid'=>$user_id, 'type'=>'logo','absolute_path'=>$image ));
+            $fileid = $this->db->insert_id();
+            $this->db->where('id', $user_id);
+            $this->db->set('image',$fileid);
+            $this->db->update('users');
+        }
+        $this->db->where('id', $temp[0]->id);
+        $this->db->set('absolute_path', $image);
+        $this->db->update('files');
         //echo $this->db->last_query(); die;
     }
     
