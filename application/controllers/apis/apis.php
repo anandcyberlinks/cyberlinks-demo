@@ -7,13 +7,17 @@ require APPPATH.'/libraries/REST_Controller.php';
  * at : application token { pass every time in every request}
  * st : pagination start with
  * lt : limit of result
- * on : ordered field name else default on id with ascending
+ * ob : order by field name 
  * od : asc/desc ascending and descending of result
  */ 
  
 class Apis extends REST_Controller{
     
     public $app = '';
+    public $start = 0;
+    public $limit = 10;
+    public $order_by = null;
+    public $order = 'ASC';
     
     /***
      * at : Application token
@@ -26,7 +30,10 @@ class Apis extends REST_Controller{
         if(isset($qString['at']) && $qString['at'] != ''){
             $flag = $this->validrequest($qString['at']);
             if($flag){
-                
+                $this->start = isset($qString['st']) && $qString['st'] > 0 ? $qString['st'] : 0;
+                $this->limit = isset($qString['lt']) && $qString['lt'] > 0 ? $qString['lt'] : 10;
+                $this->order = isset($qString['od']) && $qString['od'] != '' ? $qString['od'] : 'ASC';
+                $this->order_by = isset($qString['ob']) && $qString['ob'] != '' ? $qString['ob'] : null;
             }else{
                 $this->response(array('error'=>'Invalid Token'));
             }
