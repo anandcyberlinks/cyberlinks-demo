@@ -33,6 +33,9 @@ class Content extends Apis{
         foreach($dataset as $key=>$val){
             $dataset[$key]->paid = $val->paid != '' ? 'Paid' : 'Free';
             if(file_exists($val->video_basethumb)){
+                $base_url = strpos('http://',$val->video_basepath) > 0 ? '' : base_url();
+                $dataset[$key]->video_basepath = $base_url.$val->video_basepath;
+                
                 $base_url = strpos('http://',$val->video_basethumb) > 0 ? '' : base_url();
                 $dataset[$key]->video_basethumb = $base_url.$val->video_basethumb;
                 $filename = end(explode('/',$val->video_basethumb));
