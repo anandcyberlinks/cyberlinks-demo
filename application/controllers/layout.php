@@ -277,7 +277,7 @@ class Layout extends MY_Controller {
                     if(file_exists($profilePicOld)){
                         unlink($profilePicOld);
                     }
-                    $this->user_model->do_upload($this->user_id, base_url().$dest);
+                    $this->user_model->do_upload($this->user_id, $dest, REAL_PATH.PROFILEPIC_PATH.$p_image);
                     $this->session->set_flashdata('message', $this->_successmsg($this->loadPo($this->config->item('success_file_update'))));
                     redirect(base_url() . 'layout/profile');
                 } else {

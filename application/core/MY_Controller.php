@@ -136,13 +136,13 @@ class MY_Controller extends CI_Controller {
         $s = $this->session->all_userdata();
         $tmp = $s['0'];
         $id = $tmp->id;
-        $this->db->select('absolute_path');
+        $this->db->select('relative_path');
         $this->db->where('uid', $id);
         $this->db->where('type', 'logo');
         $query = $this->db->get('files');
         $result = $query->result();
         if (count($result) !=  '0') {
-            return $result[0]->absolute_path;
+            return base_url().$result[0]->relative_path;
         } else {
             return base_url() . 'assets/img/avatar3.png';
         }
