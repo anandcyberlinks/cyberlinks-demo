@@ -89,6 +89,7 @@ class User extends REST_Controller
         }
         $data = array(
 	    'owner_id' => $owner_id,
+	    'username' => $this->post('email'), 
             'first_name' => $this->post('firstname'), 
             'last_name' => $this->post('lastname'),
             'gender' => $this->post('gender'),

@@ -124,7 +124,7 @@ class User_model extends CI_Model {
        }
         $this->db->select('t.owner_id as id');
 	$this->db->from('api_token t');
-	$this->db->join('customers u','t.owner_id=u.id','inner');
+	$this->db->join('users u','t.owner_id=u.id','inner');
         $this->db->where('t.token',$token);
         //$this->db->where('status',0);
         //$this->db->where('DATE_ADD(hit_time, INTERVAL 15 MINUTE) >', 'NOW()',FALSE);
