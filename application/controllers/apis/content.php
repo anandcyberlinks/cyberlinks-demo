@@ -15,15 +15,20 @@ class Content extends Apis{
                             c.description,
                             cat.id as `category_id`,
                             cat.category as `category_name`,
+                            v.views as `views`,
                             v.duration as `duration`,
                             cfile.relative_path as `video_basepath`,
                             vtfile.relative_path as `video_basethumb`,
-                            p.content_id as `paid`
+                            p.content_id as `paid`,
+                            SUM(IF(l.user_id > 0,1,0)) as `likes`,
+                            ((SUM(vr.rating) * 100) / SUM(5)) as `rating`
                             from contents c
                             left join categories cat on cat.id = c.category
                             left join videos v on v.content_id = c.id
                             left join files cfile on cfile.id = v.file_id
                             left join price p on p.content_id = c.id
+                            left join video_rating vr on vr.content_id = c.id
+                            left join likes l on l.content_id = c.id
                             left join video_thumbnails vt on vt.content_id = c.id
                             left join files vtfile on vtfile.id = vt.file_id
                             where c.uid  = "%d" limit %d,%d ',$this->app->id,$this->start,$this->limit);
@@ -61,10 +66,17 @@ class Content extends Apis{
             case 'category' :
                     $condition.= isset($qString['val']) && $qString['val'] != '' ? sprintf('AND cat.id = %d ',$qString['val']) : '';
                 break;
+            case 'recent' :
+                    $condition.= sprintf(' ORDER BY c.id DESC ');
+                break;
+            case 'popular' :
+                    $condition.= sprintf(' ORDER BY v.views DESC ');
+                break;
         }
         
         $total_query = sprintf('select count(c.id) as tot from contents c
                                left join categories cat on cat.id = c.category
+                               left join videos v on v.content_id = c.id
                                where uid = %d %s ',$this->app->id,$condition);
         
         $dataset_count = $this->db->query($total_query)->result();
@@ -76,15 +88,20 @@ class Content extends Apis{
                             c.description,
                             cat.id as `category_id`,
                             cat.category as `category_name`,
+                            v.views as `views`,
                             v.duration as `duration`,
                             cfile.relative_path as `video_basepath`,
                             vtfile.relative_path as `video_basethumb`,
-                            p.content_id as `paid`
+                            p.content_id as `paid`,
+                            SUM(IF(l.user_id > 0,1,0)) as `likes`,
+                            ((SUM(vr.rating) * 100) / SUM(5)) as `rating`
                             from contents c
                             left join categories cat on cat.id = c.category
                             left join videos v on v.content_id = c.id
                             left join files cfile on cfile.id = v.file_id
                             left join price p on p.content_id = c.id
+                            left join video_rating vr on vr.content_id = c.id
+                            left join likes l on l.content_id = c.id
                             left join video_thumbnails vt on vt.content_id = c.id
                             left join files vtfile on vtfile.id = vt.file_id
                             where c.uid  = "%d" %s limit %d,%d ',$this->app->id,$condition,$this->start,$this->limit);
