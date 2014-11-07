@@ -499,13 +499,13 @@ class Video extends REST_Controller
          #### function for likes #########
          function like_post(){
             //print_r($this->get());
-            $data = $this->post();  
+            $data = $this->post();            
                if(isset($data['content_id']) && $data['content_id'] != ''){
                   $content_id = $data['content_id'];
                   $con = $this->Video_model->check_content($content_id);
                   if($con){
                      if(isset($data['user_id']) && $data['user_id'] != ''){
-                        $user_id = $data['user_id'];
+                       $user_id = $data['user_id'];
                         $user = $this->Video_model->check_user($user_id);
                            if($user != '0'){
                            if(isset($data['like']) && $data['like'] == '1'){  

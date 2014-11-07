@@ -17,7 +17,7 @@ class User_model extends CI_Model {
    public function getsplash($project)
    {
        $this->db->select('image as logo');
-       $this->db->from('users');
+       $this->db->from('customers');
        $this->db->where('username',$project);
        $this->db->where('owner_id',1);
        $this->db->limit(1);
@@ -31,7 +31,7 @@ class User_model extends CI_Model {
    {
 	$this->db->set($data);
          $this->db->set('created', 'NOW()', FALSE); 
-	$this->db->insert('users', $data);
+	$this->db->insert('customers', $data);
 	//echo '<br>'.$this->db->last_query();die;
 	return $this->db->insert_id();
    }
@@ -62,7 +62,7 @@ class User_model extends CI_Model {
    public function checkuser($email)
    {
         $this->db->select('id');
-	$this->db->from('users');
+	$this->db->from('customers');
         $this->db->where('email',$email);
         $query = $this->db->get();    
        // echo '<br>'.$this->db->last_query();die;
@@ -76,7 +76,7 @@ class User_model extends CI_Model {
    public function loginuser($email,$password)
    {
         $this->db->select('a.id');
-	$this->db->from('users a');
+	$this->db->from('customers a');
         $this->db->join('social_connects b', 'a.id = b.user_id', 'left');
         $this->db->where('a.email',$email);        
         $this->db->where('a.password',$password); 
@@ -93,7 +93,7 @@ class User_model extends CI_Model {
     public function confirmRegistration($token)
     {
         $this->db->select('a.id');
-	$this->db->from('users a');
+	$this->db->from('customers a');
         $this->db->join('token b','a.id = b.user_id','inner');
         $this->db->where('b.token',$token);
         $this->db->where('a.status','inactive');
@@ -104,7 +104,7 @@ class User_model extends CI_Model {
             //-- activate user --//            
             $this->db->set('modified', 'NOW()', FALSE); 
             $this->db->where('id', $result->id);
-            $this->db->update('users', array('status'=>'active'));
+            $this->db->update('customers', array('status'=>'active'));
             //----------------------------//        
             
             //-- delete token --//
@@ -124,7 +124,7 @@ class User_model extends CI_Model {
        }
         $this->db->select('t.owner_id as id');
 	$this->db->from('api_token t');
-	$this->db->join('users u','t.owner_id=u.id','inner');
+	$this->db->join('customers u','t.owner_id=u.id','inner');
         $this->db->where('t.token',$token);
         //$this->db->where('status',0);
         //$this->db->where('DATE_ADD(hit_time, INTERVAL 15 MINUTE) >', 'NOW()',FALSE);
@@ -140,7 +140,7 @@ class User_model extends CI_Model {
    public function getuser($id)
    {
         $this->db->select('a.id,a.first_name,a.last_name,a.gender,a.email,a.created,b.token,a.image');
-	$this->db->from('users a');
+	$this->db->from('customers a');
         $this->db->join('api_token b','a.id = b.owner_id','left');
         $this->db->where('a.id',$id);
         $query = $this->db->get();    
@@ -155,7 +155,7 @@ class User_model extends CI_Model {
    {
         $this->db->select('a.u_password as password,b.email');
 	$this->db->from('user_password a');
-        $this->db->join('users b', 'b.id = a.user_id', 'inner');
+        $this->db->join('customers b', 'b.id = a.user_id', 'inner');
         $this->db->where('b.email',$id);
         $query = $this->db->get();    
        // echo '<br>'.$this->db->last_query();die;
@@ -169,7 +169,7 @@ class User_model extends CI_Model {
     public function validpassword($email,$password)
     {
         $this->db->select('a.id');
-	$this->db->from('users a');        
+	$this->db->from('customers a');        
         $this->db->where('a.email',$email);        
         $this->db->where('a.password',$password); 
         $this->db->where('a.status',1); 
@@ -186,7 +186,7 @@ class User_model extends CI_Model {
     {
         $data = array('password' => md5($password));
         $this->db->where('id', $id);
-        $this->db->update('users', $data); 
+        $this->db->update('customers', $data); 
         
         $data = array('u_password' => $password);
         $this->db->where('user_id', $id);
@@ -216,7 +216,7 @@ class User_model extends CI_Model {
   {
     $this->db->set('modified', 'NOW()', FALSE); 
     $this->db->where('id', $id);
-    $this->db->update('users', $data); 
+    $this->db->update('customers', $data); 
     return true;
   }
   
@@ -236,7 +236,7 @@ class User_model extends CI_Model {
 function delete_user($id){
         $this->db->set('status','inactive');
         $this->db->where('id', $id);
-        $this->db->update('users');
+        $this->db->update('customers');
 	 return true;
   }
   

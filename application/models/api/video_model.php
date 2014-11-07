@@ -590,7 +590,8 @@ class Video_model extends CI_Model {
    
    function check_user($user_id){
       $this->db->where('id', $user_id);
-      $query = $this->db->get('users');
+      $query = $this->db->get('customers');
+      echo $this->db->last_query();
       return count($query->result());
    }
    
@@ -672,7 +673,7 @@ class Video_model extends CI_Model {
         }
 	 
 	 $this->db->from('comment a');
-	 $this->db->join('users b', 'a.user_id=b.id');
+	 $this->db->join('customers b', 'a.user_id=b.id');
 	 $this->db->where('a.content_id', $cid);
 	 $this->db->order_by('a.id', 'DESC');
 	 $query = $this->db->get();         

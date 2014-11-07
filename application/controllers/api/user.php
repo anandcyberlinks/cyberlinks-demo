@@ -60,17 +60,19 @@ class User extends REST_Controller
 	    }
        //-----------------------------------//
        
-       $ext = 'jpg';//$this->post('ext');
+       $ext = $this->post('ext');
+       $my_base64_string = $this->post('pic');
         //---- Upload logo image for user --//
         if($ext !=''){
-           $my_base64_string = $this->post('pic');
-            $pic = $this->base64_to_jpeg( $my_base64_string, PROFILEPIC_PATH,$ext );
-            if($pic == 0){
-                $this->response(array('code'=>0,'error' => "Error uploading image."), 404);
-            }
+	    if($my_base64_string !=''){
+		$pic = $this->base64_to_jpeg( $my_base64_string, PROFILEPIC_PATH,$ext );
+		if($pic == 0){
+		    $this->response(array('code'=>0,'error' => "Error uploading image."), 404);
+		}
+	    }
         }else{
-                $incoming_tmp = $_FILES['pic']['tmp_name'];
-                $incoming_original = $_FILES["pic"]["name"];
+                $incoming_tmp = @$_FILES['pic']['tmp_name'];
+                $incoming_original = @$_FILES["pic"]["name"];
                 if ($incoming_original != '') {                    
                     $path = PROFILEPIC_PATH;
                     $allowed = array('jpg', 'jpeg', 'png', 'gif');
@@ -93,7 +95,7 @@ class User extends REST_Controller
             'email' => $this->post('email'), 
             'password' => $this->post('password'),
             'contact_no' => $this->post('phone'),
-            'image' => $pic,           
+            'image' => @$pic,           
             'status' => 'inactive'           
             );
                 
@@ -160,7 +162,7 @@ class User extends REST_Controller
                     $allowed = array('jpg', 'jpeg', 'png', 'gif');
                     $output = $this->uploadfile($incoming_tmp, $incoming_original, $path, $allowed);  //-- upload file --//
 
-                    if ($output['error']) {
+                    if (@$output['error']) {
                         $this->response(array('code'=>0,'error' => $output['error']), 404);
                     } else {
                         $pic = $output['path'];
@@ -177,11 +179,15 @@ class User extends REST_Controller
             );
            if($pic !='' && $pic != 0){
                $data['image']=$pic;
-           }
-           
+           }           
             $result = $this->User_model->update_user($data,$id);
             if($result){
-                $this->response(array('code'=>1,'result'=>'Profile Updated Successfully'), 200); // 200 being the HTTP response code
+		$output = $this->User_model->getuser($id);
+		if($output->image !=""){
+                    $output->image = base_url().PROFILEPIC_PATH.$output->image;
+     		}
+		
+                $this->response(array('code'=>1,'result'=>$output), 200); // 200 being the HTTP response code
             }
     }
     
@@ -404,6 +410,7 @@ class User extends REST_Controller
             }else{              
             //-----------Register user-----------------//
             $userdata = array(
+	    'owner_id' => $owner_id,
             'first_name' => $firstname, 
             'last_name' => $lastname,
             'gender' => $gender,
@@ -476,20 +483,20 @@ class User extends REST_Controller
     {
         $error=array();
         if($data['first_name']==''){
-            $error['first_name'] ="First name cannot be blank";             
+            $error ="First name cannot be blank";             
         }
         if($data['email']==''){
-            $error['email'] ="Email cannot be blank";             
+            $error ="Email cannot be blank";             
         }
         if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
-            $error['email'] = "This email address is invalid.";
+            $error = "This email address is invalid.";
         }
         
         if($data['password']==''){
-            $error['password'] ="Password cannot be blank";             
+            $error ="Password cannot be blank";             
         }
         if(!empty($error)){
-            $this->response(array('error' => $error), 404);
+            $this->response(array('code'=>0,'error' => $error), 404);
         }
         return 1;
     }
@@ -498,16 +505,16 @@ class User extends REST_Controller
     {
         $error=array();       
         if($data['email']==''){
-            $error['email'] ="Email cannot be blank";             
+            $error ="Email cannot be blank";             
         }
         if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
-            $error['email'] = "This email address is invalid.";
+            $error = "This email address is invalid.";
         }        
         if($data['password']==''){
-            $error['password'] ="Password cannot be blank";             
+            $error ="Password cannot be blank";             
         }
         if(!empty($error)){
-            $this->response(array('error' => $error), 404);
+           $this->response(array('code'=>0,'error' => $error), 404);
         }
         return 1;
     }
