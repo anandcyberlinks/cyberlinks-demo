@@ -1,6 +1,3 @@
-<?php echo $result->video_path; exit; ?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
