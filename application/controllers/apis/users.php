@@ -46,8 +46,8 @@ class Users extends Apis{
             $base_url = strpos('http://',$dataset->splash) > 0 ? '' : base_url();
             $dataset->splash = $base_url.$dataset->splash;
         });
-        
-        $response = array('count'=>count($dataset),'result'=>$dataset);
+
+        $response = array('tr'=>count($dataset),'result'=>$dataset);
         $this->response($response);
         exit;
     }
