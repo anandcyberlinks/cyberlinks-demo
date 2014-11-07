@@ -97,6 +97,7 @@ class Content extends Apis{
                             cfile.relative_path as `video_basepath`,
                             vtfile.relative_path as `video_basethumb`,
                             p.content_id as `paid`,
+                            l.user_id as `l`,
                             SUM(IF(l.user_id IS NOT NULL,1,0)) as `likes`,
                             ((SUM(vr.rating) * 100) / SUM(5)) as `rating`
                             from contents c
