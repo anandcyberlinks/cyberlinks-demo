@@ -62,14 +62,18 @@ class Content extends Apis{
         switch($qString['k']){
             case 'title' :
                     $condition.= isset($qString['val']) && $qString['val'] != '' ? sprintf('AND c.title like "%%%s%%" ',$qString['val']) : '';
+                    $condition.= ' group by c.id ';
                 break;
             case 'category' :
                     $condition.= isset($qString['val']) && $qString['val'] != '' ? sprintf('AND cat.id = %d ',$qString['val']) : '';
+                    $condition.= ' group by c.id ';
                 break;
             case 'recent' :
+                    $condition.= ' group by c.id ';
                     $condition.= sprintf(' ORDER BY c.id DESC ');
                 break;
             case 'popular' :
+                    $condition.= ' group by c.id ';
                     $condition.= sprintf(' ORDER BY v.views DESC ');
                 break;
         }
@@ -104,7 +108,7 @@ class Content extends Apis{
                             left join likes l on l.content_id = c.id
                             left join video_thumbnails vt on vt.content_id = c.id
                             left join files vtfile on vtfile.id = vt.file_id
-                            where c.uid  = "%d" %s group by c.id limit %d,%d ',$this->app->id,$condition,$this->start,$this->limit);
+                            where c.uid  = "%d" %s limit %d,%d ',$this->app->id,$condition,$this->start,$this->limit);
         
         $dataset = $this->db->query($query)->result();
         foreach($dataset as $key=>$val){
