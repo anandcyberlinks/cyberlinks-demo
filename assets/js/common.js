@@ -1,5 +1,5 @@
 $(function () {
-     $("#eventDates").datepicker({
+    $("#eventDates").datepicker({
         dateFormat: 'dd/mm/yy',
         numberOfMonths: 1,
         onSelect: function (selected) {
@@ -13,37 +13,29 @@ $(function () {
             $("#datepickerstart").datepicker("option", "maxDate", $('#datepickerstart').val());
         }
     });
-    
-    
-    
-    
     $('#reservation').daterangepicker();
     //Date range picker with time picker
     $('#reservationtime').daterangepicker({timePicker: true, timePickerIncrement: 1, format: 'YYYY/MM/DD h:mm:00'});
     //Date range as a button
-    $('#daterange-btn').daterangepicker(
-            {
-                ranges: {
-                    'Today': [moment(), moment()],
-                    'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
-                    'Last 7 Days': [moment().subtract('days', 6), moment()],
-                    'Last 30 Days': [moment().subtract('days', 29), moment()],
-                    'This Month': [moment().startOf('month'), moment().endOf('month')],
-                    'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
-                },
-                startDate: moment().subtract('days', 29),
-                endDate: moment()
-            },
+    $('#daterange-btn').daterangepicker({
+        ranges: {
+            'Today': [moment(), moment()],
+            'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
+            'Last 7 Days': [moment().subtract('days', 6), moment()],
+            'Last 30 Days': [moment().subtract('days', 29), moment()],
+            'This Month': [moment().startOf('month'), moment().endOf('month')],
+            'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+        },
+        startDate: moment().subtract('days', 29),
+        endDate: moment()
+    },
     function (start, end) {
         $('#reportrange span').html(start.format('MMMM D, YYYY') + '-' + end.format('MMMM D, YYYY'));
     });
-
     $('#status').html('');
     $("#time_div").hide();
     $("#time_div").hide();
     $('#durationDiv').hide();
-
-
     $(document).on('click', '.ftpdir', function () {
         var path = $(this).attr('href');
         $('#ftpPath').val(path);
@@ -52,8 +44,6 @@ $(function () {
     });
 
     /*	Start Date and Time in Scheduling */
-
-
     $(".timepicker").timepicker({
         minuteStep: 1,
         showInputs: false,
@@ -69,28 +59,19 @@ $(function () {
     $('#id_radio2').click(function () {
         $('#div2').show();
     });
-    /*	End Radio Hide/Show */
-
     /* tagit function for keywork in video basic */
-
     $("#myTags").tagit();
-
-    /* function to crop thumbnail image(ry) */
-
     $('#cropbox').Jcrop({
         aspectRatio: 1,
         onSelect: updateCoords
     });
-
     /* function to upload thumbnail image using ajax(ry) */
-
     $('a.thumb_upload').click(function (e) {
         $('#status').html('');
         var content_id = $(this).attr('content_id');
         var str = '<input type="hidden" name="content_id" id="content_id" value="' + content_id + '" \/>';
         $('#myModal1 #prevElement1').html(str);
     });
-
     $('#thumbImgUpload').click(function (e) {
         var thumb_image = $('#thumb_img').val();
         if (thumb_image == '')
@@ -99,15 +80,11 @@ $(function () {
             return false;
         }
     });
-
-
     $('a.thumb_crop').click(function (e) {
         var content_id = $(this).attr('content_id');
         var str = '<input type="hidden" name="content_id" id="content_id" value="' + content_id + '" \/>';
         $('#myModal2 #prevElement2').html(str);
     });
-
-
     $('a.thumb_grab').click(function (e) {
         var file_path = $(this).attr('data-img-url');
         var str = '<script type="text/javascript">';
@@ -154,14 +131,10 @@ $(function () {
 
         });
     });
-
-
     /* other functions */
 
     $('#daterange').daterangepicker({timePicker: true, timePickerIncrement: 30, format: 'MM/DD/YYYY h:mm A'});
-
     $("#datepickerend").datepicker("option", "showAnim", 'drop');
-
     $('a.prev_video').click(function (e) {
         var file_path = $(this).attr('data-img-url')
         var str = '<script type="text/javascript">';
@@ -174,7 +147,6 @@ $(function () {
         str += '<\/script>';
         $('#myModal #prevElement').html(str);
     });
-
     $('a.jsplayerVideo').click(function (e) {
         var file_path = $(this).attr('data-img-url')
         var str = '<script type="text/javascript">';
@@ -187,7 +159,6 @@ $(function () {
         str += '<\/script>';
         $('#playerModel #jsplayerV').html(str);
     });
-
     $('.manaegvideo').on('click', function () {
         var url = $(this).attr('link');
         $.ajax({
@@ -201,9 +172,7 @@ $(function () {
                 });
             }
         });
-
     });
-
     $('.price').on('click', function () {
         var url = $(this).attr('link');
         bootbox.dialog({message: 'wait...', title: "Price"});
@@ -217,11 +186,8 @@ $(function () {
         });
     });
 });
-
 /*  function to crop thumbnail image(ry) */
-
-function updateCoords(c)
-{
+function updateCoords(c) {
     var orig_width = $('#orig_width').val();  // original width of image
     var orig_height = $('#orig_height').val(); // original height of image
     var width_ratio = (orig_width / 560).toFixed(2);  // ratio with displayed image with width
@@ -238,32 +204,24 @@ function updateCoords(c)
     $('#y').val(mod_y);
     $('#w').val(mod_w);
     $('#h').val(mod_h);
-
 }
 ;
 
-function checkCoords()
-{
+function checkCoords() {
     if (parseInt($('#w').val()))
         return true;
     alert('Please select a crop region then press submit.');
     return false;
 }
 ;
-
-
-function secondsToTime(secs)
-{
+function secondsToTime(secs) {
     secs = Math.floor(secs);
     var hours = Math.floor(secs / (60 * 60));
-
     var divisor_for_minutes = secs % (60 * 60);
     var minutes = Math.floor(divisor_for_minutes / 60);
-
     var divisor_for_seconds = divisor_for_minutes % 60;
     var seconds = Math.ceil(divisor_for_seconds);
-    if (seconds)
-    {
+    if (seconds) {
         $("#thumbgrabHours").val(hours);
         $("#thumbgrabMinutes").val(minutes);
         $("#thumbgrabSeconds").val(seconds);
@@ -272,12 +230,7 @@ function secondsToTime(secs)
 
 
 /* other functions */
-
-function form_submit(id, fla, con)
-{
-    //alert(id+fla+con);
-
-    //var conid = document.getElementById("useid").value ;
+function form_submit(id, fla, con) {
     var str = 'vid=' + id + '&fid=' + fla + '&conid=' + con;
     //alert(str);
     $.ajax({
@@ -295,31 +248,25 @@ function form_submit(id, fla, con)
                 jQuery("#statu_change_" + fla).html(hts);
                 $("#btn_" + fla).attr("disabled", "disabled");
             }
-            if (data == 0)
-            {
+            if (data == 0) {
                 var ht = '<div class="alert alert-success alert-dismissable"><i class="fa fa-check"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>The video transcode in flavor request already sent successfully.</div>'
                 jQuery("#msg_div").html(ht);
             }
-
         }
     });
 }
-function date_check()
-{
+function date_check() {
     var startDate = $('#datepickerstart').val();
     var endDate = $('#datepickerend').val();
-    if (startDate != "" && endDate != "")
-    {
+    if (startDate != "" && endDate != "") {
         var regExp = /(\d{1,2})\/(\d{1,2})\/(\d{2,4})/;
         if (parseInt(endDate.replace(regExp, "$3$2$1")) < parseInt(startDate.replace(regExp, "$3$2$1"))) {
-
             bootbox.alert("End date should be greater then to start date");
             return false;
         }
     }
     return true;
 }
-
 $('td a.prev_video').click(function (e) {
     var file_path = $(this).attr('data-img-url')
     var str = '<script type="text/javascript">';
@@ -339,118 +286,83 @@ function stopvideo(id) {
 
 function delete_video(id, url, curl)
 {
-    bootbox.confirm("Are you sure you want to Delete video", function (confirmed)
-    {
-        if (confirmed)
-        {
+    bootbox.confirm("Are you sure you want to Delete video", function (confirmed) {
+        if (confirmed) {
             location.href = url + '?id=' + id + '&curl=' + curl;
         }
     })
 }
 
-function delete_event(id, url, curl)
-{
-    bootbox.confirm("Are you sure you want to Delete ", function (confirmed)
-    {
-        if (confirmed)
-        {
+function delete_event(id, url, curl) {
+    bootbox.confirm("Are you sure you want to Delete ", function (confirmed) {
+        if (confirmed) {
             location.href = url + '?id=' + id + '&curl=' + curl;
         }
     })
 }
 
-function delete_url(url)
-{
-    bootbox.confirm("Are you sure you want to Delete", function (confirmed)
-    {
-        if (confirmed)
-        {
+function delete_url(url) {
+    bootbox.confirm("Are you sure you want to Delete", function (confirmed) {
+        if (confirmed) {
             location.href = url;
         }
     })
 }
 
-function delete_field(id, url, curl)
-{
-    bootbox.confirm("Are you sure you want to Delete Field", function (confirmed)
-    {
-        if (confirmed)
-        {
+function delete_field(id, url, curl) {
+    bootbox.confirm("Are you sure you want to Delete Field", function (confirmed) {
+        if (confirmed) {
             location.href = url + '?id=' + id + '&curl=' + curl;
         }
     })
 }
-function delete_pack(id)
-{
-    bootbox.confirm("Are you sure you want to Package", function (confirmed)
-    {
-        if (confirmed)
-        {
+function delete_pack(id) {
+    bootbox.confirm("Are you sure you want to Package", function (confirmed) {
+        if (confirmed) {
             location.href = 'package/deletePackage/' + id;
         }
     })
 }
-function delete_form(id, url, curl)
-{
-    bootbox.confirm("Are you sure you want to Delete Form", function (confirmed)
-    {
-        if (confirmed)
-        {
+function delete_form(id, url, curl) {
+    bootbox.confirm("Are you sure you want to Delete Form", function (confirmed) {
+        if (confirmed) {
             location.href = url + '?id=' + id + '&curl=' + curl;
         }
     })
 }
-
-
-
-function delete_comment(id)
-{
-    bootbox.confirm("Are you sure you want to Delete video", function (confirmed)
-    {
-        if (confirmed)
-        {
+function delete_comment(id) {
+    bootbox.confirm("Are you sure you want to Delete video", function (confirmed) {
+        if (confirmed) {
             location.href = url + '?id=' + id;
         }
     })
 }
-function delete_page(id, url)
-{
-    bootbox.confirm("Are you sure you want to Delete Page", function (confirmed)
-    {
-        if (confirmed)
-        {
+function delete_page(id, url) {
+    bootbox.confirm("Are you sure you want to Delete Page", function (confirmed) {
+        if (confirmed) {
             location.href = url + '?id=' + id;
         }
     })
 }
-function delete_role(id)
-{
-    bootbox.confirm("Are you sure you want to Delete video", function (confirmed)
-    {
-        if (confirmed)
-        {
+function delete_role(id) {
+    bootbox.confirm("Are you sure you want to Delete video", function (confirmed) {
+        if (confirmed) {
             location.href = 'role/deleterole?id=' + id;
         }
     })
 }
 
-function delete_video1(id)
-{
-    bootbox.confirm("Are you sure you want to Delete video", function (confirmed)
-    {
-        if (confirmed)
-        {
+function delete_video1(id) {
+    bootbox.confirm("Are you sure you want to Delete video", function (confirmed) {
+        if (confirmed) {
             location.href = '/mobiletv/video/deletevideo?id=' + id;
         }
     })
 }
 
-function delete_user(id)
-{
-    bootbox.confirm("Are you sure you want to Delete", function (confirmed)
-    {
-        if (confirmed)
-        {
+function delete_user(id) {
+    bootbox.confirm("Are you sure you want to Delete", function (confirmed) {
+        if (confirmed) {
             location.href = 'user/DeleteUser?id=' + id;
         }
     })
@@ -489,8 +401,7 @@ var colLength = 5;
 $('#csv_file').on('change', prepareUpload);
 // Grab the files and set them to our variable
 
-function prepareUpload(event)
-{
+function prepareUpload(event) {
     $('#status_csv_file').html('');
     $('#csvFileList').html('');
     files = event.target.files;
@@ -645,8 +556,7 @@ function validatesrc_url() {
 
 /* functions to check png image in video setting section starts */
 
-function upload_logo_video()
-{
+function upload_logo_video() {
     var LogoLinkUrl = $('#playerLogoLink').val();
     if (LogoLinkUrl != "")
     {
@@ -668,8 +578,7 @@ function upload_logo_video()
 
 /* functions to upload file using ftp section starts */
 
-function connect()
-{
+function connect() {
     var ftpserver = $("#ftpserver").val();
     var username = $("#username").val();
     var password = $("#password").val();
@@ -725,8 +634,7 @@ function connect()
     return false;
 }
 
-function check()
-{
+function check() {
     var form = $(this);
     $('#displayfileftp').html('<img src="' + baseurl + 'assets/img/loader.gif"> loading...');
     var ftpserver = $("#ftpserver").val();
@@ -755,8 +663,7 @@ function check()
     return false;
 }
 
-function Download()
-{
+function Download() {
     $('#displayfileftp').html('<img src="' + baseurl + 'assets/img/loader.gif"> loading...');
     //myFunction(); // call function for Size count
     var ftpPath = $("#ftpPath").val();
@@ -806,8 +713,7 @@ function Download()
 /* functions used for comment section starts */
 
 //Active/Inactive Status
-function comment_status(ID, PAGE, status)
-{
+function comment_status(ID, PAGE, status) {
     var str = 'id=' + ID + '&status=' + status;
     jQuery.ajax({
         type: "POST",
@@ -839,8 +745,7 @@ function comment_status(ID, PAGE, status)
 }
 
 //Aprroved/Bloack
-function comment_approved_status(ID, PAGE, approve)
-{
+function comment_approved_status(ID, PAGE, approve) {
     var str = 'id=' + ID + '&approved=' + approve;
     jQuery.ajax({
         type: "POST",
