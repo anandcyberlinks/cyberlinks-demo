@@ -82,13 +82,14 @@ class Package_model extends CI_Model{
 
     }
     
-    function get_dyration($uid, $pid){
+    function get_dyration($uid, $pid, $type){
         $this->db->select('duration.*, price.price');
         $this->db->from('duration');
         $this->db->join('price', 'duration.id=price.duration_id', 'left');
         $this->db->where('duration.uid', $uid);
         
         $this->db->where('price.content_id', $pid);
+        $this->db->where('price.content_type', $type);
         $this->db->where('duration.status', '1');
         $query = $this->db->get();
         if(count($query->result())!='0'){
@@ -97,7 +98,6 @@ class Package_model extends CI_Model{
            $this->db->where('duration.status', '1');
            $query = $this->db->get('duration');
            return $query->result();
-           
         }
     }
     function checkprice($content_id, $content_type, $duration_id){
@@ -118,6 +118,12 @@ class Package_model extends CI_Model{
                 $this->db->where('id', $data['content_id']);
                 $this->db->update('contents');
         }
+        if($data['content_type']=='event'){
+                $this->db->set('type', $data['package_type']);
+                $this->db->where('id', $data['content_id']);
+                $this->db->update('events');
+        }
+        
         if($data['content_type']=='package'){
             $this->db->set('package_type', $data['package_type']);
             $this->db->where('id', $data['content_id']);
@@ -152,6 +158,11 @@ class Package_model extends CI_Model{
         if($type == 'package'){
             $this->db->select('package_type as type');
             $this->db->from('package');
+            $this->db->where('id', $id);
+        }
+        if($type == 'event'){
+            $this->db->select('type as type');
+            $this->db->from('events');
             $this->db->where('id', $id);
         }
         $query = $this->db->get();

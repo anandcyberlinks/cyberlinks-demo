@@ -30,7 +30,17 @@ $(document).ready(function(){
       'name':{
         'required':true,
         'minlength':4,
-        'maxlength':8
+        'maxlength':30
+      },
+      'description':{
+        'required':true,
+        'minlength':4,
+      },
+      
+      'start_date':{
+        'required':true,
+        'minlength':41,
+        'maxlength':41
       },
       'password':{
         'required':true,
@@ -88,10 +98,9 @@ $(document).ready(function(){
       'remote':'Email already taken'
     },
     
-      'email':{
-      'required':'Email should not be blank',
-      'email':'Please enter valid email Id',
-      'remote':'Email already taken'
+      'start_date':{
+      minlength: "Please enter valid date from datepicker.",
+      maxlength: "Please enter valid date from datepicker.",
     },
     'form_name':{
       'remote':'Form Name already taken'
