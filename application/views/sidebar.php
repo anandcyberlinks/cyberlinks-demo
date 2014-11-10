@@ -98,12 +98,12 @@
                     <i class="fa fa-fw fa-list-alt"></i> <span><?php echo $welcome->loadPo('API'); ?></span>
                 </a>
             </li>
-            <?php /* ?>
+           
               <li class="<?=($this->uri->segment(1)=='comments')?'active':''?>">
               <a href="<?php echo base_url() ?>comments">
               <i class="glyphicon glyphicon-comment"></i> <span><?php echo $welcome->loadPo('Comment Section'); ?></span>
               </a>
-              </li>  <?php */ ?>
+              </li>
         </ul>
     </section>
 </aside>
