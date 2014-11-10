@@ -25,7 +25,7 @@ class Subscription_model extends CI_Model{
     {
 	$this->db->select('o.id');
 	$this->db->from('price p');
-	$this->db->join('order_details od','od.subscription_id=p.duration_id','inner');
+	$this->db->join('order_details od','od.subscription_id=p.id','inner');
 	$this->db->join('order o','od.order_id=o.id','inner');
 	$this->db->where('o.user_id',$data['user_id']);
 	$this->db->where('p.content_id',$data['content_id']);
