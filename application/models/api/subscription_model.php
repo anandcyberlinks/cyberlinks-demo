@@ -15,12 +15,30 @@ class Subscription_model extends CI_Model{
         $this->db->from('duration d');
         $this->db->join('price p','d.id=p.duration_id','inner');       
         $this->db->where('d.uid',$this->owner_id);
-        $this->db->where('p.content_id',$data['id']);        
+        $this->db->where('p.content_id',$data['content_id']);        
         $query = $this->db->get();
-       //echo $this->db->last_query();
+      // echo $this->db->last_query();
        return $query->result();
     }
     
+    function validate_subscription($data)
+    {
+	$this->db->select('o.id');
+	$this->db->from('price p');
+	$this->db->join('order_details od','od.subscription_id=p.duration_id','inner');
+	$this->db->join('order o','od.order_id=o.id','inner');
+	$this->db->where('o.user_id',$data['user_id']);
+	$this->db->where('p.content_id',$data['content_id']);
+	$this->db->where('CURDATE() between od.start_date AND od.end_date');
+	$this->db->where('o.status','completed');
+	$query=$this->db->get();
+	//echo $this->db->last_query();	
+	$result = $query->row();
+        if($result)
+            return $result->id;
+        else
+            return 0;
+    }
      
     function getSubsIdArr($invoice)
     {
@@ -113,7 +131,7 @@ class Subscription_model extends CI_Model{
         $this->db->delete('order_details');
         
         $this->db->delete('order');
-    }
+    }    
 }
 
 

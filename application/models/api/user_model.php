@@ -122,9 +122,9 @@ class User_model extends CI_Model {
        if($token == ''){
            $token='';
        }
-        $this->db->select('t.owner_id as id');
+        $this->db->select('u.owner_id as id');
 	$this->db->from('api_token t');
-	$this->db->join('users u','t.owner_id=u.id','inner');
+	$this->db->join('customers u','t.user_id=u.id','inner');
         $this->db->where('t.token',$token);
         //$this->db->where('status',0);
         //$this->db->where('DATE_ADD(hit_time, INTERVAL 15 MINUTE) >', 'NOW()',FALSE);
@@ -141,7 +141,7 @@ class User_model extends CI_Model {
    {
         $this->db->select('a.id,a.first_name,a.last_name,a.gender,a.email,a.created,b.token,a.image');
 	$this->db->from('customers a');
-        $this->db->join('api_token b','a.id = b.owner_id','left');
+        $this->db->join('api_token b','a.id = b.user_id','left');
         $this->db->where('a.id',$id);
         $query = $this->db->get();    
        // echo '<br>'.$this->db->last_query();die;
@@ -230,7 +230,7 @@ class User_model extends CI_Model {
   }
   
   function delete_api($id){
-        $this->db->where('owner_id', $id);
+        $this->db->where('user_id', $id);
         $this->db->delete('api_token'); 
   }
 function delete_user($id){

@@ -48,6 +48,17 @@ class Subscription extends REST_Controller
         }
    }
    
+   function validate_get()
+   {
+      $data = $this->get();
+      $id = $this->subscription_model->validate_subscription($data);
+      if($id > 0){         
+         $this->response(array('code'=>1), 200); // 200 being the HTTP response code
+      }else{
+         $this->response(array('code'=>0,'error' => 'Please subscribe to play the video'), 404);
+      }
+   }
+   
    function checkout_post()
    {
      $post = $this->post();     
