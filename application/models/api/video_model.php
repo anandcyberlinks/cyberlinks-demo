@@ -118,7 +118,9 @@ class Video_model extends CI_Model {
         }else{
             $this->db->select('count(a.id) as total');
         }
-        
+        if($device !=''){
+	 $this->db->where('g.flavor_name',$device);
+	}
 	$this->db->from('contents a');
         $this->db->join('videos b', 'a.id = b.content_id', 'left');        
         $this->db->join('files c1', 'b.file_id = c1.id', 'left');
@@ -131,13 +133,12 @@ class Video_model extends CI_Model {
         $this->db->join('video_thumbnails h','h.content_id=a.id AND h.default_thumbnail=1','left');
         $this->db->join('files c3', 'h.file_id = c3.id', 'left');
         $this->db->where('a.status','1');
-        $this->db->where_in('a.category',$id);
-        $this->db->where('g.flavor_name',$device);
+        $this->db->where_in('a.category',$id);        
 	$this->db->where('a.uid',$this->owner_id);
         $this->db->order_by('a.id desc');
         $this->db->group_by('a.id');
         $query = $this->db->get();    
-        echo '<pre>'.$this->db->last_query();die;
+        //echo '<pre>'.$this->db->last_query();die;
 	return $query->result();
    }
    
