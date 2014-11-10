@@ -19,7 +19,7 @@ class Content extends Apis{
                             v.duration as `duration`,
                             cfile.relative_path as `video_basepath`,
                             vtfile.relative_path as `video_basethumb`,
-                            p.content_id as `paid`,
+                            p.content_id as `price`,
                             SUM(l.like) as `likes`,
                             ((SUM(vr.rating) * 100) / SUM(5)) as `rating`
                             from contents c
@@ -36,7 +36,7 @@ class Content extends Apis{
         
         $dataset = $this->db->query($query)->result();
         foreach($dataset as $key=>$val){
-            $dataset[$key]->paid = $val->paid != '' ? 'Paid' : 'Free';
+            $dataset[$key]->price = $val->price != '' ? 'Paid' : 'Free';
             if(file_exists($val->video_basethumb)){
                 $base_url = strpos('http://',$val->video_basepath) > 0 ? '' : base_url();
                 $dataset[$key]->video_basepath = $base_url.$val->video_basepath;
@@ -96,8 +96,7 @@ class Content extends Apis{
                             v.duration as `duration`,
                             cfile.relative_path as `video_basepath`,
                             vtfile.relative_path as `video_basethumb`,
-                            p.content_id as `paid`,
-                            l.user_id as `l`,
+                            p.content_id as `price`,
                             SUM(l.like) as `likes`,
                             ((SUM(vr.rating) * 100) / SUM(5)) as `rating`
                             from contents c
@@ -113,7 +112,7 @@ class Content extends Apis{
         
         $dataset = $this->db->query($query)->result();
         foreach($dataset as $key=>$val){
-            $dataset[$key]->paid = $val->paid != '' ? 'Paid' : 'Free';
+            $dataset[$key]->price = $val->price != '' ? 'Paid' : 'Free';
             if(file_exists($val->video_basethumb)){
                 $base_url = strpos('http://',$val->video_basepath) > 0 ? '' : base_url();
                 $dataset[$key]->video_basepath = $base_url.$val->video_basepath;
@@ -131,5 +130,11 @@ class Content extends Apis{
         
         $response = array('tr'=>$dataset_count,'cp'=>$this->start + 1,'limit'=>$this->limit,'result'=>$dataset);
         $this->response($response);
+    }
+    
+    function like_post(){
+        $qString = $this->get();
+        echo '<pre>';print_r($qString);echo '</pre>';
+        echo '<pre>';print_r($this->app);echo '</pre>';
     }
 }

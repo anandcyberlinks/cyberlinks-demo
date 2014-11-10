@@ -14,6 +14,7 @@ require APPPATH.'/libraries/REST_Controller.php';
 class Apis extends REST_Controller{
     
     public $app = '';
+    public $user = '';
     public $start = 0;
     public $limit = 10;
     public $order_by = null;
@@ -27,15 +28,24 @@ class Apis extends REST_Controller{
         $this->load->helper('url');
         
         $qString = $this->get();
+        $this->start = isset($qString['st']) && $qString['st'] > 0 ? $qString['st'] : 0;
+        $this->limit = isset($qString['lt']) && $qString['lt'] > 0 ? $qString['lt'] : 10;
+        $this->order = isset($qString['od']) && $qString['od'] != '' ? $qString['od'] : 'ASC';
+        $this->order_by = isset($qString['ob']) && $qString['ob'] != '' ? $qString['ob'] : null;
+        
         if(isset($qString['at']) && $qString['at'] != ''){
             $flag = $this->validrequest($qString['at']);
             if($flag){
-                $this->start = isset($qString['st']) && $qString['st'] > 0 ? $qString['st'] : 0;
-                $this->limit = isset($qString['lt']) && $qString['lt'] > 0 ? $qString['lt'] : 10;
-                $this->order = isset($qString['od']) && $qString['od'] != '' ? $qString['od'] : 'ASC';
-                $this->order_by = isset($qString['ob']) && $qString['ob'] != '' ? $qString['ob'] : null;
+                
             }else{
-                $this->response(array('error'=>'Invalid Token'));
+                $this->response(array('error'=>'Invalid App Token'));
+            }
+        }elseif(isset($qString['ut']) && $qString['ut'] != ''){
+            $flag = $this->validrequest($qString['ut'],'user');
+            if($flag){
+                echo 'valid user';
+            }else{
+                $this->response(array('error'=>'Invalid User Token'));
             }
         }else{
             if($this->uri->segment(2) == 'users' && $this->uri->segment(3) == 'applogin'){
@@ -46,16 +56,61 @@ class Apis extends REST_Controller{
         }
     }
     
-    function validrequest($token){
-        $this->db->select('*');
-        $this->db->where('token',$token);
-        $resultset = $this->db->get('users')->result();
-        if(isset($resultset['0']->id) && $resultset['0']->id > 0){
-            $this->app = $resultset[0];
-            return true;
-        }else{
-            return false;
+    function validrequest($token,$type = 'app'){
+        $return  = false;
+        switch($type){
+            case 'app' :
+                $this->db->select('*');
+                $this->db->where('token',$token);
+                $resultset = $this->db->get('users')->result();
+                if(isset($resultset['0']->id) && $resultset['0']->id > 0){
+                    $this->app = $resultset[0];
+                    $return  = true;
+                }else{
+                    $return  = false;
+                }
+                break;
+            case 'user' :
+                
+                $query = sprintf('select
+                                 u.id as app_id,
+                                 u.username as app_username,
+                                 u.email as app_email,
+                                 u.owner_id as app_owner_id,
+                                 u.first_name as app_first_name,
+                                 u.last_name as app_last_name,
+                                 u.gender as app_gender,
+                                 u.contact_no as app_contact_no,
+                                 u.password as app_password,
+                                 u.token as app_token,
+                                 
+                                 c.id as user_id,
+                                 c.username as user_username,
+                                 c.email as user_email,
+                                 c.owner_id as user_owner_id,
+                                 c.first_name as user_first_name,
+                                 c.last_name as user_last_name,
+                                 c.gender as user_gender,
+                                 c.contact_no as user_contact_no,
+                                 c.password as user_password,
+                                 c.token as user_token
+                                 
+                                 from api_token at
+                                 left join customers c on c.id = at.user_id
+                                 left join users u on u.id = c.owner_id
+                                 where at.token = "%s" ',$token);
+                $dataset = $this->db->query($query)->result();
+                if(count($dataset) > 0){
+                    $data = reset($dataset);
+                    $this->app->id  = $data->app_id;
+                    $this->user = array('id'=>$data->user_id);
+                    $return  = true;
+                }else{
+                    $return  = false;
+                }
+                break;
         }
+        return $return;
     }
     
     function response($data){
