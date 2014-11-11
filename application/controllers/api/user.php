@@ -541,7 +541,7 @@ class User extends REST_Controller
         //-- delete api token --//
             $this->User_model->delete_api($id);
         //-- add api token ---//    
-            $data = array('token'=>$token,'owner_id'=>$id);
+            $data = array('token'=>$token,'user_id'=>$id);
             $this->User_model->add_apikey($data);
             //$this->User_model->update_user($token,$id);
         //-------------------//
