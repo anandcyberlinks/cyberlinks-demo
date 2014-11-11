@@ -36,7 +36,7 @@
             </li>
             <li class="<?= ($this->uri->segment(2) == 'live_streaming') ? 'active' : '' ?>">
                 <a href="<?php echo base_url() ?>video/live_streaming" >
-                    <i class="fa fa-fw fa-film"></i> <span><?php echo $welcome->loadPo('Live_Stream'); ?></span>
+                    <i class="fa fa-fw fa-film"></i> <span><?php echo $welcome->loadPo('Live Stream'); ?></span>
                 </a>
             </li>
             <li class="<?= ($this->uri->segment(1) == 'event') ? 'active' : '' ?>">
@@ -66,27 +66,26 @@
             </li>
             <li class="<?= ($this->uri->segment(1) == 'pages') ? 'active' : '' ?>">
                 <a href="<?php echo base_url() ?>pages">
-                    <i class="fa fa-file-text-o"></i> <span><?php echo $welcome->loadPo('Static Pages'); ?></span>
+                    <i class="fa fa-file-text-o"></i> <span><?php echo $welcome->loadPo('Pages'); ?></span>
                 </a>
             </li>
             <?php
             $s = $this->session->all_userdata();
-            if ($s[0]->role == 'Superadmin' || $s[0]->role == 'Admin') {
+            if ($s[0]->role == 'Admin') {
                 ?>
+                
+                <li class="treeview <?= (($this->uri->segment(1) == 'user') || ($this->uri->segment(1) == 'role')) ? 'active' : '' ?>">
+                <a href="#">
+                    <i class="fa fa-users"></i>
+                    <span><?php echo $welcome->loadPo('User'); ?></span>
+                    <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="<?= ($this->uri->segment(1) === 'user') ? 'active' : '' ?>"><a href="<?php echo base_url() ?>user"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('User List'); ?></a></li>
+                    <li class="<?= ($this->uri->segment(1) === 'role') ? 'active' : '' ?>"><a href="<?php echo base_url() ?>role"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('User Role'); ?></a></li>
 
-                <li class="<?= ($this->uri->segment(1) == 'user') ? 'active' : '' ?>">
-                    <a href="<?php echo base_url() ?>user">
-                        <i class="fa fa-users"></i> <span><?php echo $welcome->loadPo('Users'); ?></span>
-                    </a>
-                </li>
-            <?php } ?>
-            <?php if ($s[0]->role == 'Admin') {
-                ?>
-                <li class="<?= ($this->uri->segment(1) == 'role') ? 'active' : '' ?>">
-                    <a href="<?php echo base_url() ?>role">
-                        <i class="fa fa-fw fa-minus-circle"></i> <span><?php echo $welcome->loadPo('User Role'); ?></span>
-                    </a>
-                </li>
+                </ul>
+            </li>
                 <li class="<?= ($this->uri->segment(1) == 'device') ? 'active' : '' ?>">
                     <a href="<?php echo base_url() ?>device">
                         <i class="fa fa-fw fa-mobile"></i> <span><?php echo $welcome->loadPo('Device'); ?></span>
@@ -98,10 +97,9 @@
                     <i class="fa fa-fw fa-list-alt"></i> <span><?php echo $welcome->loadPo('API'); ?></span>
                 </a>
             </li>
-           
               <li class="<?=($this->uri->segment(1)=='comments')?'active':''?>">
-              <a href="<?php echo base_url() ?>comments">
-              <i class="glyphicon glyphicon-comment"></i> <span><?php echo $welcome->loadPo('Comment Section'); ?></span>
+                <a href="<?php echo base_url() ?>comments">
+              <i class="glyphicon glyphicon-comment"></i> <span><?php echo $welcome->loadPo('Comments'); ?></span>
               </a>
               </li>
         </ul>
