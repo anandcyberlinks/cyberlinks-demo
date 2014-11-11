@@ -147,7 +147,7 @@ class Subscription extends REST_Controller
       $result =  $this->subscription_model->saveOrder($post);
       $this->subscription_model->saveOrderDetails($post); //-- update order detail start and end time
       if($result)
-         $this->response(array('output'=>1), 200); // 200 being the HTTP response code
+         $this->response(array('output'=>1,'result'=>$result), 200); // 200 being the HTTP response code
       else
          $this->response(array('output'=>0,'error'=>'Checkout failed.'), 404);
    }
