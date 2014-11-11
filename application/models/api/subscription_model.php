@@ -11,7 +11,7 @@ class Subscription_model extends CI_Model{
     
     function getlist($data)
     {
-        $this->db->select('c.title,d.name as subscription_name,d.days,p.duration_id as subscription_id,p.content_id,p.content_type as type,p.price as amount');
+        $this->db->select('c.title,d.name as subscription_name,d.days,p.id as subscription_id,p.content_id,p.content_type as type,p.price as amount');
         $this->db->from('duration d');
         $this->db->join('price p','d.id=p.duration_id','INNER');
 	$this->db->join('contents c','p.content_id=c.id','INNER');
