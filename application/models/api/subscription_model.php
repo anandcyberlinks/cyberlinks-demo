@@ -11,13 +11,16 @@ class Subscription_model extends CI_Model{
     
     function getlist($data)
     {
-        $this->db->select('d.name,d.days,p.duration_id as subscription_id,p.content_id,p.content_type as type,p.price');
+        $this->db->select('c.title,d.name as subscription_name,d.days,p.duration_id as subscription_id,p.content_id,p.content_type as type,p.price as amount');
         $this->db->from('duration d');
-        $this->db->join('price p','d.id=p.duration_id','inner');       
+        $this->db->join('price p','d.id=p.duration_id','INNER');
+	$this->db->join('contents c','p.content_id=c.id','INNER');
+	$this->db->join('video_thumbnails vt','vt.content_id=p.content_id' ,'LEFT');
+	$this->db->join('files f','vt.file_id=f.id and vt.default_thumbnail=1' ,'LEFT');
         $this->db->where('d.uid',$this->owner_id);
         $this->db->where('p.content_id',$data['content_id']);        
         $query = $this->db->get();
-      // echo $this->db->last_query();
+       //echo $this->db->last_query();
        return $query->result();
     }
     
@@ -60,7 +63,7 @@ class Subscription_model extends CI_Model{
      
      function susbcription_packages($package_id)
      {
-	 $this->db->select('d.name,d.days,p.duration_id as subscription_id,p.content_id,p.content_type as type,p.price');
+	 $this->db->select('d.name as subscription_name,d.days,p.duration_id as subscription_id,p.content_id,p.content_type as type,p.price as amount');
         $this->db->from('duration d');
         $this->db->join('price p','d.id=p.duration_id','inner');
 	$this->db->join('package pk','p.content_id=pk.id' ,'inner');
