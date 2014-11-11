@@ -126,13 +126,14 @@ class Checkout extends My_Controller
                                 $resp = curl_exec($curl);
                                
                                  // Close request to clear up some resources
-                                 curl_close($curl);
-				 $this->log('paypal_log', $resp);
-				    $subject = 'Instant Payment Notification - Recieved Payment';                                    
+                                 curl_close($curl);				 
+				    $subject = 'Instant Payment Notification - Recieved Payment';                                    				    
+				    $this->log('paypal_log', $resp.': '.$subject);
 				    $p->send_report($subject); // Send the notification about the transaction
 			    }else{
 				    $subject = 'Instant Payment Notification - Payment Fail';                                    
-				    $p->send_report($subject); // failed notification
+				    $this->log('paypal_log', $resp.': '.$subject);
+				    $p->send_report($subject); // failed notification				    
 			    }
 		    break;
 		}

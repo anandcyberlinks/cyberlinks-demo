@@ -69,7 +69,7 @@ class Subscription extends REST_Controller
         
         if($result)
         {         
-            $this->response(array('code'=>1,'result'=>$result), 200); // 200 being the HTTP response code
+            $this->response(array('code'=>1), 200); // 200 being the HTTP response code
         }else{
             $this->response(array('code'=>0,'error' => 'No record found'), 404);
         }

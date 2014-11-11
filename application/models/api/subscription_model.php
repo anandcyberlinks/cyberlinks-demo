@@ -82,7 +82,7 @@ class Subscription_model extends CI_Model{
 	$this->db->join('price','order_details.subscription_id = price.id', 'left');
 	$this->db->join('duration','price.duration_id = duration.id', 'left');
         $this->db->where('order.invoice', $invoice);
-        $query = $this->db->get();
+        $query = $this->db->get();	
         $result = $query->result();
 	return $result;
     }
