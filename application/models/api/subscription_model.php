@@ -40,6 +40,37 @@ class Subscription_model extends CI_Model{
             return 0;
     }
      
+     function available_packages($data)
+     {
+	$this->db->select('pk.name as package_name,pk.package_type,pkv.package_id,pkv.content_id,f.relative_path');
+	//$this->db->from('duration d');
+	//$this->db->join('price p','d.id=p.duration_id' ,'inner');
+	$this->db->from('package pk');
+	//$this->db->join('package pk','p.content_id=pk.id' ,'inner');
+	$this->db->join('package_video pkv','pkv.package_id=pk.id' ,'inner');
+	$this->db->join('video_thumbnails vt','vt.content_id=pkv.content_id' ,'LEFT');
+	$this->db->join('files f','vt.file_id=f.id and vt.default_thumbnail=1' ,'Left');
+	//$this->db->where('p.content_type','package');
+	$this->db->where('pk.uid',$this->owner_id);
+	$this->db->where('pkv.package_id IN (select package_id  as package_id from package_video where content_id='.$data['content_id'].' )',NULL,false);
+	$query = $this->db->get();
+	//echo $this->db->last_query();
+	return $query->result();	
+     }
+     
+     function susbcription_packages($package_id)
+     {
+	 $this->db->select('d.name,d.days,p.duration_id as subscription_id,p.content_id,p.content_type as type,p.price');
+        $this->db->from('duration d');
+        $this->db->join('price p','d.id=p.duration_id','inner');
+	$this->db->join('package pk','p.content_id=pk.id' ,'inner');
+        $this->db->where('d.uid',$this->owner_id);
+        $this->db->where('pk.id',$package_id);        
+        $query = $this->db->get();
+       //echo $this->db->last_query();
+       return $query->result();
+     }
+     
     function getSubsIdArr($invoice)
     {
 	$this->db->select('order_details.subscription_id as subscription_id, order_details.order_id as order_id, duration.days as validtime');

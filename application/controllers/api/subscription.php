@@ -39,7 +39,34 @@ class Subscription extends REST_Controller
    function list_get()
    {
          $data = $this->get();
-        $result =  $this->subscription_model->getlist($data);        
+        $video =  $this->subscription_model->getlist($data);
+        
+        //-- get available package --//
+        if($data['content_id'] !=''){
+            $package = $this->subscription_model->available_packages($data);            
+        }
+        
+        $result['video'] = $video;
+        foreach($package as $row)
+        {         
+         if($row->package_id != @$package_id){
+         $i=0;
+         //-- get pakcage durations --//
+            $subscription = $this->subscription_model->susbcription_packages($row->package_id);
+         //------------------------------------------//
+         $package_id = $row->package_id;
+         $result['package'][$row->package_name]['subscription'] = $subscription;
+         $result['package'][$row->package_name][$i]['content_id'] = $row->content_id;
+         $result['package'][$row->package_name][$i]['path'] = base_url().$row->relative_path;      
+         }else{
+            $result['package'][$row->package_name][$i]['content_id'] = $row->content_id;
+            $result['package'][$row->package_name][$i]['path'] = base_url().$row->relative_path;
+         }
+         $i++;
+        }
+        
+        //--------------------------//
+        
         if($result)
         {         
             $this->response(array('code'=>1,'result'=>$result), 200); // 200 being the HTTP response code
@@ -58,6 +85,7 @@ class Subscription extends REST_Controller
          $this->response(array('code'=>0,'error' => 'Please subscribe to play the video'), 404);
       }
    }
+     
    
    function checkout_post()
    {
