@@ -202,7 +202,7 @@ class Category_model extends CI_Model {
 	
 	function checkToken($uid){
 		$this->db->select('token');
-		$this->db->where('owner_id',$uid);
+		$this->db->where('user_id',$uid);
 		$this->db->from('api_token');  	
 		$query = $this->db->get();
 		$result = $query->result();
