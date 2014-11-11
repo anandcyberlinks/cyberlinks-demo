@@ -592,7 +592,7 @@ class Video_model extends CI_Model {
    function check_user($user_id){
       $this->db->where('id', $user_id);
       $query = $this->db->get('customers');
-      echo $this->db->last_query();
+      //echo $this->db->last_query();
       return count($query->result());
    }
    
