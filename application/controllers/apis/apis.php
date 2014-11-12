@@ -102,8 +102,8 @@ class Apis extends REST_Controller{
                 $dataset = $this->db->query($query)->result();
                 if(count($dataset) > 0){
                     $data = reset($dataset);
-                    $this->app->id  = $data->app_id;
-                    $this->user = array('id'=>$data->user_id);
+                    $this->app = (object) array('id'=>$data->app_id,'username'=>$data->app_username,'email'=>$data->app_email,'owner_id'=>$data->app_owner_id,'first_name'=>$data->app_first_name,'last_name'=>$data->app_last_name);
+                    $this->user = (object) array('id'=>$data->user_id,'username'=>$data->user_username,'email'=>$data->user_email,'owner_id'=>$data->user_owner_id,'first_name'=>$data->user_first_name,'last_name'=>$data->user_last_name);
                     $return  = true;
                 }else{
                     $return  = false;
