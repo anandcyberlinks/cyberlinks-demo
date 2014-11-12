@@ -22,7 +22,8 @@ class Content extends Apis{
                             p.content_id as `price`,
                             if(ufl.`like` > 0,ufl.`like`,0) as `likes`,
                             if(comments.comments <= 0,0,comments.comments) as `comments`,
-                            ((SUM(vr.rating) * 100) / SUM(5)) as `rating`
+                            ((SUM(vr.rating) * 100) / SUM(5)) as `rating`,
+                            c.created
                             from contents c
                             left join categories cat on cat.id = c.category
                             left join videos v on v.content_id = c.id
