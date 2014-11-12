@@ -14,14 +14,14 @@ class Content extends Apis{
                             c.uid as `creater_id`,
                             cat.id as `category_id`,
                             cat.category as `category_name`,
-                            if(v.views ? 0,v.views,0) as `views`,
+                            if(v.views > 0,v.views,0) as `views`,
                             c.feature_video as featured,
                             v.duration as `duration`,
                             cfile.relative_path as `video_basepath`,
                             vtfile.relative_path as `video_basethumb`,
                             p.content_id as `price`,
                             if(ufl.`like` > 0,ufl.`like`,0) as `likes`,
-                            if(comments.comments <= 0,0,comments.comments) as `comments`,
+                            if(comments.comments > 0,comments.comments,0) as `comments`,
                             ((SUM(vr.rating) * 100) / SUM(5)) as `rating`,
                             c.created
                             from contents c
