@@ -45,24 +45,44 @@ class Subscription extends REST_Controller
         if($data['content_id'] !=''){
             $package = $this->subscription_model->available_packages($data);            
         }
-        
+      $i=1;
+      $total=0;
+      
         $result['video'] = $video;
         foreach($package as $row)
         {
          if($row->package_id != @$package_id){
-         $i=0;
+         $j=0;
+        // echo '<pre>';print_r($info);
+       //echo '<pre>';  print_r($info);
          //-- get pakcage durations --//
             $subscription = $this->subscription_model->susbcription_packages($row->package_id);
          //------------------------------------------//
          $package_id = $row->package_id;
-         $result['package'][$row->package_name]['subscription'] = $subscription;
-         $result['package'][$row->package_name][$i]['content_id'] = $row->content_id;
-         $result['package'][$row->package_name][$i]['path'] = base_url().$row->relative_path;      
-         }else{
-            $result['package'][$row->package_name][$i]['content_id'] = $row->content_id;
-            $result['package'][$row->package_name][$i]['path'] = base_url().$row->relative_path;
-         }
+        if(@$info){
+         $result['package'][$i]['info'] = (object) $info;
          $i++;
+         $info = array();
+        }
+                
+        $info[$j]['content_id'] = $row->content_id;
+        $info[$j]['path'] = base_url().$row->relative_path;
+        $result['package'][$i]['title'] = $row->package_name;
+        $result['package'][$i]['subscription'] = $subscription;
+        
+        // $result['package'][$i]['content_id'] = $row->content_id;
+         //$result['package'][$i]['path'] = base_url().$row->relative_path;      
+         }else{
+           // $result['package'][$i]['content_id'] = $row->content_id;
+          //  $result['package'][$i]['path'] = base_url().$row->relative_path;
+          $info[$j]['content_id'] = $row->content_id;
+          $info[$j]['path'] = base_url().$row->relative_path;
+         }
+         $total++;
+         $j++; //echo '<pre>';print_r($info);
+         if(count($package) == $total){
+             $result['package'][$i]['info'] = (object) $info;
+         }
         }
         
         //--------------------------//
@@ -79,7 +99,7 @@ class Subscription extends REST_Controller
    {
       $data = $this->get();
       $id = $this->subscription_model->validate_subscription($data);
-      if($id > 0){         
+      if($id > 0){
          $this->response(array('code'=>1), 200); // 200 being the HTTP response code
       }else{
          $this->response(array('code'=>0,'error' => 'Please subscribe to play the video'), 404);

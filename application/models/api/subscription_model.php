@@ -32,7 +32,7 @@ class Subscription_model extends CI_Model{
 	$this->db->join('order o','od.order_id=o.id','inner');
 	$this->db->where('o.user_id',$data['user_id']);
 	$this->db->where('p.content_id',$data['content_id']);
-	$this->db->where('CURDATE() between od.start_date AND od.end_date');
+	$this->db->where('CURDATE() BETWEEN DATE_FORMAT(od.start_date,"%Y-%m-%d") AND DATE_FORMAT(od.end_date,"%Y-%m-%d")');
 	$this->db->where('o.status','completed');
 	$query=$this->db->get();
 	//echo $this->db->last_query();	
