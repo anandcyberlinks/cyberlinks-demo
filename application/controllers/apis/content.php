@@ -14,14 +14,14 @@ class Content extends Apis{
                             c.uid as `creater_id`,
                             cat.id as `category_id`,
                             cat.category as `category_name`,
-                            v.views as `views`,
+                            if(v.views ? 0,v.views,0) as `views`,
                             c.feature_video as featured,
                             v.duration as `duration`,
                             cfile.relative_path as `video_basepath`,
                             vtfile.relative_path as `video_basethumb`,
                             p.content_id as `price`,
-                            ufl.`like` as `likes`,
-                            comments.comments as `comments`,
+                            if(ufl.`like` > 0,ufl.`like`,0) as `likes`,
+                            if(comments.comments <= 0,0,comments.comments) as `comments`,
                             ((SUM(vr.rating) * 100) / SUM(5)) as `rating`
                             from contents c
                             left join categories cat on cat.id = c.category
