@@ -6,6 +6,7 @@ $cur = isset($_GET['p']) ? $_GET['p'] : 1;
 $ob = isset($_GET['ob']) ? $_GET['ob'] : 'latest';
 $data = searchVideo(($cur - 1) * $lt, $lt, $val, $ob);
 $recent = recentVideo(0, 4);
+
 //echo '<pre>';print_r($recent);echo '</pre>';
 $pagination =  range(0,$data->tr,$lt);
 ?>

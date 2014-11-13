@@ -1,7 +1,5 @@
 <?php require_once('header.php'); ?>
-
 <div class="container">
-
     <div class="row">
         <div class="col-sm-8">
             <div id="post-2369" class="post-2369 post type-post status-publish format-standard has-post-thumbnail hentry category-music tag-band tag-live tag-music-3 tag-perfomance">

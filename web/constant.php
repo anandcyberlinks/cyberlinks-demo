@@ -50,6 +50,16 @@ function recentVideo($st = 0,$lt = 10){
         return false;
     }
 }
+
+function viewedVideo($st = 0,$lt = 18){
+    $url = sprintf('%s/st/%d/lt/%d/k/popular',VIDEO_SEARCH,$st,$lt);
+    $result = getdata($url);
+    if (count($result) > 0) {
+        return $result;
+    } else {
+        return false;
+    }
+}
 function featuredList() {
     //echo FEATURED_LIST; exit;
     $result = getdata(FEATURED_LIST);
