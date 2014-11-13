@@ -22,6 +22,7 @@ class Subscription extends REST_Controller
    {
        parent::__construct();	
       $this->load->model('api/subscription_model');
+      $this->load->model('api/Video_model');
       $this->load->helper('url');  
         
        //-- validate token --//
@@ -71,7 +72,7 @@ class Subscription extends REST_Controller
       
       $result['video'] = $vid;
       
-      $i=1;
+      $i=0;
       $total=0;      
         
         //----- Package data ---//
@@ -86,14 +87,14 @@ class Subscription extends REST_Controller
          $package_id = $row->package_id;
          
         if(@$info){
-         $result['package'][$i]['info'] = (object) $info;
+         $result['package']['v'.$i]['info'] = (object) $info;
          $i++;
          $info = array();
         }
-         $info[$j]['title'] = $row->title;       
-        $info[$j]['content_id'] = $row->content_id;        
-        $result['package'][$i]['title'] = $row->package_name;
-        $result['package'][$i]['subscription'] = $subscription;
+         $info['i'.$j]['title'] = $row->title;       
+        $info['i'.$j]['content_id'] = $row->content_id;        
+        $result['package']['v'.$i]['title'] = $row->package_name;
+        $result['package']['v'.$i]['subscription'] = $subscription;
         
         //-- video thumbnail --//
         if($row->thumbnail_path !=''){
@@ -101,25 +102,25 @@ class Subscription extends REST_Controller
          $thumbArray['medium'] = base_url().THUMB_MEDIUM_PATH.$row->thumbnail_path;
          $thumbArray['large'] = base_url().THUMB_LARGE_PATH.$row->thumbnail_path;
         }
-         $info[$j]['image'] = (object) $thumbArray;         
+         $info['i'.$j]['image'] = (object) $thumbArray;         
          }else{
-            $info[$j]['content_id'] = $row->content_id; 
-          $info[$j]['title'] = $row->title;
+            $info['i'.$j]['content_id'] = $row->content_id; 
+          $info['i'.$j]['title'] = $row->title;
           //-- video thumbnail --//
           if($row->thumbnail_path !=''){
          $thumbArray['small'] = base_url().THUMB_SMALL_PATH.$row->thumbnail_path;
          $thumbArray['medium'] = base_url().THUMB_MEDIUM_PATH.$row->thumbnail_path;
          $thumbArray['large'] = base_url().THUMB_LARGE_PATH.$row->thumbnail_path;
           }
-         $info[$j]['image'] = (object) $thumbArray; 
+         $info['i'.$j]['image'] = (object) $thumbArray; 
          }
          $total++;
          $j++;
          if(count($package) == $total){
-             $result['package'][$i]['info'] = (object) $info;
+             $result['package']['v'.$i]['info'] = (object) $info;
          }
-        }
-        
+        }     
+       
         //--------------------------//
         //echo '<pre>';print_r($result);
         if($result)
@@ -133,9 +134,171 @@ class Subscription extends REST_Controller
    function mysusbscriptions_get()
    {
       $data = $this->get();
-      $this->subscription_model->get_my_susbscriptions($data);
+      $video = $this->subscription_model->get_video_susbscriptions($data);
+      array_walk ( $video, function (&$key) { 
+                //-- get total likes --//
+                $likes = $this->Video_model->like_count($key->content_id);                
+                //-- get rating --//
+                $rating =  $this->Video_model->getAverageRating($key->content_id);
+                //-- video duration --//
+                $duration = $this->time_from_seconds($key->duration);
+                $key->duration = $duration;
+                
+                //-- get pakcage durations --//
+                  $subscription['subscription_name'] = $key->subscription_name;
+                  $subscription['subscription_id'] = $key->subscription_id;
+                  $subscription['days'] = $key->days;
+                  $subscription['content_id'] = $key->content_id;
+                  $subscription['type'] = $key->type;
+                  $subscription['amount'] = $key->amount;
+               //------------------------------------------//
+               $key->subscription = (object)$subscription;
+               
+                if($key->thumbnail_path !=''){   
+               $thumbArray['small'] = base_url().THUMB_SMALL_PATH.$key->thumbnail_path;
+               $thumbArray['medium'] = base_url().THUMB_MEDIUM_PATH.$key->thumbnail_path;
+               $thumbArray['large'] = base_url().THUMB_LARGE_PATH.$key->thumbnail_path;
+                }else{
+                    $thumbArray['small']='';
+                    $thumbArray['medium']='';
+                    $thumbArray['large']='';
+                }
+           $key->url = base_url().'index.php/details?id='.$key->content_id.'&device='.$this->get('device');
+           $key->likes = $likes;
+           $key->rating = $rating;
+           $key->image = $thumbArray;          
+            } );
+      
+      //echo '<pre>';print_r($video);
+      
+      //-- My Package subscription --//         
+         $result_pkg = $this->subscription_model->get_package_susbscriptions($data);
+         
+         array_walk ( $result_pkg, function (&$key) { 
+                //-- get total likes --//
+                $likes = $this->Video_model->like_count($key->content_id);                
+                //-- get rating --//
+                $rating =  $this->Video_model->getAverageRating($key->content_id);
+                //-- video duration --//
+                $duration = $this->time_from_seconds($key->duration);
+                $key->duration = $duration;
+                
+                if($key->thumbnail_path !=''){   
+               $thumbArray['small'] = base_url().THUMB_SMALL_PATH.$key->thumbnail_path;
+               $thumbArray['medium'] = base_url().THUMB_MEDIUM_PATH.$key->thumbnail_path;
+               $thumbArray['large'] = base_url().THUMB_LARGE_PATH.$key->thumbnail_path;
+                }else{
+                    $thumbArray['small']='';
+                    $thumbArray['medium']='';
+                    $thumbArray['large']='';
+                }
+           $key->url = base_url().'index.php/details?id='.$key->content_id.'&device='.$this->get('device');
+           $key->likes = $likes;
+           $key->rating = $rating;
+           $key->image = $thumbArray;          
+            } );
+         $i=0;
+         $result = array();
+        //  echo '<pre>';print_r($result_pkg);
+         
+         $result = $this->package_array($result_pkg);
+         $result['video'] = $video;
+         //echo '<pre>';print_r($result);die;
+      //-----------------------------//
+      
+       if($result)
+        {         
+            $this->response(array('code'=>1,'result'=>$result), 200); // 200 being the HTTP response code
+        }else{
+            $this->response(array('code'=>0,'error' => 'No record found'), 404);
+        }
    }
-   
+  
+  function package_array($package)
+  {
+   $i=0;
+   $total=0; 
+    //----- Package data ---//
+        foreach($package as $row)
+        {
+         if($row->package_id != @$package_id){
+         $j=0;
+         $i++;
+         $thumbArray = array('small'=>'','medium'=>'','large'=>'');
+       
+         $package_id = $row->package_id;
+         
+        if(@$info){
+         $result['package']['v'.$i]['info'] = (object) $info;
+         $i++;
+         $info = array();
+        }
+         $info['i'.$j]['title'] = $row->title;       
+         $info['i'.$j]['content_id'] = $row->content_id;
+         $info['i'.$j]['description'] = $row->description;       
+         $info['i'.$j]['type'] = $row->type;
+         $info['i'.$j]['content_type'] = $row->content_type;       
+         $info['i'.$j]['video_path'] = $row->video_path;
+         $info['i'.$j]['category_id'] = $row->category_id;       
+         $info['i'.$j]['category_name'] = $row->category_name;
+         $info['i'.$j]['duration'] = $row->duration;       
+         $info['i'.$j]['total_view'] = $row->total_view;
+         $info['i'.$j]['thumbnail_path'] = $row->thumbnail_path;       
+         $info['i'.$j]['url'] = $row->url;
+         $info['i'.$j]['url'] = $row->url;       
+         $info['i'.$j]['rating'] = $row->rating;        
+        
+        //-- package detail --//
+        $result['package']['v'.$i]['title'] = $row->package_name;
+        $result['package']['v'.$i]['package_id'] = $row->package_id;
+        
+        //-- subscription array --//
+        $result['package']['v'.$i]['subscription']['subscription_name'] = $row->subscription_name;
+        $result['package']['v'.$i]['subscription']['days'] = $row->days;
+        $result['package']['v'.$i]['subscription']['subscription_id'] = $row->subscription_id;
+        $result['package']['v'.$i]['subscription']['type'] = $row->type;
+        $result['package']['v'.$i]['subscription']['amount'] = $row->amount;
+        
+        //-- video thumbnail --//
+        if($row->thumbnail_path !=''){
+         $thumbArray['small'] = base_url().THUMB_SMALL_PATH.$row->thumbnail_path;
+         $thumbArray['medium'] = base_url().THUMB_MEDIUM_PATH.$row->thumbnail_path;
+         $thumbArray['large'] = base_url().THUMB_LARGE_PATH.$row->thumbnail_path;
+        }
+         $info['i'.$j]['image'] = (object) $thumbArray;         
+         }else{
+            $info['i'.$j]['content_id'] = $row->content_id; 
+            $info['i'.$j]['title'] = $row->title;
+            $info['i'.$j]['description'] = $row->description;       
+            $info['i'.$j]['type'] = $row->type;
+            $info['i'.$j]['content_type'] = $row->content_type;       
+            $info['i'.$j]['video_path'] = $row->video_path;
+            $info['i'.$j]['category_id'] = $row->category_id;       
+            $info['i'.$j]['category_name'] = $row->category_name;
+            $info['i'.$j]['duration'] = $row->duration;       
+            $info['i'.$j]['total_view'] = $row->total_view;
+            $info['i'.$j]['thumbnail_path'] = $row->thumbnail_path;       
+            $info['i'.$j]['url'] = $row->url;
+            $info['i'.$j]['url'] = $row->url;       
+            $info['i'.$j]['rating'] = $row->rating;
+         
+          //-- video thumbnail --//
+          if($row->thumbnail_path !=''){
+         $thumbArray['small'] = base_url().THUMB_SMALL_PATH.$row->thumbnail_path;
+         $thumbArray['medium'] = base_url().THUMB_MEDIUM_PATH.$row->thumbnail_path;
+         $thumbArray['large'] = base_url().THUMB_LARGE_PATH.$row->thumbnail_path;
+          }
+         $info['i'.$j]['image'] = (object) $thumbArray; 
+         }
+         $total++;
+         $j++;
+         if(count($package) == $total){
+             $result['package']['v'.$i]['info'] = (object) $info;
+         }
+        }
+   return $result;
+  }
+  
    function validate_get()
    {
       $data = $this->get();

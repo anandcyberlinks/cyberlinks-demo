@@ -71,19 +71,60 @@ class Subscription_model extends CI_Model{
        return $query->result();
      }
      
-     function get_my_susbscriptions($data=array())
+     function get_video_susbscriptions($data=array())
      {
-	$this->db->select('c.id as content_id,c.title,c.description,c.content_type,,cat.category,cat,id as category_id,cd.name as subscription_name,d.days,p.id as subscription_id,p.content_id,p.content_type as type,p.price as amount');
-        $this->db->from('duration d');
-        $this->db->join('price p','d.id=p.duration_id','INNER');
+	if($data['device'] !=''){
+	 $this->db->where('fl.flavor_name',$data['device']);
+	}
+	
+	$this->db->select('c.title,c.description,c.type,c.content_type,fl.device_name,fv.id,fv.path as video_path,ct.id as category_id,ct.category as category_name,v.duration,v.views as total_view, d.name as subscription_name, d.days, p.id as subscription_id, p.content_id, p.content_type as type, p.price as amount, f.name as thumbnail_path');
+        $this->db->from('order o');
+	$this->db->join('order_details od','o.id=od.order_id ','INNER');	
+        $this->db->join('price p','p.id=od.subscription_id','INNER');
+	$this->db->join('duration d','d.id=p.duration_id','INNER');
 	$this->db->join('contents c','p.content_id=c.id','INNER');
-	$this->db->join('categories cat','c.category=cat.id','INNER');
-	$this->db->join('video_thumbnails vt','vt.content_id=p.content_id' ,'LEFT');
+	$this->db->join('categories ct','c.category=ct.id','INNER');
+	$this->db->join('videos v','v.content_id=c.id' ,'LEFT');
+	$this->db->join('video_thumbnails vt','vt.content_id=c.id' ,'LEFT');
 	$this->db->join('files f','vt.file_id=f.id and vt.default_thumbnail=1' ,'LEFT');
+	$this->db->join('flavored_video fv','fv.content_id = c.id' ,'LEFT');
+	$this->db->join('video_flavors vf','vf.id = fv.flavor_id' ,'LEFT');
+	$this->db->join('flavors fl','vf.flavor_id = fl.id' ,'LEFT');
         $this->db->where('d.uid',$this->owner_id);
-        $this->db->where('p.content_id',$data['content_id']);        
+        $this->db->where('o.user_id',$data['user_id']);
         $query = $this->db->get();
+	//echo '<pre>'. $this->db->last_query();
+	return $query->result();
      }
+     
+     function get_package_susbscriptions($data=array())
+     {
+	if($data['device'] !=''){
+	 $this->db->where('fl.flavor_name',$data['device']);
+	}
+	
+	$this->db->select('pk.name as package_name,pk.id as package_id,c.title,c.description,c.type,c.content_type,fl.device_name,fv.id,fv.path as video_path,ct.id as category_id,ct.category as category_name,v.duration,v.views as total_view, d.name as subscription_name, d.days, p.id as subscription_id, c.id as content_id, p.content_type as type, p.price as amount, f.name as thumbnail_path');
+        $this->db->from('order o');
+	$this->db->join('order_details od','o.id=od.order_id ','INNER');	
+        $this->db->join('price p','p.id=od.subscription_id','INNER');
+	$this->db->join('duration d','d.id=p.duration_id','INNER');
+	$this->db->join('package pk', 'p.content_id=pk.id','INNER');
+	$this->db->join('package_video pkv','pk.id=pkv.package_id','INNER');
+	$this->db->join('contents c','pkv.content_id=c.id','INNER');
+	$this->db->join('categories ct','c.category=ct.id','INNER');
+	$this->db->join('videos v','v.content_id=c.id' ,'LEFT');
+	$this->db->join('video_thumbnails vt','vt.content_id=c.id' ,'LEFT');
+	$this->db->join('files f','vt.file_id=f.id and vt.default_thumbnail=1' ,'LEFT');
+	$this->db->join('flavored_video fv','fv.content_id = c.id' ,'LEFT');
+	$this->db->join('video_flavors vf','vf.id = fv.flavor_id' ,'LEFT');
+	$this->db->join('flavors fl','vf.flavor_id = fl.id' ,'LEFT');
+        $this->db->where('d.uid',$this->owner_id);
+        $this->db->where('o.user_id',$data['user_id']);
+        $query = $this->db->get();
+	//echo '<pre>'. $this->db->last_query();
+	return $query->result();
+     }
+     
      
     function getSubsIdArr($invoice)
     {
