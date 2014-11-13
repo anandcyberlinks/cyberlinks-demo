@@ -70,7 +70,8 @@ class Checkout extends My_Controller
                                 
                             }else{
                                 //echo $result['error'];
-				echo json_encode(array('code'=>0,'result'=>$result['error']));
+				//echo json_encode(array('code'=>0,'result'=>$result['error']));
+				redirect(base_url() . 'checkout/callback?result=error');
                             }
                         }
                             //$this->paypal_model->saveData($_POST);
@@ -79,8 +80,9 @@ class Checkout extends My_Controller
 		    break;
 		    
 		    case "success": // success case to show the user payment got success
-			echo json_encode(array('code'=>1)); // 200 being the HTTP response code
+			//echo json_encode(array('code'=>1)); // 200 being the HTTP response code
 			    //echo "<h1>Payment Transaction Done Successfully</h1>";
+			    redirect(base_url() . 'checkout/callback?result=success');
 		    break;
 		    
 		    case "cancel": // case cancel to show user the transaction was cancelled
@@ -104,11 +106,13 @@ class Checkout extends My_Controller
                                  curl_close($curl);
                                  $result = json_decode($resp,true);                                 
                                  if($result['output']==1){
-				    echo json_encode(array('code'=>0,'result'=>'Transaction Cancelled'));
+				    redirect(base_url() . 'checkout/callback?result=cancel');
+				  //  echo json_encode(array('code'=>0,'result'=>'Transaction Cancelled'));
                                     //echo "<h2>Transaction Cancelled</h2>";
                                  }else{
-				    echo json_encode(array('code'=>0,'result'=>$result['error']));
+				    //echo json_encode(array('code'=>0,'result'=>$result['error']));
                                    // echo $result['error'];
+				   redirect(base_url() . 'checkout/callback?result=cancel');
                                  }
 		    break;
 		    
@@ -145,6 +149,21 @@ class Checkout extends My_Controller
 	    } else {
 		//$this->load->view('paypal');
 	    }               
+    }
+    
+    function callback()
+    {
+	if($this->get('result')=='success')
+	{
+	    echo "<h1>Payment Transaction Done Successfully</h1>";
+	}if($this->get('result')=='cancel')
+	{
+	    echo "<h2>Transaction Cancelled</h2>";
+	}if($this->get('result')=='error')
+	{
+	    echo "<h2>Error in checkout</h2>";
+	}
+	die;
     }
 }
 

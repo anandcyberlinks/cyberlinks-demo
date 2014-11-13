@@ -60,7 +60,7 @@ class Subscription extends REST_Controller
          $subscription['content_id'] = $row->content_id;
          $subscription['type'] = $row->type;
          $subscription['amount'] = $row->amount;
-         
+        
          $vid['subscription'][$i] = (object)$subscription;
          $vid['image'] = (object) $thumbArray;
          $i++;
@@ -87,14 +87,14 @@ class Subscription extends REST_Controller
          $package_id = $row->package_id;
          
         if(@$info){
-         $result['package']['v'.$i]['info'] = (object) $info;
+         $result['package'][$i]['info'] = $info;
          $i++;
          $info = array();
         }
-         $info['i'.$j]['title'] = $row->title;       
-        $info['i'.$j]['content_id'] = $row->content_id;        
-        $result['package']['v'.$i]['title'] = $row->package_name;
-        $result['package']['v'.$i]['subscription'] = $subscription;
+         $info[$j]['title'] = $row->title;       
+        $info[$j]['content_id'] = $row->content_id;        
+        $result['package'][$i]['title'] = $row->package_name;
+        $result['package'][$i]['subscription'] = $subscription;
         
         //-- video thumbnail --//
         if($row->thumbnail_path !=''){
@@ -102,22 +102,22 @@ class Subscription extends REST_Controller
          $thumbArray['medium'] = base_url().THUMB_MEDIUM_PATH.$row->thumbnail_path;
          $thumbArray['large'] = base_url().THUMB_LARGE_PATH.$row->thumbnail_path;
         }
-         $info['i'.$j]['image'] = (object) $thumbArray;         
+         $info[$j]['image'] = (object) $thumbArray;         
          }else{
-            $info['i'.$j]['content_id'] = $row->content_id; 
-          $info['i'.$j]['title'] = $row->title;
+            $info[$j]['content_id'] = $row->content_id; 
+          $info[$j]['title'] = $row->title;
           //-- video thumbnail --//
           if($row->thumbnail_path !=''){
          $thumbArray['small'] = base_url().THUMB_SMALL_PATH.$row->thumbnail_path;
          $thumbArray['medium'] = base_url().THUMB_MEDIUM_PATH.$row->thumbnail_path;
          $thumbArray['large'] = base_url().THUMB_LARGE_PATH.$row->thumbnail_path;
           }
-         $info['i'.$j]['image'] = (object) $thumbArray; 
+         $info[$j]['image'] = (object) $thumbArray; 
          }
          $total++;
          $j++;
          if(count($package) == $total){
-             $result['package']['v'.$i]['info'] = (object) $info;
+             $result['package'][$i]['info'] = $info;
          }
         }     
        
@@ -229,35 +229,35 @@ class Subscription extends REST_Controller
          $package_id = $row->package_id;
          
         if(@$info){
-         $result['package']['v'.$i]['info'] = (object) $info;
+         $result['package'][$i]['info'] = (object) $info;
          $i++;
          $info = array();
         }
-         $info['i'.$j]['title'] = $row->title;       
-         $info['i'.$j]['content_id'] = $row->content_id;
-         $info['i'.$j]['description'] = $row->description;       
-         $info['i'.$j]['type'] = $row->type;
-         $info['i'.$j]['content_type'] = $row->content_type;       
-         $info['i'.$j]['video_path'] = $row->video_path;
-         $info['i'.$j]['category_id'] = $row->category_id;       
-         $info['i'.$j]['category_name'] = $row->category_name;
-         $info['i'.$j]['duration'] = $row->duration;       
-         $info['i'.$j]['total_view'] = $row->total_view;
-         $info['i'.$j]['thumbnail_path'] = $row->thumbnail_path;       
-         $info['i'.$j]['url'] = $row->url;
-         $info['i'.$j]['url'] = $row->url;       
-         $info['i'.$j]['rating'] = $row->rating;        
+         $info[$j]['title'] = $row->title;       
+         $info[$j]['content_id'] = $row->content_id;
+         $info[$j]['description'] = $row->description;       
+         $info[$j]['type'] = $row->type;
+         $info[$j]['content_type'] = $row->content_type;       
+         $info[$j]['video_path'] = $row->video_path;
+         $info[$j]['category_id'] = $row->category_id;       
+         $info[$j]['category_name'] = $row->category_name;
+         $info[$j]['duration'] = $row->duration;       
+         $info[$j]['total_view'] = $row->total_view;
+         $info[$j]['thumbnail_path'] = $row->thumbnail_path;       
+         $info[$j]['url'] = $row->url;
+         $info[$j]['url'] = $row->url;       
+         $info[$j]['rating'] = $row->rating;        
         
         //-- package detail --//
-        $result['package']['v'.$i]['title'] = $row->package_name;
-        $result['package']['v'.$i]['package_id'] = $row->package_id;
+        $result['package'][$i]['title'] = $row->package_name;
+        $result['package'][$i]['package_id'] = $row->package_id;
         
         //-- subscription array --//
-        $result['package']['v'.$i]['subscription']['subscription_name'] = $row->subscription_name;
-        $result['package']['v'.$i]['subscription']['days'] = $row->days;
-        $result['package']['v'.$i]['subscription']['subscription_id'] = $row->subscription_id;
-        $result['package']['v'.$i]['subscription']['type'] = $row->type;
-        $result['package']['v'.$i]['subscription']['amount'] = $row->amount;
+        $result['package'][$i]['subscription']['subscription_name'] = $row->subscription_name;
+        $result['package'][$i]['subscription']['days'] = $row->days;
+        $result['package'][$i]['subscription']['subscription_id'] = $row->subscription_id;
+        $result['package'][$i]['subscription']['type'] = $row->type;
+        $result['package'][$i]['subscription']['amount'] = $row->amount;
         
         //-- video thumbnail --//
         if($row->thumbnail_path !=''){
@@ -265,22 +265,22 @@ class Subscription extends REST_Controller
          $thumbArray['medium'] = base_url().THUMB_MEDIUM_PATH.$row->thumbnail_path;
          $thumbArray['large'] = base_url().THUMB_LARGE_PATH.$row->thumbnail_path;
         }
-         $info['i'.$j]['image'] = (object) $thumbArray;         
+         $info[$j]['image'] = (object) $thumbArray;         
          }else{
-            $info['i'.$j]['content_id'] = $row->content_id; 
-            $info['i'.$j]['title'] = $row->title;
-            $info['i'.$j]['description'] = $row->description;       
-            $info['i'.$j]['type'] = $row->type;
-            $info['i'.$j]['content_type'] = $row->content_type;       
-            $info['i'.$j]['video_path'] = $row->video_path;
-            $info['i'.$j]['category_id'] = $row->category_id;       
-            $info['i'.$j]['category_name'] = $row->category_name;
-            $info['i'.$j]['duration'] = $row->duration;       
-            $info['i'.$j]['total_view'] = $row->total_view;
-            $info['i'.$j]['thumbnail_path'] = $row->thumbnail_path;       
-            $info['i'.$j]['url'] = $row->url;
-            $info['i'.$j]['url'] = $row->url;       
-            $info['i'.$j]['rating'] = $row->rating;
+            $info[$j]['content_id'] = $row->content_id; 
+            $info[$j]['title'] = $row->title;
+            $info[$j]['description'] = $row->description;       
+            $info[$j]['type'] = $row->type;
+            $info[$j]['content_type'] = $row->content_type;       
+            $info[$j]['video_path'] = $row->video_path;
+            $info[$j]['category_id'] = $row->category_id;       
+            $info[$j]['category_name'] = $row->category_name;
+            $info[$j]['duration'] = $row->duration;       
+            $info[$j]['total_view'] = $row->total_view;
+            $info[$j]['thumbnail_path'] = $row->thumbnail_path;       
+            $info[$j]['url'] = $row->url;
+            $info[$j]['url'] = $row->url;       
+            $info[$j]['rating'] = $row->rating;
          
           //-- video thumbnail --//
           if($row->thumbnail_path !=''){
@@ -288,12 +288,12 @@ class Subscription extends REST_Controller
          $thumbArray['medium'] = base_url().THUMB_MEDIUM_PATH.$row->thumbnail_path;
          $thumbArray['large'] = base_url().THUMB_LARGE_PATH.$row->thumbnail_path;
           }
-         $info['i'.$j]['image'] = (object) $thumbArray; 
+         $info[$j]['image'] = (object) $thumbArray; 
          }
          $total++;
          $j++;
          if(count($package) == $total){
-             $result['package']['v'.$i]['info'] = (object) $info;
+             $result['package'][$i]['info'] = (object) $info;
          }
         }
    return @$result;
