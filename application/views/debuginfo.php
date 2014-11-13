@@ -55,9 +55,9 @@
                                             <th width="15px"><?php echo $welcome->loadPo('Title') ?></th>                                            
                                             <th><?php echo $welcome->loadPo('Video File') ?></th>
                                             <th><?php echo $welcome->loadPo('Thumb') ?></th>
-                                            <th><?php echo $welcome->loadPo('Thumb Small') ?></th>
-                                            <th><?php echo $welcome->loadPo('Thumb Medium') ?></th>
-                                            <th><?php echo $welcome->loadPo('Thumb Large') ?></th>
+                                            <th><?php echo $welcome->loadPo('Small Thumb') ?></th>
+                                            <th><?php echo $welcome->loadPo('Medium Thumb') ?></th>
+                                            <th><?php echo $welcome->loadPo('Large Thumb') ?></th>
                                             <?php /*/ ?><th align="center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $welcome->loadPo('Action') ?></th><?php /*/ ?>
                                         </tr>
                                     </thead>
