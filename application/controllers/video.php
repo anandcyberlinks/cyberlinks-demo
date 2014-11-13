@@ -1519,9 +1519,49 @@
         }
     }
 
+    /*
+    /--------------------------------------------------------------------------------
+    /   function used to render video
+    /--------------------------------------------------------------------------------
+    */  
+
     function rendervideo(){
         $data['path'] = base64_decode($_GET['path']);
         $this->load->view('rendervideo',$data);    
+    }
+    
+    
+    /*
+    /--------------------------------------------------------------------------------
+    /   function used to debug video information
+    /--------------------------------------------------------------------------------
+    */  
+
+    function debug() {
+        $data['welcome'] = $this;
+        $searchterm='';
+        if($this->uri->segment(3) ==''){                
+            $this->session->unset_userdata('search_form');
+        }
+        if (isset($_POST['submit']) && $_POST['submit'] == 'Search') {
+            $this->session->set_userdata('search_form', $_POST);
+        } else if (isset($_POST['reset']) && $_POST['reset'] == 'Reset') {
+            $this->session->unset_userdata('search_form');
+        } 
+        $searchterm = $this->session->userdata('search_form');
+        $this->load->library("pagination");
+        $config = array();
+        $config["base_url"] = base_url() . "video/debug/";
+        $config["total_rows"] = $this->videos_model->get_debugVideoInfoCount($this->uid, $searchterm);
+        $config["per_page"] = 10;
+        $config["uri_segment"] = 3;
+        $this->pagination->initialize($config);
+        $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        $data['result'] = $this->videos_model->debugVideoInfo($this->uid, PER_PAGE, $page, $searchterm);
+        $data["links"] = $this->pagination->create_links();
+        $data['total_rows'] = $config["total_rows"];
+        $this->show_view('debuginfo',$data);    
+
     }
 }
     
