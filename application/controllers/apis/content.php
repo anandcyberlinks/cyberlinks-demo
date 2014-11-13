@@ -89,11 +89,7 @@ class Content extends Apis{
                 break;
         }
         
-        $total_query = sprintf('select count(c.id) as tot from contents c
-                               left join categories cat on cat.id = c.category
-                               left join videos v on v.content_id = c.id
-                               where uid = %d %s ',$this->app->id,$condition);
-        
+        $total_query = sprintf('select count(*) as tot from (%s %s) as tmp ',$this->query,$condition);
         $dataset_count = $this->db->query($total_query)->result();
         $dataset_count = isset($dataset_count[0]->tot) ? $dataset_count[0]->tot : 0;
         
