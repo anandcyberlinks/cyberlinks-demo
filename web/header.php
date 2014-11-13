@@ -31,14 +31,13 @@ $appdetail = appdetail();
             <div class="container">
                 <div class="row">
                     <div class="col-sm-3" id="logo">
-                        <a title="<?php echo  $appdetail->first_name.' '.$appdetail->last_name ?>" href="http://localhost/mobiletvweb">
+                        <a title="<?php echo  $appdetail->first_name.' '.$appdetail->last_name ?>" href="<?=BASEURL ?>">
                             <img id="logo_image" src="<?php echo  $appdetail->logo ?>" alt="Just another WordPress site" />
                         </a>
                     </div>
-                    <form method="get" action="http://videotube.marstheme.com">	
+                    <form method="GET" action="search.php">	
                         <div class="col-sm-6" id="header-search">
                             <span class="glyphicon glyphicon-search search-icon"></span>
-                            <input type="hidden" name="post_type" value="video">
                             <input value="" name="s" type="text" placeholder="Search here..." id="search">
                         </div>
                     </form>

@@ -716,7 +716,9 @@ if(count($VideoList->result) > 0){
                     </div><div class="widget widget_text"><h4 class="widget-title">About VideoTube</h4>			<div class="textwidget"><p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean which is great.</p>
                             <p>A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences.</p>
                         </div>
-                    </div><div class="widget mars-posts-sidebar-widget"><h4 class="widget-title">Lastest Posts</h4>				        <div class="row">
+                    </div>
+                    <div class="widget mars-posts-sidebar-widget"><h4 class="widget-title">Lastest Posts</h4>
+                        <div class="row">
                             <div id="post-right-mars-posts-sidebar-widget-2-2370" class="post-2370 post type-post status-publish format-standard has-post-thumbnail hentry category-food tag-delicious tag-food-2 tag-recipe-2 col-xs-6 item">
                                 <a title="5 Delicious Video Recipes" href="http://videotube.marstheme.com/5-delicious-video-recipes-2/"><img width="165" height="108" src="http://videotube.marstheme.com/wp-content/uploads/2014/03/All-0057-165x108.jpg" class="img-responsive wp-post-image" alt="" /></a>                    <div class="post-header">              	         	
                                     <h3><a title="5 Delicious Video Recipes" href="http://videotube.marstheme.com/5-delicious-video-recipes-2/">5 Delicious Video Recipes</a></h3>
