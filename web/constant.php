@@ -1,6 +1,5 @@
 <?php
-
-define('BASEURL', 'http://localhost/mobiletvweb/');
+define('BASEURL', 'http://localhost/multitvfinal/web/');
 define('CSS_PATH', BASEURL . 'assets/css/');
 define('JS_PATH', BASEURL . 'assets/js/');
 define('IMG_PATH', BASEURL . 'assets/images/');
