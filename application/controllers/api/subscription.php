@@ -296,7 +296,7 @@ class Subscription extends REST_Controller
              $result['package']['v'.$i]['info'] = (object) $info;
          }
         }
-   return $result;
+   return @$result;
   }
   
    function validate_get()
@@ -313,7 +313,8 @@ class Subscription extends REST_Controller
    
    function checkout_post()
    {
-     $post = $this->post();     
+     $post = $this->post();
+     
       //return print_r($data);die;
        /* $user_id = $this->post('user_id');
         $user_name = $this->post('user_name');
@@ -324,22 +325,25 @@ class Subscription extends REST_Controller
         //$this->post('amount');
        
         $cart = json_decode($this->post('cart'),true);
-      //$this->response($cart);die;
+      //$this->response($cart);
+      
+      $cart = array($cart);
         if(count($cart)>0)
-        {
-         
+        {         
          //-- insert in order table --//
             //$orderdata['user_id'] = $user_id;
             //$orderdata['total_amount'] = $total_amt;            
       
-            $order_id = $this->subscription_model->saveOrder($post);
+           $order_id = $this->subscription_model->saveOrder($post);
              
          //--------------------------//
          if($order_id > 0){
                      
             foreach($cart as $row){
                 //-- insert cart item in order detail table --//
+                
                 $row['order_id'] = $order_id;
+                
                  $id = $this->subscription_model->saveOrderDetails($row);               
                   if($id <= 0){
                      //-- deleta order --//
@@ -352,6 +356,8 @@ class Subscription extends REST_Controller
         }else{
             $this->response(array('output'=>0,'error'=>'Checkout failed.'), 404);
         }
+        }else{
+            $this->response(array('output'=>0,'error'=>'Checkout failed.'), 404);
         }
    }
    

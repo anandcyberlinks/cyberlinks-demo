@@ -77,7 +77,7 @@ class Subscription_model extends CI_Model{
 	 $this->db->where('fl.flavor_name',$data['device']);
 	}
 	
-	$this->db->select('c.title,c.description,c.type,c.content_type,fl.device_name,fv.id,fv.path as video_path,ct.id as category_id,ct.category as category_name,v.duration,v.views as total_view, d.name as subscription_name, d.days, p.id as subscription_id, p.content_id, p.content_type as type, p.price as amount, f.name as thumbnail_path');
+	$this->db->select('c.title,c.description,c.type,c.content_type,fl.device_name,fv.path as video_path,ct.id as category_id,ct.category as category_name,v.duration,v.views as total_view, d.name as subscription_name, d.days, p.id as subscription_id, p.content_id, p.content_type as type, p.price as amount, f.name as thumbnail_path');
         $this->db->from('order o');
 	$this->db->join('order_details od','o.id=od.order_id ','INNER');	
         $this->db->join('price p','p.id=od.subscription_id','INNER');
@@ -103,7 +103,7 @@ class Subscription_model extends CI_Model{
 	 $this->db->where('fl.flavor_name',$data['device']);
 	}
 	
-	$this->db->select('pk.name as package_name,pk.id as package_id,c.title,c.description,c.type,c.content_type,fl.device_name,fv.id,fv.path as video_path,ct.id as category_id,ct.category as category_name,v.duration,v.views as total_view, d.name as subscription_name, d.days, p.id as subscription_id, c.id as content_id, p.content_type as type, p.price as amount, f.name as thumbnail_path');
+	$this->db->select('pk.name as package_name,pk.id as package_id,c.title,c.description,c.type,c.content_type,fl.device_name,fv.path as video_path,ct.id as category_id,ct.category as category_name,v.duration,v.views as total_view, d.name as subscription_name, d.days, p.id as subscription_id, c.id as content_id, p.content_type as type, p.price as amount, f.name as thumbnail_path');
         $this->db->from('order o');
 	$this->db->join('order_details od','o.id=od.order_id ','INNER');	
         $this->db->join('price p','p.id=od.subscription_id','INNER');

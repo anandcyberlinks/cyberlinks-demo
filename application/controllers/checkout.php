@@ -45,7 +45,7 @@ class Checkout extends My_Controller
                           
                             if($result['output']==1){
                             $i=0;
-                           
+			    $cart = array($cart);
                             //-- post form to paypal --//
                                 foreach($cart as $row){
                                     $i++;
