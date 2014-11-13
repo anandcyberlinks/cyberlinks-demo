@@ -87,6 +87,10 @@ class Content extends Apis{
                     $condition.= ' group by c.id ';
                     $condition.= sprintf(' ORDER BY v.views DESC ');
                 break;
+            case 'liked' :
+                    $condition.= ' group by c.id ';
+                    $condition.= sprintf(' ORDER BY ufl.`like` DESC ');
+                break;
         }
         
         $total_query = sprintf('select count(*) as tot from (%s %s) as tmp ',$this->query,$condition);
