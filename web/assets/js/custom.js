@@ -4,9 +4,19 @@
     $('div.col-sm-3 > ul').addClass('list-unstyled');
     $('input[type="submit"]').addClass('btn btn-default');
     
-    //var height = $('#logo_image').height();
-    $('#logo,#header-social').height($('#logo_image').height());
-    //alert('hi anand');
+    $(body).on('onload',function(){
+      alert('hi annad');
+    });
+    
+    //$('#logo,#header-social').height($('#logo_image').height());
+    
   
   });
+  
+  $(window).load(function() {
+      alert("window load occurred!");
+  });
+  
+  alert('annad');
+  
 })(jQuery);
