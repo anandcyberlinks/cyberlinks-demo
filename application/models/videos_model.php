@@ -1039,11 +1039,11 @@ class Videos_model extends CI_Model {
                 $data->thumb_large = $true ;
                 $tmp['valid'][] = $data;
             } else {
-                $data->video_relative_path = (file_exists(REAL_PATH.$data->video_relative_path)) ? $true : $false ;
-                $data->thumb_relative_path = (file_exists(REAL_PATH.$data->thumb_relative_path)) ? $true : $false ;
-                $data->thumb_small =(file_exists(REAL_PATH.THUMB_SMALL_PATH.$data->thumb_filename)) ? $true : $false ;
-                $data->thumb_medium = (file_exists(REAL_PATH.THUMB_MEDIUM_PATH.$data->thumb_filename)) ? $true : $false ;
-                $data->thumb_large = (file_exists(REAL_PATH.THUMB_LARGE_PATH.$data->thumb_filename)) ? $true : $false ;
+                $data->video_relative_path = (($data->video_relative_path !='') && (file_exists(REAL_PATH.$data->video_relative_path))) ? $true : $false ;
+                $data->thumb_relative_path = (($data->thumb_relative_path !='') && (file_exists(REAL_PATH.$data->thumb_relative_path))) ? $true : $false ;
+                $data->thumb_small =(($data->thumb_filename !='') && (file_exists(REAL_PATH.THUMB_SMALL_PATH.$data->thumb_filename))) ? $true : $false ;
+                $data->thumb_medium = (($data->thumb_filename !='') && (file_exists(REAL_PATH.THUMB_MEDIUM_PATH.$data->thumb_filename))) ? $true : $false ;
+                $data->thumb_large = (($data->thumb_filename !='') && (file_exists(REAL_PATH.THUMB_LARGE_PATH.$data->thumb_filename))) ? $true : $false ;
                 $tmp['invalid'][] = $data;
             }    
         }
