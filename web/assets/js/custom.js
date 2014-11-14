@@ -6,9 +6,7 @@
   });
   
   $(window).load(function() {
-      $('#logo,#header-social').height($('#logo_image').height());
+      var hi = $('#logo_image').height() < 80 ? 80 : $('#logo_image').height();
+      $('#logo,#header-social').height(hi);
   });
-  
-  
-  
 })(jQuery);
