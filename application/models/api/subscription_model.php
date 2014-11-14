@@ -124,8 +124,7 @@ class Subscription_model extends CI_Model{
 	//echo '<pre>'. $this->db->last_query();
 	return $query->result();
      }
-     
-     
+
     function getSubsIdArr($invoice)
     {
 	$this->db->select('order_details.subscription_id as subscription_id, order_details.order_id as order_id, duration.days as validtime');
@@ -137,6 +136,17 @@ class Subscription_model extends CI_Model{
         $query = $this->db->get();	
         $result = $query->result();
 	return $result;
+    }
+    
+    function getorder($data)
+    {
+	$this->db->select('order_info as cart,user_id');
+	$this->db->from('order');
+	$this->db->where('invoice',base64_decode($data['o']));
+	$this->db->limit(1);
+	$query = $this->db->get();
+	//echo $this->db->last_query();die;
+	return $query->row();
     }
     
     function save_order($data){       
@@ -162,9 +172,10 @@ class Subscription_model extends CI_Model{
 	    $orderData = array(
 		'user_id'=>$data['user_id'],
 		'invoice'=>$data['invoice'],
-		'total_amount'=>$data['total_amount'],		
+		'total_amount'=>$data['total_amount'],
+		'order_info' => serialize($data['cart']),
 		'status'=>'pending'
-	    );      
+	    );
 	    $this->db->set($orderData);
 	    $this->db->set('created','NOW()',FALSE);	    
 	    $this->db->insert('order');

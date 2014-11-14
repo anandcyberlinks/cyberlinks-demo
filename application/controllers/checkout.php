@@ -18,33 +18,37 @@ class Checkout extends My_Controller
         $p->currency 	= $this->config->item('currency'); // set notification email
        
         $action = @$_REQUEST["action"];
-        $invoice = date("His").rand(1234, 9632);
+        //$invoice = date("His").rand(1234, 9632);
         $_REQUEST['cmd'] = '_cart';
-        $cart = json_decode(@$_REQUEST['cart'],true);
-        
+        //$cart = json_decode(@$_REQUEST['cart'],true);        
 	    if(isset($action)) {
 		switch($action){
 		    case "process": // case process insert the form data in DB and process to the paypal			    
-			if(count($cart)>0){
-                            $_REQUEST['invoice'] = $invoice;
+			
+			//if(count($cart)>0){
+                            //$_REQUEST['invoice'] = $invoice;
                             $curl = curl_init();
                             // Set some options - we are passing in a useragent too here
                             curl_setopt_array($curl, array(
                                 CURLOPT_RETURNTRANSFER => 1,
-                                CURLOPT_URL => base_url().'api/subscription/checkout/token/'.$token,
+                                CURLOPT_URL => base_url().'api/subscription/order/token/'.$token,
                                 CURLOPT_USERAGENT => 'Checkout',
                                 CURLOPT_POST => 1,
                                 CURLOPT_POSTFIELDS => $_REQUEST
                             ));  
                             // Send the request & save response to $resp
-                           $resp = curl_exec($curl);
+                            $resp = curl_exec($curl);
                           
                             // Close request to clear up some resources
                             curl_close($curl);
                             $result = json_decode($resp,true);
-                          
+                       
                             if($result['output']==1){
                             $i=0;
+			    //-- get result array--//
+			    
+			    $cart = json_decode($result['result']['cart'],true);
+			    $user_id = $result['result']['user_id'];			    
 			    $cart = array($cart);
                             //-- post form to paypal --//
                                 foreach($cart as $row){
@@ -60,11 +64,11 @@ class Checkout extends My_Controller
                                  $p->add_field('cmd', $_REQUEST["cmd"]); // cmd should be _cart for cart checkout
                                  $p->add_field('upload', '1');
                                  $p->add_field('return', $this->config->item('PayPalReturnURL')); // return URL after the transaction got over
-                                 $p->add_field('cancel_return', $this->config->item('PayPalCancelURL').'&invoiceno='.$_REQUEST["invoice"]); // cancel URL if the trasaction was cancelled during half of the transaction
+                                 $p->add_field('cancel_return', $this->config->item('PayPalCancelURL').'&invoiceno='.$_REQUEST["o"]); // cancel URL if the trasaction was cancelled during half of the transaction
                                  //$p->add_field('cancel_return', $this->config->item('PayPalCancelURL')); // cancel URL if the trasaction was cancelled during half of the transaction
                                  $p->add_field('notify_url', $this->config->item('PayPalIpnURL')); // Notify URL which received IPN (Instant Payment Notification)
                                  $p->add_field('currency_code', $this->config->item('PayPalCurrencyCode'));
-                                 $p->add_field('invoice', $_REQUEST["invoice"]);
+                                 $p->add_field('invoice', $_REQUEST["o"]);
                                  //$p->dump_fields();die;
                                  $p->submit_paypal_post(); // POST it to paypal
                                 
@@ -73,7 +77,7 @@ class Checkout extends My_Controller
 				//echo json_encode(array('code'=>0,'result'=>$result['error']));
 				redirect(base_url() . 'checkout/callback?result=error');
                             }
-                        }
+                        //}
                             //$this->paypal_model->saveData($_POST);
 
 			    //$p->dump_fields(); // Show the posted values for a reference, comment this line before app goes live
@@ -153,13 +157,13 @@ class Checkout extends My_Controller
     
     function callback()
     {
-	if($this->get('result')=='success')
+	if($_REQUEST['result']=='success')
 	{
 	    echo "<h1>Payment Transaction Done Successfully</h1>";
-	}if($this->get('result')=='cancel')
+	}if($_REQUEST['result']=='cancel')
 	{
 	    echo "<h2>Transaction Cancelled</h2>";
-	}if($this->get('result')=='error')
+	}if($_REQUEST['result']=='error')
 	{
 	    echo "<h2>Error in checkout</h2>";
 	}

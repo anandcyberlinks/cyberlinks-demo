@@ -46,56 +46,24 @@ code {
 <body>
 
      <?php 
-        $socialfb = '{"id":"579156356",
-                "email":"vishal.jethani@gmail.com",
-                "name":"Vishal Jethani",
-                "first_name":"Vishal",
-                "last_name":"Jethani",
-                "link":"https://www.facebook.com/vishal.jethani",
-                "username":"vishal.jethani",
-                "hometown":{
-                "id":"106442706060302",
-                "name":"Pune, Maharashtra"                    
-                },
-                "location":{
-                "id":"106377336067638",
-                "name":"Bangalore, India"                    
-                },
-                "bio":"bye bye to bad characters",
-                "gender":"male",
-                "relationship_status":"Single",
-                "timezone":5.5,
-                "locale":"en_GB",
-                "verified":true,
-                "updated_time":"2012-06-15T05:33:31+0000",
-                "type":"user"
-                }';
-                    
-
-        $socialgoogle = '{
-  "stat": "ok",
-  "profile": {
-    "providerName": "Google+",
-    "identifier": "https://www.google.com/profiles/123456789123456789123",
-    "verifiedEmail": "2013-11-22 21:01:09.601637 +0000",
-    "preferredUsername": "example",
-    "displayName": "First Last",
-    "name": {
-      "formatted": "First Last",
-      "givenName": "First",
-      "familyName": "Last"
-    },
-    "email": "example@example.com",
-    "url": "https://plus.google.com/123456789123456789123",
-    "photo": "https://lh4.googleusercontent.com/-12345678912/12345678912/12345678912/12345678912/photo.jpg?sz=50",
-    "address": {
-      "formatted": "Portland, OR"
-    },
-    "gender": "male",
-    "googleUserId": "123456789123456789123",
-    "providerSpecifier": "googleplus"
-  }
-}';
+$socialfb = '{"link":"https://www.facebook.com/app_scoped_user_id/871038016269947/",
+		"id":"871038016269947",
+		"first_name":"Khalid",
+		"gender":"male",
+		"last_name":"Imtiyaz",
+		"image":"",
+		"updated_time":"2014-02-28T17:14:02+0000"
+		}';
+	
+        $socialgoogle = '{"link":"https://www.facebook.com/app_scoped_user_id/871038016269947/",
+		"id":"123456789123456789123",
+		"first_name":"Khalid",
+		"gender":"male",
+		"last_name":"Imtiyaz",
+		"image":"",
+		"updated_time":"2014-02-28T17:14:02+0000"
+		}';
+		
         //echo '<pre>'; print_r(json_decode($social));
             $socialInfo = $social;
         ?>
@@ -125,7 +93,7 @@ code {
 
 <p><strong>Users Webservice</strong></p>
 <ul><li><strong> User Registration: </strong>
-    <form action="<?php echo site_url('api/user/add');?>" method='post' enctype='multipart/form-data'>
+    <form action="<?php echo site_url('api/user/add/token/ad8b0280827');?>" method='post' enctype='multipart/form-data'>
     First Name: <input type='text' name='firstname'>
     Last Name: <input type='text' name='lastname'>
     Gender: <input type='radio' name='gender' value='Male' checked> Male <input type='radio' name='gender' value='Female'> Female
@@ -196,7 +164,7 @@ code {
 
  <p><strong>Checkout Webservice</strong></p>
 <ul><li><strong> Checkout: </strong>
-    <form action="<?php echo site_url('checkout?token=1234567890');?>" method='post' enctype='multipart/form-data'>
+    <form action="<?php echo site_url('api/subscription/checkout/token/1234567890');?>" method='post' enctype='multipart/form-data'>
     Cart: <input type='text' name='cart' value='[{"subscription_id":"1","subscription_name":"daily","amount":"5"},{"subscription_id":"2","subscription_name":"monthly","amount":"20"},{"subscription_id":"3","subscription_name":"yearly","amount":"50"}]'>   
     userid. : <input type='text' name='user_id'>
     user name : <input type='text' name='user_name'>

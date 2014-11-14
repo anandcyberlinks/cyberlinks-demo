@@ -318,18 +318,9 @@ class Subscription extends REST_Controller
       $post = $this->post();
       $invoice = date("His").rand(1234, 9632);
       $post['invoice'] = $invoice;
-      //return print_r($data);die;
-       /* $user_id = $this->post('user_id');
-        $user_name = $this->post('user_name');
-        $user_email = $this->post('user_email');
-        $total_amt = $this->post('total_amount');
-        */
-        //$this->post('subscription_id');
-        //$this->post('amount');
-       
-        $cart = json_decode($this->post('cart'),true);
-      //$this->response($cart);
-      
+             
+      $cart = json_decode($this->post('cart'),true);
+          
       $cart = array($cart);
         if(count($cart)>0)
         {
@@ -341,12 +332,9 @@ class Subscription extends REST_Controller
              
          //--------------------------//
          if($order_id > 0){
-                     
             foreach($cart as $row){
-                //-- insert cart item in order detail table --//
-                
-                $row['order_id'] = $order_id;
-                
+                //-- insert cart item in order detail table --//                
+                $row['order_id'] = $order_id;                
                  $id = $this->subscription_model->saveOrderDetails($row);               
                   if($id <= 0){
                      //-- deleta order --//
@@ -354,14 +342,24 @@ class Subscription extends REST_Controller
                      //--------------//
                      $this->response(array('output'=>0,'error'=>'Checkout failed.'), 404);
                    }
-            }            
-            $this->response(array('output'=>1), 200); // 200 being the HTTP response code
+            }
+            $url = base_url().'checkout?token='.$this->get('token').'&o='.base64_encode($invoice).'&action=process';            
+            $this->response(array('output'=>1,'result'=>$url), 200); // 200 being the HTTP response code
         }else{
             $this->response(array('output'=>0,'error'=>'Checkout failed.'), 404);
         }
         }else{
             $this->response(array('output'=>0,'error'=>'Checkout failed.'), 404);
         }
+   }
+   
+   function order_post(){
+      $post = $this->post();
+      $order = $this->subscription_model->getorder($post);
+      $order->cart = unserialize($order->cart);     
+      if($order){
+         $this->response(array('output'=>1,'result'=>$order), 200);
+      }
    }
    
    function cancel_post()
