@@ -1,6 +1,6 @@
 <?php
 session_start();
-define('BASEURL', 'http://182.18.165.252/multitvfinal/web/');
+define('BASEURL', sprintf('http://%s/multitvfinal/web/',$_SERVER['HTTP_HOST']));
 
 if(isset($_GET['t']) && $_GET['t'] != ''){
     $_SESSION['token'] = $_GET['t'];
