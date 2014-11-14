@@ -1,7 +1,7 @@
 <div id="footer">
     <div class="container">
         <div class="copyright">
-            <p>Copyright 2014 By MarsTheme All rights reserved. Powered by WordPress &amp; MarsTheme</p>
+            <p>Copyright 2014 By <?=$_SESSION['app']->result[0]->first_name.' '.$_SESSION['app']->result[0]->last_name; ?> All rights reserved.</p>
         </div>
     </div>
 </div>

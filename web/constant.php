@@ -1,10 +1,24 @@
 <?php
+session_start();
+define('BASEURL', 'http://localhost/multitvfinal/web/');
 
-define('BASEURL', 'http://182.18.165.252/multitvfinal/web/');
+if(isset($_GET['t']) && $_GET['t'] != ''){
+    $_SESSION['token'] = $_GET['t'];
+    header('location:'.BASEURL);
+    exit;
+}
+
+if(isset($_SESSION['token']) && $_SESSION['token'] != ''){
+    define('TOKEN', $_SESSION['token']);
+}else{
+    echo 'Access denied';
+    exit;
+}
+
 define('CSS_PATH', BASEURL . 'assets/css/');
 define('JS_PATH', BASEURL . 'assets/js/');
 define('IMG_PATH', BASEURL . 'assets/images/');
-define('TOKEN', '545a1e3363dd2');
+
 define('APPDETAIL_URL', sprintf('http://182.18.165.252/multitvfinal/apis/users/appdetail/at/%s', TOKEN));
 define('VIDEO_LIST', sprintf('http://182.18.165.252/multitvfinal/apis/content/getlist/type/video/at/%s', TOKEN));
 define('FEATURED_LIST', sprintf('http://182.18.165.252/multitvfinal/apis/content/featured/at/%s/st/0/lt/9', TOKEN));
@@ -12,8 +26,9 @@ define('VIDEO_SEARCH', sprintf('http://182.18.165.252/multitvfinal/apis/content/
 define('DATE_FORMAT', 'M,d Y');
 
 
+
 function appdetail() {
-    $result = getdata(APPDETAIL_URL);
+    $_SESSION['app'] = $result = getdata(APPDETAIL_URL);
     if (count($result) > 0) {
         return $result->result[0];
     } else {
