@@ -1028,18 +1028,19 @@ class Videos_model extends CI_Model {
                         left join files f on f.id =  v.file_id
                         left join video_thumbnails vt on vt.content_id =  c.id
                         left join files f_thumb on f_thumb.id =  vt.file_id
-                        where c.uid=%d and c.status=1 and vt.default_thumbnail=1 %s limit %d,%d',$uid, $like, $start, $limit);
+                        where c.uid=%d and c.status=1  %s limit %d,%d',$uid, $like, $start, $limit);
         $data = $this->db->query($query)->result();
+                     
+
         array_walk($data,function($data){
-            
             $true = base_url().'assets/img/test-pass-icon.png';
             $false = base_url().'assets/img/test-fail-icon.png';
             
             $data->video_relative_path = file_exists(REAL_PATH.$data->video_relative_path) ? $true : $false ;
-            $data->thumb_relative_path = file_exists(REAL_PATH.$data->thumb_relative_path) ? $true : $false ;
-            $data->thumb_small = file_exists(REAL_PATH.THUMB_SMALL_PATH.$data->thumb_filename) ? $true : $false ;
-            $data->thumb_medium = file_exists(REAL_PATH.THUMB_MEDIUM_PATH.$data->thumb_filename) ? $true : $false ;
-            $data->thumb_large = file_exists(REAL_PATH.THUMB_LARGE_PATH.$data->thumb_filename) ? $true : $false ;
+            $data->thumb_relative_path = (($data->thumb_relative_path != '') && (file_exists(REAL_PATH.$data->thumb_relative_path))) ? $true : $false ;
+            $data->thumb_small =(($data->thumb_filename != '') && (file_exists(REAL_PATH.THUMB_SMALL_PATH.$data->thumb_filename))) ? $true : $false ;
+            $data->thumb_medium = (($data->thumb_filename != '') && (file_exists(REAL_PATH.THUMB_MEDIUM_PATH.$data->thumb_filename))) ? $true : $false ;
+            $data->thumb_large = (($data->thumb_filename != '') && (file_exists(REAL_PATH.THUMB_LARGE_PATH.$data->thumb_filename))) ? $true : $false ;
         });
         return $data;
     }
@@ -1058,7 +1059,7 @@ class Videos_model extends CI_Model {
                         left join files f on f.id =  v.file_id
                         left join video_thumbnails vt on vt.content_id =  c.id
                         left join files f_thumb on f_thumb.id =  vt.file_id
-                        where c.uid=%d and c.status=1 and vt.default_thumbnail=1 %s', $uid, $like);
+                        where c.uid=%d and c.status=1  %s', $uid, $like);
         $data = count($this->db->query($query)->result());
         return $data;
     }
