@@ -3,6 +3,7 @@ require_once('header.php');
 $VideoList = videoList(0,18);
 $featuredList = featuredList();
 $viewed = viewedVideo(0, 18);
+$liked = likedVideo(0, 6);
 
 if(count($featuredList->result) > 0){
     $feature_data = array_chunk($featuredList->result,3);
@@ -247,60 +248,25 @@ if(count($VideoList->result) > 0){
                     <div class="widget mars-videos-sidebar-widget">
                         <h4 class="widget-title">Most Liked videos</h4>
                         <div class="row">
+                            <?php foreach($liked->result as $val){ ?>
+                            
                             <div class="col-xs-6 item mars-videos-sidebar-widget-2-1719">
                                 <div class="item-img">
-                                    <a title="#SELFIE &#8211; The Chainsmokers" href="http://videotube.marstheme.com/video/selfie-the-chainsmokers/"><img width="165" height="108" src="http://videotube.marstheme.com/wp-content/uploads/2014/03/music2-165x108.jpg" class="img-responsive wp-post-image" alt="music2" /></a>						<a href="http://videotube.marstheme.com/video/selfie-the-chainsmokers/"><div class="img-hover"></div></a>
+                                    <a title="<?=$val->title ?>" href="http://videotube.marstheme.com/video/selfie-the-chainsmokers/">
+                                    <img width="165" height="108" src="<?=$val->thumbs->large ?>" class="img-responsive wp-post-image" alt="music2" /></a>
+                                    <a href="http://videotube.marstheme.com/video/selfie-the-chainsmokers/"><div class="img-hover"></div></a>
                                 </div>	            	
-                                <h3><a title="#SELFIE &#8211; The Chainsmokers" href="http://videotube.marstheme.com/video/selfie-the-chainsmokers/">#SELFIE &#8211; The Chainsmokers</a></h3>
+                                <h3><a title="<?=$val->title ?>" href="http://videotube.marstheme.com/video/selfie-the-chainsmokers/"><?=$val->title ?></a></h3>
 
-                                <div class="meta"><span class="date">8 months ago</span>
-                                    <span class="views"><i class="fa fa-eye"></i>4681</span><span class="heart"><i class="fa fa-heart"></i>351</span>
-                                    <span class="fcomments"><i class="fa fa-comments"></i>0</span>
+                                <div class="meta"><span class="date"><?php echo dateFormat($v->created); ?></span>
+                                    <span class="views"><i class="fa fa-eye"></i><?=$val->views ?></span><span class="heart">
+                                    <i class="fa fa-heart"></i><?=$val->likes ?></span>
+                                    <span class="fcomments"><i class="fa fa-comments"></i><?=$val->comments ?></span>
 
                                 </div>
                             </div>
-                            <div class="col-xs-6 item mars-videos-sidebar-widget-2-2132">
-                                <div class="item-img">
-                                    <a title="HD Music Nexus Playlist" href="http://videotube.marstheme.com/video/hd-music-nexus-playlist/"><img width="165" height="108" src="http://videotube.marstheme.com/wp-content/uploads/2014/07/hd-music-nexus-playlist-165x108.jpg" class="img-responsive wp-post-image" alt="HD Music Nexus Playlist" /></a>						<a href="http://videotube.marstheme.com/video/hd-music-nexus-playlist/"><div class="img-hover"></div></a>
-                                </div>	            	
-                                <h3><a title="HD Music Nexus Playlist" href="http://videotube.marstheme.com/video/hd-music-nexus-playlist/">HD Music Nexus Playlist</a></h3>
+                            <?php } ?>
 
-                                <div class="meta"><span class="date">4 months ago</span>
-                                    <span class="views"><i class="fa fa-eye"></i>2522</span><span class="heart"><i class="fa fa-heart"></i>342</span>
-                                    <span class="fcomments"><i class="fa fa-comments"></i>0</span>
-
-                                </div>
-                            </div>
-                            <div class="col-xs-6 item mars-videos-sidebar-widget-2-1903">
-                                <div class="item-img">
-                                    <a title="Wonderfull Chill Out Music Love" href="http://videotube.marstheme.com/video/wonderfull-chill-out-music-love/"><img width="165" height="108" src="http://videotube.marstheme.com/wp-content/uploads/2014/04/wonderfull-chill-out-music-love-165x108.jpg" class="img-responsive wp-post-image" alt="Wonderfull Chill Out Music Love" /></a>						<a href="http://videotube.marstheme.com/video/wonderfull-chill-out-music-love/"><div class="img-hover"></div></a>
-                                </div>	            	
-                                <h3><a title="Wonderfull Chill Out Music Love" href="http://videotube.marstheme.com/video/wonderfull-chill-out-music-love/">Wonderfull Chill Out Music Love</a></h3>
-
-                                <div class="meta"><span class="date">7 months ago</span>
-                                    <span class="views"><i class="fa fa-eye"></i>3561</span><span class="heart"><i class="fa fa-heart"></i>218</span>
-                                    <span class="fcomments"><i class="fa fa-comments"></i>3</span>
-
-                                </div>
-                            </div>
-                            <div class="col-xs-6 item mars-videos-sidebar-widget-2-2360">
-                                <div class="item-img">
-                                    <a title="Best TRANCE music 2014" href="http://videotube.marstheme.com/video/best-trance-music-2014/"><img width="165" height="108" src="http://videotube.marstheme.com/wp-content/uploads/2014/09/best-trance-music-2014-165x108.jpg" class="img-responsive wp-post-image" alt="Best TRANCE music 2014" /></a>						<a href="http://videotube.marstheme.com/video/best-trance-music-2014/"><div class="img-hover"></div></a>
-                                </div>	            	
-                                <h3><a title="Best TRANCE music 2014" href="http://videotube.marstheme.com/video/best-trance-music-2014/">Best TRANCE music 2014</a></h3>
-
-                                <div class="meta"><span class="date">3 months ago</span>
-                                    <span class="views"><i class="fa fa-eye"></i>1910</span><span class="heart"><i class="fa fa-heart"></i>164</span>
-                                    <span class="fcomments"><i class="fa fa-comments"></i>0</span>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="widget widget_text">
-                        <h4 class="widget-title">Like us on Facebook</h4>
-                        <div class="textwidget">
-                            <iframe src="//www.facebook.com/plugins/likebox.php?href=http%3A%2F%2Fwww.facebook.com%2FFacebookDevelopers&amp;width=360&amp;height=290&amp;colorscheme=light&amp;show_faces=true&amp;header=true&amp;stream=false&amp;show_border=false" width="360" height="260"></iframe>
                         </div>
                     </div>
                 </div><!-- /.sidebar -->		</div><!-- /.row -->

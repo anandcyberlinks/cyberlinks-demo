@@ -6,9 +6,7 @@ $cur = isset($_GET['p']) ? $_GET['p'] : 1;
 $ob = isset($_GET['ob']) ? $_GET['ob'] : 'latest';
 $data = searchVideo(($cur - 1) * $lt, $lt, $val, $ob);
 $recent = recentVideo(0, 4);
-
-//echo '<pre>';print_r($recent);echo '</pre>';
-$pagination =  range(0,$data->tr,$lt);
+$pagination = range(0, $data->tr, $lt); 
 ?>
 <div class="container">
     <div class="row">
@@ -19,21 +17,20 @@ $pagination =  range(0,$data->tr,$lt);
                     <ul class="sorting">
                         <li class="sort-text">Sort by:</li>
                         <?php
-                            list($l,$v,$li,$c) = array($_GET['ob'] == 'created' ? 'active' : '',
-                                                       $_GET['ob'] == 'views' ? 'active' : '',
-                                                       $_GET['ob'] == 'likes' ? 'active' : '',
-                                                       $_GET['ob'] == 'comments' ? 'active' : '');
-                            echo sprintf('<li class="%s"><a href="?%s">Latest</a></li>',$l,http_build_query(array_merge($_GET,array('ob'=>'created'))));
-                            echo sprintf('<li class="%s"><a href="?%s">Viewed</a></li>',$v,http_build_query(array_merge($_GET,array('ob'=>'views'))));
-                            echo sprintf('<li class="%s"><a href="?%s">Liked</a></li>',$li,http_build_query(array_merge($_GET,array('ob'=>'likes'))));
-                            echo sprintf('<li class="%s"><a href="?%s">Comments</a></li>',$c,http_build_query(array_merge($_GET,array('ob'=>'comments'))));
+                        list($l, $v, $li, $c) = array($_GET['ob'] == 'created' ? 'active' : '',
+                            $_GET['ob'] == 'views' ? 'active' : '',
+                            $_GET['ob'] == 'likes' ? 'active' : '',
+                            $_GET['ob'] == 'comments' ? 'active' : '');
+                        echo sprintf('<li class="%s"><a href="?%s">Latest</a></li>', $l, http_build_query(array_merge($_GET, array('ob' => 'created'))));
+                        echo sprintf('<li class="%s"><a href="?%s">Viewed</a></li>', $v, http_build_query(array_merge($_GET, array('ob' => 'views'))));
+                        echo sprintf('<li class="%s"><a href="?%s">Liked</a></li>', $li, http_build_query(array_merge($_GET, array('ob' => 'likes'))));
+                        echo sprintf('<li class="%s"><a href="?%s">Comments</a></li>', $c, http_build_query(array_merge($_GET, array('ob' => 'comments'))));
                         ?>
                     </ul>
                 </div>
             </div>
             <div class="row video-section meta-maxwidth-230">
                 <?php foreach ($data->result as $value) { //echo '<pre>';print_r($value);echo '</pre>'; ?>
-
                     <div class="col-sm-4 col-xs-6 item">
                         <a title="<?php echo $value->title; ?>" href="http://videotube.marstheme.com/video/best-trance-music-2014/">
                             <img src="<?php echo $value->thumbs->large; ?>" class="img-responsive wp-post-image" alt="Best TRANCE music 2014" height="150" width="230"></a>
@@ -44,9 +41,7 @@ $pagination =  range(0,$data->tr,$lt);
                             <span class="fcomments"><i class="fa fa-comments"></i><?php echo $value->comments; ?></span>
                         </div>
                     </div>
-
                 <?php } ?>
-
             </div>
         </div>
         <div class="col-sm-4 sidebar">
@@ -117,39 +112,35 @@ $pagination =  range(0,$data->tr,$lt);
             <div class="widget mars-videos-sidebar-widget"><h4 class="widget-title">Latest Videos</h4>
                 <div class="row">
                     <div class="widget mars-videos-sidebar-widget">
-                <?php foreach ($recent->result as $value) { //echo '<pre>';print_r($value);echo '</pre>'; ?>
-
-                    <div class="col-xs-6 item mars-videos-sidebar-widget-3-2360">
-                        <a title="<?php echo $value->title; ?>" href="http://videotube.marstheme.com/video/best-trance-music-2014/">
-                            <img src="<?php echo $value->thumbs->large; ?>" class="img-responsive wp-post-image" alt="Best TRANCE music 2014" height="150" width="230"></a>
-                        <h3><a title="<?php echo $value->title; ?>" href="http://videotube.marstheme.com/video/best-trance-music-2014/"><?php echo $value->title; ?></a></h3>
-                        <div class="meta"><span class="date"><?php echo dateFormat($value->created); ?></span>
-                            <span class="views"><i class="fa fa-eye"></i><?php echo $value->views; ?></span>
-                            <span class="heart"><i class="fa fa-heart"></i><?php echo $value->likes; ?></span>
-                            <span class="fcomments"><i class="fa fa-comments"></i><?php echo $value->comments; ?></span>
-                        </div>
-                    </div>
-
-                <?php } ?>
-
-            </div>
-
+                        <?php foreach ($recent->result as $value) { //echo '<pre>';print_r($value);echo '</pre>'; ?>
+                            <div class="col-xs-6 item mars-videos-sidebar-widget-3-2360">
+                                <a title="<?php echo $value->title; ?>" href="http://videotube.marstheme.com/video/best-trance-music-2014/">
+                                    <img src="<?php echo $value->thumbs->large; ?>" class="img-responsive wp-post-image" alt="Best TRANCE music 2014" height="150" width="230"></a>
+                                <h3><a title="<?php echo $value->title; ?>" href="http://videotube.marstheme.com/video/best-trance-music-2014/"><?php echo $value->title; ?></a></h3>
+                                <div class="meta"><span class="date"><?php echo dateFormat($value->created); ?></span>
+                                    <span class="views"><i class="fa fa-eye"></i><?php echo $value->views; ?></span>
+                                    <span class="heart"><i class="fa fa-heart"></i><?php echo $value->likes; ?></span>
+                                    <span class="fcomments"><i class="fa fa-comments"></i><?php echo $value->comments; ?></span>
+                                </div>
+                            </div>
+                        <?php } ?>
                     </div>
                 </div>
             </div>
-        </div><!-- /.sidebar -->
-        <ul class="pagination">
-            <?php
-            foreach($pagination as $key=>$val){
-                $page = $key + 1;
-                $qs = http_build_query(array_merge($_GET,array('p'=>$page)));
-                if($page == count($pagination))
-                echo sprintf('<li><span class="page-nmbers %s"><a href="%s">Last →</a></span></li>',($page) == $cur ? 'current' : '','?'.$qs);
-                else
-                echo sprintf('<li><span class="page-numbers %s"><a href="%s">%d</a></span></li>',($page) == $cur ? 'current' : '','?'.$qs,$page);
-            }    
-            ?>
-        </ul>
-    </div><!-- /.row -->   
+        </div>
+    </div><!-- /.sidebar -->
+    <ul class="pagination">
+        <?php
+        foreach ($pagination as $key => $val) {
+            $page = $key + 1;
+            $qs = http_build_query(array_merge($_GET, array('p' => $page)));
+            if ($page == count($pagination))
+                echo sprintf('<li><span class="page-nmbers %s"><a href="%s">Last →</a></span></li>', ($page) == $cur ? 'current' : '', '?' . $qs);
+            else
+                echo sprintf('<li><span class="page-numbers %s"><a href="%s">%d</a></span></li>', ($page) == $cur ? 'current' : '', '?' . $qs, $page);
+        }
+        ?>
+    </ul>
+</div><!-- /.row -->   
 </div>
 <?php include "footer.php" ?>

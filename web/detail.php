@@ -65,14 +65,10 @@
                             <label for="author">Your Name</label>
                             <input type="text" class="form-control" id="author" name="author" placeholder="Enter name" value="">
                         </div>			
-
-
                         <div class="form-group">
                             <label for="email">Your Email</label>
                             <input type="text" class="form-control" id="email" name="email" placeholder="Enter Email" value="">
                         </div>
-
-
                         <div class="form-group">
                             <label for="url">Website</label>
                             <input type="text" class="form-control" id="url" name="url" placeholder="Enter Website" value="">
