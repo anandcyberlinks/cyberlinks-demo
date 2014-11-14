@@ -1551,13 +1551,10 @@
         $searchterm = $this->session->userdata('search_form');
         $this->load->library("pagination");
         $config = array();
-        $config["base_url"] = base_url() . "video/debug/";
         $config["total_rows"] = $this->videos_model->get_debugVideoInfoCount($this->uid, $searchterm);
-        $config["per_page"] = 10;
-        $config["uri_segment"] = 3;
+        $config["per_page"] = $config["total_rows"];
         $this->pagination->initialize($config);
-        $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
-        $data['result'] = $this->videos_model->debugVideoInfo($this->uid, PER_PAGE, $page, $searchterm);
+        $data['result'] = $this->videos_model->debugVideoInfo($this->uid, $searchterm);
         $data["links"] = $this->pagination->create_links();
         $data['total_rows'] = $config["total_rows"];
         $this->show_view('debuginfo',$data);    

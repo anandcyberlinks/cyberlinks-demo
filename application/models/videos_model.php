@@ -1014,42 +1014,7 @@ class Videos_model extends CI_Model {
     /---------------------------------------------------------------
    */
     
-    function debugVideoInfo($uid, $limit, $start,  $data='') {
-        $like = '';
-        if (isset($data['content_title']) && $data['content_title'] != '') {
-            $like = " and c.title LIKE '%". $data['content_title'] ."%' ";
-        }
-        $query = sprintf('select
-                        c.id as contentId, c.title,
-                        f.name as video_filename, f.relative_path as video_relative_path,
-                        f_thumb.name as thumb_filename, f_thumb.relative_path as thumb_relative_path
-                        from contents c
-                        left join videos v on v.content_id = c.id
-                        left join files f on f.id =  v.file_id
-                        left join video_thumbnails vt on vt.content_id =  c.id
-                        left join files f_thumb on f_thumb.id =  vt.file_id
-                        where c.uid=%d and c.status=1  %s limit %d,%d',$uid, $like, $start, $limit);
-        $data = $this->db->query($query)->result();
-                     
-
-        array_walk($data,function($data){
-            $true = base_url().'assets/img/test-pass-icon.png';
-            $false = base_url().'assets/img/test-fail-icon.png';
-            
-            $data->video_relative_path = file_exists(REAL_PATH.$data->video_relative_path) ? $true : $false ;
-            $data->thumb_relative_path = (($data->thumb_relative_path != '') && (file_exists(REAL_PATH.$data->thumb_relative_path))) ? $true : $false ;
-            $data->thumb_small =(($data->thumb_filename != '') && (file_exists(REAL_PATH.THUMB_SMALL_PATH.$data->thumb_filename))) ? $true : $false ;
-            $data->thumb_medium = (($data->thumb_filename != '') && (file_exists(REAL_PATH.THUMB_MEDIUM_PATH.$data->thumb_filename))) ? $true : $false ;
-            $data->thumb_large = (($data->thumb_filename != '') && (file_exists(REAL_PATH.THUMB_LARGE_PATH.$data->thumb_filename))) ? $true : $false ;
-        });
-        return $data;
-    }
-    
-    function get_debugVideoInfoCount($uid,  $data='') {
-        $like = '';
-        if (isset($data['content_title']) && $data['content_title'] != '') {
-            $like = " and c.title LIKE '%". $data['content_title'] ."%' ";
-        }
+    function debugVideoInfo($uid, $formdata='') {        
         $query = sprintf('select
                         c.id as contentId, c.title,
                         f.relative_path as video_relative_path,
@@ -1059,9 +1024,76 @@ class Videos_model extends CI_Model {
                         left join files f on f.id =  v.file_id
                         left join video_thumbnails vt on vt.content_id =  c.id
                         left join files f_thumb on f_thumb.id =  vt.file_id
-                        where c.uid=%d and c.status=1  %s', $uid, $like);
-        $data = count($this->db->query($query)->result());
-        return $data;
+                        where c.uid=%d and c.status=1',$uid);
+        $resultset = $this->db->query($query)->result();
+        
+        $tmp = array();             
+        $true = base_url().'assets/img/test-pass-icon.png';
+        $false = base_url().'assets/img/test-fail-icon.png';
+        foreach($resultset as $key=>$data){
+            if(($data->video_relative_path != '') && ($data->thumb_relative_path != '') && ($data->thumb_filename != '') && (file_exists(REAL_PATH.$data->video_relative_path)) && (file_exists(REAL_PATH.$data->thumb_relative_path)) && (file_exists(REAL_PATH.THUMB_SMALL_PATH.$data->thumb_filename)) && (file_exists(REAL_PATH.THUMB_MEDIUM_PATH.$data->thumb_filename)) && (file_exists(REAL_PATH.THUMB_LARGE_PATH.$data->thumb_filename))){
+                $data->video_relative_path = $true ;
+                $data->thumb_relative_path =  $true ;
+                $data->thumb_small =$true ;
+                $data->thumb_medium = $true;
+                $data->thumb_large = $true ;
+                $tmp['valid'][] = $data;
+            } else {
+                $data->video_relative_path = $false ;
+                $data->thumb_relative_path =  $false ;
+                $data->thumb_small =$false ;
+                $data->thumb_medium = $false;
+                $data->thumb_large = $false ;
+                $tmp['invalid'][] = $data;
+            }    
+        }
+        if((isset($formdata)) && (($formdata['records'] =='') || ($formdata['records'] == 'invalid')) || (!(isset($formdata)))){
+            return $tmp['invalid'];
+        } else if((isset($formdata)) && ($formdata['records'] =='valid')) {
+            return $tmp['valid'];
+        }
+    }
+    
+    function get_debugVideoInfoCount($uid,  $formdata='') {
+
+        $query = sprintf('select
+                        c.id as contentId, c.title,
+                        f.relative_path as video_relative_path,
+                        f_thumb.name as thumb_filename, f_thumb.relative_path as thumb_relative_path
+                        from contents c
+                        left join videos v on v.content_id = c.id
+                        left join files f on f.id =  v.file_id
+                        left join video_thumbnails vt on vt.content_id =  c.id
+                        left join files f_thumb on f_thumb.id =  vt.file_id
+                        where c.uid=%d and c.status=1 ', $uid);
+        $resultset = $this->db->query($query)->result();
+        
+        $tmp = array();             
+        $true = base_url().'assets/img/test-pass-icon.png';
+        $false = base_url().'assets/img/test-fail-icon.png';
+        foreach($resultset as $key=>$data){
+            if(($data->video_relative_path != '') && ($data->thumb_relative_path != '') && ($data->thumb_filename != '') && (file_exists(REAL_PATH.$data->video_relative_path)) && (file_exists(REAL_PATH.$data->thumb_relative_path)) && (file_exists(REAL_PATH.THUMB_SMALL_PATH.$data->thumb_filename)) && (file_exists(REAL_PATH.THUMB_MEDIUM_PATH.$data->thumb_filename)) && (file_exists(REAL_PATH.THUMB_LARGE_PATH.$data->thumb_filename))){
+                $data->video_relative_path = $true ;
+                $data->thumb_relative_path =  $true ;
+                $data->thumb_small =$true ;
+                $data->thumb_medium = $true;
+                $data->thumb_large = $true ;
+                $tmp['valid'][] = $data;
+            } else {
+                $data->video_relative_path = $false ;
+                $data->thumb_relative_path =  $false ;
+                $data->thumb_small =$false ;
+                $data->thumb_medium = $false;
+                $data->thumb_large = $false ;
+                $tmp['invalid'][] = $data;
+            }    
+        }
+        
+        if((isset($formdata)) && (($formdata['records'] =='') || ($formdata['records'] == 'invalid')) || (!(isset($formdata)))){
+            return count($tmp['invalid']);
+        } else if((isset($formdata)) && ($formdata['records'] =='valid')) {
+            return count($tmp['valid']);
+        }
     }
 
 }

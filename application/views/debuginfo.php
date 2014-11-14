@@ -30,9 +30,13 @@
                                 <div class="box-body">
                                     <div class="row">
                                         <div class="form-group col-lg-4">
-                                            <div class="input text">
-                                                <label for=""><?php echo $welcome->loadPo('Title') ?></label>
-                                                <input type="text" name="content_title" id="content_title" class="form-control" value="<?php echo (isset($search['content_title'])) ? $search['content_title'] : ''; ?>" placeholder="<?php echo $welcome->loadPo('Title') ?>">
+                                            <div class="input select">
+                                                <label for="searchRecords"><?php echo $welcome->loadPo('Video Records') ?></label>
+                                                <select name="records" class="form-control" placeholder="<?php echo $welcome->loadPo('Video Records') ?>" id="searchCategory">
+                                                    <option value=""><?php echo $welcome->loadPo('Select Record Type') ?></option>
+                                                    <option value="invalid"><?php echo $welcome->loadPo('Invalid') ?></option>
+                                                    <option value="valid"><?php echo $welcome->loadPo('Valid') ?></option>
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
@@ -111,13 +115,6 @@
                                         ?>
                                     </div>
                                 </div>	
-                                <div class="row pull-right">
-                                    <div class="col-xs-12">
-                                        <div class="dataTables_paginate paging_bootstrap">
-                                            <ul class="pagination"><li><?php echo $welcome->loadPo($links); ?></li></ul> 
-                                        </div>
-                                    </div>
-                                </div>
                             </div>		
                             <!-- Pagination end -->
                         </div><!-- /.box-body -->
