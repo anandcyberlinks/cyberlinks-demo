@@ -152,7 +152,7 @@ class Subscription extends REST_Controller
                   $subscription['type'] = $key->type;
                   $subscription['amount'] = $key->amount;
                //------------------------------------------//
-               $key->subscription = (object)$subscription;
+               $key->subscription = $subscription;
                
                 if($key->thumbnail_path !=''){   
                $thumbArray['small'] = base_url().THUMB_SMALL_PATH.$key->thumbnail_path;
@@ -202,8 +202,10 @@ class Subscription extends REST_Controller
         //  echo '<pre>';print_r($result_pkg);
          
          $result = $this->package_array($result_pkg);
-         $result['video'] = $video;
+         //$result = (array)$result;
          //echo '<pre>';print_r($result);die;
+         $result['video'] = $video;
+         
       //-----------------------------//
       
        if($result)
@@ -223,13 +225,13 @@ class Subscription extends REST_Controller
         {
          if($row->package_id != @$package_id){
          $j=0;
-         $i++;
+        
          $thumbArray = array('small'=>'','medium'=>'','large'=>'');
        
          $package_id = $row->package_id;
          
         if(@$info){
-         $result['package'][$i]['info'] = (object) $info;
+         $result['package'][$i]['info'] = $info;
          $i++;
          $info = array();
         }
@@ -265,7 +267,7 @@ class Subscription extends REST_Controller
          $thumbArray['medium'] = base_url().THUMB_MEDIUM_PATH.$row->thumbnail_path;
          $thumbArray['large'] = base_url().THUMB_LARGE_PATH.$row->thumbnail_path;
         }
-         $info[$j]['image'] = (object) $thumbArray;         
+         $info[$j]['image'] = $thumbArray;         
          }else{
             $info[$j]['content_id'] = $row->content_id; 
             $info[$j]['title'] = $row->title;
@@ -288,12 +290,12 @@ class Subscription extends REST_Controller
          $thumbArray['medium'] = base_url().THUMB_MEDIUM_PATH.$row->thumbnail_path;
          $thumbArray['large'] = base_url().THUMB_LARGE_PATH.$row->thumbnail_path;
           }
-         $info[$j]['image'] = (object) $thumbArray; 
+         $info[$j]['image'] =  $thumbArray; 
          }
          $total++;
          $j++;
          if(count($package) == $total){
-             $result['package'][$i]['info'] = (object) $info;
+             $result['package'][$i]['info'] =  $info;
          }
         }
    return @$result;
@@ -313,8 +315,9 @@ class Subscription extends REST_Controller
    
    function checkout_post()
    {
-     $post = $this->post();
-     
+      $post = $this->post();
+      $invoice = date("His").rand(1234, 9632);
+      $post['invoice'] = $invoice;
       //return print_r($data);die;
        /* $user_id = $this->post('user_id');
         $user_name = $this->post('user_name');
@@ -329,7 +332,7 @@ class Subscription extends REST_Controller
       
       $cart = array($cart);
         if(count($cart)>0)
-        {         
+        {
          //-- insert in order table --//
             //$orderdata['user_id'] = $user_id;
             //$orderdata['total_amount'] = $total_amt;            
