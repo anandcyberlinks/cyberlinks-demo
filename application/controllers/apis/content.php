@@ -71,25 +71,33 @@ class Content extends Apis{
         $qString = $this->get();
         $condition = '';
         switch($qString['k']){
-            case 'title' :
-                    $condition.= isset($qString['val']) && $qString['val'] != '' ? sprintf('AND c.title like "%%%s%%" ',$qString['val']) : '';
-                    $condition.= ' group by c.id ';
-                break;
-            case 'category' :
-                    $condition.= isset($qString['val']) && $qString['val'] != '' ? sprintf('AND cat.id = %d ',$qString['val']) : '';
-                    $condition.= ' group by c.id ';
-                break;
             case 'recent' :
-                    $condition.= ' group by c.id ';
-                    $condition.= sprintf(' ORDER BY c.id DESC ');
+                    $condition.= ' group by c.`id` ';
+                    $condition.= sprintf(' ORDER BY c.`id` DESC ');
                 break;
             case 'popular' :
                     $condition.= ' group by c.id ';
-                    $condition.= sprintf(' ORDER BY v.views DESC ');
+                    $condition.= sprintf(' ORDER BY v.`views` DESC ');
                 break;
             case 'liked' :
                     $condition.= ' group by c.id ';
                     $condition.= sprintf(' ORDER BY ufl.`like` DESC ');
+                break;
+            default :
+                switch($qString['k']){
+                    case 'id' :
+                        $condition.= isset($qString['val']) && $qString['val'] != '' ? sprintf('AND c.id = %d ',$qString['val']) : '';
+                        $condition.= ' group by c.`id` ';
+                        break;
+                    case 'title' :
+                        $condition.= isset($qString['val']) && $qString['val'] != '' ? sprintf('AND c.title like "%%%s%%" ',$qString['val']) : '';
+                        $condition.= ' group by c.`id` ';
+                    break;
+                    case 'category' :
+                        $condition.= isset($qString['val']) && $qString['val'] != '' ? sprintf('AND cat.id = %d ',$qString['val']) : '';
+                        $condition.= ' group by c.`id` ';
+                    break;
+                }    
                 break;
         }
         
@@ -246,6 +254,10 @@ class Content extends Apis{
         $this->response($response);
     }
     
+    /*** detail section ****/
+    function detail_get(){
+        $qString = $this->get();
+    }
     
     /*** Comment section ****/
     function comments_get(){
