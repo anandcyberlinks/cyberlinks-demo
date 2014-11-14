@@ -36,12 +36,12 @@ if(count($VideoList->result) > 0){
                                                 foreach($val as $k=>$v){ //print_r($v->thumbs); exit; ?>
                                                 <div id="video-featured-2360" class="col-sm-4 mars-featuredvideo-widgets-2-2360">
                                                     <div class="item-img">
-                                                        <a title="<?php echo $v->title ?>" href="http://videotube.marstheme.com/video/best-trance-music-2014/">
+                                                        <a title="<?php echo $v->title ?>" href="<?php echo BASEURL.'play.php?id='.$v->id ?>">
                                                         <img width="360" height="240" src="<?php echo $v->thumbs->large; ?>" class="img-responsive wp-post-image" alt="Best TRANCE music 2014" /></a>                                        		<a href="http://videotube.marstheme.com/video/best-trance-music-2014/"><div class="img-hover"></div></a>
                                                     </div> 				                                
                                                     <div class="feat-item">
                                                         <div class="feat-info video-info-2360">
-                                                            <h3><a title="Best TRANCE music 2014" href="http://localhost/mobiletvweb/playvideo?id=<?php echo $v->id ?>"><?php echo $v->title ?></a></h3>
+                                                            <h3><a title="Best TRANCE music 2014" href="<?php echo BASEURL.'play.php?id='.$v->id ?>"><?php echo $v->title ?></a></h3>
                                                             <div class="meta"><span class="date"><?php echo dateFormat($v->created); ?></span>
                                                                 <span class="views"><i class="fa fa-eye"></i><?php echo $v->views; ?></span>
                                                                 <span class="heart"><i class="fa fa-heart"></i><?php echo $v->likes; ?></span>
@@ -91,14 +91,14 @@ if(count($VideoList->result) > 0){
                                                 foreach($val as $k=>$v){ //print_r($v->thumbs); exit; ?>
                                                 <div id="video-main-mars-mainvideo-widgets-2-2508" class="col-sm-4 col-xs-6 item video-2508">
                                                     <div class="item-img">
-                                                        <a title="<?php echo $v->title ?>" href="http://localhost/mobiletvweb/playvideo.php">
+                                                        <a title="<?php echo $v->title ?>" href="<?php echo BASEURL.'play.php?id='.$v->id ?>">
                                                             <img width="230" height="150" src="<?php echo $v->thumbs->large; ?>" class="img-responsive wp-post-image" alt="<?php echo $v->title ?>" />
                                                         </a>
-                                                        <a href="http://videotube.marstheme.com/video/awesome-film-perfomance/">
+                                                        <a href="<?php echo BASEURL.'play.php?id='.$v->id ?>">
                                                             <div class="img-hover"></div>
                                                         </a>
                                                     </div>
-                                                    <h3><a title="<?php echo $v->title ?>" href="http://localhost/mobiletvweb/playvideo.php"><?php echo $v->title ?></a></h3>
+                                                    <h3><a title="<?php echo $v->title ?>" href="<?php echo BASEURL.'play.php?id='.$v->id ?>"><?php echo $v->title ?></a></h3>
                                                     <div class="meta">
                                                         <span class="date"><?php echo dateFormat($v->created); ?></span>
                                                         <span class="views"><i class="fa fa-eye"></i><?php echo $v->views; ?></span>
@@ -133,14 +133,14 @@ if(count($VideoList->result) > 0){
                                                 foreach($val as $k=>$v){ //print_r($v->thumbs); exit; ?>
                                                 <div id="video-main-mars-mainvideo-widgets-2-2508" class="col-sm-4 col-xs-6 item video-2508">
                                                     <div class="item-img">
-                                                        <a title="<?php echo $v->title ?>" href="http://localhost/mobiletvweb/playvideo.php">
+                                                        <a title="<?php echo $v->title ?>" href="<?php echo BASEURL.'play.php?id='.$v->id ?>">
                                                             <img width="230" height="150" src="<?php echo $v->thumbs->large; ?>" class="img-responsive wp-post-image" alt="<?php echo $v->title ?>" />
                                                         </a>
-                                                        <a href="http://videotube.marstheme.com/video/awesome-film-perfomance/">
+                                                        <a href="<?php echo BASEURL.'play.php?id='.$v->id ?>">
                                                             <div class="img-hover"></div>
                                                         </a>
                                                     </div>
-                                                    <h3><a title="<?php echo $v->title ?>" href="http://localhost/mobiletvweb/playvideo.php"><?php echo $v->title ?></a></h3>
+                                                    <h3><a title="<?php echo $v->title ?>" href="<?php echo BASEURL.'play.php?id='.$v->id ?>"><?php echo $v->title ?></a></h3>
                                                     <div class="meta">
                                                         <span class="date"><?php echo dateFormat($v->created); ?></span>
                                                         <span class="views"><i class="fa fa-eye"></i><?php echo $v->views; ?></span>
@@ -252,11 +252,11 @@ if(count($VideoList->result) > 0){
                             
                             <div class="col-xs-6 item mars-videos-sidebar-widget-2-1719">
                                 <div class="item-img">
-                                    <a title="<?=$val->title ?>" href="http://videotube.marstheme.com/video/selfie-the-chainsmokers/">
+                                    <a title="<?=$val->title ?>" href="<?php echo BASEURL.'play.php?id='.$val->id ?>">
                                     <img width="165" height="108" src="<?=$val->thumbs->large ?>" class="img-responsive wp-post-image" alt="music2" /></a>
-                                    <a href="http://videotube.marstheme.com/video/selfie-the-chainsmokers/"><div class="img-hover"></div></a>
+                                    <a href="<?php echo BASEURL.'play.php?id='.$val->id ?>"><div class="img-hover"></div></a>
                                 </div>	            	
-                                <h3><a title="<?=$val->title ?>" href="http://videotube.marstheme.com/video/selfie-the-chainsmokers/"><?=$val->title ?></a></h3>
+                                <h3><a title="<?=$val->title ?>" href="<?php echo BASEURL.'play.php?id='.$val->id ?>"><?=$val->title ?></a></h3>
 
                                 <div class="meta"><span class="date"><?php echo dateFormat($v->created); ?></span>
                                     <span class="views"><i class="fa fa-eye"></i><?=$val->views ?></span><span class="heart">

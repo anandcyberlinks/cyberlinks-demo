@@ -1,8 +1,6 @@
-<?php
-require_once('constant.php');
+<?php require_once('constant.php');
 $appdetail = appdetail();
 ?>
-<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8">
@@ -102,9 +100,7 @@ $appdetail = appdetail();
                             </ul>
                         </li>
                         <li id="menu-item-2078" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-2078 depth"><a href="http://themeforest.net/item/videotube-a-responsive-video-wordpress-theme/7214445?ref=phpface">Buy Now</a></li>
-                    </ul>			</nav>
+                    </ul>
+                </nav>
             </div>
-        </div><!-- /#navigation-wrapper -->				    
-
-
-
+        </div>

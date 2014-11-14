@@ -43,7 +43,20 @@ $pagination = range(0, $data->tr, $lt);
                     </div>
                 <?php } ?>
             </div>
+                     <ul class="pagination">
+        <?php
+        foreach ($pagination as $key => $val) {
+            $page = $key + 1;
+            $qs = http_build_query(array_merge($_GET, array('p' => $page)));
+            if ($page == count($pagination))
+                echo sprintf('<li><span class="page-nmbers %s"><a href="%s">Last →</a></span></li>', ($page) == $cur ? 'current' : '', '?' . $qs);
+            else
+                echo sprintf('<li><span class="page-numbers %s"><a href="%s">%d</a></span></li>', ($page) == $cur ? 'current' : '', '?' . $qs, $page);
+        }
+        ?>
+    </ul>
         </div>
+   
         <div class="col-sm-4 sidebar">
             <div class="widget mars-subscribox-widget"><h4 class="widget-title">Social Subscribox</h4>
                 <div class="social-counter-item">
@@ -129,18 +142,7 @@ $pagination = range(0, $data->tr, $lt);
             </div>
         </div>
     </div><!-- /.sidebar -->
-    <ul class="pagination">
-        <?php
-        foreach ($pagination as $key => $val) {
-            $page = $key + 1;
-            $qs = http_build_query(array_merge($_GET, array('p' => $page)));
-            if ($page == count($pagination))
-                echo sprintf('<li><span class="page-nmbers %s"><a href="%s">Last →</a></span></li>', ($page) == $cur ? 'current' : '', '?' . $qs);
-            else
-                echo sprintf('<li><span class="page-numbers %s"><a href="%s">%d</a></span></li>', ($page) == $cur ? 'current' : '', '?' . $qs, $page);
-        }
-        ?>
-    </ul>
+
 </div><!-- /.row -->   
 </div>
 <?php include "footer.php" ?>
