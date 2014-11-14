@@ -22,7 +22,7 @@ $temp = $detail->result[0];
             </div>
 
             <div class="videoWrapper player">
-                <iframe src="http://182.18.165.252/multitvfinal/index.php/details?id=<?php echo $temp->id ?>&device=3g" frameborder="0"  webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe>	                	
+                <iframe hight="98%" width="97%" src="http://182.18.165.252/multitvfinal/index.php/details?id=<?php echo $temp->id ?>&device=3g" frameborder="0"  webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe>	                	
             </div>
 
 
