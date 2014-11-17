@@ -29,11 +29,8 @@ class Package extends REST_Controller
        //-- validate token --//
        $token = $this->get('token');
      // $action = $this->get('action');
-      $action = $this->uri->segment(3);
+      $this->owner_id = $this->validateToken($token);
       
-      if($action != 'ipn' && $action != 'cancel'){
-        $this->owner_id = $this->validateToken($token);
-      }
        //--paging limit --//
           $this->param =  $this->paging($this->get('p'));
    }

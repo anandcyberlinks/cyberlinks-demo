@@ -1708,6 +1708,7 @@ abstract class REST_Controller extends CI_Controller
         
         function package_array($package)
         {
+            $result['package']=array(); 
             $i=0;
             $total=0; 
             //----- Package data ---//
