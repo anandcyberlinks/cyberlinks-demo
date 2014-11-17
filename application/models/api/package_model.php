@@ -27,6 +27,7 @@ class package_model extends CI_Model{
 	$this->db->join('video_flavors vf','vf.id = fv.flavor_id' ,'LEFT');
 	$this->db->join('flavors fl','vf.flavor_id = fl.id' ,'LEFT');	
 	$this->db->where('pk.uid',$this->owner_id);
+	$this->db->where('pk.status',1);	
         $this->db->order_by('pk.id asc');
         $query = $this->db->get();
 	//echo '<pre>'. $this->db->last_query();

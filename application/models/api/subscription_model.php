@@ -52,6 +52,7 @@ class Subscription_model extends CI_Model{
 	$this->db->join('video_thumbnails vt','vt.content_id=pkv.content_id' ,'LEFT');
 	$this->db->join('files f','vt.file_id=f.id and vt.default_thumbnail=1' ,'Left');	
 	$this->db->where('pk.uid',$this->owner_id);
+	$this->db->where('pk.status',1);
 	$this->db->where('pkv.package_id IN (select package_id  as package_id from package_video where content_id='.$data['content_id'].' )',NULL,false);
 	$query = $this->db->get();
 	//echo $this->db->last_query();
@@ -65,6 +66,7 @@ class Subscription_model extends CI_Model{
         $this->db->join('price p','d.id=p.duration_id','inner');
 	$this->db->join('package pk','p.content_id=pk.id' ,'inner');
         $this->db->where('d.uid',$this->owner_id);
+	$this->db->where('pk.status',1);
         $this->db->where('pk.id',$package_id);        
         $query = $this->db->get();
        //echo $this->db->last_query();
@@ -118,7 +120,7 @@ class Subscription_model extends CI_Model{
 	$this->db->join('flavored_video fv','fv.content_id = c.id' ,'LEFT');
 	$this->db->join('video_flavors vf','vf.id = fv.flavor_id' ,'LEFT');
 	$this->db->join('flavors fl','vf.flavor_id = fl.id' ,'LEFT');
-        $this->db->where('d.uid',$this->owner_id);
+        $this->db->where('d.uid',$this->owner_id);	
         $this->db->where('o.user_id',$data['user_id']);
         $query = $this->db->get();
 	//echo '<pre>'. $this->db->last_query();
