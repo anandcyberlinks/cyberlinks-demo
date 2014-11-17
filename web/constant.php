@@ -23,6 +23,8 @@ define('APPDETAIL_URL', sprintf('http://182.18.165.252/multitvfinal/apis/users/a
 define('VIDEO_LIST', sprintf('http://182.18.165.252/multitvfinal/apis/content/getlist/type/video/at/%s', TOKEN));
 define('FEATURED_LIST', sprintf('http://182.18.165.252/multitvfinal/apis/content/featured/at/%s/st/0/lt/9', TOKEN));
 define('VIDEO_SEARCH', sprintf('http://182.18.165.252/multitvfinal/apis/content/search/at/'.TOKEN));
+define('CAT_LIST', sprintf('http://182.18.165.252/multitvfinal/apis/category/getlist/at/'.TOKEN));
+
 define('DATE_FORMAT', 'M,d Y');
 
 
@@ -31,6 +33,15 @@ function appdetail() {
     $_SESSION['app'] = $result = getdata(APPDETAIL_URL);
     if (count($result) > 0) {
         return $result->result[0];
+    } else {
+        return false;
+    }
+}
+
+function catList(){
+    $result = getdata(CAT_LIST);
+    if (count($result) > 0) {
+        return $result;
     } else {
         return false;
     }
@@ -46,8 +57,8 @@ function videoList($st = 0,$lt = 10) {
     }
 }
 
-function searchVideo($st = 0,$lt = 10, $title, $ob= null){
-    $url = sprintf('%s/st/%d/lt/%d/k/title/val/%s/ob/%s',VIDEO_SEARCH,$st,$lt, $title, $ob);
+function searchVideo($st = 0,$lt = 10, $title, $ob= null, $k){
+    $url = sprintf('%s/st/%d/lt/%d/k/%s/val/%s/ob/%s',VIDEO_SEARCH,$st,$lt, $k, $title, $ob);
     $result = getdata($url);
     if (count($result) > 0) {
         return $result;

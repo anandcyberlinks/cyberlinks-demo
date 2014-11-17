@@ -20,12 +20,9 @@ $temp = $detail->result[0];
                     <span class="likes"><i class="fa fa-thumbs-up"></i>
                         <label class="likevideo2508"><?php echo $temp->likes ?></label></span></a>
             </div>
-
             <div class="videoWrapper player">
                 <iframe hight="98%" width="97%" scrolling="no" src="http://182.18.165.252/multitvfinal/index.php/details?id=<?php echo $temp->id ?>&device=3g" frameborder="0"  webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe>	                	
             </div>
-
-
             <div id="lightoff"></div>
 
             <div class="row video-options">
@@ -47,7 +44,7 @@ $temp = $detail->result[0];
                     <a class="option likes-dislikes" href="javascript:void(0)" action="like" id="2508" video="2508">
                         <i class="fa fa-thumbs-up"></i>
                         <span class="option-text likes-dislikes">
-                            <label class="likevideo2508">115</label>
+                            <label class="likevideo2508"><?=$temp->likes ?></label>
                         </span>
                     </a>
                 </div>
@@ -78,10 +75,8 @@ $temp = $detail->result[0];
                 </div>
             </div>
             <div class="video-details">
-                <span class="date">Published on Sep 29, 2014 by <a href="http://videotube.marstheme.com/author/demo/">ovxsolutions.com</a></span>
-                <div class="post-entry"><p>Lorem ipsum dolor sit amet, ex vim nostrud phaedrum, docendi facilisi te sed. An molestie inimicus temporibus per, vel debet aeque consequat et. Usu insolens deserunt suscipiantur et, ne enim laudem iudicabit his. Dicam luptatum interpretaris te his, quo te nisl nostrum, id lobortis senserit contentiones cum. Dicant corpora platonem usu ad, his sint officiis ad, et usu oratio cetero iisque.</p>
-                    <p>Choro interesset ei vis. Prompta singulis gubergren eum no, ex mei mazim constituto. Ad appareat erroribus est, at legendos petentium vix, ei mea timeam nostrum. His soluta possim no. Probo contentiones ut usu, dicam aliquando ius ad.<span itemprop="video" itemscope="" itemtype="http://schema.org/VideoObject"><meta itemprop="name" content="Awesome Film Perfomance"><meta itemprop="thumbnailURL" content="http://videotube.marstheme.com/wp-content/uploads/2014/09/awesome-film-perfomance-videotube-a-responsive-video-wordpress-theme.jpg"><meta itemprop="description" content="Lorem ipsum dolor sit amet, ex vim nostrud phaedrum, docendi facilisi te sed. An molestie inimicus temporibus per, vel debet aeque consequat et. Usu insolens deserunt suscipiantur et, ne enim laudem iudicabit his. Dicam luptatum interpretaris te his, quo te nisl nostrum, id lobortis senserit content"><meta itemprop="uploadDate" content="2014-09-29T03:20:45+00:00"><meta itemprop="embedURL" content="https://www.vimeo.com/moogaloop.swf?clip_id=106786265"><meta itemprop="duration" content="PT9M18S"></span></p>
-                </div>
+                <span class="date"><?php echo dateFormat($temp->created); ?></span>
+                <div class="post-entry"><?=$temp->description ?></div>
                 <span class="meta"><span class="meta-info">Category</span> <a href="http://videotube.marstheme.com/categories/music/" rel="tag">Music</a> <a href="http://videotube.marstheme.com/categories/sports/" rel="tag">Sports</a> <a href="http://videotube.marstheme.com/categories/trailers/" rel="tag">Trailers</a></span>
                 <span class="meta"></span>
             </div>
@@ -219,18 +214,15 @@ $temp = $detail->result[0];
                     </div>
                 </div>
             </div><!-- /#carousel-->
-            <div class="widget widget_text">			<div class="textwidget"><img src="http://placehold.it/750x100"></div>
-            </div>								<div class="comments">
+            <div class="widget widget_text">
+                <div class="textwidget"><img src="http://placehold.it/750x100"></div>
+            </div>
+            <div class="comments">
                 <div class="section-header">
                     <h3>no comment</h3>
                 </div>
-
                 <ul class="list-unstyled comment-list">
                 </ul>
-
-
-
-
                 <div id="respond" class="comment-respond">
                     <h3 id="reply-title" class="comment-reply-title">Add your comment <small><a rel="nofollow" id="cancel-comment-reply-link" href="/video/awesome-film-perfomance/#respond" style="display:none;">Cancel Reply</a></small></h3>
                     <form action="http://videotube.marstheme.com/wp-comments-post.php" method="post" id="commentform" class="comment-form">
@@ -268,6 +260,7 @@ $temp = $detail->result[0];
 
             
             <div class="col-sm-4 sidebar">
+                <?php /*
                     <div class="widget mars-loginform-widget"><h4 class="widget-title">Profile</h4><div class="alert alert-danger" style="display:none;"></div>
                         <form name="vt_loginform" id="vt_loginform" action="http://videotube.marstheme.com/wp-login.php" method="post">
 
@@ -289,7 +282,11 @@ $temp = $detail->result[0];
                             <input type="hidden" name="action" value="vt_ajax_login">
                             <input type="hidden" name="button_label" value="Log In">
 
-                        </form></div><div class="widget mars-subscribox-widget"><h4 class="widget-title">Social Subscribox</h4>			        <div class="social-counter-item">
+                        </form>
+                    </div>
+                    */ ?>
+                    
+                    <div class="widget mars-subscribox-widget"><h4 class="widget-title">Social Subscribox</h4>			        <div class="social-counter-item">
                             <a target="_blank" href="456093831125324">
                                 <i class="fa fa-facebook"></i>
                                 <span class="counter">135</span>

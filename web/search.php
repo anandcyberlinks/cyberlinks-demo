@@ -1,12 +1,20 @@
 <?php
 include "header.php";
 $lt = 9;
+if(isset($_GET['s'])){
 $val = $_GET['s'];
+} else {
+    $val = "";
+}
+$k = 'title';
+if(isset($_GET['k'])){
+    $k = $_GET['k'];
+}
 $cur = isset($_GET['p']) ? $_GET['p'] : 1;
 $ob = isset($_GET['ob']) ? $_GET['ob'] : 'latest';
-$data = searchVideo(($cur - 1) * $lt, $lt, $val, $ob);
+$data = searchVideo(($cur - 1) * $lt, $lt, $val, $ob, $k);
 $recent = recentVideo(0, 4);
-$pagination = range(0, $data->tr, $lt); 
+$pagination = range(1, $data->tr, $lt); 
 ?>
 <div class="container">
     <div class="row">
@@ -32,9 +40,9 @@ $pagination = range(0, $data->tr, $lt);
             <div class="row video-section meta-maxwidth-230">
                 <?php foreach ($data->result as $value) { //echo '<pre>';print_r($value);echo '</pre>'; ?>
                     <div class="col-sm-4 col-xs-6 item">
-                        <a title="<?php echo $value->title; ?>" href="http://videotube.marstheme.com/video/best-trance-music-2014/">
+                        <a title="<?php echo $value->title; ?>" href="<?php echo BASEURL.'play.php?id='.$value->id ?>">
                             <img src="<?php echo $value->thumbs->large; ?>" class="img-responsive wp-post-image" alt="Best TRANCE music 2014" height="150" width="230"></a>
-                        <h3><a title="<?php echo $value->title; ?>" href="http://videotube.marstheme.com/video/best-trance-music-2014/"><?php echo $value->title; ?></a></h3>
+                        <h3><a title="<?php echo $value->title; ?>" href="<?php echo BASEURL.'play.php?id='.$value->id ?>"><?php echo $value->title; ?></a></h3>
                         <div class="meta"><span class="date"><?php echo dateFormat($value->created); ?></span>
                             <span class="views"><i class="fa fa-eye"></i><?php echo $value->views; ?></span>
                             <span class="heart"><i class="fa fa-heart"></i><?php echo $value->likes; ?></span>

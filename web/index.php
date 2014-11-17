@@ -113,7 +113,6 @@ if(count($VideoList->result) > 0){
                                 </div>
                             </div>
                         </div>
-
                     </div><!-- /#carousel-->
                     <div id="carousel-latest-mars-mainvideo-widgets-3" class="carousel carousel-mars-mainvideo-widgets-3 slide video-section" data-ride="carousel">
                         <div class="section-header">
@@ -159,9 +158,9 @@ if(count($VideoList->result) > 0){
                     </div>	
                 </div><!-- /.video-section -->
                 <div class="col-sm-4 sidebar">
+                    <?php /*
                     <div class="widget mars-loginform-widget"><h4 class="widget-title">Profile</h4><div class="alert alert-danger" style="display:none;"></div>
                         <form name="vt_loginform" id="vt_loginform" action="http://videotube.marstheme.com/wp-login.php" method="post">
-
                             <p class="login-username">
                                 <label for="user_login">Username</label>
                                 <input type="text" name="log" id="user_login" class="input" value="" size="20" />
@@ -180,7 +179,10 @@ if(count($VideoList->result) > 0){
                             <input type="hidden" name="action" value="vt_ajax_login">
                             <input type="hidden" name="button_label" value="Log In">
 
-                        </form></div><div class="widget mars-subscribox-widget"><h4 class="widget-title">Social Subscribox</h4>			        <div class="social-counter-item">
+                        </form>
+                    </div>
+                    */ ?>
+                    <div class="widget mars-subscribox-widget"><h4 class="widget-title">Social Subscribox</h4>			        <div class="social-counter-item">
                             <a target="_blank" href="456093831125324">
                                 <i class="fa fa-facebook"></i>
                                 <span class="counter">135</span>
