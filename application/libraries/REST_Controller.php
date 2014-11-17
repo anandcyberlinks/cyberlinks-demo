@@ -1705,4 +1705,114 @@ abstract class REST_Controller extends CI_Controller
 		}
 		return TRUE;
 	}
+        
+        function package_array($package)
+        {
+            $i=0;
+            $total=0; 
+            //----- Package data ---//
+               foreach($package as $row)
+               {
+               if($row->package_id != @$package_id){
+               $j=0;
+              
+                //-- get pakcage durations --//
+                    $subscription = $this->subscription_model->susbcription_packages($row->package_id);
+                 //------------------------------------------//
+                 
+               $thumbArray = array('small'=>'','medium'=>'','large'=>'');
+             
+               $package_id = $row->package_id;
+               
+                if(@$info){
+                $result['package'][$i]['info'] = $info;
+                $i++;
+                $info = array();
+                }
+                
+                //-- get total likes --//
+                $likes = $this->Video_model->like_count($row->content_id);                
+                //-- get rating --//
+                $rating =  $this->Video_model->getAverageRating($row->content_id);
+                //-- video duration --//
+                $duration = $this->time_from_seconds($row->duration);
+                $row->duration = $duration;
+                $url = base_url().'index.php/details?id='.$row->content_id.'&device='.$this->get('device');
+                
+               $info[$j]['title'] = $row->title;       
+               $info[$j]['content_id'] = $row->content_id;
+               $info[$j]['description'] = $row->description;       
+               $info[$j]['type'] = $row->type;
+               $info[$j]['content_type'] = $row->content_type;       
+               $info[$j]['video_path'] = $row->video_path;
+               $info[$j]['category_id'] = $row->category_id;       
+               $info[$j]['category_name'] = $row->category_name;
+               $info[$j]['duration'] = $row->duration;       
+               $info[$j]['total_view'] = $row->total_view;
+               $info[$j]['thumbnail_path'] = $row->thumbnail_path;       
+               $info[$j]['url'] = $url;                
+               $info[$j]['rating'] = $rating;        
+              
+              //-- package detail --//
+              $result['package'][$i]['title'] = $row->package_name;
+              $result['package'][$i]['package_id'] = $row->package_id;
+              
+              //-- subscription array --//
+            /*  $result['package'][$i]['subscription']['subscription_name'] = $row->subscription_name;
+              $result['package'][$i]['subscription']['days'] = $row->days;
+              $result['package'][$i]['subscription']['subscription_id'] = $row->subscription_id;
+              $result['package'][$i]['subscription']['type'] = $row->type;
+              $result['package'][$i]['subscription']['amount'] = $row->amount;
+              */
+                $result['package'][$i]['subscription'] = $subscription;
+              //-- video thumbnail --//
+              if($row->thumbnail_path !=''){
+               $thumbArray['small'] = base_url().THUMB_SMALL_PATH.$row->thumbnail_path;
+               $thumbArray['medium'] = base_url().THUMB_MEDIUM_PATH.$row->thumbnail_path;
+               $thumbArray['large'] = base_url().THUMB_LARGE_PATH.$row->thumbnail_path;
+              }
+               $info[$j]['image'] = $thumbArray;         
+               }else{
+                
+                //-- get total likes --//
+                $likes = $this->Video_model->like_count($row->content_id);                
+                //-- get rating --//
+                $rating =  $this->Video_model->getAverageRating($row->content_id);
+                //-- video duration --//
+                $duration = $this->time_from_seconds($row->duration);
+                $row->duration = $duration;
+                
+                $url = base_url().'index.php/details?id='.$row->content_id.'&device='.$this->get('device');
+                
+               $info[$j]['content_id'] = $row->content_id; 
+               $info[$j]['title'] = $row->title;
+               $info[$j]['description'] = $row->description;       
+               $info[$j]['type'] = $row->type;
+               $info[$j]['content_type'] = $row->content_type;       
+               $info[$j]['video_path'] = $row->video_path;
+               $info[$j]['category_id'] = $row->category_id;       
+               $info[$j]['category_name'] = $row->category_name;
+               $info[$j]['duration'] = $row->duration;       
+               $info[$j]['total_view'] = $row->total_view;
+               $info[$j]['thumbnail_path'] = $row->thumbnail_path;       
+               $info[$j]['url'] = $url;                     
+               $info[$j]['rating'] = $rating;
+            
+             //-- video thumbnail --//
+               if($row->thumbnail_path !=''){
+              $thumbArray['small'] = base_url().THUMB_SMALL_PATH.$row->thumbnail_path;
+              $thumbArray['medium'] = base_url().THUMB_MEDIUM_PATH.$row->thumbnail_path;
+              $thumbArray['large'] = base_url().THUMB_LARGE_PATH.$row->thumbnail_path;
+               }
+              $info[$j]['image'] =  $thumbArray; 
+              }
+               
+              $total++;
+              $j++;
+              if(count($package) == $total){
+                  $result['package'][$i]['info'] =  $info;
+              }
+           }
+            return @$result;
+        }
 }
