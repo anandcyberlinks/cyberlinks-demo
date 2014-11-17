@@ -1707,8 +1707,7 @@ abstract class REST_Controller extends CI_Controller
 	}
         
         function package_array($package)
-        {
-            $result['package']=array(); 
+        {            
             $i=0;
             $total=0; 
             //----- Package data ---//
@@ -1726,7 +1725,7 @@ abstract class REST_Controller extends CI_Controller
                $package_id = $row->package_id;
                
                 if(@$info){
-                $result['package'][$i]['info'] = $info;
+                $result[$i]['info'] = $info;
                 $i++;
                 $info = array();
                 }
@@ -1755,8 +1754,8 @@ abstract class REST_Controller extends CI_Controller
                $info[$j]['rating'] = $rating;        
               
               //-- package detail --//
-              $result['package'][$i]['title'] = $row->package_name;
-              $result['package'][$i]['package_id'] = $row->package_id;
+              $result[$i]['title'] = $row->package_name;
+              $result[$i]['package_id'] = $row->package_id;
               
               //-- subscription array --//
             /*  $result['package'][$i]['subscription']['subscription_name'] = $row->subscription_name;
@@ -1765,7 +1764,7 @@ abstract class REST_Controller extends CI_Controller
               $result['package'][$i]['subscription']['type'] = $row->type;
               $result['package'][$i]['subscription']['amount'] = $row->amount;
               */
-                $result['package'][$i]['subscription'] = $subscription;
+                $result[$i]['subscription'] = $subscription;
               //-- video thumbnail --//
               if($row->thumbnail_path !=''){
                $thumbArray['small'] = base_url().THUMB_SMALL_PATH.$row->thumbnail_path;
@@ -1811,7 +1810,7 @@ abstract class REST_Controller extends CI_Controller
               $total++;
               $j++;
               if(count($package) == $total){
-                  $result['package'][$i]['info'] =  $info;
+                  $result[$i]['info'] =  $info;
               }
            }
             return @$result;

@@ -198,13 +198,13 @@ class Subscription extends REST_Controller
            $key->image = $thumbArray;          
             } );*/
          $i=0;
-         $result = array();
-        //  echo '<pre>';print_r($result_pkg);
+         $result = array();      
+         $result['video'] = $video;
+         $result['package'] = $this->package_array($result_pkg);
          
-         $result = $this->package_array($result_pkg);
          //$result = (array)$result;
          //echo '<pre>';print_r($result);die;
-         $result['video'] = $video;
+         
          
       //-----------------------------//
       
