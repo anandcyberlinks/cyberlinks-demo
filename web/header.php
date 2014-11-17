@@ -62,7 +62,7 @@ $cat = catList()->result;
                         <li id="menu-item-2090">
                             <a href="<?=BASEURL ?>">Home </a>
                         </li>
-                        <li id="menu-item-2048" class="menu-item-has-children dropdown <?php if(isset($_GET['k']) && $_GET['k'] == 'category'){ echo active; } ?>"><a href="http://videotube.marstheme.com/video">Browse <b class="caret"></b></a>
+                        <li id="menu-item-2048" class="menu-item-has-children dropdown <?php if(isset($_GET['k']) && $_GET['k'] == 'category'){ echo active; } ?>"><a href="">Browse <b class="caret"></b></a>
                             <ul class="dropdown-menu">
                                 <?php foreach($cat as $val){ ?>
                                 <li id="menu-item-2072" class="menu-item-object-categories"><a href="<?php echo BASEURL.'search.php?k=category&s='.$val->id; ?>"><?php echo $val->category ?></a></li>
