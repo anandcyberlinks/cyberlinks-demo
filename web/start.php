@@ -1,4 +1,4 @@
-<?php define('BASEURL', sprintf('http://%s/multitvfinal/web/',$_SERVER['HTTP_HOST'])); ?>
+<?php /* define('BASEURL', sprintf('http://%s/multitvfinal/web/',$_SERVER['HTTP_HOST'])); ?>
 
 <a href="<?php echo BASEURL ?>?t=ad8b0280827">I am Punjabi</a><br><br>
 
@@ -8,4 +8,4 @@
 
 <a href="<?php echo BASEURL ?>?t=5450d5c33b853">Green TV</a><br><br>-->
 
-<a href="<?php echo BASEURL ?>?t=545a1e3363dd2">Veena TV</a><br><br>
+<a href="<?php echo BASEURL ?>?t=545a1e3363dd2">Veena TV</a><br><br> */ ?>
