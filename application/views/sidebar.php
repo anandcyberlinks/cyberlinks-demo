@@ -39,13 +39,13 @@
                 <a href="<?php echo base_url() ?>video/live_streaming" >
                     <i class="fa fa-fw fa-film"></i> <span><?php echo $welcome->loadPo('Live Stream'); ?></span>
                 </a>
-            </li>
+            </li><?php /*
             <li class="<?= ($this->uri->segment(1) == 'event') ? 'active' : '' ?>">
                 <a href="<?php echo base_url() ?>event">
                     <i class="fa fa-fw fa-laptop"></i> <span><?php echo $welcome->loadPo('Events'); ?></span>
                 </a>
             </li>
-            
+            */ ?>
             <li class="treeview <?= (($this->uri->segment(1) == 'category') || ($this->uri->segment(1) == 'transcode') || ($this->uri->segment(1) == 'genre') || ($this->uri->segment(1) == 'dform') || ($this->uri->segment(1) == 'package') || ($this->uri->segment(1) == 'subscription') || ($this->uri->segment(1) == 'youtubevideo')) ? 'active' : '' ?>">
                 <a href="#">
                     <i class="fa fa-laptop"></i>
@@ -72,7 +72,7 @@
             </li>
             <?php
             $s = $this->session->all_userdata();
-            if ($s[0]->role == 'Admin') {
+            if ($s[0]->role == 'Admin' && $s[0]->role == 'Superadmin') {
                 ?>
                 
                 <li class="treeview <?= (($this->uri->segment(1) == 'user') || ($this->uri->segment(1) == 'role')) ? 'active' : '' ?>">
@@ -84,7 +84,6 @@
                 <ul class="treeview-menu">
                     <li class="<?= ($this->uri->segment(1) === 'user') ? 'active' : '' ?>"><a href="<?php echo base_url() ?>user"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('User List'); ?></a></li>
                     <li class="<?= ($this->uri->segment(1) === 'role') ? 'active' : '' ?>"><a href="<?php echo base_url() ?>role"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('User Role'); ?></a></li>
-
                 </ul>
             </li>
                 <li class="<?= ($this->uri->segment(1) == 'device') ? 'active' : '' ?>">
@@ -100,7 +99,8 @@
             </li>
               <li class="<?=($this->uri->segment(1)=='comments')?'active':''?>">
                 <a href="<?php echo base_url() ?>comments">
-              <i class="glyphicon glyphicon-comment"></i> <span><?php echo $welcome->loadPo('Comments'); ?></span>
+              <i class="glyphicon glyphicon-comment"></i>
+                <span><?php echo $welcome->loadPo('Comments'); ?></span>
               </a>
               </li>
         </ul>
