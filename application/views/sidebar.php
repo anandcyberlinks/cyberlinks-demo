@@ -60,7 +60,7 @@
                     <?php } ?>
                     <?php /* <li class="<?=($this->uri->segment(1)==='youtubevideo')?'active':''?>"><a href="<?php echo base_url() ?>youtubevideo"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('Youtube'); ?></a></li> */ ?>
                     <li class="<?= ($this->uri->segment(1) === 'dform') ? 'active' : '' ?>"><a href="<?php echo base_url() ?>dform"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('Advance Fields'); ?></a></li>
-                    <li class="<?= ($this->uri->segment(1) === 'subscription') ? 'active' : '' ?>"><a href="<?php echo base_url() ?>subscription"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('Subscription'); ?></a></li>
+                    <?php /* <li class="<?= ($this->uri->segment(1) === 'subscription') ? 'active' : '' ?>"><a href="<?php echo base_url() ?>subscription"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('Subscription'); ?></a></li> */ ?>
                     <li class="<?= ($this->uri->segment(1) === 'package') ? 'active' : '' ?>"><a href="<?php echo base_url() ?>package"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('Package'); ?></a></li>
 
                 </ul>
