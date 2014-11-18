@@ -72,7 +72,7 @@
             </li>
             <?php
             $s = $this->session->all_userdata();
-            if ($s[0]->role == 'Admin' && $s[0]->role == 'Superadmin') {
+            if ($s[0]->role == 'Admin' || $s[0]->role == 'Superadmin') {
                 ?>
                 
                 <li class="treeview <?= (($this->uri->segment(1) == 'user') || ($this->uri->segment(1) == 'role')) ? 'active' : '' ?>">
