@@ -40,7 +40,7 @@ class Package extends REST_Controller
         $get = $this->get();    
         $package = $this->package_model->getpackagelist($get);
         
-        $result = $this->package_array($package);
+        $result['package'] = $this->package_array($package);
        
        // echo '<pre>';print_r($result);
         if($result)
