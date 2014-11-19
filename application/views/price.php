@@ -16,7 +16,7 @@
 <?php foreach($result as $value){?>
     <tr>
         <td><?php echo $value->name; ?></td>
-        <td><?php echo $value->days; ?></td>
+        <td><?php if($value->days < 1){ echo 'One Time';}else{ echo $value->days;} ?></td>
         <td><input type="number" name="prive[<?php echo $value->id?>]" value="<?php if(isset($value->price)){ echo $value->price; } ?>"></td>
     </tr>
 <?php } ?>

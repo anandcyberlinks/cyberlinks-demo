@@ -86,7 +86,7 @@ class Package_model extends CI_Model{
         $query = $this->db->query("SELECT * FROM `duration` d
         left join (select p.duration_id,p.content_id,p.price from price p where p.content_id = $pid AND p.content_type = '$type')
         as p on p.duration_id = d.id
-        where d.uid = $uid");
+        where d.uid = $uid ORDER BY d.days");
         return $query->result();
         
     }
