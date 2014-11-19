@@ -83,22 +83,12 @@ class Package_model extends CI_Model{
     }
     
     function get_dyration($uid, $pid, $type){
-        $this->db->select('duration.*, price.price');
-        $this->db->from('duration');
-        $this->db->join('price', 'duration.id=price.duration_id', 'left');
-        $this->db->where('duration.uid', $uid);
+        $query = $this->db->query("SELECT * FROM `duration` d
+        left join (select p.duration_id,p.content_id,p.price from price p where p.content_id = $pid AND p.content_type = '$type')
+        as p on p.duration_id = d.id
+        where d.uid = $uid");
+        return $query->result();
         
-        $this->db->where('price.content_id', $pid);
-        $this->db->where('price.content_type', $type);
-        $this->db->where('duration.status', '1');
-        $query = $this->db->get();
-        if(count($query->result())!='0'){
-            return $query->result();
-        }else{
-           $this->db->where('duration.status', '1');
-           $query = $this->db->get('duration');
-           return $query->result();
-        }
     }
     function checkprice($content_id, $content_type, $duration_id){
         $this->db->where('content_id', $content_id);
