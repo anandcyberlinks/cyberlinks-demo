@@ -6,7 +6,7 @@ class Event_model extends CI_Model {
         $timeStart = " 00:00:00";
         $timeEnd = " 23:59:59";
 
-        if ($data['name'] != "") {
+        if (isset($data['name']) && $data['name'] != "") {
             $this->db->where('name', $data['name']);
         }
         if (isset($data['datepickerstart']) && $data['datepickerstart'] != '') {
@@ -37,7 +37,7 @@ class Event_model extends CI_Model {
         $timeStart = " 00:00:00";
         $timeEnd = " 23:59:59";
 
-        if ($data['name'] != "") {
+        if (isset($data['name']) && $data['name'] != "") {
             $this->db->where('name', $data['name']);
         }
         if (isset($data['datepickerstart']) && $data['datepickerstart'] != '') {

@@ -3,24 +3,21 @@
     <section class="sidebar">
         <!-- Sidebar user panel -->
         <div class="user-panel">
-            <div class="pull-left image">
-            </div>
+            <div class="pull-left image"></div>
             <div class="pull-left info">
                 <p><?php echo $welcome->loadPo('Hello'); ?>, <?php echo $s[0]->first_name ?></p>
                 <small><i class="fa fa-circle text-success"></i> Online</small>
             </div>
         </div>
         <!-- search form -->
-
         <!-- /.search form -->
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu">
             <li class="<?= ($this->uri->segment(1) == 'layout') ? 'active' : '' ?>">
                 <a href="<?php echo base_url() ?>layout/dashboard">
-                    <i class="fa fa-dashboard"></i> <span><?php echo $welcome->loadPo('Dashboard'); ?></span>
-                </a>
+                    <i class="fa fa-dashboard"></i> <span><?php echo $welcome->loadPo('Dashboard'); ?></span></a>
             </li>
-            <li class="treeview <?= (($this->uri->segment(2) == 'videoUploadSrc') || ($this->uri->segment(2) == 'bulkupload') || ($this->uri->segment(2) == 'video_status') || ($this->uri->segment(2) == 'video_settings') || ($this->uri->segment(2) == 'debug') || ($this->uri->segment(1)."/".$this->uri->segment(2) == 'video/index') ) ? 'active' : '' ?>">
+            <li class="treeview <?= (($this->uri->segment(2) == 'videoUploadSrc') || ($this->uri->segment(2) == 'bulkupload') || ($this->uri->segment(2) == 'video_status') || ($this->uri->segment(2) == 'video_settings') || ($this->uri->segment(2) == 'debug') || ($this->uri->segment(1) . "/" . $this->uri->segment(2) == 'video/index') ) ? 'active' : '' ?>">
                 <a href="#">
                     <i class="fa fa-video-camera"></i>
                     <span><?php echo $welcome->loadPo('Video'); ?></span>
@@ -32,20 +29,20 @@
                     <li class="<?= ($this->uri->segment(2) == 'bulkupload' || $this->uri->segment(2) == 'ftp') ? 'active' : '' ?>"><a href="<?php echo base_url() ?>video/bulkupload/csv"><i class="fa fa-angle-double-right"></i>  <?php echo $welcome->loadPo('Video') . " " . $welcome->loadPo('Bulk') . " " . $welcome->loadPo('Upload'); ?></a></li>
                     <li class="<?= ($this->uri->segment(2) == 'video_status') ? 'active' : '' ?>"><a href="<?php echo base_url() ?>video/video_status"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('Video') . " " . $welcome->loadPo('Status'); ?></a></li>                   
                     <?php /* <li class="<?=($this->uri->segment(2)=='setting')?'active':''?>"><a href="<?php echo base_url() ?>video/setting"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('Video')." ".$welcome->loadPo('Settings'); ?> </a></li>     */ ?>
-		    <li class="<?= ($this->uri->segment(2) == 'debug') ? 'active' : '' ?>"><a href="<?php echo base_url() ?>video/debug"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('Debug'); ?></a></li>
+                    <li class="<?= ($this->uri->segment(2) == 'debug') ? 'active' : '' ?>"><a href="<?php echo base_url() ?>video/debug"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('Debug'); ?></a></li>
                 </ul>
             </li>
             <li class="<?= ($this->uri->segment(2) == 'live_streaming') ? 'active' : '' ?>">
                 <a href="<?php echo base_url() ?>video/live_streaming" >
                     <i class="fa fa-fw fa-film"></i> <span><?php echo $welcome->loadPo('Live Stream'); ?></span>
                 </a>
-            </li><?php /*
-            <li class="<?= ($this->uri->segment(1) == 'event') ? 'active' : '' ?>">
-                <a href="<?php echo base_url() ?>event">
-                    <i class="fa fa-fw fa-laptop"></i> <span><?php echo $welcome->loadPo('Events'); ?></span>
-                </a>
             </li>
-            */ ?>
+                      <li class="<?= ($this->uri->segment(1) == 'event') ? 'active' : '' ?>">
+                      <a href="<?php echo base_url() ?>event">
+                      <i class="fa fa-fw fa-laptop"></i> <span><?php echo $welcome->loadPo('Events'); ?></span>
+                      </a>
+                      </li>
+                    
             <li class="treeview <?= (($this->uri->segment(1) == 'category') || ($this->uri->segment(1) == 'transcode') || ($this->uri->segment(1) == 'genre') || ($this->uri->segment(1) == 'dform') || ($this->uri->segment(1) == 'package') || ($this->uri->segment(1) == 'subscription') || ($this->uri->segment(1) == 'youtubevideo')) ? 'active' : '' ?>">
                 <a href="#">
                     <i class="fa fa-laptop"></i>
@@ -62,10 +59,9 @@
                     <li class="<?= ($this->uri->segment(1) === 'dform') ? 'active' : '' ?>"><a href="<?php echo base_url() ?>dform"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('Advance Fields'); ?></a></li>
                     <?php /* <li class="<?= ($this->uri->segment(1) === 'subscription') ? 'active' : '' ?>"><a href="<?php echo base_url() ?>subscription"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('Subscription'); ?></a></li> */ ?>
                     <li class="<?= ($this->uri->segment(1) === 'package') ? 'active' : '' ?>"><a href="<?php echo base_url() ?>package"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('Package'); ?></a></li>
-
                 </ul>
             </li>
-            <li class="<?= ($this->uri->segment(1) == 'pages') ? 'active' : '' ?>">
+            <li class="<?=($this->uri->segment(1) == 'pages') ? 'active' : '' ?>">
                 <a href="<?php echo base_url() ?>pages">
                     <i class="fa fa-file-text-o"></i> <span><?php echo $welcome->loadPo('Pages'); ?></span>
                 </a>
@@ -74,18 +70,17 @@
             $s = $this->session->all_userdata();
             if ($s[0]->role == 'Admin' || $s[0]->role == 'Superadmin') {
                 ?>
-                
                 <li class="treeview <?= (($this->uri->segment(1) == 'user') || ($this->uri->segment(1) == 'role')) ? 'active' : '' ?>">
-                <a href="#">
-                    <i class="fa fa-users"></i>
-                    <span><?php echo $welcome->loadPo('User'); ?></span>
-                    <i class="fa fa-angle-left pull-right"></i>
-                </a>
-                <ul class="treeview-menu">
-                    <li class="<?= ($this->uri->segment(1) === 'user') ? 'active' : '' ?>"><a href="<?php echo base_url() ?>user"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('User List'); ?></a></li>
-                    <li class="<?= ($this->uri->segment(1) === 'role') ? 'active' : '' ?>"><a href="<?php echo base_url() ?>role"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('User Role'); ?></a></li>
-                </ul>
-            </li>
+                    <a href="#">
+                        <i class="fa fa-users"></i>
+                        <span><?php echo $welcome->loadPo('User'); ?></span>
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li class="<?= ($this->uri->segment(1) === 'user') ? 'active' : '' ?>"><a href="<?php echo base_url() ?>user"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('User List'); ?></a></li>
+                        <li class="<?= ($this->uri->segment(1) === 'role') ? 'active' : '' ?>"><a href="<?php echo base_url() ?>role"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('User Role'); ?></a></li>
+                    </ul>
+                </li>
                 <li class="<?= ($this->uri->segment(1) == 'device') ? 'active' : '' ?>">
                     <a href="<?php echo base_url() ?>device">
                         <i class="fa fa-fw fa-mobile"></i> <span><?php echo $welcome->loadPo('Device'); ?></span>
@@ -97,12 +92,12 @@
                     <i class="fa fa-fw fa-list-alt"></i> <span><?php echo $welcome->loadPo('API'); ?></span>
                 </a>
             </li>
-              <li class="<?=($this->uri->segment(1)=='comments')?'active':''?>">
+            <li class="<?= ($this->uri->segment(1) == 'comments') ? 'active' : '' ?>">
                 <a href="<?php echo base_url() ?>comments">
-              <i class="glyphicon glyphicon-comment"></i>
-                <span><?php echo $welcome->loadPo('Comments'); ?></span>
-              </a>
-              </li>
+                    <i class="glyphicon glyphicon-comment"></i>
+                    <span><?php echo $welcome->loadPo('Comments'); ?></span>
+                </a>
+            </li>
         </ul>
     </section>
 </aside>
