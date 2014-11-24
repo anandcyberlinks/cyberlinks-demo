@@ -39,8 +39,6 @@ $(document).ready(function(){
       
       'start_date':{
         'required':true,
-        'minlength':41,
-        'maxlength':41
       },
       'password':{
         'required':true,
@@ -98,10 +96,6 @@ $(document).ready(function(){
       'remote':'Email already taken'
     },
     
-      'start_date':{
-      minlength: "Please enter valid date from datepicker.",
-      maxlength: "Please enter valid date from datepicker.",
-    },
     'form_name':{
       'remote':'Form Name already taken'
     },
