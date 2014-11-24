@@ -1099,13 +1099,13 @@ class Videos_model extends CI_Model {
         }
         
         if((isset($formdata)) && (($formdata['records'] =='') || ($formdata['records'] == 'invalid')) || (!(isset($formdata)))){
-            if(isset($tmp['valid'])){
+            if((isset($tmp['invalid'])) && ($tmp['invalid']) != ''){
                 return count($tmp['invalid']);
             } else {
                 return 0;
             }
         } else if((isset($formdata)) && ($formdata['records'] =='valid')) {
-            if(isset($tmp['valid'])){
+            if((isset($tmp['valid'])) && ($tmp['valid']) != ''){
                 return count($tmp['valid']);
             } else {
                 return 0;
