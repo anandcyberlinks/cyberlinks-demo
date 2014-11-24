@@ -1014,7 +1014,8 @@ class Videos_model extends CI_Model {
     /---------------------------------------------------------------
    */
     
-    function debugVideoInfo($uid, $formdata='') {        
+    function debugVideoInfo($uid, $formdata='') {
+        //echo '<pre>';print_r($formdata);echo '</pre>';exit;
         $query = sprintf('select
                         c.id as contentId, c.title,
                         f.relative_path as video_relative_path,
@@ -1048,9 +1049,17 @@ class Videos_model extends CI_Model {
             }    
         }
         if((isset($formdata)) && (($formdata['records'] =='') || ($formdata['records'] == 'invalid')) || (!(isset($formdata)))){
-            return $tmp['invalid'];
+            if(isset($tmp['invalid'])){
+                return $tmp['invalid'];
+            } else {
+                return $tmp['invalid']=array();
+            }            
         } else if((isset($formdata)) && ($formdata['records'] =='valid')) {
-            return $tmp['valid'];
+            if(isset($tmp['valid'])){
+                return $tmp['valid'];
+            } else {
+                return $tmp['valid']=array();
+            }
         }
     }
     
@@ -1090,9 +1099,17 @@ class Videos_model extends CI_Model {
         }
         
         if((isset($formdata)) && (($formdata['records'] =='') || ($formdata['records'] == 'invalid')) || (!(isset($formdata)))){
-            return count($tmp['invalid']);
+            if(isset($tmp['valid'])){
+                return count($tmp['invalid']);
+            } else {
+                return 0;
+            }
         } else if((isset($formdata)) && ($formdata['records'] =='valid')) {
-            return count($tmp['valid']);
+            if(isset($tmp['valid'])){
+                return count($tmp['valid']);
+            } else {
+                return 0;
+            }
         }
     }
 

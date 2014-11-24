@@ -67,7 +67,9 @@
                                     </thead>
 
                                     <tbody>
-                                        <?php foreach ($result as $value) {
+                                        <?php
+                                        if(isset($result)){
+                                        foreach ($result as $value) {
                                             if(($value->contentId)){    
                                         ?>
                                         <tr id="<?php echo $value->contentId ?>">
@@ -83,7 +85,7 @@
                                                 <a class="confirm" onclick="return delete_video(<?php echo $value->id; ?>, '<?php echo base_url() . 'video/deletevideo' ?>', '<?php echo current_full_url(); ?>');" href="" ><button class="btn btn-danger btn-sm" data-toggle="modal" data-target=".bs-example-modal-sm" ><?php echo $welcome->loadPo('Delete') ?></button></a>
                                             </td><?php /*/ ?>
                                         </tr>
-                                        <?php } } ?>
+                                        <?php } } } ?>
                                     </tbody>
 
 
