@@ -32,11 +32,11 @@ class Event_model extends CI_Model {
         //echo $this->db->last_query();
         return $result;
     }
-
+    
     function countAll($uid, $data) {
         $timeStart = " 00:00:00";
         $timeEnd = " 23:59:59";
-
+    
         if (isset($data['name']) && $data['name'] != "") {
             $this->db->where('name', $data['name']);
         }

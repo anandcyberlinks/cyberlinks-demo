@@ -46,7 +46,7 @@
                                         </div>
                                         <div class="form-group col-md-10">
                                             <label><?php echo $welcome->loadPo('Time'); ?></label>
-                                            <input id="reservationtime" class="form-control" type="text" name="start_date" value="<?php if(isset($value)){ echo $value[0]->start_date." - ".$value[0]->end_date; }?>" readonly="readonly">
+                                            <input id="reservationtime" class="form-control" type="text" name="start_date" value="<?php if(isset($value)){ echo str_replace('-', '/', $value[0]->start_date)." - ".str_replace('-','/',$value[0]->end_date); }?>" readonly="readonly">
                                         </div>
                                         <div class="form-group col-md-10">
                                             <label><?php echo $welcome->loadPo('Url'); ?></label>
