@@ -874,7 +874,7 @@ class Videos_model extends CI_Model {
 	}
 
     function get_videocountstatus($uid){
-         $query = sprintf("SELECT c.uid,SUM(1) as total_video, SUM(IF(f.type = 'youtube',1,0)) as youtube_video,vf.tj as total_jobs,vf.tcomp as completed_jobs,vf.tpend as pending_jobs,vf.tinpro as inprocess_jobs
+        $query = sprintf("SELECT c.uid,SUM(1) as total_video, SUM(IF(f.type = 'youtube',1,0)) as youtube_video,vf.tj as total_jobs,vf.tcomp as completed_jobs,vf.tpend as pending_jobs,vf.tinpro as inprocess_jobs
         FROM `contents` c 
         left join videos v on v.content_id = c.id
         left join files f on f.id = v.file_id

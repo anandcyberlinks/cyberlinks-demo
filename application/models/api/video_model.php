@@ -143,8 +143,9 @@ class Video_model extends CI_Model {
    }
    
    
-   public function featuredvideo($device, $param=array())
+   public function featuredvideo($device, $param=array(),$category = '')
    {      
+      
        if($param){
             $this->db->limit($param['limit'],$param['offset']);
             $this->db->select('a.category as category_id,a.content_type,d.category,a.id as content_id,a.title,a.description,a.type,c3.name as thumbnail_path,d.id as category_id,d.category as category_name,b.views as total_view,b.duration');
@@ -167,7 +168,11 @@ class Video_model extends CI_Model {
         $this->db->where('a.feature_video','1');
         $this->db->where('g.flavor_name',$device);
 	$this->db->where('a.uid',$this->owner_id);
-        $this->db->order_by('a.created desc');
+        
+	if($category != '')
+	$this->db->where('d.uid',$this->owner_id);
+	
+	$this->db->order_by('a.created desc');
         $this->db->group_by('a.id');
         $query = $this->db->get();    
         //echo '<pre>'.$this->db->last_query();die;
@@ -235,6 +240,7 @@ class Video_model extends CI_Model {
    
    public function searchvideo($data,$param=array())
    {
+       
        if($param){
             $this->db->limit($param['limit'],$param['offset']);
             $this->db->select('a.category as category_id,a.content_type,d.category,a.id as content_id,a.title,a.description,a.type,c3.name as thumbnail_path,d.id as category_id,d.category as category_name,b.views as total_view,b.duration');
@@ -255,7 +261,11 @@ class Video_model extends CI_Model {
         $this->db->join('files c3', 'h.file_id = c3.id', 'left');
         $this->db->join('genres i','b.genre_id=i.id','left');
         $this->db->where('a.status','1');
-        $this->db->where('g.flavor_name',$data['device']);
+        
+	if(isset($data['title']) && $data['title']!='') 
+	$this->db->like('a.title',$data['title']);
+	
+	$this->db->where('g.flavor_name',$data['device']);
 	$this->db->where('a.uid',$this->owner_id);
         $this->db->group_by('a.id');
                                
