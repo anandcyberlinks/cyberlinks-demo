@@ -166,9 +166,9 @@ class Subscription_model extends CI_Model{
 		'status'=>strtolower($data["payment_status"])
 	    );            
 	    $this->db->set('modified','NOW()',FALSE);
-	    $this->db->where('invoice', $data['invoice']);
+	    $this->db->where('invoice', base64_decode($data['invoice']));
 	    $this->db->update('order', $orderData); 		
-	    return $data['invoice'];
+	    return base64_decode($data['invoice']);
 	} else {
             //return 'ss';die;
 	    $orderData = array(
