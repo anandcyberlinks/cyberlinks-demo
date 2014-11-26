@@ -35,7 +35,7 @@ class Subscription_model extends CI_Model{
 	$this->db->where('CURDATE() BETWEEN DATE_FORMAT(od.start_date,"%Y-%m-%d") AND DATE_FORMAT(od.end_date,"%Y-%m-%d")');
 	$this->db->where('o.status','completed');
 	$query=$this->db->get();
-	echo $this->db->last_query();	
+	//echo $this->db->last_query();	
 	$result = $query->row();
         if($result)
             return $result->id;
