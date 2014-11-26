@@ -338,11 +338,7 @@ class Video_model extends CI_Model {
         }else{
             $this->db->select('count(a.id) as total');
         }
-	
-	if($arrVal['id']>0){
-	 $this->db->where('a.id !=',$arrVal['id']);
-	}
-        
+	        
 	$this->db->from('contents a');
         $this->db->join('video_detail a2', 'a.id = a2.content_id', 'left');
         $this->db->join('videos b', 'a.id = b.content_id', 'left');        
@@ -357,15 +353,13 @@ class Video_model extends CI_Model {
         $this->db->join('files c3', 'h.file_id = c3.id', 'left');
         $this->db->where('a.status','1');        
         $this->db->where('g.flavor_name',$arrVal['device']);
-        $this->db->where('b.genre_id',$arrVal['type']);
-	
-	if(isset($arrVal['category_id']) && $arrVal['category_id'] != '')
         $this->db->where('a.category',$arrVal['category_id']);
-	
+        $this->db->where_not_in('a.id',$arrVal['id']);
 	$this->db->where('a.uid',$this->owner_id);
 	$this->db->group_by('a.id');
-        $query = $this->db->get();    
-        //echo '<br>'.$this->db->last_query();
+	$this->db->limit('5');
+        $query = $this->db->get();
+       // echo '<br>'.$this->db->last_query();
 	return $query->result();
    }
    
