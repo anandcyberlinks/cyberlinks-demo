@@ -35,7 +35,7 @@ class Subscription_model extends CI_Model{
 	$this->db->where('CURDATE() BETWEEN DATE_FORMAT(od.start_date,"%Y-%m-%d") AND DATE_FORMAT(od.end_date,"%Y-%m-%d")');
 	$this->db->where('o.status','completed');
 	$query=$this->db->get();
-	//echo $this->db->last_query();	
+	echo $this->db->last_query();	
 	$result = $query->row();
         if($result)
             return $result->id;
@@ -189,7 +189,7 @@ class Subscription_model extends CI_Model{
     function saveOrderDetails($data)
     {
 	if(isset($data['txn_id'])){
-	    $subscriptionDataArr = $this->getSubsIdArr($data['invoice']);
+	    $subscriptionDataArr = $this->getSubsIdArr(base64_decode($data['invoice']));
 	    $countData = count($subscriptionDataArr);
 	    for($i=0; $i<$countData; $i++){
 		$this->db->set('start_date','NOW()',FALSE);
