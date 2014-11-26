@@ -170,7 +170,7 @@ class Video_model extends CI_Model {
 	$this->db->where('a.uid',$this->owner_id);
         
 	if($category != '')
-	$this->db->where('d.uid',$this->owner_id);
+	$this->db->where('d.id',$category);
 	
 	$this->db->order_by('a.created desc');
         $this->db->group_by('a.id');
@@ -358,10 +358,12 @@ class Video_model extends CI_Model {
         $this->db->where('a.status','1');        
         $this->db->where('g.flavor_name',$arrVal['device']);
         $this->db->where('b.genre_id',$arrVal['type']);
-        $this->db->where('a.category',$arrVal['category_id']);
-	$this->db->where('a.uid',$this->owner_id);
 	
-        $this->db->group_by('a.id');
+	if(isset($arrVal['category_id']) && $arrVal['category_id'] != '')
+        $this->db->where('a.category',$arrVal['category_id']);
+	
+	$this->db->where('a.uid',$this->owner_id);
+	$this->db->group_by('a.id');
         $query = $this->db->get();    
         //echo '<br>'.$this->db->last_query();
 	return $query->result();
