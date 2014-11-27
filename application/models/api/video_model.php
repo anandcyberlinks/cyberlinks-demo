@@ -332,7 +332,17 @@ class Video_model extends CI_Model {
    
    public function relatedvideo($arrVal=array(),$param=array())
    {
-        if($param){
+      //-- get category id --//
+	 $this->db->select('category');
+	 $this->db->from('contents c');
+	 $this->db->where('c.id',$arrVal['id']);
+	 $this->db->limit('1');
+	 $query = $this->db->get();
+	 $result = $query->row();
+	 $category_id = $result->category;
+      //------------------------//
+	
+	if($param){
             $this->db->limit($param['limit'],$param['offset']);
             $this->db->select('a.category as category_id,a.content_type,d.category,a.id as content_id,a.title,a.description,a2.star_cast,a2.director,a2.music_director,a2.producer,c3.name as thumbnail_path,d.id as category_id,d.category as category_name,b.views as total_view,b.duration');
         }else{
@@ -353,13 +363,13 @@ class Video_model extends CI_Model {
         $this->db->join('files c3', 'h.file_id = c3.id', 'left');
         $this->db->where('a.status','1');        
         $this->db->where('g.flavor_name',$arrVal['device']);
-        $this->db->where('a.category',$arrVal['category_id']);
+        $this->db->where('a.category',$category_id);
         $this->db->where_not_in('a.id',$arrVal['id']);
 	$this->db->where('a.uid',$this->owner_id);
 	$this->db->group_by('a.id');
 	$this->db->limit('5');
         $query = $this->db->get();
-       // echo '<br>'.$this->db->last_query();
+        //echo '<br>'.$this->db->last_query();
 	return $query->result();
    }
    
@@ -474,7 +484,7 @@ class Video_model extends CI_Model {
    
    public function video_play($id,$device)
    {
-        $this->db->select('a.id as content_id,c1.name as thumbnail_path,e.path as video_path');
+        $this->db->select('a.id as content_id,a.uid as content_provider,c1.name as thumbnail_path,e.path as video_path');
 	$this->db->from('contents a');               
         $this->db->join('flavored_video e', 'a.id = e.content_id', 'left');
         $this->db->join('video_flavors f', 'f.id = e.flavor_id', 'left');
