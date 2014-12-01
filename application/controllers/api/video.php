@@ -796,4 +796,52 @@ class Video extends REST_Controller
             $this->response(array('code'=>0,'error' => 'No record found'), 404);
         }
     }
+    
+    function validate($cid, $uid) {
+        /* $this->db->select('id');
+          $this->db->where('content_id', $cid);
+          $query = $this->db->get('package_video');
+          $data = $query->result();
+         */
+        $returnvalue = FALSE;
+        $ctype = 'video';
+        $query = $this->db->query(sprintf("SELECT * FROM `price` p 
+            left join order_details od on od.subscription_id = p.id
+            left join `order` o on o.id = od.order_id
+            where p.content_id = 21
+            and p.content_type = '%s'
+            and o.user_id = 3
+            and od.end_date <= now()
+            and o.status = 'completed'
+            group by p.content_id", $ctype));
+        if (count($query->result()) > 0) {
+            $returnvalue = TRUE;
+        } else {
+            $ctype = 'package';
+            $this->db->select('package_id as id');
+            $this->db->from('package_video');
+            $this->db->where('content_id', $cid);
+            $data = $this->db->get()->result();
+            foreach ($data as $val) {
+                $pid = $val->id;
+                $query = $this->db->query(sprintf("SELECT o.id as oid FROM `price` p 
+                        left join order_details od on od.subscription_id = p.id
+                        left join `order` o on o.id = od.order_id
+                        where p.content_id = '%s'
+                        and p.content_type = '%s'
+                        and o.user_id = 3
+                        and od.end_date <= now()
+                        and o.status = 'completed'
+                        group by p.content_id", $pid, $ctype));
+                $data = $query->result();
+                if (isset($data[0]->oid)) {
+                    $returnvalue = TRUE;
+                    break;
+                } else {
+                    $returnvalue = FALSE;
+                }
+            }
+        }
+        return $returnvalue;
+    }
 }
