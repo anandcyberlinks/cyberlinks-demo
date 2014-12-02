@@ -82,7 +82,8 @@
 $(window).on('beforeunload', function(){
       jwplayer().pause();
       var pos = jwplayer().getPosition();
-      pause(pos);     
+      pause(pos);
+      return 'are you sure?';
 });
 //------------------------//
 
@@ -199,7 +200,8 @@ $(window).on('beforeunload', function(){
             data: {
                 id: id,
                 watched_time: duration,
-                complete: '1'
+                complete: '1',
+		pause: 0
                 },
                 cache: false,
                 type: "POST"            
