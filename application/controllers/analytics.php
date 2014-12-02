@@ -24,7 +24,12 @@ class Analytics extends MY_Controller {
 		$this->uid = $s[0]->id;
 		$this->role_id = $s[0]->role_id;
 	}
-
+	
+	function form()
+	{
+		$this->load->view('analytics-form');
+	}
+	
 	function index()
 	{		
 		//-- get geocoding google api --//

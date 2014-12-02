@@ -145,8 +145,8 @@
 				<tr>
 				<td><a class='element' href="#" onclick="if( $('#sub_table_<?php echo $i;?>').hasClass( 'hidden' ) ) $('#sub_table_<?php echo $i;?>').removeClass('hidden'); else $('#sub_table_<?php echo $i;?>').addClass('hidden');"><?php echo $row->title;?></a>
 				<table class="table table-striped hidden" id='sub_table_<?php echo $i?>' >
-				    <tr><td>Completed</td><td>Partial</td><td>Replay</td></tr>
-				    <tr><td><?php echo $row->complete;?></td><td><?php echo $row->partial;?></td><td><?php echo $row->replay;?></td></tr>
+				    <tr><td>Play</td><td>Completed</td><td>Partial</td><td>Replay</td></tr>
+				    <tr><td><?php echo $row->play;?></td><td><?php echo $row->complete;?></td><td><?php echo $row->partial;?></td><td><?php echo $row->replay;?></td></tr>
 				</table>
 				</td>
 				<td><?php echo $row->total_hits;?></td>

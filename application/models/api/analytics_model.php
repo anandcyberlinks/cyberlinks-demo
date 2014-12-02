@@ -24,8 +24,11 @@ class Analytics_model extends CI_Model{
     
     public function getReport($type)
     {
-        $this->db->select(' c.title,a.content_id,count(content_id) as total_hits,sum(watched_time) as total_watched_time,IF( a.complete =1, sum( a.complete ) , sum( a.complete ) ) AS complete, IF( a.complete =0
-        AND a.pause =1, sum( a.pause ) , sum( a.pause ) ) AS partial, IF( a.replay =1, sum( a.replay ) , sum( a.replay ) ) AS replay');
+        $this->db->select(' c.title,a.content_id,count(content_id) as total_hits,sum(watched_time) as total_watched_time,
+        IF(a.play=1 && (a.complete=0 && a.pause=0 && a.replay=0), sum(a.play),sum(a.play)) as play,
+        IF( a.complete =1, sum( a.complete ) , sum( a.complete ) ) AS complete,
+        IF( a.complete =0 && a.pause =1, sum( a.pause ) , sum( a.pause ) ) AS partial,
+        IF( a.replay =1, sum( a.replay ) , sum( a.replay ) ) AS replay');
         $this->db->from('analytics a');
         $this->db->join('contents c','a.content_id=c.id','inner');
         $this->db->where('a.content_provider',$this->uid);

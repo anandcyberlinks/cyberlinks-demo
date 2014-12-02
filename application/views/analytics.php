@@ -77,6 +77,15 @@
 ?>
 
 <script>
+
+//-- execute when browser closed --//
+$(window).on('beforeunload', function(){
+      jwplayer().pause();
+      var pos = jwplayer().getPosition();
+      pause(pos);     
+});
+//------------------------//
+
  var route='';
  var city ='';
  var state = '';

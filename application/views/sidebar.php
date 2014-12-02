@@ -17,6 +17,10 @@
                 <a href="<?php echo base_url() ?>layout/dashboard">
                     <i class="fa fa-dashboard"></i> <span><?php echo $welcome->loadPo('Dashboard'); ?></span></a>
             </li>
+             <li class="<?= ($this->uri->segment(1) == 'layout') ? 'active' : '' ?>">
+                <a href="<?php echo base_url() ?>analytics/report">
+                    <i class="fa fa-dashboard"></i> <span><?php echo $welcome->loadPo('Analytics'); ?></span></a>
+            </li>
             <li class="treeview <?= (($this->uri->segment(2) == 'videoUploadSrc') || ($this->uri->segment(2) == 'bulkupload') || ($this->uri->segment(2) == 'video_status') || ($this->uri->segment(2) == 'video_settings') || ($this->uri->segment(2) == 'debug') || ($this->uri->segment(1) . "/" . $this->uri->segment(2) == 'video/index') ) ? 'active' : '' ?>">
                 <a href="#">
                     <i class="fa fa-video-camera"></i>
