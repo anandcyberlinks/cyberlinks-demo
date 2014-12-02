@@ -1,6 +1,6 @@
 <p><strong>Play Video</strong></p>
 
- <form action="<?php echo site_url('analytics?device=3g');?>" method='get' enctype='multipart/form-data'>   
+ <form target='_blank' action="<?php echo site_url('analytics?device=3g');?>" method='get' enctype='multipart/form-data'>   
 <table>
     <tr>
         <td>user id. :</td><td><input type='text' name='user_id' value='2'></td>
