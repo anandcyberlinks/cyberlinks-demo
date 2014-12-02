@@ -31,7 +31,7 @@ class Analytics_model extends CI_Model{
         $this->db->where('a.content_provider',$this->uid);
         $this->db->group_by('a.content_id');
         $query = $this->db->get();
-    echo $this->db->last_query();die;
+    //echo $this->db->last_query();die;
         return $query->result();
 
     }
