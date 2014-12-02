@@ -1,5 +1,4 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-error_reporting(E_ALL);
 class Analytics extends MY_Controller {
 
 	function __construct()
@@ -77,7 +76,7 @@ class Analytics extends MY_Controller {
 	function replay()
 	{
 		$post = $_POST;
-		$post['browser'] = $this->result['parent'];
+		$post['browser'] = $this->result['browser'].' '.$this->result['version'];
                 $post['platform'] = $this->result['platform'];
 		//$where = array('id'=>$post['id']);
 		echo $this->Analytics_model->save($post);
