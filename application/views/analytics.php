@@ -82,8 +82,7 @@
 $(window).on('beforeunload', function(){
       jwplayer().pause();
       var pos = jwplayer().getPosition();
-      pause(pos);
-      return 'are you sure?';
+      pause(pos);     
 });
 //------------------------//
 
