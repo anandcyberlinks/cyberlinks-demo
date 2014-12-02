@@ -1,5 +1,5 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-
+error_reporting(E_ALL);
 class Analytics extends MY_Controller {
 
 	function __construct()
