@@ -7,14 +7,16 @@ class Analytics extends MY_Controller {
             parent::__construct();
             $this->load->model('/api/Video_model');
 	    $this->load->model('/api/Analytics_model');
+	    $this->load->library('User_Agent');
 	     $this->load->config('messages');
 	    $this->data['welcome'] = $this;
 	    
 	    //$this->load->library('User_Agent');//--regex class to get user agent --//
 	    //-- get browser http_user_agent info in array --//
-                    $this->result = get_browser(null, true);
+                    //$this->result = get_browser(null, true);
 		    
-		    // OR $result = User_Agent::getinfo();  //--regex class to get user agent --//
+		   $this->result = User_Agent::getinfo();  //--regex class to get user agent --//
+		  
                 //---------------------//
 		
 		$this->load->library('session');
@@ -53,7 +55,7 @@ class Analytics extends MY_Controller {
 	function play()
 	{
 		$post = $_POST;                
-		$post['browser'] = $this->result['parent'];
+		$post['browser'] = $this->result['browser'].' '.$this->result['version'];
                 $post['platform'] = $this->result['platform'];
                echo $this->Analytics_model->save($post);
 	}
