@@ -55,9 +55,9 @@
     
 
 <body style='background:#000'>
-		<input type='text' name='meta' id='meta'>
-	<input type='text' name='analytics_id' id='analytics_id'>
-	<input type='text' name='is_complete' id='is_complete'>
+		<input type='hidden' name='meta' id='meta'>
+	<input type='hidden' name='analytics_id' id='analytics_id'>
+	<input type='hidden' name='is_complete' id='is_complete'>
         <div id="myElement" style='width:100%;height:100%'></div>
        
 <script type="text/javascript" src="<?php echo base_url(); ?>./assets/js/jwplayer.js" ></script>
