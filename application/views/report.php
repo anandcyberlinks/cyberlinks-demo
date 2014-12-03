@@ -21,7 +21,7 @@
     <!-- Main content -->
     <section class="content">
         <!-- Small boxes (Stat box) -->
-	<?php /*
+	
         <div class="row">
             
             <div class="col-lg-2 col-xs-6">
@@ -29,15 +29,13 @@
                 <div class="small-box bg-light-blue">
                     <div class="inner">
                         <h3>
-                            
+                            <?php echo $summary->total_hits;?>	
                         </h3>
                         <p>
                            <?php echo $welcome->loadPo('Total Hits'); ?> 
                         </p>
                     </div>
-                    <div class="icon">
-                        <i class="fa fa-youtube-play"></i>
-                    </div>
+                   
                     <!--a href="<?php //echo base_url() ?>video" class="small-box-footer">
                         <?php //echo $welcome->loadPo('More info'); ?> <i class="fa fa-arrow-circle-right"></i>
                     </a>-->
@@ -48,15 +46,13 @@
                 <div class="small-box bg-fuchsia">
                     <div class="inner">
                         <h3>
-                            
+                            <?php echo $summary->total_partial;?>
                         </h3>
                         <p>
-                           <?php echo $welcome->loadPo('Unique Hits'); ?> 
+                           <?php echo $welcome->loadPo('Partial Play'); ?> 
                         </p>
                     </div>
-                    <div class="icon">
-                        <i class="fa fa-forward"></i>
-                    </div>
+                  
                     <!--a href="<?php //echo base_url() ?>video" class="small-box-footer">
                         <?php //echo $welcome->loadPo('More info'); ?> <i class="fa fa-arrow-circle-right"></i>
                     </a>-->
@@ -67,15 +63,13 @@
                 <div class="small-box bg-red">
                     <div class="inner">
                         <h3>
-                           
+                           <?php echo $summary->total_complete;?>
                         </h3>
                         <p>
                             <?php echo $welcome->loadPo('Complete Play'); ?>
                         </p>
                     </div>
-                    <div class="icon">
-                        <i class="fa fa-thumbs-up"></i>
-                    </div>
+                   
                     <!--a href="<?php //echo base_url() ?>video/video_status" class="small-box-footer">
                         <?php //echo $welcome->loadPo('More info'); ?> <i class="fa fa-arrow-circle-right"></i>
 		    </a>-->
@@ -86,15 +80,13 @@
                 <div class="small-box bg-yellow">
                     <div class="inner">
                         <h3>
-                            
+                            <?php echo $summary->total_replay;?>
                         </h3>
                         <p>
                             <?php echo $welcome->loadPo('Replay Video'); ?>
                         </p>
                     </div>
-                    <div class="icon">
-                        <i class="fa fa-clock-o"></i>
-                    </div>
+                    
                     <!--a href="<?php //echo base_url() ?>video/video_status" class="small-box-footer">
                         <?php //echo $welcome->loadPo('More info'); ?> <i class="fa fa-arrow-circle-right"></i>
                     </a>-->
@@ -105,22 +97,20 @@
                 <div class="small-box bg-purple">
                     <div class="inner">
                         <h3>
-                            
+                            <?php echo time_from_seconds($summary->total_watched_time); //-- common helper ?>
                         </h3>
                         <p>
                             <?php echo $welcome->loadPo('Total Time Watched'); ?>
                         </p>
                     </div>
-                    <div class="icon">
-                        <i class="fa fa-thumbs-down"></i>
-                    </div>
+                   
                     <!--a href="#" class="small-box-footer">
                         <?php //echo $welcome->loadPo('More info'); ?> <i class="fa fa-arrow-circle-right"></i>
                     </a>-->
                 </div>
             </div><!-- ./col -->
         </div><!-- /.row -->
-	*/?>
+	
         <div class="row">
 	    <section class="col-lg-6"> 
 		<!-- Box (with bar chart) -->
@@ -141,16 +131,16 @@
 				<th>Total Hits</th>
 				<th>Total Time Watched</th>				
 				</tr>
-			     <?php $i=0; foreach($result as $row){ $i++;?>
+			     <?php $i=0; foreach($content as $row){ $i++;?>
 				<tr>
 				<td><a class='element' href="#" onclick="if( $('#sub_table_<?php echo $i;?>').hasClass( 'hidden' ) ) $('#sub_table_<?php echo $i;?>').removeClass('hidden'); else $('#sub_table_<?php echo $i;?>').addClass('hidden');"><?php echo $row->title;?></a>
 				<table class="table table-striped hidden" id='sub_table_<?php echo $i?>' >
-				    <tr><td>Play</td><td>Completed</td><td>Partial</td><td>Replay</td></tr>
-				    <tr><td><?php echo $row->play;?></td><td><?php echo $row->complete;?></td><td><?php echo $row->partial;?></td><td><?php echo $row->replay;?></td></tr>
+				    <tr><td>Completed</td><td>Partial</td><td>Replay</td></tr>
+				    <tr></td><td><?php echo $row->complete;?></td><td><?php echo $row->partial;?></td><td><?php echo $row->replay;?></td></tr>
 				</table>
 				</td>
 				<td><?php echo $row->total_hits;?></td>
-				<td><?php echo $this->Analytics_model->time_from_seconds($row->total_watched_time);?></td>				
+				<td><?php echo time_from_seconds($row->total_watched_time);?></td>				
 				</tr>
 			    <?php }?>
                             </tbody></table><!-- /.table -->
@@ -159,7 +149,7 @@
 		</div><!-- /.box -->
 	    </section><!-- /.Left col -->
 	    
-	    <?php /*<section class="col-lg-6"> 
+	    <section class="col-lg-6"> 
 		<!-- Box (with bar chart) -->
 		<div class="box box-danger">
 		    <div class="box-header">
@@ -167,18 +157,36 @@
 			<div class="pull-right box-tools">
 			    <button class="btn btn-danger btn-sm" data-widget='collapse' data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
 			</div><!-- /. tools -->
-			<h3 class="box-title">User Based Analytics</h3>
+			<h3 class="box-title">User Agent</h3>
 		    </div><!-- /.box-header -->
 		    <div class="box-body no-padding">
-			<div class="row">
-			    <div class="col-sm-10">
-				<div class="chart" id="uservideo-chart-div" style="height: 250px;"></div>
-			    </div>
-			</div><!-- /.row - inside box -->
+			
+			   
+				<div class="table-responsive">
+                            <!-- .table - Uses sparkline charts-->
+                            <table class="table table-striped">
+				<tbody><tr>
+				<th>OS</th>
+				<th>Browser</th>
+				<th>Hits</th>
+				<th>Time Watched</th>				
+				</tr>
+			     <?php $i=0; foreach($useragent as $row){ $i++;?>
+				<tr>
+				<td><?php echo $row->platform;?></td>
+				<td><?php echo $row->browser;?></td>
+				<td><?php echo $row->total_hits;?></td>
+				<td><?php echo time_from_seconds($row->total_watched_time);?></td>				
+				</tr>
+			    <?php }?>
+                            </tbody></table><!-- /.table -->
+                        </div>
+			    
+			
 		    </div><!-- /.box-body -->
 		</div><!-- /.box -->
 	    </section><!-- /.Left col -->
-	    */?>
+	    
         </div><!-- /.row (main row) -->
 	<?php /*
 	<div class="row">

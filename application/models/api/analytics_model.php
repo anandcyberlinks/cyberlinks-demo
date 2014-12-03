@@ -22,29 +22,40 @@ class Analytics_model extends CI_Model{
         }        
     }
     
-    public function getReport($type)
+    public function getReport($type='content')
     {
-        $this->db->select(' c.title,a.content_id,count(content_id) as total_hits,sum(watched_time) as total_watched_time,
-        IF(a.play=1 && (a.complete=0 && a.pause=0 && a.replay=0), sum(a.play),sum(a.play)) as play,
-        IF( a.complete =1, sum( a.complete ) , sum( a.complete ) ) AS complete,
-        IF( a.complete =0 && a.pause =1, sum( a.pause ) , sum( a.pause ) ) AS partial,
-        IF( a.replay =1, sum( a.replay ) , sum( a.replay ) ) AS replay');
+        $group='';
+        switch($type){            
+
+        case 'content':
+            $select = 'c.title,a.content_id,count(content_id) as total_hits,sum(watched_time) as total_watched_time,           
+            SUM(IF( a.complete =1, 1, 0 )) AS complete, 
+            SUM(IF( a.complete =0 && a.pause =1, 1, 0 )) AS partial, 
+            SUM(IF( a.replay =1, 1, 0) ) AS replay ';
+            $group = 'a.content_id';
+            break;   
+        case 'useragent':        
+            $select = 'a.platform, a.browser, count( a.id ) as total_hits , sum( a.watched_time ) as total_watched_time';
+            $group = 'a.platform, a.browser';
+            break;
+        case 'summary':
+            $select = "count(a.id) as total_hits,
+            SUM(IF( a.complete =0 && a.pause =1, 1, 0 )) AS total_partial,
+            SUM(IF(a.complete=1,1,0)) as total_complete,
+            SUM(IF(a.replay=1,1,0)) as total_replay, sum( a.watched_time ) as total_watched_time";            
+            break;
+        }
+        
+        $this->db->select($select,false);
         $this->db->from('analytics a');
         $this->db->join('contents c','a.content_id=c.id','inner');
         $this->db->where('a.content_provider',$this->uid);
-        $this->db->group_by('a.content_id');
+        $this->db->group_by($group);
         $query = $this->db->get();
-    //echo $this->db->last_query();die;
+    //echo '<br>'.$this->db->last_query();
         return $query->result();
-
+        
     }
-    
-    public function time_from_seconds($seconds) { 
-        $h = floor($seconds / 3600); 
-        $m = floor(($seconds % 3600) / 60); 
-        $s = $seconds - ($h * 3600) - ($m * 60); 
-        return sprintf('%02d:%02d:%02d', $h, $m, $s); 
-	} 
 }
 
 ?>

@@ -1,4 +1,5 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+error_reporting(1);
 class Analytics extends MY_Controller {
 
 	function __construct()
@@ -7,6 +8,7 @@ class Analytics extends MY_Controller {
             $this->load->model('/api/Video_model');
 	    $this->load->model('/api/Analytics_model');
 	    $this->load->library('User_Agent');
+	   // $this->load->helper('common');
 	     $this->load->config('messages');
 	    $this->data['welcome'] = $this;
 	    
@@ -37,7 +39,8 @@ class Analytics extends MY_Controller {
 		$this->data['long'] = $lng = $_GET['lng'];
 		$url = "http://maps.googleapis.com/maps/api/geocode/json?latlng=".$lat.",".$lng."&sensor=true";
 		$data = @file_get_contents($url);
-		$result = json_decode($data,true);		
+		$result = json_decode($data,true);
+		//echo '<pre>';print_r($result);die;
 		$this->data['geodata'] = $result['results'][0]['address_components'];
 		//------------------------------
 		$this->load->helper('url');
@@ -59,7 +62,8 @@ class Analytics extends MY_Controller {
 	function play()
 	{
 		$post = $_POST;                
-		$post['browser'] = $this->result['browser'].' '.$this->result['version'];
+		$post['browser'] = $this->result['browser'];
+		$post['browser_version'] = $this->result['version'];
                 $post['platform'] = $this->result['platform'];
                echo $this->Analytics_model->save($post);
 	}
@@ -81,7 +85,8 @@ class Analytics extends MY_Controller {
 	function replay()
 	{
 		$post = $_POST;
-		$post['browser'] = $this->result['browser'].' '.$this->result['version'];
+		$post['browser'] = $this->result['browser'];
+		$post['browser_version'] = $this->result['version'];
                 $post['platform'] = $this->result['platform'];
 		//$where = array('id'=>$post['id']);
 		echo $this->Analytics_model->save($post);
@@ -89,10 +94,18 @@ class Analytics extends MY_Controller {
 	
 	function report()
 	{
-		$type = 'content';
-		$this->data['result'] = $this->Analytics_model->getReport($type);
+		$summary = $this->Analytics_model->getReport('summary');		
+		$this->data['summary'] = $summary[0];
+		$this->data['content'] = $this->Analytics_model->getReport('content');
+		$this->data['useragent'] = $this->Analytics_model->getReport('useragent');
+		
 		$this->show_view('report',$this->data);		
-	}	
+	}
+	
+	function map()
+	{
+		$this->load->view('map');
+	}
 	
 }
 
