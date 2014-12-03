@@ -1,4 +1,3 @@
-<?php $this->load->model('/api/Analytics_model');?>
 <link href="<?=base_url()?>assets/css/morris/morris.css" rel="stylesheet" type="text/css" />
 <aside class="right-side">
     <!-- Content Header (Page header) -->

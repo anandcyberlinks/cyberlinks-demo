@@ -1,5 +1,4 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-error_reporting(1);
 class Analytics extends MY_Controller {
 
 	function __construct()
@@ -8,7 +7,7 @@ class Analytics extends MY_Controller {
             $this->load->model('/api/Video_model');
 	    $this->load->model('/api/Analytics_model');
 	    $this->load->library('User_Agent');
-	   // $this->load->helper('common');
+	    $this->load->helper('common');
 	     $this->load->config('messages');
 	    $this->data['welcome'] = $this;
 	    
@@ -102,10 +101,7 @@ class Analytics extends MY_Controller {
 		$this->show_view('report',$this->data);		
 	}
 	
-	function map()
-	{
-		$this->load->view('map');
-	}
+	
 	
 }
 
