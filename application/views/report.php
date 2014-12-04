@@ -40,6 +40,23 @@
                     </a>-->
                 </div>
             </div>
+	    <div class="col-lg-2 col-xs-6">
+                <!-- small box -->
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3>
+                            <?php echo $summary->unique_hits;?>	
+                        </h3>
+                        <p>
+                           <?php echo $welcome->loadPo('Unique Users'); ?> 
+                        </p>
+                    </div>
+                   
+                    <!--a href="<?php //echo base_url() ?>video" class="small-box-footer">
+                        <?php //echo $welcome->loadPo('More info'); ?> <i class="fa fa-arrow-circle-right"></i>
+                    </a>-->
+                </div>
+            </div>
             <div class="col-lg-2 col-xs-6">
                 <!-- small box -->
                 <div class="small-box bg-fuchsia">
@@ -132,7 +149,7 @@
 				</tr>
 			     <?php $i=0; foreach($content as $row){ $i++;?>
 				<tr>
-				<td><a class='element' href="#" onclick="if( $('#sub_table_<?php echo $i;?>').hasClass( 'hidden' ) ) $('#sub_table_<?php echo $i;?>').removeClass('hidden'); else $('#sub_table_<?php echo $i;?>').addClass('hidden');"><?php echo $row->title;?></a>
+				<td><a class='element' href="javascript:void()" onclick="if( $('#sub_table_<?php echo $i;?>').hasClass( 'hidden' ) ) $('#sub_table_<?php echo $i;?>').removeClass('hidden'); else $('#sub_table_<?php echo $i;?>').addClass('hidden');"><?php echo $row->title;?></a>
 				<table class="table table-striped hidden" id='sub_table_<?php echo $i?>' >
 				    <tr><td>Completed</td><td>Partial</td><td>Replay</td></tr>
 				    <tr></td><td><?php echo $row->complete;?></td><td><?php echo $row->partial;?></td><td><?php echo $row->replay;?></td></tr>
@@ -146,9 +163,8 @@
                         </div>
 		    </div><!-- /.box-body -->
 		</div><!-- /.box -->
-	    </section><!-- /.Left col -->
-	    
-	    <section class="col-lg-6"> 
+	   <!-- </section> /.Left col 
+	     <section class="col-lg-6"> -->
 		<!-- Box (with bar chart) -->
 		<div class="box box-danger">
 		    <div class="box-header">
@@ -184,11 +200,101 @@
 			
 		    </div><!-- /.box-body -->
 		</div><!-- /.box -->
+		<!--Content Provider -->
+		<div class="box box-danger">
+		    <div class="box-header">
+			<!-- tools box -->
+			<div class="pull-right box-tools">
+			    <button class="btn btn-danger btn-sm" data-widget='collapse' data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+			</div><!-- /. tools -->
+			<h3 class="box-title">Content Provider</h3>
+		    </div><!-- /.box-header -->
+		    <div class="box-body no-padding">
+			
+			   
+				<div class="table-responsive">
+                            <!-- .table - Uses sparkline charts-->
+                            <table class="table table-striped">
+				<tbody><tr>
+				<th>Content Provider</th>				
+				<th>Hits</th>
+				<th>Time Watched</th>				
+				</tr>
+			     <?php $i=0; foreach($content_provider as $row){ $i++;?>
+				<tr>
+				<td><?php echo $row->name;?></td>				
+				<td><?php echo $row->total_hits;?></td>
+				<td><?php echo time_from_seconds($row->total_watched_time);?></td>				
+				</tr>
+			    <?php }?>
+                            </tbody></table><!-- /.table -->
+                        </div>
+			    
+			
+		    </div><!-- /.box-body -->
+		</div><!-- /.box -->
+	    </section> <!--/.Left col -->
+	   
+	    
+        <!--</div> /.row (main row) 
+	
+	<div class="row">-->
+	    <section class="col-lg-6"> 
+		<!-- Box (with bar chart) -->
+		<div class="box box-danger">
+		    <div class="box-header">
+			<!-- tools box -->
+			<div class="pull-right box-tools">
+			    <button class="btn btn-danger btn-sm" data-widget='collapse' data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+			</div><!-- /. tools -->
+			<h3 class="box-title">Map </h3>
+		    </div><!-- /.box-header -->
+		    
+		    <div class="box-body no-padding">
+			
+			  <div id="world-map" style="height: 300px;"></div>
+		</div>
+			    
+			
+		    </div><!-- /.box-body -->
+		
+	    <!--</section> /.Left col 
+	    <section class="col-lg-6">-->
+		<!-- Box (with bar chart) -->
+		<div class="box box-danger">
+		    <div class="box-header">
+			<!-- tools box -->
+			<div class="pull-right box-tools">
+			    <button class="btn btn-danger btn-sm" data-widget='collapse' data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+			</div><!-- /. tools -->
+			<h3 class="box-title">Country </h3>
+		    </div><!-- /.box-header -->
+		    <div class="box-body no-padding">
+			     <div class="table-responsive">
+                                        <!-- .table - Uses sparkline charts-->
+                                        <table class="table table-striped">
+                                            <tr>
+                                                <th>Country</th>
+                                                <th>Hits</th>
+                                                <th>Time Watched</th>                                                
+                                            </tr>
+					    <?php foreach($country as $row){?>
+                                            <tr>
+                                                <td><a href="#"><?php echo $row->country;?></a></td>
+                                                <td><?php echo $row->total_hits;?></td>
+						<td><?php echo time_from_seconds($row->total_watched_time);?></td>
+                                            </tr>
+					    <?php }?>
+                                            
+                                        </table><!-- /.table -->
+                                    </div>
+			
+		    </div><!-- /.box-body -->
+		</div><!-- /.box -->
 	    </section><!-- /.Left col -->
 	    
         </div><!-- /.row (main row) -->
 	<?php /*
-	<div class="row">
 	    <section class="col-lg-12"> 
 		<!-- Box (with bar chart) -->
 		<div class="box box-danger">
@@ -197,18 +303,7 @@
 			<div class="pull-right box-tools">
 			    <button class="btn btn-danger btn-sm" data-widget='collapse' data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
 			</div><!-- /. tools -->
-			<div class="pull-right box-tools">
-			    <select class="form-control onchange" id="year">
-				<?php
-				    foreach($years as $key=>$val){
-					if($key == date('Y'))
-					echo sprintf('<option value="%s" selected="selected">%s</option>',$key,$val);
-					else
-					echo sprintf('<option value="%s">%s</option>',$key,$val);
-				    }
-				?>
-			    </select>
-			</div>
+			
 			<div class="pull-right box-tools">
 			    <select class="form-control onchange" id="month">
 				<?php
@@ -232,12 +327,55 @@
 			</div><!-- /.row - inside box -->
 		    </div><!-- /.box-body -->
 		</div><!-- /.box -->
-	    </section><!-- /.Left col -->
+	    </section><!-- /.Left col -->*/?>
 	</div>
-	*/?>
+	
+	
+	<script>
+	    //-- map values ---//	    
+	    var visitorsData = {
+		<?php foreach($map as $country){?>
+		"<?php echo $country->code;?>": <?php echo $country->total_hits;?>, //Saudi Arabia
+		<?php }?>
+		
+	    };
+	    
+	</script>
+	<link rel="stylesheet" href="<?=base_url()?>assets/css/jvectormap/jquery-jvectormap-1.2.2.css" type="text/css" media="screen"/>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
         <script src="<?=base_url()?>assets/js/plugins/morris/morris.min.js" type="text/javascript"></script>
+	<!-- jvectormap -->
+        <script src="<?=base_url()?>assets/js/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js" type="text/javascript"></script>
+        <script src="<?=base_url()?>assets/js/plugins/jvectormap/jquery-jvectormap-world-mill-en.js" type="text/javascript"></script>
+	
+	
 	<script>
+	    
+	     //World map by jvectormap
+	$('#world-map').vectorMap({	    
+        map: 'world_mill_en',
+        backgroundColor: "#fff",
+        regionStyle: {
+            initial: {
+                fill: '#e4e4e4',
+                "fill-opacity": 1,
+                stroke: 'none',
+                "stroke-width": 0,
+                "stroke-opacity": 1
+            }
+        },
+        series: {
+            regions: [{
+                    values: visitorsData,
+                    scale: ["#3c8dbc", "#2D79A6"], //['#3E5E6B', '#A6BAC2'],
+                    normalizeFunction: 'polynomial'
+                }]
+        },
+        onRegionLabelShow: function(e, el, code) {
+            if (typeof visitorsData[code] != "undefined")
+                el.html(el.html() + ': ' + visitorsData[code] + ' hits');
+        }
+    });
 	    $(function(){
 		$('#category-chart-div').html(loaderCenter);
 		$.ajax({

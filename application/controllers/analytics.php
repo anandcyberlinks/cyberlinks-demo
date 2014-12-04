@@ -32,7 +32,7 @@ class Analytics extends MY_Controller {
 	}
 	
 	function index()
-	{		
+	{
 		//-- get geocoding google api --//
 		$this->data['lat'] = $lat = $_GET['lat'];
 		$this->data['long'] = $lng = $_GET['lng'];
@@ -97,6 +97,10 @@ class Analytics extends MY_Controller {
 		$this->data['summary'] = $summary[0];
 		$this->data['content'] = $this->Analytics_model->getReport('content');
 		$this->data['useragent'] = $this->Analytics_model->getReport('useragent');
+		$this->data['location'] = $this->Analytics_model->getReport('location');
+		$this->data['map'] = $this->Analytics_model->getReport('map');
+		$this->data['country'] = $this->Analytics_model->getReport('country');
+		$this->data['content_provider'] = $this->Analytics_model->getReport('content_provider');
 		
 		$this->show_view('report',$this->data);		
 	}

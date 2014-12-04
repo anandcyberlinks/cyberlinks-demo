@@ -39,20 +39,42 @@ class Analytics_model extends CI_Model{
             $group = 'a.platform, a.browser';
             break;
         case 'summary':
-            $select = "count(a.id) as total_hits,
+            $select = "count(distinct a.user_id) unique_hits,count(a.id) as total_hits,
             SUM(IF( a.complete =0 && a.pause =1, 1, 0 )) AS total_partial,
             SUM(IF(a.complete=1,1,0)) as total_complete,
             SUM(IF(a.replay=1,1,0)) as total_replay, sum( a.watched_time ) as total_watched_time";            
             break;
+        case 'map':
+             $select = 'a.country_code as code,count( a.id ) as total_hits , sum( a.watched_time ) as total_watched_time';
+            $group = 'a.country_code';
+            break;
+        case 'country':
+            $select = 'a.country_code as code,a.country,count( a.id ) as total_hits , sum( a.watched_time ) as total_watched_time';
+            $group = 'a.country_code';
+            break;
+        case 'content_provider':
+            $select = 'concat(u.first_name," ",u.last_name) as name,count( a.id ) as total_hits , sum( a.watched_time ) as total_watched_time';
+            $group = 'a.content_provider';
+            $join = "users u";
+            $cond = "a.content_provider=u.id";          
+            break;
+        }
+        
+        if($join !=''){
+            
+            $this->db->join($join,$cond );
+        }
+        if($type !='content_provider'){
+             $this->db->where('a.content_provider',$this->uid);
         }
         
         $this->db->select($select,false);
         $this->db->from('analytics a');
         $this->db->join('contents c','a.content_id=c.id','inner');
-        $this->db->where('a.content_provider',$this->uid);
+       
         $this->db->group_by($group);
         $query = $this->db->get();
-    //echo '<br>'.$this->db->last_query();
+   // echo '<br>'.$this->db->last_query();
         return $query->result();
         
     }
