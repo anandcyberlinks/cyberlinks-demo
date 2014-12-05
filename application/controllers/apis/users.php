@@ -90,4 +90,70 @@ class Users extends Apis{
         exit;
     }
     
+    /*** User registration ****/
+    function register_post(){
+        $user = array_merge(array('first_name'=>'','last_name'=>'','gender'=>'','email'=>'','password'=>'',
+                                  'contact_no'=>'','image'=>'','image_type'=>'','status'=>'inactive',
+                                  'language'=>'english','role_id'=>'NULL','token'=>md5(uniqid()),'owner_id'=>$this->app->id,
+                                  'created'=>date("Y-m-d H:i:s"),'modified'=>date("Y-m-d H:i:s")),$this->post());
+        $validation = array('first_name','last_name','gender','email','password','image','image_type');
+        $response = array();
+        
+        //check validation
+        foreach($validation as $key=>$val){
+            if(empty($user[$val])){
+                $response['error'][] = sprintf('%s field is required',ucwords($val));
+            }    
+        }
+        
+        if(!isset($response['error'])){
+            //check user already register with US
+            $query = sprintf('select count(*) as tot from customers c where c.email = "%s" and c.owner_id = %d',$user['email'],$this->app->id);
+            $total = reset($this->db->query($query)->result());
+            if($total->tot > 0){
+                $response['error'][] = sprintf('%s is already registered with %s',$user['email'],ucwords($this->app->username));
+            }else{
+                //Insert new user
+                $filepath = sprintf('assets/upload/profilepic/%s.%s',uniqid(),'png');
+                if(!empty($user['image'])){
+                    try{
+                        $tmp = base64_decode($user['image']);
+                        $im = @imagecreatefromstring($tmp);
+                        if ($im !== false){
+                            if(imagepng($im, $filepath)){
+                                            
+                            }else{
+                                throw new Exception("Image not valid");
+                            }
+                        }else{
+                            throw new Exception("Image string not valid");
+                        }
+                    }catch(Exception $e){
+                        $response['error'][] = $e->getMessage();
+                    }
+                }
+                
+                $user['username'] = $user['email'];
+                $user['password'] = md5($user['password']);
+                $user['image'] = file_exists($filepath) ? $filepath : '';
+                unset($user['image_type']);
+                if($this->db->insert('customers',$user)){
+                    
+                    $subject = '[I Am Punjabi]Confirm your email address';
+                    $message = '<p>You recently register in our service</p>';
+                    $message .= '<p>Please confirm your email by clicking link below.</p>';
+                    $message .= '<p><a href="'.site_url('confirmation').'?t='.$user['token'].'">Confirm your email address</a></p>';
+                    $message .= "<br><br> Kind Regards,<br><br>";
+                    $message .= "I Am Punjabi Team";
+                    $to = $user['email'];
+                    $from = 'info@cyberlinks.in';
+                    $this->sendmail(array('from'=>$from,'body'=>$message,'subject'=>$subject,'to'=>$to));
+                    
+                    $response = array('code'=>true,'result' => sprintf("You are successfully registered. Please check you confirmation mail in your email id: %s",$user['email']));
+                }
+            }
+        }
+        $this->response($response);
+        exit;
+    }
 }

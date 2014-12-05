@@ -139,4 +139,15 @@ class Apis extends REST_Controller{
         }
         return $xml->asXML();
     }
+    
+    function sendmail($data = array()){
+        $this->load->library('email');
+        $result = $this->email->from($data['from'])
+                  ->reply_to($data['from'])
+                  ->to($data['to'])
+                  ->subject($data['subject'])
+                  ->message($data['body'])->send();
+                  
+        return $result;          
+    }
 }

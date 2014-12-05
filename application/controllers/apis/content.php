@@ -75,6 +75,7 @@ class Content extends Apis{
                     $condition.= ' group by c.`id` ';
                     $condition.= sprintf(' ORDER BY c.`id` DESC ');
                 break;
+            case 'viewed' :
             case 'popular' :
                     $condition.= ' group by c.id ';
                     $condition.= sprintf(' ORDER BY v.`views` DESC ');
@@ -82,6 +83,10 @@ class Content extends Apis{
             case 'liked' :
                     $condition.= ' group by c.id ';
                     $condition.= sprintf(' ORDER BY ufl.`like` DESC ');
+                break;
+            case 'featured' :
+                    $condition.= sprintf(' AND c.feature_video = 1 ');
+                    $condition.= ' group by c.id ';
                 break;
             default :
                 switch($qString['k']){
@@ -97,6 +102,55 @@ class Content extends Apis{
                         $condition.= isset($qString['val']) && $qString['val'] != '' ? sprintf('AND cat.id = %d ',$qString['val']) : '';
                         $condition.= ' group by c.`id` ';
                     break;
+                    case 'cc' :
+                        $condition.= isset($qString['title']) && $qString['title'] != '' ? sprintf('AND c.title = %s ',$qString['title']) : '';
+                        $condition.= isset($qString['cat']) && $qString['cat'] != '' ? sprintf('AND cat.id = %d ',$qString['cat']) : '';
+                        $condition.= ' group by c.`id` ';
+                    break;
+                    case 'related' :
+                        $content_id = isset($qString['val']) && $qString['val'] != '' ? $qString['val'] : false;
+                        if($content_id){
+                            $query = sprintf('select c.category from contents c where c.id = %d ',$content_id);
+                            $temp = $this->db->query($query)->result();
+                            $category_id = isset($temp[0]->category) ? $temp[0]->category : 0;
+                            if($category_id > 0){
+                                $condition.= sprintf('AND cat.id = %d ',$category_id);
+                                $condition.= ' group by c.`id` ';
+                            }else{
+                                $this->response($response);
+                                exit;
+                            }
+                        }
+                    break;
+                    case 'comments' :
+                        $content_id = isset($qString['val']) && $qString['val'] != '' ? $qString['val'] : false;
+                        if($content_id){
+                            $query = sprintf('select c.id,c.comment,c.created_date as created,c.updated_date as modified,
+                                             c.approved,c.status,u.id as user_id,u.username,u.email,u.first_name as fname,
+                                             u.last_name as lname,u.gender,u.image
+                                             from comment c
+                                             left join customers u on u.id = c.user_id
+                                             where u.id > 0
+                                             AND c.approved = "YES"
+                                             AND c.content_id = %d ',$content_id);
+                            
+                            $temp = $this->db->query($query)->result();
+                            array_walk($temp,function(&$temp){
+                                $temp->gender = $temp->gender == 'male' ? 'Male' : 'Female';
+                                $tmp_filepath = 'assets/upload/profilepic/'.$temp->image;
+                                if(file_exists($tmp_filepath) && is_file($tmp_filepath)){
+                                    $temp->image = base_url().$tmp_filepath;
+                                }else{
+                                    $temp->image = base_url(). 'assets/upload/profilepic/userdefault.png';
+                                }
+                            });
+                            $response = array('tr'=>count($temp),'result'=>$temp);
+                        }else{
+                            $response = array('error' => 'Content Id Not valid');
+                        }
+                        $this->response($response);
+                        exit;
+                    break;
                 }    
                 break;
         }
@@ -106,35 +160,6 @@ class Content extends Apis{
         $dataset_count = isset($dataset_count[0]->tot) ? $dataset_count[0]->tot : 0;
         
         $query = sprintf('%s %s limit %d,%d ',$this->query,$condition,$this->start,$this->limit);
-        $dataset = $this->db->query($query)->result();
-        foreach($dataset as $key=>$val){
-            $dataset[$key]->price = $val->price != '' ? 'Paid' : 'Free';
-            if(file_exists($val->video_basethumb)){
-                $base_url = strpos('http://',$val->video_basepath) > 0 ? '' : base_url();
-                $dataset[$key]->video_basepath = $base_url.$val->video_basepath;
-                
-                $base_url = strpos('http://',$val->video_basethumb) > 0 ? '' : base_url();
-                $dataset[$key]->video_basethumb = $base_url.$val->video_basethumb;
-                $filename = end(explode('/',$val->video_basethumb));
-                $dataset[$key]->thumbs = array('small'=>sprintf('%s',base_url().THUMB_SMALL_PATH.$filename),
-                                         'medium'=>sprintf('%s',base_url().THUMB_MEDIUM_PATH.$filename),
-                                         'large'=>sprintf('%s',base_url().THUMB_LARGE_PATH.$filename));
-                
-            }
-            $dataset[$key]->duration = $this->time_from_seconds($val->duration);
-        }
-        
-        $response = array('tr'=>$dataset_count,'cp'=>$this->start + 1,'limit'=>$this->limit,'result'=>$dataset);
-        $this->response($response);
-    }
-    
-    function featured_get(){
-        $qString = $this->get();
-        $total_query = sprintf('select count(id) as tot from contents where uid = %d and feature_video = 1 ',$this->app->id);
-        $dataset_count = $this->db->query($total_query)->result();
-        $dataset_count = isset($dataset_count[0]->tot) ? $dataset_count[0]->tot : 0;
-        
-        $query = sprintf('%s and c.feature_video = 1 group by c.id limit %d,%d ',$this->query,$this->start,$this->limit);
         $dataset = $this->db->query($query)->result();
         foreach($dataset as $key=>$val){
             $dataset[$key]->price = $val->price != '' ? 'Paid' : 'Free';
@@ -191,7 +216,7 @@ class Content extends Apis{
     
     /*************************************************
      * Favorite Section
-     *************************************************/
+    *************************************************/
     
     function favorite_post(){
         $qString = $this->get();
@@ -260,44 +285,6 @@ class Content extends Apis{
     }
     
     /*** Comment section ****/
-    function comments_get(){
-        $qString = $this->get();
-        $response = $dataset = array();
-        if(isset($qString['cid']) && $qString['cid'] != ''){
-            $query = sprintf('select
-                                  c.id,
-                                  c.comment,
-                                  if(c.approved = "Yes",1,0)  as status,
-                                  c.created_date as created,
-                                  c.user_ip as ip,
-                                  u.id as user_id,
-                                  u.first_name,
-                                  u.last_name,
-                                  CONCAT(u.first_name," ",u.last_name) as username,
-                                  u.gender,
-                                  f.relative_path,
-                                  f.absolute_path
-                                  from comment c
-                                  left join users u on u.id = c.user_id
-                                  left join files f on f.id = u.image
-                                  where content_id = %d AND c.approved = "No"
-                                  group by c.id ',$qString['cid']);
-            
-            $dataset = $this->db->query($query)->result();
-            array_walk($dataset,function(&$dataset){
-                if($dataset->relative_path != ''){
-                    $base_url = strpos('http://',$dataset->relative_path) > 0 ? '' : base_url();
-                    $dataset->relative_path = $base_url.$dataset->relative_path;
-                }
-            });
-        }else{
-            $response['error'] = 'Invalid content Id';
-        }
-        $response = array('tr'=>count($dataset),'result'=>$dataset);
-        $this->response($response);
-        exit;
-    }
-    
     function comments_post(){
         $qString = $this->get();
         if(isset($_POST['content_id']) && $_POST['content_id'] != '' && isset($_POST['comment']) && $_POST['comment'] != ''){
