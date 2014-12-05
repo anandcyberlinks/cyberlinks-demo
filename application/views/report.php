@@ -163,6 +163,41 @@
                         </div>
 		    </div><!-- /.box-body -->
 		</div><!-- /.box -->
+		
+		<!-- Box (with bar chart) -->
+		<div class="box box-danger">
+		    <div class="box-header">
+			<!-- tools box -->
+			<div class="pull-right box-tools">
+			    <button class="btn btn-danger btn-sm" data-widget='collapse' data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+			</div><!-- /. tools -->
+			<h3 class="box-title">User Wise Report</h3>
+		    </div><!-- /.box-header -->
+		    <div class="box-body no-padding">
+			<div class="table-responsive">
+                            <!-- .table - Uses sparkline charts-->
+                            <table class="table table-striped">
+				<tbody><tr>
+				<th>User</th>
+				<th>Total Hits</th>
+				<th>Total Time Watched</th>				
+				</tr>
+			     <?php $i=0; foreach($customer as $row){ $i++;?>
+				<tr>
+				<td><a class='element' href="javascript:void()" onclick="getContent('<?php echo $row->id;?>')"><?php echo $row->name;?></a>
+				<table class="table table-striped hidden" id='customer_<?php echo $row->id?>' >
+				    <tr><td>Video</td><td>Hits</td><td>Watched time</td></tr>
+				    
+				</table>
+				</td>
+				<td><?php echo $row->total_hits;?></td>
+				<td><?php echo time_from_seconds($row->total_watched_time);?></td>				
+				</tr>
+			    <?php }?>
+                            </tbody></table><!-- /.table -->
+                        </div>
+		    </div><!-- /.box-body -->
+		</div><!-- /.box -->
 	   <!-- </section> /.Left col 
 	     <section class="col-lg-6"> -->
 		<!-- Box (with bar chart) -->
@@ -330,7 +365,47 @@
 	    </section><!-- /.Left col -->*/?>
 	</div>
 	
-	
+	<script>
+	    //-- get contents by user id --//
+	    function getContent(id) {
+		//code
+		$.ajax({
+		    url: "<?php echo base_url();?>analytics/ajax",
+		    data: {
+			user_id: id
+		    }
+		})
+		.done(function(data){
+		    var strhtml='';
+		    if( $('#customer_'+id).hasClass( 'hidden' ) ){
+			
+		    }else{
+			$('#customer_'+id).addClass('hidden');
+			exit;
+		    }
+		    $.each($.parseJSON(data), function (name,obj ){			
+		    var total_watched = second_to_time(obj.total_watched_time);
+		        strhtml += '<tr class=tr_'+id+'><td>'+obj.title+'</td><td>'+obj.total_hits+'</td><td>'+total_watched+'</td></tr>';			
+		    });
+		       $('.tr_'+id ).remove();
+		       $('#customer_'+id).append(strhtml);
+		       $('#customer_'+id).removeClass('hidden');
+		});
+	    }
+	    function second_to_time(pos)
+	    {
+		var seconds = pos;
+		var hours = parseInt( seconds / 3600 ); // 3,600 seconds in 1 hour
+		seconds = seconds % 3600;
+		
+		 var minutes = parseInt( seconds / 60 ); // 60 seconds in 1 minute
+		// 4- Keep only seconds not extracted to minutes:
+		seconds = seconds % 60;
+		return hours+":"+minutes+":"+seconds;
+	    }
+	    
+	    
+	</script>
 	<script>
 	    //-- map values ---//	    
 	    var visitorsData = {

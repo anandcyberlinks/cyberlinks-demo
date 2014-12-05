@@ -22,10 +22,10 @@ class Analytics_model extends CI_Model{
         }        
     }
     
-    public function getReport($type='content')
+    public function getReport($param=array())
     {
         $group='';
-        switch($type){            
+        switch($param['type']){            
 
         case 'content':
             $select = 'c.title,a.content_id,count(content_id) as total_hits,sum(watched_time) as total_watched_time,           
@@ -33,6 +33,11 @@ class Analytics_model extends CI_Model{
             SUM(IF( a.complete =0 && a.pause =1, 1, 0 )) AS partial, 
             SUM(IF( a.replay =1, 1, 0) ) AS replay ';
             $group = 'a.content_id';
+            //-- user contents --//
+            if($param['id']>0){
+                $where = $this->db->where('a.user_id',$param['id']);
+            }
+            
             break;   
         case 'useragent':        
             $select = 'a.platform, a.browser, count( a.id ) as total_hits , sum( a.watched_time ) as total_watched_time';
@@ -42,7 +47,7 @@ class Analytics_model extends CI_Model{
             $select = "count(distinct a.user_id) unique_hits,count(a.id) as total_hits,
             SUM(IF( a.complete =0 && a.pause =1, 1, 0 )) AS total_partial,
             SUM(IF(a.complete=1,1,0)) as total_complete,
-            SUM(IF(a.replay=1,1,0)) as total_replay, sum( a.watched_time ) as total_watched_time";            
+            SUM(IF(a.replay=1,1,0)) as total_replay, sum( a.watched_time ) as total_watched_time";                    
             break;
         case 'map':
              $select = 'a.country_code as code,count( a.id ) as total_hits , sum( a.watched_time ) as total_watched_time';
@@ -58,6 +63,12 @@ class Analytics_model extends CI_Model{
             $join = "users u";
             $cond = "a.content_provider=u.id";          
             break;
+        case 'customer':
+            $select = 'u.id,concat(u.first_name," ",u.last_name) as name,count( a.id ) as total_hits , sum( a.watched_time ) as total_watched_time';
+            $group = 'u.id';           
+            $join = "customers u";
+            $cond = "a.user_id=u.id";
+            break;
         }
         
         if($join !=''){
@@ -70,11 +81,11 @@ class Analytics_model extends CI_Model{
         
         $this->db->select($select,false);
         $this->db->from('analytics a');
-        $this->db->join('contents c','a.content_id=c.id','inner');
+        $this->db->join('contents c','a.content_id=c.id');
        
         $this->db->group_by($group);
         $query = $this->db->get();
-   // echo '<br>'.$this->db->last_query();
+    //echo '<br>'.$this->db->last_query();
         return $query->result();
         
     }

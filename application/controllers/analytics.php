@@ -1,4 +1,5 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
 class Analytics extends MY_Controller {
 
 	function __construct()
@@ -93,18 +94,34 @@ class Analytics extends MY_Controller {
 	
 	function report()
 	{
-		$summary = $this->Analytics_model->getReport('summary');		
+		$summary = $this->Analytics_model->getReport(array('type'=>'summary'));
+		//echo '<pre>';print_r($summary);die;
 		$this->data['summary'] = $summary[0];
-		$this->data['content'] = $this->Analytics_model->getReport('content');
-		$this->data['useragent'] = $this->Analytics_model->getReport('useragent');
-		$this->data['location'] = $this->Analytics_model->getReport('location');
-		$this->data['map'] = $this->Analytics_model->getReport('map');
-		$this->data['country'] = $this->Analytics_model->getReport('country');
-		$this->data['content_provider'] = $this->Analytics_model->getReport('content_provider');
+		/* $url = "http://localhost:8085/solr/collection1/select?q=content_provider:".$this->uid."&wt=json&indent=true";
+			$result = file_get_contents($url);
+			$summary = json_decode($result);
+		*/	
+			//if($summary) {
+			//  $this->data['summary'] = $summary->response->docs[0];            
+		//}
+	    
+		$this->data['content'] = $this->Analytics_model->getReport(array('type'=>'content'));
+		$this->data['useragent'] = $this->Analytics_model->getReport(array('type'=>'useragent'));
+		$this->data['location'] = $this->Analytics_model->getReport(array('type'=>'location'));
+		$this->data['map'] = $this->Analytics_model->getReport(array('type'=>'map'));
+		$this->data['country'] = $this->Analytics_model->getReport(array('type'=>'country'));
+		$this->data['content_provider'] = $this->Analytics_model->getReport(array('type'=>'content_provider'));
+		$this->data['customer'] = $this->Analytics_model->getReport(array('type'=>'customer'));
 		
 		$this->show_view('report',$this->data);		
 	}
 	
+	function ajax()
+	{
+		 $id = $_GET['user_id'];
+		$result = $this->Analytics_model->getReport(array('id'=>$id,'type'=>'content'));
+		echo json_encode($result);
+	}
 	
 	
 }
