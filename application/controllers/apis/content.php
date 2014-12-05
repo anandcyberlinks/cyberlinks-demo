@@ -88,71 +88,72 @@ class Content extends Apis{
                     $condition.= sprintf(' AND c.feature_video = 1 ');
                     $condition.= ' group by c.id ';
                 break;
-            default :
-                switch($qString['k']){
-                    case 'id' :
-                        $condition.= isset($qString['val']) && $qString['val'] != '' ? sprintf('AND c.id = %d ',$qString['val']) : '';
-                        $condition.= ' group by c.`id` ';
-                        break;
-                    case 'title' :
-                        $condition.= isset($qString['val']) && $qString['val'] != '' ? sprintf('AND c.title like "%%%s%%" ',$qString['val']) : '';
-                        $condition.= ' group by c.`id` ';
-                    break;
-                    case 'category' :
-                        $condition.= isset($qString['val']) && $qString['val'] != '' ? sprintf('AND cat.id = %d ',$qString['val']) : '';
-                        $condition.= ' group by c.`id` ';
-                    break;
-                    case 'cc' :
-                        $condition.= isset($qString['title']) && $qString['title'] != '' ? sprintf('AND c.title = %s ',$qString['title']) : '';
-                        $condition.= isset($qString['cat']) && $qString['cat'] != '' ? sprintf('AND cat.id = %d ',$qString['cat']) : '';
-                        $condition.= ' group by c.`id` ';
-                    break;
-                    case 'related' :
-                        $content_id = isset($qString['val']) && $qString['val'] != '' ? $qString['val'] : false;
-                        if($content_id){
-                            $query = sprintf('select c.category from contents c where c.id = %d ',$content_id);
-                            $temp = $this->db->query($query)->result();
-                            $category_id = isset($temp[0]->category) ? $temp[0]->category : 0;
-                            if($category_id > 0){
-                                $condition.= sprintf('AND cat.id = %d ',$category_id);
-                                $condition.= ' group by c.`id` ';
-                            }else{
-                                $this->response($response);
-                                exit;
-                            }
-                        }
-                    break;
-                    case 'comments' :
-                        $content_id = isset($qString['val']) && $qString['val'] != '' ? $qString['val'] : false;
-                        if($content_id){
-                            $query = sprintf('select c.id,c.comment,c.created_date as created,c.updated_date as modified,
-                                             c.approved,c.status,u.id as user_id,u.username,u.email,u.first_name as fname,
-                                             u.last_name as lname,u.gender,u.image
-                                             from comment c
-                                             left join customers u on u.id = c.user_id
-                                             where u.id > 0
-                                             AND c.approved = "YES"
-                                             AND c.content_id = %d ',$content_id);
-                            
-                            $temp = $this->db->query($query)->result();
-                            array_walk($temp,function(&$temp){
-                                $temp->gender = $temp->gender == 'male' ? 'Male' : 'Female';
-                                $tmp_filepath = 'assets/upload/profilepic/'.$temp->image;
-                                if(file_exists($tmp_filepath) && is_file($tmp_filepath)){
-                                    $temp->image = base_url().$tmp_filepath;
-                                }else{
-                                    $temp->image = base_url(). 'assets/upload/profilepic/userdefault.png';
-                                }
-                            });
-                            $response = array('tr'=>count($temp),'result'=>$temp);
-                        }else{
-                            $response = array('error' => 'Content Id Not valid');
-                        }
-                        $this->response($response);
-                        exit;
-                    break;
-                }    
+            case 'id' :
+                    $condition.= isset($qString['val']) && $qString['val'] != '' ? sprintf('AND c.id = %d ',$qString['val']) : '';
+                    $condition.= ' group by c.`id` ';
                 break;
+            case 'title' :
+                    $condition.= isset($qString['val']) && $qString['val'] != '' ? sprintf('AND c.title like "%%%s%%" ',$qString['val']) : '';
+                    $condition.= ' group by c.`id` ';
+            break;
+            case 'category' :
+                    $condition.= isset($qString['val']) && $qString['val'] != '' ? sprintf('AND cat.id = %d ',$qString['val']) : '';
+                    $condition.= ' group by c.`id` ';
+            break;
+            case 'cc' :
+                    $condition.= isset($qString['title']) && $qString['title'] != '' ? sprintf('AND c.title = %s ',$qString['title']) : '';
+                    $condition.= isset($qString['cat']) && $qString['cat'] != '' ? sprintf('AND cat.id = %d ',$qString['cat']) : '';
+                    $condition.= ' group by c.`id` ';
+            break;
+            case 'related' :
+                    $content_id = isset($qString['val']) && $qString['val'] != '' ? $qString['val'] : false;
+                    if($content_id){
+                        $query = sprintf('select c.category from contents c where c.id = %d ',$content_id);
+                        $temp = $this->db->query($query)->result();
+                        $category_id = isset($temp[0]->category) ? $temp[0]->category : 0;
+                        if($category_id > 0){
+                            $condition.= sprintf('AND cat.id = %d ',$category_id);
+                            $condition.= ' group by c.`id` ';
+                        }else{
+                            $this->response($response);
+                            exit;
+                        }
+                    }
+            break;
+            case 'comments' :
+                    $content_id = isset($qString['val']) && $qString['val'] != '' ? $qString['val'] : false;
+                    if($content_id){
+                        $query = sprintf('select c.id,c.comment,c.created_date as created,c.updated_date as modified,
+                                         c.approved,c.status,u.id as user_id,u.username,u.email,u.first_name as fname,
+                                         u.last_name as lname,u.gender,u.image
+                                         from comment c
+                                         left join customers u on u.id = c.user_id
+                                         where u.id > 0
+                                         AND c.approved = "YES"
+                                         AND c.content_id = %d ',$content_id);
+                        
+                        $temp = $this->db->query($query)->result();
+                        array_walk($temp,function(&$temp){
+                            $temp->gender = $temp->gender == 'male' ? 'Male' : 'Female';
+                            $tmp_filepath = 'assets/upload/profilepic/'.$temp->image;
+                            if(file_exists($tmp_filepath) && is_file($tmp_filepath)){
+                                $temp->image = base_url().$tmp_filepath;
+                            }else{
+                                $temp->image = base_url(). 'assets/upload/profilepic/userdefault.png';
+                            }
+                        });
+                        $response = array('tr'=>count($temp),'result'=>$temp);
+                    }else{
+                        $response = array('error' => 'Content Id Not valid');
+                    }
+                    $this->response($response);
+                    exit;
+            break;
+            default:
+                    $response = array('error' => 'No key found');
+                    $this->response($response);
+                    exit;
+            break;
         }
         
         $total_query = sprintf('select count(*) as tot from (%s %s) as tmp ',$this->query,$condition);
