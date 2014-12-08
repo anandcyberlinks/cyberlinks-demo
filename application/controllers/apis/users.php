@@ -23,6 +23,7 @@ class Users extends Apis{
         exit;
     }
     
+    //Application Detail
     function appdetail_get(){
         $qs = $this->get();
         $query = sprintf('select u.username,u.email,
@@ -139,6 +140,8 @@ class Users extends Apis{
                 unset($user['image_type']);
                 if($this->db->insert('customers',$user)){
                     
+                    $this->db->insert('token',array('user_id'=>$this->db->insert_id(),'token'=>$user['token'],'action'=>'activation','expiry'=>date("Y-m-d H:i:s",strtotime('+7 day'))));
+                    
                     $subject = '[I Am Punjabi]Confirm your email address';
                     $message = '<p>You recently register in our service</p>';
                     $message .= '<p>Please confirm your email by clicking link below.</p>';
@@ -152,6 +155,100 @@ class Users extends Apis{
                     $response = array('code'=>true,'result' => sprintf("You are successfully registered. Please check you confirmation mail in your email id: %s",$user['email']));
                 }
             }
+        }
+        $this->response($response);
+        exit;
+    }
+    
+    //Get user profile
+    function profile_get(){
+        $response = array();
+        if($this->user){
+            $response = $this->user;
+        }else{
+            $response['error'][] = 'No user logged In';
+        }
+        $this->response($response);
+        exit;
+    }
+    
+    /*** edit user profile *****/
+    function editprofile_post(){
+        
+        $response = array();
+        $validation = array('id');
+        
+        if(isset($this->user->id) && $this->user->id > 0){
+            $user = array_intersect_key(array('id'=>'','first_name'=>'','last_name'=>'','gender'=>'',
+                                  'contact_no'=>'','image'=>'','image_type'=>'',
+                                  'language'=>'english','modified'=>date("Y-m-d H:i:s")),$this->post());
+            
+            $validvalue = array();
+            foreach($user as $key=>$val){
+                $validvalue[$key] = $this->post($key);
+            }
+            
+            //check validation
+            foreach($validation as $key=>$val){
+                if(empty($validvalue[$val])){
+                    $response['error'][] = sprintf('%s field is required',ucwords($val));
+                }    
+            }
+            
+            if(!isset($response['error'])){
+                //New image of user
+                $filepath = sprintf('assets/upload/profilepic/%s.%s',uniqid(),'png');
+                if(!empty($validvalue['image'])){
+                    try{
+                        $tmp = base64_decode($validvalue['image']);
+                        $im = @imagecreatefromstring($tmp);
+                        if ($im !== false){
+                            if(imagepng($im, $filepath)){
+                                            
+                            }else{
+                                throw new Exception("Image not valid");
+                            }
+                        }else{
+                            throw new Exception("Image string not valid");
+                        }
+                    }catch(Exception $e){
+                        $response['error'][] = $e->getMessage();
+                    }
+                    
+                    $validvalue['image'] = file_exists($filepath) ? $filepath : '';
+                    unset($validvalue['image_type']);
+                }
+                
+                $this->db->where('id', $validvalue['id']);
+                if($this->db->update('customers', $validvalue)){
+                    $response = array('code'=>true,'result' => sprintf("Successfully update user profile"));
+                }
+            }
+            
+        }else{
+            $response['error'] = 'Invalid request';
+        }
+        $this->response($response);
+        exit;
+    }
+    
+    function forgot_post(){
+        
+        $response = array();
+        $email = $this->post('email');
+        
+        //check Email is valid or not
+        if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            //check in database
+            $query = sprintf('select count(*) as tot from customers where email  = "%s" ',$email);
+            $total = reset($this->db->query($query)->result());
+            if($total->tot >0){
+                    
+            }else{
+                $response['error'][] = sprintf('Email address not Valid');
+            }
+        }else{
+            $response['error'][] = sprintf('Email address not Valid');
         }
         $this->response($response);
         exit;

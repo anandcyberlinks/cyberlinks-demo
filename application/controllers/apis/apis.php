@@ -84,6 +84,7 @@ class Apis extends REST_Controller{
                                  u.password as app_password,
                                  u.token as app_token,
                                  
+                                 
                                  c.id as user_id,
                                  c.username as user_username,
                                  c.email as user_email,
@@ -93,7 +94,8 @@ class Apis extends REST_Controller{
                                  c.gender as user_gender,
                                  c.contact_no as user_contact_no,
                                  c.password as user_password,
-                                 c.token as user_token
+                                 c.token as user_token,
+                                 c.image
                                  
                                  from api_token at
                                  left join customers c on c.id = at.user_id
@@ -103,7 +105,14 @@ class Apis extends REST_Controller{
                 if(count($dataset) > 0){
                     $data = reset($dataset);
                     $this->app = (object) array('id'=>$data->app_id,'username'=>$data->app_username,'email'=>$data->app_email,'owner_id'=>$data->app_owner_id,'first_name'=>$data->app_first_name,'last_name'=>$data->app_last_name);
-                    $this->user = (object) array('id'=>$data->user_id,'username'=>$data->user_username,'email'=>$data->user_email,'owner_id'=>$data->user_owner_id,'first_name'=>$data->user_first_name,'last_name'=>$data->user_last_name);
+                    $this->user = (object) array('id'=>$data->user_id,
+                                                 'username'=>$data->user_username,
+                                                 'email'=>$data->user_email,
+                                                 'owner_id'=>$data->user_owner_id,
+                                                 'first_name'=>$data->user_first_name,
+                                                 'last_name'=>$data->user_last_name,
+                                                 'image'=> file_exists($data->image) ? base_url().$data->image : base_url().'assets/upload/profilepic/userdefault.png',
+                                                );
                     $return  = true;
                 }else{
                     $return  = false;
