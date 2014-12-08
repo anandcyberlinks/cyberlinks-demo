@@ -178,7 +178,7 @@ $(window).on('beforeunload', function(){
 	//alert(analytics_id);
         $.ajax({
             url:"<?php echo base_url()?>analytics/pause",
-            data: {              
+            data: {
 	        id: id,
                 watched_time: duration,
                 pause: '1'

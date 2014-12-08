@@ -23,21 +23,45 @@ class Analytics_model extends CI_Model{
     }
     
     public function getReport($param=array())
-    {
+    {     
         $group='';
-        switch($param['type']){            
+        switch($param['type']){
 
         case 'content':
-            $select = 'c.title,a.content_id,count(content_id) as total_hits,sum(watched_time) as total_watched_time,           
+            $select = 'c.title,a.content_id,concat(u.first_name," ",u.last_name) as content_provider,count(content_id) as total_hits,sum(watched_time) as total_watched_time,           
             SUM(IF( a.complete =1, 1, 0 )) AS complete, 
             SUM(IF( a.complete =0 && a.pause =1, 1, 0 )) AS partial, 
             SUM(IF( a.replay =1, 1, 0) ) AS replay ';
             $group = 'a.content_id';
+            
+            $join = "users u";
+            $cond = "a.content_provider=u.id";
+            
             //-- user contents --//
             if($param['id']>0){
-                $where = $this->db->where('a.user_id',$param['id']);
+                $this->db->where('a.user_id',$param['id']);
             }
-            
+            //--- search val --//
+            if(@$param['search']){
+                if($param['search']['title'] !=''){
+                    $this->db->like('c.title',$param['search']['title']);
+                }
+                
+                if($param['search']['contentprovider'] != ''){
+                    $this->db->where('u.id',$param['search']['contentprovider']);
+                }
+                
+                if($param['search']['startdate'] != '' && $param['search']['enddate']==''){
+                    $this->db->where('DATE_FORMAT(a.created,"%Y-%m-%d") >',date('Y-m-d',strtotime($param['search']['startdate'])));
+                }
+                
+                if($param['search']['startdate'] != '' && $param['search']['enddate']!=''){
+                    $startdate = date('Y-m-d',strtotime($param['search']['startdate']));
+                    $enddate = date('Y-m-d',strtotime($param['search']['enddate']));
+                    
+                    $this->db->where("DATE_FORMAT(a.created,'%Y-%m-%d') BETWEEN '$startdate' AND '$enddate'");
+                }
+            }
             break;   
         case 'useragent':        
             $select = 'a.platform, a.browser, count( a.id ) as total_hits , sum( a.watched_time ) as total_watched_time';
@@ -76,7 +100,7 @@ class Analytics_model extends CI_Model{
             $this->db->join($join,$cond );
         }
         if($type !='content_provider'){
-             $this->db->where('a.content_provider',$this->uid);
+            // $this->db->where('a.content_provider',$this->uid);
         }
         
         $this->db->select($select,false);
@@ -88,6 +112,16 @@ class Analytics_model extends CI_Model{
     //echo '<br>'.$this->db->last_query();
         return $query->result();
         
+    }
+    
+    function getContentProvider()
+    {
+        $this->db->select('id,concat(first_name," ",last_name) as name',false);
+        $this->db->from('users');
+        $this->db->where('status','active');
+        $this->db->where('role_id',1);
+        $query = $this->db->get();
+        return $query->result();
     }
 }
 

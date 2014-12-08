@@ -1,5 +1,5 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-
+error_reporting(1);
 class Analytics extends MY_Controller {
 
 	function __construct()
@@ -123,7 +123,33 @@ class Analytics extends MY_Controller {
 		echo json_encode($result);
 	}
 	
+	function content()
+	{
+		if($_GET['search']){
+			$post = $_GET;
+		}
+		
+		//--- search form content provider --//
+		$this->data['content_provider'] = $this->Analytics_model->getContentProvider();
+		//-----------------------//
+		
+		$this->data['content'] = $this->Analytics_model->getReport(array('type'=>'content','search'=>$post));
+		$this->show_view('content_report',$this->data);
+	}
 	
+	function user()
+	{
+		if($_GET['search']){
+			$post = $_GET;
+		}
+		
+		//--- search form content provider --//
+		//$this->data['content_provider'] = $this->Analytics_model->getContentProvider();
+		//-----------------------//
+		
+		$this->data['content'] = $this->Analytics_model->getReport(array('type'=>'customer','search'=>$post));
+		$this->show_view('customer_report',$this->data);
+	}
 }
 
 /* End of file welcome.php */
