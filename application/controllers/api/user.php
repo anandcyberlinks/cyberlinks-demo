@@ -423,7 +423,7 @@ class User extends REST_Controller
             'status' => 'active'
             //'created'=>date('Y-m-d h:i:s')
                 );
-           $this->response($userdata);
+           
              $id = $this->User_model->adduser($userdata);
             
              if($id){
