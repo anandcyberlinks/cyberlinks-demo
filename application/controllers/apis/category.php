@@ -12,10 +12,12 @@ class Category extends Apis{
         $query = sprintf('select
                             c.id,c.category,c.parent_id,
                             c.description,c.color,
+                            sum(if(contents.id > 0,1,0)) as total,
                             f.relative_path
                             from categories c
+                            left join contents on contents.category = c.id
                             left join files f on f.id = c.file_id
-                            where c.u_id  = "%d" ',$this->app->id);
+                            where c.u_id  = "%d" group by c.id ',$this->app->id);
 
         $dataset = $this->db->query($query)->result();
         foreach($dataset as $key=>$val){

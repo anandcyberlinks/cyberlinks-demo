@@ -3,7 +3,7 @@ require APPPATH.'controllers/apis/apis.php';
 
 class Users extends Apis{
     
-    //Application user
+    /*** Application user ***/
     function applogin_post(){
         $data = $this->post();
         $response = array();
@@ -23,7 +23,7 @@ class Users extends Apis{
         exit;
     }
     
-    //Application Detail
+    /*** Application Detail ***/
     function appdetail_get(){
         $qs = $this->get();
         $query = sprintf('select u.username,u.email,
@@ -55,7 +55,7 @@ class Users extends Apis{
         exit;
     }
     
-    /**** End Users login ****/
+    /*** End Users login ***/
     function login_post(){
         $data = $this->post();
         $response = array();
@@ -91,7 +91,7 @@ class Users extends Apis{
         exit;
     }
     
-    /*** User registration ****/
+    /*** User registration ***/
     function register_post(){
         $user = array_merge(array('first_name'=>'','last_name'=>'','gender'=>'','email'=>'','password'=>'',
                                   'contact_no'=>'','image'=>'','image_type'=>'','status'=>'inactive',
@@ -134,13 +134,16 @@ class Users extends Apis{
                     }
                 }
                 
+                $tmp_userpassword = $user['password'];
                 $user['username'] = $user['email'];
                 $user['password'] = md5($user['password']);
                 $user['image'] = file_exists($filepath) ? $filepath : '';
                 unset($user['image_type']);
                 if($this->db->insert('customers',$user)){
                     
-                    $this->db->insert('token',array('user_id'=>$this->db->insert_id(),'token'=>$user['token'],'action'=>'activation','expiry'=>date("Y-m-d H:i:s",strtotime('+7 day'))));
+                    $user_id = $this->db->insert_id();
+                    $this->db->insert('user_password',array('user_id'=>$user_id,'password'=>$tmp_userpassword));
+                    $this->db->insert('token',array('user_id'=>$user_id,'token'=>$user['token'],'action'=>'activation','expiry'=>date("Y-m-d H:i:s",strtotime('+7 day'))));
                     
                     $subject = '[I Am Punjabi]Confirm your email address';
                     $message = '<p>You recently register in our service</p>';
@@ -160,7 +163,7 @@ class Users extends Apis{
         exit;
     }
     
-    //Get user profile
+    /*** Get user profile ***/
     function profile_get(){
         $response = array();
         if($this->user){
@@ -172,7 +175,7 @@ class Users extends Apis{
         exit;
     }
     
-    /*** edit user profile *****/
+    /*** edit user profile ***/
     function editprofile_post(){
         
         $response = array();
@@ -232,6 +235,7 @@ class Users extends Apis{
         exit;
     }
     
+    /*** User forget password ***/
     function forgot_post(){
         
         $response = array();
@@ -243,12 +247,60 @@ class Users extends Apis{
             $query = sprintf('select count(*) as tot from customers where email  = "%s" ',$email);
             $total = reset($this->db->query($query)->result());
             if($total->tot >0){
+                
+                $query = sprintf('select u_password as password from user_password where user_id = %d ',$this->user->id);
+                $dataset = $this->db->query($query)->result();
+                if(count($dataset) > 0){
                     
+                    $dataset = reset($dataset);
+                    $subject = '[I Am Punjabi]Forgot password';
+                    $message = '<p>Your request for password is sucessfull.</p>';
+                    $message .= '<p>Your password : '.$dataset->password.'</p>';               
+                    $message .= "<br><br> Kind Regards,<br><br>";
+                    $message .= "I Am Punjabi Team";
+                    $to = $this->user->email;
+                    $from = 'info@cyberlinks.in';
+                    $this->sendmail(array('from'=>$from,'body'=>$message,'subject'=>$subject,'to'=>$to));
+                    
+                    $response = array('code'=>true,'result' => sprintf("Password sent on %s email address. Please check your mail box",$to));
+                }else{
+                    $response['error'][] = sprintf('Password Not saved in database');
+                }
             }else{
                 $response['error'][] = sprintf('Email address not Valid');
             }
         }else{
             $response['error'][] = sprintf('Email address not Valid');
+        }
+        $this->response($response);
+        exit;
+    }
+    
+    /*** Change password ***/
+    function changepassword_post(){
+        
+        $data = array_merge(array('old_password'=>'','new_password'=>'','confirm_password'=>''),$this->post());
+        $validation = array('old_password','new_password','confirm_password');
+        $response = array();
+        
+        //check validation
+        foreach($validation as $key=>$val){
+            if(empty($data[$val])){
+                $response['error'][] = sprintf('%s field is required',ucwords($val));
+            }    
+        }
+        
+        if($data['new_password'] != $data['confirm_password']){
+            $response['error'][] = "New password and confirm password don't match";   
+        }
+        
+        if(!isset($response['error'])){
+            if(md5($data['old_password']) == $this->user->password){
+                
+                
+            }else{
+                $response['error'][] = "Old password is not match with current password";
+            }
         }
         $this->response($response);
         exit;

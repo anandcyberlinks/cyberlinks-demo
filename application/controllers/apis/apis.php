@@ -111,6 +111,7 @@ class Apis extends REST_Controller{
                                                  'owner_id'=>$data->user_owner_id,
                                                  'first_name'=>$data->user_first_name,
                                                  'last_name'=>$data->user_last_name,
+                                                 'password'=>$data->user_password,
                                                  'image'=> file_exists($data->image) ? base_url().$data->image : base_url().'assets/upload/profilepic/userdefault.png',
                                                 );
                     $return  = true;
