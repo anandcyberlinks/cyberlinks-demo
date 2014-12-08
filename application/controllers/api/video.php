@@ -49,7 +49,7 @@ class Video extends REST_Controller
            $thumbArray['small']='';
            $thumbArray['medium']='';
            $thumbArray['large']='';
-                   
+           /*        
            if(!in_array('23',$catids)){ //-- to be deleted temporary for channels category --//
            //--- small, medium, large images path --//
            if(isset($thumbnails)){
@@ -61,10 +61,13 @@ class Video extends REST_Controller
             }
            }
            }else{ //-- to be deleted temporary for channels category --//
+           */
+           if(isset($thumbnails)){
                $thumbArray['small'] = base_url().THUMB_SMALL_PATH.$row->thumbnail;
                $thumbArray['medium'] = base_url().THUMB_MEDIUM_PATH.$row->thumbnail;
                $thumbArray['large'] = base_url().THUMB_LARGE_PATH.$row->thumbnail;
            }
+           //}
            //-- final array for category ---//
            $finalResult[$i]['id'] = $row->id;
            $finalResult[$i]['category'] = $row->category;
@@ -107,41 +110,32 @@ class Video extends REST_Controller
            $ids = $id;
        
        
-       
        //print_r($ids);
        //--------------------//
        $result = $this->Video_model->videolist($ids,$device,$this->param);
       // $total_record = $this->Video_model->videolist($ids,$device);
        array_walk ( $result, function (&$key) { 
-               
-               //-- get total likes --//
-               $likes = $this->Video_model->like_count($key->content_id);                
+                //-- get total likes --//
+                $likes = $this->Video_model->like_count($key->content_id);                
                 //-- get rating --//
-               $rating =  $this->Video_model->getAverageRating($key->content_id);
+                $rating =  $this->Video_model->getAverageRating($key->content_id);
                 //-- video duration --//
-               $duration = $this->time_from_seconds($key->duration);
-               $key->duration = $duration;
+                $duration = $this->time_from_seconds($key->duration);
+                $key->duration = $duration;
                 
-               if($key->thumbnail_path !=''){   
-                  $thumbArray['small'] = base_url().THUMB_SMALL_PATH.$key->thumbnail_path;
-                  $thumbArray['medium'] = base_url().THUMB_MEDIUM_PATH.$key->thumbnail_path;
-                  $thumbArray['large'] = base_url().THUMB_LARGE_PATH.$key->thumbnail_path;
-               }else{
-                  $thumbArray['small']='';
-                  $thumbArray['medium']='';
-                  $thumbArray['large']='';
-               }
-               
-               $key->url = base_url().'index.php/details?id='.$key->content_id.'&device='.$this->get('device');
-               $key->likes = $likes;
-               $key->rating = $rating;
-               $key->image = $thumbArray;
-               
-               unset($key->description);
-               unset($key->type);
-               unset($key->thumbnail_path);
-               unset($key->category);
-               
+                if($key->thumbnail_path !=''){   
+               $thumbArray['small'] = base_url().THUMB_SMALL_PATH.$key->thumbnail_path;
+               $thumbArray['medium'] = base_url().THUMB_MEDIUM_PATH.$key->thumbnail_path;
+               $thumbArray['large'] = base_url().THUMB_LARGE_PATH.$key->thumbnail_path;
+                }else{
+                    $thumbArray['small']='';
+                    $thumbArray['medium']='';
+                    $thumbArray['large']='';
+                }
+           $key->url = base_url().'index.php/details?id='.$key->content_id.'&device='.$this->get('device');
+           $key->likes = $likes;
+           $key->rating = $rating;
+           $key->image = $thumbArray;          
             } );
               
        //-------------------------------//
@@ -157,17 +151,13 @@ class Video extends REST_Controller
     
     public function featured_get()
     {       
-      $p = $this->get('p');       
-      $device = $this->get('device');
-      $category = $this->get('category_id');
-      
+       $p = $this->get('p');       
+       $device = $this->get('device');
        
-      //-----get featured video---------------//
-      $result = $this->Video_model->featuredvideo($device,$this->param,$category);   
-       
+       //-----get featured video---------------//
+       $result = $this->Video_model->featuredvideo($device,$this->param);
      //  $total_record = $this->Video_model->featuredvideo($device);
        array_walk ( $result, function (&$key) { 
-                $device = $this->get('device');
                 //-- get total likes --//
                 $likes = $this->Video_model->like_count($key->content_id);
                 //-- get rating --//
@@ -270,11 +260,9 @@ class Video extends REST_Controller
     
     public function search_get()
     {
-       $data = array();
-       $data['title'] = $this->get('title');
        $data['keywords'] = $this->get('keywords');
        $id = $this->get('id');
-       $data['device'] = '3g';
+       $data['device'] = '';
        if($this->get('device')!=''){
            $data['device'] = $this->get('device');
        }
@@ -292,16 +280,13 @@ class Video extends REST_Controller
             }else
                 $ids = $id;
            
-            $data['category'] = $ids;
+       $data['category'] = $ids;
        }
        $result = $this->Video_model->searchvideo($data,$this->param);
        //$total_record = $this->Video_model->searchvideo($data);
         if($result)
         {
             array_walk ( $result, function (&$key) { 
-                
-                $data['device'] = '';
-                
                 //-- get total likes --//
                 $likes = $this->Video_model->like_count($key->content_id);
                 //-- get rating --//
@@ -318,10 +303,10 @@ class Video extends REST_Controller
                     $thumbArray['medium']='';
                     $thumbArray['large']='';
                }
-               $key->url = base_url().'index.php/details?id='.$key->content_id.'&device='.$data['device'];
-               $key->likes = $likes;
-               $key->rating = $rating;
-               $key->image = $thumbArray;          
+           $key->url = base_url().'index.php/details?id='.$key->content_id.'&device='.$data['device'];
+           $key->likes = $likes;
+           $key->rating = $rating;
+           $key->image = $thumbArray;          
             } );
             //$result['total_record'] = $total_record[0]->total;
             $this->response(array('code'=>1,'result'=>$result), 200); // 200 being the HTTP response code
@@ -364,10 +349,6 @@ class Video extends REST_Controller
                 $thumbArray['medium']='';
                 $thumbArray['large']='';
                }
-            
-            unset($result->type);
-            unset($result->thumbnail_path);
-            
             $result->image = $thumbArray;
             $this->response(array('code'=>1,'result'=>$result), 200); // 200 being the HTTP response code
         }else{
@@ -380,7 +361,7 @@ class Video extends REST_Controller
         $arrInput = $this->get();
 
        // $type =  $this->get('type');
-        //$id = $this->get('category_id');
+       // $id = $this->get('category_id');
         $result = $this->Video_model->relatedvideo($arrInput,$this->param);
           
         if($result){
@@ -700,9 +681,8 @@ class Video extends REST_Controller
             //-- make full path for image --//
                     array_walk ( $result, function (&$key) { 
                         //--get times ago from timestamp --//
-                           $key->comment_date = $this->timeago_from_timestamp($key->comment_date);
-                           $tmp = base_url().PROFILEPIC_PATH.$key->image;
-                           if(file_exists($tmp)) $key->image = $tmp;
+                            $key->comment_date = $this->timeago_from_timestamp($key->comment_date);
+                        $key->image = base_url().PROFILEPIC_PATH.$key->image;
                         //$key->url = base_url().'index.php/details?id='.$key->content_id;
                     } );                  
            // $result['total_comment'] = $total_record[0]->total;            
