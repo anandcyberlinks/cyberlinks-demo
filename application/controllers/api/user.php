@@ -376,7 +376,7 @@ class User extends REST_Controller
             $gender = $userdetails->gender;
             $socialid = $userdetails->id;
             $password = md5($socialid);
-           
+	    $image = $userdetails->image;
             $token = sha1($socialid.rand());
         }
         
@@ -397,6 +397,7 @@ class User extends REST_Controller
             $socialid = $userdetails->id;
             $password = md5($socialid);
             $token = sha1($socialid.rand());
+	    $image = $userdetails->image;
             //echo '<pre>'; print_r($userdetails);die;
         }
                 	
@@ -417,11 +418,12 @@ class User extends REST_Controller
             'gender' => $gender,
             'email' => $email, 
             'password' => $password,
+	    'image' => $image,
             //'token' => $token,
             'status' => 'active'
             //'created'=>date('Y-m-d h:i:s')
                 );
-           
+           $this->response($userdata);
              $id = $this->User_model->adduser($userdata);
             
              if($id){
