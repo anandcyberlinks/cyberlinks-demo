@@ -297,11 +297,142 @@ class Users extends Apis{
         if(!isset($response['error'])){
             if(md5($data['old_password']) == $this->user->password){
                 
-                
+                $tmp = array('password'=>md5($data['new_password']));
+                //change old password with new
+                $this->db->where('id',$this->user->id);
+                if($this->db->update('customers', $tmp)){
+                    
+                    $tmp = array('u_password'=>$data['new_password']);
+                    //save password in user_password table
+                    $this->db->where('user_id',$this->user->id);
+                    if($this->db->update('user_password', $tmp)){
+                        $response = array('code'=>true,'result' => sprintf("Password Successfully updated"));    
+                    }
+                }
             }else{
                 $response['error'][] = "Old password is not match with current password";
             }
         }
+        $this->response($response);
+        exit;
+    }
+    
+    /*** Comment Post ***/
+    function comment_post(){
+        
+        $response = array();
+        $validation = array('content_id','comment');
+        
+        if(isset($this->user->id) && $this->user->id > 0){
+            $data = array_merge(array('user_id'=>$this->user->id,'content_id'=>'','comment'=>'',
+                                  'created_date'=>date("Y-m-d H:i:s"),'updated_date'=>date("Y-m-d H:i:s"),
+                                  'moderator_id'=>$this->user->id,'user_ip'=>$_SERVER['REMOTE_ADDR'],
+                                  'approved'=>'NO','status'=>'active'),$this->post());
+            
+            //check validation
+            foreach($validation as $key=>$val){
+                if(empty($data[$val])){
+                    $response['error'][] = sprintf('%s field is required',ucwords($val));
+                }    
+            }
+            
+            //check content id is exist or not
+            if(!isset($response['error'])){
+                $query = sprintf('select count(*) as tot from contents where id = %d',$data['content_id']);
+                $total = reset($this->db->query($query)->result());
+                if($total->tot > 0){
+                    if($this->db->insert('comment',$data)){
+                        $response = array('code'=>true,'result' => sprintf("Comment Successfully inserted")); 
+                    }
+                }else{
+                    $response['error'][] = sprintf('No content found on this %d',$data['content_id']);
+                }
+            }
+            
+        }else{
+            $response['error'][] = 'Invalid Request';    
+        }
+        
+        $this->response($response);
+        exit;
+    }
+    
+    /*** Liked Post ***/
+    function like_post(){
+        
+        $response = array();
+        $validation = array('content_id','like');
+        
+        if(isset($this->user->id) && $this->user->id > 0){
+            $data = array_merge(array('content_id'=>'','user_id'=>$this->user->id,'like'=>0,
+                                  'created'=>date("Y-m-d H:i:s"),'modified'=>date("Y-m-d H:i:s")),$this->post());
+            
+            //check validation
+            foreach($validation as $key=>$val){
+                if(empty($data[$val])){
+                    $response['error'][] = sprintf('%s field is required',ucwords($val));
+                }    
+            }
+            
+            if(!isset($response['error'])){
+                switch($data['like']){
+                    case 0 :
+                        if($this->db->delete('likes',array('content_id'=>$data['content_id'],'user_id'=>$this->user->id))){
+                            $response = array('code'=>true,'result' => sprintf("Like Successfully deleted")); 
+                        }
+                        break;
+                    case 1 :
+                        if($this->db->insert('likes',$data)){
+                            $response = array('code'=>true,'result' => sprintf("Like Successfully inserted")); 
+                        }
+                        break;
+                }
+            }
+        }else{
+            $response['error'][] = 'Invalid Request';
+        }
+        
+        $this->response($response);
+        exit;
+    }
+    
+    /*** favorite Post ***/
+    function favorite_post(){
+        
+        $response = array();
+        $validation = array('content_id');
+        if(isset($this->user->id) && $this->user->id > 0){
+            $data = array_merge(array('content_id'=>'','user_id'=>$this->user->id,'value'=>0,
+                                  'created'=>date("Y-m-d H:i:s"),'modified'=>date("Y-m-d H:i:s")),$this->post());
+            
+            //check validation
+            foreach($validation as $key=>$val){
+                if(empty($data[$val])){
+                    $response['error'][] = sprintf('%s field is required',ucwords($val));
+                }    
+            }
+            
+            if(!isset($response['error'])){
+                //check value already inserted in database or not
+                switch($data['value']){
+                    case 0 :
+                        if($this->db->delete('user_favorites',array('content_id'=>$data['content_id'],'user_id'=>$this->user->id))){
+                            $response = array('code'=>true,'result' => sprintf("favorite Successfully deleted")); 
+                        }
+                        break;
+                    case 1 :
+                        unset($data['value']);
+                        if($this->db->insert('user_favorites',$data)){
+                            $response = array('code'=>true,'result' => sprintf("favorite Successfully inserted")); 
+                        }
+                        break;
+                }
+            }
+            
+        }else{
+            $response['error'][] = 'Invalid Request';
+        }
+        
         $this->response($response);
         exit;
     }
