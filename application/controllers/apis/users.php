@@ -25,7 +25,6 @@ class Users extends Apis{
     
     /*** Application Detail ***/
     function appdetail_get(){
-        $qs = $this->get();
         $query = sprintf('select u.username,u.email,
                             u.first_name,u.last_name,
                             u.gender,u.language,
@@ -35,7 +34,7 @@ class Users extends Apis{
                             left join `files` logo on logo.id = u.image
                             left join `splash_screen` ss on ss.user_id = u.id
                             left join files f on f.id = ss.file_id
-                            where u.token  = "%s" ',$qs['at']);
+                            where u.id  = %d ',$this->app->id);
         
         $dataset = $this->db->query($query)->result();
         array_walk($dataset,function(&$dataset){
