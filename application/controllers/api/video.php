@@ -318,8 +318,12 @@ class Video extends REST_Controller
     public function detail_get()
     {
        $id = $this->get('id');
-       $device = $this->get('device'); 
-       $result = $this->Video_model->videodetails($id);
+       $device = $this->get('device');
+       $user_id = $this->get('user_id');
+       if($user_id <= 0){
+         $user_id=1;
+       }
+       $result = $this->Video_model->videodetails($id,$user_id);
        //$result->video_path = base_url().$result->video_path;       
         if($result)
         {
@@ -331,6 +335,7 @@ class Video extends REST_Controller
             //-- video duration --//
                 $duration = $this->time_from_seconds($result->duration);
                 $result->duration = $duration;
+               
 	//-- get favorite --//
 		if($result->favorite >0)
 			 $result->favorite =1;
@@ -693,7 +698,7 @@ class Video extends REST_Controller
       }
       
       #### function for likes #########
-         function addfavorite_post(){            
+         function addfavorite_post(){
             $data = $this->post();  
                if(isset($data['content_id']) && $data['content_id'] != ''){
                   $content_id = $data['content_id'];

@@ -307,7 +307,7 @@ class Video_model extends CI_Model {
 	return $query->result();
    }
    
-   public function videodetails($id)
+   public function videodetails($id,$user_id)
    {
         $this->db->select('a.id as content_id,a.content_type,i.id as favorite,a.title,a.description,a2.star_cast,a2.director,a2.music_director,a2.producer,b.views,c1.name as thumbnail_path,d.id as category_id,d.category as category_name,b.genre_id as type_id,b1.genre_name as type,b.duration');
 	$this->db->from('contents a');
@@ -320,7 +320,7 @@ class Video_model extends CI_Model {
         $this->db->join('flavors g', 'f.flavor_id = g.id', 'left');  
         $this->db->join('video_thumbnails h','h.content_id=a.id AND h.default_thumbnail=1','left');
         $this->db->join('files c1', 'h.file_id = c1.id', 'left');
-	$this->db->join('user_favorites i', 'i.content_id = a.id', 'left');
+	$this->db->join('user_favorites i', 'i.content_id = a.id AND i.user_id='.$user_id, 'left');
         $this->db->where('a.status','1');
         $this->db->where('a.id',$id);
 	$this->db->where('a.uid',$this->owner_id);
