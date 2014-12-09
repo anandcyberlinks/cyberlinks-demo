@@ -124,6 +124,7 @@ class Apis extends REST_Controller{
     }
     
     function response($data){
+        header('Access-Control-Allow-Origin: *');
         $type = isset($_GET['type']) && $_GET['type'] != '' ? $_GET['type'] : 'json';
         switch($type){
             case 'json' :
