@@ -43,7 +43,7 @@ class Apis extends REST_Controller{
         }elseif(isset($qString['ut']) && $qString['ut'] != ''){
             $flag = $this->validrequest($qString['ut'],'user');
             if($flag){
-                echo 'valid user';
+                
             }else{
                 $this->response(array('error'=>'Invalid User Token'));
             }

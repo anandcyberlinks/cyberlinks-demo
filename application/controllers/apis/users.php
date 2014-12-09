@@ -361,7 +361,7 @@ class Users extends Apis{
     function like_post(){
         
         $response = array();
-        $validation = array('content_id','like');
+        $validation = array('content_id');
         
         if(isset($this->user->id) && $this->user->id > 0){
             $data = array_merge(array('content_id'=>'','user_id'=>$this->user->id,'like'=>0,
@@ -382,8 +382,14 @@ class Users extends Apis{
                         }
                         break;
                     case 1 :
-                        if($this->db->insert('likes',$data)){
-                            $response = array('code'=>true,'result' => sprintf("Like Successfully inserted")); 
+                        $query = sprintf('select count(*) as tot from likes where content_id = %d and user_id = %d',$data['content_id'],$this->user->id);
+                        $total = reset($this->db->query($query)->result());
+                        if($total->tot > 0){
+                            $response = array('code'=>true,'result' => sprintf("Like already inserted"));
+                        }else{
+                            if($this->db->insert('likes',$data)){
+                                $response = array('code'=>true,'result' => sprintf("Like Successfully inserted")); 
+                            }    
                         }
                         break;
                 }
