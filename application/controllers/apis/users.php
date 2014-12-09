@@ -324,10 +324,10 @@ class Users extends Apis{
         $validation = array('content_id','comment');
         
         if(isset($this->user->id) && $this->user->id > 0){
-            $data = array_merge(array('user_id'=>$this->user->id,'content_id'=>'','comment'=>'',
+            $data = $this->array_cleanup(array('user_id'=>$this->user->id,'content_id'=>'','comment'=>'',
                                   'created_date'=>date("Y-m-d H:i:s"),'updated_date'=>date("Y-m-d H:i:s"),
                                   'moderator_id'=>$this->user->id,'user_ip'=>$_SERVER['REMOTE_ADDR'],
-                                  'approved'=>'NO','status'=>'active'),$this->post());
+                                  'approved'=>'YES','status'=>'active'),$this->post());
             
             //check validation
             foreach($validation as $key=>$val){
@@ -364,8 +364,7 @@ class Users extends Apis{
         $validation = array('content_id');
         
         if(isset($this->user->id) && $this->user->id > 0){
-            $data = array_merge(array('content_id'=>'','user_id'=>$this->user->id,'like'=>0,
-                                  'created'=>date("Y-m-d H:i:s"),'modified'=>date("Y-m-d H:i:s")),$this->post());
+            $data = $this->array_cleanup(array('content_id'=>'','user_id'=>$this->user->id,'like'=>0),$this->post());
             
             //check validation
             foreach($validation as $key=>$val){
@@ -375,23 +374,20 @@ class Users extends Apis{
             }
             
             if(!isset($response['error'])){
-                switch($data['like']){
-                    case 0 :
-                        if($this->db->delete('likes',array('content_id'=>$data['content_id'],'user_id'=>$this->user->id))){
-                            $response = array('code'=>true,'result' => sprintf("Like Successfully deleted")); 
-                        }
-                        break;
-                    case 1 :
-                        $query = sprintf('select count(*) as tot from likes where content_id = %d and user_id = %d',$data['content_id'],$this->user->id);
-                        $total = reset($this->db->query($query)->result());
-                        if($total->tot > 0){
-                            $response = array('code'=>true,'result' => sprintf("Like already inserted"));
-                        }else{
-                            if($this->db->insert('likes',$data)){
-                                $response = array('code'=>true,'result' => sprintf("Like Successfully inserted")); 
-                            }    
-                        }
-                        break;
+                $query = sprintf('select count(*) as tot from user_favlikes where content_id = %d and user_id = %d',$data['content_id'],$this->user->id);
+                $total = reset($this->db->query($query)->result());
+                if($total->tot > 0){
+                    //update
+                    $this->db->where('user_id',$this->user->id);
+                    $this->db->where('content_id',$data['content_id']);
+                    if($this->db->update('user_favlikes', $data)){
+                        $response = array('code'=>true,'result' => sprintf("Like Successfully updated"));    
+                    }
+                }else{
+                    //insert
+                    if($this->db->insert('user_favlikes',$data)){
+                        $response = array('code'=>true,'result' => sprintf("Like Successfully inserted")); 
+                    }    
                 }
             }
         }else{
@@ -408,8 +404,7 @@ class Users extends Apis{
         $response = array();
         $validation = array('content_id');
         if(isset($this->user->id) && $this->user->id > 0){
-            $data = array_merge(array('content_id'=>'','user_id'=>$this->user->id,'value'=>0,
-                                  'created'=>date("Y-m-d H:i:s"),'modified'=>date("Y-m-d H:i:s")),$this->post());
+            $data = $this->array_cleanup(array('content_id'=>'','user_id'=>$this->user->id,'favorite'=>0),$this->post());
             
             //check validation
             foreach($validation as $key=>$val){
@@ -419,22 +414,22 @@ class Users extends Apis{
             }
             
             if(!isset($response['error'])){
-                //check value already inserted in database or not
-                switch($data['value']){
-                    case 0 :
-                        if($this->db->delete('user_favorites',array('content_id'=>$data['content_id'],'user_id'=>$this->user->id))){
-                            $response = array('code'=>true,'result' => sprintf("favorite Successfully deleted")); 
-                        }
-                        break;
-                    case 1 :
-                        unset($data['value']);
-                        if($this->db->insert('user_favorites',$data)){
-                            $response = array('code'=>true,'result' => sprintf("favorite Successfully inserted")); 
-                        }
-                        break;
+                $query = sprintf('select count(*) as tot from user_favlikes where content_id = %d and user_id = %d',$data['content_id'],$this->user->id);
+                $total = reset($this->db->query($query)->result());
+                if($total->tot > 0){
+                    //update
+                    $this->db->where('user_id',$this->user->id);
+                    $this->db->where('content_id',$data['content_id']);
+                    if($this->db->update('user_favlikes', $data)){
+                        $response = array('code'=>true,'result' => sprintf("favorite Successfully updated"));    
+                    }
+                }else{
+                    //insert
+                    if($this->db->insert('user_favlikes',$data)){
+                        $response = array('code'=>true,'result' => sprintf("favorite Successfully inserted")); 
+                    }    
                 }
             }
-            
         }else{
             $response['error'][] = 'Invalid Request';
         }

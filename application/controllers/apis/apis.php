@@ -161,4 +161,12 @@ class Apis extends REST_Controller{
                   
         return $result;          
     }
+    
+    function array_cleanup($master = array(),$slave = array()){
+        $response = array();
+        foreach($master as $key=>$val){
+            $response[$key] = isset($slave[$key]) ? $slave[$key] : $val;
+        }
+        return $response;
+    }
 }

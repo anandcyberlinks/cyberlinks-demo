@@ -7,7 +7,39 @@ class Content extends Apis{
     
     function __construct(){
         parent::__construct();
-        $this->query =  sprintf( 'select
+        if(isset($this->user->id) && $this->user->id > 0){
+            $this->query =  sprintf( 'select 
+                            c.id,
+                            c.title,
+                            c.description,
+                            c.uid as `creater_id`,
+                            cat.id as `category_id`,
+                            cat.category as `category_name`,
+                            if(v.views > 0,v.views,0) as `views`,
+                            c.feature_video as featured,
+                            v.duration as `duration`,
+                            cfile.relative_path as `video_basepath`,
+                            vtfile.relative_path as `video_basethumb`,
+                            p.content_id as `price`,
+                            if(ufl.`like` > 0,ufl.`like`,0) as `likes`,
+                            
+                            if(comments.comments > 0,comments.comments,0) as `comments`,
+                            ((SUM(vr.rating) * 100) / SUM(5)) as `rating`,
+                            c.created
+                            from contents c
+                            left join categories cat on cat.id = c.category
+                            left join videos v on v.content_id = c.id
+                            left join files cfile on cfile.id = v.file_id
+                            left join price p on p.content_id = c.id
+                            left join video_rating vr on vr.content_id = c.id
+                            left join (select content_id,SUM(`like`) as `like` from user_favlikes group by content_id) as ufl on ufl.content_id = c.id
+                            left join user_favlikes uf on uf.content_id = c.id
+                            left join video_thumbnails vt on vt.content_id = c.id
+                            left join files vtfile on vtfile.id = vt.file_id
+                            left join (select content_id,SUM(1) as comments from comment group by content_id) as comments on comments.content_id = c.id
+                            where c.uid = %d AND c.status = 1',$this->app->id);
+        }else{ 
+            $this->query =  sprintf( 'select 
                             c.id,
                             c.title,
                             c.description,
@@ -36,6 +68,7 @@ class Content extends Apis{
                             left join files vtfile on vtfile.id = vt.file_id
                             left join (select content_id,SUM(1) as comments from comment group by content_id) as comments on comments.content_id = c.id
                             where c.uid = %d AND c.status = 1',$this->app->id);
+        }
     }
     
     function getlist_get(){
