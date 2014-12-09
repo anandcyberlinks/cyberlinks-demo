@@ -136,7 +136,7 @@
 			<div class="pull-right box-tools">
 			    <button class="btn btn-danger btn-sm" data-widget='collapse' data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
 			</div><!-- /. tools -->
-			<h3 class="box-title">Content Wise Report</h3>
+			<h3 class="box-title"><a href=''>Content Wise Report</a></h3>
 		    </div><!-- /.box-header -->
 		    <div class="box-body no-padding">
 			<div class="table-responsive">
