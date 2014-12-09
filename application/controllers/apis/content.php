@@ -22,7 +22,7 @@ class Content extends Apis{
                             vtfile.relative_path as `video_basethumb`,
                             p.content_id as `price`,
                             if(ufl.`like` > 0,ufl.`like`,0) as `likes`,
-                            
+                            ufl.liked,
                             if(comments.comments > 0,comments.comments,0) as `comments`,
                             ((SUM(vr.rating) * 100) / SUM(5)) as `rating`,
                             c.created
@@ -32,12 +32,12 @@ class Content extends Apis{
                             left join files cfile on cfile.id = v.file_id
                             left join price p on p.content_id = c.id
                             left join video_rating vr on vr.content_id = c.id
-                            left join (select content_id,SUM(`like`) as `like` from user_favlikes group by content_id) as ufl on ufl.content_id = c.id
+                            left join (select content_id,SUM(`like`) as `like`,if(user_id = %d AND `like` = 1,1,0) as liked from user_favlikes group by content_id) as ufl on ufl.content_id = c.id
                             left join user_favlikes uf on uf.content_id = c.id
                             left join video_thumbnails vt on vt.content_id = c.id
                             left join files vtfile on vtfile.id = vt.file_id
                             left join (select content_id,SUM(1) as comments from comment group by content_id) as comments on comments.content_id = c.id
-                            where c.uid = %d AND c.status = 1',$this->app->id);
+                            where c.uid = %d AND c.status = 1',$this->user->id,$this->app->id);
         }else{ 
             $this->query =  sprintf( 'select 
                             c.id,
@@ -216,70 +216,6 @@ class Content extends Apis{
         $this->response($response);
     }
     
-    /*************************************************
-     * Likes Section
-     *************************************************/
-    
-    function like_post(){
-        $qString = $this->get();
-        $response = false;
-        if(isset($_POST['content_id']) && $_POST['content_id'] != ''){
-            switch($_POST['value']){
-                case '1' :
-                    $query = sprintf('select * from user_favlikes where content_id = %d and user_id = %d ',$_POST['content_id'],$this->user->id);
-                    $dataset = $this->db->query($query)->result();
-                    if(count($dataset) > 0){
-                        $query = sprintf('update user_favlikes set `like` = 1 where content_id = %d and user_id = %d ',$_POST['content_id'],$this->user->id);
-                        $this->db->query($query);    
-                    }else{
-                        echo $query = sprintf('insert into user_favlikes set user_id = %d, content_id = %d, `like` = 1',$this->user->id,$_POST['content_id']);
-                        $this->db->query($query);    
-                    }
-                    $response = true;
-                    break;
-                default:
-                    $query = sprintf('update user_favlikes set `like` = 0 where content_id = %d and user_id = %d ',$_POST['content_id'],$this->user->id);
-                    $this->db->query($query);  
-                    $response = true;
-                    break;
-            }
-        } 
-        $response = array('tr'=>1,'result'=>$response);
-        $this->response($response);
-    }
-    
-    /*************************************************
-     * Favorite Section
-    *************************************************/
-    
-    function favorite_post(){
-        $qString = $this->get();
-        $response = false;
-        if(isset($_POST['content_id']) && $_POST['content_id'] != ''){
-            switch($_POST['value']){
-                case '1' :
-                    $query = sprintf('select * from user_favlikes where content_id = %d and user_id = %d ',$_POST['content_id'],$this->user->id);
-                    $dataset = $this->db->query($query)->result();
-                    if(count($dataset) > 0){
-                        $query = sprintf('update user_favlikes set `favorite` = 1 where content_id = %d and user_id = %d ',$_POST['content_id'],$this->user->id);
-                        $this->db->query($query);    
-                    }else{
-                        echo $query = sprintf('insert into user_favlikes set user_id = %d, content_id = %d, `favorite` = 1',$this->user->id,$_POST['content_id']);
-                        $this->db->query($query);    
-                    }
-                    $response = true;
-                    break;
-                default:
-                    $query = sprintf('update user_favlikes set `favorite` = 0 where content_id = %d and user_id = %d ',$_POST['content_id'],$this->user->id);
-                    $this->db->query($query);  
-                    $response = true;
-                    break;
-            }
-        } 
-        $response = array('tr'=>1,'result'=>$response);
-        $this->response($response);
-    }
-    
     function favorite_get(){
         $qString = $this->get();
         
@@ -313,23 +249,36 @@ class Content extends Apis{
         $this->response($response);
     }
     
-    /*** detail section ****/
-    function detail_get(){
+    function like_get(){
         $qString = $this->get();
-    }
-    
-    /*** Comment section ****/
-    function comments_post(){
-        $qString = $this->get();
-        if(isset($_POST['content_id']) && $_POST['content_id'] != '' && isset($_POST['comment']) && $_POST['comment'] != ''){
-                $query = sprintf('insert into comment set user_id = %d, content_id = %d,
-                                 comment = "%s" , created_date = now(), approved = "No", status = "active" ',$this->user->id,$_POST['content_id'],$_POST['comment']);
-                $this->db->query($query);
-                $response['result'] = true;
-        }else{
-            $response['error'] = 'Fields required!!!';
-        } 
+        
+        $total_query = sprintf('select count(c.id) as tot from contents c
+                               left join user_favlikes uf on uf.content_id = c.id
+                               where uf.like = 1 and uf.user_id = %d',$this->user->id);
+        
+        $dataset_count = $this->db->query($total_query)->result();
+        $dataset_count = isset($dataset_count[0]->tot) ? $dataset_count[0]->tot : 0;
+        
+        $query = sprintf('%s AND uf.like = 1 and uf.user_id = %d group by c.id limit %d,%d ',$this->query,$this->user->id,$this->start,$this->limit);
+        $dataset = $this->db->query($query)->result();
+        foreach($dataset as $key=>$val){
+            $dataset[$key]->price = $val->price != '' ? 'Paid' : 'Free';
+            if(file_exists($val->video_basethumb)){
+                $base_url = strpos('http://',$val->video_basepath) > 0 ? '' : base_url();
+                $dataset[$key]->video_basepath = $base_url.$val->video_basepath;
+                
+                $base_url = strpos('http://',$val->video_basethumb) > 0 ? '' : base_url();
+                $dataset[$key]->video_basethumb = $base_url.$val->video_basethumb;
+                $filename = end(explode('/',$val->video_basethumb));
+                $dataset[$key]->thumbs = array('small'=>sprintf('%s',base_url().THUMB_SMALL_PATH.$filename),
+                                         'medium'=>sprintf('%s',base_url().THUMB_MEDIUM_PATH.$filename),
+                                         'large'=>sprintf('%s',base_url().THUMB_LARGE_PATH.$filename));
+                
+            }
+            $dataset[$key]->duration = $this->time_from_seconds($val->duration);
+        }
+        
+        $response = array('tr'=>$dataset_count,'cp'=>$this->start + 1,'limit'=>$this->limit,'result'=>$dataset);
         $this->response($response);
-        exit;
     }
 }

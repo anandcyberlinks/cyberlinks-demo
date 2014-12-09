@@ -241,37 +241,42 @@ class Users extends Apis{
         $response = array();
         $email = $this->post('email');
         
-        //check Email is valid or not
-        if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            //check in database
-            $query = sprintf('select count(*) as tot from customers where email  = "%s" ',$email);
-            $total = reset($this->db->query($query)->result());
-            if($total->tot >0){
-                
-                $query = sprintf('select u_password as password from user_password where user_id = %d ',$this->user->id);
-                $dataset = $this->db->query($query)->result();
-                if(count($dataset) > 0){
+        if(isset($this->user->id) && $this->user->id > 0){
+            //check Email is valid or not
+            if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                //check in database
+                $query = sprintf('select count(*) as tot from customers where email  = "%s" ',$email);
+                $total = reset($this->db->query($query)->result());
+                if($total->tot >0){
                     
-                    $dataset = reset($dataset);
-                    $subject = '[I Am Punjabi]Forgot password';
-                    $message = '<p>Your request for password is sucessfull.</p>';
-                    $message .= '<p>Your password : '.$dataset->password.'</p>';               
-                    $message .= "<br><br> Kind Regards,<br><br>";
-                    $message .= "I Am Punjabi Team";
-                    $to = $this->user->email;
-                    $from = 'info@cyberlinks.in';
-                    $this->sendmail(array('from'=>$from,'body'=>$message,'subject'=>$subject,'to'=>$to));
-                    
-                    $response = array('code'=>true,'result' => sprintf("Password sent on %s email address. Please check your mail box",$to));
+                    $query = sprintf('select u_password as password from user_password where user_id = %d ',$this->user->id);
+                    $dataset = $this->db->query($query)->result();
+                    if(count($dataset) > 0){
+                        
+                        $dataset = reset($dataset);
+                        $subject = '[I Am Punjabi]Forgot password';
+                        $message = '<p>Your request for password is sucessfull.</p>';
+                        $message .= '<p>Your password : '.$dataset->password.'</p>';               
+                        $message .= "<br><br> Kind Regards,<br><br>";
+                        $message .= "I Am Punjabi Team";
+                        $to = $this->user->email;
+                        $from = 'info@cyberlinks.in';
+                        $this->sendmail(array('from'=>$from,'body'=>$message,'subject'=>$subject,'to'=>$to));
+                        
+                        $response = array('code'=>true,'result' => sprintf("Password sent on %s email address. Please check your mail box",$to));
+                    }else{
+                        $response['error'][] = sprintf('Password Not saved in database');
+                    }
                 }else{
-                    $response['error'][] = sprintf('Password Not saved in database');
+                    $response['error'][] = sprintf('Email address not Valid');
                 }
             }else{
                 $response['error'][] = sprintf('Email address not Valid');
             }
         }else{
-            $response['error'][] = sprintf('Email address not Valid');
+            $response['error'][] = 'Invalid Request';    
         }
+        
         $this->response($response);
         exit;
     }
@@ -283,36 +288,41 @@ class Users extends Apis{
         $validation = array('old_password','new_password','confirm_password');
         $response = array();
         
-        //check validation
-        foreach($validation as $key=>$val){
-            if(empty($data[$val])){
-                $response['error'][] = sprintf('%s field is required',ucwords($val));
-            }    
-        }
-        
-        if($data['new_password'] != $data['confirm_password']){
-            $response['error'][] = "New password and confirm password don't match";   
-        }
-        
-        if(!isset($response['error'])){
-            if(md5($data['old_password']) == $this->user->password){
-                
-                $tmp = array('password'=>md5($data['new_password']));
-                //change old password with new
-                $this->db->where('id',$this->user->id);
-                if($this->db->update('customers', $tmp)){
-                    
-                    $tmp = array('u_password'=>$data['new_password']);
-                    //save password in user_password table
-                    $this->db->where('user_id',$this->user->id);
-                    if($this->db->update('user_password', $tmp)){
-                        $response = array('code'=>true,'result' => sprintf("Password Successfully updated"));    
-                    }
-                }
-            }else{
-                $response['error'][] = "Old password is not match with current password";
+        if(isset($this->user->id) && $this->user->id > 0){
+            //check validation
+            foreach($validation as $key=>$val){
+                if(empty($data[$val])){
+                    $response['error'][] = sprintf('%s field is required',ucwords($val));
+                }    
             }
+            
+            if($data['new_password'] != $data['confirm_password']){
+                $response['error'][] = "New password and confirm password don't match";   
+            }
+            
+            if(!isset($response['error'])){
+                if(md5($data['old_password']) == $this->user->password){
+                    
+                    $tmp = array('password'=>md5($data['new_password']));
+                    //change old password with new
+                    $this->db->where('id',$this->user->id);
+                    if($this->db->update('customers', $tmp)){
+                        
+                        $tmp = array('u_password'=>$data['new_password']);
+                        //save password in user_password table
+                        $this->db->where('user_id',$this->user->id);
+                        if($this->db->update('user_password', $tmp)){
+                            $response = array('code'=>true,'result' => sprintf("Password Successfully updated"));    
+                        }
+                    }
+                }else{
+                    $response['error'][] = "Old password is not match with current password";
+                }
+            }
+        }else{
+            $response['error'][] = 'Invalid Request';    
         }
+        
         $this->response($response);
         exit;
     }
