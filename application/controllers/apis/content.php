@@ -259,7 +259,7 @@ class Content extends Apis{
         $dataset_count = $this->db->query($total_query)->result();
         $dataset_count = isset($dataset_count[0]->tot) ? $dataset_count[0]->tot : 0;
         
-        $query = sprintf('%s AND uf.like = 1 and uf.user_id = %d group by c.id limit %d,%d ',$this->query,$this->user->id,$this->start,$this->limit);
+        $query = sprintf('%s AND ufl.`like` = 1 and uf.user_id = %d group by c.id limit %d,%d ',$this->query,$this->user->id,$this->start,$this->limit);
         $dataset = $this->db->query($query)->result();
         foreach($dataset as $key=>$val){
             $dataset[$key]->price = $val->price != '' ? 'Paid' : 'Free';
