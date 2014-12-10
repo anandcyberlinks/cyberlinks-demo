@@ -33,7 +33,7 @@ class Content extends Apis{
                             left join files cfile on cfile.id = v.file_id
                             left join price p on p.content_id = c.id
                             left join video_rating vr on vr.content_id = c.id
-                            left join (select user_id,content_id,SUM(`like`) as `like`,if(user_id = %d AND `like` = 1,1,0) as liked,if(user_id = %d AND `favorite` = 1,1,0) as favorited from user_favlikes group by content_id) as ufl on ufl.content_id = c.id
+                            left join (select user_id,content_id,SUM(`like`) as `like`,SUM(`favorite`) as `favorite`,if(user_id = %d AND `like` = 1,1,0) as liked,if(user_id = %d AND `favorite` = 1,1,0) as favorited from user_favlikes group by content_id) as ufl on ufl.content_id = c.id
                             left join video_thumbnails vt on vt.content_id = c.id
                             left join files vtfile on vtfile.id = vt.file_id
                             left join (select content_id,SUM(1) as comments from comment group by content_id) as comments on comments.content_id = c.id
