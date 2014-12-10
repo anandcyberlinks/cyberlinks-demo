@@ -390,12 +390,21 @@ class Users extends Apis{
                     $this->db->where('user_id',$this->user->id);
                     $this->db->where('content_id',$data['content_id']);
                     if($this->db->update('user_favlikes', $data)){
-                        $response = array('code'=>true,'result' => sprintf("Like Successfully updated"));    
+                        
+                        //get total likes
+                        $query = sprintf('select SUM(uf.like) as tot from user_favlikes uf where uf.content_id = %d ',$data['content_id']);
+                        $total = reset($this->db->query($query)->result());
+                        $total = isset($total->tot) && $total->tot > 0 ? $total->tot : 0;
+                        $response = array('code'=>true,'result' => array('total'=>$total,'msg'=>sprintf("Like Successfully updated")));    
                     }
                 }else{
                     //insert
                     if($this->db->insert('user_favlikes',$data)){
-                        $response = array('code'=>true,'result' => sprintf("Like Successfully inserted")); 
+                        //get total likes
+                        $query = sprintf('select SUM(uf.like) as tot from user_favlikes uf where uf.content_id = %d ',$data['content_id']);
+                        $total = reset($this->db->query($query)->result());
+                        $total = isset($total->tot) && $total->tot > 0 ? $total->tot : 0;
+                        $response = array('code'=>true,'result' => array('total'=>$total,'msg'=>sprintf("Like Successfully inserted")));    
                     }    
                 }
             }
