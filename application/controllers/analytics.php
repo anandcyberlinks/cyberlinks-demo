@@ -211,7 +211,7 @@ class Analytics extends MY_Controller {
 	
 	function user()
 	{
-		$this->session->unset_userdata('search_form');
+		//$this->session->unset_userdata('search_form');
 		$search = $this->search_post($_POST);
 		
 		$sort_i = $this->uri->segment(3); 
