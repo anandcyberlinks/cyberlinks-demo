@@ -1,0 +1,26 @@
+@charset "utf-8";
+/* Text color */
+.colr																		{color:#005eb5 !important;}
+.txthover:hover																{color:#005eb5 !important;}
+.backcolr																	{background-color:#005eb5 !important;}
+.backcolrhover:hover														{background-color:#005eb5 !important;}
+.backcolrdark																{background-color:#005eb5 !important; background-image:url(../images/black.png);}
+.bordercolr																	{border-color:#005eb5 !important;}
+.bordercolrover:hover														{border-color:#005eb5 !important;}
+#login-box 																	{border-top:#005eb5 2px solid;}
+/* Navigation */
+.ddsmoothmenu ul li a:hover, 
+.ddsmoothmenu ul li.current-menu-item a										{color:#005eb5 !important; border-color:#005eb5 !important;}
+/* Banner Hover */
+.nivo-prevNav:hover 														{background-color:#005eb5 !important;}
+.nivo-nextNav:hover 														{background-color:#005eb5 !important;}
+
+.links-foot ul li a:hover													{color:#005eb5;}
+.second-nav ul li a.active,
+.second-nav ul li a:hover													{background-color:#005eb5;}
+
+.gal-caption																{border-bottom:#005eb5 7px solid;}
+
+.fc-event-inner:hover span													{color:#005eb5;}
+.tab-section .tab-head ul li a:hover, 
+.tab-section .tab-head ul li a.current										{border-top:#005eb5 solid 5px;}

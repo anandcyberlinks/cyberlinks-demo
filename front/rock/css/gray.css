@@ -1,0 +1,26 @@
+@charset "utf-8";
+/* Text color */
+.colr																		{color:#6d6d6d !important;}
+.txthover:hover																{color:#6d6d6d !important;}
+.backcolr																	{background-color:#6d6d6d !important;}
+.backcolrhover:hover														{background-color:#6d6d6d !important;}
+.backcolrdark																{background-color:#6d6d6d !important; background-image:url(../images/black.png);}
+.bordercolr																	{border-color:#6d6d6d !important;}
+.bordercolrover:hover														{border-color:#6d6d6d !important;}
+#login-box 																	{border-top:#6d6d6d 2px solid;}
+/* Navigation */
+.ddsmoothmenu ul li a:hover, 
+.ddsmoothmenu ul li.current-menu-item a										{color:#6d6d6d !important; border-color:#6d6d6d !important;}
+/* Banner Hover */
+.nivo-prevNav:hover 														{background-color:#6d6d6d !important;}
+.nivo-nextNav:hover 														{background-color:#6d6d6d !important;}
+
+.links-foot ul li a:hover													{color:#6d6d6d;}
+.second-nav ul li a.active,
+.second-nav ul li a:hover													{background-color:#6d6d6d;}
+
+.gal-caption																{border-bottom:#6d6d6d 7px solid;}
+
+.fc-event-inner:hover span													{color:#6d6d6d;}
+.tab-section .tab-head ul li a:hover, 
+.tab-section .tab-head ul li a.current										{border-top:#6d6d6d solid 5px;}

@@ -1,0 +1,26 @@
+@charset "utf-8";
+/* Text color */
+.colr																		{color:#a91d3b !important;}
+.txthover:hover																{color:#a91d3b !important;}
+.backcolr																	{background-color:#a91d3b !important;}
+.backcolrhover:hover														{background-color:#a91d3b !important;}
+.backcolrdark																{background-color:#a91d3b !important; background-image:url(../images/black.png);}
+.bordercolr																	{border-color:#a91d3b !important;}
+.bordercolrover:hover														{border-color:#a91d3b !important;}
+#login-box 																	{border-top:#a91d3b 2px solid;}
+/* Navigation */
+.ddsmoothmenu ul li a:hover, 
+.ddsmoothmenu ul li.current-menu-item a										{color:#a91d3b !important; border-color:#a91d3b !important;}
+/* Banner Hover */
+.nivo-prevNav:hover 														{background-color:#a91d3b !important;}
+.nivo-nextNav:hover 														{background-color:#a91d3b !important;}
+
+.links-foot ul li a:hover													{color:#a91d3b;}
+.second-nav ul li a.active,
+.second-nav ul li a:hover													{background-color:#a91d3b;}
+
+.gal-caption																{border-bottom:#a91d3b 7px solid;}
+
+.fc-event-inner:hover span													{color:#a91d3b;}
+.tab-section .tab-head ul li a:hover, 
+.tab-section .tab-head ul li a.current										{border-top:#a91d3b solid 5px;}

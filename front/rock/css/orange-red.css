@@ -1,0 +1,26 @@
+@charset "utf-8";
+/* Text color */
+.colr																		{color:#dc5038 !important;}
+.txthover:hover																{color:#dc5038 !important;}
+.backcolr																	{background-color:#dc5038 !important;}
+.backcolrhover:hover														{background-color:#dc5038 !important;}
+.backcolrdark																{background-color:#dc5038 !important; background-image:url(../images/black.png);}
+.bordercolr																	{border-color:#dc5038 !important;}
+.bordercolrover:hover														{border-color:#dc5038 !important;}
+#login-box 																	{border-top:#dc5038 2px solid;}
+/* Navigation */
+.ddsmoothmenu ul li a:hover, 
+.ddsmoothmenu ul li.current-menu-item a										{color:#dc5038 !important; border-color:#dc5038 !important;}
+/* Banner Hover */
+.nivo-prevNav:hover 														{background-color:#dc5038 !important;}
+.nivo-nextNav:hover 														{background-color:#dc5038 !important;}
+
+.links-foot ul li a:hover													{color:#dc5038;}
+.second-nav ul li a.active,
+.second-nav ul li a:hover													{background-color:#dc5038;}
+
+.gal-caption																{border-bottom:#dc5038 7px solid;}
+
+.fc-event-inner:hover span													{color:#dc5038;}
+.tab-section .tab-head ul li a:hover, 
+.tab-section .tab-head ul li a.current										{border-top:#dc5038 solid 5px;}
