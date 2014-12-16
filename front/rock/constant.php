@@ -212,6 +212,10 @@ function dateFormat($date) {
 }
 
 function getLink($cid, $price) {
+    
+    return 'detail.php?v=' . $cid;
+    
+    /*
     if ($price == 'Free') {
         return 'detail.php?v=' . $cid;
     } else {
@@ -223,6 +227,7 @@ function getLink($cid, $price) {
             return "javascript:animatedcollapse.toggle('login-box');window.scrollTo(0,0);";
         }
     }
+    */
 }
 
 $file_path = $_SERVER['PHP_SELF'];
