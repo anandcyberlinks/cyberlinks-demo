@@ -23,10 +23,7 @@ $cat = catList();
         <link rel="alternate stylesheet" type="text/css" href="css/orange.css" title="styles4" media="screen" />
         <link rel="alternate stylesheet" type="text/css" href="css/green.css" title="styles5" media="screen" />
         <link rel="alternate stylesheet" type="text/css" href="css/orange-red.css" title="styles6" media="screen" />
-        <link rel="shortcut icon" href="images/favicon.ico" />
-        <link rel="rockit-touch-icon" href="images/rockit-touch-icon.png" />
-        <link rel="rockit-touch-icon" sizes="72x72" href="images/rockit-touch-icon-72x72.png" />
-        <link rel="rockit-touch-icon" sizes="114x114" href="images/rockit-touch-icon-114x114.png" />
+        <link rel="shortcut icon" href="images/favicon.png" />
         <script type="text/javascript" src="js/jquery.min.js"></script>
         <script type="text/javascript" src="js/styleswitch.js"></script>
         <script type="text/javascript" src="js/jquery.infinite-carousel.js"></script>

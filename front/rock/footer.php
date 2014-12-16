@@ -33,7 +33,7 @@
                 <div class="foot-bottom">
                 	<!-- Copyrights Start -->
                     <div class="copyrights">
-                    	<p>Copyright <a href="#">Multitv</a> <?php echo date('Y'); ?></p>
+                    	<p>powered by<a href="#"> MultiTV CMS</a> <?php echo date('Y'); ?></p>
                     </div>
                     <!-- Copyrights End -->
                     <!-- Follow Us and Top Start -->

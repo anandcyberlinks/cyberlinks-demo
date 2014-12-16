@@ -1,0 +1,4 @@
+AuthType Basic
+AuthName "Multi Tv front Access"
+AuthUserFile /var/www/multitvfinal/front/rock/.htpasswd
+Require valid-user

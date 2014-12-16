@@ -27,7 +27,7 @@ $totalPage = floor($data->tr / $lt) + 1;
 ?>
 <div class="container row">
     <div class="two-thirds column left">
-        <h1 class="heading">From our blogs</h1>
+        <h1 class="heading">Videos</h1>
         <!-- Blog Post Start -->
         <?php
         foreach ($data->result as $value) {
@@ -142,14 +142,12 @@ $totalPage = floor($data->tr / $lt) + 1;
                 <div class="clear"></div>
             </div>
         </div>
-        <div class="box-small">
+        <!--<div class="box-small">
             <div class="box-in">
-                <!-- Now Playing Start -->
                 <a href="<?=$link ?>"><img src="images/facebook.jpg" alt="" /></a>
-                <!-- Now Playing End -->
                 <div class="clear"></div>
             </div>
-        </div>
+        </div>-->
     </div>
 </div>
 <?php include 'footer.php'; ?>

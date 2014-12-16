@@ -152,14 +152,12 @@ if (isset($_GET['v'])) {
                         <div class="clear"></div>
                     </div>
                 </div>
-                <div class="box-small">
+                <!--<div class="box-small">
                     <div class="box-in">
-                        <!-- Now Playing Start -->
                         <a href="#"><img src="images/facebook.jpg" alt="" /></a>
-                        <!-- Now Playing End -->
                         <div class="clear"></div>
                     </div>
-                </div>
+                </div>-->
             </div>
         </div>
         <div class="clear"></div>
