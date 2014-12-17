@@ -107,7 +107,6 @@ $(".like,.unlike").click(function(e) {
              dataType: 'text',  
              success: function(data) {
                 var result = JSON.parse(data);
-                
                 if(result.code == true){
                     switch(eval(element.attr('value'))){
                         case 0 :
@@ -116,9 +115,7 @@ $(".like,.unlike").click(function(e) {
                             break;
                         case 1 :
                             element.attr('value',0);
-                            
                             $("#f"+cid).html('favorited');
- 
                             break;
                     }
                 }
@@ -126,6 +123,21 @@ $(".like,.unlike").click(function(e) {
         });
     });
     
-    
-    
+ (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+ (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+ })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ ga('create', 'UA-53914177-1', 'auto');
+ ga('send', 'pageview');
+ 
+ function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+	} else {
+        x.innerHTML = "Geolocation is not supported by this browser.";
+    }
+}
+function showPosition(position){}
+
+getLocation();
 </script>

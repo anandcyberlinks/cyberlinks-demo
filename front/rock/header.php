@@ -31,7 +31,6 @@ $cat = catList();
         <script type="text/javascript" src="js/ddsmoothmenu.js"></script>
         <script type="text/javascript" src="js/jquery.nivo.slider.js"></script>
         <script type="text/javascript" src="js/scrolltopcontrol.js"></script>
-        <script type="text/javascript" src="js/tabs.js"></script>
         <script type="text/javascript" src="js/jquery.countdown.js"></script>
         <script type="text/javascript" src="js/jquery.jplayer.min.js"></script>
         <script type="text/javascript" src="js/jplayer.playlist.min.js"></script>
@@ -40,7 +39,6 @@ $cat = catList();
         <script type="text/javascript" src="js/lightbox.js"></script>
         <script type="text/javascript" src="js/jquery-ui.min.js"></script>
         <script type="text/javascript" src="js/jquery.easing.1.3.js"></script>
-        <script type="text/javascript" src="js/jquery.mCustomScrollbar.js"></script>
         <script type="text/javascript">var switchTo5x=true;</script>
         <script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
         <script type="text/javascript">stLight.options({publisher: "d61f6a85-907f-442e-81a4-b8b5c3697454", doNotHash: false, doNotCopy: false, hashAddressBar: false});</script>
