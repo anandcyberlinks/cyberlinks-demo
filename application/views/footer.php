@@ -23,6 +23,8 @@
 		<script src="<?php echo base_url() ?>assets/js/register.jquery.js" type="text/javascript"></script>
 		<script>
 			$("#msg_div").fadeOut(3500);
-		</script>		
+		</script>
+		 
+		<script src="<?php echo base_url()?>assets/js/bootstrap-typeahead.js" type="text/javascript"></script>
     </body>
 </html>

@@ -7,7 +7,7 @@
             <ol class="breadcrumb">
                 <li><a href="<?php echo base_url(); ?>analytics/report"><i class="fa fa-dashboard"></i><?php echo $welcome->loadPo('Analytics') ?></a></li>
                 <li><a href="<?php echo base_url(); ?>analytics/user"><?php echo $welcome->loadPo('User wise report') ?></a></li>
-		<li class="active"><?php echo $welcome->loadPo('User content report') ?></li>
+		<li class="active"><?php echo $content[0]->customer_name;?></li>
             </ol>
         </section>
         <div>
@@ -53,6 +53,27 @@
                                                         ?>  ><?php echo $row->name; ?></option>
                                                             <?php } ?>
                                                 </select>
+                                            </div>
+                                        </div>
+                                    </div>
+				    <div class="row">
+                                        <div class="form-group col-lg-4">
+                                            <div class="input text">
+                                                <label for=""><?php echo $welcome->loadPo('Operating System') ?></label>
+                                                <input type="text" name="platform" id="platform" class="form-control" value="<?php echo (isset($search['platform'])) ? $search['platform'] : ''; ?>" placeholder="<?php echo $welcome->loadPo('Operating System') ?>">
+                                            </div>
+                                        </div>
+					 <div class="form-group col-lg-4">
+                                            <div class="input text">
+                                                <label for=""><?php echo $welcome->loadPo('Browser') ?></label>
+                                                <input type="text" name="browser" id="browser" class="form-control" value="<?php echo (isset($search['browser'])) ? $search['browser'] : ''; ?>" placeholder="<?php echo $welcome->loadPo('Browser') ?>">
+                                            </div>
+                                        </div>                                     
+                                    </div>
+                                    <div class="row"> <div class="form-group col-lg-4">
+                                            <div class="input text">
+                                                <label for=""><?php echo $welcome->loadPo('Location') ?></label>
+                                                <input type="text"  placeholder="Search location..." autocomplete="off" name="country" id="country" class="form-control span4" value="<?php echo (isset($search['country'])) ? $search['country'] : ''; ?>" placeholder="<?php echo $welcome->loadPo('Location') ?>">
                                             </div>
                                         </div>
                                     </div>
@@ -151,9 +172,13 @@
                                 <table id="example2" class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
-                                           <th><a href="<?php echo base_url(); ?>analytics/usercontent/v/<?php echo (!empty($show_c)) ? $show_c : 'asc'; ?>/id/<?php echo $userid;?>">Content</a></th>
-                                           <th><a href="<?php echo base_url(); ?>analytics/usercontent/p/<?php echo (!empty($show_p)) ? $show_p : 'asc'; ?>/id/<?php echo $userid;?>">Content Provider</a></th>
-                                            <th><a href="<?php echo base_url(); ?>analytics/usercontent/h/<?php echo (!empty($show_h)) ? $show_h : 'asc'; ?>/id/<?php echo $userid;?>">Total Hits</a></th>
+					    <th><a href="<?php echo base_url(); ?>analytics/usercontent/v/<?php echo (!empty($show_c)) ? $show_c : 'asc'; ?>/id/<?php echo $userid;?>">Content</a></th>
+					    <th><a href="<?php echo base_url(); ?>analytics/usercontent/p/<?php echo (!empty($show_p)) ? $show_p : 'asc'; ?>/id/<?php echo $userid;?>">Content Provider</a></th>
+					    <th><a href="<?php echo base_url(); ?>analytics/usercontent/os/<?php echo (!empty($show_os)) ? $show_os : 'asc'; ?>/id/<?php echo $userid;?>">Platform</a></th>
+					    <th><a href="<?php echo base_url(); ?>analytics/usercontent/brw/<?php echo (!empty($show_brw)) ? $show_brw : 'asc'; ?>/id/<?php echo $userid;?>">Browser</a></th>
+					    <th><a href="<?php echo base_url(); ?>analytics/usercontent/loc/<?php echo (!empty($show_loc)) ? $show_loc : 'asc'; ?>/id/<?php echo $userid;?>">Location</a></th>
+					    <th><a href="<?php echo base_url(); ?>analytics/usercontent/dt/<?php echo (!empty($show_dt)) ? $show_dt : 'asc'; ?>/id/<?php echo $userid;?>">Date</a></th>
+					    <th><a href="<?php echo base_url(); ?>analytics/usercontent/h/<?php echo (!empty($show_h)) ? $show_h : 'asc'; ?>/id/<?php echo $userid;?>">Total Hits</a></th>
                                             <th><a href="<?php echo base_url(); ?>analytics/usercontent/t/<?php echo (!empty($show_t)) ? $show_t : 'asc'; ?>/id/<?php echo $userid;?>">Total Time Watched</a></th>	
                                         </tr>
                                     </thead>
@@ -163,7 +188,11 @@
                                         <tr id="<?php echo $value->id ?>">
                                                 <td  width="70%"><!--a href="<?php echo base_url(); ?>analytics/user/<?php echo $value->id; ?>"--><?php echo $value->title; ?></td>
                                                 <td><?php echo $value->content_provider; ?></td>                                                
-                                                <td><?php echo $value->total_hits; ?></td>
+                                                <td><?php echo $value->platform; ?></td>                                                
+                                                <td><?php echo $value->browser; ?></td>
+                                                <td><?php echo $value->country; ?></td>                                                
+                                                <td><?php echo $value->created; ?></td>
+						<td><?php echo $value->total_hits; ?></td>
                                                 <td><?php echo time_from_seconds($value->total_watched_time); ?></td>                                                                                        
                                             </tr>
                                         <?php } ?>
@@ -213,8 +242,6 @@
         </section><!-- /.content -->
     </aside><!-- /.right-side -->
 </div><!-- ./wrapper -->
-
-
  <script>
 
   $(function(){
@@ -222,6 +249,12 @@
   dateFormat: 'dd-mm-yy',
   numberOfMonths: 1,
 });
+
+//-- auto suggest bootstrap-typeahead --//
+    $('#country').typeahead({
+        source: <?php echo (json_encode($country));?>
+        //itemSelected: displayResult
+    });
   });
  
   </script>

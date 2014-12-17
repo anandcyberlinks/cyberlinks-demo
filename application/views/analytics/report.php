@@ -185,12 +185,7 @@
 				</tr>
 			     <?php $i=0; foreach($customer as $row){ $i++;?>
 				<tr>
-				<td><a class='element' href="javascript:void()" onclick="getContent('<?php echo $row->id;?>')"><?php echo $row->name;?></a>
-				<table class="table table-striped hidden" id='customer_<?php echo $row->id?>' >
-				    <tr><td>Video</td><td>Hits</td><td>Watched time</td></tr>
-				    
-				</table>
-				</td>
+				<td><?php echo $row->name;?></td>
 				<td><?php echo $row->total_hits;?></td>
 				<td><?php echo time_from_seconds($row->total_watched_time);?></td>				
 				</tr>
@@ -234,7 +229,7 @@
                             </tbody></table><!-- /.table -->
                         </div>			    
 		    </div><!-- /.box-body -->
-		    <div><a href='#' style="float:right;">View All</a></div>
+		    <div><a href='<?php echo base_url()?>analytics/device'' style="float:right;">View All</a></div>
 		</div><!-- /.box -->
 		<!--Content Provider -->
 		<div class="box box-danger">
@@ -327,6 +322,36 @@
 			
 		    </div><!-- /.box-body -->
 		</div><!-- /.box -->
+		
+		<div class="box box-primary">
+                                <div class="box-header">
+                                   
+                                    <h3 class="box-title">Top video viewed</h3>
+                                </div>
+                                <div class="box-body">                                    
+				    <table id="example2" class="table table-bordered table-striped">                                    
+                                    <thead>
+				    <tr>
+					<th>Sl.</th>
+					<th>Title</th>
+					<th>Hits</th>
+					<th>Watched time</th>
+				    </tr>				    
+				</thead>
+				    <tbody>
+                                        <?php $i=0; foreach ($topcontent as $value) { $i++;?>
+                                        <tr id="<?php echo $value->id ?>">
+					<td><?php echo $i; ?></td>  
+                                                <td  width="70%"><?php echo $value->title; ?></td>                                               
+                                                 <td><?php echo $value->total_hits; ?></td>
+                                                <td><?php echo time_from_seconds($value->total_watched_time); ?></td>                                                                                        
+                                            </tr>
+                                        <?php } ?>
+                                    </tbody>
+                                </table>
+                                </div><!-- /.box-body-->
+				<div><a href='<?php echo base_url()?>analytics/top'' style="float:right;">View All</a></div>
+                            </div><!-- /.box -->
 	    </section><!-- /.Left col -->
 	    
         </div><!-- /.row (main row) -->

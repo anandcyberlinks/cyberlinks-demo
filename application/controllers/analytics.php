@@ -17,10 +17,10 @@ class Analytics extends MY_Controller {
 	    
 	    //$this->load->library('User_Agent');//--regex class to get user agent --//
 	    //-- get browser http_user_agent info in array --//
-                    //$this->result = get_browser(null, true);
+                 //   $this->result = get_browser(null, true);
 		    
 		   $this->result = User_Agent::getinfo();  //--regex class to get user agent --//
-		  
+		 // print_r($_SERVER[HTTP_USER_AGENT]);die;
                 //---------------------//
 		
 		$this->load->library('session');
@@ -31,8 +31,7 @@ class Analytics extends MY_Controller {
 	}
 	
 	function form()
-	{
-		
+	{		
 		$this->load->view('analytics-form');
 	}
 	
@@ -116,6 +115,7 @@ class Analytics extends MY_Controller {
 		$this->data['country'] = $this->Analytics_model->getReport(array('type'=>'country','l'=>$limit));
 		$this->data['content_provider'] = $this->Analytics_model->getReport(array('type'=>'content_provider','l'=>$limit));
 		$this->data['customer'] = $this->Analytics_model->getReport(array('type'=>'user','l'=>$limit));
+		$this->data['topcontent'] = $this->Analytics_model->getReport(array('type'=>'content','l'=>$limit,'top'=>1,'search'=>$search));
 		
 		$this->show_view('analytics/report',$this->data);		
 	}
@@ -171,7 +171,39 @@ class Analytics extends MY_Controller {
 			else
 			    $this->data['show_t'] = 'asc';
 			    			    
-			break; 
+			break;
+		 case "brw":
+			$sort = 'a.browser';
+			if ($sort_by == 'asc')
+			    $this->data['show_brw'] = 'desc';
+			else
+			    $this->data['show_brw'] = 'asc';
+
+			break;
+		 case "os":
+			$sort = 'a.platform';
+			if ($sort_by == 'asc')
+			    $this->data['show_os'] = 'desc';
+			else
+			    $this->data['show_os'] = 'asc';
+
+			break;
+		case "loc":
+			$sort = 'a.country';
+			if ($sort_by == 'asc')
+			    $this->data['show_loc'] = 'desc';
+			else
+			    $this->data['show_loc'] = 'asc';
+
+			break;
+		case "dt":
+			$sort = 'a.created';
+			if ($sort_by == 'asc')
+			    $this->data['show_dt'] = 'desc';
+			else
+			    $this->data['show_dt'] = 'asc';
+
+			break;
 		    default:
 			$sort_by = 'desc';
 			$sort = 'a.id';
@@ -197,6 +229,10 @@ class Analytics extends MY_Controller {
 		$sort = $this->sort_input($sort_i,$sort_by);
 		//-----//
 		
+		//-- get country list --//
+		$this->data['country'] = $this->Analytics_model->getCountry();
+		
+		//--------------------//
 		//-- summary report --//
 		$summary = $this->Analytics_model->getReport(array('type'=>'summary','search'=>$search),$sort,$sort_by);
 		$this->data['summary'] = $summary[0];
@@ -264,6 +300,9 @@ class Analytics extends MY_Controller {
 		$sort = $this->sort_input($sort_i,$sort_by);
 		//-----//
 	
+		//-- get country list --//
+		$this->data['country'] = $this->Analytics_model->getCountry();
+		
 		//-- summary report --//
 		$summary = $this->Analytics_model->getReport(array('id'=>$id,'type'=>'summary','search'=>$search),$sort,$sort_by);
 		$this->data['summary'] = $summary[0];
@@ -276,6 +315,35 @@ class Analytics extends MY_Controller {
 		$this->show_view('analytics/user_content_report',$this->data);
 	}
 		
+	function device()
+	{
+		//$this->session->unset_userdata('search_form');
+		$search = $this->search_post($_POST);
+		
+		$sort_i = $this->uri->segment(3); 
+		$sort_by = $this->uri->segment(4);
+		
+		if($sort_i !=''){
+			$this->data['sort_by'] =  $sort_by;
+			$this->data['sort_i'] =  $sort_i;
+		}else{
+			$this->data['sort_by'] =  'asc';
+			$this->data['sort_i'] = 'os';
+		}
+		
+		//-- sorting input --//
+		$sort = $this->sort_input($sort_i,$sort_by);
+		//-----//
+		
+		//-- summary report --//
+		$summary = $this->Analytics_model->getReport(array('type'=>'summary','search'=>$search),$sort,$sort_by);
+		$this->data['summary'] = $summary[0];		
+		//echo '<pre>';print_r($summary);die;		
+		$this->data['useragent'] = $this->Analytics_model->getReport(array('type'=>'useragent','search'=>$search),$sort,$sort_by);
+				
+		$this->show_view('analytics/device_report',$this->data);
+	}
+	
 	function export()
 	{
 		$search = $this->session->userdata('search_form');
@@ -301,7 +369,7 @@ class Analytics extends MY_Controller {
 				//-- create pdf --//
 				create_pdf($content, 'Content Base Report');
 			}elseif($this->uri->segment(4)=='csv'){
-				$heading = array('Name','Content Provider','Total Hits','Total time watched');
+				$heading = array('Name','Content Provider','Platform','Browser','Location','Date','Total Hits','Total time watched');
 				//$content =  $this->load->view('templates/pdf_content',$this->data,true);				
 				
 				$dataRpt = array();
@@ -309,6 +377,10 @@ class Analytics extends MY_Controller {
 				foreach($this->data['result'] as $p) {
 				    $dataRpt[$num]['title']       = $p->title;
 				    $dataRpt[$num]['content_provider']  = $p->content_provider;
+				    $dataRpt[$num]['platform']  = $p->platform;
+				    $dataRpt[$num]['browser']  = $p->browser;
+				    $dataRpt[$num]['location']  = $p->country;
+				    $dataRpt[$num]['date']  = $p->created;
 				    $dataRpt[$num]['hits']        = $p->total_hits;
 				    $dataRpt[$num]['watched time'] = time_from_seconds($p->total_watched_time);                 
 				    $num++;
@@ -324,8 +396,9 @@ class Analytics extends MY_Controller {
 				 $content =  $this->load->view('templates/pdf_usercontent',$this->data,true);
 				//-- create pdf --//
 				create_pdf($content, 'User Content Report');
+				
 			}elseif($this->uri->segment(4)=='csv'){
-				$heading = array('Name','Content Provider','Total Hits','Total time watched');
+				$heading = array('Name','Content Provider','Platform','Browser','Location','Date','Total Hits','Total time watched');
 				//$content =  $this->load->view('templates/pdf_content',$this->data,true);				
 				//print_r($this->data['result']);die;
 				$dataRpt = array();
@@ -333,6 +406,10 @@ class Analytics extends MY_Controller {
 				foreach($this->data['result'] as $p) {
 				    $dataRpt[$num]['title']       = $p->title;
 				    $dataRpt[$num]['content_provider']  = $p->content_provider;
+				    $dataRpt[$num]['platform']  = $p->platform;
+				    $dataRpt[$num]['browser']  = $p->browser;
+				    $dataRpt[$num]['location']  = $p->country;
+				    $dataRpt[$num]['date']  = $p->created;
 				    $dataRpt[$num]['hits']        = $p->total_hits;				    
 				    $dataRpt[$num]['watched time'] = time_from_seconds($p->total_watched_time);                 
 				    $num++;
@@ -363,9 +440,72 @@ class Analytics extends MY_Controller {
 				//echo query_to_csv($content);
 				//exit;
 			}
-		}		
+		}
+		
+		if($type == 'useragent'){
+			if($this->uri->segment(4)=='pdf'){
+				 $content =  $this->load->view('templates/pdf_device',$this->data,true);
+				//-- create pdf --//
+				create_pdf($content, 'Device Base Report');
+			}elseif($this->uri->segment(4)=='csv'){
+				$heading = array('Platform','Browser','Total Hits','Total time watched');
+				//$content =  $this->load->view('templates/pdf_content',$this->data,true);				
+				
+				$dataRpt = array();
+				$num=0;
+				foreach($this->data['result'] as $p) {
+				    $dataRpt[$num]['platform']       = $p->platform;
+				    $dataRpt[$num]['browser']  = $p->browser;
+				    $dataRpt[$num]['hits']        = $p->total_hits;
+				    $dataRpt[$num]['watched time'] = time_from_seconds($p->total_watched_time);                 
+				    $num++;
+			       }
+				query_to_csv($dataRpt,$heading);
+				//echo query_to_csv($content);
+				//exit;
+			}
+		}
 	}
 	
+	function top()
+	{
+		$limit=5;
+		$search = $this->search_post($_POST);		
+		
+		$summary = $this->Analytics_model->getReport(array('type'=>'summary','search'=>$search));
+		$this->data['summary'] = $summary[0];
+		
+		$this->data['topcontent'] = $this->Analytics_model->getReport(array('type'=>'content','l'=>$limit,'top'=>1,'search'=>$search));
+		$this->data['topuseragent'] = $this->Analytics_model->getReport(array('type'=>'useragent','l'=>$limit,'top'=>1,'search'=>$search));
+		$this->data['topcountry'] = $this->Analytics_model->getReport(array('type'=>'country','l'=>$limit,'top'=>1,'search'=>$search));
+		
+		$this->show_view('analytics/top_report',$this->data);
+	}
+	
+	function dailyreport()
+	{
+		$search = $this->search_post($_POST);
+		$startdate = $_GET['startdate'];
+		$enddate = $_GET['enddate'];
+		//-- generate daily graph data --//
+		if($startdate=='' && $enddate == ''){
+			$startdate = date('d-m-Y', strtotime(date('Y-m-01')));
+			$enddate = date('Y-m-d');			
+		}
+		if($startdate == ''){
+			$startdate = date('d-m-Y', strtotime(date('Y-m-01')));
+		}
+		if($enddate == ''){
+			$enddate = date('Y-m-d');
+		}
+		
+		$dateRange = createDateRangeArray($startdate,$enddate);//-- helper to get date range
+		$dailyreport = $this->Analytics_model->getDailyReport($dateRange);
+		
+		echo json_encode($dailyreport);die;
+		
+		//-----------------------------//		
+	}
 }
 
 /* End of file welcome.php */

@@ -16,6 +16,8 @@
 </script>
 </head>
 <body style='background:#000'>
+	<input type='hidden' name='analytics_id' id='analytics_id'>
+	<input type='hidden' name='is_complete' id='is_complete'>
         <div id="myElement" style='width:100%;height:100%'></div>
        
 <script type="text/javascript" src="<?php echo base_url(); ?>./assets/js/jwplayer.js" ></script>
@@ -23,47 +25,168 @@
 <script src="<?php echo base_url() ?>assets/js/jquery-1.10.2.js"></script>
 <?php if(count($result)>0){
 	$content_id = $result->content_id;
+	$content_provider = $result->content_provider;
 	$video_path = $result->video_path;
 	$thumbnail_path = $result->thumbnail_path;
 }else{
 	$content_id = '';
+	$content_provider ='';
 	$video_path = '';
 	$thumbnail_path = '';
 }
 ?>
-<script>
-	
+<script>	
+//-- execute when browser closed --//
+$(window).on('beforeunload', function(){
+      jwplayer().pause();
+      var pos = jwplayer().getPosition();
+      pause(pos);     
+});
+//------------------------//
+
+ var route='';
+ var city ='';
+ var state = '';
+ var country ='';
+ var country_code = '';
+ var postal_code = '';
+ 
+ 	///--- location data ---//
+	<?php if($geodata){
+		foreach($geodata as $row){?>
+					
+		<?php if ($row['types'][0] == "route"){	?>		
+			route = "<?php echo $row['long_name']?>";
+		<?php } ?>
+		
+		<?php if ($row['types'][0] == "locality"){	?>		
+			city = "<?php echo $row['long_name']?>";
+		<?php } ?>
+		
+		<?php if ($row['types'][0] == "administrative_area_level_1"){	?>		
+			state = "<?php echo $row['long_name']?>";
+		<?php } ?>
+		
+		<?php if ($row['types'][0] == "country"){	?>		
+			country = "<?php echo $row['long_name']?>";
+			country_code = "<?php echo $row['short_name']?>";
+		<?php } ?>
+		
+		<?php if ($row['types'][0] == "postal_code"){	?>		
+			postal_code = "<?php echo $row['long_name']?>";
+		<?php } ?>
+			
+	<?php } }?>
+		//------------------------------//
+		
 	function playVideo(){    		
 		player.bind("finish", function() {
 		    jwplayer().play(true);
 		});
 	}
 
-    function autoplay() {
+   function autoplay() {
+	if(typeof duration === 'undefined'){
+		duration=jwplayer().getDuration();		
+		//ga('send', 'event', 'IOSVideo', 'Play', 'IOS video test' ,pos);
+		//-- send view count in database --//	     
+	}
 	jwplayer().play(true); //-- auto play for mobile	
+	play();
     }
-    function addview(){
-        var id = "<?php echo $content_id;?>";
-                    $.ajax({
-                    url: "<?php echo base_url() ?>details/addview?id=" + id,
-                    type: 'GET',                    
-                    cache: false,
-                    dataType: 'json',
-                    processData: false, // Don't process the files
-                    contentType: false, // Set content type to false as jQuery will tell the server its a query string request
-                    success: function(data, textStatus, jqXHR)
-                    {
-                        console.log('Response: ' + data);
-                    },
-                    error: function(jqXHR, textStatus, errorThrown)
-                    {
-                        // Handle errors here
-                        console.log('ERRORS: ' + textStatus);
-                        // STOP LOADING SPINNER
-                    }
-                });
-                } 
-                
+    
+    function play() {
+	
+	$.ajax({
+		url: "<?php echo base_url() ?>analytics/play",
+	        data: {		
+                user_id:'<?php echo $user_id;?>',
+                content_id:'<?php echo $content_id;?>',
+                content_provider:'<?php echo $content_provider;?>',
+                play: '1',
+		city: city,
+		state: state,
+		country: country,
+		country_code: country_code,
+		route: route,
+		postal_code: postal_code,
+		latitude: '<?php echo $lat;?>',
+		longitude: '<?php echo $long;?>'
+	       },
+	       cache: false,
+	       type: "POST",
+	       dataType: 'json'	
+	})
+	.done(function(data){
+		$('#analytics_id').val(data);	
+	});
+    }
+    
+    function pause(duration){
+	var id = $('#analytics_id').val();
+	//alert(analytics_id);
+        $.ajax({
+            url:"<?php echo base_url()?>analytics/pause",
+            data: {
+	        id: id,
+                watched_time: duration,
+                pause: '1'
+		},
+                cache: false,
+                type: "POST"            
+        })
+        .done(function(data){
+            
+        });
+    }
+    
+    function complete(duration) {
+        //code
+	var id = $('#analytics_id').val();	
+        $.ajax({
+            url: "<?php echo base_url()?>analytics/complete",
+            data: {
+                id: id,
+                watched_time: duration,
+                complete: '1',
+		pause: 0
+                },
+                cache: false,
+                type: "POST"            
+        })
+        .done(function(data){
+            if (data > 0) {
+		$('#is_complete').val('1');
+	    }
+        });
+    }
+    
+    function replay(id){
+	$.ajax({
+		url: "<?php echo base_url()?>analytics/replay",
+		data: {
+			//id: id,
+			user_id:'<?php echo $user_id;?>',
+			content_id:'<?php echo $content_id;?>',
+			content_provider:'<?php echo $content_provider;?>',
+			replay: '1',
+			city: city,
+			state: state,
+			country: country,
+			country_code: country_code,
+			route: route,
+			postal_code: postal_code,
+			latitude: '<?php echo $lat;?>',
+			longitude: '<?php echo $long;?>'
+		},
+		cache: false,
+		type: "POST"
+	})
+	.done(function(data){
+		$('#analytics_id').val(data);
+	});
+    }
+      
     jwplayer("myElement").setup({
        //flashplayer: "assets/player.swf",
         primary: "html5",
@@ -71,6 +194,7 @@
         image: "<?php echo base_url().THUMB_LARGE_PATH. $thumbnail_path;?>",       
         width: "100%",
  aspectratio: "16:9",
+ //controls: false,
  //stretching: "exactfit",
 //autostart: 1,
         logo: {
@@ -99,19 +223,13 @@
         //skin: "myCoolSkin/roundster.xml",       
     });
         
-	autoplay();
+	autoplay(); //--auto play jwplayer --//
 	
-    //-- get count for video views ---//
-     var duration;  
-      var pos=0;
-           jwplayer().onBuffer(function () {
-            duration = this.getDuration();              
-           // alert(duration);
-            }       
-    );
-
+	var duration;  
+	var pos=0;
+    
     jwplayer().onPause(function () {
-            
+            state = jwplayer().getState();
             if(pos >0){
                 pos = parseInt(this.getPosition())-pos1;
                 pos1 = pos1+pos;
@@ -119,28 +237,32 @@
                 pos = parseInt(this.getPosition());
                 pos1=pos;
             }
+            pause(pos1);
             //alert(pos);
               //ga('send', 'event', 'IOSVideo', 'Pause', 'IOS video test' ,pos);
             }
     );
 
     jwplayer().onPlay(function () {
-            if(duration==-1){            
-            duration=this.getDuration();
-            //ga('send', 'event', 'IOSVideo', 'Play', 'IOS video test' ,pos);
-            //-- send view count in database --//            
-                   addview();
-            }
-        }
+	//var id = $('#analytics_id').val();
+	var is_complete = $('#is_complete').val();
+		//alert(is_complete);
+		if (is_complete == '1' && state != 'PAUSED') {		
+		replay();
+		}
+            
+        });
     
-    );
-    
-    jwplayer().onComplete(function () { 
+    jwplayer().onComplete(function () {
+	state=''; //-- set reset state --//
+        /*
     if(pos >0){
         pos = parseInt(this.getPosition())-pos;
     }else{
         pos = parseInt(this.getPosition());
-    }
+    }*/
+    pos = parseInt(this.getPosition());
+    complete(pos);
     //var title = "<?php //echo $content->content_title;?>-<?php //echo $content->contentid;?>";
     //alert(pos);
     //ga('send', 'event', 'IOSVideo', 'Complete', 'IOS video test' ,pos);
@@ -156,29 +278,7 @@
 */    
     
 });
-/*
-jwplayer().onComplete(function () { 
-    if(pos >0){
-        pos = parseInt(this.getPosition())-pos;
-    }else{
-        pos = parseInt(this.getPosition());
-    }
-    //var title = "<?php //echo $content->content_title;?>-<?php //echo $content->contentid;?>";
-    //alert(pos);
-  //  ga('send', 'event', 'Video', 'Complete', title ,pos);
-   // pos=0;
-    /*var seconds = pos/1000;
-    var hours = parseInt( seconds / 3600 ); // 3,600 seconds in 1 hour
-    seconds = seconds % 3600;
-    
-     var minutes = parseInt( seconds / 60 ); // 60 seconds in 1 minute
-    // 4- Keep only seconds not extracted to minutes:
-    seconds = seconds % 60;
-    alert( hours+" hours and "+minutes+" minutes and "+seconds+" seconds!" );
-*/    
-    
-//});
-
+   
 $(document).ready(function(){    
     AndroidApp.startVideo();    
 });
