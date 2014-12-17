@@ -281,4 +281,22 @@ class Content extends Apis{
         $response = array('tr'=>$dataset_count,'cp'=>$this->start + 1,'limit'=>$this->limit,'result'=>$dataset);
         $this->response($response);
     }
+    
+    function page_get(){
+        $qString = $this->get();
+        $response = array();
+        if(isset($qString['title']) && $qString['title'] != ''){
+            $query = sprintf('select * from pages p where p.page_title = "%s" and user_id = %d ',$qString['title'],$this->app->id);
+            $dataset = $this->db->query($query)->result();
+            if(count($dataset) > 0){
+                $tmp = reset($dataset);
+                $response['result'] = $tmp->page_description;
+            }else{
+                $response['error'][] = 'Invalid page Id';
+            }
+        }else{
+            $response['error'][] = 'Invalid page Id';
+        }
+        $this->response($response);
+    }
 }
