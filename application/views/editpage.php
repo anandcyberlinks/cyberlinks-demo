@@ -35,11 +35,9 @@
                             <?php echo form_error('page_title', '<span class="text-danger">', '</span>'); ?>
                             </div>
                             <div class="form-group">
-                                <label>Page Description</label>
+                                <label>Page Description</label><br/>
                                
-                                    <textarea id="editor1" name="page_description" rows="10" cols="80" >
-                                        <?php echo $result[0]->page_description; ?>
-                                    </textarea> 
+                                    <textarea id="editor1" name="page_description" rows="10" cols="80" ><?php echo $result[0]->page_description; ?></textarea> 
                                     <?php echo form_error('page_description', '<span class="text-danger">', '</span>'); ?>
                                 
                             </div>
@@ -57,15 +55,4 @@
         </div><!-- /.row -->                    
     </section><!-- /.content -->
 </aside><!-- /.right-side -->
-<script src="<?php echo base_url(); ?>assets/js/plugins/ckeditor/ckeditor.js" type="text/javascript"></script>
-<script src="<?php echo base_url(); ?>assets/js/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js" type="text/javascript"></script>
 
-<script type="text/javascript">
-    $(function () {
-// Replace the <textarea id="editor1"> with a CKEditor
-// instance, using default configuration.
-        CKEDITOR.replace('editor1');
-//bootstrap WYSIHTML5 - text editor
-        $(".textarea").wysihtml5();
-    });
-</script>

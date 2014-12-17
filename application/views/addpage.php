@@ -36,10 +36,7 @@ color: red;
 <div class="form-group">
 <label>Page Description</label>
 <div class='box-body pad'>
-<textarea id="editor1" name="page_description" value="<?php echo set_value('page_description'); ?>" rows="10" cols="80">
-
-
-</textarea>
+<textarea id="editor1" name="page_description" value="<?php echo set_value('page_description'); ?>" rows="10" cols="80"></textarea>
 <?php echo form_error('page_description','<span class="text-danger">','</span>'); ?>
 </div>
 </div>
@@ -60,15 +57,4 @@ color: red;
 </div><!-- /.row -->                    
 </section><!-- /.content -->
 </aside><!-- /.right-side -->
-<script src="<?php echo base_url();?>assets/js/plugins/ckeditor/ckeditor.js" type="text/javascript"></script>
-<script src="<?php echo base_url();?>assets/js/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js" type="text/javascript"></script>
 
-<script type="text/javascript">
-$(function() {
-// Replace the <textarea id="editor1"> with a CKEditor
-// instance, using default configuration.
-CKEDITOR.replace('editor1');
-//bootstrap WYSIHTML5 - text editor
-$(".textarea").wysihtml5();
-});
-</script>
