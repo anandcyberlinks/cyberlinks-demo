@@ -8,8 +8,7 @@ class Details extends MY_Controller {
             $this->load->model('/api/Video_model');
 	    $this->load->model('ads/Ads_model');
 	  //  $this->load->model('/analytics/Analytics_model');
-	    $this->load->library('User_Agent');
-	    $this->load->helper('common');
+	    $this->load->library('User_Agent');	    
 	    
 	//-- get browser http_user_agent info in array --//
                 //   $this->result = get_browser(null, true);		
