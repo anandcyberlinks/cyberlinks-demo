@@ -1,6 +1,7 @@
 @charset "utf-8";
 /* Outer Wrapper
 ================================================== */
+.error{color: red}
 #outer-wrapper {
 	width:100%;
 	background:url(../images/bg-sides.png) no-repeat top center;
@@ -1181,8 +1182,6 @@ a#logoNext:hover {
 #tab-rock .prod-list li:first-child{
 	padding-left:20px;
 }
-/* Album Details
-================================================== */
 .album-detail {
 	width:100%;
 }

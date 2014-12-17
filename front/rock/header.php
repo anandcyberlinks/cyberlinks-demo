@@ -25,6 +25,9 @@ $cat = catList();
         <link rel="alternate stylesheet" type="text/css" href="css/orange-red.css" title="styles6" media="screen" />
         <link rel="shortcut icon" href="images/favicon.png" />
         <script type="text/javascript" src="js/jquery.min.js"></script>
+        <script type="text/javascript" src="js/jquery.validate.js"></script>
+        <script type="text/javascript" src="js/register.jquery.js"></script>
+        
         <script type="text/javascript" src="js/styleswitch.js"></script>
         <script type="text/javascript" src="js/jquery.infinite-carousel.js"></script>
         <script type="text/javascript" src="js/animatedcollapse.js"></script>

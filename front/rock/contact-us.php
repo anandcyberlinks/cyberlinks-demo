@@ -24,24 +24,23 @@
                             <!-- Quick Inquary Start -->
                             <div class="quickinquiry">
                             	<h2>Quick Inquary</h2>
-                            	<form class="forms">
+                                <form class="forms" id="contact" action="mail.php">
                                     <ul>
                                         <li>
-                                            <input name="" placeholder="Enter Name" type="text" />
+                                            <label for="name" generated="true" class="error"></label>
+                                            <input name="name" placeholder="Enter Name" type="text" />
                                         </li>
                                         <li>
-                                            <input name="" placeholder="Enter Email" type="text" />
+                                            <label for="email" generated="true" class="error"></label>
+                                            <input name="email" placeholder="Enter Email" type="text" />
                                         </li>
                                         <li>
-                                            <input name="" placeholder="Enter Company Name" type="text" />
+                                            <label for="coment" generated="true" class="error"></label>
+                                            <textarea name="coment" placeholder="Enter Massage"></textarea>
+                                            <div id="msg" style="color: green"></div>
                                         </li>
                                         <li>
-                                            <textarea rows="" cols=""
-                                            onfocus="if(this.value=='Enter Massage') {this.value='';}"
-                                            onblur="if(this.value=='') {this.value='Enter Massage';}" />Enter Massage</textarea>
-                                        </li>
-                                        <li>
-                                            <button>Submit Comment</button>
+                                            <button onclick="return SubmitIfValid();">Submit Comment</button>
                                         </li>
                                     </ul>
                                 </form>
