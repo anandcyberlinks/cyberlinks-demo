@@ -41,24 +41,11 @@ $cat = catList();
         <script type="text/javascript" src="js/jquery-ui.min.js"></script>
         <script type="text/javascript" src="js/jquery.easing.1.3.js"></script>
         <script type="text/javascript" src="js/jquery.mCustomScrollbar.js"></script>
-        
         <script type="text/javascript">var switchTo5x=true;</script>
         <script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
         <script type="text/javascript">stLight.options({publisher: "d61f6a85-907f-442e-81a4-b8b5c3697454", doNotHash: false, doNotCopy: false, hashAddressBar: false});</script>
     </head>
     <body>
-        <!-- Styleswitcher Start -->
-        <!--<div class="styles">
-            <ul>
-                <li><a href="?style=style7" rel="styles7" class="styleswitch brown">&nbsp;</a></li>
-                <li><a href="?style=style1" rel="styles1" class="styleswitch red">&nbsp;</a></li>
-                <li><a href="?style=style2" rel="styles2" class="styleswitch blue">&nbsp;</a></li>
-                <li><a href="?style=style3" rel="styles3" class="styleswitch gray">&nbsp;</a></li>
-                <li><a href="?style=style4" rel="styles4" class="styleswitch orange">&nbsp;</a></li>
-                <li><a href="?style=style5" rel="styles5" class="styleswitch green">&nbsp;</a></li>
-                <li><a href="?style=style6" rel="styles6" class="styleswitch orange-red">&nbsp;</a></li>
-            </ul>
-        </div>-->
         <div id="outer-wrapper">
             <div class="inner">
                 <!-- Header Start -->
@@ -170,7 +157,8 @@ $cat = catList();
                                                 <?php } ?>
                                             </ul>
                                         </li>
-                                        <li><a href="#">Contact</a></li>
+                                        <li class="<?= $isabouttActive ?>"><a href="about-us.php">About us</a></li>
+                                        <li class="<?= $iscontectActive ?>"><a href="contact-us.php">Contact</a></li>
                                     </ul>
                                     <div class="clear"></div>
                                 </div>

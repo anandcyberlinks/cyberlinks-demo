@@ -39,6 +39,16 @@ function apicall($url, $post_fields = array()) {
     return $output;
 }
 
+function pages($title){
+    $url = sprintf('http://182.18.165.43/multitvfinal/apis/content/page/title/%s/%s', $title, $_SESSION['token']);
+    $result = getdata($url);
+    if (count($result) > 0) {
+        return $result;
+    } else {
+        return false;
+    }
+}
+
 function subList($cid) {
     $url = sprintf('http://182.18.165.43/multitvfinal/api/subscription/list/content_id/%d/token/%s', $cid, $_SESSION['user_token']);
     $result = getdata($url);
@@ -238,4 +248,5 @@ $file_name = array_pop($file_path);
 $isHomeActive = ($file_name == 'index.php') ? 'current-menu-item' : '';
 $ispopulerActive = ($file_name == 'populer.php') ? 'current-menu-item' : '';
 $iscatActive = ($file_name == 'category.php') ? 'current-menu-item' : '';
-//$isProductActive = ($file_name == 'show_all_products.php')?'active' :'' ;
+$iscontectActive = ($file_name == 'contact-us.php')?'current-menu-item' :'' ;
+$isabouttActive = ($file_name == 'about-us.php')?'current-menu-item' :'' ;

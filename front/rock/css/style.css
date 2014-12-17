@@ -1176,6 +1176,7 @@ a#logoNext:hover {
 	float:left;
 	overflow:hidden;
 	padding:0px 0px 20px 20px;
+        height: 210px; 
 }
 #tab-rock .prod-list li:first-child{
 	padding-left:20px;
