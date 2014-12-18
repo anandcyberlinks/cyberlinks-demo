@@ -62,9 +62,9 @@ $totalPage = floor($data->tr / $lt) + 1;
                             <?php } ?>
                         </p>
                             <?php if(!in_array($value->price,array('Free','free'))) { ?>
-                            <!--<p class="tags">
+                            <p class="tags">
                                 <a href="<?=getLink($value->id, $value->price) ?>">Buy Now</a>
-                            </p>-->
+                            </p>
                             <?php } ?>
                             <div class="clear"></div>
                         </div>
