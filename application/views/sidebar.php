@@ -37,7 +37,12 @@
                 </ul>
             </li>
             <li class="<?= ($this->uri->segment(2) == 'live_streaming') ? 'active' : '' ?>">
-                <a href="<?php echo base_url() ?>video/live_streaming" >
+                <!--
+		<a href="<?php echo base_url() ?>video/live_streaming" >
+                    <i class="fa fa-fw fa-film"></i> <span><?php echo $welcome->loadPo('Live Stream'); ?></span>
+                </a>
+		-->
+		<a href="<?php echo base_url() ?>livestream/" >
                     <i class="fa fa-fw fa-film"></i> <span><?php echo $welcome->loadPo('Live Stream'); ?></span>
                 </a>
             </li>

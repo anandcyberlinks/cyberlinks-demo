@@ -60,10 +60,11 @@
 				    </div>
                                     <div class="row"> 
 					<div class="col-md-9">
-					<label for="Image"><?php echo $welcome->loadPo('Image'); ?></label>&nbsp;&nbsp;
-					<span class="btn btn-default btn-file btn-sm">
-					<?php echo  $welcome->loadPo('Choose Media') ?> <input name="chanelImage"  id="chanelImage"  atr="files" type="file"/>
-					</span>
+					    <label for="Image"><?php echo $welcome->loadPo('Image'); ?></label>
+					    <label for="Image"><?php echo  $welcome->loadPo('Choose Media') ?></label>
+					    <span class="btn btn-default btn-file btn-sm">
+						<input name="chanelImage"  id="chanelImage" atr="files" type="file"/>
+					    </span>
 					</div>
 				    </div>
                                     <div class="row">
