@@ -58,7 +58,7 @@
 					    <input class="form-control" type="text" value="<?php echo $result->web;?>" name="web" placeholder="Livestrem URL" />
 					</div>					
 				    </div>
-				    <br/><br/>
+				    <br/>
                                     <div class="row"> 
 					<div class="col-md-9">
 					    <label for="Image"><?php echo $welcome->loadPo('Image'); ?></label>
@@ -68,6 +68,7 @@
 					    </span>
 					</div>
 				    </div>
+				    <br/>
                                     <div class="row">
                                         <div class="col-md-6">					   
 					    <input name="save" type="submit" value="Save" class="btn btn-success btn-sm">
