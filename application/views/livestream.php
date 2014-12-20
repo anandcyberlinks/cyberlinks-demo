@@ -58,12 +58,13 @@
 					    <input class="form-control" type="text" value="<?php echo $result->web;?>" name="web" placeholder="Livestrem URL" />
 					</div>					
 				    </div>
+				    <br/><br/>
                                     <div class="row"> 
 					<div class="col-md-9">
 					    <label for="Image"><?php echo $welcome->loadPo('Image'); ?></label>
-					    <label for="Image"><?php echo  $welcome->loadPo('Choose Media') ?></label>
 					    <span class="btn btn-default btn-file btn-sm">
-						<input name="chanelImage"  id="chanelImage" atr="files" type="file"/>
+						<?php echo  $welcome->loadPo('Choose Media') ?>
+						<input name="chanelImage"  id="chanelImage" atr="files" type="file" />
 					    </span>
 					</div>
 				    </div>
