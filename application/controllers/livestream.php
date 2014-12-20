@@ -75,7 +75,7 @@ class Livestream extends MY_Controller {
             $input['android'] = $_POST['android'];
             $input['windows'] = $_POST['windows'];
             $input['web'] = $_POST['web'];
-            $input['thumbnail_url'] = $thumbnail;
+            $input['thumbnail_url'] = base_url().$thumbnail;
             $input['user_id'] = $this->uid;
             $input['status'] = 1;
             
@@ -98,8 +98,8 @@ class Livestream extends MY_Controller {
     function uploadImg($tmpFilePath, $fileName, $id=null){
         $fileExt = $this->_getFileExtension($fileName); 
         $fileUniqueName = uniqid() . "." . $fileExt;
-        $filepath = REAL_PATH.'/assets/upload/logo/'.$fileUniqueName;     
-          move_uploaded_file($tmpFilePath,$filepath);
+        $filepath = 'assets/upload/thumbs/'.$fileUniqueName;     
+          move_uploaded_file($tmpFilePath,REAL_PATH.$filepath);
           return $filepath;        
     }
     
@@ -108,8 +108,6 @@ class Livestream extends MY_Controller {
         $this->load->view('rendervideo',$data);    
     }
         
-    
-
     public function delImage($file_id) {
         $fileName = $this->videos_model->getThumbImgName($file_id);
         if($fileName) {
@@ -119,36 +117,7 @@ class Livestream extends MY_Controller {
             $delResultThumbLarge = $this->_deleteFile($fileName, REAL_PATH.CATEGORY_LARGE_PATH);
             $result = $this->Category_model->delCategoryImage($file_id);
         }
-    }
-    
-    /* 	Delete Category */
-
-    function deleteCategory() {
-        $per = $this->checkpermission($this->role_id, 'delete');
-        //echo $this->role_id;
-        if ($per) {
-            $id = $_GET['id'];
-            $video = $this->Category_model->getCategoryVideo($id);
-            if ($video == '0') {
-                $child = $this->Category_model->getCategoryChild($id);
-                if($child == '0'){
-                    $this->Category_model->delete_category($id);
-                    $this->session->set_flashdata('message', $this->_successmsg($this->loadPo($this->config->item('success_record_delete'))));
-                    redirect(base_url() . 'category');
-                }else{
-                    $this->session->set_flashdata('message', $this->_warningmsg($this->loadPo($this->config->item('warning_category_record'))));
-                    redirect(base_url() . 'category');
-                }
-            } else {
-                $this->session->set_flashdata('message', $this->_warningmsg($this->loadPo($this->config->item('warning_category_record'))));
-                redirect(base_url() . 'category');
-            }
-        } else {
-            $this->session->set_flashdata('message', $this->_errormsg($this->loadPo($this->config->item('error_permission'))));
-            redirect(base_url() . 'category');
-        }
-    }
-
+    }    
 }
 
 /* End of file welcome.php */

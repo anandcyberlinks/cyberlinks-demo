@@ -14,16 +14,16 @@ class Livestream_model extends CI_Model {
        $this->load->database();
    }
    
-   function getStream($device)
-   {
-    if($device != ''){
-       $this->db->select($device.' as url');
-    }
-    $this->db->select('id,channel_name,thumbnail_url');
-    $this->db->from('livestream');
-    $this->db->where('status',1);
+   function getStream()
+   {    
+    $this->db->select('l.thumbnail_url,l.youtube,l.ios,l.android,l.windows,l.web,,u.first_name as channel_name');
+    $this->db->from('livestream l');
+    $this->db->join('users u','u.id=l.user_id');
+    $this->db->where('l.status',1);
     $query = $this->db->get();
     return $query->result();
    }
+   
+  
 }
    ?>
