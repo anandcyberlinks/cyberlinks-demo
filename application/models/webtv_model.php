@@ -6,13 +6,7 @@ class Webtv_model extends CI_Model{
     }
     
     function fetchplaylists($uid, $start, $limit, $data) {
-        
-        
-        
-                $this->db->select('p.*, SUM(1) as `total` ');
-        
-        
-        
+        $this->db->select('p.*, SUM(if(pv.id is not null,1,0)) as `total` ',false);
         $timeStart = " 00:00:00";
         $timeEnd = " 23:59:59";
 
@@ -35,11 +29,12 @@ class Webtv_model extends CI_Model{
         }
 
         $this->db->where('p.uid', $uid);
+        $this->db->where('p.id > 0');
         $this->db->from('playlists p');
         $this->db->join('playlist_video pv', 'pv.playlist_id = p.id', 'left');
+        $this->db->group_by('p.id');
         $this->db->limit($start, $limit);
         $result = $this->db->get()->result();
-        //echo $this->db->last_query();
         //echo $this->db->last_query();
         return $result;
     }
