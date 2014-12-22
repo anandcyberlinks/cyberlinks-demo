@@ -224,10 +224,10 @@ class Analytics extends MY_Controller {
 			$this->data['sort_i'] =  $sort_i;
 		}else{
 			$this->data['sort_by'] =  'asc';
-			$this->data['sort_i'] = 'v';
+			$this->data['sort_i'] = 'i';
 		}
 		//-- sorting input --//
-		$sort = $this->sort_input($sort_i,$sort_by);
+		 $sort = $this->sort_input($sort_i,$sort_by);
 		//-----//
 		
 		//-- get country list --//
@@ -259,7 +259,7 @@ class Analytics extends MY_Controller {
 			$this->data['sort_i'] =  $sort_i;
 		}else{
 			$this->data['sort_by'] =  'asc';
-			$this->data['sort_i'] = 'v';
+			$this->data['sort_i'] = 'i';
 		}
 		
 		//-- sorting input --//
@@ -295,7 +295,7 @@ class Analytics extends MY_Controller {
 			$this->data['sort_i'] =  $sort_i;
 		}else{
 			$this->data['sort_by'] =  'asc';
-			$this->data['sort_i'] = 'v';
+			$this->data['sort_i'] = 'i';
 		}
 		//-- sorting input --//
 		$sort = $this->sort_input($sort_i,$sort_by);
@@ -329,7 +329,7 @@ class Analytics extends MY_Controller {
 			$this->data['sort_i'] =  $sort_i;
 		}else{
 			$this->data['sort_by'] =  'asc';
-			$this->data['sort_i'] = 'os';
+			$this->data['sort_i'] = 'i';
 		}
 		
 		//-- sorting input --//
@@ -581,7 +581,7 @@ class Analytics extends MY_Controller {
 			$this->data['sort_i'] =  $sort_i;
 		}else{
 			$this->data['sort_by'] =  'asc';
-			$this->data['sort_i'] = 'v';
+			$this->data['sort_i'] = 'i';
 		}
 		//-- sorting input --//
 		$sort = $this->sort_input($sort_i,$sort_by);
