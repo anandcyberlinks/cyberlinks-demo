@@ -35,7 +35,7 @@
         </h1>
         <ol class="breadcrumb">
             <i class="fa fa-dashboard"></i>
-            <li class="active"><?php echo $welcome->loadPo('Analytics') ?></li>
+            <li class="active"><a href="<?php echo base_url()?>analytics/report"><?php echo $welcome->loadPo('Analytics') ?></a></li>
             <li class="active"><a href="<?php echo base_url();?>analytics/geographic?c=1"><?php echo $welcome->loadPo('Location') ?></a></li>
             <li class="active"><?php echo $country_name[0]->country; ?></li>
         </ol>
