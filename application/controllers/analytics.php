@@ -355,12 +355,15 @@ class Analytics extends MY_Controller {
 		
 		$type = $this->uri->segment(8);
 		
-		$id = $this->uri->segment(10);
-		
+		if($this->uri->segment(9)=='country'){
+			$country = $this->uri->segment(10);
+		}else{
+			$id = $this->uri->segment(10);
+		}
 		$sort = $this->sort_input($sort_i,$sort_by);
 		//-----//
 		//-- result --//		
-			$this->data['result'] = $this->Analytics_model->getReport(array('id'=>$id,'type'=>$type,'search'=>$search),$sort,$sort_by);
+			$this->data['result'] = $this->Analytics_model->getReport(array('code'=>$country,'id'=>$id,'type'=>$type,'search'=>$search),$sort,$sort_by);
 		//echo '<pre>';print_r($this->data['result']);die;
 		
 		if($type == 'content'){
@@ -465,6 +468,52 @@ class Analytics extends MY_Controller {
 				//exit;
 			}
 		}
+		
+		if($type == 'region'){			
+			if($this->uri->segment(4)=='pdf'){				
+				$geomap =  $this->load->view('templates/pdf_geomap',$this->data,true);				
+				//-- create pdf --//
+				create_pdf($geomap,'Region Based Report');
+			}elseif($this->uri->segment(4)=='csv'){ 
+				$heading = array('Country','Region','Total Hits','Total time watched');
+				//$content =  $this->load->view('templates/pdf_content',$this->data,true);
+				$dataRpt = array();
+				$num=0;
+				foreach($this->data['result'] as $p) {
+				    $dataRpt[$num]['country']          = $p->country;
+				    $dataRpt[$num]['state']          = $p->state;
+				    $dataRpt[$num]['hits']        = $p->total_hits;
+				    $dataRpt[$num]['watched time'] = time_from_seconds($p->total_watched_time);                 
+				    $num++;
+			       }
+				query_to_csv($dataRpt,$heading);
+				//echo query_to_csv($content);
+				//exit;
+			}
+		}
+		
+		if($type == 'country'){
+			$this->data['c']=1;
+			if($this->uri->segment(4)=='pdf'){				
+				$geomap =  $this->load->view('templates/pdf_geomap',$this->data,true);				
+				//-- create pdf --//
+				create_pdf($geomap,'Country Based Report');
+			}elseif($this->uri->segment(4)=='csv'){ 
+				$heading = array('Country','Total Hits','Total time watched');
+				//$content =  $this->load->view('templates/pdf_content',$this->data,true);
+				$dataRpt = array();
+				$num=0;
+				foreach($this->data['result'] as $p) {
+				    $dataRpt[$num]['country']          = $p->country;				   
+				    $dataRpt[$num]['hits']        = $p->total_hits;
+				    $dataRpt[$num]['watched time'] = time_from_seconds($p->total_watched_time);                 
+				    $num++;
+			       }
+				query_to_csv($dataRpt,$heading);
+				//echo query_to_csv($content);
+				//exit;
+			}
+		}
 	}
 	
 	function top()
@@ -505,6 +554,45 @@ class Analytics extends MY_Controller {
 		echo json_encode($dailyreport);die;
 		
 		//-----------------------------//		
+	}
+	
+	function geographic()
+	{
+		if(@$_GET['country'] =='' && @$_GET['c'] ==''){
+			$this->data['country_code'] = 'IN';
+		}else{
+			$this->data['country_code'] = $_GET['country'];
+		}
+		
+		if(@$_GET['c'] == 1){
+			$type = 'country';
+		}else{
+			$type = 'region';
+		}
+		
+		$search = $this->search_post($_POST);
+				
+		$sort_i = $this->uri->segment(3); 
+		$sort_by = $this->uri->segment(4);
+		
+		if($sort_i !=''){
+			$this->data['sort_by'] =  $sort_by;
+			$this->data['sort_i'] =  $sort_i;
+		}else{
+			$this->data['sort_by'] =  'asc';
+			$this->data['sort_i'] = 'v';
+		}
+		//-- sorting input --//
+		$sort = $this->sort_input($sort_i,$sort_by);
+
+		$this->data['country'] = $this->Analytics_model->getReport(array('type'=>'country'));
+		$this->data['country_name'] = $this->Analytics_model->getReport(array('type'=>'country','code'=>$this->data['country_code']));
+		$this->data['geomap'] = $this->Analytics_model->getReport(array('type'=>$type,'code'=>$this->data['country_code'],'search'=>$search),$sort,$sort_by);			
+		if(@$_GET['c'] == 1){
+			$this->show_view('analytics/geomap_country',$this->data);
+		}else{
+			$this->show_view('analytics/geomap_region',$this->data);
+		}
 	}
 }
 

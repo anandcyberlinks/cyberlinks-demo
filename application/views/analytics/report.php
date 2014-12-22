@@ -282,8 +282,7 @@
 		    </div><!-- /.box-header -->
 		    
 		    <div class="box-body no-padding">
-			
-			  <div id="world-map" style="height: 300px;"></div>
+			 <div id="regions_div" style="width: 500px;"></div>
 		</div>
 			    
 			
@@ -311,7 +310,7 @@
                                             </tr>
 					    <?php foreach($country as $row){?>
                                             <tr>
-                                                <td><a href="#"><?php echo $row->country;?></a></td>
+                                                <td><a href="<?php echo base_url()?>analytics/geographic?country=<?php echo $row->code;?>"><?php echo $row->country;?></a></td>
                                                 <td><?php echo $row->total_hits;?></td>
 						<td><?php echo time_from_seconds($row->total_watched_time);?></td>
                                             </tr>
@@ -321,6 +320,7 @@
                                     </div>
 			
 		    </div><!-- /.box-body -->
+		    <div><a href='<?php echo base_url()?>analytics/geographic?c=1' style="float:right;">View All</a></div>
 		</div><!-- /.box -->
 		
 		<div class="box box-primary">
@@ -432,28 +432,48 @@
 	    
 	    
 	</script>
+	
 	<script>
 	    //-- map values ---//	    
-	    var visitorsData = {
-		<?php foreach($map as $country){?>
-		"<?php echo $country->code;?>": <?php echo $country->total_hits;?>, //Saudi Arabia
-		<?php }?>
+	  /*  var visitorsData = {
+		<?php //foreach($map as $country){?>
+		"<?php //echo $country->code;?>": <?php echo $country->total_hits;?>, //Saudi Arabia
+		<?php //}?>
 		
-	    };
+	    };*/
 	    
 	</script>
-	<link rel="stylesheet" href="<?=base_url()?>assets/css/jvectormap/jquery-jvectormap-1.2.2.css" type="text/css" media="screen"/>
-	<script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
-        <script src="<?=base_url()?>assets/js/plugins/morris/morris.min.js" type="text/javascript"></script>
-	<!-- jvectormap -->
-        <script src="<?=base_url()?>assets/js/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js" type="text/javascript"></script>
-        <script src="<?=base_url()?>assets/js/plugins/jvectormap/jquery-jvectormap-world-mill-en.js" type="text/javascript"></script>
-	
+		
+	<script type='text/javascript' src='https://www.google.com/jsapi'></script>	
+	 
+    <script type="text/javascript">
+      google.load("visualization", "1", {packages:["geomap"]});
+      google.setOnLoadCallback(drawMap);
+
+      function drawMap() {
+        var data = google.visualization.arrayToDataTable([
+          ['Country', 'Hits'],
+	  <?php foreach($map as $country){
+	    if($country->country != ''){
+	    ?>
+		['<?php echo $country->country;?>', <?php echo $country->total_hits;?>],
+	<?php } }?>          
+        ]);
+
+        var options = {};
+        options['dataMode'] = 'regions';
+	options['width'] = '500px';
+        var container = document.getElementById('regions_div');
+        var geomap = new google.visualization.GeoMap(container);
+
+        geomap.draw(data, options);
+      };
+    </script>
 	
 	<script>
 	    
 	     //World map by jvectormap
-	$('#world-map').vectorMap({	    
+	/*$('#world-map').vectorMap({	    
       map: 'world_mill_en',
 	//map: 'us_aea_en',
 	
@@ -478,74 +498,7 @@
             if (typeof visitorsData[code] != "undefined")
                 el.html(el.html() + ': ' + visitorsData[code] + ' hits');
         }
-    });
-	    $(function(){
-		$('#category-chart-div').html(loaderCenter);
-		$.ajax({
-		    type: "GET",
-		    url: '<?=base_url()?>layout/dashboardchart/category_video',
-		    dataType: "html",
-		    success: function(response) {
-			var data = $.parseJSON(response);
-			$('#category-chart-div').html('');
-			var donut = new Morris.Donut({
-			    element: 'category-chart-div',
-			    resize: true,
-			    colors: data.color,
-			    data: data.data,
-			    hideHover: 'auto'
-			});
-		    }
-		});
-		
-		$('#uservideo-chart-div').html(loaderCenter);
-		$.ajax({
-		    type: "GET",
-		    url: '<?=base_url()?>layout/dashboardchart/users_video',
-		    dataType: "html",
-		    success: function(response) {
-			var data = $.parseJSON(response);
-			$('#uservideo-chart-div').html('');
-			var donut = new Morris.Donut({
-			    element: 'uservideo-chart-div',
-			    resize: true,
-			    colors: data.color,
-			    data: data.data,
-			    hideHover: 'auto'
-			});
-		    }
-		});
-		
-		$('.onchange').on('change',function(){
-		    dailyGraph();
-		});
-		
-		function dailyGraph(){
-		    $('#dailyvideo-chart-div').html(loaderCenter);
-		    $.ajax({
-			type: "GET",
-			url: '<?=base_url()?>layout/dashboardchart/dailyvideo?month=' + $('#month').val() + '&year=' + $('#year').val(),
-			dataType: "html",
-			success: function(response) {
-			    var data = $.parseJSON(response);
-			    $('#dailyvideo-chart-div').html('');
-			    var line = new Morris.Line({
-				element: 'dailyvideo-chart-div',
-				resize: true,
-				data:  data.data,
-				xkey: 'y',
-				ykeys: ['value'],
-				labels: ['Videos'],
-				xLabelAngle : 35,
-				parseTime : false,
-				lineColors: data.color,
-				hideHover: 'auto'
-			    });
-			}
-		    });
-		}
-		dailyGraph();
-	    });
+    });	    */
 	</script>
 
     </section><!-- /.content -->
