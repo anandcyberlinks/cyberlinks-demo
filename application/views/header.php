@@ -58,7 +58,6 @@ $s = $this->session->all_userdata();
                     <span class="icon-bar"></span>
                 </a>
                 <div class="navbar-right">
-
                     <ul class="nav navbar-nav">
                         <!-- Messages: style can be found in dropdown.less-->
                         <?php
@@ -121,5 +120,3 @@ $s = $this->session->all_userdata();
                 </div>
             </nav>
         </header>
-
-                           

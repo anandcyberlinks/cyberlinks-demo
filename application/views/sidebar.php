@@ -1,5 +1,5 @@
 <?php $s = $this->session->all_userdata(); ?>
-<aside class="left-side sidebar-offcanvas">                
+<aside class="left-side sidebar-">                
     <section class="sidebar">
         <!-- Sidebar user panel -->
         <div class="user-panel">
@@ -44,6 +44,12 @@
 		-->
 		<a href="<?php echo base_url() ?>livestream/" >
                     <i class="fa fa-fw fa-film"></i> <span><?php echo $welcome->loadPo('Live Stream'); ?></span>
+                </a>
+            </li>
+            
+            <li class="<?= ($this->uri->segment(1) == 'webtv') ? 'active' : '' ?>">
+                <a href="<?php echo base_url() ?>webtv" >
+                    <i class="fa fa-fw fa-film"></i> <span><?php echo $welcome->loadPo('WebTV'); ?></span>
                 </a>
             </li>
                       <li class="<?= ($this->uri->segment(1) == 'event') ? 'active' : '' ?>">

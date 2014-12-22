@@ -1,107 +1,115 @@
-    <?php
-    ini_set('display_errors',1);
-    if (!defined('BASEPATH'))
-        exit('No direct script access allowed');
-    
-    class Video extends MY_Controller {
-        public $user = null;
-        public $role_id = null;
-        public $uid = null;
-        public $allowedVideoExt;
-        public $allowedImageExt;
-    
-        function __construct() {
-            parent::__construct();
-            $this->load->config('messages');
-            $this->load->model('videos_model');
-            $this->load->model('category_model');
-            $this->load->model('Genre_model');
-            $this->load->library('session');
-            $this->load->library('form_validation');
-            $this->load->library('csvreader');
-            $data['welcome'] = $this;
-            $s = $this->session->all_userdata();
-            $this->user = $s[0]->username;
-            $this->uid = $s[0]->id;
-            $this->role_id = $s[0]->role_id;
-            $this->allowedVideoExt = array('mp4', 'mpg', 'mpeg', 'flv', 'wmv', 'avi');
-            $this->allowedImageExt = array('gif', 'png', 'jpeg', 'jpg');
-        }
-    
-        protected $validation_rules = array
-            (
-            'update_video' => array(
-                array(
-                    'field' => 'content_title',
-                    'label' => 'Content Title',
-                    'rules' => 'trim|required'
-                ),
-                array(
-                    'field' => 'content_category',
-                    'label' => 'Content Category',
-                    'rules' => 'trim|required'
-                ),
-                            /* array(
-                  'field' => 'content_channel',
-                  'label' => 'Content Channel',
-                  'rules' => 'trim|required'
-                  ), */ 
-                array(
-                    'field' => 'description',
-                    'label' => 'Description',
-                    'rules' => 'trim|required'
-                )
+<?php
+
+ini_set('display_errors', 1);
+if (!defined('BASEPATH'))
+    exit('No direct script access allowed');
+
+class Video extends MY_Controller {
+
+    public $user = null;
+    public $role_id = null;
+    public $uid = null;
+    public $allowedVideoExt;
+    public $allowedImageExt;
+
+    function __construct() {
+        parent::__construct();
+        $this->load->config('messages');
+        $this->load->model('videos_model');
+        $this->load->model('category_model');
+        $this->load->model('Genre_model');
+        $this->load->library('session');
+        $this->load->library('form_validation');
+        $this->load->library('csvreader');
+        $data['welcome'] = $this;
+        $s = $this->session->all_userdata();
+        $this->user = $s[0]->username;
+        $this->uid = $s[0]->id;
+        $this->role_id = $s[0]->role_id;
+        $this->allowedVideoExt = array('mp4', 'mpg', 'mpeg', 'flv', 'wmv', 'avi');
+        $this->allowedImageExt = array('gif', 'png', 'jpeg', 'jpg');
+    }
+
+    protected $validation_rules = array
+        (
+        'update_video' => array(
+            array(
+                'field' => 'content_title',
+                'label' => 'Content Title',
+                'rules' => 'trim|required'
             ),
-            'video_schedule' => array(
-                array(
-                    'field' => 'datepickerstart',
-                    'label' => 'Start Date',
-                    'rules' => 'trim|required'
-                ),
-                array(
-                    'field' => 'datepickerend',
-                    'label' => 'End Date',
-                    'rules' => 'trim|required'
-                )
+            array(
+                'field' => 'content_category',
+                'label' => 'Content Category',
+                'rules' => 'trim|required'
             ),
-            'videosrc_info' => array(
-                array(
-                    'field' => 'source_url',
-                    'label' => 'Source Url',
-                    'rules' => 'trim|required|valid_url_format|url_exists'
-                ),
-                array(
-                    'field' => 'content_provider',
-                    'label' => 'Content Provider',
-                    'rules' => 'trim|required'
-                ),
-                array(
-                    'field' => 'title',
-                    'label' => 'Title',
-                    'rules' => 'trim|required'
-                ),
-                array(
-                    'field' => 'category',
-                    'label' => 'Category',
-                    'rules' => 'trim|required'
-                )
+            /* array(
+              'field' => 'content_channel',
+              'label' => 'Content Channel',
+              'rules' => 'trim|required'
+              ), */
+            array(
+                'field' => 'description',
+                'label' => 'Description',
+                'rules' => 'trim|required'
             )
-        );
-    
+        ),
+        'video_schedule' => array(
+            array(
+                'field' => 'datepickerstart',
+                'label' => 'Start Date',
+                'rules' => 'trim|required'
+            ),
+            array(
+                'field' => 'datepickerend',
+                'label' => 'End Date',
+                'rules' => 'trim|required'
+            )
+        ),
+        'videosrc_info' => array(
+            array(
+                'field' => 'source_url',
+                'label' => 'Source Url',
+                'rules' => 'trim|required|valid_url_format|url_exists'
+            ),
+            array(
+                'field' => 'content_provider',
+                'label' => 'Content Provider',
+                'rules' => 'trim|required'
+            ),
+            array(
+                'field' => 'title',
+                'label' => 'Title',
+                'rules' => 'trim|required'
+            ),
+            array(
+                'field' => 'category',
+                'label' => 'Category',
+                'rules' => 'trim|required'
+            )
+        )
+    );
+
     /*
-    /
-    /--------------------------------------------------------------------------------
-    /   function to show list of videos
-    /--------------------------------------------------------------------------------
-    /
-    */
+      /
+      /--------------------------------------------------------------------------------
+      /   function to show list of videos
+      /--------------------------------------------------------------------------------
+      /
+     */
+
+    function test() {
+        echo $this->validate(21, 2);
+    }
+
     
+
     function index() {
-        $searchterm='';
-        if($this->uri->segment(2) ==''){                
+        $searchterm = '';
+        if ($this->uri->segment(2) == '') {
             $this->session->unset_userdata('search_form');
         }
-        $sort = $this->uri->segment(3); 
+        $sort = $this->uri->segment(3);
         $sort_by = $this->uri->segment(4);
         $data['welcome'] = $this;
         switch ($sort) {
@@ -148,7 +156,7 @@
             $this->session->set_userdata('search_form', $_POST);
         } else if (isset($_POST['reset']) && $_POST['reset'] == 'Reset') {
             $this->session->unset_userdata('search_form');
-        } 
+        }
         $searchterm = $this->session->userdata('search_form');
         $this->load->library("pagination");
         $config = array();
@@ -164,19 +172,18 @@
         $data['total_rows'] = $config["total_rows"];
         $this->show_view('search_video', $data);
     }
-    
-    
+
     /*
-    /
-    /********************************************************************************
-    /   Video Edit Section Starts
-    /********************************************************************************
-    /
-    */
+      /
+      /********************************************************************************
+      /   Video Edit Section Starts
+      /********************************************************************************
+      /
+     */
 
     function videoOpr() {
         $per = $this->checkpermission($this->role_id, 'add');
-        if ($per){
+        if ($per) {
             $this->data['welcome'] = $this;
             $this->data['id'] = base64_decode(@$_GET['action']);
             $this->data['result'] = $this->videos_model->edit_profile($this->data['id']);
@@ -186,7 +193,7 @@
                     $this->videoprofile();
                     break;
                 case "Advanced":
-                     $this->videoprofileadvance();
+                    $this->videoprofileadvance();
                     //$this->show_video_view('videoEditAdvance', $this->data);
                     break;
                 case "Scheduling":
@@ -206,18 +213,18 @@
                 default:
                     $this->show_video_view('videoEditBasic', $this->data);
             }
-        }else{
+        } else {
             $this->session->set_flashdata('message', $this->_errormsg($this->loadPo($this->config->item('error_permission'))));
             redirect(base_url() . 'video');
         }
     }
 
     /*
-    /----------------------------------------------------------------
-    /   function to show video information or update video details
-    /----------------------------------------------------------------
-    */
-    
+      /----------------------------------------------------------------
+      /   function to show video information or update video details
+      /----------------------------------------------------------------
+     */
+
     function videoprofile() {
         $this->data['welcome'] = $this;
         $id = @$_GET['action'];
@@ -232,104 +239,102 @@
                     $post['feature_video'] = $this->input->post('feature_video') == 'on' ? 1 : 0;
                     $post_key = $_POST['tags'];
                     $this->videos_model->_saveVideo($post);
-                    $this->videos_model->_setKeyword($post_key, $vid);                    
+                    $this->videos_model->_setKeyword($post_key, $vid);
                     $msg = $this->loadPo($this->config->item('success_record_update'));
                     $this->log($this->user, $msg);
                     $this->session->set_flashdata('message', $this->_successmsg($msg));
                     redirect('video');
                 } else {
                     $this->data['result'] = (array) $this->videos_model->edit_profile($vid);
-                    $this->data['result']['keywords'] =  $this->videos_model->_getKeyword($vid);
+                    $this->data['result']['keywords'] = $this->videos_model->_getKeyword($vid);
                     $this->data['thumbnails_info'] = $this->videos_model->get_thumbs($vid);
                     $this->data['content_id'] = $vid;
                     $this->data['category'] = $this->videos_model->get_category($this->uid);
                     $this->data['genre'] = $this->Genre_model->getAllGenre();
                     $this->data['setting'] = $this->videos_model->getsetting($vid);
-                    $this->data['countryData'] = $this->videos_model->getCountryList(); 
+                    $this->data['countryData'] = $this->videos_model->getCountryList();
                     $this->show_video_view('videoEditBasic', $this->data);
                 }
             } else {
                 $this->data['result'] = (array) $this->videos_model->edit_profile($vid);
-                $this->data['result']['keywords'] =  $this->videos_model->_getKeyword($vid);
+                $this->data['result']['keywords'] = $this->videos_model->_getKeyword($vid);
                 $this->data['thumbnails_info'] = $this->videos_model->get_thumbs($vid);
                 $this->data['content_id'] = $vid;
                 $this->data['category'] = $this->videos_model->get_category($this->uid);
                 $this->data['genre'] = $this->Genre_model->getAllGenre();
                 $this->data['setting'] = $this->videos_model->getsetting($vid);
-                $this->data['countryData'] = $this->videos_model->getCountryList(); 
+                $this->data['countryData'] = $this->videos_model->getCountryList();
                 $this->show_video_view('videoEditBasic', $this->data);
             }
         }
     }
-    
-
-
-   /*
-   /--------------------------------------------------
-   /    function used for video advance
-   /-------------------------------------------------- 
-   */
-
-     function videoprofileadvance(){
-         $id = $this->uid;
-         $cid = base64_decode($_REQUEST['action']);
-	 $this->data['advance'] = $this->videos_model->get_videofieldadvance($id, $cid);
-        // echo "<pre>";
-        // print_r($this->data['advance']);
-        $GetData =array();
-        foreach($this->data['advance'] as $key => $val){
-           // echo $val[$key]['field_id'];
-              //print_r($val->field_id);
-         $GetData[$val->field_id]= $this->videos_model->fetchvalue($cid, $val->field_id);
-        } 
-        $value=array();
-        $data1= array();
-	 if(isset($_REQUEST['submit']) && $_REQUEST['submit'] =="Submit"){
-            $curl = $_POST['curl'];
-            unset($_POST['curl']);
-	     unset($_POST['submit']);
-            foreach ($_POST as $keyadvance => $values){
-            //echo $keyadvance."==>".$values."<br>";
-            $value[$keyadvance]= $values;
-            
-            $val = $this->videos_model->get_videofieldvalueadvance($keyadvance);
-             if(isset($val[0]->value)){
-                $val1[$keyadvance] = $val[0]->value;
-             }
-        }
-        
-       
-        $this->videos_model->save_videofieldvalueadvance($value);
-        $msg = $this->loadPo($this->config->item('success_record_update'));
-                $this->log($this->user, $msg);
-                $this->session->set_flashdata('message', $this->_successmsg($msg));
-         redirect($curl);
-        }
-         $this->data['fvalue'] = $GetData;
-        $this->show_video_view('videoEditAdvance', $this->data);
-     }
 
     /*
-    /----------------------------------------------------------------
-    /   function used for video scheduling
-    /----------------------------------------------------------------
-    */
-    
+      /--------------------------------------------------
+      /    function used for video advance
+      /--------------------------------------------------
+     */
+
+    function videoprofileadvance() {
+        $id = $this->uid;
+        $cid = base64_decode($_REQUEST['action']);
+        $this->data['advance'] = $this->videos_model->get_videofieldadvance($id, $cid);
+        // echo "<pre>";
+        // print_r($this->data['advance']);
+        $GetData = array();
+        foreach ($this->data['advance'] as $key => $val) {
+            // echo $val[$key]['field_id'];
+            //print_r($val->field_id);
+            $GetData[$val->field_id] = $this->videos_model->fetchvalue($cid, $val->field_id);
+        }
+        $value = array();
+        $data1 = array();
+        if (isset($_REQUEST['submit']) && $_REQUEST['submit'] == "Submit") {
+            $curl = $_POST['curl'];
+            unset($_POST['curl']);
+            unset($_POST['submit']);
+            foreach ($_POST as $keyadvance => $values) {
+                //echo $keyadvance."==>".$values."<br>";
+                $value[$keyadvance] = $values;
+
+                $val = $this->videos_model->get_videofieldvalueadvance($keyadvance);
+                if (isset($val[0]->value)) {
+                    $val1[$keyadvance] = $val[0]->value;
+                }
+            }
+
+
+            $this->videos_model->save_videofieldvalueadvance($value);
+            $msg = $this->loadPo($this->config->item('success_record_update'));
+            $this->log($this->user, $msg);
+            $this->session->set_flashdata('message', $this->_successmsg($msg));
+            redirect($curl);
+        }
+        $this->data['fvalue'] = $GetData;
+        $this->show_video_view('videoEditAdvance', $this->data);
+    }
+
+    /*
+      /----------------------------------------------------------------
+      /   function used for video scheduling
+      /----------------------------------------------------------------
+     */
+
     function video_scheduling() {
         $id = $this->data['id'];
         if (isset($_POST['submit']) && $_POST['submit'] == 'Submit') {
             $post['content_id'] = $id;
             $post['schedule'] = $this->input->post('r2');
             $data = $this->videos_model->get_scheduling($id);
-            if(isset($data[0])){
+            if (isset($data[0])) {
                 if ($data[0]->content_id == $id) {
                     if ($this->input->post('r2') == "Always") {
                         $post['startDate'] = '';
                         $post['endDate'] = '';
                         $this->videos_model->update_scheduling($post);
-                            $msg = $this->loadPo($this->config->item('success_video_schedule'));
-                            $this->log($this->user, $msg);
-                            $this->session->set_flashdata('message', $this->_successmsg($msg));
+                        $msg = $this->loadPo($this->config->item('success_video_schedule'));
+                        $this->log($this->user, $msg);
+                        $this->session->set_flashdata('message', $this->_successmsg($msg));
                         //redirect('video');
                     } else {
                         $post['startDate'] = date('Y-m-d', strtotime($this->input->post('datepickerstart'))) . ' ' . date('H:i:s', strtotime($this->input->post('timepickerstart')));
@@ -378,13 +383,12 @@
         }
     }
 
-    
     /*
-    /--------------------------------------------------------------------------------
-    /   function used for flavors section
-    /--------------------------------------------------------------------------------
-    */
-    
+      /--------------------------------------------------------------------------------
+      /   function used for flavors section
+      /--------------------------------------------------------------------------------
+     */
+
     function flavors() {
         $sess = $this->session->all_userdata();
         $this->data['welcome'] = $this;
@@ -396,14 +400,13 @@
             $this->show_video_view('videoEditFlavor', $this->data);
         }
     }
-    
-        
+
     /*
-    /********************************************************************************
-    /   VIDEO UPLOAD(FORM/YOUTUBE/OTHER) SECTION STARTS
-    /********************************************************************************
-    */      
-    
+      /********************************************************************************
+      /   VIDEO UPLOAD(FORM/YOUTUBE/OTHER) SECTION STARTS
+      /********************************************************************************
+     */
+
     function videoUploadSrc() {
         $per = $this->checkpermission($this->role_id, 'add');
         if ($per) {
@@ -435,13 +438,13 @@
             redirect(base_url() . 'video');
         }
     }
-            
+
     /*
-    /--------------------------------------------------------------------------------
-    /   function to upload video file using form
-    /--------------------------------------------------------------------------------
-    */
-    
+      /--------------------------------------------------------------------------------
+      /   function to upload video file using form
+      /--------------------------------------------------------------------------------
+     */
+
     function upload() {
         $per = $this->checkpermission($this->role_id, 'add');
         if ($per) {
@@ -449,22 +452,22 @@
             if (isset($_FILES['0']['tmp_name']) && $_FILES['0']['tmp_name'] != "") {
                 $tmpFilePath = $_FILES['0']['tmp_name'];
                 $originalFileName = $_FILES["0"]["name"];
-                $fileExt = $this->_getFileExtension($originalFileName); 
-                $fileUniqueName = uniqid().".".$fileExt;
+                $fileExt = $this->_getFileExtension($originalFileName);
+                $fileUniqueName = uniqid() . "." . $fileExt;
                 if (!in_array($fileExt, $this->allowedVideoExt)) {
                     $data['flag'] = '0';
                     $message = $this->loadPo($this->config->item('error_file_format'));
                     $data['message'] = $this->_errormsg($message);
                     echo json_encode($data);
                 } else {
-                    $videoresult = $this->_upload($tmpFilePath, $fileUniqueName, 'video'); 
-                    if($videoresult) {
+                    $videoresult = $this->_upload($tmpFilePath, $fileUniqueName, 'video');
+                    if ($videoresult) {
                         $data = array();
                         $data['content_title'] = $fileUniqueName;
                         $data['uid'] = $this->uid;
                         $data['filename'] = $fileUniqueName;
                         $data['relative_path'] = serverVideoRelPath . $fileUniqueName;
-                        $data['absolute_path'] = REAL_PATH.serverVideoRelPath.$fileUniqueName;
+                        $data['absolute_path'] = REAL_PATH . serverVideoRelPath . $fileUniqueName;
                         $data['minetype'] = "video/" . $fileExt;
                         $data['type'] = $fileExt;
                         $data['status'] = '0';
@@ -491,15 +494,15 @@
     }
 
     /*
-    /-------------------------------------------------------------
-    /   function used for video upload from youtube url 
-    /-------------------------------------------------------------
-    */
+      /-------------------------------------------------------------
+      /   function used for video upload from youtube url
+      /-------------------------------------------------------------
+     */
 
-    function youtube(){
+    function youtube() {
         $videoUrl = $_POST['url'];
         preg_match('%https?://(?:www\.)?youtube\.com/watch\?v=([^&]+)%', $videoUrl, $matches);
-        if($matches){
+        if ($matches) {
             $post = array();
             $tmp = $this->get_youtube($videoUrl);
             $youtubeData = $tmp['detail']['entry']->{'media$group'};
@@ -520,22 +523,21 @@
             $last_id = $this->videos_model->_saveVideo($post);
             //Save keywords
             $keyWordsData = $tmp['content']['keywords'];
-            $this->videos_model->_setKeyword(trim($keyWordsData),$last_id);
+            $this->videos_model->_setKeyword(trim($keyWordsData), $last_id);
             $id = base64_encode($last_id);
-            redirect(base_url().'video/videoOpr/Basic?action='.$id. '&');
+            redirect(base_url() . 'video/videoOpr/Basic?action=' . $id . '&');
         } else {
             $this->session->set_flashdata('message', $this->_errormsg($this->loadPo($this->config->item('error_youtube_url'))));
             redirect($_POST['redirect_url']);
         }
     }
-        
-    /*
-    /--------------------------------------------------------------------------------
-    /   function used for video upload from other source  
-    /--------------------------------------------------------------------------------
-    */
 
-    
+    /*
+      /--------------------------------------------------------------------------------
+      /   function used for video upload from other source
+      /--------------------------------------------------------------------------------
+     */
+
     function upload_other() {
         $data['welcome'] = $this;
         $sess = $this->session->all_userdata();
@@ -566,7 +568,7 @@
                         $this->session->set_flashdata('message', $this->_successmsg($msg));
                         redirect($redirect_url);
                     }
-                } else {                    
+                } else {
                     $msg = $this->loadPo($this->config->item('warning_video_source'));
                     $this->log($this->user, $msg);
                     $this->session->set_flashdata('message', $this->_warningmsg($msg));
@@ -581,14 +583,13 @@
             $this->show_view('upload_video', $data);
         }
     }
-    
-    /*
-    / ********************************************************************************
-    /   BULK UPLOAD(CSV/FTP) SECTION STARTS
-    / ********************************************************************************
-    */
 
-    
+    /*
+      / ********************************************************************************
+      /   BULK UPLOAD(CSV/FTP) SECTION STARTS
+      / ********************************************************************************
+     */
+
     function bulkupload() {
         $per = $this->checkpermission($this->role_id, 'add');
         if ($per) {
@@ -613,16 +614,15 @@
             redirect(base_url() . 'video');
         }
     }
-   
-   
+
     /*
-    /--------------------------------------------------------------------------------
-    /   function to upload video files usnig csv
-    /--------------------------------------------------------------------------------
-    /   
-    /
-    */
-    
+      /--------------------------------------------------------------------------------
+      /   function to upload video files usnig csv
+      /--------------------------------------------------------------------------------
+      /
+      /
+     */
+
     function csvupload() {
         $this->data['welcome'] = $this;
         $per = $this->checkpermission($this->role_id, 'add');
@@ -632,8 +632,8 @@
             $keywords = $_POST['keyword'];
             $url = $_POST['url'];
             $description = $_POST['description'];
-            $rowID = $_POST['rowId'];  
-            if($this->remoteFileExists($url)){
+            $rowID = $_POST['rowId'];
+            if ($this->remoteFileExists($url)) {
                 $videoFileSrcPath = $url;
                 $videoFileExt = $this->_getFileExtensionUrl($videoFileSrcPath);
                 $videoFileUniqName = uniqid() . "." . $videoFileExt;
@@ -641,9 +641,9 @@
                 $post['content_provider'] = 'selfvideo';
                 $post['uid'] = $this->uid;
                 $post['created'] = date('Y-m-d');
-                $catId = $this->category_model->getCatId($category, $this->uid); 
-                if (in_array($videoFileExt, $this->allowedVideoExt)) {							
-                    $fieDestPath =  REAL_PATH.serverVideoRelPath. $videoFileUniqName;
+                $catId = $this->category_model->getCatId($category, $this->uid);
+                if (in_array($videoFileExt, $this->allowedVideoExt)) {
+                    $fieDestPath = REAL_PATH . serverVideoRelPath . $videoFileUniqName;
                     $videoresult = $this->_uploadFileCurl($videoFileSrcPath, $fieDestPath, $videoFileUniqName);
                     if ($videoresult == '1') {
                         $contentData = array();
@@ -654,16 +654,16 @@
                         $contentData['uid'] = $this->uid;
                         $contentData['filename'] = $videoFileUniqName;
                         $contentData['relative_path'] = serverVideoRelPath . $videoFileUniqName;
-                        $contentData['absolute_path'] = REAL_PATH.serverVideoRelPath . $videoFileUniqName;
+                        $contentData['absolute_path'] = REAL_PATH . serverVideoRelPath . $videoFileUniqName;
                         $contentData['minetype'] = "video/" . $videoFileExt;
                         $contentData['type'] = $videoFileExt;
                         $contentData['status'] = '1';
                         $contentData['info'] = base64_encode($videoFileUniqName);
                         $lastId = $this->videos_model->_saveVideo($contentData);
-                       
+
                         //Insert keywords
-                        if(isset($keywords) && $keywords != ''){
-                            $this->videos_model->_setKeyword(str_replace("|",",",$keywords), $lastId);
+                        if (isset($keywords) && $keywords != '') {
+                            $this->videos_model->_setKeyword(str_replace("|", ",", $keywords), $lastId);
                         }
                         if ($lastId != '') {
                             $message = $this->loadPo($this->config->item('success_file_upload'));
@@ -671,7 +671,7 @@
                             //$data['message'] = $this->_successmsg($message);
                             $data['message'] = 'success';
                             $data['rowId'] = $rowID;
-                        } 
+                        }
                     } else {
                         $message = $this->loadPo($this->config->item('error_file_upload'));
                         $this->log($this->user, $message);
@@ -686,52 +686,51 @@
                     $data['message'] = 'error';
                     $data['rowId'] = $rowID;
                 }
-            }else{
+            } else {
                 //$data['message'] = $this->_errormsg($this->loadPo($row['url'].$this->config->item('error_file_found')));
                 $data['message'] = 'error';
                 $data['rowId'] = $rowID;
             }
             echo json_encode($data);
-        //$this->show_view('bulkupload', $this->data);
+            //$this->show_view('bulkupload', $this->data);
         } else {
             $this->session->set_flashdata('message', $this->_errormsg($this->loadPo($this->config->item('error_permission'))));
             redirect(base_url() . 'video');
         }
     }
-    
-    
+
     /*
-    /--------------------------------------------------------------------------------
-    /   function to connect with ftp
-    /--------------------------------------------------------------------------------
-    /   
-    / 	$ftp_server            = server host name 
-    / 	$ftp_username          = username
-    /   $ftp_userpass          = Password
-    /
-    */
-    
+      /--------------------------------------------------------------------------------
+      /   function to connect with ftp
+      /--------------------------------------------------------------------------------
+      /
+      / 	$ftp_server            = server host name
+      / 	$ftp_username          = username
+      /   $ftp_userpass          = Password
+      /
+     */
+
     public function ftpLogin() {
         $ftp_server = $_POST['ftpserver'];
         $ftp_username = $_POST['username'];
         $ftp_userpass = $_POST['password'];
         $ftp_path = $_POST['ftpPath'];
-        if($ftp_server !="" && $ftp_username != "" && $ftp_userpass != "") { 
+        if ($ftp_server != "" && $ftp_username != "" && $ftp_userpass != "") {
             $ftp_conn = ftp_connect($ftp_server) or die("Could not connect to $ftp_server");
             if ($ftp_conn) {
-               $ftpLogin = ftp_login($ftp_conn, $ftp_username, $ftp_userpass);
-               if($ftpLogin) {
+                $ftpLogin = ftp_login($ftp_conn, $ftp_username, $ftp_userpass);
+                if ($ftpLogin) {
                     $ftp_path = $ftp_path != '' ? $ftp_path : '/';
                     $rawfiles = ftp_rawlist($ftp_conn, $ftp_path); //true being for recursive					
                     $tmpData = array();
                     $result = '';
                     $message = '';
-		    $response['data'] = array();
+                    $response['data'] = array();
                     if ($ftp_path != '/') {
                         $tmp = explode('/', substr($_POST['ftpPath'], 0, -1));
                         array_pop($tmp);
                         $tmp = implode('/', $tmp) . '/';
-			$tmpData['dir'][] = array('name' => '..', 'path' => $tmp);
+                        $tmpData['dir'][] = array('name' => '..', 'path' => $tmp);
                     }
                     foreach ($rawfiles as $rawfile) {
                         $info = preg_split("/[\s]+/", $rawfile, 9);
@@ -768,7 +767,7 @@
 
                     if (isset($tmpData['file'])) {
                         foreach ($tmpData['file'] as $key => $val) {
-                            $fileExt = $this->_getFileExtension($val[8]); 
+                            $fileExt = $this->_getFileExtension($val[8]);
                             if (in_array($fileExt, $this->allowedVideoExt)) {
                                 $size = round((intval(trim($val[4])) / 1048576), 2);
                                 $modified = date('d/m/Y', strtotime($info[6] . ' ' . $info[5] . ' ' . $info[7]));
@@ -785,10 +784,10 @@
                     }
                     $result = 'success';
                     $response['data'] .= '</table></div>';
-               } else {
+                } else {
                     $result = 'error';
                     $message = $this->_warningmsg($this->loadPo($this->config->item('warning_username_password')));
-               }
+                }
             } else {
                 $result = 'error';
                 $message = $this->_warningmsg($this->loadPo($this->config->item('error_server_connect')));
@@ -802,22 +801,20 @@
         echo json_encode($response);
     }
 
-    
     /*
-    /--------------------------------------------------------------------------------
-    /   function to download files from ftp server
-    /--------------------------------------------------------------------------------
-    /   
-    / 	$ftp_server            = server host name 
-    / 	$ftp_username          = username
-    /   $ftp_userpass          = Password
-    /
-    */  
-    
+      /--------------------------------------------------------------------------------
+      /   function to download files from ftp server
+      /--------------------------------------------------------------------------------
+      /
+      / 	$ftp_server            = server host name
+      / 	$ftp_username          = username
+      /   $ftp_userpass          = Password
+      /
+     */
 
     public function uploadFtp() {
         // connect and login to FTP server
-	$ftp_server = $_POST['ftpserver'];
+        $ftp_server = $_POST['ftpserver'];
         $ftp_username = $_POST['username'];
         $ftp_userpass = $_POST['password'];
         $ftp_conn = ftp_connect($ftp_server) or die("Could not connect to $ftp_server");
@@ -827,18 +824,18 @@
         $filesArr = explode(",", rtrim($fileNameArr, ','));
         for ($i = 0; $i < count($filesArr); $i++) {
             $fileName = $filesArr[$i];
-            $fileExt = $this->_getFileExtension($fileName); 
+            $fileExt = $this->_getFileExtension($fileName);
             $fileNameUniq = uniqid() . "." . $fileExt;
             $fieSrcPath = $this->input->post('ftpPath') . $fileName;
-            $fieDestPath =  REAL_PATH.serverVideoRelPath. $fileNameUniq;
+            $fieDestPath = REAL_PATH . serverVideoRelPath . $fileNameUniq;
             $msg = "";
             if (!in_array($fileExt, $this->allowedVideoExt)) {
-                $msg = $this->loadPo($this->config->item('error_file_format').$fileName);
-		$this->log($this->user, $msg);
+                $msg = $this->loadPo($this->config->item('error_file_format') . $fileName);
+                $this->log($this->user, $msg);
                 $data['message'] = $this->_errormsg($msg);
             } else {
                 $videoresult = $this->_downloadFileFtp($fieSrcPath, $fieDestPath, $ftp_conn);
-                if($videoresult) {
+                if ($videoresult) {
                     $fileInfo = $this->getFileInfo($fieDestPath);
                     $mimeType = $fileInfo['mime_type'];
                     $data = array();
@@ -847,7 +844,7 @@
                     $data['type'] = 'FTP';
                     $data['filename'] = $fileNameUniq;
                     $data['relative_path'] = serverVideoRelPath . $fileNameUniq;
-                    $data['absolute_path'] = REAL_PATH.serverVideoRelPath . $fileNameUniq;
+                    $data['absolute_path'] = REAL_PATH . serverVideoRelPath . $fileNameUniq;
                     $data['minetype'] = $mimeType;
                     $data['type'] = $fileExt;
                     $data['status'] = '0';
@@ -861,7 +858,7 @@
                     $msg = $this->loadPo($this->config->item('error_file_upload'));
                     $this->log($this->user, $msg);
                     $data['message'] = $this->_errormsg($msg);
-                }                    
+                }
             }
         }
         ftp_close($ftp_conn);
@@ -869,58 +866,56 @@
     }
 
     /*
-    /--------------------------------------------------------------------------------
-    /   function used to check remote file existance
-    /--------------------------------------------------------------------------------
-    /
-    /   $url = remote file path
-    */
-        
+      /--------------------------------------------------------------------------------
+      /   function used to check remote file existance
+      /--------------------------------------------------------------------------------
+      /
+      /   $url = remote file path
+     */
+
     function remoteFileExists($url) {
         $curl = curl_init($url);
         //don't fetch the actual page, you only want to check the connection is ok
         curl_setopt($curl, CURLOPT_NOBODY, true);
-        
+
         //do request
         $result = curl_exec($curl);
         $ret = false;
         //if request did not fail
         if ($result !== false) {
             //if request was ok, check response code
-            $statusCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);  
+            $statusCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
             if ($statusCode == 200) {
-                $ret = true;   
+                $ret = true;
             }
         }
         curl_close($curl);
         return $ret;
     }
-    
+
     /*
-    /--------------------------------------------------------------------------------
-    /   function used to get video file size
-    /--------------------------------------------------------------------------------
-    */
-    
+      /--------------------------------------------------------------------------------
+      /   function used to get video file size
+      /--------------------------------------------------------------------------------
+     */
+
     public function Size_file() {
         $incoming_original = $this->input->post('chk');
         $incoming_size = $this->input->post('files');
         $extension = end(explode(".", $incoming_original));
         $video_name = $incoming_original;
-        $local_file = base_url()."assets/videos/" . $incoming_original;
+        $local_file = base_url() . "assets/videos/" . $incoming_original;
         $Size1 = filesize($local_file);
         $Size = round((intval(trim($Size1)) / 1048576), 2);
         echo $Size;
     }
-    
-  
-  
-      /*
-    /--------------------------------------------------------------------------------
-    /   function to delete video(from server/database)
-    /--------------------------------------------------------------------------------
-    */
-    
+
+    /*
+      /--------------------------------------------------------------------------------
+      /   function to delete video(from server/database)
+      /--------------------------------------------------------------------------------
+     */
+
     function deletevideo() {
         $per = $this->checkpermission($this->role_id, 'delete');
         $redirect_url = $_GET['curl'];
@@ -929,21 +924,21 @@
             $id = $_GET['id'];
             $fileName = $this->videos_model->get_videoInfo($id);
             $thumbInfo = $this->videos_model->getThumbsInfo($id);
-            if(!empty($thumbInfo)){
+            if (!empty($thumbInfo)) {
                 $thumbCount = count($thumbInfo);
-                for($i=0; $i<$thumbCount; $i++) {
-                    $delResultThumb = $this->_deleteFile($thumbInfo[$i]->name, REAL_PATH.serverImageRelPath);
-                    $delResultThumbSmall = $this->_deleteFile($thumbInfo[$i]->name, REAL_PATH.THUMB_SMALL_PATH);
-                    $delResultThumbMedium = $this->_deleteFile($thumbInfo[$i]->name, REAL_PATH.THUMB_MEDIUM_PATH);
-                    $delResultThumbLarge = $this->_deleteFile($thumbInfo[$i]->name, REAL_PATH.THUMB_LARGE_PATH);
-                }                                   
-            }                
-            $delResult = $this->_deleteFile($fileName, REAL_PATH.serverVideoRelPath);
+                for ($i = 0; $i < $thumbCount; $i++) {
+                    $delResultThumb = $this->_deleteFile($thumbInfo[$i]->name, REAL_PATH . serverImageRelPath);
+                    $delResultThumbSmall = $this->_deleteFile($thumbInfo[$i]->name, REAL_PATH . THUMB_SMALL_PATH);
+                    $delResultThumbMedium = $this->_deleteFile($thumbInfo[$i]->name, REAL_PATH . THUMB_MEDIUM_PATH);
+                    $delResultThumbLarge = $this->_deleteFile($thumbInfo[$i]->name, REAL_PATH . THUMB_LARGE_PATH);
+                }
+            }
+            $delResult = $this->_deleteFile($fileName, REAL_PATH . serverVideoRelPath);
             $videoFileExt = $this->_getFileExtension($fileName);
             $fileNameInitial = basename($fileName, $videoFileExt);
-            $delResult_2g = $this->_deleteFile($fileNameInitial.'_2g.mp4', REAL_PATH.serverVideoRelPath);
-            $delResult_3g = $this->_deleteFile($fileNameInitial.'_3g.mp4', REAL_PATH.serverVideoRelPath);
-            $delResult_hd = $this->_deleteFile($fileNameInitial.'_hd.mp4', REAL_PATH.serverVideoRelPath);
+            $delResult_2g = $this->_deleteFile($fileNameInitial . '_2g.mp4', REAL_PATH . serverVideoRelPath);
+            $delResult_3g = $this->_deleteFile($fileNameInitial . '_3g.mp4', REAL_PATH . serverVideoRelPath);
+            $delResult_hd = $this->_deleteFile($fileNameInitial . '_hd.mp4', REAL_PATH . serverVideoRelPath);
             $result = $this->videos_model->delete_video($id);
             if ($result == '1') {
                 $msg = $this->loadPo($this->config->item('success_record_delete'));
@@ -955,14 +950,14 @@
             $this->session->set_flashdata('message', $this->_errormsg($this->loadPo($this->config->item('error_permission'))));
             redirect(base_url() . 'video');
         }
-    }  
-  
+    }
+
     /*
-    /********************************************************************************
-    /   function used for video setting section starts
-    /********************************************************************************
-    */
-    
+      /********************************************************************************
+      /   function used for video setting section starts
+      /********************************************************************************
+     */
+
     function setting() {
         $this->data['welcome'] = $this;
         $sess = $this->session->all_userdata();
@@ -980,7 +975,7 @@
                 $this->data['playerData'] = $this->videos_model->getPlayerData($uid);
                 $this->show_view('video_settings', $this->data);
                 break;
-                        case "country":
+            case "country":
                 $this->data['countryData'] = $this->videos_model->getCountryList();
                 $this->show_view('video_settings', $this->data);
                 break;
@@ -989,13 +984,13 @@
                 $this->show_view('video_settings', $this->data);
         }
     }
-    
+
     /*
-    /--------------------------------------------------------------------------------
-    /   function used for video flavor setting 
-    /--------------------------------------------------------------------------------
-    */
-    
+      /--------------------------------------------------------------------------------
+      /   function used for video flavor setting
+      /--------------------------------------------------------------------------------
+     */
+
     function setting_flavor() {
         $data['welcome'] = $this;
         $sess = $this->session->all_userdata();
@@ -1028,13 +1023,13 @@
             $this->show_view('video_settings', $data);
         }
     }
-    
+
     /*
-    /--------------------------------------------------------------------------------
-    /   function used for video player setting 
-    /--------------------------------------------------------------------------------
-    */
-    
+      /--------------------------------------------------------------------------------
+      /   function used for video player setting
+      /--------------------------------------------------------------------------------
+     */
+
     function setting_player() {
         $data['welcome'] = $this;
         $data['tab'] = 'Player';
@@ -1122,44 +1117,40 @@
             $this->show_view('video_settings', $data);
         }
     }
-    
-	
-            
-    
+
     /*
-    /--------------------------------------------------------------------------------
-    /   function used for live streaming section 
-    /--------------------------------------------------------------------------------
-    */
-    
+      /--------------------------------------------------------------------------------
+      /   function used for live streaming section
+      /--------------------------------------------------------------------------------
+     */
+
     function live_streaming() {
-        if(isset($_POST['save'])){
+        if (isset($_POST['save'])) {
             $this->videos_model->saveUrl($_POST['url'], $this->uid);
             $msg = $this->loadPo($this->config->item('success_record_update'));
             $this->log($this->user, $msg);
             $this->session->set_flashdata('message', $this->_successmsg($msg));
-            redirect(base_url()."video/live_streaming");
+            redirect(base_url() . "video/live_streaming");
         }
         $data['url'] = $this->videos_model->getLivestream($this->uid);
         $data['welcome'] = $this;
         $this->show_view('live_streaming', $data);
     }
-    
-    function deleteLive(){
+
+    function deleteLive() {
         $this->videos_model->deleteUrl($this->uid);
         $msg = $this->loadPo($this->config->item('success_record_delete'));
         $this->log($this->user, $msg);
         $this->session->set_flashdata('message', $this->_successmsg($msg));
-        redirect(base_url()."video/live_streaming");
+        redirect(base_url() . "video/live_streaming");
     }
 
-
     /*
-    / ********************************************************************************
-    /   Thumbnail Section Starts
-    / ********************************************************************************
-    */
-    
+      / ********************************************************************************
+      /   Thumbnail Section Starts
+      / ********************************************************************************
+     */
+
     function thumbnails() {
         $sess = $this->session->all_userdata();
         $this->data['welcome'] = $this;
@@ -1174,13 +1165,12 @@
         }
     }
 
-    
     /*
-    /--------------------------------------------------------------------------------
-    /   function used to upload thumbnail
-    /--------------------------------------------------------------------------------
-    */
-    
+      /--------------------------------------------------------------------------------
+      /   function used to upload thumbnail
+      /--------------------------------------------------------------------------------
+     */
+
     function upload_thumb() {
         $data['welcome'] = $this;
         $content_id = $_REQUEST['content_id'];
@@ -1188,27 +1178,27 @@
         if ($content_id != "") {
             if (isset($_FILES['thumb_img']['tmp_name']) && $_FILES['thumb_img']['tmp_name'] != "") {
                 $tmpFileName = $_FILES['thumb_img']['tmp_name'];
-                $fileExt = $this->_getFileExtension($_FILES['thumb_img']["name"]); 
+                $fileExt = $this->_getFileExtension($_FILES['thumb_img']["name"]);
                 $fileUniqueName = uniqid() . "." . $fileExt;
                 if (!in_array($fileExt, $this->allowedImageExt)) {
                     $msg = $this->loadPo($this->config->item('error_file_format'));
                     $this->log($this->user, $msg);
                     $this->data['error'] = $msg;
-                    $this->show_video_view('videoEditThumbnail', $this->data);                
+                    $this->show_video_view('videoEditThumbnail', $this->data);
                 } else {
-                    $videoresult = $this->_upload($tmpFileName, $fileUniqueName, 'thumb'); 
-                    if($videoresult) {
-                        list($width, $height, $type, $attr) = getimagesize(REAL_PATH.serverImageRelPath.$fileUniqueName);
+                    $videoresult = $this->_upload($tmpFileName, $fileUniqueName, 'thumb');
+                    if ($videoresult) {
+                        list($width, $height, $type, $attr) = getimagesize(REAL_PATH . serverImageRelPath . $fileUniqueName);
                         switch ($type) {
                             case "1":
-                                    $imageType = 'image/gif';
-                                    break;
+                                $imageType = 'image/gif';
+                                break;
                             case "2":
-                                    $imageType = 'image/jpg';
-                                    break;
+                                $imageType = 'image/jpg';
+                                break;
                             case "3":
-                                    $imageType = 'image/png';
-                                    break;
+                                $imageType = 'image/png';
+                                break;
                         }
                         $type = 'thumbnail';
                         $fileData = array();
@@ -1218,8 +1208,8 @@
                         $fileData['minetype'] = $imageType;
                         $fileData['width'] = $width;
                         $fileData['height'] = $height;
-                        $fileData['relative_path'] = serverImageRelPath.$fileUniqueName;
-                        $fileData['absolute_path'] = REAL_PATH.serverImageRelPath.$fileUniqueName;
+                        $fileData['relative_path'] = serverImageRelPath . $fileUniqueName;
+                        $fileData['absolute_path'] = REAL_PATH . serverImageRelPath . $fileUniqueName;
                         $fileData['status'] = '0';
                         $fileData['uid'] = $this->uid;
                         $data_postFile = @serialize($fileData);
@@ -1236,32 +1226,32 @@
                         $this->show_video_view('videoEditThumbnail', $data);
                     }
                 }
-                                //$videoresult = $this->upload_move_file($incoming_tmp, $incoming_original, $path);
+                //$videoresult = $this->upload_move_file($incoming_tmp, $incoming_original, $path);
             } else {
                 $this->show_video_view('videoEditThumbnail', $this->data);
-            }		
+            }
         } else {
             redirect($redirect_url);
         }
     }
 
     /*
-    /--------------------------------------------------------------------------------
-    /   function used to crop thumb 
-    /--------------------------------------------------------------------------------
-    */
-    
+      /--------------------------------------------------------------------------------
+      /   function used to crop thumb
+      /--------------------------------------------------------------------------------
+     */
+
     function crop_thumb() {
         $this->data['welcome'] = $this;
         $thumb_imgName = $_REQUEST['thumb_imgName'];
         $content_id = $_REQUEST['content_id'];
         $redirect_url = $_REQUEST['redirect_url'];
-        $fileExt = $this->_getFileExtension($thumb_imgName); 
+        $fileExt = $this->_getFileExtension($thumb_imgName);
         $fileUniqueName = uniqid() . "." . $fileExt;
-        $fileDestPath = REAL_PATH.serverImageRelPath. $fileUniqueName;
+        $fileDestPath = REAL_PATH . serverImageRelPath . $fileUniqueName;
         $targ_w = $targ_h = 170;
         $jpeg_quality = 90;
-        $fileSrcPath = REAL_PATH.serverImageRelPath.$thumb_imgName;       
+        $fileSrcPath = REAL_PATH . serverImageRelPath . $thumb_imgName;
 
         switch ($fileExt) {
             case "1":
@@ -1297,44 +1287,44 @@
                 imagejpeg($dst_r, $fileDestPath, $jpeg_quality);
                 break;
         }
-                $result = $this->_upload($fileSrcPath, $fileUniqueName, 'thumb');
-                if($result) {
-                    $type = 'thumbnail';
-                    $fileData = array();
-                    $fileData['content_id'] = $content_id;
-                    $fileData['filename'] = $fileUniqueName;
-                    $fileData['type'] = $type;
-                    $fileData['minetype'] = $imageType;
-                    $fileData['width'] = $targ_w;
-                    $fileData['height'] = $targ_h;
-                    $fileData['relative_path'] = serverImageRelPath . $fileUniqueName;
-                    $fileData['absolute_path'] = REAL_PATH.serverImageRelPath . $fileUniqueName;
-                    $fileData['status'] = '0';
-                    $fileData['uid'] = $this->uid;
-                    $fileData['created'] = date('Y-m-d');
-                    $data_postThumb = @serialize($fileData);
-                    $data_thumb = base64_encode($data_postThumb);
-                    $fileData['info'] = $data_thumb;
+        $result = $this->_upload($fileSrcPath, $fileUniqueName, 'thumb');
+        if ($result) {
+            $type = 'thumbnail';
+            $fileData = array();
+            $fileData['content_id'] = $content_id;
+            $fileData['filename'] = $fileUniqueName;
+            $fileData['type'] = $type;
+            $fileData['minetype'] = $imageType;
+            $fileData['width'] = $targ_w;
+            $fileData['height'] = $targ_h;
+            $fileData['relative_path'] = serverImageRelPath . $fileUniqueName;
+            $fileData['absolute_path'] = REAL_PATH . serverImageRelPath . $fileUniqueName;
+            $fileData['status'] = '0';
+            $fileData['uid'] = $this->uid;
+            $fileData['created'] = date('Y-m-d');
+            $data_postThumb = @serialize($fileData);
+            $data_thumb = base64_encode($data_postThumb);
+            $fileData['info'] = $data_thumb;
 
-                    $file_id = $this->videos_model->_saveThumb($fileData);
-                    $msg = $this->loadPo($this->config->item('success_image_crop'));
-                    $this->log($this->user, $msg);
-                    $this->session->set_flashdata('message', $this->_successmsg($msg));
-                } else {
-                    $msg = $this->loadPo($this->config->item('error_file_upload'));
-                    $this->log($this->user, $msg);
-                    $this->data['message'] = $msg;
-                    $this->show_video_view('videoEditThumbnail', $this->data);
-                }
+            $file_id = $this->videos_model->_saveThumb($fileData);
+            $msg = $this->loadPo($this->config->item('success_image_crop'));
+            $this->log($this->user, $msg);
+            $this->session->set_flashdata('message', $this->_successmsg($msg));
+        } else {
+            $msg = $this->loadPo($this->config->item('error_file_upload'));
+            $this->log($this->user, $msg);
+            $this->data['message'] = $msg;
+            $this->show_video_view('videoEditThumbnail', $this->data);
+        }
         redirect($redirect_url);
     }
 
     /*
-    /--------------------------------------------------------------------------------
-    /   function used to set default thumb 
-    /--------------------------------------------------------------------------------
-    */
-    
+      /--------------------------------------------------------------------------------
+      /   function used to set default thumb
+      /--------------------------------------------------------------------------------
+     */
+
     public function set_defltimage() {
         $sess = $this->session->all_userdata();
         $content_id = @$_GET['cid'];
@@ -1346,12 +1336,12 @@
         $this->session->set_flashdata('message', $this->_successmsg($msg));
         redirect($redirect_url);
     }
-    
+
     /*
-    /--------------------------------------------------------------------------------
-    /   function used to delete thumb 
-    /--------------------------------------------------------------------------------
-    */
+      /--------------------------------------------------------------------------------
+      /   function used to delete thumb
+      /--------------------------------------------------------------------------------
+     */
 
     public function delele_thumbimage() {
         $sess = $this->session->all_userdata();
@@ -1359,11 +1349,11 @@
         $file_id = @$_GET['fid'];
         $redirect_url = @$_GET['redirect_url'];
         $fileName = $this->videos_model->getThumbImgName($file_id);
-        if($fileName) {
-            $delResultThumb = $this->_deleteFile($fileName, REAL_PATH.serverImageRelPath);
-            $delResultThumbSmall = $this->_deleteFile($fileName, REAL_PATH.THUMB_SMALL_PATH);
-            $delResultThumbMedium = $this->_deleteFile($fileName, REAL_PATH.THUMB_MEDIUM_PATH);
-            $delResultThumbLarge = $this->_deleteFile($fileName, REAL_PATH.THUMB_LARGE_PATH);
+        if ($fileName) {
+            $delResultThumb = $this->_deleteFile($fileName, REAL_PATH . serverImageRelPath);
+            $delResultThumbSmall = $this->_deleteFile($fileName, REAL_PATH . THUMB_SMALL_PATH);
+            $delResultThumbMedium = $this->_deleteFile($fileName, REAL_PATH . THUMB_MEDIUM_PATH);
+            $delResultThumbLarge = $this->_deleteFile($fileName, REAL_PATH . THUMB_LARGE_PATH);
             $result = $this->videos_model->deleleThumb($content_id, $file_id);
             $msg = $this->loadPo($this->config->item('success_record_delete'));
             $this->log($this->user, $msg);
@@ -1371,21 +1361,20 @@
             redirect($redirect_url);
         }
     }
-    
+
     /*
-    /--------------------------------------------------------------------------------
-    /   function used to download thumb 
-    /--------------------------------------------------------------------------------
-    */
+      /--------------------------------------------------------------------------------
+      /   function used to download thumb
+      /--------------------------------------------------------------------------------
+     */
 
     function download_thumb() {
         $sess = $this->session->all_userdata();
         $fileName = @$_GET['fileName'];
         $redirect_url = @$_GET['redirect_url'];
-        $fullPath = REAL_PATH.serverImageRelPath.$fileName;
+        $fullPath = REAL_PATH . serverImageRelPath . $fileName;
         $downloadResult = $this->_downloadFile($fileName, $fullPath);
-        if(!$downloadResult)
-        {
+        if (!$downloadResult) {
             $msg = $this->loadPo($this->config->item('error_file_found'));
             $this->log($this->user, $msg);
             $this->session->set_flashdata('message', $this->_errormsg($msg));
@@ -1393,15 +1382,12 @@
         }
     }
 
-
- 
     /*
-    /********************************************************************************
-    /   PROMO SECTION STARTS
-    /********************************************************************************
-    */
-   
-        
+      /********************************************************************************
+      /   PROMO SECTION STARTS
+      /********************************************************************************
+     */
+
     function promo() {
         $sess = $this->session->all_userdata();
         $this->data['welcome'] = $this;
@@ -1427,7 +1413,7 @@
             $this->show_video_view('videoPromo', $this->data);
         }
     }
-    
+
     function promoInfo() {
         $sess = $this->session->all_userdata();
         $this->data['welcome'] = $this;
@@ -1435,32 +1421,31 @@
         echo $end_time = $_REQUEST['end_time_video'];
         exit;
     }
-    
-    /*
-    /--------------------------------------------------------------------------------
-    /   function used to show video detail page 
-    /--------------------------------------------------------------------------------
-    */
 
-    function detail(){
+    /*
+      /--------------------------------------------------------------------------------
+      /   function used to show video detail page
+      /--------------------------------------------------------------------------------
+     */
+
+    function detail() {
         $data['welcome'] = $this;
         $id = $this->uri->segment(3);
-        if($id == ""){
-            redirect(base_url().'video');
+        if ($id == "") {
+            redirect(base_url() . 'video');
         }
         $result = $this->videos_model->video_detail($id);
         $data['result'] = $result;
-     
+
         $this->show_view('videodetail', $data);
     }
-        
+
     /*
-    /--------------------------------------------------------------------------------
-    /   function used for test log
-    /--------------------------------------------------------------------------------
-    */  
-            
-    
+      /--------------------------------------------------------------------------------
+      /   function used for test log
+      /--------------------------------------------------------------------------------
+     */
+
     function testlog() {
         $user = 'admin';
         $id = $_GET['id'];
@@ -1468,14 +1453,13 @@
         $this->log($user, $msg);
         redirect(base_url() . 'video/videoprofile?action=NTQ=&');
     }
-    
-    /*
-    /*********************************************************************************
-    /   VIDEO STATUS SECTION STARTS
-    /*********************************************************************************
-    */
 
-    
+    /*
+      /*********************************************************************************
+      /   VIDEO STATUS SECTION STARTS
+      /*********************************************************************************
+     */
+
     function video_status() {
         $this->load->library("pagination");
         $config = array();
@@ -1491,12 +1475,12 @@
         $data['total_rows'] = $config["total_rows"];
         $this->show_view('video_status', $data);
     }
-    
+
     /*
-    /--------------------------------------------------------------------------------
-    /   function used to change status
-    /--------------------------------------------------------------------------------
-    */  
+      /--------------------------------------------------------------------------------
+      /   function used to change status
+      /--------------------------------------------------------------------------------
+     */
 
     function changeStatus() {
         $curr_url = $_GET['redirecturl'];
@@ -1512,7 +1496,7 @@
         $id = $data['content_id'];
         if ($data['status'] == 'pending' || $data['status'] == 'inprocess') {
             //echo 'hello';
-            $msg = $this->loadPo($this->config->item('success_flavor_status_change'). '=' . $id);
+            $msg = $this->loadPo($this->config->item('success_flavor_status_change') . '=' . $id);
             $this->log($this->user, $msg);
             $this->session->set_flashdata('message', $this->_successmsg($msg));
             redirect($curr_url);
@@ -1520,34 +1504,33 @@
     }
 
     /*
-    /--------------------------------------------------------------------------------
-    /   function used to render video
-    /--------------------------------------------------------------------------------
-    */  
+      /--------------------------------------------------------------------------------
+      /   function used to render video
+      /--------------------------------------------------------------------------------
+     */
 
-    function rendervideo(){
+    function rendervideo() {
         $data['path'] = base64_decode($_GET['path']);
-        $this->load->view('rendervideo',$data);    
+        $this->load->view('rendervideo', $data);
     }
-    
-    
+
     /*
-    /--------------------------------------------------------------------------------
-    /   function used to debug video information
-    /--------------------------------------------------------------------------------
-    */  
+      /--------------------------------------------------------------------------------
+      /   function used to debug video information
+      /--------------------------------------------------------------------------------
+     */
 
     function debug() {
         $data['welcome'] = $this;
-        $searchterm='';
-        if($this->uri->segment(3) ==''){                
+        $searchterm = '';
+        if ($this->uri->segment(3) == '') {
             $this->session->unset_userdata('search_form');
         }
         if (isset($_POST['submit']) && $_POST['submit'] == 'Search') {
             $this->session->set_userdata('search_form', $_POST);
         } else if (isset($_POST['reset']) && $_POST['reset'] == 'Reset') {
             $this->session->unset_userdata('search_form');
-        } 
+        }
         $searchterm = $this->session->userdata('search_form');
         $this->load->library("pagination");
         $config = array();
@@ -1557,13 +1540,11 @@
         $data['result'] = $this->videos_model->debugVideoInfo($this->uid, $searchterm);
         $data["links"] = $this->pagination->create_links();
         $data['total_rows'] = $config["total_rows"];
-        $this->show_view('debuginfo',$data);    
-
+        $this->show_view('debuginfo', $data);
     }
+
 }
-    
-        
-    
-    /* End of file welcome.php */
+
+/* End of file welcome.php */
     /* Location: ./application/controllers/welcome.php */
             

@@ -160,8 +160,7 @@ class Package extends MY_Controller {
         $pid = $this->uri->segment(3);
         $cid = $this->uri->segment(4);                               
         $this->Package_model->add_video($pid, $cid);
-        
-        echo json_encode(array('success'=>TRUE,'message'=>"Article deleted"));
+        echo json_encode(array('success'=>TRUE,'message'=>"Article added"));
     }
     function delete(){
         $id = $this->uri->segment(3);

@@ -1,5 +1,4 @@
 <?php
-
 ini_set('display_errors', 'On');
 
 class Event extends MY_Controller {
@@ -45,9 +44,6 @@ class Event extends MY_Controller {
             $post['uid'] = $this->uid;
             $post['description'] = $_POST['description'];
             $post['status'] = $_POST['status'];
-            
-            
-            
             $this->event_model->insertEvent($post);
             $this->session->set_flashdata('message', $this->_successmsg($this->loadPo($this->config->item('success_record_add'))));
             redirect(base_url() . 'event');
@@ -74,16 +70,11 @@ class Event extends MY_Controller {
             $post['uid'] = $this->uid;
             $post['description'] = $_POST['description'];
             $post['status'] = $_POST['status'];
-            
-            //print_r($post); die;
-            
             $this->event_model->insertEvent($post);
             $this->session->set_flashdata('message', $this->_successmsg($this->loadPo($this->config->item('success_record_update'))));
             redirect(base_url() . 'event');
-            
         }
         $data['value'] = $this->event_model->fetchEventbyId($id);
         $this->show_view('add_event', $data);
     }
-
 }

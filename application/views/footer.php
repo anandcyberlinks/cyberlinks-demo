@@ -1,4 +1,3 @@
-		<script src="<?php echo base_url() ?>assets/js/jquery-1.8.2.min.js" type="text/javascript"></script>
 		<script src="<?php echo base_url() ?>assets/js/AdminLTE/app.js" type="text/javascript"></script>
 		<!-- jcrop -->
 		<script src="<?php echo base_url()?>assets/js/jcrop/jquery.Jcrop.js"></script>			
