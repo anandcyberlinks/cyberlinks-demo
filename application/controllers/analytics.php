@@ -20,7 +20,7 @@ class Analytics extends MY_Controller {
                  //   $this->result = get_browser(null, true);
 		    
 		   $this->result = User_Agent::getinfo();  //--regex class to get user agent --//
-		 // print_r($_SERVER[HTTP_USER_AGENT]);die;
+		 
                 //---------------------//
 		
 		$this->load->library('session');
@@ -37,6 +37,7 @@ class Analytics extends MY_Controller {
 	
 	function index()
 	{
+		 print_r($this->result);die;
 		//-- get geocoding google api --//
 		$this->data['lat'] = $lat = $_GET['lat'];
 		$this->data['long'] = $lng = $_GET['lng'];
