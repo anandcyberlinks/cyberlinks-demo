@@ -178,4 +178,51 @@ class Webtv extends MY_Controller {
         $this->webtv_model->delete_vid($id);
         echo json_encode(array('success'=>TRUE,'message'=>"Article deleted"));
     }
+    
+    function renderevent(){
+        $data = array();
+        $query = sprintf('select * from playlist_epg pe where pe.user_id = %d and pe.start_date between "%s" and "%s" ',$this->uid,date('Y-m-d h:i:s',$_GET['start']),date('Y-m-d h:i:s',$_GET['end']));
+        $dataset = $this->db->query($query)->result();
+        foreach($dataset as $key=>$val){
+            $data[] = array('id'=>$val->content_id,
+                            'title'=>$val->title,
+                            'start'=> $val->start_date,
+                            'end'=> $val->end_date,
+                            'backgroundColor'=>'',
+                            'borderColor'=>'',
+                            'allDay'=>false,
+                            'axisFormat'=>'HH:mm');
+        }
+        echo json_encode($data);    
+        exit;
+    }
+    
+    function saveevent(){
+        $response = array();
+        if(isset($_POST['id'])){
+            
+            $data = array();
+            $data['content_id'] = $_POST['id'];
+            $data['title'] = $_POST['title'];
+            $data['user_id'] = $this->uid;
+            $data['start_date'] = isset($_POST['start_date']) && $_POST['start_date']!='' ? date('Y-m-d h:i:s',strtotime($_POST['start_date'])) : date('Y-m-d h:i:s');
+            $data['end_date'] = isset($_POST['end_date']) && $_POST['end_date']!='' ? date('Y-m-d h:i:s',strtotime($_POST['end_date'])) : date('Y-m-d h:i:s',strtotime($data['start_date']) + 60*60);
+            
+            $query = sprintf('select * from playlist_epg pe where pe.content_id = %d and user_id = %d',$_POST['id'],$this->uid);
+            $dataset = $this->db->query($query)->result();
+            if(count($dataset) > 0){
+                $this->db->where('id', $dataset[0]->id);
+                $this->db->update('playlist_epg',$data);
+            }else{
+                $data['created'] = date('Y-m-d h:i:s');
+                $this->db->insert('playlist_epg',$data);
+            }
+            $response['success'] = 'Data saved';
+            
+        }else{
+            $response['error'] = 'Invalid Data';
+        }
+        echo json_encode($response);
+        exit;
+    }
 }
