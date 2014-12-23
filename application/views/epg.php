@@ -35,7 +35,7 @@
                                             'bg-navy');
                                         
                                         foreach ($result as $key=>$value){ ?>
-                                        <div class='external-event bg-green' id="<?=$value->id?>"><?=$value->title?></div><br>
+                                        <div class='external-event' style="background-color: <?=$value->color?>" id="<?=$value->id?>"><?=$value->title?></div><br>
                                         <?php } ?>
                                         
                                         <p class="loader"></p>

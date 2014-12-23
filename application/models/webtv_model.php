@@ -86,7 +86,7 @@ class Webtv_model extends CI_Model{
         return TRUE;
     }
     function get_video($id){
-        $this->db->select('a.*, b.category , e.name as file,e.minetype, c.id as vpid');
+        $this->db->select('a.*, b.category , e.name as file,e.minetype, c.id as vpid,c.color');
         $this->db->from('contents a');
         $this->db->join('categories b', 'a.category = b.id', 'left');
         $this->db->join('playlist_video c', 'a.id = c.content_id', 'left');
@@ -247,7 +247,7 @@ class Webtv_model extends CI_Model{
         return $category;
     }
     function add_video($pid, $cid){
-        $data = array('playlist_id'=>$pid, 'content_id'=>$cid, 'created'=>'NOW()');
+        $data = array('playlist_id'=>$pid, 'content_id'=>$cid, 'created'=>'NOW()','color'=>sprintf('#%06X', mt_rand(0, 0xFFFFFF)));
         $this->db->insert('playlist_video', $data);
     }
     function delete_vid($id){
