@@ -86,9 +86,14 @@ class Webtv extends MY_Controller {
     function videoEpg(){
         $data['welcome'] = $this;
         $id = $this->uri->segment(3);
+        $list = $this->webtv_model->getemgVideo($id);
+        $ids = array('0'=>0);
+        foreach ($list as $val){
+            $ids[] = $val->id;
+        }
         $data['playlist_id'] = $id;
         $data['package'] = $this->webtv_model->getPack($id);
-        $data['result'] = $this->webtv_model->get_video($id);
+        $data['result'] = $this->webtv_model->get_video($id, $ids);
         //echo "<pre>";        print_r($data['result']); die;
         $this->show_view('epg', $data);
     }

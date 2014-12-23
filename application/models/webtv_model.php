@@ -85,7 +85,7 @@ class Webtv_model extends CI_Model{
         $this->db->delete('playlists', array('id'=>$id));
         return TRUE;
     }
-    function get_video($id){
+    function get_video($id, $ids){
         $this->db->select('a.*, b.category , e.name as file,e.minetype, c.id as vpid,c.color,c.playlist_id');
         $this->db->from('contents a');
         $this->db->join('categories b', 'a.category = b.id', 'left');
@@ -95,12 +95,42 @@ class Webtv_model extends CI_Model{
         //$this->db->join('video_rating f', 'a.id = f.content_id', 'left');
         $this->db->group_by('a.id');
         $this->db->where('c.playlist_id', $id); 
+        $this->db->where_not_in('a.id', $ids);
         $query = $this->db->get();
        //echo $this->db->last_query();
         $data = $query->result();
        //echo "<pre>"; print_r($data); exit;
         return $data;
     }
+    function getemgVideo($id){
+        $this->db->select('content_id as id');
+        $this->db->where('playlist_id', $id);
+        $this->db->from('playlist_epg');
+        $result = $this->db->get()->result();
+        //print_r($result); die;
+        return $result;
+    }
+            
+    
+    function get_epgvideo($id, $ids){
+        $this->db->select('a.*, b.category , e.name as file,e.minetype, c.id as vpid,c.color');
+        $this->db->from('contents a');
+        $this->db->join('categories b', 'a.category = b.id', 'left');
+        $this->db->join('playlist_video c', 'a.id = c.content_id', 'left');
+        $this->db->join('videos d', 'a.id = d.content_id', 'left');
+        $this->db->join('files e', 'd.file_id = e.id', 'left');
+        //$this->db->join('video_rating f', 'a.id = f.content_id', 'left');
+        $this->db->group_by('a.id');
+        $this->db->where('c.playlist_id', $id); 
+        $this->db->where_not_in('a.id', $ids);
+        $query = $this->db->get();
+       echo $this->db->last_query();
+        $data = $query->result();
+       //echo "<pre>"; print_r($data); exit;
+        return $data;
+    }
+    
+    
     function getPack($id){
         $this->db->select('name');
         $this->db->where('id', $id);
@@ -252,5 +282,6 @@ class Webtv_model extends CI_Model{
     }
     function delete_vid($id){
         $this->db->delete('playlist_video', array('id'=>$id));
+        $this->db->delete('playlist_epg', array('content_id'=>$id));
     }
 }
