@@ -68,7 +68,7 @@ class Livestream extends MY_Controller {
                 }                
                 $thumbnail = $this->uploadImg($_FILES['chanelImage']["tmp_name"], $_FILES['chanelImage']["name"]);
             } else {
-                $thumbnail = $result->thumbnail_url;
+                //$thumbnail = $result->thumbnail_url;
             }
             $input['youtube'] = $_POST['youtube'];
             $input['ios'] = $_POST['ios'];
