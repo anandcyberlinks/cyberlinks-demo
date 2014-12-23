@@ -85,7 +85,7 @@ class Webtv_model extends CI_Model{
         $this->db->delete('playlists', array('id'=>$id));
         return TRUE;
     }
-    function get_video($id, $ids){
+    function get_videoid($id, $ids){
         $this->db->select('a.*, b.category , e.name as file,e.minetype, c.id as vpid,c.color,c.playlist_id');
         $this->db->from('contents a');
         $this->db->join('categories b', 'a.category = b.id', 'left');
@@ -102,6 +102,24 @@ class Webtv_model extends CI_Model{
        //echo "<pre>"; print_r($data); exit;
         return $data;
     }
+    
+    function get_video($id){
+        $this->db->select('a.*, b.category , e.name as file,e.minetype, c.id as vpid,c.color,c.playlist_id');
+        $this->db->from('contents a');
+        $this->db->join('categories b', 'a.category = b.id', 'left');
+        $this->db->join('playlist_video c', 'a.id = c.content_id', 'left');
+        $this->db->join('videos d', 'a.id = d.content_id', 'left');
+        $this->db->join('files e', 'd.file_id = e.id', 'left');
+        //$this->db->join('video_rating f', 'a.id = f.content_id', 'left');
+        $this->db->group_by('a.id');
+        $this->db->where('c.playlist_id', $id); 
+        $query = $this->db->get();
+       //echo $this->db->last_query();
+        $data = $query->result();
+       //echo "<pre>"; print_r($data); exit;
+        return $data;
+    }
+    
     function getemgVideo($id){
         $this->db->select('content_id as id');
         $this->db->where('playlist_id', $id);

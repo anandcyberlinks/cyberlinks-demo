@@ -93,7 +93,7 @@ class Webtv extends MY_Controller {
         }
         $data['playlist_id'] = $id;
         $data['package'] = $this->webtv_model->getPack($id);
-        $data['result'] = $this->webtv_model->get_video($id, $ids);
+        $data['result'] = $this->webtv_model->get_videoid($id, $ids);
         //echo "<pre>";        print_r($data['result']); die;
         $this->show_view('epg', $data);
     }
