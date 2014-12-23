@@ -161,7 +161,7 @@
                     $.ajax({
                         url: subUrl,
                         type: "POST",
-                        data: { id : event.id , title : event.title, start_date : event.start, end_date : event.end},
+                        data: { id : event.id , playlist_id : <?=$playlist_id?>, title : event.title, start_date : event.start, end_date : event.end},
                         success: function(data, textStatus) {
                             $('.loader').html('');
                         },

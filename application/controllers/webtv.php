@@ -86,6 +86,7 @@ class Webtv extends MY_Controller {
     function videoEpg(){
         $data['welcome'] = $this;
         $id = $this->uri->segment(3);
+        $data['playlist_id'] = $id;
         $data['package'] = $this->webtv_model->getPack($id);
         $data['result'] = $this->webtv_model->get_video($id);
         //echo "<pre>";        print_r($data['result']); die;
@@ -187,6 +188,7 @@ class Webtv extends MY_Controller {
         $dataset = $this->db->query($query)->result();
         foreach($dataset as $key=>$val){
             $data[] = array('id'=>$val->content_id,
+                            'title'=>$val->playlist_id,
                             'title'=>$val->title,
                             'start'=> $val->start_date,
                             'end'=> $val->end_date,
@@ -205,6 +207,7 @@ class Webtv extends MY_Controller {
             
             $data = array();
             $data['content_id'] = $_POST['id'];
+            $data['playlist_id'] = $_POST['playlist_id'];
             $data['title'] = $_POST['title'];
             $data['user_id'] = $this->uid;
             $data['start_date'] = isset($_POST['start_date']) && $_POST['start_date']!='' ? date('Y-m-d h:i:s',strtotime($_POST['start_date'])) : date('Y-m-d h:i:s');
