@@ -35,11 +35,12 @@
                                             'bg-navy');
                                         
                                         foreach ($result as $key=>$value){ ?>
-                                        <div class='external-event bg-green'><?=$value->title?></div><br>
+                                        <div class='external-event bg-green' id="<?=$value->id?>"><?=$value->title?></div><br>
                                         <?php } ?>
-                                        <p>
-                                            <input type='checkbox' id='drop-remove' /> <label for='drop-remove'>remove after drop</label>
-                                        </p>
+                                        
+                                        <p class="loader"></p>
+                                        <!-- <input type='checkbox' id='drop-remove' /> <label for='drop-remove'>remove after drop</label> -->
+                                        
                                     </div>
                                 </div><!-- /.box-body -->
                             </div><!-- /. box -->
@@ -64,6 +65,9 @@
             $(function() {
                 /* initialize the external events
                  -----------------------------------------------------------------*/
+                
+                $('#drop-remove').prop('checked', true);
+                
                 function ini_events(ele) {
                     ele.each(function() {
 
@@ -91,9 +95,7 @@
                  -----------------------------------------------------------------*/
                 //Date for the calendar events (dummy data)
                 var date = new Date();
-                var d = date.getDate(),
-                        m = date.getMonth(),
-                        y = date.getFullYear();
+                var d = date.getDate(),m = date.getMonth(),y = date.getFullYear();
                 $('#calendar').fullCalendar({
                     header: {
                         left: 'prev,next today',
@@ -108,12 +110,14 @@
                         week: 'week',
                         day: 'day'
                     },
-                    //Random default events
-
+                    events: "<?=base_url()?>webtv/renderevent",
+                    minTime: 0,
+                    maxTime: 24,
+                    slotMinutes: 15,
                     editable: true,
                     droppable: true, // this allows things to be dropped onto the calendar !!!
-                    drop: function(date, allDay) { // this function is called when something is dropped
-
+                    drop : function(date, allDay, ui){
+                        
                         // retrieve the dropped element's stored Event Object
                         var originalEventObject = $(this).data('eventObject');
 
@@ -121,6 +125,7 @@
                         var copiedEventObject = $.extend({}, originalEventObject);
 
                         // assign it the date that was reported
+                        copiedEventObject.id = $(this).attr("id");
                         copiedEventObject.start = date;
                         copiedEventObject.allDay = allDay;
                         copiedEventObject.backgroundColor = $(this).css("background-color");
@@ -129,48 +134,41 @@
                         // render the event on the calendar
                         // the last `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
                         $('#calendar').fullCalendar('renderEvent', copiedEventObject, true);
-
+                        
+                        __saveEvent(copiedEventObject);
+                        
+                        $(this).remove();
+                        
                         // is the "remove after drop" checkbox checked?
+                        /*
                         if ($('#drop-remove').is(':checked')) {
                             // if so, remove the element from the "Draggable Events" list
                             $(this).remove();
                         }
-
+                        */
+                    },
+                    eventDrop: function(event, delta, revertFunc) {
+                        __saveEvent(event);
+                    },
+                    eventResize: function(event, delta, revertFunc) {
+                        __saveEvent(event);
                     }
                 });
-
-                /* ADDING EVENTS */
-                var currColor = "#f56954"; //Red by default
-                //Color chooser button
-                var colorChooser = $("#color-chooser-btn");
-                $("#color-chooser > li > a").click(function(e) {
-                    e.preventDefault();
-                    //Save color
-                    currColor = $(this).css("color");
-                    //Add color effect to button
-                    colorChooser
-                            .css({"background-color": currColor, "border-color": currColor})
-                            .html($(this).text()+' <span class="caret"></span>');
-                });
-                $("#add-new-event").click(function(e) {
-                    e.preventDefault();
-                    //Get value and make sure it is not null
-                    var val = $("#new-event").val();
-                    if (val.length == 0) {
-                        return;
-                    }
-
-                    //Create event
-                    var event = $("<div />");
-                    event.css({"background-color": currColor, "border-color": currColor, "color": "#fff"}).addClass("external-event");
-                    event.html(val);
-                    $('#external-events').prepend(event);
-
-                    //Add draggable funtionality
-                    ini_events(event);
-
-                    //Remove event from text input
-                    $("#new-event").val("");
-                });
+                
+                function __saveEvent(event){
+                    var subUrl = "<?=base_url()?>webtv/saveevent";
+                    $('.loader').html('loading.....');
+                    $.ajax({
+                        url: subUrl,
+                        type: "POST",
+                        data: { id : event.id , title : event.title, start_date : event.start, end_date : event.end},
+                        success: function(data, textStatus) {
+                            $('.loader').html('');
+                        },
+                        error: function(data, textStatus) {
+                            alert('An error has occured retrieving data!');
+                        }
+                    });
+                }
             });
         </script>
