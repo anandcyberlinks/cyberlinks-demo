@@ -75,7 +75,11 @@ class Livestream extends MY_Controller {
             $input['android'] = $_POST['android'];
             $input['windows'] = $_POST['windows'];
             $input['web'] = $_POST['web'];
-            $input['thumbnail_url'] = base_url().$thumbnail;
+            
+            if($thumbnail !=''){
+                $input['thumbnail_url'] = base_url().$thumbnail;
+            }
+            
             $input['user_id'] = $this->uid;
             $input['status'] = 1;
             
