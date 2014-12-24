@@ -113,7 +113,7 @@
                     events: "<?=base_url()?>webtv/renderevent",
                     minTime: 0,
                     maxTime: 24,
-                    slotMinutes: 15,
+                    slotMinutes: 10,
                     editable: true,
                     droppable: true, // this allows things to be dropped onto the calendar !!!
                     drop : function(date, allDay, ui){

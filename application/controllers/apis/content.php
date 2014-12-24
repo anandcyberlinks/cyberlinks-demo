@@ -299,4 +299,50 @@ class Content extends Apis{
         }
         $this->response($response);
     }
+    
+    function webtv_get(){
+        $qString = $this->get();
+        $response = array();
+        $query = sprintf('select p.id,p.name,p.description,p.status,p.start_date,p.end_date from playlists p where uid = %d ',$this->app->id);
+        $dataset = $this->db->query($query)->result();
+        foreach($dataset as $key=>$val){
+            $response[] = $val;
+        }
+        $this->response($response);
+    }
+    
+    function webtvdetail_get(){
+        $qString = $this->get();
+        $response = array();
+        
+        $query =  sprintf( 'select 
+                            c.id,
+                            pv.playlist_id,
+                            c.title,
+                            c.description,
+                            c.uid as `creater_id`,
+                            cat.id as `category_id`,
+                            cat.category as `category_name`,
+                            if(v.views > 0,v.views,0) as `views`,
+                            c.feature_video as featured,
+                            v.duration as `duration`,
+                            cfile.relative_path as `video_basepath`,
+                            vtfile.relative_path as `video_basethumb`,
+                            c.created
+                            from contents c
+                            left join categories cat on cat.id = c.category
+                            left join playlist_video pv on pv.content_id = c.id
+                            left join videos v on v.content_id = c.id
+                            left join files cfile on cfile.id = v.file_id
+                            left join video_thumbnails vt on vt.content_id = c.id
+                            left join files vtfile on vtfile.id = vt.file_id
+                            where c.uid = %d AND pv.status != 0 order by pv.index ',$this->app->id);
+        
+        
+        $dataset = $this->db->query($query)->result();
+        foreach($dataset as $key=>$val){
+            $response[] = $val;
+        }
+        $this->response($response);
+    }
 }
