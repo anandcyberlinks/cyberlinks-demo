@@ -13,8 +13,8 @@ class Livestream extends MY_Controller {
     function __construct() {
         parent::__construct();
         $this->load->config('messages');
-        $this->load->model('Livestream_model');
-        $this->load->library('form_validation');
+        $this->load->model('Livestream_model');        
+         $this->load->library("pagination");
         $this->load->library('Session');
         $this->data['welcome'] = $this;
         $s = $this->session->all_userdata();
@@ -25,46 +25,58 @@ class Livestream extends MY_Controller {
 
     }
 
-    protected $validation_rules = array
-        (
-        'add_category' => array(
-            array(
-                'field' => 'channel_name',
-                'label' => 'Channel Name',
-                'rules' => 'trim|required'
-            ),         
-        ),
-        'update_Stream' => array(
-            array(
-                'field' => 'channel_name',
-                'label' => 'Channel name',
-                'rules' => 'trim|required'
-            ),            
-        )
-    );
+  function slist()
+  {
+        if (isset($_POST['search']) && $_POST['search'] == 'Search') {			
+	    $this->session->set_userdata('search_form', $_POST);
+	} else if (isset($_POST['reset']) && $_POST['reset'] == 'Reset') {
+	    $this->session->unset_userdata('search_form');
+	}
+        
+        //--- pagination----//
+       
+        $config = array();
+	$config["base_url"] = base_url() . "livestream/slist?";	
+        $totalCount = $this->Livestream_model->getList(array('search'=>$this->session->userdata('search_form'),'count'=>1));
+	$config["total_rows"] = $totalCount[0]->total;
+	$config["per_page"] = 10;
+	$config["uri_segment"] = 3;
+	$config['page_query_string'] = TRUE;
+	$this->pagination->initialize($config);
+	
+	//$page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+	$page = ($_GET['per_page']) ? $_GET['per_page'] : 0;
+	$this->data["links"] = $this->pagination->create_links();
+	$this->data['total_rows'] = $config["total_rows"];
 
-    function live_streaming() {
-        if(isset($_POST['save'])){
-            $this->Livestream_model->saveUrl($_POST['url'], $this->uid);
-            $msg = $this->loadPo($this->config->item('success_record_update'));
-            $this->log($this->user, $msg);
-            $this->session->set_flashdata('message', $this->_successmsg($msg));
-            redirect(base_url()."video/live_streaming");
-        }
-        $data['url'] = $this->videos_model->getLivestream($this->uid);
-        $data['welcome'] = $this;
-        $this->show_view('live_streaming', $data);
-    }
-
+     //-- content provider list --//
+            $this->data['content_provider'] = $this->Livestream_model->getContentProvider();
+    $this->data['result'] = $this->Livestream_model->getList(array('search'=>$this->session->userdata('search_form'),'l'=>$config["per_page"],'start'=>$page));
+    $this->show_view('livestream/list',$this->data);
+  }
+  
     function index() {
-        $data['result'] = $result = $this->Livestream_model->getStream($this->uid);
+        
+        if($_GET['id'] !=''){           
+            $id = base64_decode($_GET['id']);
+        }else if($_POST['userid'] >0){
+            $id = $_POST['userid'];
+        }else{
+            $id = $this->uid;
+        }
+        
+        //-- content provider list --//
+            $data['content_provider'] = $this->Livestream_model->getContentProvider(true);
+        
+          //-- stream list --//
+            $data['result'] = $result = $this->Livestream_model->getStream($id);
          //print_r($result);die;
          if(isset($_POST['save'])){
-           
+          
             //--- upload file --//
             if (isset($_FILES['chanelImage']['tmp_name']) && $_FILES['chanelImage']['tmp_name'] != "") {
                 if(isset($result->thumbnail_url)){
-                    unlink($result->thumbnail_url);                                
+                    unlink(REAL_PATH.str_replace(base_url(),"",$result->thumbnail_url));                                
                 }                
                 $thumbnail = $this->uploadImg($_FILES['chanelImage']["tmp_name"], $_FILES['chanelImage']["name"]);
             } else {
@@ -75,12 +87,12 @@ class Livestream extends MY_Controller {
             $input['android'] = $_POST['android'];
             $input['windows'] = $_POST['windows'];
             $input['web'] = $_POST['web'];
-            
+
             if($thumbnail !=''){
-                $input['thumbnail_url'] = base_url().$thumbnail;
+            $input['thumbnail_url'] = base_url().$thumbnail;
             }
             
-            $input['user_id'] = $this->uid;
+            $input['user_id'] = $id;
             $input['status'] = 1;
             
             if(empty($result)){
@@ -91,12 +103,11 @@ class Livestream extends MY_Controller {
             $msg = $this->loadPo($this->config->item('success_record_update'));
             $this->log($this->user, $msg);
             $this->session->set_flashdata('message', $this->_successmsg($msg));
-            redirect(base_url()."livestream");
+            redirect(base_url()."livestream?id=".base64_encode($id));
         }
-        
        
         $data['welcome'] = $this;
-        $this->show_view('livestream', $data);
+        $this->show_view('livestream/add', $data);
     }
 
     function uploadImg($tmpFilePath, $fileName, $id=null){
@@ -112,16 +123,13 @@ class Livestream extends MY_Controller {
         $this->load->view('rendervideo',$data);    
     }
         
-    public function delImage($file_id) {
-        $fileName = $this->videos_model->getThumbImgName($file_id);
-        if($fileName) {
-            $delResultThumb = $this->_deleteFile($fileName, REAL_PATH.CATEGORY_PATH);
-            $delResultThumbSmall = $this->_deleteFile($fileName, REAL_PATH.CATEGORY_SMALL_PATH);
-            $delResultThumbMedium = $this->_deleteFile($fileName, REAL_PATH.CATEGORY_MEDIUM_PATH);
-            $delResultThumbLarge = $this->_deleteFile($fileName, REAL_PATH.CATEGORY_LARGE_PATH);
-            $result = $this->Category_model->delCategoryImage($file_id);
-        }
-    }    
+   function changestatus() {
+        $data['id'] = $_GET['id'];
+        $data['status'] = $_GET['status'];
+        $this->Livestream_model->updatestatus($data);      
+        $this->session->set_flashdata('message', $this->_successmsg($this->loadPo($this->config->item('success_record_update'))));
+        redirect(base_url() . 'livestream/slist');
+    }
 }
 
 /* End of file welcome.php */

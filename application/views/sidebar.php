@@ -42,7 +42,11 @@
                     <i class="fa fa-fw fa-film"></i> <span><?php echo $welcome->loadPo('Live Stream'); ?></span>
                 </a>
 		-->
-		<a href="<?php echo base_url() ?>livestream/" >
+                 <?php if($this->role_id==2){?>
+		<a href="<?php echo base_url() ?>livestream/slist" >
+                <?php }else{?>
+                <a href="<?php echo base_url() ?>livestream/" >
+                <?php }?>
                     <i class="fa fa-fw fa-film"></i> <span><?php echo $welcome->loadPo('Live Stream'); ?></span>
                 </a>
             </li>
