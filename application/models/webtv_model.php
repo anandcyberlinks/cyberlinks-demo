@@ -5,6 +5,14 @@ class Webtv_model extends CI_Model{
         parent::__construct();
     }
     
+    function changeStatus($data){
+        $this->db->where('content_id', $data['id']);
+        $this->db->where('playlist_id', $data['p_id']);
+        $this->db->set('status', $data['status']);
+        $this->db->update('playlist_video');
+        return TRUE;
+    }
+    
     function fetchplaylists($uid, $start, $limit, $data) {
         $this->db->select('p.*, SUM(if(pv.id is not null,1,0)) as `total` ',false);
         $timeStart = " 00:00:00";
@@ -95,6 +103,7 @@ class Webtv_model extends CI_Model{
         //$this->db->join('video_rating f', 'a.id = f.content_id', 'left');
         $this->db->group_by('a.id');
         $this->db->where('c.playlist_id', $id); 
+        $this->db->where('c.status', '1');
         $this->db->where_not_in('a.id', $ids);
         $query = $this->db->get();
        //echo $this->db->last_query();
@@ -104,7 +113,7 @@ class Webtv_model extends CI_Model{
     }
     
     function get_video($id){
-        $this->db->select('a.*, b.category , e.name as file,e.minetype, c.id as vpid,c.color,c.playlist_id');
+        $this->db->select('a.*, b.category , e.name as file,e.minetype, c.id as vpid,c.color,c.playlist_id, c.status');
         $this->db->from('contents a');
         $this->db->join('categories b', 'a.category = b.id', 'left');
         $this->db->join('playlist_video c', 'a.id = c.content_id', 'left');

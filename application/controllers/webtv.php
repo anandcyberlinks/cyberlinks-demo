@@ -83,6 +83,14 @@ class Webtv extends MY_Controller {
         $this->show_view('playlist_video', $data);
     }
     
+    function changeStatus(){
+        $data['id'] = $this->uri->segment(3);
+        $data['status'] = $this->uri->segment(4);
+        $data['p_id'] = $this->uri->segment(5);
+        $this->webtv_model->changeStatus($data);
+        redirect($_GET['url']);
+    }
+    
     function videoEpg(){
         $data['welcome'] = $this;
         $id = $this->uri->segment(3);
