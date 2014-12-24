@@ -67,10 +67,10 @@
 										<tr>
 											<th><?php echo $welcome->loadPo('Content Provider'); ?></th>
 											<th><?php echo $welcome->loadPo('Icon'); ?></th>
-											<th><?php echo $welcome->loadPo('Youtube'); ?></th>
-											<th><?php echo $welcome->loadPo('IOS'); ?></th>
-                                                                                        <th><?php echo $welcome->loadPo('Android'); ?></th>
-                                                                                        <th><?php echo $welcome->loadPo('Window'); ?></th>
+											<th width=20%><?php echo $welcome->loadPo('Youtube'); ?></th>
+											<th width=20%><?php echo $welcome->loadPo('IOS'); ?></th>
+                                                                                        <th width=20%><?php echo $welcome->loadPo('Android'); ?></th>
+                                                                                        <!--<th><?php echo $welcome->loadPo('Window'); ?></th>-->
                                                                                         <th><?php echo $welcome->loadPo('Status'); ?></th>
 											<th><?php echo $welcome->loadPo('Action'); ?></th>
 										</tr>
@@ -86,7 +86,7 @@
                                                                                                 <td><?php echo $row->youtube; ?></td>
                                                                                                 <td><?php echo $row->ios; ?></td>
                                                                                                 <td><?php echo $row->android; ?></td>
-                                                                                                <td><?php echo $row->windows; ?></td>												
+                                                                                                <!--<td><?php echo $row->windows; ?></td>-->
 												<td>
 													<?php if($row->status == 1){?>
 														<a href="<?php echo base_url() ?>livestream/changestatus/?id=<?php echo $row->id; ?>&status=0" title="Click To Inactive"><img src="<?php echo base_url();?>assets/img/test-pass-icon.png" alt="Active" /></a>
