@@ -35,6 +35,7 @@
                                 <table id="table-draggable2" class="table table-bordered table-striped">
                                     <tbody class="connectedSortable">
                                         <tr>
+                                            <th><?php echo $welcome->loadPo('Index') ?></th>
                                             <th><?php echo $welcome->loadPo('Title') ?></th>
                                             <th><?php echo $welcome->loadPo('Category') ?></th>
                                             <th><?php echo $welcome->loadPo('Preview') ?></th>
@@ -42,8 +43,9 @@
                                             <th><?php echo $welcome->loadPo('Action') ?></th>
                                             <th><?php echo $welcome->loadPo('Publish') ?></th>
                                         </tr>
-                                        <?php foreach ($result as $value) { ?>
+                                        <?php $i=1; foreach ($result as $value) { ?>
                                         <tr id="<?php echo $value->id ?>">
+                                                <td  width="10" id="<?php echo $value->id; ?>" class="index"><?php echo $value->index > 0 ? $value->index : $i++ ; ?></td>
                                                 <td  width="350"><a href="<?php echo base_url(); ?>video/detail/<?php echo $value->id; ?>"><?php echo strlen($value->title) > 40 ?  substr($value->title,0,40).'...' : $value->title; ?></td>
                                                 <td><?php echo $value->category; ?></td>
                                                                                                 <td style='text-align:center'>
@@ -129,20 +131,28 @@
                 });
                 return false;
             });
-
-    var $tabs=$('#table-draggable2')
-    $( "tbody.connectedSortable" ).sortable({
-        connectWith: ".connectedSortable",
-        items: "> tr:not(:first)",
-        appendTo: $tabs,
-        helper:"clone",
-        cursor: 'move',
-        zIndex: 999990,
-        update: function(data){
-            var order = $(this).sortable("serialize"); 
-            console.log(order);
-        }
-    });
     
-});
+            updateIndex = function(e, ui) {
+                var updateString = '';
+                $('td.index', ui.item.parent()).each(function (i) {
+                    $(this).html(i + 1);
+                    updateString += '&' + $(this).attr('id') + '=' + (i + 1);
+                });
+                
+                $.ajax({
+                    type: "POST",
+                    url: "<?=base_url().'webtv/updateindex'?>",
+                    data: 'playlist_id=' + <?=$playlist_id?> + updateString,
+                    success: function(data) {
+                        
+                    }
+                }); 
+                
+            };
+            
+            $("#table-draggable2 tbody" ).sortable({
+                stop: updateIndex
+            }).disableSelection();
+            
+        });
 </script>

@@ -79,6 +79,7 @@ class Webtv extends MY_Controller {
         $data['welcome'] = $this;
         $id = $this->uri->segment(3);
         $data['package'] = $this->webtv_model->getPack($id);
+        $data['playlist_id'] = $id;
         $data['result'] = $this->webtv_model->get_video($id);
         $this->show_view('playlist_video', $data);
     }
@@ -241,6 +242,20 @@ class Webtv extends MY_Controller {
             $response['error'] = 'Invalid Data';
         }
         echo json_encode($response);
+        exit;
+    }
+    
+    function updateindex(){
+        if(isset($_POST['playlist_id']) && $_POST['playlist_id'] != ''){
+            foreach($_POST as $key=>$val){
+                if($key == 'playlist_is') continue;
+                $data = array();
+                $data['index'] = $val;
+                $this->db->where('pv.playlist_id',$_POST['playlist_id']);
+                $this->db->where('pv.content_id',$key);
+                $this->db->update('playlist_video pv',$data);
+            }
+        }
         exit;
     }
 }

@@ -113,13 +113,14 @@ class Webtv_model extends CI_Model{
     }
     
     function get_video($id){
-        $this->db->select('a.*, b.category , e.name as file,e.minetype, c.id as vpid,c.color,c.playlist_id, c.status');
+        $this->db->select('a.*, b.category , e.name as file,e.minetype, c.id as vpid,c.color,c.playlist_id, c.status,c.index');
         $this->db->from('contents a');
         $this->db->join('categories b', 'a.category = b.id', 'left');
         $this->db->join('playlist_video c', 'a.id = c.content_id', 'left');
         $this->db->join('videos d', 'a.id = d.content_id', 'left');
         $this->db->join('files e', 'd.file_id = e.id', 'left');
         //$this->db->join('video_rating f', 'a.id = f.content_id', 'left');
+        $this->db->order_by('c.index');
         $this->db->group_by('a.id');
         $this->db->where('c.playlist_id', $id); 
         $query = $this->db->get();
