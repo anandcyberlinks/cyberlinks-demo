@@ -39,7 +39,8 @@
                                             <th><?php echo $welcome->loadPo('Category') ?></th>
                                             <th><?php echo $welcome->loadPo('Preview') ?></th>
                                             <th><?php echo $welcome->loadPo('Publish Date') ?></th>
-                                            <th align="center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $welcome->loadPo('Action') ?></th>
+                                            <th><?php echo $welcome->loadPo('Action') ?></th>
+                                            <th><?php echo $welcome->loadPo('Publish') ?></th>
                                         </tr>
                                         <?php foreach ($result as $value) { ?>
                                         <tr id="<?php echo $value->id ?>">
@@ -54,6 +55,13 @@
                                                 </td>
                                                 <td  width="120"><?php echo date('M d,Y', strtotime($value->created)); ?></td>
                                                 <td><a href="#" class="link" links="<?php echo base_url(); ?>webtv/unlink/<?php echo $value->vpid; ?>" ><?php echo $welcome->loadPo('Delete') ?></a></td>
+                                                <td>
+                                                    <?php if ($value->status == '1') { ?>
+                                                    <a href="<?php echo base_url(); ?>webtv/changeStatus/<?php echo $value->id; ?>/0/<?= $this->uri->segment(3)?>?url=<?= current_full_url() ?>"><img src="<?php echo base_url(); ?>assets/img/test-pass-icon.png" alt="Active" /></a>
+                                                    <?php } else { ?>
+                                                        <a href="<?php echo base_url(); ?>webtv/changeStatus/<?php echo $value->id; ?>/1/<?= $this->uri->segment(3)?>?url=<?= current_full_url() ?>"><img src="<?php echo base_url(); ?>assets/img/test-fail-icon.png" alt="Inactive" /></a>
+        <?php } ?>
+                                                </td>
                                                 </tr>
                                         <?php } ?>
                                     </tbody>
