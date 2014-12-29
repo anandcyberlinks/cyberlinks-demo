@@ -328,10 +328,13 @@ class Content extends Apis{
                             v.duration as `duration`,
                             cfile.relative_path as `video_basepath`,
                             vtfile.relative_path as `video_basethumb`,
+                            pe.start_date,
+                            pe.end_date,
                             c.created
                             from contents c
                             left join categories cat on cat.id = c.category
                             left join playlist_video pv on pv.content_id = c.id
+                            left join playlist_epg pe on pe.content_id = pv.content_id
                             left join videos v on v.content_id = c.id
                             left join files cfile on cfile.id = v.file_id
                             left join video_thumbnails vt on vt.content_id = c.id

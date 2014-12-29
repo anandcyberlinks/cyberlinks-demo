@@ -152,7 +152,14 @@
                     },
                     eventResize: function(event, delta, revertFunc) {
                         __saveEvent(event);
-                    }
+                    },
+                    eventClick : function(event, jsEvent, view) {
+                        var r = confirm("Delete " + event.title);
+                        if (r===true){
+                            $('#calendar').fullCalendar('removeEvents', event._id);
+                            __saveEvent(event);
+                        }
+                    } 
                 });
                 
                 function __saveEvent(event){
