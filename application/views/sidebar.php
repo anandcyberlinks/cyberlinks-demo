@@ -17,7 +17,7 @@
                 <a href="<?php echo base_url() ?>layout/dashboard">
                     <i class="fa fa-dashboard"></i> <span><?php echo $welcome->loadPo('Dashboard'); ?></span></a>
             </li>
-             <li class="<?= ($this->uri->segment(1) == 'layout') ? 'active' : '' ?>">
+             <li class="<?= ($this->uri->segment(1) == 'analytics') ? 'active' : '' ?>">
                 <a href="<?php echo base_url() ?>analytics/report">
                     <i class="fa fa-dashboard"></i> <span><?php echo $welcome->loadPo('Analytics'); ?></span></a>
             </li>
@@ -36,7 +36,7 @@
                     <li class="<?= ($this->uri->segment(2) == 'debug') ? 'active' : '' ?>"><a href="<?php echo base_url() ?>video/debug"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('Debug'); ?></a></li>
                 </ul>
             </li>
-            <li class="<?= ($this->uri->segment(2) == 'live_streaming') ? 'active' : '' ?>">
+            <li class="<?= ($this->uri->segment(1) == 'livestream') ? 'active' : '' ?>">
                 <!--
 		<a href="<?php echo base_url() ?>video/live_streaming" >
                     <i class="fa fa-fw fa-film"></i> <span><?php echo $welcome->loadPo('Live Stream'); ?></span>
