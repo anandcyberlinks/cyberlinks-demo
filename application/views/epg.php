@@ -100,7 +100,7 @@
                     header: {
                         left: 'prev,next today',
                         center: 'title',
-                        right: 'month,agendaWeek,agendaDay'
+                        right: 'month,agendaDay'
                     },
                     buttonText: {//This is to add icons to the visible buttons
                         prev: "<span class='fa fa-caret-left'></span>",
@@ -113,7 +113,7 @@
                     events: "<?=base_url()?>webtv/renderevent",
                     minTime: 0,
                     maxTime: 24,
-                    slotMinutes: 10,
+                    slotMinutes: 15,
                     editable: true,
                     droppable: true, // this allows things to be dropped onto the calendar !!!
                     drop : function(date, allDay, ui){

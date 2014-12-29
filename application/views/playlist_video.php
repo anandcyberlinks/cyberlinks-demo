@@ -33,7 +33,7 @@
                         <div class="box">
                             <div class="box-body table-responsive">
                                 <table id="table-draggable2" class="table table-bordered table-striped">
-                                    <tbody class="connectedSortable">
+                                    <thead>
                                         <tr>
                                             <th><?php echo $welcome->loadPo('Index') ?></th>
                                             <th><?php echo $welcome->loadPo('Title') ?></th>
@@ -43,6 +43,8 @@
                                             <th><?php echo $welcome->loadPo('Action') ?></th>
                                             <th><?php echo $welcome->loadPo('Publish') ?></th>
                                         </tr>
+                                    </thead>
+                                    <tbody class="connectedSortable">
                                         <?php $i=1; foreach ($result as $value) { ?>
                                         <tr id="<?php echo $value->id ?>">
                                                 <td  width="10" id="<?php echo $value->id; ?>" class="index"><?php echo $value->index > 0 ? $value->index : $i++ ; ?></td>
