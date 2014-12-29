@@ -42,7 +42,7 @@
                     <i class="fa fa-fw fa-film"></i> <span><?php echo $welcome->loadPo('Live Stream'); ?></span>
                 </a>
 		-->
-                 <?php if($this->role_id==2){?>
+                 <?php if($s[0]->role == 'Superadmin'){?>
 		<a href="<?php echo base_url() ?>livestream/slist" >
                 <?php }else{?>
                 <a href="<?php echo base_url() ?>livestream/" >
