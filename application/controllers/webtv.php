@@ -227,17 +227,25 @@ class Webtv extends MY_Controller {
             $data['start_date'] = isset($_POST['start_date']) && $_POST['start_date']!='' ? date('Y-m-d h:i:s',strtotime($_POST['start_date'])) : date('Y-m-d h:i:s');
             $data['end_date'] = isset($_POST['end_date']) && $_POST['end_date']!='' ? date('Y-m-d h:i:s',strtotime($_POST['end_date'])) : date('Y-m-d h:i:s',strtotime($data['start_date']) + 60*60);
             
-            $query = sprintf('select * from playlist_epg pe where pe.content_id = %d and user_id = %d',$_POST['id'],$this->uid);
-            $dataset = $this->db->query($query)->result();
-            if(count($dataset) > 0){
-                $this->db->where('id', $dataset[0]->id);
-                $this->db->update('playlist_epg',$data);
-            }else{
-                $data['created'] = date('Y-m-d h:i:s');
-                $this->db->insert('playlist_epg',$data);
+            switch($_POST['action']){
+                case 'delete' :
+                    $query = sprintf('delete from playlist_epg where content_id = %d and user_id = %d',$_POST['id'],$this->uid);
+                    $dataset = $this->db->query($query)->result();
+                    $response['success'] = 'Data deleted';
+                    break;
+                default :
+                    $query = sprintf('select * from playlist_epg pe where pe.content_id = %d and user_id = %d',$_POST['id'],$this->uid);
+                    $dataset = $this->db->query($query)->result();
+                    if(count($dataset) > 0){
+                        $this->db->where('id', $dataset[0]->id);
+                        $this->db->update('playlist_epg',$data);
+                    }else{
+                        $data['created'] = date('Y-m-d h:i:s');
+                        $this->db->insert('playlist_epg',$data);
+                    }
+                    $response['success'] = 'Data saved';
+                    break;
             }
-            $response['success'] = 'Data saved';
-            
         }else{
             $response['error'] = 'Invalid Data';
         }

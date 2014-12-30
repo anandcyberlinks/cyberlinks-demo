@@ -152,15 +152,17 @@
                         */
                     },
                     eventDrop: function(event, delta, revertFunc) {
+                        event.action = 'update';
                         __saveEvent(event);
                     },
                     eventResize: function(event, delta, revertFunc) {
+                        event.action = 'update';
                         __saveEvent(event);
                     },
                     eventClick : function(event, jsEvent, view) {
                         var r = confirm("Delete " + event.title);
                         if (r===true){
-                            $('#calendar').fullCalendar('removeEvents', event._id);
+                            event.action = 'delete';
                             __saveEvent(event);
                         }
                     } 
@@ -172,9 +174,13 @@
                     $.ajax({
                         url: subUrl,
                         type: "POST",
-                        data: { id : event.id , playlist_id : <?=$playlist_id?>, title : event.title, start_date : event.start, end_date : event.end},
+                        data: { id : event.id , playlist_id : <?=$playlist_id?>, title : event.title, start_date : event.start, end_date : event.end , action : event.action},
                         success: function(data, textStatus) {
-                            $('.loader').html('');
+                            if (event.action == 'delete'){
+                                location.reload();
+                            }else{
+                                $('.loader').html('');    
+                            }
                         },
                         error: function(data, textStatus) {
                             alert('An error has occured retrieving data!');

@@ -72,7 +72,7 @@
                                 </table>
                                 <br>
                                 <a href="<?php echo base_url()."webtv/addVideo/".$this->uri->segment(3) ?>" class="btn btn-success">Add Video</a>
-                                <a href="<?php echo base_url(); ?>webtv" class="btn btn-primary">Back</a>
+                                <a class="btn btn-warning" href="<?=  base_url()?>webtv"><i class="fa fa-mail-reply"></i> Back</a>
                             </div>		
                             <!-- Pagination end -->
                         </div><!-- /.box-body -->
