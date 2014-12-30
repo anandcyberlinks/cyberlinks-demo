@@ -315,7 +315,8 @@ class Content extends Apis{
         $qString = $this->get();
         $response = array();
         
-        $query =  sprintf( 'select 
+        if(isset($qString['k']) && $qString['k'] != ''){
+            $query =  sprintf( 'select 
                             c.id,
                             pv.playlist_id,
                             c.title,
@@ -339,13 +340,17 @@ class Content extends Apis{
                             left join files cfile on cfile.id = v.file_id
                             left join video_thumbnails vt on vt.content_id = c.id
                             left join files vtfile on vtfile.id = vt.file_id
-                            where c.uid = %d AND pv.status != 0 order by pv.index ',$this->app->id);
+                            where c.uid = %d AND pv.playlist_id = %d AND pv.status != 0 order by pv.index ',$this->app->id,$qString['k']);
         
         
-        $dataset = $this->db->query($query)->result();
-        foreach($dataset as $key=>$val){
-            $response[] = $val;
+            $dataset = $this->db->query($query)->result();
+            foreach($dataset as $key=>$val){
+                $response[] = $val;
+            }    
+        }else{
+            $response['error'] = 'Invalid Key';    
         }
+        
         $this->response($response);
     }
 }
