@@ -13,6 +13,270 @@ class Ads_model extends CI_Model {
 	   $this->load->helper('url');
    }
    
+   function get_videocount($uid, $data=''){      
+        $timeStart = " 00:00:00";
+        $timeEnd = " 23:59:59";
+        $id = $this->get_ownerid($uid);
+        array_push($id, $uid);
+        $this->db->select('ads.*');
+        $this->db->from('ads');
+        $this->db->join('categories', 'ads.category = categories.id', 'left');
+        $this->db->where_in('ads.uid', $id);
+        if (isset($data['ads_title']) && $data['ads_title'] != '') {
+            $this->db->like('ad_title', trim($data['ads_title']));
+        }
+        if (isset($data['category']) && $data['category'] != '') {
+            $this->db->where('ads.category', $data['category']);
+        }
+        if ((isset($data['datepickerstart']) && $data['datepickerstart'] != '') && (isset($data['datepickerend']) && $data['datepickerend'] != '')) {
+            $date = str_replace('/', '-', $data['datepickerstart']);
+            $datestart = date('y-m-d', strtotime($date));
+            $date = str_replace('/', '-', $data['datepickerend']);
+            $dateend = date('y-m-d', strtotime($date));
+            $dateTimeStart = $datestart . $timeStart;
+            $dateTimeEnd = $dateend . $timeEnd;
+            $this->db->where("ads.created BETWEEN '$dateTimeStart' and '$dateTimeEnd'", NULL, FALSE);
+        } else {
+            if (isset($data['datepickerstart']) && $data['datepickerstart'] != '') {
+                $date = str_replace('/', '-', $data['datepickerstart']);
+                $datestart = date('y-m-d', strtotime($date));
+                $dateTimeStart = $datestart . $timeStart;
+                $dateTimeEnd = $datestart . $timeEnd;
+                $this->db->where("ads.created BETWEEN '$dateTimeStart' and '$dateTimeEnd'", NULL, FALSE);
+            }
+            if (isset($data['datepickerend']) && $data['datepickerend'] != '') {
+                $date = str_replace('/', '-', $data['datepickerend']);
+                $dateend = date('y-m-d', strtotime($date));
+                $dateTimeStart = $dateend . $timeStart;
+                $dateTimeEnd = $dateend . $timeEnd;
+                $this->db->where("ads.created BETWEEN '$dateTimeStart' and '$dateTimeEnd'", NULL, FALSE);
+            }
+        }
+
+        $query = $this->db->get();
+        //echo $this->db->last_query();
+        return count($query->result());
+    }
+   
+   function get_video($uid, $limit, $start, $sort = '', $sort_by = '', $data) {
+        $timeStart = " 00:00:00";
+        $timeEnd = " 23:59:59";
+        $id = $this->get_ownerid($uid);
+        array_push($id, $uid);
+        $this->db->select('a.*, b.category , c.username, e.name as file,e.minetype');        
+        $this->db->from('ads a');
+        $this->db->where_in('a.uid', $id); 
+        $this->db->join('categories b', 'a.category = b.id', 'left');
+        $this->db->join('users c', 'a.uid = c.id', 'left');
+        $this->db->join('videos d', 'a.id = d.content_id', 'left');
+        $this->db->join('files e', 'd.file_id = e.id', 'left');
+        //$this->db->join('video_rating f', 'a.id = f.content_id', 'left');
+        if (isset($data['ads_title']) && $data['ads_title'] != '') {
+            $this->db->like('title', trim($data['ads_title']));
+        }
+        if (isset($data['category']) && $data['category'] != '') {
+            $this->db->where('a.category', $data['category']);
+        }
+        if ((isset($data['datepickerstart']) && $data['datepickerstart'] != '') && (isset($data['datepickerend']) && $data['datepickerend'] != '')) {
+            $date = str_replace('/', '-', $data['datepickerstart']);
+            $datestart = date('y-m-d', strtotime($date));
+            $date = str_replace('/', '-', $data['datepickerend']);
+            $dateend = date('y-m-d', strtotime($date));
+            $dateTimeStart = $datestart . $timeStart;
+            $dateTimeEnd = $dateend . $timeEnd;
+            $this->db->where("a.created BETWEEN '$dateTimeStart' and '$dateTimeEnd'", NULL, FALSE);
+        } else {
+            if (isset($data['datepickerstart']) && $data['datepickerstart'] != '') {
+                $date = str_replace('/', '-', $data['datepickerstart']);
+                $datestart = date('y-m-d', strtotime($date));
+                $dateTimeStart = $datestart . $timeStart;
+                $dateTimeEnd = $datestart . $timeEnd;
+                $this->db->where("a.created BETWEEN '$dateTimeStart' and '$dateTimeEnd'", NULL, FALSE);
+            }
+            if (isset($data['datepickerend']) && $data['datepickerend'] != '') {
+                $date = str_replace('/', '-', $data['datepickerend']);
+                $dateend = date('y-m-d', strtotime($date));
+                $dateTimeStart = $dateend . $timeStart;
+                $dateTimeEnd = $dateend . $timeEnd;
+                $this->db->where("a.created BETWEEN '$dateTimeStart' and '$dateTimeEnd'", NULL, FALSE);
+            }
+        }
+
+        $this->db->group_by('a.id');
+        $this->db->order_by($sort, $sort_by);
+        $this->db->limit($limit, $start);
+        $query = $this->db->get();
+        //echo $this->db->last_query();
+        
+        $data = $query->result();
+        return $data;
+    }
+    
+    function get_category($uid,$relation = false) {
+        $this->db->select('child.id,child.category,child.parent_id,parent.category as parent');
+        $this->db->from('categories child');
+        $this->db->join('categories parent', 'child.parent_id = parent.id', 'left');
+        $this->db->where('child.u_id', $uid);
+        $this->db->order_by('child.category', 'asc');
+        $query = $this->db->get();
+        $result = $query->result();
+        
+        $category = array();
+        if($relation === false){
+            foreach($result as $key=>$val){
+                $category[$val->id] = ucfirst(strtolower($val->category));
+            }
+        }else{
+            foreach($result as $key=>$val){
+                if($val->parent_id > 0){
+                    $category[$val->parent][$val->id] = ucfirst(strtolower($val->category));
+                }else{
+                    $category[$val->id] = ucfirst(strtolower($val->category));
+                }
+            }
+        }
+        return $category;
+    }
+    
+    function get_ownerid($uid){
+        $this->db->select('id');
+        $this->db->where('owner_id', $uid);
+        $query = $this->db->get('users');
+        //return $query->result();
+            $data = array();
+        $i =1;
+        foreach($query->result() as $value){
+            //print_r($value);
+            $data[$i] =  $value->id;
+            $i++;
+        }
+        return  $data;
+        
+    }
+    
+     /**
+     *Function for Save and update video created by arshad
+     *$data = array();
+     * $data['title'] ='mandatory' for insert and update query
+     * $data['uid'] ='mandatory' for insert and update query
+     * $data['description'] ='optional'
+     * $data['fname'] = 'filename' mandatory for insert query
+     * $data['type'] = 'filetype' mandatory for insert query
+     * $data['minetype'], $data['relative_path'], $data['absolute_path'], $data['info']   = mandatory for insert query
+     * for update table you should be send $data['id'] = 'content_id'
+     * $data['category'] = 'category_id' mandatory for update
+     * $data['feature_video'] = '0 or 1' mandatory for update
+     * $data['status'] = '0 or 1' mandatory for update
+     * $data['star_cast'], $data['director'], $data['music_director'], $data['producer']  = 'optional' for update
+     */
+    
+    function _saveVideo($data){
+
+        $contents['ad_title'] = $data['content_title'];
+        if(isset($data['description'])){
+            $contents['ad_desc'] = $data['description'];
+            $contents['status'] = $data['status'];
+        }
+	                   
+        if(isset($data['content_id'])){
+            $cid = $data['content_id'];
+            $contents['category'] = $data['content_category'];
+                       
+            $this->db->where('id', $cid);
+            $this->db->set($contents);
+            $this->db->update('ads');
+            
+        }else{
+	    ###inserting file detail data in files table and return id###
+            $file['name'] = $data['filename'];
+            $file['type'] = $data['type'];
+            $file['minetype'] = $data['minetype'];
+            $file['relative_path'] = $data['relative_path'];
+            $file['absolute_path'] = $data['absolute_path'];
+            $file['info'] = $data['info'];
+            $this->db->set($file);
+            $this->db->set('created','NOW()',FALSE);
+            $this->db->insert('files');
+            $fid = $this->db->insert_id();
+	    
+            ###inserting data in contents table and return id###
+            $contents['uid'] = $data['uid'];
+            if(isset($data['category'])){
+                $contents['category'] = $data['category'];
+            }
+	    $contents['file_id'] = $fid;
+            $this->db->set($contents);
+            $this->db->set('created','NOW()',FALSE);
+            $this->db->insert('ads');
+            $cid = $this->db->insert_id();
+            //$this->db->last_query();                                           
+        }
+        return $cid;
+    }
+    ###saveVideo() function end #####
+    
+    function edit_profile($id) {
+        $this->db->select('a.*, b.id , c.username, g.name as file');
+        $this->db->from('ads a');
+        $this->db->join('categories b', 'a.category = b.id', 'left');
+        $this->db->join('users c', 'a.uid = c.id', 'left');      
+        $this->db->join('files g', 'a.file_id = g.id');
+        //$this->db->join('video_detail h', 'h.content_id = a.id', 'left');
+        $this->db->where('a.id', $id);
+        $query = $this->db->get();
+        return reset($query->result());
+    }
+    
+    function get_thumbs($id) {
+        $this->db->select('a.*, b.default_thumbnail, b.content_id');
+        $this->db->from('files a');
+        $this->db->join('video_thumbnails b', 'a.id = b.file_id');
+        $this->db->order_by('b.file_id', 'desc');
+        $this->db->where('b.content_id', $id);
+        $query = $this->db->get();
+        return $query->result();
+    }
+    
+    function get_videoInfo($vid) {
+
+        $this->db->select('f.name');
+        $this->db->from('ads a');
+        $this->db->where('a.id', $vid);        
+        $this->db->join('files f', 'a.file_id = f.id', 'left');
+        $query = $this->db->get();
+        $result = $query->result();
+        $fileInfo = $result[0]->name;
+        if ($fileInfo != "") {
+            return $fileInfo;
+        } else {
+            return 0;
+        }
+    }
+    
+    function get_defaultThumb($vid) {
+        $this->db->select('default_thumbnail');
+        $this->db->from('video_thumbnails');
+        $this->db->where('content_id', $vid);
+        $query = $this->db->get();
+        $thumbVal = '0';
+        foreach ($query->result_array() as $row) {
+            $default_thumbnail = $row['default_thumbnail'];
+            if ($default_thumbnail == '1') {
+                $thumbVal = '1';
+            }
+        }
+        return $thumbVal;
+    }
+	
+    function get_thumbIds($id) {
+        $this->db->select('a.id, a.name');
+        $this->db->from('files a');
+        $this->db->join('video_thumbnails b', 'a.id = b.file_id');
+        $this->db->where('b.content_id', $id);
+        $query = $this->db->get();
+        return $query->result();
+    }
+    
     public function getContent($id)
     {
         $this->db->select('a.location_sensor,b.file_id,a.id as contentid,a.title,c.*');
