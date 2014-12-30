@@ -8,6 +8,7 @@
                     </h1>
                     <ol class="breadcrumb">
                         <li><a href="<?=  base_url()?>"><i class="fa fa-dashboard"></i> Home</a></li>
+                        <li><a href="<?=  base_url()?>webtv"><i class="fa fa-dashboard"></i> Playlist</a></li>
                         <li class="active">EPG</li>
                     </ol>
                 </section>
@@ -42,8 +43,11 @@
                                         <!-- <input type='checkbox' id='drop-remove' /> <label for='drop-remove'>remove after drop</label> -->
                                         
                                     </div>
+                                    
                                 </div><!-- /.box-body -->
+                                
                             </div><!-- /. box -->
+                            <a class="btn btn-warning" href="<?=  base_url()?>webtv"><i class="fa fa-mail-reply"></i> Back</a>
                         </div><!-- /.col -->
                         <div class="col-md-9">
                             <div class="box box-primary">                                
