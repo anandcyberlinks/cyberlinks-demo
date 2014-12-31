@@ -25,7 +25,7 @@
 						<div class="nav-tabs-custom">
 							<ul class="nav nav-tabs">
 								<li class="<?=($tab==='Upload')?'active':''?>" ><a href="<?php echo base_url();?>video/videoUploadSrc/Upload"><?php echo  $welcome->loadPo('Upload') ?></a></li>
-								<li class="<?=($tab==='Youtube')?'active':''?>" ><a href="<?php echo base_url();?>video/videoUploadSrc/Youtube"><?php echo  $welcome->loadPo('Youtube') ?></a></li>
+								<!--<li class="<?=($tab==='Youtube')?'active':''?>" ><a href="<?php echo base_url();?>video/videoUploadSrc/Youtube"><?php echo  $welcome->loadPo('Youtube') ?></a></li>-->
 
 								<?php /* ?><li class="<?=($tab==='Other')?'active':''?>" ><a href="<?php echo base_url();?>video/videoUploadSrc/Other"><?php echo  $welcome->loadPo('Other')." ".$welcome->loadPo('Source'); ?></a></li><?php */ ?>
 							</ul>
@@ -55,7 +55,7 @@
 											</div>
 											<div class="box-footer">
 												<a class="confirm"  href=""  ><button id="load" class="btn btn-primary btn-sm" data-toggle="modal" data-target=".bs-example-modal-sm" ><?php echo  $welcome->loadPo('Upload') ?></button></a>
-												<a href="<?php echo  base_url(); ?>video" class="btn btn-default btn-sm"><?php echo  $welcome->loadPo('Cancel') ?></a>                
+												<a href="<?php echo  base_url(); ?>ads" class="btn btn-default btn-sm"><?php echo  $welcome->loadPo('Cancel') ?></a>                
 											</div>
 										</form>
 									</div>
@@ -64,8 +64,8 @@
 								<!-- simple upload section ends -->
 								
 								<!-- youtube upload section starts -->
-								<?php if($tab == 'Youtube') {?>
-								<div class="tab-pane active"">
+								<?php //if($tab == 'Youtube') {?>
+								<?php /*<div class="tab-pane active"">
 									<div class="box-header">
 										<h3 class="box-title"><?php echo  $welcome->loadPo('Youtube')." ".$welcome->loadPo('URL') ?></h3>
 									</div>
@@ -75,8 +75,8 @@
 									<input class="form-control" name="url" ></br>
 										<input type="submit" name="submit" value="Submit" class="btn btn-success">
 									</form>
-								</div>
-								<?php } ?>
+								</div> */?>
+								<?php //} ?>
 								<!-- youtube upload section ends -->
 								
 								
@@ -89,7 +89,7 @@
 											<div class="box-tools pull-right"></div>
 										</div>
 										<!-- form start -->
-										<form action="<?php echo base_url(); ?>video/upload_other" id="videoSrcOther" enctype="multipart/form-data" method="post" accept-charset="utf-8" >
+										<form action="<?php echo base_url(); ?>ads/upload_other" id="videoSrcOther" enctype="multipart/form-data" method="post" accept-charset="utf-8" >
 											<div style="display:none;">
 											<input type="hidden" id="redirect_url" name="redirect_url" value="<?php echo current_full_url(); ?>" />	
 											<input type="hidden" name="_method" value="POST"/></div>
@@ -150,7 +150,7 @@
 
 												<div class="box-footer">
 													<button class="btn btn-primary btn-sm" id="validatesrc"  type="submit" name="submit" value="Submit" onclick="validatesrc_url();" ><?php echo  $welcome->loadPo('Submit') ?></button>
-													<a href="<?php echo  base_url(); ?>video" class="btn btn-default btn-sm"><?php echo  $welcome->loadPo('Cancel') ?></a>                
+													<a href="<?php echo  base_url(); ?>ads" class="btn btn-default btn-sm"><?php echo  $welcome->loadPo('Cancel') ?></a>                
 												</div>
 											</div>
 										</form>

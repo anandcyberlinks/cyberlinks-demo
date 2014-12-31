@@ -140,7 +140,7 @@ class Ads extends MY_Controller {
                     $data['show_ca'] = 'asc';
                 break;
             case "title":
-                $sort = 'a.title';
+                $sort = 'a.ad_title';
                 if ($sort_by == 'asc')
                     $data['show_t'] = 'desc';
                 else
@@ -192,7 +192,7 @@ class Ads extends MY_Controller {
                     break;
                 case "Advanced":
                     $this->videoprofileadvance();
-                    //$this->show_video_view('videoEditAdvance', $this->data);
+                    //$this->show_ads_view('videoEditAdvance', $this->data);
                     break;
                 case "Scheduling":
                     $this->video_scheduling();
@@ -202,14 +202,14 @@ class Ads extends MY_Controller {
                     break;
                 case "Flavor":
                     $this->flavors();
-                    //	$this->show_video_view('videoEditFlavor',$this->data);
+                    //	$this->show_ads_view('videoEditFlavor',$this->data);
                     break;
                 case "Promo":
                     $this->promo();
-                    //	$this->show_video_view('videoEditFlavor',$this->data);
+                    //	$this->show_ads_view('videoEditFlavor',$this->data);
                     break;
                 default:
-                    $this->show_video_view('ads/videoEditBasic', $this->data);
+                    $this->show_ads_view('ads/videoEditBasic', $this->data);
             }
         } else {
             $this->session->set_flashdata('message', $this->_errormsg($this->loadPo($this->config->item('error_permission'))));
@@ -306,7 +306,7 @@ class Ads extends MY_Controller {
             redirect($curl);
         }
         $this->data['fvalue'] = $GetData;
-        $this->show_video_view('videoEditAdvance', $this->data);
+        $this->show_ads_view('videoEditAdvance', $this->data);
     }
 
     /*
@@ -343,7 +343,7 @@ class Ads extends MY_Controller {
                             //redirect('video');	
                         } else {
                             $this->data['schedule'] = $this->videos_model->get_scheduling($id);
-                            $this->show_video_view('videoEditScheduling', $this->data);
+                            $this->show_ads_view('videoEditScheduling', $this->data);
                         }
                     }
                 }
@@ -366,15 +366,15 @@ class Ads extends MY_Controller {
                         //redirect('video');	
                     } else {
                         $this->data['schedule'] = $this->videos_model->get_scheduling($id);
-                        $this->show_video_view('videoEditScheduling', $this->data);
+                        $this->show_ads_view('videoEditScheduling', $this->data);
                     }
                 }
             }
             $this->data['schedule'] = $this->videos_model->get_scheduling($id);
-            $this->show_video_view('videoEditScheduling', $this->data);
+            $this->show_ads_view('videoEditScheduling', $this->data);
         } else {
             $this->data['schedule'] = $this->videos_model->get_scheduling($id);
-            $this->show_video_view('videoEditScheduling', $this->data);
+            $this->show_ads_view('videoEditScheduling', $this->data);
         }
     }
 
@@ -392,7 +392,7 @@ class Ads extends MY_Controller {
         if ($vid) {
             $s = $this->data['setting'] = $this->videos_model->getsetting($vid);
             $this->data['content_id'] = $vid;
-            $this->show_video_view('videoEditFlavor', $this->data);
+            $this->show_ads_view('videoEditFlavor', $this->data);
         }
     }
 
@@ -458,7 +458,7 @@ class Ads extends MY_Controller {
                     $videoresult = $this->_upload($tmpFilePath, $fileUniqueName, 'ads');
                     if ($videoresult) {
                         $data = array();
-                        $data['ads_title'] = $fileUniqueName;
+                        $data['content_title'] = $fileUniqueName;
                         $data['uid'] = $this->uid;
                         $data['filename'] = $fileUniqueName;
                         $data['relative_path'] = serverAdsRelPath . $fileUniqueName;
@@ -594,19 +594,19 @@ class Ads extends MY_Controller {
             switch ($tab) {
                 case "csv":
                     $this->data['tab'] = $tab;
-                    $this->show_view('bulkupload', $this->data);
+                    $this->show_view('ads/bulkupload', $this->data);
                     break;
                 case "ftp":
                     $this->data['tab'] = $tab;
-                    $this->show_view('bulkupload', $this->data);
+                    $this->show_view('ads/bulkupload', $this->data);
                     break;
                 default:
                     $this->data['tab'] = 'csv';
-                    $this->show_view('bulkupload', $this->data);
+                    $this->show_view('ads/bulkupload', $this->data);
             }
         } else {
             $this->session->set_flashdata('message', $this->_errormsg($this->loadPo($this->config->item('error_permission'))));
-            redirect(base_url() . 'video');
+            redirect(base_url() . 'ads');
         }
     }
 
@@ -624,7 +624,7 @@ class Ads extends MY_Controller {
         if ($per) {
             $content_title = $_POST['content_title'];
             $category = $_POST['category'];
-            $keywords = $_POST['keyword'];
+           // $keywords = $_POST['keyword'];
             $url = $_POST['url'];
             $description = $_POST['description'];
             $rowID = $_POST['rowId'];
@@ -638,7 +638,7 @@ class Ads extends MY_Controller {
                 $post['created'] = date('Y-m-d');
                 $catId = $this->category_model->getCatId($category, $this->uid);
                 if (in_array($videoFileExt, $this->allowedVideoExt)) {
-                    $fieDestPath = REAL_PATH . serverVideoRelPath . $videoFileUniqName;
+                    $fieDestPath = REAL_PATH . serverAdsRelPath . $videoFileUniqName;
                     $videoresult = $this->_uploadFileCurl($videoFileSrcPath, $fieDestPath, $videoFileUniqName);
                     if ($videoresult == '1') {
                         $contentData = array();
@@ -654,12 +654,8 @@ class Ads extends MY_Controller {
                         $contentData['type'] = $videoFileExt;
                         $contentData['status'] = '1';
                         $contentData['info'] = base64_encode($videoFileUniqName);
-                        $lastId = $this->videos_model->_saveVideo($contentData);
-
-                        //Insert keywords
-                        if (isset($keywords) && $keywords != '') {
-                            $this->videos_model->_setKeyword(str_replace("|", ",", $keywords), $lastId);
-                        }
+                        $lastId = $this->Ads_model->_saveVideo($contentData);
+                       
                         if ($lastId != '') {
                             $message = $this->loadPo($this->config->item('success_file_upload'));
                             $this->log($this->user, $message);
@@ -690,7 +686,7 @@ class Ads extends MY_Controller {
             //$this->show_view('bulkupload', $this->data);
         } else {
             $this->session->set_flashdata('message', $this->_errormsg($this->loadPo($this->config->item('error_permission'))));
-            redirect(base_url() . 'video');
+            redirect(base_url() . 'ads');
         }
     }
 
@@ -822,7 +818,7 @@ class Ads extends MY_Controller {
             $fileExt = $this->_getFileExtension($fileName);
             $fileNameUniq = uniqid() . "." . $fileExt;
             $fieSrcPath = $this->input->post('ftpPath') . $fileName;
-            $fieDestPath = REAL_PATH . serverVideoRelPath . $fileNameUniq;
+            $fieDestPath = REAL_PATH . serverAdsRelPath . $fileNameUniq;
             $msg = "";
             if (!in_array($fileExt, $this->allowedVideoExt)) {
                 $msg = $this->loadPo($this->config->item('error_file_format') . $fileName);
@@ -838,13 +834,13 @@ class Ads extends MY_Controller {
                     $data['uid'] = $this->uid;
                     $data['type'] = 'FTP';
                     $data['filename'] = $fileNameUniq;
-                    $data['relative_path'] = serverVideoRelPath . $fileNameUniq;
-                    $data['absolute_path'] = REAL_PATH . serverVideoRelPath . $fileNameUniq;
+                    $data['relative_path'] = serverAdsRelPath . $fileNameUniq;
+                    $data['absolute_path'] = REAL_PATH . serverAdsRelPath . $fileNameUniq;
                     $data['minetype'] = $mimeType;
                     $data['type'] = $fileExt;
                     $data['status'] = '0';
                     $data['info'] = base64_encode($fileNameUniq);
-                    $last_id = $this->videos_model->_saveVideo($data);
+                    $last_id = $this->Ads_model->_saveVideo($data);
                     $msg = $this->loadPo($this->config->item('success_file_upload'));
                     $this->log($this->user, $msg);
                     $data['id'] = base64_encode($last_id);
@@ -917,8 +913,8 @@ class Ads extends MY_Controller {
         if ($per) {
             $sess = $this->session->all_userdata();
             $id = $_GET['id'];
-            $fileName = $this->videos_model->get_videoInfo($id);
-            $thumbInfo = $this->videos_model->getThumbsInfo($id);
+            $fileName = $this->Ads_model->get_videoInfo($id);
+            $thumbInfo = $this->Ads_model->getThumbsInfo($id);
             if (!empty($thumbInfo)) {
                 $thumbCount = count($thumbInfo);
                 for ($i = 0; $i < $thumbCount; $i++) {
@@ -928,13 +924,13 @@ class Ads extends MY_Controller {
                     $delResultThumbLarge = $this->_deleteFile($thumbInfo[$i]->name, REAL_PATH . THUMB_LARGE_PATH);
                 }
             }
-            $delResult = $this->_deleteFile($fileName, REAL_PATH . serverVideoRelPath);
+            $delResult = $this->_deleteFile($fileName, REAL_PATH . serverAdsRelPath);
             $videoFileExt = $this->_getFileExtension($fileName);
             $fileNameInitial = basename($fileName, $videoFileExt);
-            $delResult_2g = $this->_deleteFile($fileNameInitial . '_2g.mp4', REAL_PATH . serverVideoRelPath);
-            $delResult_3g = $this->_deleteFile($fileNameInitial . '_3g.mp4', REAL_PATH . serverVideoRelPath);
-            $delResult_hd = $this->_deleteFile($fileNameInitial . '_hd.mp4', REAL_PATH . serverVideoRelPath);
-            $result = $this->videos_model->delete_video($id);
+            $delResult_2g = $this->_deleteFile($fileNameInitial . '_2g.mp4', REAL_PATH . serverAdsRelPath);
+            $delResult_3g = $this->_deleteFile($fileNameInitial . '_3g.mp4', REAL_PATH . serverAdsRelPath);
+            $delResult_hd = $this->_deleteFile($fileNameInitial . '_hd.mp4', REAL_PATH . serverAdsRelPath);
+            $result = $this->Ads_model->delete_video($id);
             if ($result == '1') {
                 $msg = $this->loadPo($this->config->item('success_record_delete'));
                 $this->log($this->user, $msg);
@@ -943,7 +939,7 @@ class Ads extends MY_Controller {
             }
         } else {
             $this->session->set_flashdata('message', $this->_errormsg($this->loadPo($this->config->item('error_permission'))));
-            redirect(base_url() . 'video');
+            redirect(base_url() . 'ads');
         }
     }
 
@@ -1153,10 +1149,10 @@ class Ads extends MY_Controller {
         $vid = base64_decode($id);
         if ($vid) {
             $this->data['thumbnails_info'] = $this->Ads_model->get_thumbs($vid);
-            $this->data['content_id'] = $vid;
+            $this->data['ads_id'] = $vid;
             $this->data['videoInfo'] = $this->Ads_model->get_videoInfo($vid);
             $this->data['defaultThumbInfo'] = $this->Ads_model->get_defaultThumb($vid);
-            $this->show_video_view('videoEditThumbnail', $this->data);
+            $this->show_ads_view('ads/videoEditThumbnail', $this->data);
         }
     }
 
@@ -1179,7 +1175,7 @@ class Ads extends MY_Controller {
                     $msg = $this->loadPo($this->config->item('error_file_format'));
                     $this->log($this->user, $msg);
                     $this->data['error'] = $msg;
-                    $this->show_video_view('videoEditThumbnail', $this->data);
+                    $this->show_ads_view('videoEditThumbnail', $this->data);
                 } else {
                     $videoresult = $this->_upload($tmpFileName, $fileUniqueName, 'thumb');
                     if ($videoresult) {
@@ -1197,7 +1193,7 @@ class Ads extends MY_Controller {
                         }
                         $type = 'thumbnail';
                         $fileData = array();
-                        $fileData['content_id'] = $content_id;
+                        $fileData['ads_id'] = $content_id;
                         $fileData['filename'] = $fileUniqueName;
                         $fileData['type'] = $type;
                         $fileData['minetype'] = $imageType;
@@ -1210,7 +1206,7 @@ class Ads extends MY_Controller {
                         $data_postFile = @serialize($fileData);
                         $dataFile = base64_encode($data_postFile);
                         $fileData['info'] = $dataFile;
-                        $last_id = $this->videos_model->_saveThumb($fileData);
+                        $last_id = $this->Ads_model->_saveThumb($fileData);
                         $msg = $this->loadPo($this->config->item('success_file_upload'));
                         $this->log($this->user, $msg);
                         $this->session->set_flashdata('message', $this->_successmsg($msg));
@@ -1218,12 +1214,12 @@ class Ads extends MY_Controller {
                     } else {
                         $msg = $this->loadPo($this->config->item('error_file_upload'));
                         $data['message'] = $this->_errormsg($msg);
-                        $this->show_video_view('videoEditThumbnail', $data);
+                        $this->show_ads_view('videoEditThumbnail', $data);
                     }
                 }
                 //$videoresult = $this->upload_move_file($incoming_tmp, $incoming_original, $path);
             } else {
-                $this->show_video_view('videoEditThumbnail', $this->data);
+                $this->show_ads_view('videoEditThumbnail', $this->data);
             }
         } else {
             redirect($redirect_url);
@@ -1309,7 +1305,7 @@ class Ads extends MY_Controller {
             $msg = $this->loadPo($this->config->item('error_file_upload'));
             $this->log($this->user, $msg);
             $this->data['message'] = $msg;
-            $this->show_video_view('videoEditThumbnail', $this->data);
+            $this->show_ads_view('videoEditThumbnail', $this->data);
         }
         redirect($redirect_url);
     }
@@ -1325,7 +1321,7 @@ class Ads extends MY_Controller {
         $content_id = @$_GET['cid'];
         $file_id = @$_GET['fid'];
         $redirect_url = @$_GET['redirect_url'];
-        $result = $this->videos_model->setDefaultImg($content_id, $file_id);
+        $result = $this->Ads_model->setDefaultImg($content_id, $file_id);
         $msg = $this->loadPo($this->config->item('success_default_image_set'));
         $this->log($this->user, $msg);
         $this->session->set_flashdata('message', $this->_successmsg($msg));
@@ -1405,7 +1401,7 @@ class Ads extends MY_Controller {
                 $this->data['videoFileName'] = '';
             }
             $this->data['defaultPromoInfo'] = $this->videos_model->get_defaultPromo($vid);
-            $this->show_video_view('videoPromo', $this->data);
+            $this->show_ads_view('videoPromo', $this->data);
         }
     }
 
@@ -1429,10 +1425,10 @@ class Ads extends MY_Controller {
         if ($id == "") {
             redirect(base_url() . 'video');
         }
-        $result = $this->videos_model->video_detail($id);
+        $result = $this->Ads_model->video_detail($id);
         $data['result'] = $result;
 
-        $this->show_view('videodetail', $data);
+        $this->show_view('ads/videodetail', $data);
     }
 
     /*

@@ -21,8 +21,8 @@
                         </div>
                         <div class="form-group col-lg-12">
                             <label for="exampleInputEmail1"><?php echo $welcome->loadPo('Description') ?></label>
-                            <textarea class="textarea" placeholder="Place some text here" style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;" name="description"> <?php if (isset($result['description']) && $result['description'] != "") {
-                            echo $result['description'];
+                            <textarea class="textarea" placeholder="Place some text here" style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;" name="description"> <?php if (isset($result['ad_desc']) && $result['ad_desc'] != "") {
+                            echo $result['ad_desc'];
                         } else {
                             echo set_value('description');
                         } ?></textarea>  
@@ -38,21 +38,11 @@
     } ?> />&nbsp;&nbsp;<?php echo $welcome->loadPo('Status') ?> 
                             </label>
                         </div>
-						<div class="form-group col-lg-12">
-                            <label>
-                                <input type="checkbox"  name="feature_video"<?php if (isset($result['feature_video']) && $result['feature_video'] == 1) {
-        echo " checked";
-    } else {
-        echo "";
-    } ?> />&nbsp;&nbsp;<?php echo $welcome->loadPo('Feature Video') ?> 
-                            </label>
-                        </div>
-
             </div>
         </div>
         <div class="box-footer">
             <button class="btn btn-primary btn-sm" type="submit" name="submit" value="Update"><?php echo $welcome->loadPo('Update') ?></button>
-            <a href="<?php echo base_url(); ?>video" class="btn btn-default"><?php echo $welcome->loadPo('Cancel') ?></a>           
+            <a href="<?php echo base_url(); ?>ads" class="btn btn-default"><?php echo $welcome->loadPo('Cancel') ?></a>           
         </div>
         </form>
     </div>

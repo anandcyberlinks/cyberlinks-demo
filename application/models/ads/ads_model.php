@@ -22,8 +22,8 @@ class Ads_model extends CI_Model {
         $this->db->from('ads');
         $this->db->join('categories', 'ads.category = categories.id', 'left');
         $this->db->where_in('ads.uid', $id);
-        if (isset($data['ads_title']) && $data['ads_title'] != '') {
-            $this->db->like('ad_title', trim($data['ads_title']));
+        if (isset($data['title']) && $data['title'] != '') {
+            $this->db->like('ad_title', trim($data['title']));
         }
         if (isset($data['category']) && $data['category'] != '') {
             $this->db->where('ads.category', $data['category']);
@@ -67,12 +67,11 @@ class Ads_model extends CI_Model {
         $this->db->from('ads a');
         $this->db->where_in('a.uid', $id); 
         $this->db->join('categories b', 'a.category = b.id', 'left');
-        $this->db->join('users c', 'a.uid = c.id', 'left');
-        $this->db->join('videos d', 'a.id = d.content_id', 'left');
-        $this->db->join('files e', 'd.file_id = e.id', 'left');
+        $this->db->join('users c', 'a.uid = c.id', 'left');        
+        $this->db->join('files e', 'a.file_id = e.id', 'left');
         //$this->db->join('video_rating f', 'a.id = f.content_id', 'left');
-        if (isset($data['ads_title']) && $data['ads_title'] != '') {
-            $this->db->like('title', trim($data['ads_title']));
+        if (isset($data['title']) && $data['title'] != '') {
+            $this->db->like('ad_title', trim($data['title']));
         }
         if (isset($data['category']) && $data['category'] != '') {
             $this->db->where('a.category', $data['category']);
@@ -209,7 +208,24 @@ class Ads_model extends CI_Model {
             $this->db->set('created','NOW()',FALSE);
             $this->db->insert('ads');
             $cid = $this->db->insert_id();
-            //$this->db->last_query();                                           
+            //$this->db->last_query();
+	    
+	     ###transcoding video ###
+           
+                $this->db->select('*');
+                $this->db->from('flavors');
+                $query = $this->db->get();
+                $flav = $query->result();
+                foreach($flav as $flavorVal){
+                    $videoFlavorsData['flavor_id'] = $flavorVal->id;
+                    $videoFlavorsData['ads_id'] = $cid;
+                    $videoFlavorsData['file_id'] = $fid;
+                    $videoFlavorsData['status'] = 'pending';
+                    //$videoFlavorsData['created'] = date('Y-m-d');
+                    $this->db->set('created','NOW()',FALSE);
+                    $this->db->insert('ads_flavors', $videoFlavorsData);
+                }
+            
         }
         return $cid;
     }
@@ -228,11 +244,11 @@ class Ads_model extends CI_Model {
     }
     
     function get_thumbs($id) {
-        $this->db->select('a.*, b.default_thumbnail, b.content_id');
+        $this->db->select('a.*, b.default_thumbnail, b.ads_id');
         $this->db->from('files a');
-        $this->db->join('video_thumbnails b', 'a.id = b.file_id');
+        $this->db->join('ads_thumbnails b', 'a.id = b.file_id');
         $this->db->order_by('b.file_id', 'desc');
-        $this->db->where('b.content_id', $id);
+        $this->db->where('b.ads_id', $id);
         $query = $this->db->get();
         return $query->result();
     }
@@ -255,8 +271,8 @@ class Ads_model extends CI_Model {
     
     function get_defaultThumb($vid) {
         $this->db->select('default_thumbnail');
-        $this->db->from('video_thumbnails');
-        $this->db->where('content_id', $vid);
+        $this->db->from('ads_thumbnails');
+        $this->db->where('ads_id', $vid);
         $query = $this->db->get();
         $thumbVal = '0';
         foreach ($query->result_array() as $row) {
@@ -271,10 +287,195 @@ class Ads_model extends CI_Model {
     function get_thumbIds($id) {
         $this->db->select('a.id, a.name');
         $this->db->from('files a');
-        $this->db->join('video_thumbnails b', 'a.id = b.file_id');
-        $this->db->where('b.content_id', $id);
+        $this->db->join('ads_thumbnails b', 'a.id = b.file_id');
+        $this->db->where('b.ads_id', $id);
         $query = $this->db->get();
         return $query->result();
+    }
+    
+    function getThumbsInfo($id) {
+        $this->db->select('a.name');
+        $this->db->from('files a');
+        $this->db->join('ads_thumbnails b', 'a.id = b.file_id');
+        $this->db->order_by('b.file_id', 'desc');
+        $this->db->where('b.ads_id', $id);
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+
+
+    function setDefaultImg($content_id, $file_id) {
+        if ($content_id != '' && $file_id != '') {
+            $result = $this->updateDefaultImgPre($content_id);
+            if ($result) {
+                $data = array(
+                    'default_thumbnail' => '1',
+                );
+                $this->db->where('ads_id', $content_id);
+                $this->db->where('file_id', $file_id);
+                $this->db->update('ads_thumbnails', $data);
+                return true;
+            }
+        }
+    }
+
+    function updateDefaultImgPre($content_id) {
+        $data = array(
+            'default_thumbnail' => '0',
+        );
+        $this->db->where('ads_id', $content_id);
+        $this->db->update('ads_thumbnails', $data);
+        return true;
+    }
+
+    function getThumbImgName($file_id) {
+        $this->db->select('name');
+        $this->db->from('files');
+        $this->db->where('id', $file_id);
+        $query = $this->db->get();
+        $result = $query->result();
+        $fileName =  $result[0]->name;
+        if ($fileName != "") {
+            return $fileName;
+        } else {
+            return 0;
+        }
+    }
+
+    function deleleThumb($content_id, $file_id) {
+        $this->db->delete('ads_thumbnails', array('ads_id' => $content_id, 'file_id' => $file_id));
+        $this->db->delete('files', array('id' => $file_id));
+        return true;
+    }
+    
+    function delete_video($id) {
+        if($id){
+            $videoFileId = $this->getVideoFileIds($id); 
+          //  $deleteKeyword = $this->deletekeywords($id);
+            
+            $videoThumbFileIds = $this->getVideoThumbFileIds($id);
+            if(isset($videoThumbFileIds)){
+                foreach($videoThumbFileIds as $fileinfo){
+                    if($this->checkIfRecordsExists('files', 'id', $fileinfo->file_id)){
+                        $this->db->delete('files', array('id' => $fileinfo->file_id));
+                    }
+                }
+            }
+            /*if($this->checkIfRecordsExists('video_source', 'content_id', $id))
+            {
+                $this->db->delete('video_source', array('content_id' => $id));
+            }*/
+            
+            //If($videoFileId) {
+                if($this->checkIfRecordsExists('ads', 'id', $id)){
+                    $this->db->delete('ads', array('id' => $id));
+                }
+                if($this->checkIfRecordsExists('files', 'id', $videoFileId)){
+                    $this->db->delete('files', array('id' => $videoFileId));
+                }
+             /*  if($this->checkIfRecordsExists('video_flavors', 'content_id', $id)){
+                   $this->db->delete('video_flavors', array('content_id' => $id));
+                }
+                */
+                if($this->checkIfRecordsExists('ads_thumbnails', 'ads_id', $id)){
+                   $this->db->delete('ads_thumbnails', array('ads_id' => $id));
+                }
+                              
+                //$this->db->delete('wowza_video', array('content_id' => $id));
+                return 1;
+            //} else {
+                    //return 0;
+            //}
+        } else {
+        return 0;
+        }
+    }
+    
+    
+    function _saveThumb($data){
+        $cid = $data['ads_id'];
+        if(isset($cid)){
+            ###inserting file detail data in files table and return id###
+            $file['name'] = $data['filename'];
+            $file['type'] = $data['type'];
+            $file['minetype'] = $data['minetype'];
+            $file['relative_path'] = $data['relative_path'];
+            $file['absolute_path'] = $data['absolute_path'];
+            $file['status'] = $data['status'];
+            $file['uid'] = $data['uid'];
+            $file['info'] = $data['info'];
+            $this->db->set($file);
+            $this->db->set('created','NOW()',FALSE);
+            $this->db->insert('files');
+            $fid = $this->db->insert_id();
+            
+            ###inserting data in videos table with contents_id and file_id###
+            
+            $this->db->set('ads_id', $cid);
+            $this->db->set('file_id', $fid);
+            $this->db->set('created','NOW()',FALSE);
+            $this->db->insert('ads_thumbnails');            
+            $thumbId = $this->db->insert_id();
+        }
+        return $fid;
+    }
+    
+    function getVideoFileIds($id) {
+        $this->db->select('a.id');
+        $this->db->from('files a');
+        $this->db->join('ads b', 'a.id = b.file_id');
+        $this->db->where('b.id', $id);
+        $query = $this->db->get();
+        //echo $this->db->last_query(); exit;
+            $result = $query->result();
+            if(count($result))
+            {
+                    $videoFileId = $result[0]->id;
+                    return $videoFileId;
+            } else {
+                    return 0;
+            }
+
+    }
+    
+     function getVideoThumbFileIds($id) {
+        $this->db->select('a.file_id');
+        $this->db->from('ads_thumbnails a');
+        $this->db->where('a.ads_id', $id);
+        $query = $this->db->get();
+        //echo $this->db->last_query(); exit;
+        $result = $query->result();
+        return $result;
+    }
+    
+    function checkIfRecordsExists($table, $field, $value){
+        $this->db->select('id');
+        $this->db->from($table);
+        $this->db->where($field, $value);
+        $query = $this->db->get();
+        $result = $query->result();
+        $cnt = count($result);
+        if($cnt > 0)
+        {
+            return true;
+        } else {
+            return false;
+        }
+        
+    }
+    
+    
+    function video_detail($id) {
+        $this->db->select('a.*, b.category , c.username, e.name as file');
+        $this->db->from('ads a');
+        $this->db->where('a.id', $id);
+        $this->db->join('categories b', 'a.category = b.id', 'left');
+        $this->db->join('users c', 'a.uid = c.id', 'left');       
+        $this->db->join('files e', 'a.file_id = e.id', 'left');
+        $query = $this->db->get();
+        $data = $query->result();
+        return $data;
     }
     
     public function getContent($id)

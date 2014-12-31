@@ -3,10 +3,10 @@
     <aside class="right-side"> 
         <!-- Content Header (Page header) -->
         <section class="content-header">
-            <h1><?php echo $welcome->loadPo('Video') ?><small><?php echo $welcome->loadPo('Control panel') ?></small></h1>
+            <h1><?php echo $welcome->loadPo('Ads') ?><small><?php echo $welcome->loadPo('Control panel') ?></small></h1>
             <ol class="breadcrumb">
                 <li><a href="<?php echo base_url(); ?>"><i class="fa fa-dashboard"></i><?php echo $welcome->loadPo('Dashboard') ?></a></li>
-                <li class="active"><?php echo $welcome->loadPo('Video') ?></li>
+                <li class="active"><?php echo $welcome->loadPo('Ads') ?></li>
             </ol>
         </section>
         <div>
@@ -33,7 +33,7 @@
                                         <div class="form-group col-lg-4">
                                             <div class="input text">
                                                 <label for=""><?php echo $welcome->loadPo('Title') ?></label>
-                                                <input type="text" name="content_title" id="content_title" class="form-control" value="<?php echo (isset($search['content_title'])) ? $search['content_title'] : ''; ?>" placeholder="<?php echo $welcome->loadPo('Title') ?>">
+                                                <input type="text" name="title" id="title" class="form-control" value="<?php echo (isset($search['title'])) ? $search['title'] : ''; ?>" placeholder="<?php echo $welcome->loadPo('Title') ?>">
                                             </div>
                                         </div>
                                         <div class="form-group col-lg-4">
@@ -72,6 +72,7 @@
                                 <div class="box-footer">
                                         <!--	<input type="text" id="hddstarddt" name="hddstarddt" value="<?php echo @$_POST['hddstarddt'] ?>"> -->
                                     <button type="submit" name="submit" value="Search"class="btn btn-primary"><?php echo $welcome->loadPo('Search') ?></button>
+                                <button type="submit" name="reset" value="Reset"class="btn btn-primary"><?php echo $welcome->loadPo('Reset') ?></button>
                                 </div>
                             </form>
                         </div><!-- /.box -->
@@ -84,15 +85,13 @@
                                 <table id="example2" class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
-                                            <th width="15px"><a href="<?php echo base_url(); ?>video/index/title/<?php echo (!empty($show_t)) ? $show_t : 'asc'; ?>"><?php echo $welcome->loadPo('Title') ?></a></th>
+                                            <th width="15px"><a href="<?php echo base_url(); ?>ads/index/title/<?php echo (!empty($show_t)) ? $show_t : 'asc'; ?>"><?php echo $welcome->loadPo('Title') ?></a></th>
                                             
-                                            <th><a href="<?php echo base_url(); ?>video/index/category/<?php echo (!empty($show_c)) ? $show_c : 'asc'; ?>"><?php echo $welcome->loadPo('Category') ?></a></th>
-                                            <th><a href="<?php echo base_url(); ?>video/index/user/<?php echo (!empty($show_u)) ? $show_u : 'asc'; ?>"><?php echo $welcome->loadPo('User') ?></a></th>
-                                            <th><a href="<?php echo base_url(); ?>video/index/status/<?php echo (!empty($show_s)) ? $show_s : 'asc'; ?>"><?php echo $welcome->loadPo('Status') ?></a></th>
-                                            <th><?php echo $welcome->loadPo('Type') ?></th>
-                                            <th><?php echo $welcome->loadPo('Price') ?></th>
+                                            <th><a href="<?php echo base_url(); ?>ads/index/category/<?php echo (!empty($show_c)) ? $show_c : 'asc'; ?>"><?php echo $welcome->loadPo('Category') ?></a></th>
+                                            <th><a href="<?php echo base_url(); ?>ads/index/user/<?php echo (!empty($show_u)) ? $show_u : 'asc'; ?>"><?php echo $welcome->loadPo('User') ?></a></th>
+                                            <th><a href="<?php echo base_url(); ?>ads/index/status/<?php echo (!empty($show_s)) ? $show_s : 'asc'; ?>"><?php echo $welcome->loadPo('Status') ?></a></th>                                            
                                             <th><?php echo $welcome->loadPo('Preview') ?></th>
-                                            <th><a href="<?php echo base_url(); ?>video/index/created/<?php echo (!empty($show_ca)) ? $show_ca : 'asc'; ?>"><?php echo $welcome->loadPo('Publish Date') ?></a></th>
+                                            <th><a href="<?php echo base_url(); ?>ads/index/created/<?php echo (!empty($show_ca)) ? $show_ca : 'asc'; ?>"><?php echo $welcome->loadPo('Publish Date') ?></a></th>
                                             <th align="center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $welcome->loadPo('Action') ?></th>
                                         </tr>
                                     </thead>
@@ -100,7 +99,7 @@
                                     <tbody>
                                         <?php foreach ($result as $value) { ?>
                                         <tr id="<?php echo $value->id ?>">
-                                                <td  width="350"><a href="<?php echo base_url(); ?>video/detail/<?php echo $value->id; ?>"><?php echo strlen($value->title) > 40 ?  substr($value->title,0,40).'...' : $value->title; ?></td>
+                                                <td  width="350"><a href="<?php echo base_url(); ?>ads/detail/<?php echo $value->id; ?>"><?php echo strlen($value->ad_title) > 40 ?  substr($value->ad_title,0,40).'...' : $value->ad_title; ?></td>
                                                 <td><?php echo $value->category; ?></td>
                                                 <td><?php echo $value->username; ?></td>
                                                 <td><?php if ($value->status == 1) { ?>
@@ -108,20 +107,18 @@
                                                     <?php } else { ?>
                                                         <img src="<?php echo base_url(); ?>assets/img/test-fail-icon.png" alt="Active" />
                                                     <?php } ?></td>
-                                                <td><?php echo ucfirst($value->content_type); ?></td>
-                                                <td><a href="javascript:void(0)" link="<?php echo base_url()?>package/price/<?php echo $value->id; ?>?type=video" class="price">Price</a></td>
-                                                <td style='text-align:center'>
+                                                                                              <td style='text-align:center'>
                                                     <?php if(in_array($value->minetype,array('video/wmv','video/avi'))) { ?>
                                                     --
                                                     <?php } else { ?>
-                                                    <a class="prev_video" href="#myModal" data-backdrop="static" data-toggle="modal" data-img-url="<?php echo baseurl.serverVideoRelPath.$value->file; ?>">Preview</a>
+                                                    <a class="prev_video" href="#myModal" data-backdrop="static" data-toggle="modal" data-img-url="<?php echo baseurl.serverAdsRelPath.$value->file; ?>">Preview</a>
                                                     <?php } ?>
                                                 </td>
                                                 <td  width="120"><?php echo date('M d,Y', strtotime($value->created)); ?></td>
                                                 <td  width="150"> 
-                                                    <a href="<?php echo base_url(); ?>video/videoOpr/Basic?action=<?php echo base64_encode($value->id) . '&'; ?>" class="btn btn-info btn-sm"><?php echo $welcome->loadPo('Edit') ?></a>
+                                                    <a href="<?php echo base_url(); ?>ads/videoOpr/Basic?action=<?php echo base64_encode($value->id) . '&'; ?>" class="btn btn-info btn-sm"><?php echo $welcome->loadPo('Edit') ?></a>
                                                     &nbsp;
-                                                    <a class="confirm" onclick="return delete_video(<?php echo $value->id; ?>, '<?php echo base_url() . 'video/deletevideo' ?>', '<?php echo current_full_url(); ?>');" href="" ><button class="btn btn-danger btn-sm" data-toggle="modal" data-target=".bs-example-modal-sm" ><?php echo $welcome->loadPo('Delete') ?></button></a>                            </td>
+                                                    <a class="confirm" onclick="return delete_video(<?php echo $value->id; ?>, '<?php echo base_url() . 'ads/deletevideo' ?>', '<?php echo current_full_url(); ?>');" href="" ><button class="btn btn-danger btn-sm" data-toggle="modal" data-target=".bs-example-modal-sm" ><?php echo $welcome->loadPo('Delete') ?></button></a>                            </td>
                                             </tr>
                                         <?php } ?>
                                     </tbody>
