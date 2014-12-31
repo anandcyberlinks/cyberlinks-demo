@@ -47,14 +47,15 @@
                                         <div class="form-group col-md-10">
                                             <label><?php echo $welcome->loadPo('Time'); ?></label>
                                             <input id="reservationtime" class="form-control" type="text" name="start_date" value="<?php if(isset($value)){ echo str_replace('-', '/', $value[0]->start_date)." - ".str_replace('-','/',$value[0]->end_date); }?>" readonly="readonly">
-                                        </div>
+                                        </div> <?php /*
                                         <div class="form-group col-md-10">
                                             <label><?php echo $welcome->loadPo('Status'); ?></label>
                                             <input type="hidden" name="status" value="0">
                                             <input type="checkbox" name="status" value="1" <?php if(isset($value)){ if($value[0]->status == '1'){echo "checked";} }?>>
-                                        </div>
+                                        </div> */ ?>
                                         <div class="form-group col-md-5">
                                             <input type="submit" name="submit" value="Submit" class="btn btn-success">
+                                            <a class="btn btn-warning" href="http://localhost/multitvfinal/webtv"><i class="fa fa-mail-reply"></i> Back</a>
                                         </div>
                                     </div>
                                 </form>

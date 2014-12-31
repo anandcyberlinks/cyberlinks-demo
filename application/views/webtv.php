@@ -73,6 +73,7 @@
                                             <th><?php echo $welcome->loadPo('Name') ?></th>
                                             <th><?php echo $welcome->loadPo('Description') ?></th>
                                             <th><?php echo $welcome->loadPo('Status') ?></th>
+                                            <th><?php echo $welcome->loadPo('URL') ?></th>
                                             <th><?php echo $welcome->loadPo('Start Date') ?></th>
                                             <th><?php echo $welcome->loadPo('End Date') ?></th>
                                             <th colspan="2"><?php echo $welcome->loadPo('Manage'); ?></th>
@@ -91,6 +92,13 @@
                                                     <?php } else { ?>
                                                         <img src="<?php echo base_url(); ?>assets/img/test-fail-icon.png" alt="Active" />
                                                     <?php } ?></td>
+                                                <td style='text-align:center'>
+                                                    <?php if($value->url == '') { ?>
+                                                    --
+                                                    <?php } else { ?>
+                                                    <a class="prev_video" href="#myModal" data-backdrop="static" data-toggle="modal" data-img-url="<?php echo $value->url; ?>">Preview</a>
+                                                    <?php } ?>
+                                                </td>
                                                 <td><?php echo date('M d,Y', strtotime($value->start_date)); ?></td>
                                                 <td><?php echo date('M d,Y', strtotime($value->end_date)); ?></td>
                                                 <td>
