@@ -303,10 +303,27 @@ class Content extends Apis{
     function webtv_get(){
         $qString = $this->get();
         $response = array();
-        $query = sprintf('select p.id,p.name,p.description,p.status,p.start_date,p.end_date from playlists p where uid = %d ',$this->app->id);
+        $query = sprintf('select p.id,p.name,p.description,p.status,p.start_date,p.end_date
+                         from playlists p
+                         where p.uid = %d and p.status = 0 ',$this->app->id);
         $dataset = $this->db->query($query)->result();
         foreach($dataset as $key=>$val){
             $response[] = $val;
+        }
+        $this->response($response);
+    }
+    
+    function webtvsave_post(){
+        $data = array();
+        $response = array();
+        if(isset($_POST['id']) && $_POST['id'] != ''){
+            $data['url'] = isset($_POST['url']) ? $_POST['url'] : '';
+            $data['status'] = isset($_POST['status']) ? $_POST['status'] : 0;
+            $this->db->where('id', $_POST['id']);
+            $this->db->update('playlists',$data);
+            $response['result'] = 'data saved successfully';
+        }else{
+            $response['error'][] = 'Invalid Playlist Id';
         }
         $this->response($response);
     }
