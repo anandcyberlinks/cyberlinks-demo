@@ -8,13 +8,13 @@
     <aside class="right-side">                
 		<!-- Content Header (Page header) -->
 		<section class="content-header">
-			<h1>Live Stream<small>Control panel</small></h1>
+			<h1>Youtube Channels<small>Control panel</small></h1>
 			<ol class="breadcrumb">
 				<li><a href="<?php echo base_url(); ?>"><i class="fa fa-dashboard"></i><?php echo $welcome->loadPo('Dashboard') ?></a></li>                                
-                               <?php if($this->role_id ==2 ){?>
-			        <li><a href="<?php echo base_url()?>livestream/slist"><?php echo $welcome->loadPo('Live Streaming') ?></a></li>
-				<?php }?>
-				 <li class="active"><?php echo $welcome->loadPo('Add/Edit') ?></li>
+                               
+			        <li><a href="<?php echo base_url()?>webtv"><?php echo $welcome->loadPo('Web Tv') ?></a></li>
+				
+				 <li class="active"><?php echo $channel->name; ?></li>
 			</ol>
 		</section>
 		<div>
@@ -26,14 +26,14 @@
 		<section class="content">
 		    <div class="box box-primary">
 			<div class="box-header">
-			    <h3 class="box-title">Live Stream</h3>
+			   
 			</div><!-- /.box-header -->
 			<!-- form start -->
 			<form action="" method="post" id="frmstream" enctype='multipart/form-data'>
 			    <div class="box-body">
 				<div class="form-group">
 				    <div class="row">
-					<div class="col-md-9">
+					<!--<div class="col-md-9">
                                             <label for="Name"><?php echo $welcome->loadPo('Content provider'); ?></label>
 					    <?php if($this->role_id ==2 && $_GET['action']=='add'){?>
 						    <select name="userid" class="form-control" placeholder="User" id="userid" title="please select content provider" required>
@@ -45,7 +45,7 @@
 					    <?php }else{?>
 						<input class="form-control" type="text" disabled=disabled value="<?php echo $result->content_provider;?>" placeholder="Youtube URL" />
 					    <?php }?>
-					</div>
+					</div>-->
 				    </div>
                                     <div class="row">
 					<div class="col-md-9">

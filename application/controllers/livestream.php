@@ -57,20 +57,21 @@ class Livestream extends MY_Controller {
   
     function index() {
         
-        if($_GET['id'] !=''){           
+        if(isset($_GET['id']) && $_GET['id'] !=''){           
             $id = base64_decode($_GET['id']);
-        }else if($_POST['userid'] >0){
+        }else if(isset($_POST['userid']) && $_POST['userid'] >0){
             $id = $_POST['userid'];
         }else{
             $id = $this->uid;
         }
         
+        $cid = $this->uri->segment(3);
         //-- content provider list --//
-            $data['content_provider'] = $this->Livestream_model->getContentProvider(true);
-        
+            //$data['content_provider'] = $this->Livestream_model->getContentProvider(true);
+        $data['channel'] = $this->Livestream_model->getChannel($cid);
           //-- stream list --//
-            $data['result'] = $result = $this->Livestream_model->getStream($id);
-         //print_r($result);die;
+            $data['result'] = $result = $this->Livestream_model->getStream($cid);
+        //print_r($result);die;
          if(isset($_POST['save'])){
           
             //--- upload file --//
@@ -82,6 +83,7 @@ class Livestream extends MY_Controller {
             } else {
                 //$thumbnail = $result->thumbnail_url;
             }
+            $input['channel_id'] = $cid;
             $input['youtube'] = $_POST['youtube'];
             $input['ios'] = $_POST['ios'];
             $input['android'] = $_POST['android'];
@@ -103,7 +105,7 @@ class Livestream extends MY_Controller {
             $msg = $this->loadPo($this->config->item('success_record_update'));
             $this->log($this->user, $msg);
             $this->session->set_flashdata('message', $this->_successmsg($msg));
-            redirect(base_url()."livestream?id=".base64_encode($id));
+            redirect(base_url()."livestream/index/".$cid);
         }
        
         $data['welcome'] = $this;

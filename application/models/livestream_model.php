@@ -35,7 +35,7 @@ class Livestream_model extends CI_Model{
         $this->db->set($data);
         if($type == 'update'){
             $this->db->set('modified','NOW()',FALSE);
-            $this->db->where('user_id', $data['user_id']);
+            $this->db->where('channel_id', $data['channel_id']);
             $this->db->update('livestream', $data);
              
         }else{
@@ -45,12 +45,13 @@ class Livestream_model extends CI_Model{
         }
     }
     
-    function getStream($uid)
+    function getStream($cid)
    {
     $this->db->select('l.*,CONCAT(u.first_name ," ",u.last_name) as content_provider',false);
     $this->db->from('livestream l');
     $this->db->join('users u','u.id=l.user_id');
-    $this->db->where('user_id',$uid);
+    //$this->db->where('user_id',$uid);
+    $this->db->where('l.channel_id',$cid);
     $query = $this->db->get();
     //echo $this->db->last_query();
     return $query->row();
@@ -68,6 +69,17 @@ class Livestream_model extends CI_Model{
 	$this->db->where('u.role_id',1);
 	$query = $this->db->get();	
 	return $query->result();
+   }
+   
+   function getChannel($id)
+   {    
+         
+	$this->db->select('name');
+	$this->db->from('channels');	
+	$this->db->where('id',$id);
+	$this->db->limit(1);
+	$query = $this->db->get();	
+	return $query->row();
    }
    
    function updatestatus($data)

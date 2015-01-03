@@ -91,8 +91,10 @@
                                                     <?php } ?></td>
                                                 <td>
                                                     <?php if($value->type =='Loop'){ ?>
-                                                    <a href="<?php echo base_url() ?>webtv/playlist/<?php echo $value->id; ?>">Manage Chsnnels</a>
-                                                    <?php } else{ echo '....'; } ?>
+                                                    <a href="<?php echo base_url() ?>webtv/playlist/<?php echo $value->id; ?>">Manage Channels</a>
+                                                    <?php } else if($value->type =='Youtube'){ ?>
+                                                    <a href="<?php echo base_url() ?>livestream/index/<?php echo $value->id; ?>">Manage Channels</a>
+                                                    <?php } ?>
                                                 </td>
                                                 <td  width="150"> 
                                                     <a href="<?php echo base_url(); ?>webtv/edit_channels?action=<?php echo base64_encode($value->id) . '&'; ?>" class="btn btn-info btn-sm"><?php echo $welcome->loadPo('Edit') ?></a>
