@@ -13,7 +13,7 @@ class Webtv_model extends CI_Model{
         return TRUE;
     }
     
-    function fetchplaylists($uid, $start, $limit, $data) {
+    function fetchplaylists($uid, $start, $limit, $data, $channel_id) {
         $this->db->select('p.*, SUM(if(pv.id is not null,1,0)) as `total` ',false);
         $timeStart = " 00:00:00";
         $timeEnd = " 23:59:59";
@@ -38,16 +38,30 @@ class Webtv_model extends CI_Model{
 
         $this->db->where('p.uid', $uid);
         $this->db->where('p.id > 0');
+        $this->db->where('p.channel_id', $channel_id);
         $this->db->from('playlists p');
         $this->db->join('playlist_video pv', 'pv.playlist_id = p.id', 'left');
         $this->db->group_by('p.id');
         $this->db->limit($start, $limit);
         $result = $this->db->get()->result();
-        //echo $this->db->last_query();
         return $result;
     }
     
-    function countAll($uid, $data) {
+        function fetchchannels($uid, $start, $limit, $data) {
+        $this->db->select('*');
+        if (isset($data['name']) && $data['name'] != "") {
+            $this->db->where('name', $data['name']);
+        }
+        $this->db->where('uid', $uid);
+        $this->db->from('channels');
+        $this->db->limit($start, $limit);
+        $result = $this->db->get()->result();
+        //echo $this->db->last_query();
+        //print_r($result);
+        return $result;
+    }
+    
+    function countAll($uid, $data, $channel_id) {
         $timeStart = " 00:00:00";
         $timeEnd = " 23:59:59";
     
@@ -70,10 +84,20 @@ class Webtv_model extends CI_Model{
         }
 
         $this->db->where('uid', $uid);
+        $this->db->where('channel_id', $channel_id);
         $this->db->from('playlists');
         return $this->db->count_all_results();
     }
-
+    
+    function countAll_channels($uid, $data) {
+        if (isset($data['name']) && $data['name'] != "") {
+            $this->db->where('name', $data['name']);
+        }
+        $this->db->where('uid', $uid);
+        $this->db->from('channels');
+        return $this->db->count_all_results();
+    }
+    
     function insert($post) {
         if (isset($post['id'])) {
             $this->db->where('id', $post['id']);
@@ -84,13 +108,34 @@ class Webtv_model extends CI_Model{
             $this->db->insert('playlists', $post);
         }
     }
+    
+    function insert_channels($post) {
+        if (isset($post['id'])) {
+            $this->db->where('id', $post['id']);
+            unset($post['id']);
+            $this->db->update('channels', $post);
+        } else {
+            $this->db->set('created', 'NOW()', FALSE);
+            $this->db->insert('channels', $post);
+        }
+    }
     function fetchEventbyId($id) {
         $this->db->where('id', $id);
         return $this->db->get('playlists')->result();
     }
     
+    function fetchChannelsbyId($id) {
+        $this->db->where('id', $id);
+        return $this->db->get('channels')->result();
+    }
+    
     function delete($id){
         $this->db->delete('playlists', array('id'=>$id));
+        return TRUE;
+    }
+    
+    function delete_channels($id){
+        $this->db->delete('channels', array('id'=>$id));
         return TRUE;
     }
     function get_videoid($id, $ids){

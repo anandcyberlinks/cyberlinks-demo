@@ -3,8 +3,8 @@
     <aside class="right-side"> 
         <!-- Content Header (Page header) -->
         <section class="content-header">
-            <h1><?php echo $welcome->loadPo('WebTV') ?><small><?php echo $welcome->loadPo('Control panel') ?></small>
-                <a class="btn btn-success" href="<?php echo base_url().'webtv/add/'.$this->uri->segment(3); ?>">Add New</a>
+            <h1><?php echo $welcome->loadPo('Channels') ?><small><?php echo $welcome->loadPo('Control panel') ?></small>
+                <a class="btn btn-success" href="<?php echo base_url().'webtv/add_channels'; ?>">Add New</a>
             </h1>
             <ol class="breadcrumb">
                 <li><a href="<?php echo base_url(); ?>"><i class="fa fa-dashboard"></i><?php echo $welcome->loadPo('Dashboard') ?></a></li>
@@ -71,12 +71,9 @@
                                     <thead>
                                         <tr>
                                             <th><?php echo $welcome->loadPo('Name') ?></th>
-                                            <th><?php echo $welcome->loadPo('Description') ?></th>
+                                            <th><?php echo $welcome->loadPo('Type') ?></th>
                                             <th><?php echo $welcome->loadPo('Status') ?></th>
-                                            <th><?php echo $welcome->loadPo('URL') ?></th>
-                                            <th><?php echo $welcome->loadPo('Start Date') ?></th>
-                                            <th><?php echo $welcome->loadPo('End Date') ?></th>
-                                            <th colspan="2"><?php echo $welcome->loadPo('Manage'); ?></th>
+                                            <th><?php echo $welcome->loadPo('Manage'); ?></th>
                                             <th align="center"><?php echo $welcome->loadPo('Action') ?></th>
                                         </tr>
                                     </thead>
@@ -86,31 +83,21 @@
 
                                             <tr id="<?php echo $value->id ?>">
                                                 <td><?php echo $value->name; ?></td>
-                                                <td><?php echo $value->description; ?></td>
+                                                <td><?php echo $value->type; ?></td>
                                                 <td><?php if ($value->status == 1) { ?>
                                                         <img src="<?php echo base_url(); ?>assets/img/test-pass-icon.png" alt="Active" />
                                                     <?php } else { ?>
                                                         <img src="<?php echo base_url(); ?>assets/img/test-fail-icon.png" alt="Active" />
                                                     <?php } ?></td>
-                                                <td style='text-align:center'>
-                                                    <?php if($value->url == '') { ?>
-                                                    --
-                                                    <?php } else { ?>
-                                                    <a class="prev_video" href="#myModal" data-backdrop="static" data-toggle="modal" data-img-url="<?php echo $value->url; ?>">Preview</a>
-                                                    <?php } ?>
-                                                </td>
-                                                <td><?php echo date('M d,Y', strtotime($value->start_date)); ?></td>
-                                                <td><?php echo date('M d,Y', strtotime($value->end_date)); ?></td>
                                                 <td>
-                                                    <a href="<?php echo base_url() ?>webtv/video_detail/<?php echo $value->id; ?>">Manage Videos, </a>Total <?php echo $value->total; ?>
-                                                </td>
-                                                <td>
-                                                    <a href="<?php echo base_url() ?>webtv/videoEpg/<?php echo $value->id; ?>">Manage EPG</a>
+                                                    <?php if($value->type =='Loop'){ ?>
+                                                    <a href="<?php echo base_url() ?>webtv/playlist/<?php echo $value->id; ?>">Manage Chsnnels</a>
+                                                    <?php } else{ echo '....'; } ?>
                                                 </td>
                                                 <td  width="150"> 
-                                                    <a href="<?php echo base_url(); ?>webtv/edit?action=<?php echo base64_encode($value->id) . '&'; ?>" class="btn btn-info btn-sm"><?php echo $welcome->loadPo('Edit') ?></a>
+                                                    <a href="<?php echo base_url(); ?>webtv/edit_channels?action=<?php echo base64_encode($value->id) . '&'; ?>" class="btn btn-info btn-sm"><?php echo $welcome->loadPo('Edit') ?></a>
                                                     &nbsp;
-                                                    <a class="confirm" onclick="return delete_event(<?php echo $value->id; ?>, '<?php echo base_url() . 'webtv/delete' ?>', '<?php echo current_full_url(); ?>');" href="" ><button class="btn btn-danger btn-sm" data-toggle="modal" data-target=".bs-example-modal-sm" ><?php echo $welcome->loadPo('Delete') ?></button></a>
+                                                    <a class="confirm" onclick="return delete_event(<?php echo $value->id; ?>, '<?php echo base_url() . 'webtv/delete_channels' ?>', '<?php echo current_full_url(); ?>');" href="" ><button class="btn btn-danger btn-sm" data-toggle="modal" data-target=".bs-example-modal-sm" ><?php echo $welcome->loadPo('Delete') ?></button></a>
                                                 </td>
                                             </tr>
                                         <?php } ?>
