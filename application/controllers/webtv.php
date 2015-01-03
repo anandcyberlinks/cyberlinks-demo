@@ -26,7 +26,7 @@ class Webtv extends MY_Controller {
         $config["uri_segment"] = 3;
         $this->pagination->initialize($config);
         $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
-        $data['res'] = $this->webtv_model->fetchchannels($this->uid, PER_PAGE, $page, $searchterm);
+        $data['res'] = $this->webtv_model->fetchchannels($this->uid, $config["per_page"], $page, $searchterm);
         $data["links"] = $this->pagination->create_links();
         $this->show_view('channels', $data);
     }
@@ -44,10 +44,10 @@ class Webtv extends MY_Controller {
         $config["base_url"] = base_url() . "webtv/playlist/";
         $config["total_rows"] = $this->webtv_model->countAll($this->uid, $searchterm, $channel_id);
         $config["per_page"] = 100000;
-        $config["uri_segment"] = 3;
+        $config["uri_segment"] = 4;
         $this->pagination->initialize($config);
         $page = 0;
-        $data['res'] = $this->webtv_model->fetchplaylists($this->uid, PER_PAGE, $page, $searchterm, $channel_id);
+        $data['res'] = $this->webtv_model->fetchplaylists($this->uid, $config["per_page"] , $page, $searchterm, $channel_id);
         $data["links"] = $this->pagination->create_links();
         $this->show_view('webtv', $data);
     }
@@ -64,7 +64,7 @@ class Webtv extends MY_Controller {
             $post['description'] = $_POST['description'];
             $this->webtv_model->insert($post);
             $this->session->set_flashdata('message', $this->_successmsg($this->loadPo($this->config->item('success_record_add'))));
-            redirect(base_url() . 'webtv/playlist/'.$post['channel_id']);
+            redirect($_POST['url']);
         }
         $this->show_view('add_play', $data);
     }
@@ -86,8 +86,9 @@ class Webtv extends MY_Controller {
     function delete(){
         $id = $_GET['id'];
         $this->webtv_model->delete($id);
-        $this->session->set_flashdata('message', $this->_successmsg($this->loadPo($this->config->item('success_record_add'))));
-        redirect(base_url() . 'webtv');
+        $this->session->set_flashdata('message', $this->_successmsg($this->loadPo($this->config->item('success_record_delete'))));
+        redirect($_GET['curl']);
+        
     }
     
     function delete_channels(){
@@ -175,52 +176,13 @@ class Webtv extends MY_Controller {
         $sort = $this->uri->segment(3); 
         $sort_by = $this->uri->segment(4);
         $data['welcome'] = $this;
-        switch ($sort) {
-            case "category":
-                $sort = 'b.category';
-                if ($sort_by == 'asc')
-                    $data['show_c'] = 'desc';
-                else
-                    $data['show_c'] = 'asc';
-                break;
-            case "user":
-                $sort = 'a.uid';
-                if ($sort_by == 'asc')
-                    $data['show_u'] = 'desc';
-                else
-                    $data['show_u'] = 'asc';
-                break;
-            case "status":
-                $sort = 'a.status';
-                if ($sort_by == 'asc')
-                    $data['show_s'] = 'desc';
-                else
-                    $data['show_s'] = 'asc';
-                break;
-            case "created":
-                $sort = 'a.created';
-                if ($sort_by == 'asc')
-                    $data['show_ca'] = 'desc';
-                else
-                    $data['show_ca'] = 'asc';
-                break;
-            case "title":
-                $sort = 'a.title';
-                if ($sort_by == 'asc')
-                    $data['show_t'] = 'desc';
-                else
-                    $data['show_t'] = 'asc';
-                break;
-            default:
-                $sort_by = 'desc';
-                $sort = 'a.id';
-        }
         if (isset($_POST['submit']) && $_POST['submit'] == 'Search') {
             $this->session->set_userdata('search_form', $_POST);
         } else if (isset($_POST['reset']) && $_POST['reset'] == 'Reset') {
             $this->session->unset_userdata('search_form');
         }
         $pid = $this->uri->segment(3);
+        $chid = $this->uri->segment(3);
         $list = $this->webtv_model->get_video($pid);
         $ids = array('0'=>0);
         foreach ($list as $val){
@@ -229,13 +191,13 @@ class Webtv extends MY_Controller {
         $searchterm = $this->session->userdata('search_form');
         $this->load->library("pagination");
         $config = array();
-        $config["base_url"] = base_url() . "webtv/addVideo/".$pid;
+        $config["base_url"] = base_url() . "webtv/addVideo/".$pid.'/'.$chid;
         $config["total_rows"] = $this->webtv_model->get_videocount($this->uid, $searchterm, $ids);
         $config["per_page"] = 10;
         $config["uri_segment"] = 4;
         $this->pagination->initialize($config);
-        $page = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
-        $data['result'] = $this->webtv_model->get_allvideo($ids, $this->uid, PER_PAGE, $page, $sort, $sort_by, $searchterm);
+        $page = ($this->uri->segment(5)) ? $this->uri->segment(5) : 0;
+        $data['result'] = $this->webtv_model->get_allvideo($ids, $this->uid, PER_PAGE, $page, $searchterm);
         $data["links"] = $this->pagination->create_links();
         $data['category'] = $this->webtv_model->get_category($this->uid);
         $data['total_rows'] = $config["total_rows"];
