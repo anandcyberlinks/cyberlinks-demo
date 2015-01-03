@@ -28,11 +28,11 @@ class Stream extends REST_Controller
    public function live_get()
     {
         $device = $this->get('device');
-        $result = $this->livestream_model->getStream($device);
-        
-        if($result)
+        $channels = $this->livestream_model->getStream($device);
+        $channels[] =  reset($this->livestream_model->getPlayList());
+        if($channels)
         {
-            $this->response($result, 200); // 200 being the HTTP response code
+            $this->response($channels, 200); // 200 being the HTTP response code
         }else{
             $this->response(array('error' => 'No record found'), 404);
         }        
