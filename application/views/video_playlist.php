@@ -6,7 +6,10 @@
             <h1><?php echo $welcome->loadPo('Video') ?><small><?php echo $welcome->loadPo('Control panel') ?></small></h1>
             <ol class="breadcrumb">
                 <li><a href="<?php echo base_url(); ?>"><i class="fa fa-dashboard"></i><?php echo $welcome->loadPo('Dashboard') ?></a></li>
-                <li class="active"><?php echo $welcome->loadPo('Video') ?></li>
+                <li><a href="<?php echo base_url()."webtv/" ?>"><?php echo $welcome->loadPo('Channels') ?></a></li>
+                <li><a href="<?php echo base_url()."webtv/playlist/".$this->uri->segment(4) ?>"><?php echo $welcome->loadPo('Playlist') ?></a></li>
+                <li><a href="<?php echo base_url()."webtv/video_detail/".$this->uri->segment(3).'/'.$this->uri->segment(4) ?>"><?php echo $welcome->loadPo('Videos') ?></a></li>               
+                <li class="active"><?php echo $welcome->loadPo('Add Video') ?></li>
             </ol>
         </section>
         <div>
@@ -70,7 +73,7 @@
                                 <div class="box-footer">
                                         <!--	<input type="text" id="hddstarddt" name="hddstarddt" value="<?php echo @$_POST['hddstarddt'] ?>"> -->
                                     <button type="submit" name="submit" value="Search"class="btn btn-primary"><?php echo $welcome->loadPo('Search') ?></button>
-                                    <div class="pull-right"><a href="<?php echo base_url()."webtv/video_detail/".$this->uri->segment(3); ?>" class="btn btn-primary">Back To Playlist</a></div>
+                                    <div class="pull-right"><a href="<?php echo base_url()."webtv/video_detail/".$this->uri->segment(3).'/'.$this->uri->segment(4) ?>" class="btn btn-primary">Back To Playlist Videos</a></div>
                                 </div>
                             </form>
                         </div><!-- /.box -->

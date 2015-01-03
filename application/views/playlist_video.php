@@ -6,6 +6,8 @@
             <h1><?php echo $welcome->loadPo('Playlist') ?><small><?php echo $welcome->loadPo('Control panel') ?></small></h1>
             <ol class="breadcrumb">
                 <li><a href="<?php echo base_url(); ?>"><i class="fa fa-dashboard"></i><?php echo $welcome->loadPo('Dashboard') ?></a></li>
+                <li><a href="<?php echo base_url()."webtv/" ?>"><?php echo $welcome->loadPo('Channels') ?></a></li>
+                <li><a href="<?php echo base_url()."webtv/playlist/".$this->uri->segment(4) ?>"><?php echo $welcome->loadPo('Playlist') ?></a></li>
                 <li class="active"><?php echo $welcome->loadPo('Video') ?></li>
             </ol>
         </section>
@@ -71,8 +73,8 @@
                                     </tbody>
                                 </table>
                                 <br>
-                                <a href="<?php echo base_url()."webtv/addVideo/".$this->uri->segment(3) ?>" class="btn btn-success">Add Video</a>
-                                <a class="btn btn-warning" href="<?=  base_url()?>webtv"><i class="fa fa-mail-reply"></i> Back</a>
+                                <a href="<?php echo base_url()."webtv/addVideo/".$this->uri->segment(3).'/'.$this->uri->segment(4) ?>" class="btn btn-success">Add Video</a>
+                                <a class="btn btn-warning" href="<?php echo base_url()."webtv/playlist/".$this->uri->segment(4) ?>"><i class="fa fa-mail-reply"></i> Back</a>
                             </div>		
                             <!-- Pagination end -->
                         </div><!-- /.box-body -->

@@ -256,7 +256,7 @@ class Webtv_model extends CI_Model{
         //echo $this->db->last_query();
         return count($query->result());
     }
-    function get_allvideo($ids, $uid, $limit, $start, $sort = '', $sort_by = '', $data){
+    function get_allvideo($ids, $uid, $limit, $start, $data){
         $timeStart = " 00:00:00";
         $timeEnd = " 23:59:59";
         $id = $this->get_ownerid($uid);
@@ -302,7 +302,6 @@ class Webtv_model extends CI_Model{
         }
 
         $this->db->group_by('a.id');
-        $this->db->order_by($sort, $sort_by);
         $this->db->limit($limit, $start);
         $query = $this->db->get();
         //echo $this->db->last_query();

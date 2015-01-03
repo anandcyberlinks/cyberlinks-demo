@@ -8,6 +8,7 @@
             </h1>
             <ol class="breadcrumb">
                 <li><a href="<?php echo base_url(); ?>"><i class="fa fa-dashboard"></i><?php echo $welcome->loadPo('Dashboard') ?></a></li>
+                <li><a href="<?php echo base_url().'webtv'; ?>"><?php echo $welcome->loadPo('Channels') ?></a></li>
                 <li class="active"><?php echo $welcome->loadPo('WebTV Playlists') ?></li>
             </ol>
         </section>
@@ -102,10 +103,10 @@
                                                 <td><?php echo date('M d,Y', strtotime($value->start_date)); ?></td>
                                                 <td><?php echo date('M d,Y', strtotime($value->end_date)); ?></td>
                                                 <td>
-                                                    <a href="<?php echo base_url() ?>webtv/video_detail/<?php echo $value->id; ?>">Manage Videos, </a>Total <?php echo $value->total; ?>
+                                                    <a href="<?php echo base_url() ?>webtv/video_detail/<?php echo $value->id.'/'.$this->uri->segment(3); ?>">Manage Videos, </a>Total <?php echo $value->total; ?>
                                                 </td>
                                                 <td>
-                                                    <a href="<?php echo base_url() ?>webtv/videoEpg/<?php echo $value->id; ?>">Manage EPG</a>
+                                                    <a href="<?php echo base_url() ?>webtv/videoEpg/<?php echo $value->id.'/'.$this->uri->segment(3); ?>">Manage EPG</a>
                                                 </td>
                                                 <td  width="150"> 
                                                     <a href="<?php echo base_url(); ?>webtv/edit?action=<?php echo base64_encode($value->id) . '&'; ?>" class="btn btn-info btn-sm"><?php echo $welcome->loadPo('Edit') ?></a>
