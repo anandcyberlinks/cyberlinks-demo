@@ -48,12 +48,13 @@ class Webtv_model extends CI_Model{
     }
     
         function fetchchannels($uid, $start, $limit, $data) {
-        $this->db->select('*');
+        $this->db->select('ch.*, cc.category');
         if (isset($data['name']) && $data['name'] != "") {
             $this->db->where('name', $data['name']);
         }
-        $this->db->where('uid', $uid);
-        $this->db->from('channels');
+        $this->db->where('ch.uid', $uid);
+        $this->db->from('channels ch');
+        $this->db->join('channel_categories cc', 'ch.category_id = cc.id', 'left');
         $this->db->limit($start, $limit);
         $result = $this->db->get()->result();
         //echo $this->db->last_query();
@@ -108,8 +109,16 @@ class Webtv_model extends CI_Model{
             $this->db->insert('playlists', $post);
         }
     }
-    
-    function insert_channels($post) {
+    function get_category($uid){
+        $this->db->select('id, category');
+        $this->db->where('u_id', $uid);
+        $this->db->from('channel_categories');
+        $result = $this->db->get()->result();
+        //print_r($result); die;
+        return $result;
+        
+    }
+            function insert_channels($post) {
         if (isset($post['id'])) {
             $this->db->where('id', $post['id']);
             unset($post['id']);
@@ -248,7 +257,7 @@ class Webtv_model extends CI_Model{
                 $dateend = date('y-m-d', strtotime($date));
                 $dateTimeStart = $dateend . $timeStart;
                 $dateTimeEnd = $dateend . $timeEnd;
-                $this->db->where("                                                                                                                                                                                                        .created BETWEEN '$dateTimeStart' and '$dateTimeEnd'", NULL, FALSE);
+                $this->db->where(".created BETWEEN '$dateTimeStart' and '$dateTimeEnd'", NULL, FALSE);
             }
         }
 
@@ -323,7 +332,7 @@ class Webtv_model extends CI_Model{
         }
         return  $data;
     }
-    function get_category($uid,$relation = false) {
+    /*  function get_category($uid,$relation = false) {
         $this->db->select('child.id,child.category,child.parent_id,parent.category as parent');
         $this->db->from('categories child');
         $this->db->join('categories parent', 'child.parent_id = parent.id', 'left');
@@ -347,7 +356,7 @@ class Webtv_model extends CI_Model{
             }
         }
         return $category;
-    }
+    } */
     function add_video($pid, $cid){
         $data = array('playlist_id'=>$pid, 'content_id'=>$cid, 'created'=>'NOW()','color'=>sprintf('#%06X', mt_rand(0, 0xFFFFFF)));
         $this->db->insert('playlist_video', $data);

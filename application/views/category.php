@@ -1,3 +1,4 @@
+<?php $uri = $this->uri->segment(1); ?>
 <div class="wrapper row-offcanvas row-offcanvas-left">
 	<!-- Right side column. Contains the navbar and content of the page -->
     <aside class="right-side">                
@@ -6,7 +7,7 @@
             <h1><?php echo $welcome->loadPo('Category'); ?><small><?php echo $welcome->loadPo('Control panel'); ?></small> </h1>
             <ol class="breadcrumb">
             <li><a href="<?php echo base_url(); ?>"><i class="fa fa-dashboard"></i><?php echo $welcome->loadPo('Dashboard') ?></a></li>
-            <li class="active"><?php echo $welcome->loadPo('Category') ?></li>
+            <li class="active"><?php echo $welcome->loadPo($this->uri->segment(1)) ?></li>
         </ol>
         </section>		
 		<div>
@@ -25,11 +26,11 @@
 							<div class="box-header">
 								<h3 class="box-title"><?php echo $welcome->loadPo('Search'); ?></h3>
 								<div class="box-tools pull-right">
-									<a href="<?php echo base_url(); ?>category/addCategory" class="btn btn-success btn-sm"><?php echo $welcome->loadPo('Category').' '.$welcome->loadPo('Add'); ?></a>
+									<a href="<?php echo base_url().$uri; ?>/addCategory" class="btn btn-success btn-sm"><?php echo $welcome->loadPo('Category').' '.$welcome->loadPo('Add'); ?></a>
 								</div>
 							</div><!-- /.box-header -->
 							<!-- form start -->
-							<form action="<?php echo base_url(); ?>category/index" id="searchCategoryForm" method="post" accept-charset="utf-8">
+							<form action="<?php echo base_url().$uri; ?>/index" id="searchCategoryForm" method="post" accept-charset="utf-8">
 								<div style="display:none;"><input type="hidden" name="_method" value="POST"/></div>                
 								<div class="box-body">
 									<div class="row">
@@ -68,10 +69,10 @@
 								<table id="example1" class="table table-bordered table-striped">
 									<thead>
 										<tr>
-											<th><a href="<?php echo base_url();?>category/index/category/<?php echo (!empty($show_c))?$show_c:'desc';?>"><?php echo $welcome->loadPo('Category').' '.$welcome->loadPo('Name'); ?></a></th>
+											<th><a href="<?php echo base_url().$uri;?>/index/category/<?php echo (!empty($show_c))?$show_c:'desc';?>"><?php echo $welcome->loadPo('Category').' '.$welcome->loadPo('Name'); ?></a></th>
 											<th><?php echo $welcome->loadPo('Description'); ?></th>
-											<th><a href="<?php echo base_url();?>category/index/parent/<?php echo (!empty($show_p))?$show_p:'desc';?>"><?php echo $welcome->loadPo('Parent'); ?></a></th>
-											<th><a href="<?php echo base_url();?>category/index/status/<?php echo (!empty($show_s))?$show_s:'desc';?>"><?php echo $welcome->loadPo('Status'); ?></a></th>
+											<th><a href="<?php echo base_url().$uri;?>/index/parent/<?php echo (!empty($show_p))?$show_p:'desc';?>"><?php echo $welcome->loadPo('Parent'); ?></a></th>
+											<th><a href="<?php echo base_url().$uri;?>/index/status/<?php echo (!empty($show_s))?$show_s:'desc';?>"><?php echo $welcome->loadPo('Status'); ?></a></th>
 											<th><?php echo $welcome->loadPo('Action'); ?></th>
 										</tr>
 									</thead>
@@ -92,7 +93,7 @@
 													<?php }?>
 												</td>
 												<td>
-													<a href="<?php echo base_url(); ?>category/addCategory?action=<?php echo base64_encode($cat->id);?>" class="btn btn-info btn-sm"><?php echo $welcome->loadPo('Edit'); ?></a>&nbsp;
+													<a href="<?php echo base_url().$uri; ?>/addCategory?action=<?php echo base64_encode($cat->id);?>" class="btn btn-info btn-sm"><?php echo $welcome->loadPo('Edit'); ?></a>&nbsp;
 													
 													<a class="confirm" onclick="return delete_category(<?php echo $cat->id;?>);" href="" ><button class="btn btn-danger btn-sm" data-toggle="modal" data-target=".bs-example-modal-sm" ><?php echo $welcome->loadPo('Delete'); ?></button></a>
 																									
@@ -130,7 +131,7 @@
 		{
 			if (confirmed) 
 			{
-				location.href = '<?php echo base_url();?>category/deleteCategory?id='+id ;
+				location.href = '<?php echo base_url().$uri;?>/deleteCategory?id='+id ;
 			}
 		})
 	}

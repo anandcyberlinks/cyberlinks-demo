@@ -71,10 +71,13 @@ class Webtv extends MY_Controller {
     
     function add_channels(){
         $data['welcome'] = $this;
+        $data['catogory'] = $this->webtv_model->get_category($this->uid);
+        //print_r($data['catogory']);
         if (isset($_POST['submit']) && $_POST['submit'] = 'Submit') {
             $post['name'] = $_POST['name'];
             $post['type'] = $_POST['type'];
             $post['uid'] = $this->uid;
+            $post['category_id'] = $_POST['category_id'];
             $post['status'] = $_POST['status'];
             $this->webtv_model->insert_channels($post);
             $this->session->set_flashdata('message', $this->_successmsg($this->loadPo($this->config->item('success_record_add'))));
@@ -110,6 +113,7 @@ class Webtv extends MY_Controller {
             $post['uid'] = $this->uid;
             $post['description'] = $_POST['description'];
             $post['status'] = $_POST['status'];
+            
             $this->webtv_model->insert($post);
             $this->session->set_flashdata('message', $this->_successmsg($this->loadPo($this->config->item('success_record_update'))));
             redirect(base_url() . 'webtv');
@@ -120,11 +124,12 @@ class Webtv extends MY_Controller {
     
     function edit_channels() {
         $data['welcome'] = $this;
+        $data['catogory'] = $this->webtv_model->get_category($this->uid);
         $id = base64_decode($_GET['action']);
         if (isset($_POST['submit']) && $_POST['submit'] = 'Submit') {
             $post['id'] = $id;
             $post['name'] = $_POST['name'];
-
+            $post['category_id'] = $_POST['category_id'];
             $date = explode('-', $_POST['start_date']);
             $post['uid'] = $this->uid;
             $post['status'] = $_POST['status'];
@@ -220,7 +225,7 @@ class Webtv extends MY_Controller {
         $data = array();
         $query = sprintf('select * from playlist_epg pe
                          left join playlist_video pv on pv.content_id = pe.content_id
-                         where pe.user_id = %d and pe.start_date between "%s" and "%s" ',$this->uid,date('Y-m-d h:i:s',$_GET['start']),date('Y-m-d h:i:s',$_GET['end']));
+                         where pe.user_id = %d and pe.playlist_id = 3 and pe.start_date between "%s" and "%s" ',$this->uid,date('Y-m-d h:i:s',$_GET['start']),date('Y-m-d h:i:s',$_GET['end']));
         $dataset = $this->db->query($query)->result();
         foreach($dataset as $key=>$val){
             $data[] = array('id'=>$val->content_id,
@@ -249,7 +254,7 @@ class Webtv extends MY_Controller {
             $data['start_date'] = isset($_POST['start_date']) && $_POST['start_date']!='' ? date('Y-m-d h:i:s',strtotime($_POST['start_date'])) : date('Y-m-d h:i:s');
             $data['end_date'] = isset($_POST['end_date']) && $_POST['end_date']!='' ? date('Y-m-d h:i:s',strtotime($_POST['end_date'])) : date('Y-m-d h:i:s',strtotime($data['start_date']) + 60*60);
             
-            switch($_POST['action']){
+            switch(isset($_POST['action'])){
                 case 'delete' :
                     $query = sprintf('delete from playlist_epg where content_id = %d and user_id = %d',$_POST['id'],$this->uid);
                     $dataset = $this->db->query($query)->result();

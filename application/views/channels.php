@@ -72,6 +72,7 @@
                                         <tr>
                                             <th><?php echo $welcome->loadPo('Name') ?></th>
                                             <th><?php echo $welcome->loadPo('Type') ?></th>
+                                            <th><?php echo $welcome->loadPo('Category') ?></th>
                                             <th><?php echo $welcome->loadPo('Status') ?></th>
                                             <th><?php echo $welcome->loadPo('Manage'); ?></th>
                                             <th align="center"><?php echo $welcome->loadPo('Action') ?></th>
@@ -83,7 +84,8 @@
 
                                             <tr id="<?php echo $value->id ?>">
                                                 <td><?php echo $value->name; ?></td>
-                                                <td><?php echo $value->type; ?></td>
+                                                <td><?php echo $value->type; ?></td> 
+                                                <td><?php echo $value->category; ?></td>
                                                 <td><?php if ($value->status == 1) { ?>
                                                         <img src="<?php echo base_url(); ?>assets/img/test-pass-icon.png" alt="Active" />
                                                     <?php } else { ?>

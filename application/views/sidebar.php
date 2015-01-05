@@ -62,7 +62,7 @@
                       </a>
                       </li>
                     
-            <li class="treeview <?= (($this->uri->segment(1) == 'category') || ($this->uri->segment(1) == 'transcode') || ($this->uri->segment(1) == 'genre') || ($this->uri->segment(1) == 'dform') || ($this->uri->segment(1) == 'package') || ($this->uri->segment(1) == 'subscription') || ($this->uri->segment(1) == 'youtubevideo')) ? 'active' : '' ?>">
+            <li class="treeview <?= (($this->uri->segment(1) == 'category') || ($this->uri->segment(1) == 'ch_category') || ($this->uri->segment(1) == 'transcode') || ($this->uri->segment(1) == 'genre') || ($this->uri->segment(1) == 'dform') || ($this->uri->segment(1) == 'package') || ($this->uri->segment(1) == 'subscription') || ($this->uri->segment(1) == 'youtubevideo')) ? 'active' : '' ?>">
                 <a href="#">
                     <i class="fa fa-laptop"></i>
                     <span><?php echo $welcome->loadPo('Utility'); ?></span>
@@ -70,6 +70,7 @@
                 </a>
                 <ul class="treeview-menu">
                     <li class="<?= ($this->uri->segment(1) === 'category') ? 'active' : '' ?>"><a href="<?php echo base_url() ?>category"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('Category'); ?></a></li>
+                    <li class="<?= ($this->uri->segment(1) === 'ch_category') ? 'active' : '' ?>"><a href="<?php echo base_url() ?>ch_category"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('Channel Category'); ?></a></li>
                     <!--<li class="<?= ($this->uri->segment(1) === 'transcode') ? 'active' : '' ?>"><a href="<?php echo base_url() ?>transcode"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('Transcode'); ?></a></li>         -->
                     <?php if ($s[0]->role == 'Superadmin') { ?>
                         <li class="<?= ($this->uri->segment(1) === 'genre') ? 'active' : '' ?>"><a href="<?php echo base_url() ?>genre"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('Genre'); ?></a></li>

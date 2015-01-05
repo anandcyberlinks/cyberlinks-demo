@@ -1,3 +1,4 @@
+<?php echo $uri = $this->uri->segment(1); ?>
 <div class="wrapper row-offcanvas row-offcanvas-left">
 	<!-- Right side column. Contains the navbar and content of the page -->
 	<aside class="right-side">                
@@ -6,7 +7,7 @@
 			<h1><?php echo $welcome->loadPo('Category'); ?> <small><?php echo $welcome->loadPo('Control panel'); ?></small></h1>
 			<ol class="breadcrumb">
             <li><a href="<?php echo base_url(); ?>"><i class="fa fa-dashboard"></i><?php echo $welcome->loadPo('Dashboard') ?></a></li>
-		<li><a href="<?php echo base_url(); ?>category"><i class="fa fa-dashboard"></i><?php echo $welcome->loadPo('Category') ?></a></li>
+		<li><a href="<?php echo base_url().$uri; ?>"><i class="fa fa-dashboard"></i><?php echo $welcome->loadPo('Category') ?></a></li>
 	    <li class="active"><?php echo $welcome->loadPo('Edit')." ".$welcome->loadPo('Category') ?></li>
 			</ol>
 		</section>
@@ -21,7 +22,7 @@
 							<div class="box-header">
 								<h3 class="box-title"><?php echo $welcome->loadPo('Category').' '.$welcome->loadPo('Edit'); ?></h3>
 								<div class="box-tools pull-right">
-									<a href="<?php echo base_url(); ?>category" class="btn btn-default btn-sm"><?php echo $welcome->loadPo('Back'); ?></a>
+									<a href="<?php echo base_url().$uri; ?>" class="btn btn-default btn-sm"><?php echo $welcome->loadPo('Back'); ?></a>
 								</div>
 							</div><!-- /.box-header -->
 							<link href="<?php echo base_url();?>assets/css/colorpicker/bootstrap-colorpicker.min.css" rel="stylesheet" type="text/css" />
@@ -105,7 +106,7 @@
 								</div><!-- /.box-body -->
 								<div class="box-footer">
 									<button type="submit" name="submit" value="Update" class="btn btn-primary"><?php echo $welcome->loadPo('Update'); ?></button>
-									<a href="<?php echo base_url(); ?>category" class="btn btn-default"><?php echo $welcome->loadPo('Cancel'); ?></a>            
+									<a href="<?php echo base_url().$uri; ?>" class="btn btn-default"><?php echo $welcome->loadPo('Cancel'); ?></a>            
 								</div>
 							</form>
 							<?php } ?>

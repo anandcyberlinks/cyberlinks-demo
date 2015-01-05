@@ -51,6 +51,15 @@
                                             </div>
                                             <?php } ?>
                                         <div class="form-group col-md-10">
+                                                <label><?php echo $welcome->loadPo('Category'); ?></label>
+                                                <select name="category_id" class="form-control">
+                                                    <option value="">Select</option>
+                                                    <?php foreach ($catogory as $val){ ?>
+                                                    <option value="<?=$val->id ?>"><?=$val->category ?></option>
+                                                    <?php } ?>
+                                                </select>
+                                            </div>
+                                        <div class="form-group col-md-10">
                                             <label><?php echo $welcome->loadPo('Status'); ?></label>
                                             <input type="hidden" name="status" value="0">
                                             <input type="checkbox" name="status" value="1" <?php if (isset($value)) {
