@@ -225,7 +225,7 @@ class Webtv extends MY_Controller {
         $data = array();
         $query = sprintf('select * from playlist_epg pe
                          left join playlist_video pv on pv.content_id = pe.content_id
-                         where pe.user_id = %d and pe.playlist_id = 3 and pe.start_date between "%s" and "%s" ',$this->uid,date('Y-m-d h:i:s',$_GET['start']),date('Y-m-d h:i:s',$_GET['end']));
+                         where pe.user_id = %d and pe.start_date between "%s" and "%s" ',$this->uid,date('Y-m-d h:i:s',$_GET['start']),date('Y-m-d h:i:s',$_GET['end']));
         $dataset = $this->db->query($query)->result();
         foreach($dataset as $key=>$val){
             $data[] = array('id'=>$val->content_id,
