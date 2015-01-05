@@ -70,7 +70,7 @@
                                         </div>
                                         <div class="form-group col-md-5">
                                             <input type="submit" name="submit" value="Submit" class="btn btn-success">
-                                            <a class="btn btn-warning" href="http://localhost/multitvfinal/webtv"><i class="fa fa-mail-reply"></i> Back</a>
+                                            <a class="btn btn-warning" href="<?php echo base_url() ?>webtv"><i class="fa fa-mail-reply"></i> Back</a>
                                         </div>
                                     </div>
                                 </form>

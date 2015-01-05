@@ -53,7 +53,7 @@
                                             <input type="hidden" name="status" value="0">
                                             <input type="checkbox" name="status" value="1" <?php if(isset($value)){ if($value[0]->status == '1'){echo "checked";} }?>>
                                         </div> */ ?>
-                                        <input type="hidden" name="url" value="http://localhost/multitvfinal/webtv/playlist/<?php echo $this->uri->segment(3) ?>" />
+                                        <input type="hidden" name="url" value="<?php echo base_url() ?>webtv/playlist/<?php echo $this->uri->segment(3) ?>" />
                                         <div class="form-group col-md-5">
                                             <input type="submit" name="submit" value="Submit" class="btn btn-success">
                                             <a class="btn btn-warning" href="<?php echo base_url() ?>webtv/playlist/<?php echo $this->uri->segment(3) ?>"><i class="fa fa-mail-reply"></i> Back</a>
