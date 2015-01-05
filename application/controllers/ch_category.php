@@ -33,22 +33,12 @@ class Ch_category extends MY_Controller {
                 'field' => 'category',
                 'label' => 'Category name',
                 'rules' => 'trim|required'
-            ),
-            array(
-                'field' => 'description',
-                'label' => 'Description',
-                'rules' => 'trim|required'
             )
         ),
         'update_Category' => array(
             array(
                 'field' => 'category',
                 'label' => 'Category name',
-                'rules' => 'trim|required'
-            ),
-            array(
-                'field' => 'description',
-                'label' => 'Description',
                 'rules' => 'trim|required'
             )
         )
