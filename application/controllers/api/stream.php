@@ -29,7 +29,7 @@ class Stream extends REST_Controller
     {
         $device = $this->get('device');
         $channels = $this->livestream_model->getStream($device);
-        $channels[] =  reset($this->livestream_model->getPlayList());
+        //$channels[] =  reset($this->livestream_model->getPlayList());
         if($channels)
         {
             $this->response($channels, 200); // 200 being the HTTP response code
