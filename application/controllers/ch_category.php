@@ -84,7 +84,7 @@ class Ch_category extends MY_Controller {
         $searchterm = $this->session->userdata('search_form');
         $this->load->library("pagination");
         $config = array();
-        $config["base_url"] = base_url() . "category/index";
+        $config["base_url"] = base_url() . "ch_category/index";
         $config["total_rows"] = $this->Ch_category_model->getRecordCount($this->uid,$searchterm );
         $config["per_page"] = 10;
         $config["uri_segment"] = 3;
