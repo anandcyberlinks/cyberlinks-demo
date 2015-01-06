@@ -154,7 +154,11 @@ class MY_Controller extends CI_Controller {
         $id = $tmp->id;
         if ($id != '') {
             $this->load->view('header', $data);
+            if(strtolower($s[0]->role) =='advertiser'){
+              $this->load->view('sidebar_ads', $data);
+            }else{
             $this->load->view('sidebar', $data);
+            }
             $this->load->view($view, $data);
             $this->load->view('footer', $data);
         } else {
