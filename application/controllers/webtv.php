@@ -187,7 +187,7 @@ class Webtv extends MY_Controller {
             $this->session->unset_userdata('search_form');
         }
         $pid = $this->uri->segment(3);
-        $chid = $this->uri->segment(3);
+        $chid = $this->uri->segment(4);
         $list = $this->webtv_model->get_video($pid);
         $ids = array('0'=>0);
         foreach ($list as $val){
