@@ -52,7 +52,7 @@ class Livestream_model extends CI_Model {
    $this->db->where('c.type','Loop');
    $this->db->where('CURDATE() BETWEEN DATE_FORMAT( p.start_date, "%Y-%m-%d" ) AND DATE_FORMAT( p.end_date, "%Y-%m-%d" )');
    $query = $this->db->get();
-    // echo $this->db->last_query();
+   //  echo $this->db->last_query();
    return $query->result();
   }
   
@@ -68,7 +68,8 @@ class Livestream_model extends CI_Model {
    $this->db->where('pe.start_date BETWEEN if(MINUTE(CURTIME()) < 30, DATE_FORMAT(NOW(),"%Y-%m-%d %H:00:00"), DATE_FORMAT(NOW(),"%Y-%m-%d %H:30:00")) AND DATE_ADD(now(), INTERVAL 2 HOUR)');
   //  $this->db->where('c.uid',$this->owner_id);
    $query = $this->db->get();
-  // echo $this->db->last_query();
+   echo '<br>'.$this->db->last_query();
+  print_r($query->result());
   return $query->result();  
   }
 }
