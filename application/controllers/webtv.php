@@ -199,7 +199,7 @@ class Webtv extends MY_Controller {
         $config["base_url"] = base_url() . "webtv/addVideo/".$pid.'/'.$chid;
         $config["total_rows"] = $this->webtv_model->get_videocount($this->uid, $searchterm, $ids);
         $config["per_page"] = 10;
-        $config["uri_segment"] = 4;
+        $config["uri_segment"] = 5;
         $this->pagination->initialize($config);
         $page = ($this->uri->segment(5)) ? $this->uri->segment(5) : 0;
         $data['result'] = $this->webtv_model->get_allvideo($ids, $this->uid, PER_PAGE, $page, $searchterm);
