@@ -22,21 +22,64 @@ class Stream extends REST_Controller
    {
        parent::__construct();	
        $this->load->model('api/livestream_model');
-       $this->load->helper('url');       
+       $this->load->helper('url');
+         //-- validate token --//
+      /*  $token = $this->get('token');
+        // $action = $this->get('action');
+        $action = $this->uri->segment(3);        
+        $this->owner_id = $this->validateToken($token);
+        
+        */
    }   
    
    public function live_get()
     {
-        $device = $this->get('device');
-        $channels = $this->livestream_model->getStream($device);
-        //$channels[] =  reset($this->livestream_model->getPlayList());
+        $id = $this->get('id');
+        $channels = $this->livestream_model->getStream($id);        
+        $total = count($channels)-1;
+        $playlist =  ($this->livestream_model->getPlayList($id));
+      // echo '<pre>';print_r($playlist);
+      
+      array_walk($channels,function(&$key){
+          $key->epg =array();            
+        
+      });
+      
+        //-- get epg details ---//        
+         array_walk($playlist, function (&$key) {
+            //-- get epg  --//
+            $key->thumbnail_url ='';
+            $key->youtube ='';
+            $key->epg = $this->livestream_model->getEPG($key->id);
+            
+         });
+        
+        if($playlist)
+        {
+            $i=1;
+            foreach($playlist as $row){
+               $channels[$total+$i] = $row;
+               $i++;
+            }            
+        }        
         if($channels)
         {
             $this->response($channels, 200); // 200 being the HTTP response code
         }else{
             $this->response(array('error' => 'No record found'), 404);
         }        
-    }    
+    }
+    
+    public function category_get()
+    {
+     $result =  $this->livestream_model->getCategory();
+      if($result)
+        {
+            $this->response($result, 200); // 200 being the HTTP response code
+        }else{
+            $this->response(array('error' => 'No record found'), 404);
+        }      
+    }
 }
 
 ?>
