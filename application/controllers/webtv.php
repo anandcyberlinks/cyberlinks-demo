@@ -97,7 +97,7 @@ class Webtv extends MY_Controller {
     function delete_channels(){
         $id = $_GET['id'];
         $this->webtv_model->delete_channels($id);
-        $this->session->set_flashdata('message', $this->_successmsg($this->loadPo($this->config->item('success_record_add'))));
+        $this->session->set_flashdata('message', $this->_successmsg($this->loadPo($this->config->item('success_record_delete'))));
         redirect(base_url() . 'webtv');
     }
     
@@ -224,8 +224,8 @@ class Webtv extends MY_Controller {
     function renderevent(){
         $data = array();
         $query = sprintf('select * from playlist_epg pe
-                         left join playlist_video pv on pv.content_id = pe.content_id
-                         where pe.playlist_id = %d and pe.user_id = %d and pe.start_date between "%s" and "%s" ',$_GET['playlist_id'],$this->uid,date('Y-m-d h:i:s',$_GET['start']),date('Y-m-d h:i:s',$_GET['end']));
+                         left join (select * from playlist_video pv where pv.playlist_id = %d ) as pv on pv.content_id = pe.content_id
+                         where pe.playlist_id = %d and pe.user_id = %d and pe.start_date between "%s" and "%s" ',$_GET['playlist_id'],$_GET['playlist_id'],$this->uid,date('Y-m-d h:i:s',$_GET['start']),date('Y-m-d h:i:s',$_GET['end']));
         $dataset = $this->db->query($query)->result();
         foreach($dataset as $key=>$val){
             $data[] = array('id'=>$val->content_id,
@@ -254,17 +254,18 @@ class Webtv extends MY_Controller {
             $data['start_date'] = isset($_POST['start_date']) && $_POST['start_date']!='' ? date('Y-m-d h:i:s',strtotime($_POST['start_date'])) : date('Y-m-d h:i:s');
             $data['end_date'] = isset($_POST['end_date']) && $_POST['end_date']!='' ? date('Y-m-d h:i:s',strtotime($_POST['end_date'])) : date('Y-m-d h:i:s',strtotime($data['start_date']) + 60*60);
             
-            switch(isset($_POST['action'])){
+            switch($_POST['action']){
                 case 'delete' :
-                    $query = sprintf('delete from playlist_epg where content_id = %d and user_id = %d',$_POST['id'],$this->uid);
+                    $query = sprintf('delete from playlist_epg where content_id = %d and playlist_id = %d and user_id = %d',$data['content_id'],$data['playlist_id'],$this->uid);
                     $dataset = $this->db->query($query)->result();
                     $response['success'] = 'Data deleted';
                     break;
                 default :
-                    $query = sprintf('select * from playlist_epg pe where pe.content_id = %d and user_id = %d',$_POST['id'],$this->uid);
+                    $query = sprintf('select * from playlist_epg pe where pe.content_id = %d and pe.playlist_id = %d and user_id = %d',$data['content_id'],$data['playlist_id'],$this->uid);
                     $dataset = $this->db->query($query)->result();
                     if(count($dataset) > 0){
                         $this->db->where('id', $dataset[0]->id);
+                        $this->db->where('playlist_id', $dataset[0]->playlist_id);
                         $this->db->update('playlist_epg',$data);
                     }else{
                         $data['created'] = date('Y-m-d h:i:s');

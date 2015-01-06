@@ -3,8 +3,9 @@
     <aside class="right-side"> 
         <!-- Content Header (Page header) -->
         <section class="content-header">
-            <h1><?php echo $welcome->loadPo('WebTV') ?><small><?php echo $welcome->loadPo('Control panel') ?></small>
-                <a class="btn btn-success" href="<?php echo base_url().'webtv/add/'.$this->uri->segment(3); ?>">Add New</a>
+            <h1><?php echo $welcome->loadPo('WebTV') ?><small><?php echo $welcome->loadPo('Channel') ?></small>
+                <a class="btn btn-success" href="<?php echo base_url().'webtv/add/'.$this->uri->segment(3); ?>">Add Playlist</a>
+                <a class="btn btn-warning" href="<?php echo base_url().'webtv' ?>"><i class="fa fa-mail-reply"></i>Back</a>
             </h1>
             <ol class="breadcrumb">
                 <li><a href="<?php echo base_url(); ?>"><i class="fa fa-dashboard"></i><?php echo $welcome->loadPo('Dashboard') ?></a></li>
@@ -103,7 +104,7 @@
                                                 <td><?php echo date('M d,Y', strtotime($value->start_date)); ?></td>
                                                 <td><?php echo date('M d,Y', strtotime($value->end_date)); ?></td>
                                                 <td>
-                                                    <a href="<?php echo base_url() ?>webtv/video_detail/<?php echo $value->id.'/'.$this->uri->segment(3); ?>">Manage Videos, </a>Total <?php echo $value->total; ?>
+                                                    <a href="<?php echo base_url() ?>webtv/video_detail/<?php echo $value->id.'/'.$this->uri->segment(3); ?>">Manage Item, </a>Total <?php echo $value->total; ?>
                                                 </td>
                                                 <td>
                                                     <a href="<?php echo base_url() ?>webtv/videoEpg/<?php echo $value->id.'/'.$this->uri->segment(3); ?>">Manage EPG</a>
@@ -124,7 +125,6 @@
                                 } else {
                                     ?>
                                     </table>
-
                                     <div class="row pull-left">
                                         <div class="dataTables_info" id="example2_info"><br>
                                             <?php

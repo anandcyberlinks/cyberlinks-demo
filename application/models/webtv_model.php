@@ -139,12 +139,61 @@ class Webtv_model extends CI_Model{
     }
     
     function delete($id){
-        $this->db->delete('playlists', array('id'=>$id));
-        return TRUE;
+        echo 'anand';
+        exit;
+        //$this->db->delete('playlists', array('id'=>$id));
+        //return TRUE;
     }
     
     function delete_channels($id){
-        $this->db->delete('channels', array('id'=>$id));
+        $this->db->select('id,type');
+        $this->db->from('channels');
+        $this->db->where('id',$id);
+        $data = $this->db->get()->result();
+        if(isset($data[0]->type) && $data[0]->type != ''){
+            switch(strtolower($data[0]->type)){
+                case 'loop':
+                    //Get all playlist of channels
+                    $this->db->select('id');
+                    $this->db->from('playlists');
+                    $this->db->where('channel_id',$id);
+                    $tmp = $this->db->get()->result();
+                    $playlist_ids = array();
+                    
+                    //Default value
+                    $playlist_ids[] = 0;
+                    
+                    foreach($tmp as $key=>$val){
+                        $playlist_ids[] = $val->id;
+                    }
+                    
+                    //Delete from playlist_epg
+                    $this->db->where_in('playlist_id',$playlist_ids);
+                    $this->db->delete('playlist_epg');
+                    
+                    //Delete from playlist_video
+                    $this->db->where_in('playlist_id',$playlist_ids);
+                    $this->db->delete('playlist_video');
+                    
+                    //Delete from playlists
+                    $this->db->where_in('id',$playlist_ids);
+                    $this->db->delete('playlists');
+                    
+                    //Delete from channels list
+                    $this->db->delete('channels', array('id'=>$id));
+                    break;
+                case 'live' :
+                case 'youtube' :
+                    //Detele data from livestream table
+                    $this->db->where('channel_id',$id);
+                    $this->db->delete('livestream');
+                    
+                    //Delete from channels list
+                    $this->db->delete('channels', array('id'=>$id));
+                    
+                    break;
+            }
+        }
         return TRUE;
     }
     function get_videoid($id, $ids){

@@ -4,7 +4,7 @@
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1><?php echo $welcome->loadPo('Channels') ?><small><?php echo $welcome->loadPo('Control panel') ?></small>
-                <a class="btn btn-success" href="<?php echo base_url().'webtv/add_channels'; ?>">Add New</a>
+                <a class="btn btn-success" href="<?php echo base_url().'webtv/add_channels'; ?>">Add Channel</a>
             </h1>
             <ol class="breadcrumb">
                 <li><a href="<?php echo base_url(); ?>"><i class="fa fa-dashboard"></i><?php echo $welcome->loadPo('Dashboard') ?></a></li>
@@ -93,9 +93,9 @@
                                                     <?php } ?></td>
                                                 <td>
                                                     <?php if($value->type =='Loop'){ ?>
-                                                    <a href="<?php echo base_url() ?>webtv/playlist/<?php echo $value->id; ?>">Manage Channels</a>
+                                                    <a href="<?php echo base_url() ?>webtv/playlist/<?php echo $value->id; ?>">Manage Playlist</a>
                                                     <?php } else if($value->type =='Youtube'){ ?>
-                                                    <a href="<?php echo base_url() ?>livestream/index/<?php echo $value->id; ?>">Manage Channels</a>
+                                                    <a href="<?php echo base_url() ?>livestream/index/<?php echo $value->id; ?>">Manage Playlist</a>
                                                     <?php } ?>
                                                 </td>
                                                 <td  width="150"> 

@@ -3,7 +3,7 @@
     <aside class="right-side"> 
         <!-- Content Header (Page header) -->
         <section class="content-header">
-            <h1><?php echo $welcome->loadPo('Playlist') ?><small><?php echo $welcome->loadPo('Control panel') ?></small></h1>
+            <h1><?php echo ucfirst($package[0]->name); ?><small><?php echo $welcome->loadPo('Playlist') ?></small></h1>
             <ol class="breadcrumb">
                 <li><a href="<?php echo base_url(); ?>"><i class="fa fa-dashboard"></i><?php echo $welcome->loadPo('Dashboard') ?></a></li>
                 <li><a href="<?php echo base_url()."webtv/" ?>"><?php echo $welcome->loadPo('Channels') ?></a></li>
@@ -20,16 +20,7 @@
         <!-- Main content -->
         <section class="content">
             <div id="content">
-                <div class="row">
-                    <div class="col-md-12">
-                        <!-- general form elements -->
-                        <div class="box box-primary">
-                            <div class="box-header col-md-6">
-                                <h3 class="box-tittle">Playlist <?php echo ucfirst($package[0]->name); ?></h3>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                
                 <div class="row">
                     <div class="col-xs-12">
                         <div class="box">
@@ -37,7 +28,7 @@
                                 <table id="table-draggable2" class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
-                                            <th><?php echo $welcome->loadPo('Index') ?></th>
+                                            <th><?php echo $welcome->loadPo('#') ?></th>
                                             <th><?php echo $welcome->loadPo('Title') ?></th>
                                             <th><?php echo $welcome->loadPo('Category') ?></th>
                                             <th><?php echo $welcome->loadPo('Preview') ?></th>
