@@ -72,7 +72,9 @@ class Ch_category_model extends CI_Model {
 				'description'=>$data['description'],
 				'color'=>$data['color'],
 				'file_id'=>$data['file_id'],
-				'status'=>$data['status']	
+				'status'=>$data['status'],	
+				'range_from'=>$data['range_from'],	
+				'range_to'=>$data['range_to']	
 			);
 			$this->db->set('modified','NOW()',FALSE);
 			$this->db->where('id', $catId);
@@ -85,7 +87,9 @@ class Ch_category_model extends CI_Model {
 				'color'=>$data['color'],
 				'file_id'=>$data['file_id'],
 				'status'=>$data['status'],
-				'u_id'=>$data['u_id']
+				'u_id'=>$data['u_id'],
+                                'range_from'=>$data['range_from'],	
+				'range_to'=>$data['range_to']
 			);
 			$this->db->set($catData);
 			$this->db->set('created','NOW()',FALSE);

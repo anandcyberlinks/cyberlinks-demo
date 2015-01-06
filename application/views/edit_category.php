@@ -40,6 +40,26 @@
 											</div>
 										</div>
 									</div>
+                                                                        <?php if($uri=='ch_category') { ?>
+                                                                            <div class="row">
+                                                                                    <div class="form-group col-lg-5">
+                                                                                            <div class="input text">
+                                                                                                    <label for="range_from"><?php echo $welcome->loadPo('Range').' '.$welcome->loadPo('From'); ?></label>
+                                                                                                    <input name="range_from" class="form-control" placeholder="<?php echo $welcome->loadPo('Range').' '.$welcome->loadPo('From'); ?>" maxlength="255" type="text" id="range_from" value="<?php echo $value->range_from;?>" />
+                                                                                                    <?php echo form_error('range_from','<span class="text-danger">','</span>'); ?>
+                                                                                            </div>
+                                                                                    </div>
+                                                                            </div>
+                                                                            <div class="row">
+                                                                                    <div class="form-group col-lg-5">
+                                                                                            <div class="input text">
+                                                                                                    <label for="range_to"><?php echo $welcome->loadPo('Range').' '.$welcome->loadPo('To'); ?></label>
+                                                                                                    <input name="range_to" class="form-control" placeholder="<?php echo $welcome->loadPo('Range').' '.$welcome->loadPo('To'); ?>" maxlength="255" type="text" id="range_to" value="<?php echo $value->range_to;?>" />
+                                                                                                    <?php echo form_error('range_to','<span class="text-danger">','</span>'); ?>
+                                                                                            </div>
+                                                                                    </div>
+                                                                            </div>
+                                                                        <?php } ?>
 									<div class="row">
 										<div class="form-group col-lg-5">
 											<div class="input select">

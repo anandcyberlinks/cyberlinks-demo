@@ -66,11 +66,19 @@
 					<div class="col-xs-12">
 						<div class="box">
 							<div class="box-body table-responsive">
+                                                            <?php if($uri=='ch_category') { 
+                                                                    $classID = 'table-draggable2';
+                                                            }  else {
+                                                                    $classID = 'example1';
+                                                            }
+                                                            ?>
 <!--								<table id="example1" class="table table-bordered table-striped">-->
-								<table  id="table-draggable2" class="table table-bordered table-striped">
+<table  id="<?php echo $classID; ?>" class="table table-bordered table-striped">
 									<thead>
 										<tr>
-                                                                                        <th><?php echo $welcome->loadPo('Index') ?></th>
+                                                                                        <?php if($uri=='ch_category') { ?>
+                                                                                            <th><?php echo $welcome->loadPo('Index') ?></th>
+                                                                                        <?php } ?>
 											<th><a href="<?php echo base_url().$uri;?>/index/category/<?php echo (!empty($show_c))?$show_c:'desc';?>"><?php echo $welcome->loadPo('Category').' '.$welcome->loadPo('Name'); ?></a></th>
 											<th><?php echo $welcome->loadPo('Description'); ?></th>
 											<th><a href="<?php echo base_url().$uri;?>/index/parent/<?php echo (!empty($show_p))?$show_p:'desc';?>"><?php echo $welcome->loadPo('Parent'); ?></a></th>
@@ -85,7 +93,9 @@
 											$i=1;
                                                                                         foreach($category as $cat) { ?>
 											<tr id="categ_<?php echo $cat->id;?>">
-                                                                                                <td  id="<?php echo $cat->id; ?>" class="index"><?php echo $cat->index > 0 ? $cat->index : $i++ ; ?></td>
+                                                                                                <?php if($uri=='ch_category') { ?>
+                                                                                                    <td  id="<?php echo $cat->id; ?>" class="index"><?php echo $cat->index > 0 ? $cat->index : $i++ ; ?></td>
+                                                                                                <?php } ?>
 												<td><?php echo $cat->category; ?></td>
 												<td><?php echo $cat->description; ?></td>
 												<td><?php if($cat->parent){ echo $cat->parent; }else{ echo '--';}  ?></td>
@@ -111,13 +121,15 @@
 									</tbody>
 								</table>
 								<!-- Pagination start --->
-<!--								<div class="row pull-right">
+                                                                <?php if($uri=='category') { ?>
+								<div class="row pull-right">
 									<div class="col-xs-12">
 										<div class="dataTables_paginate paging_bootstrap">
-											<ul class="pagination"><li><?php //echo $links ?></li></ul> 
+											<ul class="pagination"><li><?php echo $links ?></li></ul> 
 										</div>
 									</div>
-								</div>-->
+								</div>
+                                                                <?php } ?>
 								<!-- Pagination end -->
 							</div><!-- /.box-body -->
 						</div><!-- /.box -->

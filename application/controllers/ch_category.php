@@ -33,6 +33,16 @@ class Ch_category extends MY_Controller {
                 'field' => 'category',
                 'label' => 'Category name',
                 'rules' => 'trim|required'
+            ),
+            array(
+                'field' => 'range_from',
+                'label' => 'Range From',
+                'rules' => 'integer'
+            ),
+            array(
+                'field' => 'range_to',
+                'label' => 'Range To',
+                'rules' => 'integer'
             )
         ),
         'update_Category' => array(
@@ -40,6 +50,16 @@ class Ch_category extends MY_Controller {
                 'field' => 'category',
                 'label' => 'Category name',
                 'rules' => 'trim|required'
+            ),
+            array(
+                'field' => 'range_from',
+                'label' => 'Range From',
+                'rules' => 'integer'
+            ),
+            array(
+                'field' => 'range_to',
+                'label' => 'Range To',
+                'rules' => 'integer'
             )
         )
     );
