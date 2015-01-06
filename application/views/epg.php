@@ -70,6 +70,7 @@
                 /* initialize the external events
                  -----------------------------------------------------------------*/
                 
+                var playlist_id = <?=$this->uri->segment(3);?>;
                 $('#drop-remove').prop('checked', true);
                 
                 function ini_events(ele) {
@@ -114,7 +115,7 @@
                         week: 'week',
                         day: 'day'
                     },
-                    events: "<?=base_url()?>webtv/renderevent",
+                    events: "<?=base_url()?>webtv/renderevent?playlist_id=" + playlist_id + '&',
                     minTime: 0,
                     maxTime: 24,
                     slotMinutes: 15,
