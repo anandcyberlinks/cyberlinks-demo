@@ -55,7 +55,16 @@
                                                 <select name="category_id" class="form-control">
                                                     <option value="">Select</option>
                                                     <?php foreach ($catogory as $val){ ?>
-                                                    <option value="<?=$val->id ?>"><?=$val->category ?></option>
+                                                    <option value="<?=$val->id ?>"
+                                                            <?php if (isset($value)) {
+                                                                        if ($value[0]->category_id == $val->id) {
+                                                                            echo "selected";
+                                                                        }
+                                                                    } ?>
+                                                            
+                                                            
+                                                            
+                                                            ><?=$val->category ?></option>
                                                     <?php } ?>
                                                 </select>
                                             </div>
