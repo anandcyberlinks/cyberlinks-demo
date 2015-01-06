@@ -193,6 +193,26 @@ class MY_Controller extends CI_Controller {
             redirect(base_url());
         }
     }
+    
+    public function show_ads_view($view, $data = '') {
+        $s = $this->session->all_userdata();
+        $tmp = $s['0'];
+        $id = $tmp->id;
+        if ($id != '') {
+            $this->load->view('header', $data);
+             if(strtolower($s[0]->role) =='advertiser'){
+              $this->load->view('sidebar_ads', $data);
+             }else{
+              $this->load->view('sidebar', $data);
+             }
+            $this->load->view('ads/adsEditHeader', $data);
+            $this->load->view($view, $data);
+            $this->load->view('footer', $data);
+        } else {
+            $this->session->set_flashdata('msg', 'Please Login');
+            redirect(base_url());
+        }
+    }
 
     function loadPo($word) {
         $sess = $this->session->all_userdata();
@@ -451,6 +471,10 @@ class MY_Controller extends CI_Controller {
                 break;
             case 'video':
                 $fileUploadPath =  REAL_PATH.serverVideoRelPath;
+                $dimensions = '';
+                break;
+            case 'ads':
+                $fileUploadPath =  REAL_PATH.serverAdsRelPath;
                 $dimensions = '';
                 break;
         }        
