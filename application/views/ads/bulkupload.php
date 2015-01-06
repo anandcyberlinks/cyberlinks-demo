@@ -7,7 +7,7 @@
 			<h1><?php echo  $welcome->loadPo('Ads') ?><small><?php  echo  $welcome->loadPo('Control panel') ?></small></h1>
 			<ol class="breadcrumb">
 				<li><a href="<?php echo base_url(); ?>"><i class="fa fa-dashboard"></i><?php echo $welcome->loadPo('Dashboard') ?></a></li>
-                                <li><a href="<?php echo base_url(); ?>video"><i class="fa fa-play-circle"></i><?php echo $welcome->loadPo('Ads') ?></a></li>
+                                <li><a href="<?php echo base_url(); ?>ads"><i class="fa fa-play-circle"></i><?php echo $welcome->loadPo('Ads') ?></a></li>
                                 <li class="active"><?php echo $welcome->loadPo('Bulk Upload') ?></li>
 			</ol>
 		</section>

@@ -465,6 +465,44 @@ class Ads_model extends CI_Model {
         
     }
     
+    function getstatuscount($uid) {
+        $id = $this->get_ownerid($uid);
+        array_push($id, $uid);
+        
+	$this->db->select('c.id,c.ad_title,categories.category,f.*,vf.created as assignedTime,vf.status,fv.path as previewPath,fv.created as completedTime');
+	$this->db->from('ads_flavors vf');
+	$this->db->join('ads_flavored_video fv', 'vf.id = fv.flavor_id', 'left');
+	$this->db->join('flavors f', 'f.id = vf.flavor_id', 'left');
+	$this->db->join('ads c', 'vf.ads_id = c.id', 'left');
+	$this->db->join('categories', 'categories.id = c.category', 'left'); 
+	$this->db->where('vf.ads_id >', 0);
+        $this->db->where_in('c.uid', $id); 
+	$this->db->order_by('c.id', 'DESC');
+        $query = $this->db->get();
+	//echo $this->db->last_query();
+
+        return count($query->result());
+    }    
+    
+    function getstatus($uid, $limit, $start) {
+	$id = $this->get_ownerid($uid);
+        array_push($id, $uid);
+        
+	$this->db->select('c.id,c.ad_title,categories.category,f.*,vf.created as assignedTime,vf.status,fv.path as previewPath,fv.created as completedTime');
+	$this->db->from('ads_flavors vf');
+	$this->db->join('ads_flavored_video fv', 'vf.id = fv.flavor_id', 'left');
+	$this->db->join('flavors f', 'f.id = vf.flavor_id', 'left');
+	$this->db->join('ads c', 'vf.ads_id = c.id', 'left');
+	$this->db->join('categories', 'categories.id = c.category', 'left'); 
+	$this->db->where('vf.ads_id >', 0);
+        $this->db->where_in('c.uid', $id); 
+	$this->db->order_by('c.id', 'DESC');
+	$this->db->limit($limit, $start);
+        $query = $this->db->get();
+	//echo $this->db->last_query();
+	$data = $query->result();
+        return $data;
+    }
     
     function video_detail($id) {
         $this->db->select('a.*, b.category , c.username, e.name as file');

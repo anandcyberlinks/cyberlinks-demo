@@ -468,6 +468,19 @@ class Ads extends MY_Controller {
                         $data['status'] = '0';
                         $data['info'] = base64_encode($fileUniqueName);
                         $last_id = $this->Ads_model->_saveVideo($data);
+                        
+                        //-- generate Vast file ---//
+                        $vast_file_path = $this->createVideoXml($fileUniqueName,base_url().$data['relative_path']);                        
+                        //--- insert xml in files table ----//
+                        $data = array('name'=>'',
+                                      'minetype'=>'application/xml',
+                                      'type' => 'xml',
+                            'relative_path' => $vast_file_path,
+                            'absolute_path' => '',
+                            'status' => '1'                
+                        );
+                        $file_id = $this->Ads_model->save_file($data);
+                        //--------------------//
                         $msg = $this->loadPo($this->config->item('success_file_upload'));
                         $this->log($this->user, $msg);
                         $data['id'] = base64_encode($last_id);
@@ -1454,19 +1467,46 @@ class Ads extends MY_Controller {
     function video_status() {
         $this->load->library("pagination");
         $config = array();
-        $config["base_url"] = base_url() . "video/video_status";
-        $config["total_rows"] = $this->videos_model->getstatuscount($this->uid);
+        $config["base_url"] = base_url() . "ads/video_status";
+        $config["total_rows"] = $this->Ads_model->getstatuscount($this->uid);
         $config["per_page"] = 10;
         $config["uri_segment"] = 3;
         $this->pagination->initialize($config);
         $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
         $data["links"] = $this->pagination->create_links();
         $data['welcome'] = $this;
-        $data['status'] = $this->videos_model->getstatus($this->uid, $config["per_page"], $page);
+        $data['status'] = $this->Ads_model->getstatus($this->uid, $config["per_page"], $page);
         $data['total_rows'] = $config["total_rows"];
-        $this->show_view('video_status', $data);
+        $this->show_view('ads/video_status', $data);
     }
 
+     public function createXml($result) {
+        print_r($result);
+        foreach ($result as $row) {
+            if ($row->ad_type == 'Video') {
+                $ad_file_path = base_url() . $row->relative_path;
+                $vast_file_path = $this->createVideoXml($row->ad_title, $ad_file_path);
+            } else if ($row->ad_type == 'Banner') {
+                $ad_file_path = base_url() . $row->relative_path;
+                $vast_file_path = $this->createBannerXml($row->ad_title, $ad_file_path);
+            }
+           echo $vast_file_path;
+            //--- insert xml in files table ----//
+            $data = array('name'=>'',
+                          'minetype'=>'application/xml',
+                          'type' => 'xml',
+                'relative_path' => $vast_file_path,
+                'absolute_path' => '',
+                'status' => '1'                
+            );
+            $file_id = $this->Ads_model->save_file($data);
+            //-----------------------------//
+            //-- update content ads with vast file id --//
+            $data = array('file_id' => $file_id);
+            $this->Ads_model->update_content_ads($data, $row->ads_content_id);
+            //-----------------------------------------//                       
+        }
+    }
     /*
       /--------------------------------------------------------------------------------
       /   function used to change status
