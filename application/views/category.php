@@ -66,9 +66,11 @@
 					<div class="col-xs-12">
 						<div class="box">
 							<div class="box-body table-responsive">
-								<table id="example1" class="table table-bordered table-striped">
+<!--								<table id="example1" class="table table-bordered table-striped">-->
+								<table  id="table-draggable2" class="table table-bordered table-striped">
 									<thead>
 										<tr>
+                                                                                        <th><?php echo $welcome->loadPo('Index') ?></th>
 											<th><a href="<?php echo base_url().$uri;?>/index/category/<?php echo (!empty($show_c))?$show_c:'desc';?>"><?php echo $welcome->loadPo('Category').' '.$welcome->loadPo('Name'); ?></a></th>
 											<th><?php echo $welcome->loadPo('Description'); ?></th>
 											<th><a href="<?php echo base_url().$uri;?>/index/parent/<?php echo (!empty($show_p))?$show_p:'desc';?>"><?php echo $welcome->loadPo('Parent'); ?></a></th>
@@ -80,8 +82,10 @@
 										<?php 
 										if($category)
 										{
-											foreach($category as $cat) { ?>
+											$i=1;
+                                                                                        foreach($category as $cat) { ?>
 											<tr id="categ_<?php echo $cat->id;?>">
+                                                                                                <td  id="<?php echo $cat->id; ?>" class="index"><?php echo $cat->index > 0 ? $cat->index : $i++ ; ?></td>
 												<td><?php echo $cat->category; ?></td>
 												<td><?php echo $cat->description; ?></td>
 												<td><?php if($cat->parent){ echo $cat->parent; }else{ echo '--';}  ?></td>
@@ -107,13 +111,13 @@
 									</tbody>
 								</table>
 								<!-- Pagination start --->
-								<div class="row pull-right">
+<!--								<div class="row pull-right">
 									<div class="col-xs-12">
 										<div class="dataTables_paginate paging_bootstrap">
-											<ul class="pagination"><li><?php echo $links ?></li></ul> 
+											<ul class="pagination"><li><?php //echo $links ?></li></ul> 
 										</div>
 									</div>
-								</div>
+								</div>-->
 								<!-- Pagination end -->
 							</div><!-- /.box-body -->
 						</div><!-- /.box -->
@@ -123,6 +127,49 @@
 		</section><!-- /.content -->
     </aside><!-- /.right-side -->
 </div><!-- ./wrapper -->
+
+<script type="text/javascript">
+        $(function(){
+            $('.link').click(function(){
+                var elem = $(this);
+                $.ajax({
+                    type: "GET",
+                    url: elem.attr('links'),
+                    dataType:"json",  
+                    success: function(data) {
+                        if(data.success){
+                               elem.closest("tr").fadeOut('3000');
+                               $('#msg_div').html(data.message);
+                        }
+                    }
+                });
+                return false;
+            });
+    
+            updateIndex = function(e, ui) {
+                var updateString = '';
+                $('td.index', ui.item.parent()).each(function (i) {
+                    $(this).html(i + 1);
+                    updateString += '&' + $(this).attr('id') + '=' + (i + 1);
+                });
+                
+                $.ajax({
+                    type: "POST",
+                    url: "<?=base_url().'ch_category/updateindex'?>",
+                    data: updateString,
+                    success: function(data) {
+                        
+                    }
+                }); 
+                
+            };
+            
+            $("#table-draggable2 tbody" ).sortable({
+                stop: updateIndex
+            }).disableSelection();
+            
+        });
+</script>
 
 <script>
 	function delete_category(id)

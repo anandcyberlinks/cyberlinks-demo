@@ -82,7 +82,8 @@ class Ch_category extends MY_Controller {
             $this->session->unset_userdata('search_form');
         }
         $searchterm = $this->session->userdata('search_form');
-        $this->load->library("pagination");
+        
+        /* $this->load->library("pagination");
         $config = array();
         $config["base_url"] = base_url() . "ch_category/index";
         $config["total_rows"] = $this->Ch_category_model->getRecordCount($this->uid,$searchterm );
@@ -90,12 +91,25 @@ class Ch_category extends MY_Controller {
         $config["uri_segment"] = 3;
         $this->pagination->initialize($config);
         $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
-        $this->data["links"] = $this->pagination->create_links();
+        $this->data["links"] = $this->pagination->create_links();  
         $this->data['total_rows'] = $config["total_rows"];
         $this->data['category'] = $this->Ch_category_model->getCategory($this->uid, $config["per_page"], $page, $sort, $sort_by, $searchterm);
+        */
+        $this->data['category'] = $this->Ch_category_model->getCategory($this->uid, $sort, $sort_by, $searchterm);
         $this->data['allParentCategory'] = $this->Ch_category_model->getAllCategory();
         $this->show_view('category', $this->data);
     }
+    
+    function updateindex(){
+        foreach($_POST as $key=>$val){
+            $data = array();
+            $data['index'] = $val;
+            $this->db->where('ch.id',$key);
+            $this->db->update('channel_categories ch',$data);
+        }
+        exit;
+    }
+    
 
     /* 	Add and Edit Category	 */
 

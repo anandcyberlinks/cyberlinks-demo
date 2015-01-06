@@ -25,7 +25,7 @@ class Ch_category_model extends CI_Model {
 	}
 	
 	/*	Get Catogory  */	
-	function getCategory($uid, $limit, $start, $sort='', $sort_by='', $data){
+	function getCategoryOld($uid, $limit, $start, $sort='', $sort_by='', $data){
 		$this->db->select('a.*,b.category as parent');
 		$this->db->from('channel_categories a');  
 		$this->db->join('channel_categories b','a.parent_id = b.id','left');
@@ -39,6 +39,24 @@ class Ch_category_model extends CI_Model {
 		}
 		$this->db->where('a.u_id', $uid);
 		$this->db->limit($limit, $start);
+		$query = $this->db->get(); 		
+		return $query->result();
+	}
+        
+        function getCategory($uid, $sort='', $sort_by='', $data){
+		$this->db->select('a.*,b.category as parent');
+		$this->db->from('channel_categories a');  
+		$this->db->join('channel_categories b','a.parent_id = b.id','left');
+                $this->db->order_by('a.index');
+		if(isset($data['category_name'])&& $data['category_name']!='')
+		{			
+			$this->db->like('a.category',trim($data['category_name']));
+		}
+		if(isset($data['parent_id'])&& $data['parent_id']!='')
+		{
+			$this->db->where('a.parent_id',$data['parent_id']);
+		}
+		$this->db->where('a.u_id', $uid);
 		$query = $this->db->get(); 		
 		return $query->result();
 	}
