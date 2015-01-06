@@ -68,8 +68,8 @@ class Livestream_model extends CI_Model {
    $this->db->where('pe.start_date BETWEEN if(MINUTE(CURTIME()) < 30, DATE_FORMAT(NOW(),"%Y-%m-%d %H:00:00"), DATE_FORMAT(NOW(),"%Y-%m-%d %H:30:00")) AND DATE_ADD(now(), INTERVAL 2 HOUR)');
   //  $this->db->where('c.uid',$this->owner_id);
    $query = $this->db->get();
-   echo '<br>'.$this->db->last_query();
-  print_r($query->result());
+  // echo '<br>'.$this->db->last_query();
+//  print_r($query->result());
   return $query->result();  
   }
 }
