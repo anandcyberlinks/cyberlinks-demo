@@ -27,7 +27,7 @@
                         <!-- general form elements -->
                         <div class="box box-primary">
                             <!-- form start -->
-                            <form  method="post" action="<?php echo base_url(); ?>package/addVideo/24" onsubmit="return date_check();" id="searchIndexForm" name="searchIndexForm" accept-charset="utf-8">
+                            <form  method="post" action="" onsubmit="return date_check();" id="searchIndexForm" name="searchIndexForm" accept-charset="utf-8">
                                 <div style="display:none;"><input type="hidden" name="_method" value="POST"/></div>
                                 <div class="box-body">
                                     <div class="row">
