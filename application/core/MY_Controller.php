@@ -150,6 +150,7 @@ class MY_Controller extends CI_Controller {
 
     public function show_view($view, $data = '') {
         $s = $this->session->all_userdata();
+        print_r($s);
         $tmp = $s['0'];
         $id = $tmp->id;
         if ($id != '') {
