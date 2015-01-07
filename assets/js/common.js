@@ -548,7 +548,8 @@ function prepareUploadads(event) {
     if (filesAds && filesAds.length > 0) {
         $('#displayfile').html('<img src="' + baseurl + 'assets/img/loader.gif"> loading...');
         filesArray = filesAds
-        $.each(filesAds, function (index, value) {            
+        $.each(filesAds, function (index, value) {
+            alert(value.type);
             if (value.type == 'text/csv' || value.type=='application/csv') {
                 var reader = new FileReader();
                 var link_reg = /(http:\/\/|https:\/\/)/i;
