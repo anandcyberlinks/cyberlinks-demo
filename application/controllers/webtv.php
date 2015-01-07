@@ -257,8 +257,8 @@ class Webtv extends MY_Controller {
             $data['playlist_id'] = $_POST['playlist_id'];
             $data['title'] = $_POST['title'];
             $data['user_id'] = $this->uid;
-            $data['start_date'] = isset($_POST['start_date']) && $_POST['start_date']!='' ? date('Y-m-d h:i:s',strtotime($_POST['start_date'])) : date('Y-m-d h:i:s');
-            $data['end_date'] = isset($_POST['end_date']) && $_POST['end_date']!='' ? date('Y-m-d h:i:s',strtotime($_POST['end_date'])) : date('Y-m-d h:i:s',strtotime($data['start_date']) + 60*60);
+            $data['start_date'] = isset($_POST['start_date']) && $_POST['start_date']!='' ? date('Y-m-d H:i:s',strtotime($_POST['start_date'])) : date('Y-m-d H:i:s');
+            $data['end_date'] = isset($_POST['end_date']) && $_POST['end_date']!='' ? date('Y-m-d H:i:s',strtotime($_POST['end_date'])) : date('Y-m-d H:i:s',strtotime($data['start_date']) + 60*60);
             
             switch($_POST['action']){
                 case 'delete' :
