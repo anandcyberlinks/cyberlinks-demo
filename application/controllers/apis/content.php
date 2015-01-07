@@ -371,4 +371,91 @@ class Content extends Apis{
         
         $this->response($response);
     }
+    
+    function channels_get(){
+        $response = array();
+        
+        $query = sprintf('SELECT
+                         cc.id as channel_cat_id,
+                         cc.category as channel_cat_name,
+                         cc.color as channel_cat_color,
+                         cc.index as channel_cat_index,
+                         concat(cc.range_from,"-",cc.range_to) as channel_cat_range,
+                         c.id as channel_id,
+                         c.name as channel_name,
+                         c.number as channel_number,
+                         c.type as channel_type,
+                         p.id as playlist_id,
+                         p.name as playlist_name,
+                         p.start_date as playlist_startdate,
+                         p.end_date as playlist_enddate
+                         FROM `channels` c
+                            left join `channel_categories` cc on cc.id = c.category_id
+                            left join playlists p on p.channel_id = c.id 
+                            where c.category_id <> 0');
+        
+        $dataset = $this->db->query($query)->result();
+        $response['data'] = $this->getFormatData($dataset,'category',0);
+        foreach($response['data'] as $k1=>$v1){
+            foreach($v1['chList'] as $k2=>$v2){
+                foreach($v2['chCtnt'] as $k3=>$v3){
+                    $response['data'][$k1]['chList'][$k2]['chCtnt'][$k3]['PCtnt'] = $this->getPlaylistDetail($v3['PId']);
+                }
+            }
+        }
+        $this->response($response);
+    }
+    
+    function getFormatData($data = array(),$type,$id){
+        $response = array();
+        switch($type){
+            case 'category' :
+                foreach($data as $key=>$val){
+                $response[$val->channel_cat_id] = array('cNm'=>$val->channel_cat_name,
+                                               'cId'=>$val->channel_cat_id,
+                                               'cRange'=>$val->channel_cat_range,
+                                               'cOrdr'=>$val->channel_cat_index,
+                                               'cColr'=>$val->channel_cat_color,
+                                               'chList'=>$this->getFormatData($data,'channel',$val->channel_cat_id));    
+                }
+                break;
+            case 'channel' :
+                foreach($data as $key=>$val){
+                    if($val->channel_cat_id == $id  && $val->channel_id > 0)
+                    $response[$val->channel_id] = array('chNm'=>$val->channel_name,
+                                               'chId'=>$val->channel_id,
+                                               'chNmbr'=>$val->channel_number,
+                                               'chTyp'=>$val->channel_type,
+                                               'chCtnt'=>$this->getFormatData($data,'playlist',$val->channel_id));    
+                }
+                break;
+            case 'playlist' :
+                foreach($data as $key=>$val){
+                    if($val->channel_id == $id && $val->playlist_id > 0)
+                    $response[$val->playlist_id] = array('Pnm'=>$val->playlist_name,
+                                                         'PId'=>$val->playlist_id,
+                                                         'PStTym'=>$val->playlist_startdate,
+                                                         'PEdTym'=>$val->playlist_enddate,
+                                                         'PCtnt'=>array());    
+                }
+                break;
+        }
+        return array_values($response);
+    }
+    
+    function getPlaylistDetail($playlist_id){
+        $query = sprintf('select
+                            c.title as `ctntNm`,
+                            c.id as `ctntId`,
+                            f.absolute_path as `ctntUrl`
+                            from contents c
+                            left join videos v on v.content_id = c.id
+                            left join files f on f.id = v.file_id
+                            left join playlist_video pv on pv.content_id = c.id
+                            where c.type = "youtube" and pv.playlist_id = %d',$playlist_id);
+                
+        $dataset = $this->db->query($query)->result();
+        return $dataset;
+    }
+    
 }
