@@ -81,6 +81,7 @@
                                                                                         <?php } ?>
 											<th><a href="<?php echo base_url().$uri;?>/index/category/<?php echo (!empty($show_c))?$show_c:'desc';?>"><?php echo $welcome->loadPo('Category').' '.$welcome->loadPo('Name'); ?></a></th>
 											<th><?php echo $welcome->loadPo('Description'); ?></th>
+											<th><?php echo $welcome->loadPo('Range'); ?></th>
 											<th><a href="<?php echo base_url().$uri;?>/index/parent/<?php echo (!empty($show_p))?$show_p:'desc';?>"><?php echo $welcome->loadPo('Parent'); ?></a></th>
 											<th><a href="<?php echo base_url().$uri;?>/index/status/<?php echo (!empty($show_s))?$show_s:'desc';?>"><?php echo $welcome->loadPo('Status'); ?></a></th>
 											<th><?php echo $welcome->loadPo('Action'); ?></th>
@@ -98,6 +99,7 @@
                                                                                                 <?php } ?>
 												<td><?php echo $cat->category; ?></td>
 												<td><?php echo $cat->description; ?></td>
+												<td><?php echo $cat->range_from.' - '.$cat->range_to; ?></td>
 												<td><?php if($cat->parent){ echo $cat->parent; }else{ echo '--';}  ?></td>
 												<td>
 													<?php if($cat->status == 1){?>
