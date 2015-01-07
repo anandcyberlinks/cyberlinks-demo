@@ -21,31 +21,33 @@
                         <div class="col-md-3">
                             <div class="box box-primary">
                                 <div class="box-header">
-                                    <h4 class="box-title">Video list</h4>
+                                    <h4 class="box-title">Vod Video list</h4>
                                 </div>
                                 <div class="box-body">
-                                    <!-- the events -->
                                     <div id='external-events'>
-                                        
                                         <?php
-                                        $color = array(
-                                            'bg-green',
-                                            'bg-red',
-                                            'bg-aqua',
-                                            'bg-yellow',
-                                            'bg-navy');
-                                        
-                                        foreach ($result as $key=>$value){ ?>
+                                        foreach ($result['vod'] as $key=>$value){ ?>
                                         <div class='external-event' style="background-color: <?=$value->color?>" id="<?=$value->id?>"><?=$value->title?></div><br>
                                         <?php } ?>
-                                        
                                         <p class="loader"></p>
                                         <!-- <input type='checkbox' id='drop-remove' /> <label for='drop-remove'>remove after drop</label> -->
-                                        
                                     </div>
-                                    
                                 </div><!-- /.box-body -->
-                                
+                            </div><!-- /. box -->
+                            <div class="box box-primary">
+                                <div class="box-header">
+                                    <h4 class="box-title">Youtube Video list</h4>
+                                </div>
+                                <div class="box-body">
+                                    <div id='external-events'>
+                                        <?php
+                                        foreach ($result['youtube'] as $key=>$value){ ?>
+                                        <div class='external-event' style="background-color: <?=$value->color?>" id="<?=$value->id?>"><?=$value->title?></div><br>
+                                        <?php } ?>
+                                        <p class="loader"></p>
+                                        <!-- <input type='checkbox' id='drop-remove' /> <label for='drop-remove'>remove after drop</label> -->
+                                    </div>
+                                </div><!-- /.box-body -->
                             </div><!-- /. box -->
                             <a class="btn btn-warning" href="<?php echo base_url()."webtv/playlist/".$this->uri->segment(4) ?>"><i class="fa fa-mail-reply"></i> Back</a>
                         </div><!-- /.col -->

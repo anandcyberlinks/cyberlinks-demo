@@ -209,9 +209,8 @@ class Webtv_model extends CI_Model{
         $this->db->where('c.status', '1');
         $this->db->where_not_in('a.id', $ids);
         $query = $this->db->get();
-       //echo $this->db->last_query();
+        $this->db->last_query();
         $data = $query->result();
-       //echo "<pre>"; print_r($data); exit;
         return $data;
     }
     

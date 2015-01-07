@@ -168,8 +168,14 @@ class Webtv extends MY_Controller {
         }
         $data['playlist_id'] = $id;
         $data['package'] = $this->webtv_model->getPack($id);
-        $data['result'] = $this->webtv_model->get_videoid($id, $ids);
-        //echo "<pre>";        print_r($data['result']); die;
+        $tmp = $this->webtv_model->get_videoid($id, $ids);
+        foreach($tmp as $key=>$val){
+            if($val->type == 'youtube'){
+                $data['result']['youtube'][] = $val;
+            }else{
+                $data['result']['vod'][] = $val;
+            }
+        }
         $this->show_view('epg', $data);
     }
     
