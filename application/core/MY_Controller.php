@@ -99,7 +99,7 @@ class MY_Controller extends CI_Controller {
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
         $return = curl_exec($curl);
         curl_close($curl);
-        
+        $data['id'] = $id;
         $data['detail'] = (array) json_decode($return);
         return $data;
     }
