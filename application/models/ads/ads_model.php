@@ -218,14 +218,13 @@ class Ads_model extends CI_Model {
                 $flav = $query->result();
                 foreach($flav as $flavorVal){
                     $videoFlavorsData['flavor_id'] = $flavorVal->id;
-                    $videoFlavorsData['ads_id'] = $cid;
+                    $videoFlavorsData['content_id'] = $cid;
                     $videoFlavorsData['file_id'] = $fid;
                     $videoFlavorsData['status'] = 'pending';
-                    //$videoFlavorsData['created'] = date('Y-m-d');
+                    $videoFlavorsData['type'] = 'ads';
                     $this->db->set('created','NOW()',FALSE);
-                    $this->db->insert('ads_flavors', $videoFlavorsData);
+                    $this->db->insert('video_flavors', $videoFlavorsData);
                 }
-            
         }
         return $cid;
     }
