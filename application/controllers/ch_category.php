@@ -117,7 +117,7 @@ class Ch_category extends MY_Controller {
         */
         $this->data['category'] = $this->Ch_category_model->getCategory($this->uid, $sort, $sort_by, $searchterm);
         $this->data['allParentCategory'] = $this->Ch_category_model->getAllCategory();
-        $this->show_view('category', $this->data);
+        $this->show_view('ch_category', $this->data);
     }
     
     function updateindex(){
@@ -165,12 +165,12 @@ class Ch_category extends MY_Controller {
                     } else {
                         $this->data['allParentCategory'] = $this->Ch_category_model->getAllCategory();
                         $this->data['edit'] = $this->Ch_category_model->getAllParentCategory($cid);
-                        $this->show_view('edit_category', $this->data);
+                        $this->show_view('ch_edit_category', $this->data);
                     }
                 } else {
                     $this->data['allParentCategory'] = $this->Ch_category_model->getAllCategory();
                     $this->data['edit'] = $this->Ch_category_model->getAllParentCategory($cid);
-                    $this->show_view('edit_category', $this->data);
+                    $this->show_view('ch_edit_category', $this->data);
                 }
             } else {
                 if (isset($_POST['submit']) && $_POST['submit'] == 'Submit') {
@@ -199,11 +199,11 @@ class Ch_category extends MY_Controller {
                         }
                     } else {
                         $this->data['allParentCategory'] = $this->Ch_category_model->getAllCategory();
-                        $this->show_view('add_category', $this->data);
+                        $this->show_view('ch_add_category', $this->data);
                     }
                 } else {
                     $this->data['allParentCategory'] = $this->Ch_category_model->getAllCategory();
-                    $this->show_view('add_category', $this->data);
+                    $this->show_view('ch_add_category', $this->data);
                 }
             }
         } else {
