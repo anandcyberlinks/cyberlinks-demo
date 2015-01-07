@@ -54,7 +54,7 @@
 										 	</div><!-- /.box-body -->
 											<div class="box-footer">
 												<button name="Submit" id="uploadadscsv" value="Upload" class="btn btn-primary btn-sm"><?php  echo  $welcome->loadPo('Upload') ?></button>
-												<a href="<?php echo base_url(); ?>assets/upload/csv/punjabisongs.csv" class="btn btn-default btn-sm"><?php  echo  $welcome->loadPo('Download Sample File') ?></a>
+												<a href="<?php echo base_url(); ?>assets/upload/csv/sample_ads.csv" class="btn btn-default btn-sm"><?php  echo  $welcome->loadPo('Download Sample File') ?></a>
 											</div>
 										</form>
 										 <!--<div id="target-div5"></div> -->
