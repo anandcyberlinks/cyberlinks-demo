@@ -36,7 +36,7 @@ class Livestream_model extends CI_Model {
     
    //  $this->db->where('c.uid',$this->owner_id);
     $query = $this->db->get();
-    echo $this->db->last_query();
+   // echo $this->db->last_query();
     return $query->result();
    }
    
