@@ -69,8 +69,6 @@ if(isset($_SERVER['HTTP_HOST']))
     $base_url = 'http://localhost/';
 }
 $base_url .= str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']);
-
-define('bucket',		           'newsnation1');
 define('baseurl',		            $base_url);
 
 if(isset($config['amazons3'])) {

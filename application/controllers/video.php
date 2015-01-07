@@ -506,6 +506,7 @@ class Video extends MY_Controller {
             $post = array();
             $tmp = $this->get_youtube($videoUrl);
             $youtubeData = $tmp['detail']['entry']->{'media$group'};
+            $post['content_token'] = $tmp['id'];
             $post['content_title'] = $tmp['detail']['entry']->{'title'}->{'$t'};
             $post['description'] = $youtubeData->{'media$description'}->{'$t'};
             $post['uid'] = $this->uid;
