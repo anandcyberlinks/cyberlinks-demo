@@ -32,10 +32,11 @@ class Livestream_model extends CI_Model {
     $this->db->select('c.id,l.thumbnail_url,l.youtube,l.ios,l.android,l.windows,l.web,c.name as channel_name');
     $this->db->from('livestream l');
     $this->db->join('channels c','c.id=l.channel_id');
-    $this->db->where('l.status',1);
+    $this->db->where('c.status',1);
     
    //  $this->db->where('c.uid',$this->owner_id);
     $query = $this->db->get();
+    echo $this->db->last_query();
     return $query->result();
    }
    
