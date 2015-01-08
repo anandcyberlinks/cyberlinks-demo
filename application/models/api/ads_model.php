@@ -13,7 +13,7 @@ class Ads_model extends CI_Model{
         $this->db->select('a.id, a.ad_title as title,f.relative_path as url');
         $this->db->from('ads a');
         $this->db->join('files f','a.file_id=f.id');
-        $this->db->where('status',1);
+        $this->db->where('a.status',1);
         $query = $this->db->get();
         return $query->result();
     }
