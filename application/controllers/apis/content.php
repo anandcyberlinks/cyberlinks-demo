@@ -407,7 +407,7 @@ class Content extends Apis{
                     $response['data'][$k1]['chList'][$k2]['chCtnt'][$k3]['PCtnt'] = $this->getPlaylistDetail($v3['PId']);
                     if(count($response['data'][$k1]['chList'][$k2]['chCtnt'][$k3]['PCtnt']) > 0){
                         foreach($response['data'][$k1]['chList'][$k2]['chCtnt'][$k3]['PCtnt'] as $key=>$val){
-                            if($counter <= count($ads)){
+                            if($counter < count($ads)){
                                 $response['data'][$k1]['chList'][$k2]['chCtnt'][$k3]['PCtnt'][$key]->ctnAd = $ads[$counter++]->url;    
                             }else{
                                 $counter = 0;
