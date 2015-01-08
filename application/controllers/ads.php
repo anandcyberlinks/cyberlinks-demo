@@ -661,8 +661,8 @@ class Ads extends MY_Controller {
                         $contentData['category'] = $catId;
                         $contentData['uid'] = $this->uid;
                         $contentData['filename'] = $videoFileUniqName;
-                        $contentData['relative_path'] = serverVideoRelPath . $videoFileUniqName;
-                        $contentData['absolute_path'] = REAL_PATH . serverVideoRelPath . $videoFileUniqName;
+                        $contentData['relative_path'] = serverAdsRelPath . $videoFileUniqName;
+                        $contentData['absolute_path'] = REAL_PATH . serverAdsRelPath . $videoFileUniqName;
                         $contentData['minetype'] = "video/" . $videoFileExt;
                         $contentData['type'] = $videoFileExt;
                         $contentData['status'] = '1';

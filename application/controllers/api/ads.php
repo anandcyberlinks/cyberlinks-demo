@@ -43,4 +43,5 @@ class Ads extends REST_Controller
             $this->response('No record found', 404);
         }
     }
+    
 }
