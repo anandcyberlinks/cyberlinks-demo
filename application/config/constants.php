@@ -102,6 +102,7 @@ if(isset($config['amazons3'])) {
     define('CATEGORY_SMALL_PATH',           'assets/upload/category/small/');
     define('CATEGORY_MEDIUM_PATH',           'assets/upload/category/medium/');
     define('CATEGORY_LARGE_PATH',           'assets/upload/category/large/');
+    define('serverAdsRelPath',	'assets/upload/ads/');
 }
 
 define('PER_PAGE',10);
