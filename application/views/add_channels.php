@@ -40,6 +40,10 @@
                                             <label><?php echo $welcome->loadPo('Channels Name'); ?></label>
                                             <input class="form-control" type="text" name="name" value="<?php if (isset($value)) { echo $value[0]->name; } ?>">
                                         </div>
+                                        <div class="form-group col-md-10">
+                                            <label><?php echo $welcome->loadPo('Channels Number'); ?></label>
+                                            <input class="form-control" type="text" name="number" value="<?php if (isset($value)) { echo $value[0]->number; } ?>">
+                                        </div>
                                             <?php if (!isset($value)) { ?>
                                             <div class="form-group col-md-10">
                                                 <label><?php echo $welcome->loadPo('Channels Type'); ?></label>

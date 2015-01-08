@@ -110,7 +110,7 @@
                                                     <a href="<?php echo base_url() ?>webtv/videoEpg/<?php echo $value->id.'/'.$this->uri->segment(3); ?>">Manage EPG</a>
                                                 </td>
                                                 <td  width="150"> 
-                                                    <a href="<?php echo base_url(); ?>webtv/edit?action=<?php echo base64_encode($value->id) . '&'; ?>" class="btn btn-info btn-sm"><?php echo $welcome->loadPo('Edit') ?></a>
+                                                    <a href="<?php echo base_url(); ?>webtv/edit/<?=$this->uri->segment(3)?>/?action=<?php echo base64_encode($value->id) . '&'; ?>" class="btn btn-info btn-sm"><?php echo $welcome->loadPo('Edit') ?></a>
                                                     &nbsp;
                                                     <a class="confirm" onclick="return delete_event(<?php echo $value->id; ?>, '<?php echo base_url() . 'webtv/delete' ?>', '<?php echo current_full_url(); ?>');" href="" ><button class="btn btn-danger btn-sm" data-toggle="modal" data-target=".bs-example-modal-sm" ><?php echo $welcome->loadPo('Delete') ?></button></a>
                                                 </td>

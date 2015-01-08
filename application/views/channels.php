@@ -71,6 +71,7 @@
                                     <thead>
                                         <tr>
                                             <th><?php echo $welcome->loadPo('Name') ?></th>
+                                            <th><?php echo $welcome->loadPo('Number') ?></th>
                                             <th><?php echo $welcome->loadPo('Type') ?></th>
                                             <th><?php echo $welcome->loadPo('Category') ?></th>
                                             <th><?php echo $welcome->loadPo('Status') ?></th>
@@ -78,12 +79,12 @@
                                             <th align="center"><?php echo $welcome->loadPo('Action') ?></th>
                                         </tr>
                                     </thead>
-
                                     <tbody>
                                         <?php foreach ($res as $value) { ?>
 
                                             <tr id="<?php echo $value->id ?>">
                                                 <td><?php echo $value->name; ?></td>
+                                                <td><?php echo $value->number; ?></td>
                                                 <td><?php echo $value->type; ?></td> 
                                                 <td><?php echo $value->category; ?></td>
                                                 <td><?php if ($value->status == 1) { ?>
