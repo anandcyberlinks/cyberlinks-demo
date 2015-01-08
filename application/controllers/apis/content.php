@@ -400,23 +400,32 @@ class Content extends Apis{
         $ads = $this->get_data('http://182.18.165.43/multitvfinal/api/ads/list');
         $ads = json_decode($ads);
         shuffle($ads);
+        
         $counter = 0;
         foreach($response['data'] as $k1=>$v1){
             foreach($v1['chList'] as $k2=>$v2){
-                foreach($v2['chCtnt'] as $k3=>$v3){
-                    $response['data'][$k1]['chList'][$k2]['chCtnt'][$k3]['PCtnt'] = $this->getPlaylistDetail($v3['PId']);
-                    if(count($response['data'][$k1]['chList'][$k2]['chCtnt'][$k3]['PCtnt']) > 0){
-                        foreach($response['data'][$k1]['chList'][$k2]['chCtnt'][$k3]['PCtnt'] as $key=>$val){
-                            if($counter < count($ads)){
-                                $response['data'][$k1]['chList'][$k2]['chCtnt'][$k3]['PCtnt'][$key]->ctnAd = $ads[$counter++]->url;    
-                            }else{
-                                $counter = 0;
-                                $response['data'][$k1]['chList'][$k2]['chCtnt'][$k3]['PCtnt'][$key]->ctnAd = $ads[$counter]->url;
-                            }
-                            
+                switch($v2['chTyp']){
+                    case 'Loop' :
+                        if(isset($v2['chCtnt'])){
+                            array_walk($v2['chCtnt'],function(&$data) use ($ads){
+                                $data['PCtnt'] = $this->getPlaylistDetail($data['PId']);
+                                if(is_array($data['PCtnt'])){
+                                    foreach($data['PCtnt'] as $key=>$val){
+                                        $data['PCtnt'][$key]->ctnAd = $ads[rand(0,count($ads)-1)]->url;
+                                    }
+                                }
+                            });
                         }
-                    }
+                        break;
+                    case 'youtube' :
+                    case 'Live' :
+                        if(isset($v2['chCtnt'])){
+                            $v2['chCtnt']['ctntUrl'] = $this->getLiveUrl($v2['chId']);
+                            $v2['chCtnt']['ctnAd'] = $ads[rand(0,count($ads)-1)]->url;
+                        }
+                        break;
                 }
+                $response['data'][$k1]['chList'][$k2] = $v2;
             }
         }
         $this->response($response);
@@ -438,25 +447,51 @@ class Content extends Apis{
             case 'channel' :
                 foreach($data as $key=>$val){
                     if($val->channel_cat_id == $id  && $val->channel_id > 0)
-                    $response[$val->channel_id] = array('chNm'=>$val->channel_name,
+                    switch($val->channel_type){
+                        case 'Loop' :
+                            $response[$val->channel_id] = array('chNm'=>$val->channel_name,
                                                'chId'=>$val->channel_id,
                                                'chNmbr'=>$val->channel_number,
                                                'chTyp'=>$val->channel_type,
                                                'chCtnt'=>$this->getFormatData($data,'playlist',$val->channel_id));    
+                            break;
+                        case 'Live' :
+                        case 'Youtube' :
+                            $response[$val->channel_id] = array('chNm'=>$val->channel_name,
+                                               'chId'=>$val->channel_id,
+                                               'chNmbr'=>$val->channel_number,
+                                               'chTyp'=>$val->channel_type,
+                                               'chCtnt'=>array());
+                            break;
+                    }
                 }
                 break;
             case 'playlist' :
                 foreach($data as $key=>$val){
-                    if($val->channel_id == $id && $val->playlist_id > 0)
-                    $response[$val->playlist_id] = array('Pnm'=>$val->playlist_name,
+                    if($val->channel_id == $id && $val->playlist_id > 0){
+                        $response[$val->playlist_id] = array('Pnm'=>$val->playlist_name,
                                                          'PId'=>$val->playlist_id,
                                                          'PStTym'=>$val->playlist_startdate,
                                                          'PEdTym'=>$val->playlist_enddate,
-                                                         'PCtnt'=>array());    
+                                                         'PCtnt'=>array());        
+                    }
+                    
                 }
                 break;
         }
         return array_values($response);
+    }
+    
+    function getLiveUrl($channel_id){
+        $query = sprintf('select
+                              ios,
+                              android,
+                              web,
+                              windows,
+                              thumbnail_url as thumb
+                              from livestream where channel_id = %d ',$channel_id);
+        $dataset = $this->db->query($query)->result();
+        return reset($dataset);
     }
     
     function getPlaylistDetail($playlist_id){
