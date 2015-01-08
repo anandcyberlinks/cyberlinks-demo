@@ -396,10 +396,26 @@ class Content extends Apis{
         
         $dataset = $this->db->query($query)->result();
         $response['data'] = $this->getFormatData($dataset,'category',0);
+        
+        $ads = $this->get_data('http://182.18.165.43/multitvfinal/api/ads/list');
+        $ads = json_decode($ads);
+        shuffle($ads);
+        $counter = 0;
         foreach($response['data'] as $k1=>$v1){
             foreach($v1['chList'] as $k2=>$v2){
                 foreach($v2['chCtnt'] as $k3=>$v3){
                     $response['data'][$k1]['chList'][$k2]['chCtnt'][$k3]['PCtnt'] = $this->getPlaylistDetail($v3['PId']);
+                    if(count($response['data'][$k1]['chList'][$k2]['chCtnt'][$k3]['PCtnt']) > 0){
+                        foreach($response['data'][$k1]['chList'][$k2]['chCtnt'][$k3]['PCtnt'] as $key=>$val){
+                            if($counter <= count($ads)){
+                                $response['data'][$k1]['chList'][$k2]['chCtnt'][$k3]['PCtnt'][$key]->ctnAd = $ads[$counter++]->url;    
+                            }else{
+                                $counter = 0;
+                                $response['data'][$k1]['chList'][$k2]['chCtnt'][$k3]['PCtnt'][$key]->ctnAd = $ads[$counter]->url;
+                            }
+                            
+                        }
+                    }
                 }
             }
         }
@@ -447,6 +463,8 @@ class Content extends Apis{
         $query = sprintf('select
                             c.title as `ctntNm`,
                             c.id as `ctntId`,
+                            concat("http://img.youtube.com/vi/",c.content_token,"/0.jpg") as `ctnThmb`,
+                            v.duration as `ctnDur`,
                             f.absolute_path as `ctntUrl`
                             from contents c
                             left join videos v on v.content_id = c.id
