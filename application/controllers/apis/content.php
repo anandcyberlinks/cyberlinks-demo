@@ -488,6 +488,7 @@ class Content extends Apis{
                               android,
                               web,
                               windows,
+                              youtube,
                               thumbnail_url as thumb
                               from livestream where channel_id = %d ',$channel_id);
         $dataset = $this->db->query($query)->result();
