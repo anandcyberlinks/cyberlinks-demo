@@ -75,6 +75,7 @@ class Webtv extends MY_Controller {
         //print_r($data['catogory']);
         if (isset($_POST['submit']) && $_POST['submit'] = 'Submit') {
             $post['name'] = $_POST['name'];
+            $post['number'] = $_POST['number'];
             $post['type'] = $_POST['type'];
             $post['uid'] = $this->uid;
             $post['category_id'] = $_POST['category_id'];
@@ -116,7 +117,7 @@ class Webtv extends MY_Controller {
             
             $this->webtv_model->insert($post);
             $this->session->set_flashdata('message', $this->_successmsg($this->loadPo($this->config->item('success_record_update'))));
-            redirect(base_url() . 'webtv');
+            redirect(base_url() . 'webtv/playlist/'.$this->uri->segment(3));
         }
         $data['value'] = $this->webtv_model->fetchEventbyId($id);
         $this->show_view('add_play', $data);
@@ -129,8 +130,8 @@ class Webtv extends MY_Controller {
         if (isset($_POST['submit']) && $_POST['submit'] = 'Submit') {
             $post['id'] = $id;
             $post['name'] = $_POST['name'];
+            $post['number'] = $_POST['number'];
             $post['category_id'] = $_POST['category_id'];
-            $date = explode('-', $_POST['start_date']);
             $post['uid'] = $this->uid;
             $post['status'] = $_POST['status'];
             $this->webtv_model->insert_channels($post);

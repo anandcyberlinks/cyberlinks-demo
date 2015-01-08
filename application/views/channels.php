@@ -95,7 +95,7 @@
                                                 <td>
                                                     <?php if($value->type =='Loop'){ ?>
                                                     <a href="<?php echo base_url() ?>webtv/playlist/<?php echo $value->id; ?>">Manage Playlist</a>
-                                                    <?php } else if($value->type =='Youtube'){ ?>
+                                                    <?php } else if($value->type =='Youtube' || $value->type =='Live'){ ?>
                                                     <a href="<?php echo base_url() ?>livestream/index/<?php echo $value->id; ?>">Manage Playlist</a>
                                                     <?php } ?>
                                                 </td>

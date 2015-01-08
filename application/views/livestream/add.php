@@ -32,49 +32,34 @@
 			<form action="" method="post" id="frmstream" enctype='multipart/form-data'>
 			    <div class="box-body">
 				<div class="form-group">
-				    <div class="row">
-					<!--<div class="col-md-9">
-                                            <label for="Name"><?php echo $welcome->loadPo('Content provider'); ?></label>
-					    <?php if($this->role_id ==2 && $_GET['action']=='add'){?>
-						    <select name="userid" class="form-control" placeholder="User" id="userid" title="please select content provider" required>
-						    <option value="">--<?php echo $welcome->loadPo('Select'); ?>--</option>
-						    <?php foreach($content_provider as $row){?>
-						    <option value="<?php echo $row->id;?>"><?php echo $row->content_provider;?></option>
-						    <?php } ?>
-						</select>
-					    <?php }else{?>
-						<input class="form-control" type="text" disabled=disabled value="<?php echo $result->content_provider;?>" placeholder="Youtube URL" />
-					    <?php }?>
-					</div>-->
-				    </div>
                                     <div class="row">
 					<div class="col-md-9">
                                             <label for="Name"><?php echo $welcome->loadPo('Youtube Url'); ?></label>
-					    <input class="form-control" type="text" value="<?php echo $result->youtube;?>" name="youtube" placeholder="Youtube URL" />
+					    <input class="form-control" type="text" value="<?=isset($result->youtube) ? $result->youtube : ''?>" name="youtube" placeholder="Youtube URL" />
 					</div>
 				    </div>
 				    <div class="row">
 					<div class="col-md-9">
                                             <label for="Name"><?php echo $welcome->loadPo('IOS Url'); ?></label>
-					    <input class="form-control" type="text" value="<?php echo $result->ios;?>" name="ios" placeholder="IOS URL" />
+					    <input class="form-control" type="text" value="<?=isset($result->ios) ? $result->ios : ''?>" name="ios" placeholder="IOS URL" />
 					</div>
 				    </div>
                                     <div class="row">
 					<div class="col-md-9">
                                             <label for="Name"><?php echo $welcome->loadPo('Android Url'); ?></label>
-					    <input class="form-control" type="text" value="<?php echo $result->android;?>" name="android" placeholder="Android URL" />
+					    <input class="form-control" type="text" value="<?=isset($result->android) ? $result->android : ''?>" name="android" placeholder="Android URL" />
 					</div>					
 				    </div>
                                     <div class="row">
 					<div class="col-md-9">
                                             <label for="Name"><?php echo $welcome->loadPo('Windows Url'); ?></label>
-					    <input class="form-control" type="text" value="<?php echo $result->windows;?>" name="windows" placeholder="Window URL" />
+					    <input class="form-control" type="text" value="<?=isset($result->windows) ? $result->windows : ''?>" name="windows" placeholder="Window URL" />
 					</div>					
 				    </div>
                                     <div class="row">
 					<div class="col-md-9">
                                             <label for="Name"><?php echo $welcome->loadPo('Web Url'); ?></label>
-					    <input class="form-control" type="text" value="<?php echo $result->web;?>" name="web" placeholder="Web URL" />
+					    <input class="form-control" type="text" value="<?=isset($result->web) ? $result->web : ''?>" name="web" placeholder="Web URL" />
 					</div>					
 				    </div>
 				    <br/>
@@ -85,13 +70,21 @@
 						<?php echo  $welcome->loadPo('Choose Media') ?>
 						<input name="chanelImage"  id="chanelImage" atr="files" type="file" />
 					    </span>
-					    <span><img width=100 height=100 src="<?php echo $result->thumbnail_url;?>" /></span>
+					    <span>
+                                                <?php 
+                                                if(isset($result->thumbnail_url) && $result->thumbnail_url != ''){
+                                                    echo sprintf('<img width=100 height=100 src="%s" />',$result->thumbnail_url);
+                                                }
+                                                ?>
+                                            </span>
 					</div>
 				    </div>
 				    <br/>
                                     <div class="row">
-                                        <div class="col-md-6">					   
-					    <input name="save" type="submit" value="Save" class="btn btn-success btn-sm">
+                                        <div class="col-md-6">		
+                                            
+					    <input name="save" type="submit" value="Save" class="btn btn-success">
+                                            <a class="btn btn-warning" href="<?=base_url() ?>webtv"><i class="fa fa-mail-reply"></i>&nbsp;Back</a>
 					</div>
                                     </div>
 				</div>
@@ -99,7 +92,7 @@
 			</form>
 		    </div>
 		    
-		    <?php if($result->web){ ?>
+		    <?php if(isset($result->web) && $result->web!=''){ ?>
 		    <div class="box box-success">
 			<div class="box-body">
 			    <iframe width="100%" height="400px" src='<?=base_url().'livestream/rendervideo/?path='.base64_encode($result->web) ?>' allowfullscreen="" frameborder="0"></iframe>
@@ -109,7 +102,6 @@
 		</section>
     </aside><!-- /.right-side -->
 </div><!-- ./wrapper -->
-
 <script>
   $("#frmstream").validate();
 	

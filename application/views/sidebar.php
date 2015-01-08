@@ -36,22 +36,8 @@
                     <li class="<?= ($this->uri->segment(2) == 'debug') ? 'active' : '' ?>"><a href="<?php echo base_url() ?>video/debug"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('Debug'); ?></a></li>
                 </ul>
             </li>
-            <li class="<?= ($this->uri->segment(1) == 'livestream') ? 'active' : '' ?>">
-                <!--
-		<a href="<?php echo base_url() ?>video/live_streaming" >
-                    <i class="fa fa-fw fa-film"></i> <span><?php echo $welcome->loadPo('Live Stream'); ?></span>
-                </a>
-		-->
-                 <?php if($s[0]->role == 'Superadmin'){?>
-		<a href="<?php echo base_url() ?>livestream/slist" >
-                <?php }else{?>
-                <a href="<?php echo base_url() ?>livestream/" >
-                <?php }?>
-                    <i class="fa fa-fw fa-film"></i> <span><?php echo $welcome->loadPo('Live Stream'); ?></span>
-                </a>
-            </li>
-            
-            <li class="<?= ($this->uri->segment(1) == 'webtv') ? 'active' : '' ?>">
+          
+            <li class="<?= ($this->uri->segment(1) == 'webtv' || $this->uri->segment(1) == 'livestream') ? 'active' : '' ?>">
                 <a href="<?php echo base_url() ?>webtv" >
                     <i class="fa fa-fw fa-film"></i> <span><?php echo $welcome->loadPo('WebTV'); ?></span>
                 </a>
