@@ -105,6 +105,7 @@ class Videos_model extends CI_Model {
             
             ###inserting data in videos table with contents_id and file_id###
             $this->db->set('content_id', $cid);
+            $this->db->set('duration', isset($data['duration']) ? $data['duration'] : 0 );
             $this->db->set('file_id', $fid);
             $this->db->set('created','NOW()',FALSE);
             $this->db->insert('videos');

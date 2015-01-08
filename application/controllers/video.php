@@ -505,10 +505,12 @@ class Video extends MY_Controller {
         if ($matches) {
             $post = array();
             $tmp = $this->get_youtube($videoUrl);
+            
             $youtubeData = $tmp['detail']['entry']->{'media$group'};
             $post['content_token'] = $tmp['id'];
             $post['content_title'] = $tmp['detail']['entry']->{'title'}->{'$t'};
             $post['description'] = $youtubeData->{'media$description'}->{'$t'};
+            $post['duration'] = $youtubeData->{'media$content'}[0]->duration; 
             $post['uid'] = $this->uid;
             $post['created'] = date('Y-m-d');
             $post['type'] = 'youtube';
@@ -521,6 +523,7 @@ class Video extends MY_Controller {
             $post['type'] = 'youtube';
             $post['minetype'] = "";
             $post['info'] = base64_encode($videoUrl);
+            //echo "<pre>";            print_r($post); exit;
             $last_id = $this->videos_model->_saveVideo($post);
             //Save keywords
             $keyWordsData = $tmp['content']['keywords'];
