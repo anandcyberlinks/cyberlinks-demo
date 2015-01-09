@@ -34,8 +34,13 @@ class Layout extends MY_Controller {
         ###check user session #######
         $s = $this->session->all_userdata();
         $tmp = @$s['0'];
+       
         if (isset($tmp->id)) {
-            redirect(base_url().'layout/dashboard');
+            if($tmp->role == 'advertiser'){
+                redirect(base_url().'ads');
+            }else{
+                redirect(base_url().'layout/dashboard');
+            }
         }
         #################################
         if (isset($_POST['login'])) {
@@ -45,8 +50,14 @@ class Layout extends MY_Controller {
             if (count($result) == '1') {
                 $this->session->set_userdata($result);
                 $msg = $this->loadPo($this->config->item('success_login'));
+                $s = $this->session->all_userdata();
+                
                 $this->log($data['username'], $msg);
-                redirect(base_url().'layout/dashboard');
+                if($s['0']->role == 'Advertiser'){                    
+                    redirect(base_url().'ads');
+                }else{
+                    redirect(base_url().'layout/dashboard');
+                }
             } else { 
                 $this->session->set_flashdata('msg', $this->config->item('warning_auth'));
                 
