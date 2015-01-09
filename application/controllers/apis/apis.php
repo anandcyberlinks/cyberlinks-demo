@@ -185,4 +185,34 @@ class Apis extends REST_Controller{
         curl_close($ch);
         return $data;
     }
+    
+    function get_youtube($url){
+        $id = $this->getYoutubeIdFromUrl($url);
+        $youtube = sprintf('http://gdata.youtube.com/feeds/api/videos/%s?v=2&alt=json',$id);
+        //$youtube = "http://www.youtube.com/oembed?url=". $url ."&format=json"; 
+        $curl = curl_init($youtube);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        $return = curl_exec($curl);
+        curl_close($curl);
+        $data['id'] = $id;
+        $data['detail'] = (array) json_decode($return);
+        return $data;
+    }
+    
+    function getYoutubeIdFromUrl($url) {
+        $parts = parse_url($url);
+        if(isset($parts['query'])){
+            parse_str($parts['query'], $qs);
+            if(isset($qs['v'])){
+                return $qs['v'];
+            }else if($qs['vi']){
+                return $qs['vi'];
+            }
+        }
+        if(isset($parts['path'])){
+            $path = explode('/', trim($parts['path'], '/'));
+            return $path[count($path)-1];
+        }
+        return false;
+    }
 }

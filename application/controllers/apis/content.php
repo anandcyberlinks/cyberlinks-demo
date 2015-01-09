@@ -512,4 +512,137 @@ class Content extends Apis{
         return $dataset;
     }
     
+    
+    
+    /******* Insert Data *******/
+    function insertdata_get(){
+        
+        $row = 0;
+        if (($handle = fopen("assets/tmp/links.csv", "r")) !== FALSE) {
+            while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+                $row++;
+                if($row == 1) continue;
+                
+                $content_id = $playlist_id = $channel = $channel_cat = 0;
+                if($data[0] != ''){
+                    // Insert channel category
+                    $query = sprintf('select * from channel_categories where category like "%s" ',$data[0]);
+                    $dataset = $this->db->query($query)->result();
+                    if(count($dataset) > 0){
+                        $channel_cat = $dataset[0]->id;
+                    }else{
+                        $tmp = array();
+                        $tmp['category'] = $data[0];
+                        $tmp['u_id'] = 29;
+                        $tmp['created'] = date('Y-m-d h:i:s');
+                        $this->db->insert('channel_categories',$tmp);
+                        $channel_cat = $this->db->insert_id();
+                        
+                    }
+                    
+                }
+                
+                //insert channels
+                if($data[1] != '' && $channel_cat > 0){
+                    
+                    $data[1] = trim($data[1]);
+                    $query = sprintf('select * from channels where name like "%s" ',$data[1]);
+                    $dataset = $this->db->query($query)->result();
+                    if(count($dataset) > 0){
+                        $channel = $dataset[0]->id;
+                    }else{
+                        $tmp = array();
+                        $tmp['name'] = $data[1];
+                        $tmp['type'] = 'Loop';
+                        $tmp['category_id'] = $channel_cat;
+                        $tmp['uid'] = 29;
+                        $tmp['status'] = 1;
+                        $tmp['created'] = date('Y-m-d h:i:s');
+                        $this->db->insert('channels',$tmp);
+                        $channel = $this->db->insert_id();
+                        
+                    }
+                }
+                
+                //insert playlists with timing
+                if($data[2] != '' && $channel > 0){
+                    
+                    $data[2] = trim($data[2]);
+                    $query = sprintf('select * from playlists where name like "%s" ',$data[2]);
+                    $dataset = $this->db->query($query)->result();
+                    if(count($dataset) > 0){
+                        $playlist_id = $dataset[0]->id;
+                    }else{
+                        $tmp = array();
+                        $tmp['name'] = $data[2];
+                        $tmp['channel_id'] = $channel;
+                        $tmp['start_date'] = date('Y-m-d h:i:s');
+                        $tmp['end_date'] = date('Y-m-d h:i:s',strtotime("+2 hours"));
+                        $tmp['uid'] = 29;
+                        $tmp['status'] = 0;
+                        $tmp['created'] = date('Y-m-d h:i:s');
+                        $this->db->insert('playlists',$tmp);
+                        $playlist_id = $this->db->insert_id();
+                        
+                    }
+                }
+                
+                // Insert content in content table
+                if($data[4] != ''){
+                    $videoUrl = trim($data[4]);
+                    $youtube_id = $this->getYoutubeIdFromUrl($videoUrl);
+                    $query = sprintf('select * from contents where content_token like "%s" ',$youtube_id);
+                    $dataset = $this->db->query($query)->result();
+                    if(count($dataset) > 0){
+                        $content_id = $dataset[0]->id;
+                    }else{
+                        $tmp = $this->get_youtube($videoUrl);
+                        if(isset($tmp['id']) && $tmp['id']!='' && count($tmp['detail']) > 0){
+                            $this->load->model('videos_model');
+                            $youtubeData = $tmp['detail']['entry']->{'media$group'};
+                            $post['content_token'] = $tmp['id'];
+                            $post['content_title'] = $tmp['detail']['entry']->{'title'}->{'$t'};
+                            $post['description'] = $youtubeData->{'media$description'}->{'$t'};
+                            $post['duration'] = $youtubeData->{'media$content'}[0]->duration; 
+                            $post['uid'] = 29;
+                            $post['created'] = date('Y-m-d');
+                            $post['type'] = 'youtube';
+                            $post['filename'] = $videoUrl;
+                            $post['created'] = date('Y-m-d');
+                            $post['relative_path'] = $videoUrl;
+                            $post['absolute_path'] = $videoUrl;
+                            $post['status'] = '0';
+                            $post['type'] = 'youtube';
+                            $post['minetype'] = "";
+                            $post['info'] = base64_encode($videoUrl);
+                            $content_id = $this->videos_model->_saveVideo($post);
+                            
+                        }else{
+                            echo $tmp['id'] . ' is private or invalid Id';
+                            continue;
+                        }
+                    }
+                }
+                
+                //Insert data in playlist_video
+                if($playlist_id > 0 && $content_id > 0){
+                    $query = sprintf('select * from playlist_video where content_id = %d and playlist_id = %d ',$content_id,$playlist_id);
+                    $dataset = $this->db->query($query)->result();
+                    if(count($dataset) > 0){
+                        
+                    }else{
+                        $tmp = array();
+                        $tmp['playlist_id'] = $playlist_id;
+                        $tmp['content_id'] = $content_id;
+                        $tmp['color'] = sprintf('#%06X', mt_rand(0, 0xFFFFFF));
+                        $tmp['status'] = 1;
+                        $tmp['created'] = date('Y-m-d h:i:s');
+                        $this->db->insert('playlist_video',$tmp);
+                    }
+                }
+            }
+            fclose($handle);
+        }
+        exit;
+    }
 }
