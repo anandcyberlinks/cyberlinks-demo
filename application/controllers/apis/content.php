@@ -438,7 +438,7 @@ class Content extends Apis{
                                 $data['PCtnt'] = $this->getPlaylistDetail($data['PId']);
                                 if(is_array($data['PCtnt'])){
                                     foreach($data['PCtnt'] as $key=>$val){
-                                        $data['PCtnt'][$key]->ctnAd = $ads[rand(0,count($ads)-1)]->url;
+                                        $data['PCtnt'][$key]->ctnAd = $ads[rand(0,count($ads)-1)];
                                     }
                                 }
                             });
@@ -448,7 +448,7 @@ class Content extends Apis{
                     case 'live' :
                         if(isset($v2['chCtnt'])){
                             $v2['chCtnt']['ctntUrl'] = $this->getLiveUrl($v2['chId']);
-                            $v2['chCtnt']['ctnAd'] = $ads[rand(0,count($ads)-1)]->url;
+                            $v2['chCtnt']['ctnAd'] = $ads[rand(0,count($ads)-1)];
                         }
                         break;
                 }
