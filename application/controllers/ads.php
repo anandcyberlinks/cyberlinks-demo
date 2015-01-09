@@ -96,12 +96,6 @@ class Ads extends MY_Controller {
       /
      */
 
-    function test() {
-        echo $this->validate(21, 2);
-    }
-
-    
-
     function index() {
         $searchterm = '';
         if ($this->uri->segment(2) == '') {
@@ -264,125 +258,7 @@ class Ads extends MY_Controller {
         }
     }
 
-    /*
-      /--------------------------------------------------
-      /    function used for video advance
-      /--------------------------------------------------
-     */
-
-    function videoprofileadvance() {
-        $id = $this->uid;
-        $cid = base64_decode($_REQUEST['action']);
-        $this->data['advance'] = $this->videos_model->get_videofieldadvance($id, $cid);
-        // echo "<pre>";
-        // print_r($this->data['advance']);
-        $GetData = array();
-        foreach ($this->data['advance'] as $key => $val) {
-            // echo $val[$key]['field_id'];
-            //print_r($val->field_id);
-            $GetData[$val->field_id] = $this->videos_model->fetchvalue($cid, $val->field_id);
-        }
-        $value = array();
-        $data1 = array();
-        if (isset($_REQUEST['submit']) && $_REQUEST['submit'] == "Submit") {
-            $curl = $_POST['curl'];
-            unset($_POST['curl']);
-            unset($_POST['submit']);
-            foreach ($_POST as $keyadvance => $values) {
-                //echo $keyadvance."==>".$values."<br>";
-                $value[$keyadvance] = $values;
-
-                $val = $this->videos_model->get_videofieldvalueadvance($keyadvance);
-                if (isset($val[0]->value)) {
-                    $val1[$keyadvance] = $val[0]->value;
-                }
-            }
-
-
-            $this->videos_model->save_videofieldvalueadvance($value);
-            $msg = $this->loadPo($this->config->item('success_record_update'));
-            $this->log($this->user, $msg);
-            $this->session->set_flashdata('message', $this->_successmsg($msg));
-            redirect($curl);
-        }
-        $this->data['fvalue'] = $GetData;
-        $this->show_ads_view('videoEditAdvance', $this->data);
-    }
-
-    /*
-      /----------------------------------------------------------------
-      /   function used for video scheduling
-      /----------------------------------------------------------------
-     */
-
-    function video_scheduling() {
-        $id = $this->data['id'];
-        if (isset($_POST['submit']) && $_POST['submit'] == 'Submit') {
-            $post['content_id'] = $id;
-            $post['schedule'] = $this->input->post('r2');
-            $data = $this->videos_model->get_scheduling($id);
-            if (isset($data[0])) {
-                if ($data[0]->content_id == $id) {
-                    if ($this->input->post('r2') == "Always") {
-                        $post['startDate'] = '';
-                        $post['endDate'] = '';
-                        $this->videos_model->update_scheduling($post);
-                        $msg = $this->loadPo($this->config->item('success_video_schedule'));
-                        $this->log($this->user, $msg);
-                        $this->session->set_flashdata('message', $this->_successmsg($msg));
-                        //redirect('video');
-                    } else {
-                        $post['startDate'] = date('Y-m-d', strtotime($this->input->post('datepickerstart'))) . ' ' . date('H:i:s', strtotime($this->input->post('timepickerstart')));
-                        $post['endDate'] = date('Y-m-d', strtotime($this->input->post('datepickerend'))) . ' ' . date('H:i:s', strtotime($this->input->post('timepickerend')));
-                        $this->form_validation->set_rules($this->validation_rules['video_schedule']);
-                        if ($this->form_validation->run()) {
-                            $this->videos_model->update_scheduling($post);
-                            $msg = $this->loadPo($this->config->item('success_video_schedule'));
-                            $this->log($this->user, $msg);
-                            $this->session->set_flashdata('message', $this->_successmsg($msg));
-                            //redirect('video');	
-                        } else {
-                            $this->data['schedule'] = $this->videos_model->get_scheduling($id);
-                            $this->show_ads_view('videoEditScheduling', $this->data);
-                        }
-                    }
-                }
-            } else {
-                if ($this->input->post('r2') == "Always") {
-                    $this->videos_model->save_scheduling($post);
-                    $msg = $this->loadPo($this->config->item('success_video_schedule'));
-                    $this->log($this->user, $msg);
-                    $this->session->set_flashdata('message', $this->_successmsg($msg));
-                    //redirect('video');
-                } else {
-                    $post['startDate'] = date('Y-m-d', strtotime($this->input->post('datepickerstart'))) . ' ' . date('H:i:s', strtotime($this->input->post('timepickerstart')));
-                    $post['endDate'] = date('Y-m-d', strtotime($this->input->post('datepickerend'))) . ' ' . date('H:i:s', strtotime($this->input->post('timepickerend')));
-                    $this->form_validation->set_rules($this->validation_rules['video_schedule']);
-                    if ($this->form_validation->run()) {
-                        $this->videos_model->save_scheduling($post);
-                        $msg = $this->loadPo($this->config->item('success_video_schedule'));
-                        $this->log($this->user, $msg);
-                        $this->session->set_flashdata('message', $this->_successmsg($msg));
-                        //redirect('video');	
-                    } else {
-                        $this->data['schedule'] = $this->videos_model->get_scheduling($id);
-                        $this->show_ads_view('videoEditScheduling', $this->data);
-                    }
-                }
-            }
-            $this->data['schedule'] = $this->videos_model->get_scheduling($id);
-            $this->show_ads_view('videoEditScheduling', $this->data);
-        } else {
-            $this->data['schedule'] = $this->videos_model->get_scheduling($id);
-            $this->show_ads_view('videoEditScheduling', $this->data);
-        }
-    }
-
-    /*
-      /--------------------------------------------------------------------------------
-      /   function used for flavors section
-      /--------------------------------------------------------------------------------
-     */
+   
 
     function flavors() {
         $sess = $this->session->all_userdata();
@@ -467,20 +343,8 @@ class Ads extends MY_Controller {
                         $data['type'] = $fileExt;
                         $data['status'] = '0';
                         $data['info'] = base64_encode($fileUniqueName);
-                        $last_id = $this->Ads_model->_saveVideo($data);
-                        
-                        //-- generate Vast file ---//
-                        $vast_file_path = $this->createVideoXml($fileUniqueName,base_url().$data['relative_path']);                        
-                        //--- insert xml in files table ----//
-                        $data = array('name'=>'',
-                                      'minetype'=>'application/xml',
-                                      'type' => 'xml',
-                            'relative_path' => $vast_file_path,
-                            'absolute_path' => '',
-                            'status' => '1'                
-                        );
-                        $file_id = $this->Ads_model->save_file($data);
-                        //--------------------//
+                        $last_id = $this->Ads_model->_saveVideo($data);                                               
+            
                         $msg = $this->loadPo($this->config->item('success_file_upload'));
                         $this->log($this->user, $msg);
                         $data['id'] = base64_encode($last_id);
@@ -498,97 +362,6 @@ class Ads extends MY_Controller {
         } else {
             $this->session->set_flashdata('message', $this->_errormsg($this->loadPo($this->config->item('error_permission'))));
             redirect(base_url() . 'ads');
-        }
-    }
-
-    /*
-      /-------------------------------------------------------------
-      /   function used for video upload from youtube url
-      /-------------------------------------------------------------
-     */
-
-    function youtube() {
-        $videoUrl = $_POST['url'];
-        preg_match('%https?://(?:www\.)?youtube\.com/watch\?v=([^&]+)%', $videoUrl, $matches);
-        if ($matches) {
-            $post = array();
-            $tmp = $this->get_youtube($videoUrl);
-            $youtubeData = $tmp['detail']['entry']->{'media$group'};
-            $post['content_title'] = $tmp['detail']['entry']->{'title'}->{'$t'};
-            $post['description'] = $youtubeData->{'media$description'}->{'$t'};
-            $post['uid'] = $this->uid;
-            $post['created'] = date('Y-m-d');
-            $post['type'] = 'youtube';
-            $post['filename'] = $videoUrl;
-            $post['uid'] = $this->uid;
-            $post['created'] = date('Y-m-d');
-            $post['relative_path'] = $videoUrl;
-            $post['absolute_path'] = $videoUrl;
-            $post['status'] = '0';
-            $post['type'] = 'youtube';
-            $post['minetype'] = "";
-            $post['info'] = base64_encode($videoUrl);
-            $last_id = $this->videos_model->_saveVideo($post);
-            //Save keywords
-            $keyWordsData = $tmp['content']['keywords'];
-            $this->videos_model->_setKeyword(trim($keyWordsData), $last_id);
-            $id = base64_encode($last_id);
-            redirect(base_url() . 'ads/videoOpr/Basic?action=' . $id . '&');
-        } else {
-            $this->session->set_flashdata('message', $this->_errormsg($this->loadPo($this->config->item('error_youtube_url'))));
-            redirect($_POST['redirect_url']);
-        }
-    }
-
-    /*
-      /--------------------------------------------------------------------------------
-      /   function used for video upload from other source
-      /--------------------------------------------------------------------------------
-     */
-
-    function upload_other() {
-        $data['welcome'] = $this;
-        $sess = $this->session->all_userdata();
-        $uid = $sess[0]->id;
-        $data['tab'] = 'Other';
-        if (isset($_POST['submit']) && $_POST['submit'] == 'Submit') {
-            $redirect_url = $_REQUEST['redirect_url'];
-            $post['source_url'] = $this->input->post('source_url');
-            $post['content_provider'] = $this->input->post('content_provider');
-            $post['uid'] = $uid;
-            $post['created'] = date('Y-m-d');
-            $this->form_validation->set_rules($this->validation_rules['videosrc_info']);
-            if ($this->form_validation->run()) {
-                $result = $this->videos_model->checkVideoSrc($post['source_url']);
-                if ($result == 0) {
-                    $datacontent['title'] = $this->input->post('title');
-                    $datacontent['description'] = $this->input->post('description');
-                    $datacontent['type'] = 'Source Url';
-                    $datacontent['category'] = $this->input->post('category');
-                    $datacontent['uid'] = $uid;
-                    $datacontent['created'] = date('Y-m-d');
-                    $last_id = $this->videos_model->upload_video($datacontent);
-                    if ($last_id != '') {
-                        $post['content_id'] = $last_id;
-                        $this->videos_model->saveVideoSrc($post);
-                        $msg = $this->loadPo($this->config->item('success_video_source_add'));
-                        $this->log($this->user, $msg);
-                        $this->session->set_flashdata('message', $this->_successmsg($msg));
-                        redirect($redirect_url);
-                    }
-                } else {
-                    $msg = $this->loadPo($this->config->item('warning_video_source'));
-                    $this->log($this->user, $msg);
-                    $this->session->set_flashdata('message', $this->_warningmsg($msg));
-                    redirect($redirect_url);
-                }
-            } else {
-                $data['allCategory'] = $this->category_model->getAllCategory();
-                $this->show_view('upload_video', $data);
-            }
-        } else {
-            $data['allCategory'] = $this->category_model->getAllCategory();
-            $this->show_view('upload_video', $data);
         }
     }
 
@@ -957,39 +730,6 @@ class Ads extends MY_Controller {
     }
 
     /*
-      /********************************************************************************
-      /   function used for video setting section starts
-      /********************************************************************************
-     */
-
-    function setting() {
-        $this->data['welcome'] = $this;
-        $sess = $this->session->all_userdata();
-        $uid = $sess[0]->id;
-        $tab = $this->uri->segment(3);
-        $this->data['tab'] = $tab;
-        $this->data['flavorData'] = $this->videos_model->getFlavorData();
-        $optionData = $this->videos_model->getOptionData($uid);
-        $this->data['optionData'] = @unserialize(strip_slashes($optionData));
-        switch ($tab) {
-            case "Flavors":
-                $this->show_view('video_settings', $this->data);
-                break;
-            case "Player":
-                $this->data['playerData'] = $this->videos_model->getPlayerData($uid);
-                $this->show_view('video_settings', $this->data);
-                break;
-            case "country":
-                $this->data['countryData'] = $this->videos_model->getCountryList();
-                $this->show_view('video_settings', $this->data);
-                break;
-            default:
-                $this->data['tab'] = 'Flavors';
-                $this->show_view('video_settings', $this->data);
-        }
-    }
-
-    /*
       /--------------------------------------------------------------------------------
       /   function used for video flavor setting
       /--------------------------------------------------------------------------------
@@ -1026,127 +766,6 @@ class Ads extends MY_Controller {
             //$data['allCategory'] = $this->category_model->getAllCategory();
             $this->show_view('video_settings', $data);
         }
-    }
-
-    /*
-      /--------------------------------------------------------------------------------
-      /   function used for video player setting
-      /--------------------------------------------------------------------------------
-     */
-
-    function setting_player() {
-        $data['welcome'] = $this;
-        $data['tab'] = 'Player';
-        $settings_key = 'player_settings';
-        $data['playerData'] = $this->videos_model->getPlayerData($this->uid);
-        if (isset($_POST['submit'])) {
-            $redirect_url = $_REQUEST['redirect_url'];
-            $logo_imghidden = $_REQUEST['logo_imghiddennw'];
-            unset($_POST['redirect_url']);
-            unset($_POST['logo_imghiddennw']);
-            if ($_POST['submit'] == 'Save') {
-                if ($_FILES['logo_image']['name'] != "") {
-                    $new_file_name = uniqid();
-                    $path = './assets/upload/logo/';
-                    $config['upload_path'] = $path;
-                    $config['allowed_types'] = 'png';
-                    $config['file_name'] = $new_file_name;
-                    $this->load->library('upload', $config);
-                    if (!$this->upload->do_upload('logo_image')) {
-                        $errors = $this->upload->display_errors();
-                        $this->session->set_flashdata('message', $this->_errormsg($errors));
-                        redirect($redirect_url);
-                    } else {
-                        $datafile = $this->upload->data();
-                        $_POST['file'] = $datafile['file_name'];
-                    }
-                } else {
-                    $_POST['file'] = $logo_imghidden;
-                }
-                $post['value'] = serialize($_POST);
-            } else if ($_POST['submit'] == 'Set as default') {
-                $player = array(
-                    'player_type' => 'html5',
-                    'player_skin' => 'bekle',
-                    'height' => '400',
-                    'width' => '598',
-                    'player_aspectration' => '4:3',
-                    'related_video' => '0',
-                    'social_sharing' => '0',
-                    'repeat_video' => '0',
-                    'auto_start' => '1',
-                    'controls' => '1',
-                    'google_analytics' => '1',
-                    'mute' => '0',
-                    'androidhls' => '1',
-                    'logo_position' => '',
-                    'logo_margin' => '2',
-                    'logo_hide' => '1',
-                    'caption_color' => '#000000',
-                    'caption_fontsize' => '16',
-                    'caption_fontfamily' => 'html5',
-                    'caption_fontopacity' => '1',
-                    'caption_backgroundcolor' => '#ffffff',
-                    'caption_backgroundopacity' => '3',
-                    'caption_windowcolor' => '#e3e3e3',
-                    'caption_windowopacity' => '5',
-                    'about_text' => 'cyberlinks',
-                    'about_link' => 'cyberlinks'
-                );
-                $data = array(
-                    'player' => $player,
-                    'file' => 'test.png'
-                );
-                $post['value'] = serialize($data);
-            }
-
-            $checkDataF = $this->videos_model->checkFlavorData($settings_key, $this->uid);
-
-            if ($checkDataF >= 1) {
-                $post['modified'] = date('Y-m-d H:i:s');
-                $result = $this->videos_model->update_flavorOption($post, $settings_key, $this->uid);
-            } else {
-                $post['user_id'] = $this->uid;
-                $post['key'] = $settings_key;
-                $post['group'] = 'player';
-                $post['created'] = date('Y-m-d H:i:s');
-                $result = $this->videos_model->insert_flavorOption($post);
-            }
-            $msg = $this->loadPo($this->config->item('success_player_setting_update'));
-            $this->log($this->user, $msg);
-            $this->session->set_flashdata('message', $this->_successmsg($msg));
-            redirect($redirect_url);
-            exit;
-        } else {
-            $this->show_view('video_settings', $data);
-        }
-    }
-
-    /*
-      /--------------------------------------------------------------------------------
-      /   function used for live streaming section
-      /--------------------------------------------------------------------------------
-     */
-
-    function live_streaming() {
-        if (isset($_POST['save'])) {
-            $this->videos_model->saveUrl($_POST['url'], $this->uid);
-            $msg = $this->loadPo($this->config->item('success_record_update'));
-            $this->log($this->user, $msg);
-            $this->session->set_flashdata('message', $this->_successmsg($msg));
-            redirect(base_url() . "video/live_streaming");
-        }
-        $data['url'] = $this->videos_model->getLivestream($this->uid);
-        $data['welcome'] = $this;
-        $this->show_view('live_streaming', $data);
-    }
-
-    function deleteLive() {
-        $this->videos_model->deleteUrl($this->uid);
-        $msg = $this->loadPo($this->config->item('success_record_delete'));
-        $this->log($this->user, $msg);
-        $this->session->set_flashdata('message', $this->_successmsg($msg));
-        redirect(base_url() . "video/live_streaming");
     }
 
     /*
@@ -1386,46 +1005,7 @@ class Ads extends MY_Controller {
         }
     }
 
-    /*
-      /********************************************************************************
-      /   PROMO SECTION STARTS
-      /********************************************************************************
-     */
-
-    function promo() {
-        $sess = $this->session->all_userdata();
-        $this->data['welcome'] = $this;
-        $id = @$_GET['action'];
-        $vid = base64_decode($id);
-        $dir_path = getcwd();
-        $path_nw = str_replace('\\', '/', $dir_path);
-        $path = $path_nw . '/assets/upload/video/';
-        if ($vid) {
-            $this->data['promo_info'] = $this->videos_model->get_promos($vid);
-            $this->data['content_id'] = $vid;
-            $this->data['playerData'] = $this->videos_model->getPlayerData($this->uid);
-            $videoFileName = $this->videos_model->get_videoInfo($vid);
-            if (file_exists($path . $videoFileName)) {
-                $videoFileInfo = $this->getVideoFileSize($videoFileName, $path);
-                $this->data['videoFileSize'] = $videoFileInfo['playtime_seconds'];
-                $this->data['videoFileName'] = $videoFileName;
-            } else {
-                $this->data['videoFileSize'] = '';
-                $this->data['videoFileName'] = '';
-            }
-            $this->data['defaultPromoInfo'] = $this->videos_model->get_defaultPromo($vid);
-            $this->show_ads_view('videoPromo', $this->data);
-        }
-    }
-
-    function promoInfo() {
-        $sess = $this->session->all_userdata();
-        $this->data['welcome'] = $this;
-        echo $start_time = $_REQUEST['start_time_video'];
-        echo $end_time = $_REQUEST['end_time_video'];
-        exit;
-    }
-
+    
     /*
       /--------------------------------------------------------------------------------
       /   function used to show video detail page
@@ -1442,20 +1022,6 @@ class Ads extends MY_Controller {
         $data['result'] = $result;
 
         $this->show_view('ads/videodetail', $data);
-    }
-
-    /*
-      /--------------------------------------------------------------------------------
-      /   function used for test log
-      /--------------------------------------------------------------------------------
-     */
-
-    function testlog() {
-        $user = 'admin';
-        $id = $_GET['id'];
-        $msg = 'Button Click on id = ' . $id;
-        $this->log($user, $msg);
-        redirect(base_url() . 'video/videoprofile?action=NTQ=&');
     }
 
     /*
@@ -1480,60 +1046,6 @@ class Ads extends MY_Controller {
         $this->show_view('ads/video_status', $data);
     }
 
-     public function createXml($result) {
-        print_r($result);
-        foreach ($result as $row) {
-            if ($row->ad_type == 'Video') {
-                $ad_file_path = base_url() . $row->relative_path;
-                $vast_file_path = $this->createVideoXml($row->ad_title, $ad_file_path);
-            } else if ($row->ad_type == 'Banner') {
-                $ad_file_path = base_url() . $row->relative_path;
-                $vast_file_path = $this->createBannerXml($row->ad_title, $ad_file_path);
-            }
-           echo $vast_file_path;
-            //--- insert xml in files table ----//
-            $data = array('name'=>'',
-                          'minetype'=>'application/xml',
-                          'type' => 'xml',
-                'relative_path' => $vast_file_path,
-                'absolute_path' => '',
-                'status' => '1'                
-            );
-            $file_id = $this->Ads_model->save_file($data);
-            //-----------------------------//
-            //-- update content ads with vast file id --//
-            $data = array('file_id' => $file_id);
-            $this->Ads_model->update_content_ads($data, $row->ads_content_id);
-            //-----------------------------------------//                       
-        }
-    }
-    /*
-      /--------------------------------------------------------------------------------
-      /   function used to change status
-      /--------------------------------------------------------------------------------
-     */
-
-    function changeStatus() {
-        $curr_url = $_GET['redirecturl'];
-        unset($_GET['redirecturl']);
-        $data = $_GET;
-        if ($data['status'] == 'pending') {
-            $this->videos_model->changestatus($data);
-        }
-        $s = $this->videos_model->checkstatus($data);
-        if ($data['status'] == 'inprocess') {
-            $this->videos_model->deletestatus($s);
-        }
-        $id = $data['content_id'];
-        if ($data['status'] == 'pending' || $data['status'] == 'inprocess') {
-            //echo 'hello';
-            $msg = $this->loadPo($this->config->item('success_flavor_status_change') . '=' . $id);
-            $this->log($this->user, $msg);
-            $this->session->set_flashdata('message', $this->_successmsg($msg));
-            redirect($curr_url);
-        }
-    }
-
     /*
       /--------------------------------------------------------------------------------
       /   function used to render video
@@ -1543,35 +1055,6 @@ class Ads extends MY_Controller {
     function rendervideo() {
         $data['path'] = base64_decode($_GET['path']);
         $this->load->view('rendervideo', $data);
-    }
-
-    /*
-      /--------------------------------------------------------------------------------
-      /   function used to debug video information
-      /--------------------------------------------------------------------------------
-     */
-
-    function debug() {
-        $data['welcome'] = $this;
-        $searchterm = '';
-        if ($this->uri->segment(3) == '') {
-            $this->session->unset_userdata('search_form');
-        }
-        if (isset($_POST['submit']) && $_POST['submit'] == 'Search') {
-            $this->session->set_userdata('search_form', $_POST);
-        } else if (isset($_POST['reset']) && $_POST['reset'] == 'Reset') {
-            $this->session->unset_userdata('search_form');
-        }
-        $searchterm = $this->session->userdata('search_form');
-        $this->load->library("pagination");
-        $config = array();
-        $config["total_rows"] = $this->videos_model->get_debugVideoInfoCount($this->uid, $searchterm);
-        $config["per_page"] = $config["total_rows"];
-        $this->pagination->initialize($config);
-        $data['result'] = $this->videos_model->debugVideoInfo($this->uid, $searchterm);
-        $data["links"] = $this->pagination->create_links();
-        $data['total_rows'] = $config["total_rows"];
-        $this->show_view('debuginfo', $data);
     }
 
 }

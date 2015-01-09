@@ -23,7 +23,8 @@
                 <ul class="treeview-menu">
                     <li class="<?= (($this->uri->segment(1) == 'ads') && ($this->uri->segment(2) == 'index')) ? 'active' : '' ?>"><a href="<?php echo base_url() ?>ads/index"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('Ads') . " " . $welcome->loadPo('List'); ?></a></li>
                     <li class="<?= ($this->uri->segment(2) == 'videoUploadSrc' || $this->uri->segment(2) == 'upload_other') ? 'active' : '' ?>"><a href="<?php echo base_url() ?>ads/videoUploadSrc/Upload"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('Ads') . " " . $welcome->loadPo('Upload'); ?> </a></li>
-                    <li class="<?= ($this->uri->segment(2) == 'bulkupload' || $this->uri->segment(2) == 'ftp') ? 'active' : '' ?>"><a href="<?php echo base_url() ?>ads/bulkupload/csv"><i class="fa fa-angle-double-right"></i>  <?php echo $welcome->loadPo('Ads') . " " . $welcome->loadPo('Bulk') . " " . $welcome->loadPo('Upload'); ?></a></li>                  
+                    <li class="<?= ($this->uri->segment(2) == 'bulkupload' || $this->uri->segment(2) == 'ftp') ? 'active' : '' ?>"><a href="<?php echo base_url() ?>ads/bulkupload/csv"><i class="fa fa-angle-double-right"></i>  <?php echo $welcome->loadPo('Ads') . " " . $welcome->loadPo('Bulk') . " " . $welcome->loadPo('Upload'); ?></a></li>
+                    <li class="<?= ($this->uri->segment(2) == 'video_status') ? 'active' : '' ?>"><a href="<?php echo base_url() ?>ads/video_status"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('Ads') . " " . $welcome->loadPo('Status'); ?></a></li>                  
                 </ul>
             </li>
                                             

@@ -136,7 +136,7 @@ $dimensions['small'] =  array('width'=>'280','height'=>'500');
 
 define('SPLASH_SCREEN_DIMENSION', serialize($dimensions));
 
-define('VAST_PATH','./assets/ads/vast/');
+define('VAST_PATH','./assets/upload/ads/vast/');
 define('IMG_PATH','./assets/img/');
 define('CSV_PATH','./assets/ads/csv/');
 /* End of file constants.php */

@@ -209,7 +209,7 @@ class Ads_model extends CI_Model {
             $this->db->insert('ads');
             $cid = $this->db->insert_id();
             //$this->db->last_query();
-	    
+	    /*
 	     ###transcoding video ###
            
                 $this->db->select('*');
@@ -225,7 +225,7 @@ class Ads_model extends CI_Model {
                     $this->db->set('created','NOW()',FALSE);
                     $this->db->insert('ads_flavors', $videoFlavorsData);
                 }
-            
+            */
         }
         return $cid;
     }
@@ -469,34 +469,28 @@ class Ads_model extends CI_Model {
         $id = $this->get_ownerid($uid);
         array_push($id, $uid);
         
-	$this->db->select('c.id,c.ad_title,categories.category,f.*,vf.created as assignedTime,vf.status,fv.path as previewPath,fv.created as completedTime');
-	$this->db->from('ads_flavors vf');
-	$this->db->join('ads_flavored_video fv', 'vf.id = fv.flavor_id', 'left');
-	$this->db->join('flavors f', 'f.id = vf.flavor_id', 'left');
-	$this->db->join('ads c', 'vf.ads_id = c.id', 'left');
-	$this->db->join('categories', 'categories.id = c.category', 'left'); 
-	$this->db->where('vf.ads_id >', 0);
-        $this->db->where_in('c.uid', $id); 
-	$this->db->order_by('c.id', 'DESC');
+	$this->db->select('count(a.id) as total');
+	$this->db->from('ads a');
+	$this->db->join('ads_flavored_video fv', 'fv.ads_id = a.id','left');	
+	$this->db->join('categories', 'categories.id = a.category', 'left'); 	
+        $this->db->where_in('a.uid', $id); 
+	$this->db->order_by('a.id', 'DESC');
         $query = $this->db->get();
 	//echo $this->db->last_query();
-
-        return count($query->result());
+        $result = $query->row();
+	return $result->total;
     }    
     
     function getstatus($uid, $limit, $start) {
 	$id = $this->get_ownerid($uid);
         array_push($id, $uid);
         
-	$this->db->select('c.id,c.ad_title,categories.category,f.*,vf.created as assignedTime,vf.status,fv.path as previewPath,fv.created as completedTime');
-	$this->db->from('ads_flavors vf');
-	$this->db->join('ads_flavored_video fv', 'vf.id = fv.flavor_id', 'left');
-	$this->db->join('flavors f', 'f.id = vf.flavor_id', 'left');
-	$this->db->join('ads c', 'vf.ads_id = c.id', 'left');
-	$this->db->join('categories', 'categories.id = c.category', 'left'); 
-	$this->db->where('vf.ads_id >', 0);
-        $this->db->where_in('c.uid', $id); 
-	$this->db->order_by('c.id', 'DESC');
+	$this->db->select('a.id,a.ad_title,fv.type,categories.category,a.created as assignedTime,a.transcode_status as status,fv.path as previewPath,fv.created as completedTime');
+	$this->db->from('ads a');
+	$this->db->join('ads_flavored_video fv', 'fv.ads_id = a.id','left');	
+	$this->db->join('categories', 'categories.id = a.category', 'left'); 	
+        $this->db->where_in('a.uid', $id); 
+	$this->db->order_by('a.id', 'DESC');
 	$this->db->limit($limit, $start);
         $query = $this->db->get();
 	//echo $this->db->last_query();

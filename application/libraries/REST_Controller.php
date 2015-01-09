@@ -1815,4 +1815,42 @@ abstract class REST_Controller extends CI_Controller
            }
             return @$result;
         }
+        
+    public function createVideoXml($title,$files,$duration)
+    {
+        $path =VAST_PATH;
+        $filename = 'video'.str_replace(' ','-',$title);
+        $filename .= '-'.date('ymdhis').rand();
+        $this->load->helper('xml');
+        $dom = xml_dom();
+        $video = xml_add_child($dom, 'VAST');
+        xml_add_attribute($video, 'version', '2.0');
+        $ad = xml_add_child($video, 'Ad');
+        $inline = xml_add_child($ad, 'InLine');	
+        $adsystem  = xml_add_child($inline, 'AdSystem','demo video');
+        $adtitle  = xml_add_child($inline, 'AdTitle',$title);
+        $creatives = xml_add_child($inline, 'Creatives');
+        $creative = xml_add_child($creatives, 'Creative');
+        $linear = xml_add_child($creative, 'Linear');
+        $duration = xml_add_child($linear, 'Duration',$duration);
+        $mediafiles  = xml_add_child($linear, 'MediaFiles');
+        foreach($files as $row){
+            $mediafile = xml_add_child($mediafiles, 'MediaFile',$row->path);
+            if($row->type == 'ios' || $row->type == 'android'){
+             xml_add_attribute($mediafile,'type','mobile/m3u8');
+            }else if($row->type == 'window'){
+                xml_add_attribute($mediafile,'type','mobile/manifest');
+            }else{
+               xml_add_attribute($mediafile,'type','video/mp4'); 
+            }
+            xml_add_attribute($mediafile,'bitrate','300');
+            xml_add_attribute($mediafile,'width','480');
+            xml_add_attribute($mediafile,'height','270');
+        }
+        $xml = xml_print($dom,true);
+
+        $xmlobj=new SimpleXMLElement($xml);           
+        $xmlobj->saveXML($path.$filename.".xml");
+        return $path.$filename.".xml";
+    }
 }
