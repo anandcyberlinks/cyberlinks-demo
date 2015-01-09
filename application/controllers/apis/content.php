@@ -397,8 +397,35 @@ class Content extends Apis{
         $dataset = $this->db->query($query)->result();
         $response['data'] = $this->getFormatData($dataset,'category',0);
         
-        $ads = $this->get_data('http://182.18.165.43/multitvfinal/api/ads/list');
-        $ads = json_decode($ads);
+        //$ads = $this->get_data('http://182.18.165.43/multitvfinal/api/ads/list');
+        //$ads = json_decode($ads);
+        
+        $ads = array('https://www.youtube.com/watch?v=443Vy3I0gJs',
+                     'https://www.youtube.com/watch?v=S2nBBMbjS8w',
+                     'https://www.youtube.com/watch?v=stIkdrYFgcI',
+                     'https://www.youtube.com/watch?v=k-STkFCCrus',
+                     'https://www.youtube.com/watch?v=9URY-zGV4N8',
+                     'https://www.youtube.com/watch?v=YRm9kfJFIag',
+                     'https://www.youtube.com/watch?v=31kVmY3PcRY',
+                     'https://www.youtube.com/watch?v=uZ9l3ZwtCFQ',
+                     'https://www.youtube.com/watch?v=R0YPk05tQv0',
+                     'https://www.youtube.com/watch?v=pQK69dgAjPQ',
+                     'https://www.youtube.com/watch?v=nRpH73tkITY',
+                     'https://www.youtube.com/watch?v=JfKhtyTY12Y',
+                     'https://www.youtube.com/watch?v=ks9vBiL4SkA',
+                     'https://www.youtube.com/watch?v=WBN1vY9gMvU',
+                     'https://www.youtube.com/watch?v=sq1MMrTUD6c',
+                     'https://www.youtube.com/watch?v=qNc5KS9Lq_c',
+                     'https://www.youtube.com/watch?v=s6_WQDqd9pw',
+                     'https://www.youtube.com/watch?v=s6_WQDqd9pw',
+                     'https://www.youtube.com/watch?v=unM41s4UoSA',
+                     'https://www.youtube.com/watch?v=AFtUpMTs4vI',
+                     'https://www.youtube.com/watch?v=aOM_Q4uPn5g',
+                     'https://www.youtube.com/watch?v=njqEhaEZYw8',
+                     'https://www.youtube.com/watch?v=E8yNly2Bui0',
+                     'https://www.youtube.com/watch?v=NpoBwFD1D5k',
+                     'https://www.youtube.com/watch?v=FHgRZx4uAOM');
+        
         shuffle($ads);
         
         $counter = 0;
