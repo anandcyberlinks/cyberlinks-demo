@@ -417,7 +417,7 @@ class Content extends Apis{
                             });
                         }
                         break;
-                    case 'youtube' :
+                    //case 'youtube' :
                     case 'live' :
                         if(isset($v2['chCtnt'])){
                             $v2['chCtnt']['ctntUrl'] = $this->getLiveUrl($v2['chId']);
@@ -455,8 +455,8 @@ class Content extends Apis{
                                                'chTyp'=>$val->channel_type,
                                                'chCtnt'=>$this->getFormatData($data,'playlist',$val->channel_id));    
                             break;
+                        //case 'Youtube' :
                         case 'Live' :
-                        case 'Youtube' :
                             $response[$val->channel_id] = array('chNm'=>$val->channel_name,
                                                'chId'=>$val->channel_id,
                                                'chNmbr'=>$val->channel_number,
