@@ -404,8 +404,8 @@ class Content extends Apis{
         $counter = 0;
         foreach($response['data'] as $k1=>$v1){
             foreach($v1['chList'] as $k2=>$v2){
-                switch($v2['chTyp']){
-                    case 'Loop' :
+                switch(strtolower($v2['chTyp'])){
+                    case 'loop' :
                         if(isset($v2['chCtnt'])){
                             array_walk($v2['chCtnt'],function(&$data) use ($ads){
                                 $data['PCtnt'] = $this->getPlaylistDetail($data['PId']);
@@ -418,7 +418,7 @@ class Content extends Apis{
                         }
                         break;
                     case 'youtube' :
-                    case 'Live' :
+                    case 'live' :
                         if(isset($v2['chCtnt'])){
                             $v2['chCtnt']['ctntUrl'] = $this->getLiveUrl($v2['chId']);
                             $v2['chCtnt']['ctnAd'] = $ads[rand(0,count($ads)-1)]->url;
