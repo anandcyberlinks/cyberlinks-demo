@@ -147,4 +147,19 @@ $(document).ready(function(){
 
   });
 
+   $('#frmstream').validate({
+    rules:{
+      'youtube':{
+        'required':true,
+      },     
+    },
+
+  messages: {
+    'title':{
+      required: "Title is required.",
+      minlength: "Title should be 4 char long.",
+    },
+  }
+
+  });
 });
