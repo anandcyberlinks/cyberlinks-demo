@@ -100,7 +100,7 @@ class Crons extends REST_Controller
         $status = $this->post('status');
         if($status !=''){
             $data = array('transcode_status'=>$status);
-            $result = $this->Ads_model->update_ads($id,$data);
+            $result = $this->Ads_model->update_ads($data,$id);
             
             if($result)
             {
