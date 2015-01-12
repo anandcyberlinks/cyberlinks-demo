@@ -20,7 +20,7 @@ class Ads_model extends CI_Model{
     
     function getAdsFlavour()
     {     
-       $this->db->select('a.id,c.name,c.minetype as content_type,c.absolute_path as video_file_name');
+       $this->db->select('a.id,c.name,c.minetype as content_type,c.relative_path as video_file_name');
        $this->db->from('ads a');   
        $this->db->join('files c','a.file_id=c.id','inner');      
        $this->db->where('a.transcode_status','pending');      
