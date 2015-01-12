@@ -86,6 +86,7 @@ class Crons extends REST_Controller
             array_walk ( $result, function (&$key) { 
                     //-- get total likes --//
                     $key->upload_path = serverAdsRelPath;
+                    $key->video_file_name = base_url().$key->video_file_name;
             });
             $this->response($result, 200); // 200 being the HTTP response code
         }else{
