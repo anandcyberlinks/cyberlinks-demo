@@ -47,11 +47,11 @@ class Ads_model extends CI_Model{
         return true;
    }
    
-    public function save_flavored_video($data)
+    public function save_flavored_ads($data)
     {
        $this->db->set($data);
        $this->db->set('created','NOW()',FALSE);
-       $this->db->insert('flavored_ads',$data);
+       $this->db->insert('ads_flavored_video',$data);
        return $this->db->insert_id();
     }
     

@@ -116,14 +116,16 @@ class Crons extends REST_Controller
         $path = $this->post('path');
         $length = $this->post('duration');
         $type = $this->post('type');
+      //  print_r($this->get());die;
         $data = array('ads_id'=>$content_id,'type'=>$type,'path'=>$path,'status'=>1);
         $result = $this->Ads_model->save_flavored_ads($data);
         
         //--- update video duration --//
         if($length){
-            $duration =  $this->seconds_from_time($length);
+            //$duration =  $this->seconds_from_time($length);
+            $duration = $length;
             $upddata = array('duration'=>$duration);
-            $this->Ads_model->update_video($content_id,$upddata);
+            $this->Ads_model->update_ads($upddata,$content_id);
         }
         if($result)
         {
