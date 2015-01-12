@@ -102,7 +102,3 @@
 		</section>
     </aside><!-- /.right-side -->
 </div><!-- ./wrapper -->
-<script>
-  $("#frmstream").validate();
-	
-</script>
