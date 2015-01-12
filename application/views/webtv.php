@@ -5,7 +5,7 @@
         <section class="content-header">
             <h1><?php echo $welcome->loadPo('WebTV') ?><small><?php echo $welcome->loadPo('Channel') ?></small>
                 <a class="btn btn-success" href="<?php echo base_url().'webtv/add/'.$this->uri->segment(3); ?>">Add Playlist</a>
-                <a class="btn btn-warning" href="<?php echo base_url().'webtv' ?>"><i class="fa fa-mail-reply"></i>Back</a>
+                
             </h1>
             <ol class="breadcrumb">
                 <li><a href="<?php echo base_url(); ?>"><i class="fa fa-dashboard"></i><?php echo $welcome->loadPo('Dashboard') ?></a></li>
@@ -117,6 +117,13 @@
                                             </tr>
                                         <?php } ?>
                                     </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="9">
+                                            <a class="btn btn-warning" href="<?php echo base_url().'webtv' ?>"><i class="fa fa-mail-reply"></i>&nbsp; Back</a>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
                                 </table>
                                 <!-- Pagination start --->
                                 <?php
@@ -127,6 +134,7 @@
                                     </table>
                                     <div class="row pull-left">
                                         <div class="dataTables_info" id="example2_info"><br>
+                                            
                                             <?php
                                             $param = $this->pagination->cur_page * $this->pagination->per_page;
                                             if ($param > $this->pagination->total_rows) {
@@ -142,7 +150,9 @@
                                             echo "&nbsp;&nbsp;Showing <b>" . $off . "-" . $param . "</b> of <b>" . $this->pagination->total_rows . "</b> total results";
                                         }
                                         ?>
+                                            
                                     </div>
+                                        
                                 </div>	
                                 <div class="row pull-right">
                                     <div class="col-xs-12">

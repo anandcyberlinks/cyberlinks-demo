@@ -20,9 +20,9 @@ class Webtv extends MY_Controller {
         $searchterm = $this->session->userdata('search_form');
         $data['welcome'] = $this;
         $this->load->library("pagination");
-        $config["base_url"] = base_url() . "event/index/";
+        $config["base_url"] = base_url() . "webtv/index/";
         $config["total_rows"] = $this->webtv_model->countAll_channels($this->uid, $searchterm);
-        $config["per_page"] = 100000;
+        $config["per_page"] = 10;
         $config["uri_segment"] = 3;
         $this->pagination->initialize($config);
         $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
