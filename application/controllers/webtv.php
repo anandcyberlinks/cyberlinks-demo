@@ -261,7 +261,8 @@ class Webtv extends MY_Controller {
             $data['start_date'] = isset($_POST['start_date']) && $_POST['start_date']!='' ? date('Y-m-d H:i:s',strtotime($_POST['start_date'])) : date('Y-m-d H:i:s');
             $data['end_date'] = isset($_POST['end_date']) && $_POST['end_date']!='' ? date('Y-m-d H:i:s',strtotime($_POST['end_date'])) : date('Y-m-d H:i:s',strtotime($data['start_date']) + 60*60);
             
-            switch($_POST['action']){
+            $tmp = isset($_POST['action']) ? $_POST['action'] : 'save';
+            switch($tmp){
                 case 'delete' :
                     $query = sprintf('delete from playlist_epg where content_id = %d and playlist_id = %d and user_id = %d',$data['content_id'],$data['playlist_id'],$this->uid);
                     $dataset = $this->db->query($query)->result();

@@ -26,8 +26,9 @@
                                 <div class="box-body">
                                     <div id='external-events'>
                                         <?php
+                                        if(isset($result['vod']))
                                         foreach ($result['vod'] as $key=>$value){ ?>
-                                        <div class='external-event' style="background-color: <?=$value->color?>" id="<?=$value->id?>"><?=$value->title?></div><br>
+                                        <div class='external-event' style="background-color: <?=$value->color?>" id="<?=$value->id?>"><?=$value->title?>[<?=$this->time_from_seconds($value->duration)?>]</div><br>
                                         <?php } ?>
                                         <p class="loader"></p>
                                         <!-- <input type='checkbox' id='drop-remove' /> <label for='drop-remove'>remove after drop</label> -->
@@ -41,8 +42,8 @@
                                 <div class="box-body">
                                     <div id='external-events'>
                                         <?php
-                                        foreach ($result['youtube'] as $key=>$value){ ?>
-                                        <div class='external-event' style="background-color: <?=$value->color?>" id="<?=$value->id?>"><?=$value->title?></div><br>
+                                        foreach ($result['youtube'] as $key=>$value){ //echo '<pre>';print_r($value);echo '</pre>'; ?>
+                                        <div class='external-event' duration="<?=$value->duration?>" style="background-color: <?=$value->color?>" id="<?=$value->id?>"><?=$value->title?>[<?=$welcome->time_from_seconds($value->duration)?>]</div><br>
                                         <?php } ?>
                                         <p class="loader"></p>
                                         <!-- <input type='checkbox' id='drop-remove' /> <label for='drop-remove'>remove after drop</label> -->
@@ -103,7 +104,7 @@
                 //Date for the calendar events (dummy data)
                 var date = new Date();
                 var d = date.getDate(),m = date.getMonth(),y = date.getFullYear();
-                $('#calendar').fullCalendar({
+                var cal = $('#calendar').fullCalendar({
                     header: {
                         left: 'prev,next today',
                         center: 'title',
@@ -120,7 +121,7 @@
                     events: "<?=base_url()?>webtv/renderevent?playlist_id=" + playlist_id + '&',
                     minTime: 0,
                     maxTime: 24,
-                    slotMinutes: 15,
+                    slotMinutes: 1,
                     editable: true,
                     droppable: true, // this allows things to be dropped onto the calendar !!!
                     drop : function(date, allDay, ui){
@@ -130,19 +131,24 @@
 
                         // we need to copy it, so that multiple events don't have a reference to the same object
                         var copiedEventObject = $.extend({}, originalEventObject);
-
+                        
+                        var duration = $(this).attr("duration");
+                                
                         // assign it the date that was reported
                         copiedEventObject.id = $(this).attr("id");
                         copiedEventObject.start = date;
+                        copiedEventObject.end = new Date(date.getTime() + (duration * 1000));
                         copiedEventObject.allDay = allDay;
                         copiedEventObject.backgroundColor = $(this).css("background-color");
                         copiedEventObject.borderColor = $(this).css("border-color");
-
+                        
+                        console.log(copiedEventObject);
+                        
                         // render the event on the calendar
                         // the last `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
                         $('#calendar').fullCalendar('renderEvent', copiedEventObject, true);
                         
-                        __saveEvent(copiedEventObject);
+                        //__saveEvent(copiedEventObject);
                         
                         $(this).remove();
                         
@@ -156,6 +162,9 @@
                     },
                     eventDrop: function(event, delta, revertFunc) {
                         event.action = 'update';
+                        
+                       console.log(event);
+                        
                         __saveEvent(event);
                     },
                     eventResize: function(event, delta, revertFunc) {
@@ -168,7 +177,14 @@
                             event.action = 'delete';
                             __saveEvent(event);
                         }
-                    } 
+                    },
+                    eventOverlap : false,
+                    eventDurationEditable : false
+                });
+                
+                $('.fc-button-month').on('click',function(){
+                    cal.editable = false;
+                    alert('done');
                 });
                 
                 function __saveEvent(event){

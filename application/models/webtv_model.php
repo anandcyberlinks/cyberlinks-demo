@@ -203,7 +203,7 @@ class Webtv_model extends CI_Model {
     }
 
     function get_videoid($id, $ids) {
-        $this->db->select('a.*, b.category , e.name as file,e.minetype, c.id as vpid,c.color,c.playlist_id');
+        $this->db->select('a.*, b.category,d.duration, e.name as file,e.minetype, c.id as vpid,c.color,c.playlist_id');
         $this->db->from('contents a');
         $this->db->join('categories b', 'a.category = b.id', 'left');
         $this->db->join('playlist_video c', 'a.id = c.content_id', 'left');
