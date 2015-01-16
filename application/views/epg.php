@@ -81,7 +81,13 @@
 
         var playlist_id = <?= $this->uri->segment(3); ?>;
         $('#drop-remove').prop('checked', true);
-
+        
+        $('.box-body').each(function(index){
+            if($(this).height() > 200){
+                $(this).attr('style','height: 300px; overflow-x: auto;');
+            }
+        });
+        
         function ini_events(ele) {
             ele.each(function () {
 
@@ -127,7 +133,7 @@
             events: "<?= base_url() ?>webtv/renderevent?playlist_id=" + playlist_id + '&',
             minTime: 0,
             maxTime: 24,
-            slotMinutes: 1,
+            slotMinutes: 15,
             editable: true,
             droppable: true, // this allows things to be dropped onto the calendar !!!
             drop: function (date, allDay, ui) {
@@ -148,13 +154,11 @@
                 copiedEventObject.backgroundColor = $(this).css("background-color");
                 copiedEventObject.borderColor = $(this).css("border-color");
 
-                console.log(copiedEventObject);
-
                 // render the event on the calendar
                 // the last `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
                 $('#calendar').fullCalendar('renderEvent', copiedEventObject, true);
 
-                //__saveEvent(copiedEventObject);
+                __saveEvent(copiedEventObject);
 
                 $(this).remove();
 
@@ -187,9 +191,11 @@
             eventOverlap: false,
             eventDurationEditable: false
         });
+        
+        custom_buttons = '<span class="fc-button fc-button-eventcopy fc-state-default fc-corner-left" unselectable="on" style="-moz-user-select: none;">Event Copy</span>'
+        $('.fc-button-agendaDay').after(custom_buttons);
 
-        $('.fc-button-month').on('click', function () {
-            cal.editable = false;
+        $('.fc-button-eventcopy').on('click', function () {
             alert('done');
         });
 
