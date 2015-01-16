@@ -4,12 +4,12 @@
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1><?php echo $welcome->loadPo('WebTV') ?><small><?php echo $welcome->loadPo('Channel') ?></small>
-                <a class="btn btn-success" href="<?php echo base_url().'webtv/add/'.$this->uri->segment(3); ?>">Add Playlist</a>
-                
+                <a class="btn btn-success" href="<?php echo base_url() . 'webtv/add/' . $this->uri->segment(3); ?>">Add Playlist</a>
+
             </h1>
             <ol class="breadcrumb">
                 <li><a href="<?php echo base_url(); ?>"><i class="fa fa-dashboard"></i><?php echo $welcome->loadPo('Dashboard') ?></a></li>
-                <li><a href="<?php echo base_url().'webtv'; ?>"><?php echo $welcome->loadPo('Channels') ?></a></li>
+                <li><a href="<?php echo base_url() . 'webtv'; ?>"><?php echo $welcome->loadPo('Channels') ?></a></li>
                 <li class="active"><?php echo $welcome->loadPo('WebTV Playlists') ?></li>
             </ol>
         </section>
@@ -24,47 +24,47 @@
             <?php $search = $this->session->userdata('search_form');
             ?></pre>
             <div id="content">
-               <?php /* <div class="row">
-                    <!-- left column -->
-                    <div class="col-md-12">
-                        <!-- general form elements -->
-                        <div class="box box-primary">
-                            <!-- form start -->
-                            <form  method="post" action="<?php echo base_url(); ?>waptv/index" onsubmit="return date_check();" id="searchIndexForm" name="searchIndexForm" accept-charset="utf-8">
-                                <div style="display:none;"><input type="hidden" name="_method" value="POST"/></div>
-                                <div class="box-body">
-                                    <div class="row">
-                                        <div class="form-group col-lg-8">
-                                            <div class="input text">
-                                                <label for=""><?php echo $welcome->loadPo('Title') ?></label>
-                                                <input type="text" name="name" class="form-control" value="<?php echo (isset($search['name'])) ? $search['name'] : ''; ?>" placeholder="<?php echo $welcome->loadPo('Playlists Name') ?>">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="form-group col-lg-4">
-                                            <div class="input text">
-                                                <label for="url"><?php echo $welcome->loadPo('Start Date') ?></label>
-                                                <input type="text" class="form-control"  id="eventDates" name="datepickerstart" placeholder="<?php echo $welcome->loadPo('Start Date') ?>" value="<?php echo (isset($search['datepickerstart'])) ? $search['datepickerstart'] : ''; ?>" >											
-                                            </div>
-                                        </div>
-                                        <div class="form-group col-lg-4">
-                                            <div class="input text">
-                                                <label for="url"><?php echo $welcome->loadPo('End Date') ?></label>
-                                                <input type="text" class="form-control"  id="eventDatee" name="datepickerend" placeholder="<?php echo $welcome->loadPo('End Date') ?>" value="<?php echo (isset($search['datepickerend'])) ? $search['datepickerend'] : ''; ?>">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div><!-- /.box-body -->
-                                <div class="box-footer">
-                                    <button type="submit" name="submit" value="Search"class="btn btn-primary"><?php echo $welcome->loadPo('Search') ?></button>
-                                    <button type="submit" name="reset" value="Reset"class="btn btn-primary"><?php echo $welcome->loadPo('Reset') ?></button>
+                <?php /* <div class="row">
+                  <!-- left column -->
+                  <div class="col-md-12">
+                  <!-- general form elements -->
+                  <div class="box box-primary">
+                  <!-- form start -->
+                  <form  method="post" action="<?php echo base_url(); ?>waptv/index" onsubmit="return date_check();" id="searchIndexForm" name="searchIndexForm" accept-charset="utf-8">
+                  <div style="display:none;"><input type="hidden" name="_method" value="POST"/></div>
+                  <div class="box-body">
+                  <div class="row">
+                  <div class="form-group col-lg-8">
+                  <div class="input text">
+                  <label for=""><?php echo $welcome->loadPo('Title') ?></label>
+                  <input type="text" name="name" class="form-control" value="<?php echo (isset($search['name'])) ? $search['name'] : ''; ?>" placeholder="<?php echo $welcome->loadPo('Playlists Name') ?>">
+                  </div>
+                  </div>
+                  </div>
+                  <div class="row">
+                  <div class="form-group col-lg-4">
+                  <div class="input text">
+                  <label for="url"><?php echo $welcome->loadPo('Start Date') ?></label>
+                  <input type="text" class="form-control"  id="eventDates" name="datepickerstart" placeholder="<?php echo $welcome->loadPo('Start Date') ?>" value="<?php echo (isset($search['datepickerstart'])) ? $search['datepickerstart'] : ''; ?>" >
+                  </div>
+                  </div>
+                  <div class="form-group col-lg-4">
+                  <div class="input text">
+                  <label for="url"><?php echo $welcome->loadPo('End Date') ?></label>
+                  <input type="text" class="form-control"  id="eventDatee" name="datepickerend" placeholder="<?php echo $welcome->loadPo('End Date') ?>" value="<?php echo (isset($search['datepickerend'])) ? $search['datepickerend'] : ''; ?>">
+                  </div>
+                  </div>
+                  </div>
+                  </div><!-- /.box-body -->
+                  <div class="box-footer">
+                  <button type="submit" name="submit" value="Search"class="btn btn-primary"><?php echo $welcome->loadPo('Search') ?></button>
+                  <button type="submit" name="reset" value="Reset"class="btn btn-primary"><?php echo $welcome->loadPo('Reset') ?></button>
 
-                                </div>
-                            </form>
-                        </div><!-- /.box -->
-                    </div><!--/.col (left) -->
-                </div> -- */ ?>
+                  </div>
+                  </form>
+                  </div><!-- /.box -->
+                  </div><!--/.col (left) -->
+                  </div> -- */ ?>
                 <div class="row">
                     <div class="col-xs-12">
                         <div class="box">
@@ -95,22 +95,22 @@
                                                         <img src="<?php echo base_url(); ?>assets/img/test-fail-icon.png" alt="Active" />
                                                     <?php } ?></td>
                                                 <td style='text-align:center'>
-                                                    <?php if($value->url == '') { ?>
-                                                    --
+                                                    <?php if ($value->url == '') { ?>
+                                                        --
                                                     <?php } else { ?>
-                                                    <a class="prev_video" href="#myModal" data-backdrop="static" data-toggle="modal" data-img-url="<?php echo $value->url; ?>">Preview</a>
+                                                        <a class="prev_video" href="#myModal" data-backdrop="static" data-toggle="modal" data-img-url="<?php echo $value->url; ?>">Preview</a>
                                                     <?php } ?>
                                                 </td>
                                                 <td><?php echo date('M d,Y', strtotime($value->start_date)); ?></td>
                                                 <td><?php echo date('M d,Y', strtotime($value->end_date)); ?></td>
                                                 <td>
-                                                    <a href="<?php echo base_url() ?>webtv/video_detail/<?php echo $value->id.'/'.$this->uri->segment(3); ?>">Manage Item, </a>Total <?php echo $value->total; ?>
+                                                    <a href="<?php echo base_url() ?>webtv/video_detail/<?php echo $value->id . '/' . $this->uri->segment(3); ?>">Manage Item, </a>Total <?php echo $value->total; ?>
                                                 </td>
                                                 <td>
-                                                    <a href="<?php echo base_url() ?>webtv/videoEpg/<?php echo $value->id.'/'.$this->uri->segment(3); ?>">Manage EPG</a>
+                                                    <a href="<?php echo base_url() ?>webtv/videoEpg/<?php echo $value->id . '/' . $this->uri->segment(3); ?>">Manage EPG</a>
                                                 </td>
                                                 <td  width="150"> 
-                                                    <a href="<?php echo base_url(); ?>webtv/edit/<?=$this->uri->segment(3)?>/?action=<?php echo base64_encode($value->id) . '&'; ?>" class="btn btn-info btn-sm"><?php echo $welcome->loadPo('Edit') ?></a>
+                                                    <a href="<?php echo base_url(); ?>webtv/edit/<?= $this->uri->segment(3) ?>/?action=<?php echo base64_encode($value->id) . '&'; ?>" class="btn btn-info btn-sm"><?php echo $welcome->loadPo('Edit') ?></a>
                                                     &nbsp;
                                                     <a class="confirm" onclick="return delete_event(<?php echo $value->id; ?>, '<?php echo base_url() . 'webtv/delete' ?>', '<?php echo current_full_url(); ?>');" href="" ><button class="btn btn-danger btn-sm" data-toggle="modal" data-target=".bs-example-modal-sm" ><?php echo $welcome->loadPo('Delete') ?></button></a>
                                                 </td>
@@ -120,7 +120,7 @@
                                     <tfoot>
                                         <tr>
                                             <td colspan="9">
-                                            <a class="btn btn-warning" href="<?php echo base_url().'webtv' ?>"><i class="fa fa-mail-reply"></i>&nbsp; Back</a>
+                                                <a class="btn btn-warning" href="<?php echo base_url() . 'webtv' ?>"><i class="fa fa-mail-reply"></i>&nbsp; Back</a>
                                             </td>
                                         </tr>
                                     </tfoot>
@@ -134,7 +134,7 @@
                                     </table>
                                     <div class="row pull-left">
                                         <div class="dataTables_info" id="example2_info"><br>
-                                            
+
                                             <?php
                                             $param = $this->pagination->cur_page * $this->pagination->per_page;
                                             if ($param > $this->pagination->total_rows) {
@@ -150,9 +150,9 @@
                                             echo "&nbsp;&nbsp;Showing <b>" . $off . "-" . $param . "</b> of <b>" . $this->pagination->total_rows . "</b> total results";
                                         }
                                         ?>
-                                            
+
                                     </div>
-                                        
+
                                 </div>	
                                 <div class="row pull-right">
                                     <div class="col-xs-12">

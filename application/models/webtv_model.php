@@ -426,4 +426,12 @@ class Webtv_model extends CI_Model {
         $this->db->delete('playlist_epg', array('content_id' => $id));
     }
 
+    function epgList($pid, $uid) {
+        $query = sprintf('select * from playlist_epg pe
+                         left join (select * from playlist_video pv where pv.playlist_id = %d ) as pv on pv.content_id = pe.content_id
+                         where pe.playlist_id = %d and pe.user_id = %d', $pid, $pid, $uid);
+        $dataset = $this->db->query($query)->result();
+        return $dataset;
+    }
+
 }
