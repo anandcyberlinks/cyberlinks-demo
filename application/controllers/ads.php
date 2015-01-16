@@ -194,6 +194,9 @@ class Ads extends MY_Controller {
                 case "Thumbnail":
                     $this->thumbnails();
                     break;
+                case "Location":
+                    $this->location();
+                    break;
                 case "Flavor":
                     $this->flavors();
                     //	$this->show_ads_view('videoEditFlavor',$this->data);
@@ -785,6 +788,91 @@ class Ads extends MY_Controller {
             $this->data['videoInfo'] = $this->Ads_model->get_videoInfo($vid);
             $this->data['defaultThumbInfo'] = $this->Ads_model->get_defaultThumb($vid);
             $this->show_ads_view('ads/videoEditThumbnail', $this->data);
+        }
+    }
+    
+    /*
+      / ********************************************************************************
+      /   Location Section Starts
+      / ******************************************************************************** 
+     */
+    
+    function location(){
+        $sess = $this->session->all_userdata();
+        $this->data['welcome'] = $this;
+        $id = @$_GET['action'];
+        $vid = base64_decode($id);
+        if ($vid) {
+            //$this->data['thumbnails_info'] = $this->Ads_model->get_thumbs($vid);
+            $this->data['ads_id'] = $vid;
+            $this->data['adsLocationInfo'] = $this->Ads_model->get_AdsLocationInfo($vid);
+            //echo '<pre>';            print_r($this->data['adsLocationInfo']); exit;
+            $this->show_ads_view('ads/showAdsLocation', $this->data);
+        }
+    }
+    
+    /*
+     * Function used to save location data after clicking on map
+     */
+    function save_location_data(){
+        
+        $data = array();
+        $data['ads_id'] = $_POST['ads_id'];
+        $data['latitude'] = $_POST['latitude'];
+        $data['longitude'] = $_POST['longitude'];
+                
+        $geodata = $_POST['json_data_address']['results'][0]['address_components'];
+        foreach($geodata as $row){
+						
+            if ($row['types'][0] == "route"){
+                    $data['street'] = $row['long_name'];
+            }
+
+            if ($row['types'][0] == "locality"){
+                    $data['city'] = $row['long_name'];
+            }
+
+            if ($row['types'][0] == "administrative_area_level_1"){
+                    $data['state'] = $row['long_name'];
+            }
+
+            if ($row['types'][0] == "country"){
+                    $data['country'] = $row['long_name'];
+                    $data['country_code'] = $row['short_name'];
+            }
+
+            if ($row['types'][0] == "postal_code"){
+                    $data['postal_code'] = $row['long_name'];
+            }
+        }
+        $data['formatted_address'] = $_POST['json_data_address']['results'][0]['formatted_address'];
+        $last_insert_id = $this->Ads_model->_saveAdsLocation($data);
+        $data['last_insert_id'] =  $last_insert_id;
+        
+        echo json_encode($data);
+        exit;
+                
+    }
+    
+    /*
+     * Function to delete a Location
+     */
+    function deleteAdsLocation(){
+        $per = $this->checkpermission($this->role_id, 'delete');
+        $redirect_url = $_GET['curl'];
+        if ($per) {
+            $sess = $this->session->all_userdata();
+            $id = $_GET['id'];
+            $result = $this->Ads_model->delete_location($id);
+            if ($result == '1') {
+                $msg = $this->loadPo($this->config->item('success_record_delete'));
+                $this->log($this->user, $msg);
+                $this->session->set_flashdata('message', $this->_successmsg($msg));
+                redirect($redirect_url);
+            }
+        } else {
+            $this->session->set_flashdata('message', $this->_errormsg($this->loadPo($this->config->item('error_permission'))));
+            redirect(base_url() . 'ads');
         }
     }
 

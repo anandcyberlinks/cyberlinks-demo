@@ -392,6 +392,15 @@ class Ads_model extends CI_Model {
         }
     }
     
+    function delete_location($id){
+        if($id){
+            $this->db->delete('ads_location', array('id' => $id));
+            return 1;
+        }  else {
+            return 0;
+        }
+    }
+    
     
     function _saveThumb($data){
         $cid = $data['ads_id'];
@@ -710,4 +719,34 @@ class Ads_model extends CI_Model {
 	//echo '<br>'.$this->db->last_query();
         return $this->db->insert_id();	
   }
+  
+  function _saveAdsLocation($data){
+        $cid = $data['ads_id'];
+        if(isset($cid)){
+            
+            ###inserting data and return id###
+            $this->db->set($data);
+            $this->db->set('created','NOW()',FALSE);
+            $this->db->set('modified','NOW()',FALSE);
+            $this->db->insert('ads_location');
+            $fid = $this->db->insert_id();
+            
+        }
+        return $fid;
+    }
+    
+    function get_AdsLocationInfo($vid) {
+
+        $this->db->select('a.id,a.latitude,a.longitude,a.formatted_address');
+        $this->db->from('ads_location a');
+        $this->db->where('a.ads_id', $vid);  
+        $query = $this->db->get();
+        $result = $query->result();
+        $fileInfo = $result[0]->id;
+        if ($fileInfo != "") {
+            return $result;
+        } else {
+            return 0;
+        }
+    }
 }

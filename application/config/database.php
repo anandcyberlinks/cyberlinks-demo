@@ -48,10 +48,10 @@
 $active_group = 'default';
 $active_record = TRUE;
 
-$db['default']['hostname'] = 'localserver.local';
+$db['default']['hostname'] = 'anand.local';
 $db['default']['username'] = 'root';
-$db['default']['password'] = 'Cyberlinks1!';
-$db['default']['database'] = 'newsnation';
+$db['default']['password'] = '@cyberlinks';
+$db['default']['database'] = 'multitvfinal';
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;

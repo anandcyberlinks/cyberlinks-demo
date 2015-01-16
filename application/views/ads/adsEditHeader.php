@@ -34,6 +34,11 @@
                                             } else {
                                                 echo $_GET['action'];
                                             } ?>"><?php echo $welcome->loadPo('Thumbnail') ?></a></li>
+                                <li class="<?= ($this->uri->segment(3) === 'Location') ? 'active' : '' ?>" ><a href="<?php echo base_url(); ?>ads/videoOpr/Location?action=<?php if (isset($id) && $id != "") {
+                                                echo base64_encode($id) . '&';
+                                            } else {
+                                                echo $_GET['action'];
+                                            } ?>"><?php echo $welcome->loadPo('Location') ?></a></li>
                                 <?php /* ?><li class="<?= ($this->uri->segment(3) === 'Flavor') ? 'active' : '' ?>" ><a href="<?php echo base_url(); ?>video/videoOpr/Flavor?action=<?php if (isset($id) && $id != "") {
                                                 echo base64_encode($id) . '&';
                                             } else {

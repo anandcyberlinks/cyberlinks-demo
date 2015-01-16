@@ -293,6 +293,15 @@ function delete_video(id, url, curl)
     })
 }
 
+function delete_adsLocation(id, url, curl)
+{
+    bootbox.confirm("Are you sure you want to Delete this Ads Location", function (confirmed) {
+        if (confirmed) {
+            location.href = url + '?id=' + id + '&curl=' + curl;
+        }
+    })
+}
+
 function delete_event(id, url, curl) {
     bootbox.confirm("Are you sure you want to Delete ", function (confirmed) {
         if (confirmed) {
