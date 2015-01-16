@@ -84,7 +84,7 @@
         
         $('.box-body').each(function(index){
             if($(this).height() > 200){
-                $(this).attr('style','height: 300px; overflow-x: auto;');
+                //$(this).attr('style','height: 300px; overflow-x: auto;');
             }
         });
         
@@ -130,6 +130,7 @@
                 week: 'week',
                 day: 'day'
             },
+            defaultView : 'agendaDay',
             events: "<?= base_url() ?>webtv/renderevent?playlist_id=" + playlist_id + '&',
             minTime: 0,
             maxTime: 24,
