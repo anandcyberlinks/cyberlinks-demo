@@ -595,6 +595,18 @@ class Analytics extends MY_Controller {
 			$this->show_view('analytics/geomap_region',$this->data);
 		}
 	}
+        
+        /*
+         * Function to add user Interest tags
+         */
+        function user_content_tags(){
+           
+           $content_ids = $this->Analytics_model->getContentKeywords($_POST['content_id']);
+           if($content_ids!=null){
+               $this->Analytics_model->saveUserContentKeywords($_POST['user_id'],$content_ids);
+           }
+           
+        }
 }
 
 /* End of file welcome.php */

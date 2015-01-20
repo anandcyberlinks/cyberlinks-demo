@@ -301,6 +301,61 @@ class Analytics_model extends CI_Model{
         }
         return $str;
     }
+    
+    function getContentKeywords($content_id){
+        $sql = "select b.name from `content_keywords` a join keywords b on a.keyword_id = b.id where a.content_id = ".$content_id;
+        $query = $this->db->query($sql);
+        if($query->num_rows() > 0){
+            return $query->result_array();
+        }
+        return null;
+    }
+    
+    function saveUserContentKeywords($user_id, $content_ids = array()){
+        
+        $contents = array();
+        $sql = "SELECT * FROM `user_content_keywords` WHERE `user_id` =".$user_id;
+        $query = $this->db->query($sql);
+        if($query->num_rows()==0){
+            // Insert here the user content tage
+            $contents['user_id'] = $user_id;
+            $contents['keywords'] = serialize($content_ids);
+            $this->db->set($contents);
+            $this->db->set('created','NOW()',FALSE);
+            $this->db->set('modified','NOW()',FALSE);
+            $this->db->insert('user_content_keywords');
+            
+        }else{
+            $update = 0;
+            // Update the existing user tags
+            $result = $query->row_array();
+            
+            $user_keywords = unserialize($result['keywords']);
+            
+            $user_keywords_new = array();
+            foreach($user_keywords as $val){
+                array_push($user_keywords_new,$val['name']);
+            }
+            
+            foreach($content_ids as $row){
+                //echo '<pre>'; print_r($user_keywords);
+                if (in_array($row['name'], $user_keywords_new)) {
+                    //echo "I Got ".$row['name'].'<br/>';
+                }
+                else{
+                    $update = 1;
+                   $user_keywords[]['name'] = $row['name'];
+                }
+            }
+            
+            if($update==1){
+                $this->db->set('keywords',serialize($user_keywords));
+                $this->db->set('modified','NOW()', FALSE);
+                $this->db->where('user_id', $user_id);
+                $this->db->update('user_content_keywords');
+            }
+        }
+    }
 }
 
 ?>

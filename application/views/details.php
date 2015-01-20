@@ -279,7 +279,13 @@ $(window).on('beforeunload', function(){
     
 });
    
-$(document).ready(function(){    
+$(document).ready(function(){ 
+    /* User Interest Video by adding tags into user interest .  */
+    
+    $.post( "<?php echo base_url(); ?>analytics/user_content_tags", {user_id: "<?php echo $user_id; ?>", content_id: "<?php echo $content_id; ?>"},function( data ) {
+            //var foo = JSON.parse(data);
+            //alert(data)
+    });
     AndroidApp.startVideo();    
 });
 </script>

@@ -232,9 +232,9 @@ class Ads extends MY_Controller {
                     $post['content_id'] = $vid;
                     $post['status'] = $this->input->post('status') == 'on' ? 1 : 0;
                  //   $post['feature_video'] = $this->input->post('feature_video') == 'on' ? 1 : 0;
-                  //  $post_key = $_POST['tags'];
+                    $post_key = $_POST['tags'];
                     $this->Ads_model->_saveVideo($post);
-                   // $this->Ads_model->_setKeyword($post_key, $vid);
+                    $this->Ads_model->_setKeyword($post_key, $vid);
                     $msg = $this->loadPo($this->config->item('success_record_update'));
                     $this->log($this->user, $msg);
                     $this->session->set_flashdata('message', $this->_successmsg($msg));
@@ -250,7 +250,8 @@ class Ads extends MY_Controller {
                     $this->show_ads_view('ads/videoEditBasic', $this->data);
                 }
             } else {
-                $this->data['result'] = (array) $this->Ads_model->edit_profile($vid);               
+                $this->data['result'] = (array) $this->Ads_model->edit_profile($vid);
+                $this->data['result']['keywords'] = $this->Ads_model->_getKeyword($vid);
                 $this->data['thumbnails_info'] = $this->Ads_model->get_thumbs($vid);
                 $this->data['content_id'] = $vid;
                 $this->data['category'] = $this->Ads_model->get_category($this->uid);                

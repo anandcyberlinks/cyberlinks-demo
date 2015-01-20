@@ -110,6 +110,10 @@ function initialize() {
                             "+del+"\n\
                             </td> </tr>"
                         )
+                         //location.hash = "#"+foo.last_insert_id;
+                         $(document.body).animate({
+                            'scrollDown':   $('#'+foo.last_insert_id).offset().top
+                        }, 2000);
                 });
               
               marker = createMarker(event.latLng, "name", "<b>Location</b><br>"+json_data_address['results'][0]['formatted_address']);

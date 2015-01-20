@@ -495,7 +495,7 @@ class Video_model extends CI_Model {
         $this->db->where('a.id',$id);
         $this->db->where('g.flavor_name',$device);
         $query = $this->db->get();
-       //  echo '<br>'.$this->db->last_query();die;
+       //echo '<br>'.$this->db->last_query();die;
         return $query->row();
    }
    public function video_flavors()

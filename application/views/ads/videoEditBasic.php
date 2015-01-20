@@ -28,6 +28,11 @@
                         } ?></textarea>  
                             <?php echo form_error('description', '<span class="text-danger">', '</span>'); ?>
                         </div>
+                        <div class="form-group col-lg-12">
+                            <label for="exampleInputEmail1"><?php echo $welcome->loadPo('Keywords') ?></label>
+                            <input name="tags" class="form-control" id="myTags" type="text" placeholder="Enter keywords"  value="<?php echo $result['keywords']; ?> " /> 
+			    <?php echo form_error('content_keyword', '<span class="text-danger">', '</span>'); ?>
+                        </div>
                        
                         <div class="form-group col-lg-12">
                             <label>

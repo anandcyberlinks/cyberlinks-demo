@@ -749,4 +749,67 @@ class Ads_model extends CI_Model {
             return 0;
         }
     }
+    
+    /*
+     *Function for keyword insert
+     *$keydata is post keyword example 'computer,hello, hollywood, bollywood'
+    */
+    function _setKeyword($keywords, $ads_id){
+        //echo $keywords.$ads_id; exit;
+        $keydata = explode(',', $keywords);
+        foreach ($keydata as $value) {
+            $this->db->select('id');
+            $this->db->from('keywords');
+            $this->db->where('name', $value);
+            $query = $this->db->get();
+            $result = $query->result();
+            if(count($result) > 0){
+                $keyword_ids[] = $result[0]->id;
+            }else{
+            $this->db->set('name', $value);
+            $this->db->set('created', 'NOW()', false);
+            $this->db->set('modified', 'NOW()', false);
+            $this->db->insert('keywords');
+            $this->result = $this->db->insert_id();
+            $keyword_ids[] = $this->result;    
+            } 
+        }
+            $data = array('ads_id' => $ads_id);
+            $this->db->delete('ads_keywords', $data);
+            $total = array();
+            //insert data in content_keywords table
+            foreach($keyword_ids as $key=>$val){
+                $data = array('ads_id'=>$ads_id,'keyword_id'=>$val,'status'=>1);
+                $this->db->set($data);
+                $this->db->set('created', 'NOW()', false);
+                $this->db->set('modified', 'NOW()', false);
+                $this->db->insert('ads_keywords', $data);
+                $total[] = $this->db->insert_id();
+            }
+        return $total;
+    }
+    
+    /*
+     *Function for get Keyword
+     */
+    function _getKeyword($content_id){
+        $this->db->select('keywords.name');
+        $this->db->from('keywords');
+        $this->db->join('ads_keywords','keywords.id = ads_keywords.keyword_id');
+        $this->db->where('ads_keywords.ads_id', $content_id);
+        $query = $this->db->get();
+        $keyword = $query->result_array();
+	return implode(',', $this->_array_column($keyword, 'name'));
+    }
+    function _array_column($keyword, $field) {
+	$ret = array();
+	foreach($keyword as $keywords){
+	    foreach($keywords as $key=>$val){
+		if($key == $field){		    
+		    $ret[] = $val;
+		}
+	    }
+	}
+	return $ret;
+    }
 }
