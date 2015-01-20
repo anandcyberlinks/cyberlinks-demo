@@ -739,7 +739,8 @@ class Ads_model extends CI_Model {
 
         $this->db->select('a.id,a.latitude,a.longitude,a.formatted_address');
         $this->db->from('ads_location a');
-        $this->db->where('a.ads_id', $vid);  
+        $this->db->where('a.ads_id', $vid);
+        $this->db->order_by('a.id', 'DESC');
         $query = $this->db->get();
         $result = $query->result();
         $fileInfo = $result[0]->id;

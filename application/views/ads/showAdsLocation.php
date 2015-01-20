@@ -167,7 +167,7 @@ function initialize() {
                                 var onClick =  'onclick="return delete_adsLocation('+foo.last_insert_id+', '+return_url+', '+current_url+')";'
                                 var Cclass = 'class="confirm"';
                                 var del = '<a '+Cclass+' '+onClick+'  href="" >'+button+'Delete</button></a>';
-                                $("#example2").append("<tr id='"+foo.last_insert_id+"'> \n\
+                                $("#example2").prepend("<tr id='"+foo.last_insert_id+"'> \n\
                                                 <td>"+foo.formatted_address+"</td> \n\
                                                 <td>"+foo.latitude+"</td>\n\
                                                  <td>"+foo.longitude+"</td>\n\
