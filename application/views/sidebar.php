@@ -21,7 +21,7 @@
                 <a href="<?php echo base_url() ?>analytics/report">
                     <i class="fa fa-dashboard"></i> <span><?php echo $welcome->loadPo('Analytics'); ?></span></a>
             </li>
-            <li class="treeview <?= (($this->uri->segment(2) == 'videoUploadSrc') || ($this->uri->segment(2) == 'bulkupload') || ($this->uri->segment(2) == 'video_status') || ($this->uri->segment(2) == 'video_settings') || ($this->uri->segment(2) == 'debug') || ($this->uri->segment(1) . "/" . $this->uri->segment(2) == 'video/index') ) ? 'active' : '' ?>">
+            <li class="treeview <?= (($this->uri->segment(2) == 'live_streaming') ||($this->uri->segment(2) == 'videoUploadSrc') || ($this->uri->segment(2) == 'bulkupload') || ($this->uri->segment(2) == 'video_status') || ($this->uri->segment(2) == 'video_settings') || ($this->uri->segment(2) == 'debug') || ($this->uri->segment(1) . "/" . $this->uri->segment(2) == 'video/index') ) ? 'active' : '' ?>">
                 <a href="#">
                     <i class="fa fa-video-camera"></i>
                     <span><?php echo $welcome->loadPo('Video'); ?></span>
@@ -34,12 +34,18 @@
                     <li class="<?= ($this->uri->segment(2) == 'video_status') ? 'active' : '' ?>"><a href="<?php echo base_url() ?>video/video_status"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('Video') . " " . $welcome->loadPo('Status'); ?></a></li>                   
                     <?php /* <li class="<?=($this->uri->segment(2)=='setting')?'active':''?>"><a href="<?php echo base_url() ?>video/setting"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('Video')." ".$welcome->loadPo('Settings'); ?> </a></li>     */ ?>
                     <li class="<?= ($this->uri->segment(2) == 'debug') ? 'active' : '' ?>"><a href="<?php echo base_url() ?>video/debug"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('Debug'); ?></a></li>
+                    <li class="<?= ($this->uri->segment(2) == 'live_streaming') ? 'active' : '' ?>"><a href="<?php echo base_url() ?>video/live_streaming"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('Live Stream'); ?></a></li>
                 </ul>
             </li>
           
             <li class="<?= ($this->uri->segment(1) == 'webtv' || $this->uri->segment(1) == 'livestream') ? 'active' : '' ?>">
                 <a href="<?php echo base_url() ?>webtv" >
                     <i class="fa fa-fw fa-film"></i> <span><?php echo $welcome->loadPo('WebTV'); ?></span>
+                </a>
+            </li>
+            <li class="<?= ($this->uri->segment(1) == 'punchang' || $this->uri->segment(1) == 'punchang') ? 'active' : '' ?>">
+                <a href="<?php echo base_url() ?>punchang" >
+                    <i class="fa fa-fw fa-film"></i> <span><?php echo $welcome->loadPo('Punchang'); ?></span>
                 </a>
             </li>
                       <li class="<?= ($this->uri->segment(1) == 'event') ? 'active' : '' ?>">

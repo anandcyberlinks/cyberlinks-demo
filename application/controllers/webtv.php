@@ -345,5 +345,13 @@ class Webtv extends MY_Controller {
             
         }
     }
+    function eventCopy(){
+        if($_POST){
+            print_r($_POST);
+            exit;
+        } else {
+            $this->load->view('copyEvent');
+        }
+    }
 
 }
