@@ -1,8 +1,13 @@
+<style>
+    .error{
+        color: red;
+    }
+</style>
 <div class="tab-pane active" id="tab_1">
     <div class="box box-solid">
         <div class="box-body">
             <div class="row">
-                <form id="metadata" name="metadata" action="" method="post">
+                <form id="registerId" name="metadata" action="" method="post">
                         <div class="form-group col-lg-6">
                             <label for="exampleInputEmail1"><?php echo $welcome->loadPo('Title') ?></label>
                             <input name="content_title" class="form-control" id="content_title" type="text" placeholder="Enter Content Title"  value="<?php if(isset($result['ad_title'])) { echo $result['ad_title']; } ?>"/>
@@ -42,6 +47,16 @@
         echo "";
     } ?> />&nbsp;&nbsp;<?php echo $welcome->loadPo('Status') ?> 
                             </label>
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <label for="age_group_from"><?php echo $welcome->loadPo('Age Group from') ?></label>
+                            <input name="age_group_from" class="form-control" id="age_group_from" type="text" placeholder="Enter Age From"  value="<?php if(isset($result['age_group_from'])) { echo $result['age_group_from']; }else{echo '0'; } ?>" numeric />
+                            <?php echo form_error('age_group_from', '<span class="text-danger">', '</span>'); ?>
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <label for="age_group_to"><?php echo $welcome->loadPo('Age Group To') ?></label>
+                            <input name="age_group_to" class="form-control greaterThan" id="age_group_to" type="text" placeholder="Enter Age To"  value="<?php if(isset($result['age_group_to'])) { echo $result['age_group_to']; }else{echo '0'; } ?>" data-min="age_group_from" />
+                            <?php echo form_error('age_group_to', '<span class="text-danger">', '</span>'); ?>
                         </div>
             </div>
         </div>

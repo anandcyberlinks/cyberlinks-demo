@@ -176,6 +176,13 @@ class Ads_model extends CI_Model {
             $contents['ad_desc'] = $data['description'];
             $contents['status'] = $data['status'];
         }
+        
+        if(isset($data['age_group_from'])){
+            $contents['age_group_from'] = $data['age_group_from'];
+        }
+        if(isset($data['age_group_to'])){
+            $contents['age_group_to'] = $data['age_group_to'];
+        }
 	                   
         if(isset($data['content_id'])){
             $cid = $data['content_id'];

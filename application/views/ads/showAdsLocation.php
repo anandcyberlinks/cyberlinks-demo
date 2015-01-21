@@ -49,10 +49,9 @@
 
 
 <link href="<?php echo base_url() ?>assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-<script src="<?php echo base_url() ?>assets/js/bootstrap.min.js"></script>
-
 <link href="<?php echo base_url() ?>assets/css/bootstrap-dialog.min.css" rel="stylesheet" type="text/css" />
-<script src="<?php echo base_url() ?>assets/js/bootstrap-dialog.min.js"></script>
+
+
 
 
 <script type="text/javascript"> 
@@ -194,7 +193,7 @@ function initialize() {
                     dialogItself.close();
                 }
             }]
-        });
+        }); 
          
   });
   

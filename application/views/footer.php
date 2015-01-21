@@ -3,6 +3,7 @@
 		<script src="<?php echo base_url()?>assets/js/jcrop/jquery.Jcrop.js"></script>			
 		<!-- Bootstrap -->
 		<script src="<?php echo base_url() ?>assets/js/bootstrap.min.js" type="text/javascript"></script>
+                <script src="<?php echo base_url() ?>assets/js/bootstrap-dialog.min.js"></script>
 		<!-- Bootstrap time Picker -->
 		<script src="<?php echo base_url();?>assets/js/plugins/timepicker/bootstrap-timepicker.min.js" type="text/javascript"></script>
 		<link href="<?php echo base_url() ?>assets/css/jQueryUI/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" type="text/css" />

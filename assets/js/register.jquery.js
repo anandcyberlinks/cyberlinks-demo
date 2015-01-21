@@ -1,4 +1,39 @@
 $(document).ready(function(){
+    
+    /*if($('#age_group_from').val()!="")
+    {
+        $.validator.addMethod("greaterThan", function(value, element) {
+        var startdatevalue = $('#age_group_from').val();
+        return parseInt(startdatevalue) < parseInt(value);
+        }, "Must be greater than to Age Group from.");
+    }*/
+
+
+    $.validator.addMethod("greaterThan", function (value, element, param) {
+    var $element = $(element)
+        , $min;
+
+    if (typeof(param) === "string") {
+        $min = $(param);
+    } else {
+        $min = $("#" + $element.data("min"));
+    }
+
+    if (this.settings.onfocusout) {
+        $min.off(".validate-greaterThan").on("blur.validate-greaterThan", function () {
+            $element.valid();
+        });
+    }
+    return parseInt(value) >= parseInt($min.val());
+}, "Must be greater than to Age Group from.");
+
+$.validator.addClassRules({
+    greaterThan: {
+        greaterThan: true
+    }
+});
+
+
   $('#registerId').validate({
     rules:{
       'uname':{
@@ -83,6 +118,14 @@ $(document).ready(function(){
       'agree':{
         'required':true 
       },
+      'age_group_from':{
+        'number' :true
+        //'le': '#age_group_to'
+      },
+      'age_group_to':{
+        'number' :true
+        // 'greaterThan': true
+      },
     },
 
   messages: {
@@ -124,6 +167,12 @@ $(document).ready(function(){
     'avatar':{
       'required':'Please upload Avatar',
       'accept':"Please upload file with 2 extn."
+    },
+    'age_group_from':{
+      'number':'Please enter valid Age.'
+    },
+    'age_group_to':{
+      'number':'Please enter valid Age.'
     },
   }
 
