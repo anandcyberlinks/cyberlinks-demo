@@ -43,6 +43,13 @@ $.validator.addClassRules({
       'url':{
         'required':true,
       },
+      'title':{
+        'required':true,
+      },
+      'number':{
+        'required':true,
+        'number' :true,
+      },
       'first_name':{
         'required':true,
         'minlength':4
@@ -75,6 +82,7 @@ $.validator.addClassRules({
       'start_date':{
         'required':true,
       },
+      
       'password':{
         'required':true,
         'minlength':6
@@ -92,9 +100,6 @@ $.validator.addClassRules({
       },
       'language':{
         'required':true,
-      },
-      'status':{
-        'required':true
       },
       'role_id':{
         'required':true

@@ -91,6 +91,7 @@ if(isset($config['amazons3'])) {
     define('serverurl',	                baseurl);
     define('serverDir',                 'videos/');
     define('serverVideoRelPath',	'assets/upload/video/');
+    define('serverAudioRelPath',	'assets/upload/audio/');
     define('serverLogoRelPath',          'assets/upload/logo/');
     define('serverImageRelPath',	'assets/upload/thumbs/');
     define('REAL_PATH',		            $path_nw.'/');

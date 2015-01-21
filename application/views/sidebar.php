@@ -37,6 +37,17 @@
                     <li class="<?= ($this->uri->segment(2) == 'live_streaming') ? 'active' : '' ?>"><a href="<?php echo base_url() ?>video/live_streaming"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('Live Stream'); ?></a></li>
                 </ul>
             </li>
+            <li class="treeview <?= ($this->uri->segment(1) == 'audio') ? 'active' : '' ?>">
+                    <a href="#">
+                        <i class="fa fa-fw fa-bullhorn"></i>
+                        <span><?php echo $welcome->loadPo('Audio'); ?></span>
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li class="<?= ($this->uri->segment(1) == 'audio' && $this->uri->segment(2) == '' ) ? 'active' : '' ?>"><a href="<?php echo base_url() ?>audio"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('Audio List'); ?></a></li>
+                        <li class="<?= ($this->uri->segment(1) == 'audio' && $this->uri->segment(2) == 'upload') ? 'active' : '' ?>"><a href="<?php echo base_url() ?>audio/upload"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('Upload'); ?></a></li>
+                    </ul>
+                </li>
           
             <li class="<?= ($this->uri->segment(1) == 'webtv' || $this->uri->segment(1) == 'livestream') ? 'active' : '' ?>">
                 <a href="<?php echo base_url() ?>webtv" >

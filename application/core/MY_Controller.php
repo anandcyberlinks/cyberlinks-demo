@@ -436,6 +436,10 @@ class MY_Controller extends CI_Controller {
                 $fileUploadPath = REAL_PATH . serverVideoRelPath;
                 $dimensions = '';
                 break;
+            case 'audio':
+                $fileUploadPath = REAL_PATH . serverAudioRelPath;
+                $dimensions = '';
+                break;
             case 'ads':
                 $fileUploadPath = REAL_PATH . serverAdsRelPath;
                 $dimensions = '';
@@ -444,7 +448,7 @@ class MY_Controller extends CI_Controller {
         try {
             if (move_uploaded_file($fileTempPath, $fileUploadPath . $fileUniqName)) {
                 $fileDestPath = $fileUploadPath . $fileUniqName;
-                if ($type != 'video') {
+                if ($type != 'video' && $type != 'audio') {
                     foreach ($dimensions as $key => $value) {
                         if ($key == 'small') {
                             $path = $pathSmall;
