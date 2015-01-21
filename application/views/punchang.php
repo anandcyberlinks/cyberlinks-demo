@@ -86,7 +86,7 @@
                                             <th><?php echo $welcome->loadPo('Month') ?></th>
                                             <th><?php echo $welcome->loadPo('Pakshya') ?></th>
                                             <th><?php echo $welcome->loadPo('Tithi') ?></th>
-                                            <th><?php echo $welcome->loadPo('Sunrice') ?></th>
+                                            <th><?php echo $welcome->loadPo('Sunrise') ?></th>
                                             <th><?php echo $welcome->loadPo('Sunset') ?></th>
                                             <th><?php echo $welcome->loadPo('Rahukal'); ?></th>
                                         </tr>
@@ -97,7 +97,7 @@
                                         <td><?=$val->month?></td>
                                         <td><?=$val->pakshya?></td>
                                         <td><?=$val->tithi?></td>
-                                        <td><?=$val->sunrice?></td>
+                                        <td><?=$val->sunrise?></td>
                                         <td><?=$val->sunset?></td>
                                         <td><?=$val->rahukal?></td>
                                     </tr>

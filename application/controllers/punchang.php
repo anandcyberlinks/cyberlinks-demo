@@ -51,7 +51,7 @@ class Punchang extends MY_Controller {
                         $temp['month'] = $csv_line[1];
                         $temp['pakshya'] = $csv_line[2];
                         $temp['tithi'] = $csv_line[3];
-                        $temp['sunrice'] = $csv_line[4];
+                        $temp['sunrise'] = $csv_line[4];
                         $temp['sunset'] = $csv_line[5];
                         $temp['rahukal'] = $csv_line[6];
                         $temp['status'] = 1;
