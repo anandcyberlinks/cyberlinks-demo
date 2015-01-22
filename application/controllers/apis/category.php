@@ -5,7 +5,16 @@ class Category extends Apis{
     
     function getlist_get(){
         $qString = $this->get();
-        $total_query = sprintf('select count(id) as tot from categories where u_id = %d',$this->app->id);
+        $condition = '';
+        
+        if(isset($qString['k']))
+        switch($qString['k']){
+            case 'type' :
+                    $condition.= sprintf(' AND c.type = "%s" ',$qString['val']);
+                break;
+        }        
+        
+        $total_query = sprintf('select count(id) as tot from categories c where u_id = %d %s ',$this->app->id,$condition);
         $dataset_count = $this->db->query($total_query)->result();
         $dataset_count = isset($dataset_count[0]->tot) ? $dataset_count[0]->tot : 0;
         
@@ -17,7 +26,7 @@ class Category extends Apis{
                             from categories c
                             left join contents on contents.category = c.id
                             left join files f on f.id = c.file_id
-                            where c.u_id  = "%d" group by c.id ',$this->app->id);
+                            where c.u_id  = "%d" %s group by c.id ',$this->app->id,$condition);
 
         $dataset = $this->db->query($query)->result();
         foreach($dataset as $key=>$val){

@@ -300,6 +300,33 @@ class Content extends Apis{
         $this->response($response);
     }
     
+    
+    function panchang_get(){
+        $qString = $this->get();
+        $response = array();
+        $query = sprintf('select p.date,p.month,p.pakshya,p.tithi,p.sunrise,p.sunset,p.rahukal from panchang p 
+                         where p.u_id = %d and p.status = 1 and p.date = "%s" ',$this->app->id,date('Y-m-d'));
+        $dataset = $this->db->query($query)->result();
+        foreach($dataset as $key=>$val){
+            $response[] = $val;
+        }
+        $this->response($response);
+    }
+    
+    function livestream_get(){
+        $qString = $this->get();
+        $response = array();
+        $query = sprintf('select o.value as livestream from options o 
+                         where o.user_id = %d and o.key = "livestream" ',$this->app->id);
+        $dataset = $this->db->query($query)->result();
+        foreach($dataset as $key=>$val){
+            $response[] = $val;
+        }
+        $this->response($response);
+    }
+    
+    
+    
     function webtv_get(){
         $qString = $this->get();
         $response = array();
