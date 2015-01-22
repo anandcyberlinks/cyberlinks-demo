@@ -86,8 +86,8 @@
                                             <div class="form-group col-lg-5">
                                                 <label for="type"><?php echo $welcome->loadPo('Type'); ?></label>
                                                 <select class="form-control" name="type">
-                                                    <option value="video">Video</option>
-                                                    <option value="audio">Audio</option>
+                                                    <option value="video" <?= ($value->type=='video')?'selected="true"':''; ?>>Video</option>
+                                                    <option value="audio" <?= ($value->type=='audio')?'selected="true"':''; ?>>Audio</option>
                                                 </select>
                                                 <?php echo form_error('description', '<span class="text-danger">', '</span>'); ?>
                                             </div>
