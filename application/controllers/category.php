@@ -103,7 +103,7 @@ class Category extends MY_Controller {
         $this->data["links"] = $this->pagination->create_links();
         $this->data['total_rows'] = $config["total_rows"];
         $this->data['category'] = $this->Category_model->getCategory($this->uid, $config["per_page"], $page, $sort, $sort_by, $searchterm);
-        $this->data['allParentCategory'] = $this->Category_model->getAllCategory();
+        $this->data['allParentCategory'] = $this->Category_model->getAllCategory($this->uid);
         $this->show_view('category', $this->data);
     }
 

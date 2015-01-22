@@ -53,6 +53,7 @@ class Category_model extends CI_Model {
 				'parent_id'=>$data['parent_id'],
 				'description'=>$data['description'],
 				'color'=>$data['color'],
+                                'type'=>$data['type'],
 				'file_id'=>$data['file_id'],
 				'status'=>$data['status']	
 			);
@@ -147,10 +148,11 @@ class Category_model extends CI_Model {
     }
 	
 	/*	Get All Category  */	
-	function getAllCategory()
+	function getAllCategory($uid)
 	{
 		$this->db->select('*');
-		$this->db->from('categories');  
+		$this->db->from('categories');
+                $this->db->where('u_id', $uid);
 		$this->db->order_by('category', 'asc');		
 		$query = $this->db->get();
 		return $query->result() ;
