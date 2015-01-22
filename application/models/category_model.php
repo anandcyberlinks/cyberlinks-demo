@@ -148,7 +148,7 @@ class Category_model extends CI_Model {
     }
 	
 	/*	Get All Category  */	
-	function getAllCategory($uid)
+	function getAllCategory($uid='')
 	{
 		$this->db->select('*');
 		$this->db->from('categories');
