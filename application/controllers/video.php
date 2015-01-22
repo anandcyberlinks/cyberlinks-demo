@@ -1130,7 +1130,8 @@ class Video extends MY_Controller {
 
     function live_streaming() {
         if (isset($_POST['save'])) {
-            $this->videos_model->saveUrl($_POST['url'], $this->uid);
+            unset($_POST['save']);
+            $this->videos_model->saveUrl(json_encode($_POST['url']), $this->uid);
             $msg = $this->loadPo($this->config->item('success_record_update'));
             $this->log($this->user, $msg);
             $this->session->set_flashdata('message', $this->_successmsg($msg));
