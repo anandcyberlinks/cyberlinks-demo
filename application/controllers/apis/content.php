@@ -700,6 +700,7 @@ class Content extends Apis{
         $dataset = $this->db->query($query)->result();
         foreach($dataset as $key=>$val){
             $response['livestream'] = json_decode($val->livestream);
+            
         }
         $this->response($response);
     }
