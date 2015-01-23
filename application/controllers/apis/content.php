@@ -699,7 +699,7 @@ class Content extends Apis{
                          where o.user_id = %d and o.key = "livestream" ',$this->app->id);
         $dataset = $this->db->query($query)->result();
         foreach($dataset as $key=>$val){
-            $response[] = json_decode($val->livestream);
+            $response['livestream'] = json_decode($val->livestream);
         }
         $this->response($response);
     }
