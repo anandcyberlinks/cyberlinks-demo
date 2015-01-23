@@ -705,19 +705,48 @@ class Content extends Apis{
         $this->response($response);
     }
     
-    function d_content(){
+    function dsearch_get(){
         $qString = $this->get();
         $response = array();
-        $qString['type'] = isset($qString['type']) ? $qString['type'] : 'video';
-        $category = isset($qString['key']) && $qString['key'] > 0 ? $qString['key'] : 0;
-        switch($qString['type']){
+        $qString['k'] = isset($qString['k']) ? $qString['k'] : 'video';
+        $title = isset($qString['val']) && $qString['val'] != '' ? $qString['val'] : 0;
+        switch($qString['k']){
             case 'video' :
-                
+                    $tmp = file_get_contents(sprintf('http://182.18.165.43/multitvfinal/apis/content/search/k/title/val/%s/at/ad8b0280827',$title));
+                    $response[] = json_decode($tmp);
                 break;
             case 'audio' :
-                
+                    $query = sprintf('select * from audio a where a.title like "%%%s%%" ',$title);
+                    $dataset = $this->db->query($query)->result();
+                    foreach($dataset as $key=>$val){
+                        $response[] = array('title'=>$val->title,'file_path'=>$val->file_path);
+                    }
                 break;
         }
+        
+        $this->response($response);
+    }
+    
+    function dcontent_get(){
+        $qString = $this->get();
+        $response = array();
+        $qString['k'] = isset($qString['k']) ? $qString['k'] : 'video';
+        $category = isset($qString['val']) && $qString['val'] > 0 ? $qString['val'] : 0;
+        switch($qString['k']){
+            case 'video' :
+                    $tmp = file_get_contents(sprintf('http://182.18.165.43/multitvfinal/apis/content/search/k/category/val/%d/at/ad8b0280827',$category));
+                    $response[] = json_decode($tmp);
+                break;
+            case 'audio' :
+                    $query = sprintf('select * from audio a where a.category_id = %d ',$category);
+                    $dataset = $this->db->query($query)->result();
+                    foreach($dataset as $key=>$val){
+                        $response[] = array('title'=>$val->title,'file_path'=>$val->file_path);
+                    }
+                break;
+        }
+        
+        $this->response($response);
     }
     
     
