@@ -301,29 +301,7 @@ class Content extends Apis{
     }
     
     
-    function panchang_get(){
-        $qString = $this->get();
-        $response = array();
-        $query = sprintf('select p.date,p.month,p.pakshya,p.tithi,p.sunrise,p.sunset,p.rahukal from panchang p 
-                         where p.u_id = %d and p.status = 1 and p.date = "%s" ',$this->app->id,date('Y-m-d'));
-        $dataset = $this->db->query($query)->result();
-        foreach($dataset as $key=>$val){
-            $response[] = $val;
-        }
-        $this->response($response);
-    }
     
-    function livestream_get(){
-        $qString = $this->get();
-        $response = array();
-        $query = sprintf('select o.value as livestream from options o 
-                         where o.user_id = %d and o.key = "livestream" ',$this->app->id);
-        $dataset = $this->db->query($query)->result();
-        foreach($dataset as $key=>$val){
-            $response[] = $val;
-        }
-        $this->response($response);
-    }
     
     
     
@@ -699,4 +677,47 @@ class Content extends Apis{
         }
         exit;
     }
+    
+    /****** APIs for Divya TV channels **************/
+    
+    function panchang_get(){
+        $qString = $this->get();
+        $response = array();
+        $query = sprintf('select p.date,p.month,p.pakshya,p.tithi,p.sunrise,p.sunset,p.rahukal from panchang p 
+                         where p.u_id = %d and p.status = 1 and p.date = "%s" ',$this->app->id,date('Y-m-d'));
+        $dataset = $this->db->query($query)->result();
+        foreach($dataset as $key=>$val){
+            $response[] = $val;
+        }
+        $this->response($response);
+    }
+    
+    function livestream_get(){
+        $qString = $this->get();
+        $response = array();
+        $query = sprintf('select o.value as livestream from options o 
+                         where o.user_id = %d and o.key = "livestream" ',$this->app->id);
+        $dataset = $this->db->query($query)->result();
+        foreach($dataset as $key=>$val){
+            $response[] = json_decode($val);
+        }
+        $this->response($response);
+    }
+    
+    function d_content(){
+        $qString = $this->get();
+        $response = array();
+        $qString['type'] = isset($qString['type']) ? $qString['type'] : 'video';
+        $category = isset($qString['key']) && $qString['key'] > 0 ? $qString['key'] : 0;
+        switch($qString['type']){
+            case 'video' :
+                
+                break;
+            case 'audio' :
+                
+                break;
+        }
+    }
+    
+    
 }
