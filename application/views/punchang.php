@@ -3,25 +3,27 @@
     <aside class="right-side"> 
         <!-- Content Header (Page header) -->
         <section class="content-header">
-            <h1><?php echo $welcome->loadPo('Punchang') ?><small><?php echo $welcome->loadPo('Channel') ?></small>
+            <h1><?php echo $welcome->loadPo('Punchang') ?><small><?php echo $welcome->loadPo('List') ?></small>
+                <a href="punchang/add" class="btn btn-success btn-sm">Add</a>
             </h1>
             <ol class="breadcrumb">
                 <li><a href="<?php echo base_url(); ?>"><i class="fa fa-dashboard"></i><?php echo $welcome->loadPo('Dashboard') ?></a></li>
                 <li class="active"><?php echo $welcome->loadPo('Punchang') ?></li>
             </ol>
         </section>
-        <div>
-           	
-            <?php if (isset($error) && !empty($error)) { ?><div id="msg_div"><?php echo $error; ?></div><?php } ?>
-        </div>
+        
         <!-- Main content -->
         <section class="content">
             <?php $search = $this->session->userdata('search_form');
             ?></pre>
             <div id="content">
                  <div id="msg">
-
-            </div>
+                     <?php $msg = $this->session->flashdata('message');
+                     if($msg != ''){
+                        echo $msg;
+                     }
+                     ?>
+                </div>
                 <?php /* <div class="row">
                   <!-- left column -->
                   <div class="col-md-12">
@@ -89,6 +91,7 @@
                                             <th><?php echo $welcome->loadPo('Sunrise') ?></th>
                                             <th><?php echo $welcome->loadPo('Sunset') ?></th>
                                             <th><?php echo $welcome->loadPo('Rahukal'); ?></th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <?php foreach ($result as $val){ ?>
@@ -100,6 +103,10 @@
                                         <td><?=$val->sunrise?></td>
                                         <td><?=$val->sunset?></td>
                                         <td><?=$val->rahukal?></td>
+                                        <td>
+                                            <a href="<?= base_url(). 'punchang/delete/'.$val->id ?>" class="btn btn-danger btn-sm confirm_delete">Delete</a>
+                                            <a href="<?= base_url(). 'punchang/add/'.$val->id ?>" class="btn btn-warning btn-sm">Edit</a>
+                                        </td>
                                     </tr>
                                         <?php } ?>
                                     <tbody>
@@ -184,6 +191,7 @@
     </div><!-- /.modal -->
 </div> 
 <script>
+    $("#msg").fadeOut(3500);
     $('#submitcsv')
             .submit(function (e) {
                 $("#load").html('loading.....')

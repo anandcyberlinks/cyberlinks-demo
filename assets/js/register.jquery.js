@@ -195,24 +195,48 @@ $.validator.addClassRules({
   messages: {
     'title':{
       required: "Title is required.",
-      minlength: "Title should be 4 char long.",
-    },
+      minlength: "Title should be 4 char long."
+    }
   }
 
+  });
+  
+  $('#Punchang').validate({
+    rules:{
+      'date':{
+        'required':true,
+        'remote':'checkemail'
+      },
+      'month':{
+        'required':true
+      },
+      'pakshya':{
+        'required':true
+      },
+      'tithi':{
+        'required':true
+      }
+    },
+    messages: {
+    'date':{
+      required: "Date is required.",
+      remote: "Data already added for this date"
+    }
+  }
   });
 
    $('#frmstream').validate({
     rules:{
       'youtube':{
-        'required':true,
-      },     
+        'required':true
+      },
     },
 
   messages: {
     'title':{
       required: "Title is required.",
-      minlength: "Title should be 4 char long.",
-    },
+      minlength: "Title should be 4 char long."
+    }
   }
 
   });

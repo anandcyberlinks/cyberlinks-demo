@@ -3,9 +3,10 @@
 class Punchang extends MY_Controller {
 
     public $uid = null;
-    
+
     function __construct() {
         parent::__construct();
+        $this->load->config('messages');
         $this->load->model('panchang_model');
         $s = $this->session->all_userdata();
         $this->uid = $s[0]->id;
@@ -13,7 +14,7 @@ class Punchang extends MY_Controller {
 
     function index() {
         $data['welcome'] = $this;
-        
+
         $this->load->library("pagination");
         $config = array();
         $config["base_url"] = base_url() . "punchang/index/";
@@ -28,11 +29,11 @@ class Punchang extends MY_Controller {
     }
 
     function submitcsv() {
-        if(!isset($_FILES)){
-            redirect(base_url().'punchang');
+        if (!isset($_FILES)) {
+            redirect(base_url() . 'punchang');
         }
         //print_r($_FILES); die;
-        if($_FILES['csv']['type'] != 'text/csv'){
+        if ($_FILES['csv']['type'] != 'text/csv') {
             echo json_encode(array('result' => 'invalid file'));
             die;
         }
@@ -66,6 +67,57 @@ class Punchang extends MY_Controller {
             echo json_encode(array('result' => 'success'));
         } else {
             echo json_encode(array('result' => 'error'));
+        }
+    }
+
+    function delete() {
+        $id = $this->uri->segment(3);
+        $this->db->delete('panchang', array('id' => $id));
+        $msg = $this->loadPo($this->config->item('success_record_delete'));
+        $this->log($this->user, $msg);
+        $this->session->set_flashdata('message', $this->_successmsg($msg));
+        redirect(base_url() . 'punchang');
+    }
+
+    function add() {
+        $data['welcome'] = $this;
+        $id = ($this->uri->segment(3));
+        if (isset($id) && $id > 0) {
+            $this->db->where('id', $id);
+            $this->db->from('panchang');
+            $result = $this->db->get()->result();
+            if(count($result)>0){
+                $data['result'] = $result;
+                $_POST['id'] = $id;
+            }
+            //print_r($data['result']);
+        }
+        if (isset($_POST['submit'])) {
+            
+            //echo '<pre>';            print_r($_POST); die;
+            $_POST['u_id'] = $this->uid;
+            $_POST['created'] = date('Y-m-d m:i:s');
+            $_POST['rahukal'] = implode(' TO ', $_POST['rahukal']);
+            unset($_POST['submit']);
+            $this->panchang_model->insert($_POST);
+            $msg = $this->loadPo($this->config->item('success_record_add'));
+            $this->log($this->user, $msg);
+            $this->session->set_flashdata('message', $this->_successmsg($msg));
+            redirect(base_url() . 'punchang');
+        } else {
+            $this->show_view('addPunchang', $data);
+        }
+    }
+
+    function checkemail() {
+        $data['date'] = $_GET['date'];
+        $this->db->where('date', $data['date']);
+        $result = $this->db->get('panchang')->result();
+        //print_r($result);
+        if (count($result) == '0') {
+            echo '1';
+        } else {
+            echo '0';
         }
     }
 

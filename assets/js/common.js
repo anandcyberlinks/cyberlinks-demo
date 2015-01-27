@@ -134,7 +134,9 @@ $(function () {
     /* other functions */
 
     $('#daterange').daterangepicker({timePicker: true, timePickerIncrement: 30, format: 'MM/DD/YYYY h:mm A'});
-    $("#datepickerend").datepicker("option", "showAnim", 'drop');
+   // $("#datepickerend").datepicker("option", "showAnim", 'drop');
+    
+    $( "#datepicker" ).datepicker( "option", "dateFormat", 'yy-mm-dd' );
     $('a.prev_video').click(function (e) {
         var file_path = $(this).attr('data-img-url')
         var str = '<script type="text/javascript">';
@@ -395,6 +397,10 @@ $(document).ready(function () {
         onSelect: function (selected) {
             $("#datepickerstart").datepicker("option", "maxDate", $('#datepickerstart').val());
         }
+    });
+    $("#datepick").datepicker({
+        dateFormat: 'yy-mm-dd',
+        numberOfMonths: 1,
     });
 });
 
