@@ -74,6 +74,7 @@ class Category_model extends CI_Model {
                 'parent_id' => $data['parent_id'],
                 'description' => $data['description'],
                 'color' => $data['color'],
+                'type' => $data['type'],
                 'file_id' => $data['file_id'],
                 'status' => $data['status'],
                 'u_id' => $data['u_id']
