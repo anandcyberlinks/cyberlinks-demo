@@ -689,7 +689,9 @@ class Content extends Apis{
         foreach($dataset as $key=>$val){
             $response[] = $val;
         }
-        $this->response($response);
+        
+        $result = array('status'=>count($response) > 0 ? 1 : 0,'result'=>$response);
+        $this->response($result);
     }
     
     function livestream_get(){
@@ -702,7 +704,9 @@ class Content extends Apis{
             $response['livestream'] = json_decode($val->livestream);
             
         }
-        $this->response($response);
+        
+        $result = array('status'=>count($response) > 0 ? 1 : 0,'result'=>$response);
+        $this->response($result);
     }
     
     function dsearch_get(){
@@ -724,7 +728,8 @@ class Content extends Apis{
                 break;
         }
         
-        $this->response($response);
+        $result = array('status'=>count($response) > 0 ? 1 : 0,'result'=>$response);
+        $this->response($result);
     }
     
     function dcontent_get(){
@@ -734,7 +739,8 @@ class Content extends Apis{
         $category = isset($qString['val']) && $qString['val'] > 0 ? $qString['val'] : 0;
         switch($qString['k']){
             case 'video' :
-                    $tmp = file_get_contents(sprintf('http://182.18.165.43/multitvfinal/apis/content/search/k/category/val/%d/at/ad8b0280827',$category));
+                    echo $path = sprintf('http://182.18.165.43/multitvfinal/apis/content/search/k/category/val/%d/at/ad8b0280827',$category);
+                    $tmp = file_get_contents($path);
                     $response[] = json_decode($tmp);
                 break;
             case 'audio' :
@@ -746,7 +752,8 @@ class Content extends Apis{
                 break;
         }
         
-        $this->response($response);
+        $result = array('status'=>count($response) > 0 ? 1 : 0,'result'=>$response);
+        $this->response($result);
     }
     
     
