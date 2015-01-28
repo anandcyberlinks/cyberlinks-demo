@@ -1,0 +1,86 @@
+<html>
+<head>
+
+<title>LIVE STREAMING DEMO</title>
+<script type='text/javascript' src='assets/js/jquery-1.10.2.js'></script>
+<script>
+// function will check when addvide have to display
+addurl =  'http://54.179.170.143:1935/vod/sample.mp4/playlist.m3u8';
+addurl =  'http://54.179.170.143/Galaxy_Note_4_3g.mp4';
+videourl =  'rtmp://54.179.170.143:1935/live/stream1';
+checkdata= 0;
+
+    function checkaddService()
+     {
+         $.ajax({
+                         type: "GET",
+                         url: 'http://localhost/multitvfinal/api/test/o',
+                         dataType: "html",
+                         success: function(response) {
+                             var data = $.parseJSON(response);
+                             //alert(data);
+                             if (data!=checkdata)
+                             {
+                                checkdata=data;
+                                //alert(checkdata);
+                                if (checkdata) {
+                                    addvideo();
+                                }
+                                else
+                                {
+                                    changevideo();
+                                }
+                               
+                             }                       
+                         }
+             });   
+     }
+//load add video    
+   function addvideo()
+   {
+    jwplayer().load([{file:addurl},{file:videourl}]);
+   }
+   function changevideo()
+   {
+    jwplayer().load([{file:videourl}]);
+   }
+
+//-call checkapi for add   
+window.setInterval(function(){
+  checkaddService();
+}, 5000);
+
+</script>
+</script>
+</head>
+<body>
+<script type="text/javascript" src="assets/js/jwplayer.js" ></script>
+<script type="text/javascript">jwplayer.key="BC9ahgShNRQbE4HRU9gujKmpZItJYh5j/+ltVg==";</script>
+
+<div id="player">
+
+<script type="text/javascript">
+    jwplayer("player").setup({
+            primary: "flash",
+            height: "275",
+            width: "455",
+            file: videourl,
+            streamer: videourl,
+            autostart: true,
+            controlbar: 'over',
+                        rtmp: {
+                        bufferlength: 5
+                        },
+            mute: true
+        });
+ 
+</script>
+</div>
+</body>
+</html>
+
+
+</body>
+
+
+</html>
