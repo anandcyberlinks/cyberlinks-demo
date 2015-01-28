@@ -122,8 +122,8 @@ class Crons extends REST_Controller
         
         //--- update video duration --//
         if($length){
-            //$duration =  $this->seconds_from_time($length);
-            $duration = $length;
+            $duration =  $this->seconds_from_time($length);
+            //$duration = $length;
             $upddata = array('duration'=>$duration);
             $this->Ads_model->update_ads($upddata,$content_id);
         }
