@@ -13,10 +13,10 @@
         <!-- /.search form -->
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu">
-            <li class="<?= ($this->uri->segment(1) == 'ads_analytics') ? 'active' : '' ?>">
+           <!-- <li class="<?= ($this->uri->segment(1) == 'ads_analytics') ? 'active' : '' ?>">
                 <a href="<?php echo base_url() ?>ads_analytics/report">
                     <i class="fa fa-dashboard"></i> <span><?php echo $welcome->loadPo('Ads Analytics'); ?></span></a>
-            </li>
+            </li>-->
             <li class="treeview <?= (($this->uri->segment(2) == 'videoUploadSrc') || ($this->uri->segment(2) == 'bulkupload') || ($this->uri->segment(2) == 'video_status') || ($this->uri->segment(2) == 'video_settings') || ($this->uri->segment(2) == 'debug') || ($this->uri->segment(1) . "/" . $this->uri->segment(2) == 'video/index') ) ? 'active' : '' ?>">
                 <a href="#">
                     <i class="fa fa-video-camera"></i>
