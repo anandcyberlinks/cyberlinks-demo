@@ -250,7 +250,7 @@ class Ads_analytics_model extends CI_Model{
        
         //$this->db->group_by($group);
         
-        if(!isset($param['export'])){
+        if(!isset($param['export']) && isset($limit) && isset($start)){
              $this->db->limit($limit, $start);
         }
         $query = $this->db->get();
