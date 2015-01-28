@@ -742,12 +742,31 @@ class Ads_model extends CI_Model {
         return $fid;
     }
     
-    function get_AdsLocationInfo($vid) {
+    function get_AdsLocationInfoCount($vid,$data='') {
 
         $this->db->select('a.id,a.latitude,a.longitude,a.formatted_address');
         $this->db->from('ads_location a');
         $this->db->where('a.ads_id', $vid);
+        $this->db->like('a.formatted_address', trim($data['formatted_address']));
         $this->db->order_by('a.id', 'DESC');
+        $query = $this->db->get();
+        $result = $query->result();
+        $fileInfo = $result[0]->id;
+        if ($fileInfo != "") {
+            return count($result);
+        } else {
+            return 0;
+        }
+    }
+    
+    function get_AdsLocationInfo($vid, $limit, $start, $data='') {
+
+        $this->db->select('a.id,a.latitude,a.longitude,a.formatted_address');
+        $this->db->from('ads_location a');
+        $this->db->where('a.ads_id', $vid);
+        $this->db->like('a.formatted_address', trim($data['formatted_address']));
+        $this->db->order_by('a.id', 'DESC');
+        $this->db->limit($limit, $start);
         $query = $this->db->get();
         $result = $query->result();
         $fileInfo = $result[0]->id;

@@ -286,6 +286,36 @@ google.maps.event.addDomListener(window, 'load', initialize);
             </div><!-- box box-solid -->
         </div><!-- col-md-12 -->
     </div><!-- row -->
+    <?php $search = $this->session->userdata('search_form'); ?>
+    <div class="row">
+        <!-- left column -->
+        <div class="col-md-12">
+            <!-- general form elements -->
+            <div class="box box-primary">
+                <!-- form start -->
+                <form  method="post" action="<?php echo base_url().'ads/videoOpr/Location?action='.$this->session->userdata('location_vid'); ?>" id="searchIndexForm" name="searchIndexForm" accept-charset="utf-8">
+                    <div style="display:none;"><input type="hidden" name="_method" value="POST"/></div>
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="form-group col-lg-4">
+                                <div class="input text">
+                                    <label for=""><?php echo $welcome->loadPo('Search') ?></label>
+                                    <input type="text" name="formatted_address" id="formatted_address" class="form-control" value="<?php echo (isset($search['formatted_address'])) ? $search['formatted_address'] : ''; ?>" placeholder="<?php echo $welcome->loadPo('Address') ?>">
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div><!-- /.box-body -->
+                    <div class="box-footer">
+                            <!--	<input type="text" id="hddstarddt" name="hddstarddt" value="<?php echo @$_POST['hddstarddt'] ?>"> -->
+                        <button type="submit" name="submit" value="Search"class="btn btn-primary"><?php echo $welcome->loadPo('Search') ?></button>
+                    <button type="submit" name="reset" value="Reset"class="btn btn-primary"><?php echo $welcome->loadPo('Reset') ?></button>
+                    </div>
+                </form>
+            </div><!-- /.box -->
+        </div><!--/.col (left) -->
+    </div>
+    
     <div class="row">
                     <div class="col-xs-12">
                         <div class="box">
@@ -315,6 +345,42 @@ google.maps.event.addDomListener(window, 'load', initialize);
 
 
                                 </table>
+                                <!-- Pagination start --->
+                                <?php
+                                if ($this->pagination->total_rows == '0') {
+                                    echo "<tr><td colspan=\"7\"><h4>" . $welcome->loadPo('No Record Found') . "</td></tr></h4>";
+                                } else {
+                                    ?>
+                                    </table>
+
+                                    <div class="row pull-left">
+                                        <div class="dataTables_info" id="example2_info"><br>
+                                            <?php
+                                            $param = $this->pagination->cur_page * $this->pagination->per_page;
+                                            if ($param > $this->pagination->total_rows) {
+                                                $param = $this->pagination->total_rows;
+                                            }
+                                            if ($this->pagination->cur_page == '0') {
+                                                $param = $this->pagination->total_rows;
+                                            }
+                                            $off = $this->pagination->cur_page;
+                                            if ($this->pagination->cur_page > '1') {
+                                                $off = (($this->pagination->cur_page * '10') - 9);
+                                            }
+                                            echo "&nbsp;&nbsp;Showing <b>" . $off . "-" . $param . "</b> of <b>" . $this->pagination->total_rows . "</b> total results";
+                                        }
+                                        ?>
+                                    </div>
+                                </div>	
+                                <div class="row pull-right">
+                                    <div class="col-xs-12">
+                                        <div class="dataTables_paginate paging_bootstrap">
+                                            <ul class="pagination"><li><?php echo $welcome->loadPo($links); ?></li></ul> 
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>		
+                            <!-- Pagination end -->
                                 
                             </div>		
                             <!-- Pagination end -->

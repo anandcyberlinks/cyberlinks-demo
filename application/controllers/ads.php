@@ -799,15 +799,50 @@ class Ads extends MY_Controller {
      */
     
     function location(){
+        
+        $searchterm = '';
+        if ($this->uri->segment(2) == '') {
+            $this->session->unset_userdata('search_form');
+        }
+        
+        if (isset($_POST['submit']) && $_POST['submit'] == 'Search') {
+            $this->session->set_userdata('search_form', $_POST);
+        } else if (isset($_POST['reset']) && $_POST['reset'] == 'Reset') {
+            $this->session->unset_userdata('search_form');
+        }
+        
         $sess = $this->session->all_userdata();
         $this->data['welcome'] = $this;
-        $id = @$_GET['action'];
+        $location_vid = $this->session->userdata('location_vid');
+        if(isset($_GET['action'])){
+            $id = @$_GET['action'];
+            $this->session->set_userdata('location_vid', $id);
+        }else if(isset($location_vid)){
+            $id = $this->session->userdata('location_vid');
+        }
+        
+        $config = array();
+        $config["base_url"] = base_url() . "ads/videoOpr/Location/";
+        
         $vid = base64_decode($id);
         if ($vid) {
-            //$this->data['thumbnails_info'] = $this->Ads_model->get_thumbs($vid);
+            
             $this->data['ads_id'] = $vid;
-            $this->data['adsLocationInfo'] = $this->Ads_model->get_AdsLocationInfo($vid);
-            //echo '<pre>';            print_r($this->data['adsLocationInfo']); exit;
+           // $this->data['adsLocationInfo'] = $this->Ads_model->get_AdsLocationInfo($vid);
+            
+            $searchterm = $this->session->userdata('search_form');
+            $this->load->library("pagination");
+            
+            $config["total_rows"] = $this->Ads_model->get_AdsLocationInfoCount($vid, $searchterm);
+            $config["per_page"] = 10;
+            $config["uri_segment"] = 4;
+            $this->pagination->initialize($config);
+            $page = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+            //echo $page; exit;
+            $this->data['adsLocationInfo'] = $this->Ads_model->get_AdsLocationInfo($vid, PER_PAGE, $page, $searchterm);
+            $this->data["links"] = $this->pagination->create_links();
+            $this->data['total_rows'] = $config["total_rows"];
+            
             $this->show_ads_view('ads/showAdsLocation', $this->data);
         }
     }
