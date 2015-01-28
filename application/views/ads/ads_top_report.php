@@ -8,7 +8,7 @@
         </h1>
         <ol class="breadcrumb">
            
-            <li><a href="<?php echo base_url(); ?>ads_analytics/report"><i class="fa fa-dashboard"></i><?php echo $welcome->loadPo('Analytics') ?></a></li>
+            <li><a href="<?php echo base_url(); ?>ads_analytics/report"><i class="fa fa-dashboard"></i><?php echo $welcome->loadPo('Ads Analytics') ?></a></li>
 	    <li class="active"><?php echo $welcome->loadPo('Top ad viewed') ?></li>
         </ol>
     </section>

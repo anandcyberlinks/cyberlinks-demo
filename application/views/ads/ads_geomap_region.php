@@ -30,12 +30,12 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1> 
-            <?php echo $welcome->loadPo('Analytics'); ?>
+            <?php echo $welcome->loadPo('Ads Analytics'); ?>
             <small><?php echo $welcome->loadPo('Control panel'); ?></small>
         </h1>
         <ol class="breadcrumb">
             <i class="fa fa-dashboard"></i>
-            <li class="active"><a href="<?php echo base_url()?>ads_analytics/report"><?php echo $welcome->loadPo('Analytics') ?></a></li>
+            <li class="active"><a href="<?php echo base_url()?>ads_analytics/report"><?php echo $welcome->loadPo('Ads Analytics') ?></a></li>
             <li class="active"><a href="<?php echo base_url();?>ads_analytics/geographic?c=1"><?php echo $welcome->loadPo('Location') ?></a></li>
             <li class="active"><?php echo $country_name[0]->country; ?></li>
         </ol>

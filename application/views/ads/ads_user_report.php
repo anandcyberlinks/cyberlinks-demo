@@ -5,7 +5,7 @@
         <section class="content-header">
             <h1><?php echo $welcome->loadPo('User Wise Report') ?><small><?php echo $welcome->loadPo('Control panel') ?></small></h1>
             <ol class="breadcrumb">
-                <li><a href="<?php echo base_url(); ?>ads_analytics/report"><i class="fa fa-dashboard"></i><?php echo $welcome->loadPo('Analytics') ?></a></li>
+                <li><a href="<?php echo base_url(); ?>ads_analytics/report"><i class="fa fa-dashboard"></i><?php echo $welcome->loadPo('Ads Analytics') ?></a></li>
                 <li class="active"><?php echo $welcome->loadPo('User wise report') ?></li>
             </ol>
         </section>
