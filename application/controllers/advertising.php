@@ -45,4 +45,37 @@ if (!defined('BASEPATH'))
   //echo '<pre>';print_r( $data['result']);
         $this->show_view('advertising/cuepoints',$data);
     }
+    function getlistdetail()
+    {
+         $sort_by = 'desc';
+        $sort = 'd.duration';
+        $data['result'] = $this->videos_model->get_cuepoint_video($_REQUEST['IDs'],$sort, $sort_by);
+       $innerHtml = '';
+       //echo "<pre>";
+       //print_r($data['result']);
+       $json_Ids = json_encode($_REQUEST['IDs']); 
+       $i=1;
+        // foreach ($data['result'] as $v)
+          //{
+            // $className = "main_tr";
+              // echo $v->title."<br>"; 
+             //$innerHtml .= '<tr  class="'.$className.'"><td style="border-right: 1px solid gray;padding: 0px">'.$i.'</td><td style="border-right: 1px solid gray;padding: 0px"><img src="'.$v->thumbnail.'"></td><td style="border-right: 1px solid gray;padding: 0px" class="loading"></td><input type="hidden" class="video_id" name="video_id" value="'.$v->id.'"><input type="hidden" class="duration" name="duration" value="'.$v->duration.'"></tr>';            
+            //$i++;
+               
+          //}
+        //echo $innerHtml;
+       echo json_encode($data);
+        /*$content = array();
+$content['popup_content'] = $this->load->view('advertising/cuepoints',array(), TRUE);
+$this->show_view("advertising/cuepoints", $content);*/
+        
+    }
+    function setcuepoint()
+    {
+         $sort_by = 'asc';
+        $sort = 'a.cue_points';
+        $data['result'] = $this->videos_model->getCuePointInfo($_REQUEST['IDs'],$sort, $sort_by);
+        echo json_encode($data);
+        
+    }    
  }

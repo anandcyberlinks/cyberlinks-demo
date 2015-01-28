@@ -30,6 +30,9 @@ $s = $this->session->all_userdata();
         <!-- tagit.ui-zendesk.css-->
         <link href="<?php echo base_url() ?>assets/css/tagit.ui-zendesk.css" rel="stylesheet" type="text/css">
         <link href="<?php echo base_url(); ?>assets/css/timepicker/bootstrap-timepicker.min.css" rel="stylesheet"/>
+        
+        <link href="<?php echo base_url(); ?>assets/css/ion.rangeSlider.css" rel="stylesheet"/>
+        <link href="<?php echo base_url(); ?>assets/css/ion.rangeSlider.skinFlat.css" rel="stylesheet"/>
         <!-- jquery-1.10.2 -->
         <script>
         var baseurl = '<?php echo base_url(); ?>' ;

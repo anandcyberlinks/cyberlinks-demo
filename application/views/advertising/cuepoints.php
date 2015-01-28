@@ -1,3 +1,4 @@
+<
 <div class="wrapper row-offcanvas row-offcanvas-left">
     <!-- Right side column. Contains the navbar and content of the page -->
     <aside class="right-side"> 
@@ -101,7 +102,7 @@
                                     <tbody>
                                         <?php foreach ($result as $value) { ?>
                                         <tr id="<?php echo $value->id ?>">
-                                        <td><input type='checkbox' name='video[]' value=""></td>
+                                            <td><input type='checkbox' name='video[]' class="video" value="<?php echo $value->id; ?>"></td>
                                                 <td  width="350"><?php echo strlen($value->title) > 40 ?  substr($value->title,0,40).'...' : $value->title; ?></td>
                                                 <td><?php echo $value->category; ?></td>
                                                 <td><?php echo $value->username; ?></td>
@@ -134,7 +135,9 @@
                                 } else {
                                     ?>
                                     </table>
-<div><input class="btn btn-success" type='submit' value='Edit' onclick="cuepoint()"></div>
+                                    <div><a id="linkClick"   data-toggle="modal" data-backdrop="static" href="#tester" data-toggle="modal" value='Edit'>Edit</a>
+
+                                    </div>
                                     <div class="row pull-left">
                                         <div class="dataTables_info" id="example2_info"><br>
                                             <?php
@@ -220,3 +223,127 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal -->
 </div> 
+<div class="modal fade" id="tester" tabindex="-1" role="dialog" 
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" 
+                        data-dismiss="modal" aria-hidden="true" onclick='stopvideo("prevElement")'>
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    CuePoint
+            </div>
+            <div class="modal-body no-padding">        
+                      
+                            <div id="prevElement" class="innerResponse">
+                                <!--<div class="headerTb" style="border:1px solid gray;min-height: 200px;padding: 0px 10px">
+                                    <div class="headingTb">
+                                        <div style="background-color: gray;padding:10px 0px;color: white">Click on scrollbar to add or edit</div>
+                                        <div class="ionslider" id="ionslider">
+                                            <div class="thumbLeft" style="float:left; width: 20%">1</div>
+                                            <div class="thumbRight"  style="float:left;width: 80%">Slider</div>
+                                        </div>
+                                        <div class="thumbLeft" style="float:left; width: 20%">1</div>
+                                        <div class="thumbRight"  style="float:left;width: 80%">2</div>
+                                    </div>
+                                </div>   -->
+                                <div class="box-body no-padding">
+			<div class="table-responsive">
+                                <input type="hidden" name="text" id="text">
+    <input type="hidden" name="percentage" id="percentage">
+<div class="popOver">
+    <div id="innerHtml">
+        <h5 style="font: 12px">Add New Cue Point</h5>
+        <input type="hidden" value="" name="inialValPoint" id="inialValPoint"> 
+        <input type="hidden" value="" name="inialValPercentage" id="inialValPercentage">
+        <div class='timeDiv' style="padding: 0px 10px 0px 10px">
+            Timecode(hh:mm:ss:ms)<br>
+            <input class="hh" name="hh" id="hh"> :
+            <input class="mm" name="mm" id="mm"> :
+            <input class="ss" name="ss" id="ss"> :
+            <input class="ms" name="ms" id="ms">
+        </div><br>
+        <span> Name (Optional)</span>
+        <input type="text" id="cueName" name="cueName"><br><br>
+        <input type="submit" name="add" id="add" value="Add">&nbsp;<a href="#" id="cancel" class="cancel">cancel</a>
+        
+        
+    
+</div>
+</div>
+                            <!-- .table - Uses sparkline charts-->
+                            <table class="table table-striped">
+				<tbody>
+                                <tr>
+                                    <th width='10%' style="border-right: 1px solid gray;padding: 0px">Sr No.</th>
+                                    <th width='30%' style="border-right: 1px solid gray;padding: 0px">Content</th>
+                                    <th width="60%" style="border-right: 1px solid gray;padding: 0px" class="loaderheader"><div id="closeClickEvent" class="tester"><div>
+        <input type="text" id="range" value="" name="range" />
+    </div>
+
+</div></th>							
+				</tr>
+
+			        </tbody></table>
+                        </div>
+		    </div>
+                            </div>
+                        
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<style>
+     /*.irs-line-left 
+    {
+        background-color: grey;
+        
+    }
+    .irs-line-mid
+    {
+        background-color: grey;
+    }.irs-line-right
+    {
+        background-color: grey;
+        
+    }.irs-bar
+    {
+        background-color: grey;
+        
+    }
+    .irs-bar-edge
+    {
+        background-color: grey;
+        
+    }
+    .irs-slider
+    {
+        background-color: grey;
+        width: 2px;
+        
+    }*/    .popOver
+    {
+           width: 300px;
+           height: 300px;
+           border: 1px solid gray;
+           background: aliceblue;
+           margin: 0px;
+           padding: 0px;
+           display: none;
+    }
+    .timeDiv input
+    {
+          width: 25px;  
+        
+    }
+  /*.irs-slider {
+    background-color: gray!important;
+    background-position: 0 -120px;
+    height: 89px!important;
+    top: 22px;
+    width: 16px;
+}*/
+    
+</style>

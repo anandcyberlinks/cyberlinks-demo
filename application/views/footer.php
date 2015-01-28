@@ -26,5 +26,7 @@
 		</script>		
 		<script src="<?php echo base_url()?>assets/js/bootstrap-typeahead.js" type="text/javascript"></script>
 		<script src="http://code.jquery.com/jquery-migrate-1.0.0.js"></script>
+                <script src="<?php echo base_url() ?>assets/js/ion.rangeSlider.js"></script>
+                
     </body>
 </html>

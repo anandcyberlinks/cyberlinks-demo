@@ -1117,4 +1117,44 @@ class Videos_model extends CI_Model {
         }
     }
 
+        function get_cuepoint_video($IDs, $sort = '', $sort_by = '') {
+        $timeStart = " 00:00:00";
+        $timeEnd = " 23:59:59";
+        //$id = $this->get_ownerid($uid);
+       // array_push($id, $uid);
+        $this->db->select('a.id,a.title, e.name as file,e.relative_path as video_path,c3.relative_path as thumbnail,d.duration');        
+        $this->db->from('contents a');
+        $this->db->join('videos d', 'a.id = d.content_id', 'left');
+        $this->db->join('files e', 'd.file_id = e.id', 'left');
+        $this->db->join('video_thumbnails h','h.content_id=a.id AND h.default_thumbnail=1','left');
+        $this->db->join('files c3', 'h.file_id = c3.id', 'left');        
+        $this->db->where_in('a.id',$IDs);    
+        $this->db->group_by('a.id');
+        //$this->db->order_by($sort, $sort_by);
+        //$this->db->limit($limit, $start);
+        $query = $this->db->get();
+        //echo $this->db->last_query();
+        
+        $data = $query->result();
+        return $data;
+    }
+
+     function getCuePointInfo($IDs, $sort = '', $sort_by = '') {
+        $timeStart = " 00:00:00";
+        $timeEnd = " 23:59:59";
+        //$id = $this->get_ownerid($uid);
+       // array_push($id, $uid);
+        $this->db->select('a.*');        
+        $this->db->from('content_cuepoints a');
+        $this->db->where_in('a.content_id',$IDs);    
+        $this->db->order_by($sort, $sort_by);
+        //$this->db->limit($limit, $start);
+        $query = $this->db->get();
+        //echo $this->db->last_query();
+        
+        $data = $query->result();
+        return $data;
+    }
+    
+
 }
