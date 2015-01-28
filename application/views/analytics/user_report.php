@@ -30,7 +30,7 @@
                                 <div style="display:none;"><input type="hidden" name="_method" value="POST"/></div>
                                 <div class="box-body">
                                     <div class="row">
-                                        <div class="form-group col-lg-4">
+                                        <div class="form-group col-lg-8">
                                             <div class="input text">
                                                 <label for=""><?php echo $welcome->loadPo('Title') ?></label>
                                                 <input type="text" name="name" id="name" class="form-control" value="<?php echo (isset($search['name'])) ? $search['name'] : ''; ?>" placeholder="<?php echo $welcome->loadPo('Title') ?>">
@@ -54,14 +54,30 @@
                                 </div><!-- /.box-body -->
                                 <div class="box-footer">
                                         <!--	<input type="text" id="hddstarddt" name="hddstarddt" value="<?php echo @$_POST['hddstarddt'] ?>"> -->
-                                    <button type="submit" name="search" value="Search"class="btn btn-primary"><?php echo $welcome->loadPo('Search') ?></button>
+                                    <button type="submit" id="submit" name="search" value="Search"class="btn btn-primary"><?php echo $welcome->loadPo('Search') ?></button>
                                     <button type="submit" name="reset" value="Reset"class="btn btn-primary"><?php echo $welcome->loadPo('Reset') ?></button>
+                                    <span id="error_msg" style="color:red"></span>
                                 </div>
                             </form>
                         </div><!-- /.box -->
                     </div><!--/.col (left) -->
                 </div>
                 <!-- Small boxes (Stat box) -->
+                <script>
+                $("#submit").click(function(data){
+                    var name = $.trim($("#name").val());
+                    var startdate = $.trim($("#startdate").val());
+                    var enddate = $.trim($("#enddate").val());
+                    if(
+                            name === "" 
+                            && startdate === "" 
+                            && enddate === ""
+                            ){
+                        $("#error_msg").html('One on the above is required');
+                        return false;
+                    }
+                });
+                </script>
 	
         <div class="row">
             

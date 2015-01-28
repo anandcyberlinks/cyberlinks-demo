@@ -72,10 +72,20 @@
                                         <!-- form start -->
                                         <form action="<?php echo base_url() ?>video/youtube" enctype="multipart/form-data" method="post" accept-charset="utf-8">
                                             <input type="hidden" name="redirect_url" value="<?php echo current_full_url(); ?>" />	
-                                            <input class="form-control" name="url" ></br>
-                                            <input type="submit" name="submit" value="Submit" class="btn btn-success">
+                                            <input class="form-control" id="url" name="url" ></br>
+                                            <input type="submit" id="submit" name="submit" value="Submit" class="btn btn-success">
+                                            <span id="error_msg" style="color: red"></span>
                                         </form>
                                     </div>
+                                <script>
+                                    $("#submit").click(function(data){
+                                        var url = $.trim($("#url").val());
+                                        if(url === ""){
+                                            $("#error_msg").html("Please provide Youtube URL");
+                                            return false;
+                                        }
+                                    })
+                                </script>
                                 <?php } ?>
                                 <!-- youtube upload section ends -->
 

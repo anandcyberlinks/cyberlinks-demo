@@ -62,14 +62,31 @@
                                 </div><!-- /.box-body -->
                                 <div class="box-footer">
                                         <!--	<input type="text" id="hddstarddt" name="hddstarddt" value="<?php echo @$_POST['hddstarddt'] ?>"> -->
-                                    <button type="submit" name="search" value="Search"class="btn btn-primary"><?php echo $welcome->loadPo('Search') ?></button>
+                                    <button type="submit" id="submit" name="search" value="Search"class="btn btn-primary"><?php echo $welcome->loadPo('Search') ?></button>
                                     <button type="submit" name="reset" value="Reset"class="btn btn-primary"><?php echo $welcome->loadPo('Reset') ?></button>
+                                    <span id="error_msg" style="color:red"></span>
                                 </div>
                             </form>
                         </div><!-- /.box -->
                     </div><!--/.col (left) -->
                 </div>
-              
+              <script>
+                $("#submit").click(function(data){
+                    var platform = $.trim($("#platform").val());
+                    var browser = $.trim($("#browser").val());
+                    var startdate = $.trim($("#startdate").val());
+                    var enddate = $.trim($("#enddate").val());
+                    if(
+                            platform === "" 
+                            && browser === "" 
+                            && startdate === "" 
+                            && enddate === ""
+                            ){
+                        $("#error_msg").html('One on the above is required');
+                        return false;
+                    }
+                });
+                </script>
         <!-- Small boxes (Stat box) -->
 	
         <div class="row">

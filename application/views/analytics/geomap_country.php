@@ -68,12 +68,26 @@
 	<div class="row">
 		 <div class="form-group col-lg-4">
 		    <div class="input text">		   
-		    <button type="submit" name="search" value="Search"class="btn btn-primary"><?php echo $welcome->loadPo('Search') ?></button>
-                    <button type="submit" name="reset" value="Reset"class="btn btn-primary"><?php echo $welcome->loadPo('Reset') ?></button>
-		    </div>
+                        <button type="submit" id="submit" name="search" value="Search"class="btn btn-primary"><?php echo $welcome->loadPo('Search') ?></button>
+                        <button type="submit" name="reset" value="Reset"class="btn btn-primary"><?php echo $welcome->loadPo('Reset') ?></button>
+                        <span id="error_msg" style="color: red"></span>
+                    </div>
                 </div>
 	</div>
 	</form>
+        <script>
+                $("#submit").click(function(data){
+                    var startdate = $.trim($("#startdate").val());
+                    var enddate = $.trim($("#enddate").val());
+                    if(
+                            startdate === "" 
+                            && enddate === ""
+                            ){
+                        $("#error_msg").html('One on the above is required');
+                        return false;
+                    }
+                });
+                </script>
        
 	<div class="row">
          <div class="col-lg-8">
