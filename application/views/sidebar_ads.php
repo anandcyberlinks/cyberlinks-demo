@@ -13,10 +13,6 @@
         <!-- /.search form -->
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu">
-            <li class="<?= ($this->uri->segment(1) == 'analytics') ? 'active' : '' ?>">
-                <a href="<?php echo base_url() ?>analytics/report">
-                    <i class="fa fa-dashboard"></i> <span><?php echo $welcome->loadPo('Analytics'); ?></span></a>
-            </li>
             <li class="<?= ($this->uri->segment(1) == 'ads_analytics') ? 'active' : '' ?>">
                 <a href="<?php echo base_url() ?>ads_analytics/report">
                     <i class="fa fa-dashboard"></i> <span><?php echo $welcome->loadPo('Ads Analytics'); ?></span></a>
