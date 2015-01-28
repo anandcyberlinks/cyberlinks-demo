@@ -241,8 +241,21 @@ class Ads_analytics extends MY_Controller {
 		$this->data['content_provider'] = $this->Ads_analytics_model->getContentProvider();
 		//-----------------------//
 		
-		$this->data['content'] = $this->Ads_analytics_model->getReport(array('type'=>'content','search'=>$search),$sort,$sort_by);
-				
+		
+		
+                $this->load->library("pagination");
+                $config = array();
+                $config["base_url"] = base_url() . "ads_analytics/content/";
+                $config["total_rows"] = $this->Ads_analytics_model->getReportCounts(array('type'=>'content','search'=>$search),$sort,$sort_by);
+                $config["per_page"] = 10;
+                $config["uri_segment"] = 3;
+                $this->pagination->initialize($config);
+                $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+                //$data['result'] = $this->Ads_model->get_video($this->uid, PER_PAGE, $page, $sort, $sort_by, $searchterm);
+                $this->data['content'] = $this->Ads_analytics_model->getReport(array('type'=>'content','search'=>$search),$sort,$sort_by,PER_PAGE,$page);
+                $this->data["links"] = $this->pagination->create_links();
+                $this->data['total_rows'] = $config["total_rows"];
+        
 		$this->show_view('ads/ads_content_report',$this->data);
 	}
 	
@@ -364,7 +377,7 @@ class Ads_analytics extends MY_Controller {
 		$sort = $this->sort_input($sort_i,$sort_by);
 		//-----//
 		//-- result --//		
-			$this->data['result'] = $this->Ads_analytics_model->getReport(array('code'=>$country,'id'=>$id,'type'=>$type,'search'=>$search),$sort,$sort_by);
+			$this->data['result'] = $this->Ads_analytics_model->getReport(array('code'=>$country,'id'=>$id,'type'=>$type,'search'=>$search,'export'=>1),$sort,$sort_by);
 		//echo '<pre>';print_r($this->data['result']);die;
 		
 		if($type == 'content'){

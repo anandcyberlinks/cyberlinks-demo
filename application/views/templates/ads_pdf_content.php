@@ -20,7 +20,7 @@
                                         <?php foreach ($result as $value) { $i++;?>
                                         <tr>
                                                 <td width="6%"><?php echo $i;?></td>
-                                                <td  width="25%"><!--a href="<?php echo base_url(); ?>analytics/user/<?php echo $value->id; ?>"--><?php echo $value->title; ?></td>
+                                                <td  width="25%"><!--a href="<?php echo base_url(); ?>analytics/user/<?php echo $value->id; ?>"--><?php echo $value->ad_title; ?></td>
                                                 <td width="10%"><?php echo $value->content_provider; ?></td>
                                                 <td width="10%"><?php echo $value->platform; ?></td>
                                                 <td width="10%"><?php echo $value->browser; ?></td>
