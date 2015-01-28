@@ -38,20 +38,20 @@ class Apis extends REST_Controller{
             if($flag){
                 
             }else{
-                $this->response(array('error'=>'Invalid App Token'));
+                $this->response(array('status'=>0,'error'=>'Invalid App Token'));
             }
         }elseif(isset($qString['ut']) && $qString['ut'] != ''){
             $flag = $this->validrequest($qString['ut'],'user');
             if($flag){
                 
             }else{
-                $this->response(array('error'=>'Invalid User Token'));
+                $this->response(array('status'=>0,'error'=>'Invalid User Token'));
             }
         }else{
             if($this->uri->segment(2) == 'users' && $this->uri->segment(3) == 'applogin'){
                 return true;
             }else{
-                $this->response(array('error'=>'Invalid Request'));
+                $this->response(array('status'=>0,'error'=>'Invalid Request'));
             }
         }
     }

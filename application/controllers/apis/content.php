@@ -680,81 +680,12 @@ class Content extends Apis{
     
     /****** APIs for Divya TV channels **************/
     
-    function panchang_get(){
-        $qString = $this->get();
-        $response = array();
-        $query = sprintf('select p.date,p.month,p.pakshya,p.tithi,p.sunrise,p.sunset,p.rahukal from panchang p 
-                         where p.u_id = %d and p.status = 1 and p.date = "%s" ',$this->app->id,date('Y-m-d'));
-        $dataset = $this->db->query($query)->result();
-        foreach($dataset as $key=>$val){
-            $response[] = $val;
-        }
-        
-        $result = array('status'=>count($response) > 0 ? 1 : 0,'result'=>$response);
-        $this->response($result);
-    }
     
-    function livestream_get(){
-        $qString = $this->get();
-        $response = array();
-        $query = sprintf('select o.value as livestream from options o 
-                         where o.user_id = %d and o.key = "livestream" ',$this->app->id);
-        $dataset = $this->db->query($query)->result();
-        foreach($dataset as $key=>$val){
-            $response['livestream'] = json_decode($val->livestream);
-            
-        }
-        
-        $result = array('status'=>count($response) > 0 ? 1 : 0,'result'=>$response);
-        $this->response($result);
-    }
     
-    function dsearch_get(){
-        $qString = $this->get();
-        $response = array();
-        $qString['k'] = isset($qString['k']) ? $qString['k'] : 'video';
-        $title = isset($qString['val']) && $qString['val'] != '' ? $qString['val'] : 0;
-        switch($qString['k']){
-            case 'video' :
-                    $tmp = file_get_contents(sprintf('http://182.18.165.43/multitvfinal/apis/content/search/k/title/val/%s/at/ad8b0280827',$title));
-                    $response[] = json_decode($tmp);
-                break;
-            case 'audio' :
-                    $query = sprintf('select * from audio a where a.title like "%%%s%%" ',$title);
-                    $dataset = $this->db->query($query)->result();
-                    foreach($dataset as $key=>$val){
-                        $response[] = array('title'=>$val->title,'file_path'=>$val->file_path);
-                    }
-                break;
-        }
-        
-        $result = array('status'=>count($response) > 0 ? 1 : 0,'result'=>$response);
-        $this->response($result);
-    }
     
-    function dcontent_get(){
-        $qString = $this->get();
-        $response = array();
-        $qString['k'] = isset($qString['k']) ? $qString['k'] : 'video';
-        $category = isset($qString['val']) && $qString['val'] > 0 ? $qString['val'] : 0;
-        switch($qString['k']){
-            case 'video' :
-                    echo $path = sprintf('http://182.18.165.43/multitvfinal/apis/content/search/k/category/val/%d/at/ad8b0280827',$category);
-                    $tmp = file_get_contents($path);
-                    $response[] = json_decode($tmp);
-                break;
-            case 'audio' :
-                    $query = sprintf('select * from audio a where a.category_id = %d ',$category);
-                    $dataset = $this->db->query($query)->result();
-                    foreach($dataset as $key=>$val){
-                        $response[] = array('title'=>$val->title,'file_path'=>$val->file_path);
-                    }
-                break;
-        }
-        
-        $result = array('status'=>count($response) > 0 ? 1 : 0,'result'=>$response);
-        $this->response($result);
-    }
+    
+    
+    
     
     
 }

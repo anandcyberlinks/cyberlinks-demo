@@ -85,6 +85,7 @@ class Users extends Apis{
         }else{
             $response['error'] = 'Username and password not valid';
         }
+        
         $response = array('tr'=>1,'result'=>$response);
         $this->response($response);
         exit;
@@ -141,7 +142,7 @@ class Users extends Apis{
                 if($this->db->insert('customers',$user)){
                     
                     $user_id = $this->db->insert_id();
-                    $this->db->insert('user_password',array('user_id'=>$user_id,'password'=>$tmp_userpassword));
+                    $this->db->insert('user_password',array('user_id'=>$user_id,'u_password'=>$tmp_userpassword));
                     $this->db->insert('token',array('user_id'=>$user_id,'token'=>$user['token'],'action'=>'activation','expiry'=>date("Y-m-d H:i:s",strtotime('+7 day'))));
                     
                     $subject = '[I Am Punjabi]Confirm your email address';
@@ -170,6 +171,8 @@ class Users extends Apis{
         }else{
             $response['error'][] = 'No user logged In';
         }
+        
+        $response['status'] = isset($response['error']) ? 0 : 1 ;
         $this->response($response);
         exit;
     }
@@ -230,6 +233,8 @@ class Users extends Apis{
         }else{
             $response['error'] = 'Invalid request';
         }
+        
+        $response['status'] = isset($response['error']) ? 0 : 1 ;
         $this->response($response);
         exit;
     }
@@ -276,6 +281,7 @@ class Users extends Apis{
             $response['error'][] = 'Invalid Request';    
         }
         
+        $response['status'] = isset($response['error']) ? 0 : 1 ;
         $this->response($response);
         exit;
     }
@@ -322,6 +328,7 @@ class Users extends Apis{
             $response['error'][] = 'Invalid Request';    
         }
         
+        $response['status'] = isset($response['error']) ? 0 : 1 ;
         $this->response($response);
         exit;
     }
@@ -362,6 +369,7 @@ class Users extends Apis{
             $response['error'][] = 'Invalid Request';    
         }
         
+        $response['status'] = isset($response['error']) ? 0 : 1 ;
         $this->response($response);
         exit;
     }
@@ -412,6 +420,7 @@ class Users extends Apis{
             $response['error'][] = 'Invalid Request';
         }
         
+        $response['status'] = isset($response['error']) ? 0 : 1 ;
         $this->response($response);
         exit;
     }
@@ -452,6 +461,7 @@ class Users extends Apis{
             $response['error'][] = 'Invalid Request';
         }
         
+        $response['status'] = isset($response['error']) ? 0 : 1 ;
         $this->response($response);
         exit;
     }
