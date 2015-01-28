@@ -183,6 +183,11 @@ class Webtv extends MY_Controller {
     }
 
     function addVideo() {
+        $chid = $this->uri->segment(4);
+        $this->db->select('type');
+        $this->db->where('id', $chid);
+        $result = $this->db->get('channels')->result();
+        $type = $result[0]->type;
         $searchterm = '';
         if ($this->uri->segment(2) == '') {
             $this->session->unset_userdata('search_form');
@@ -206,12 +211,12 @@ class Webtv extends MY_Controller {
         $this->load->library("pagination");
         $config = array();
         $config["base_url"] = base_url() . "webtv/addVideo/" . $pid . '/' . $chid;
-        $config["total_rows"] = $this->webtv_model->get_videocount($this->uid, $searchterm, $ids);
+        $config["total_rows"] = $this->webtv_model->get_videocount($this->uid, $searchterm, $ids, $type);
         $config["per_page"] = 10;
         $config["uri_segment"] = 5;
         $this->pagination->initialize($config);
         $page = ($this->uri->segment(5)) ? $this->uri->segment(5) : 0;
-        $data['result'] = $this->webtv_model->get_allvideo($ids, $this->uid, PER_PAGE, $page, $searchterm);
+        $data['result'] = $this->webtv_model->get_allvideo($ids, $this->uid, PER_PAGE, $page, $searchterm, $type);
         $data["links"] = $this->pagination->create_links();
         $data['category'] = $this->webtv_model->get_category($this->uid);
         $data['total_rows'] = $config["total_rows"];

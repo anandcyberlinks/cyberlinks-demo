@@ -144,10 +144,8 @@ class Webtv_model extends CI_Model {
     }
 
     function delete($id) {
-        echo 'anand';
-        exit;
-        //$this->db->delete('playlists', array('id'=>$id));
-        //return TRUE;
+        $this->db->delete('playlists', array('id'=>$id));
+        return TRUE;
     }
 
     function delete_channels($id) {
@@ -274,7 +272,7 @@ class Webtv_model extends CI_Model {
         return $query->result();
     }
 
-    function get_videocount($uid, $data = '', $ids) {
+    function get_videocount($uid, $data = '', $ids, $type) {
         $timeStart = " 00:00:00";
         $timeEnd = " 23:59:59";
         $id = $this->get_ownerid($uid);
@@ -283,6 +281,9 @@ class Webtv_model extends CI_Model {
         $this->db->from('contents');
         $this->db->join('categories', 'contents.category = categories.id', 'left');
         $this->db->where_in('contents.uid', $id);
+        if($type=='Loop'){
+             $this->db->where('contents.type','youtube');
+        }
         $this->db->where_not_in('contents.id', $ids);
         if (isset($data['content_title']) && $data['content_title'] != '') {
             $this->db->like('title', trim($data['content_title']));
@@ -320,13 +321,16 @@ class Webtv_model extends CI_Model {
         return count($query->result());
     }
 
-    function get_allvideo($ids, $uid, $limit, $start, $data) {
+    function get_allvideo($ids, $uid, $limit, $start, $data, $type) {
         $timeStart = " 00:00:00";
         $timeEnd = " 23:59:59";
         $id = $this->get_ownerid($uid);
         array_push($id, $uid);
         $this->db->select('a.*, b.category , c.username, e.name as file,e.minetype');
         $this->db->from('contents a');
+        if($type=='Loop'){
+             $this->db->where('a.type','youtube');
+        }
         $this->db->where_in('a.uid', $id);
         $this->db->where_not_in('a.id', $ids);
         $this->db->join('categories b', 'a.category = b.id', 'left');
