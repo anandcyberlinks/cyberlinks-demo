@@ -381,8 +381,22 @@ class Ads_analytics extends MY_Controller {
 		$summary = $this->Ads_analytics_model->getReport(array('type'=>'summary','search'=>$search),$sort,$sort_by);
 		$this->data['summary'] = $summary[0];		
 		//echo '<pre>';print_r($summary);die;		
-		$this->data['useragent'] = $this->Ads_analytics_model->getReport(array('type'=>'useragent','search'=>$search),$sort,$sort_by);
-				
+		//$this->data['useragent'] = $this->Ads_analytics_model->getReport(array('type'=>'useragent','search'=>$search),$sort,$sort_by);
+		
+                $this->load->library("pagination");
+                $config = array();
+                $config["base_url"] = base_url() . "ads_analytics/device/$sort_i/$sort_by/?";
+                $config["total_rows"] = $this->Ads_analytics_model->getReportCounts(array('type'=>'useragent','search'=>$search),$sort,$sort_by);
+                $config["per_page"] = 10;
+                $config["uri_segment"] = 3;
+                $config["page_query_string"] = true;
+                $this->pagination->initialize($config);
+                //$page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+                $page = ($_GET['per_page']) ? $_GET['per_page'] : 0;
+                $this->data['useragent'] = $this->Ads_analytics_model->getReport(array('type'=>'useragent','search'=>$search),$sort,$sort_by,PER_PAGE,$page);
+                $this->data["links"] = $this->pagination->create_links();
+                $this->data['total_rows'] = $config["total_rows"];
+                
 		$this->show_view('ads/ads_device_report',$this->data);
 	}
 	

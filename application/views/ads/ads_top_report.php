@@ -3,13 +3,13 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1> 
-            <?php echo $welcome->loadPo('Top Video Viewed'); ?>
+            <?php echo $welcome->loadPo('Top Ad Viewed'); ?>
             <small><?php echo $welcome->loadPo('Control panel'); ?></small>
         </h1>
         <ol class="breadcrumb">
            
             <li><a href="<?php echo base_url(); ?>ads_analytics/report"><i class="fa fa-dashboard"></i><?php echo $welcome->loadPo('Analytics') ?></a></li>
-	    <li class="active"><?php echo $welcome->loadPo('Top video viewed') ?></li>
+	    <li class="active"><?php echo $welcome->loadPo('Top ad viewed') ?></li>
         </ol>
     </section>
 	<div>
@@ -59,7 +59,7 @@
 			<div class="pull-right box-tools">
 			    <button class="btn btn-danger btn-sm" data-widget='collapse' data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
 			</div><!-- /. tools -->						
-		    <h3 class="box-title">Daily Videos Hits</h3>
+		    <h3 class="box-title">Daily Ads Hits</h3>
 		    </div><!-- /.box-header -->
 		    <div class="box-body no-padding">
 			<div class="row">
@@ -88,7 +88,7 @@
 			      <div class="box box-primary">
                                 <div class="box-header">
                                    
-                                    <h3 class="box-title">Top video viewed by country</h3>
+                                    <h3 class="box-title">Top ad viewed by country</h3>
                                 </div>
                                 <div class="box-body">
                                      <table id="example2" class="table table-bordered table-striped"> 
@@ -114,7 +114,7 @@
 			    <div class="box box-primary">
                                 <div class="box-header">
                                     
-                                    <h3 class="box-title">Top video viewed by Device</h3>
+                                    <h3 class="box-title">Top ad viewed by Device</h3>
                                 </div>
                                 <div class="box-body">
                                      <!-- .table - Uses sparkline charts-->
@@ -144,7 +144,7 @@
                             <div class="box box-primary">
                                 <div class="box-header">
                                    
-                                    <h3 class="box-title">Top video viewed</h3>
+                                    <h3 class="box-title">Top ad viewed</h3>
                                 </div>
                                 <div class="box-body">                                    
 				    <table id="example2" class="table table-bordered table-striped">                                    
@@ -204,7 +204,7 @@
 				data:  data.data,
 				xkey: 'y',
 				ykeys: ['value'],
-				labels: ['Videos'],
+				labels: ['Ads'],
 				xLabelAngle : 35,
 				parseTime : false,
 				lineColors: data.color,
