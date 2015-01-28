@@ -342,7 +342,7 @@
                                         <?php $i=0; foreach ($topcontent as $value) { $i++;?>
                                         <tr id="<?php echo $value->id ?>">
 					<td><?php echo $i; ?></td>  
-                                                <td  width="70%"><?php echo $value->title; ?></td>                                               
+                                                <td  width="70%"><?php echo $value->ad_title; ?></td>                                               
                                                  <td><?php echo $value->total_hits; ?></td>
                                                 <td><?php echo time_from_seconds($value->total_watched_time); ?></td>                                                                                        
                                             </tr>
@@ -411,7 +411,7 @@
 		    }
 		    $.each($.parseJSON(data), function (name,obj ){			
 		    var total_watched = second_to_time(obj.total_watched_time);
-		        strhtml += '<tr class=tr_'+id+'><td>'+obj.title+'</td><td>'+obj.total_hits+'</td><td>'+total_watched+'</td></tr>';			
+		        strhtml += '<tr class=tr_'+id+'><td>'+obj.ad_title+'</td><td>'+obj.total_hits+'</td><td>'+total_watched+'</td></tr>';			
 		    });
 		       $('.tr_'+id ).remove();
 		       $('#customer_'+id).append(strhtml);
@@ -467,6 +467,11 @@
         var geomap = new google.visualization.GeoMap(container);
 
         geomap.draw(data, options);
+        google.visualization.events.addListener(geomap, 'regionClick', function(e) {
+        var country = e['region'];	
+	 window.location='<?php echo base_url();?>ads_analytics/geographic?country='+country;
+	     
+      });
       };
     </script>
 	

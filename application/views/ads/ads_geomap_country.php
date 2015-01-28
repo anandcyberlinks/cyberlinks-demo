@@ -16,7 +16,7 @@
 
         var options = {};
         options['dataMode'] = 'regions';
-	options['width'] = '500px';
+	options['width'] = '670px';
         var container = document.getElementById('map_canvas');
         var geomap = new google.visualization.GeoMap(container);
 
