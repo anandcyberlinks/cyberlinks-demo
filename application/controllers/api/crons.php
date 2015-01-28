@@ -135,9 +135,9 @@ class Crons extends REST_Controller
         }
     }
         
-    public function create_vast_get()
+    public function create_vast_post()
     {
-        $id = $this->get('id');
+        $id = $this->post('id');
         $result =  $this->Ads_model->getTranscodedAds($id);     
    
         if($result){
