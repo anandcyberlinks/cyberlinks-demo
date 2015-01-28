@@ -5,8 +5,8 @@
         <section class="content-header">
             <h1><?php echo $welcome->loadPo('User Content Report') ?><small><?php echo $welcome->loadPo('Control panel') ?></small></h1>
             <ol class="breadcrumb">
-                <li><a href="<?php echo base_url(); ?>analytics/report"><i class="fa fa-dashboard"></i><?php echo $welcome->loadPo('Analytics') ?></a></li>
-                <li><a href="<?php echo base_url(); ?>analytics/user"><?php echo $welcome->loadPo('User wise report') ?></a></li>
+                <li><a href="<?php echo base_url(); ?>ads_analytics/report"><i class="fa fa-dashboard"></i><?php echo $welcome->loadPo('Analytics') ?></a></li>
+                <li><a href="<?php echo base_url(); ?>ads_analytics/user"><?php echo $welcome->loadPo('User wise report') ?></a></li>
 		<li class="active"><?php echo $content[0]->customer_name;?></li>
             </ol>
         </section>
@@ -162,8 +162,8 @@
         </div><!-- /.row -->
         <div class="col-md-3 col-sm-4">
             Export
-        <a target='_blank' href='<?php echo base_url()?>analytics/export/r/pdf/<?php echo $sort_i;?>/<?php echo $sort_by;?>/type/usercontent/id/<?php echo $userid;?>'  title='pdf'><i class="fa fa-fw fa-file-text-o"></i></a>
-        <a target='_blank' href='<?php echo base_url()?>analytics/export/r/csv/<?php echo $sort_i;?>/<?php echo $sort_by;?>/type/usercontent/id/<?php echo $userid;?>' title='csv'><i class="fa fa-fw fa-list-alt"></i></a>
+        <a target='_blank' href='<?php echo base_url()?>ads_analytics/export/r/pdf/<?php echo $sort_i;?>/<?php echo $sort_by;?>/type/usercontent/id/<?php echo $userid;?>'  title='pdf'><i class="fa fa-fw fa-file-text-o"></i></a>
+        <a target='_blank' href='<?php echo base_url()?>ads_analytics/export/r/csv/<?php echo $sort_i;?>/<?php echo $sort_by;?>/type/usercontent/id/<?php echo $userid;?>' title='csv'><i class="fa fa-fw fa-list-alt"></i></a>
         </div>     
                 <div class="row">
                     <div class="col-xs-12">
@@ -172,21 +172,21 @@
                                 <table id="example2" class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
-					    <th><a href="<?php echo base_url(); ?>analytics/usercontent/v/<?php echo (!empty($show_c)) ? $show_c : 'asc'; ?>/id/<?php echo $userid;?>">Content</a></th>
-					    <th><a href="<?php echo base_url(); ?>analytics/usercontent/p/<?php echo (!empty($show_p)) ? $show_p : 'asc'; ?>/id/<?php echo $userid;?>">Content Provider</a></th>
-					    <th><a href="<?php echo base_url(); ?>analytics/usercontent/os/<?php echo (!empty($show_os)) ? $show_os : 'asc'; ?>/id/<?php echo $userid;?>">Platform</a></th>
-					    <th><a href="<?php echo base_url(); ?>analytics/usercontent/brw/<?php echo (!empty($show_brw)) ? $show_brw : 'asc'; ?>/id/<?php echo $userid;?>">Browser</a></th>
-					    <th><a href="<?php echo base_url(); ?>analytics/usercontent/loc/<?php echo (!empty($show_loc)) ? $show_loc : 'asc'; ?>/id/<?php echo $userid;?>">Location</a></th>
-					    <th><a href="<?php echo base_url(); ?>analytics/usercontent/dt/<?php echo (!empty($show_dt)) ? $show_dt : 'asc'; ?>/id/<?php echo $userid;?>">Date</a></th>
-					    <th><a href="<?php echo base_url(); ?>analytics/usercontent/h/<?php echo (!empty($show_h)) ? $show_h : 'asc'; ?>/id/<?php echo $userid;?>">Total Hits</a></th>
-                                            <th><a href="<?php echo base_url(); ?>analytics/usercontent/t/<?php echo (!empty($show_t)) ? $show_t : 'asc'; ?>/id/<?php echo $userid;?>">Total Time Watched</a></th>	
+					    <th><a href="<?php echo base_url(); ?>ads_analytics/usercontent/v/<?php echo (!empty($show_c)) ? $show_c : 'asc'; ?>/id/<?php echo $userid;?>">Content</a></th>
+					    <th><a href="<?php echo base_url(); ?>ads_analytics/usercontent/p/<?php echo (!empty($show_p)) ? $show_p : 'asc'; ?>/id/<?php echo $userid;?>">Content Provider</a></th>
+					    <th><a href="<?php echo base_url(); ?>ads_analytics/usercontent/os/<?php echo (!empty($show_os)) ? $show_os : 'asc'; ?>/id/<?php echo $userid;?>">Platform</a></th>
+					    <th><a href="<?php echo base_url(); ?>ads_analytics/usercontent/brw/<?php echo (!empty($show_brw)) ? $show_brw : 'asc'; ?>/id/<?php echo $userid;?>">Browser</a></th>
+					    <th><a href="<?php echo base_url(); ?>ads_analytics/usercontent/loc/<?php echo (!empty($show_loc)) ? $show_loc : 'asc'; ?>/id/<?php echo $userid;?>">Location</a></th>
+					    <th><a href="<?php echo base_url(); ?>ads_analytics/usercontent/dt/<?php echo (!empty($show_dt)) ? $show_dt : 'asc'; ?>/id/<?php echo $userid;?>">Date</a></th>
+					    <th><a href="<?php echo base_url(); ?>ads_analytics/usercontent/h/<?php echo (!empty($show_h)) ? $show_h : 'asc'; ?>/id/<?php echo $userid;?>">Total Hits</a></th>
+                                            <th><a href="<?php echo base_url(); ?>ads_analytics/usercontent/t/<?php echo (!empty($show_t)) ? $show_t : 'asc'; ?>/id/<?php echo $userid;?>">Total Time Watched</a></th>	
                                         </tr>
                                     </thead>
 
                                     <tbody>
                                         <?php foreach ($content as $value) { ?>
                                         <tr id="<?php echo $value->id ?>">
-                                                <td  width="70%"><!--a href="<?php echo base_url(); ?>analytics/user/<?php echo $value->id; ?>"--><?php echo $value->title; ?></td>
+                                                <td  width="70%"><!--a href="<?php echo base_url(); ?>ads_analytics/user/<?php echo $value->id; ?>"--><?php echo $value->ad_title; ?></td>
                                                 <td><?php echo $value->content_provider; ?></td>                                                
                                                 <td><?php echo $value->platform; ?></td>                                                
                                                 <td><?php echo $value->browser; ?></td>
