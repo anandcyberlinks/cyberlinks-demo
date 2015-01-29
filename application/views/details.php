@@ -15,11 +15,12 @@
 */
 </script>
 </head>
-<body style='background:#000'>
+<body style='background:#FFF'>
 	<input type='hidden' name='analytics_id' id='analytics_id'>
+	<input type='hidden' name='ads_analytics_id' id='ads_analytics_id'>
 	<input type='hidden' name='is_complete' id='is_complete'>
-        <div id="myElement" style='width:100%;height:100%'></div>
-       
+        <div id="myElement" style='width:50%;height:50%'></div>
+       <pre id="log"></pre>
 <script type="text/javascript" src="<?php echo base_url(); ?>./assets/js/jwplayer.js" ></script>
 <script type="text/javascript">jwplayer.key = "BC9ahgShNRQbE4HRU9gujKmpZItJYh5j/+ltVg==";</script>
 <script src="<?php echo base_url() ?>assets/js/jquery-1.10.2.js"></script>
@@ -34,6 +35,7 @@
 	$video_path = '';
 	$thumbnail_path = '';
 }
+
 ?>
 <script>	
 //-- execute when browser closed --//
@@ -46,7 +48,7 @@ $(window).on('beforeunload', function(){
 
  var route='';
  var city ='';
- var state = '';
+ var states = '';
  var country ='';
  var country_code = '';
  var postal_code = '';
@@ -64,7 +66,7 @@ $(window).on('beforeunload', function(){
 		<?php } ?>
 		
 		<?php if ($row['types'][0] == "administrative_area_level_1"){	?>		
-			state = "<?php echo $row['long_name']?>";
+			states = "<?php echo $row['long_name']?>";
 		<?php } ?>
 		
 		<?php if ($row['types'][0] == "country"){	?>		
@@ -105,7 +107,7 @@ $(window).on('beforeunload', function(){
                 content_provider:'<?php echo $content_provider;?>',
                 play: '1',
 		city: city,
-		state: state,
+		state: states,
 		country: country,
 		country_code: country_code,
 		route: route,
@@ -171,7 +173,7 @@ $(window).on('beforeunload', function(){
 			content_provider:'<?php echo $content_provider;?>',
 			replay: '1',
 			city: city,
-			state: state,
+			state: states,
 			country: country,
 			country_code: country_code,
 			route: route,
@@ -192,7 +194,7 @@ $(window).on('beforeunload', function(){
         primary: "html5",
         file: "<?php echo $video_path;?>",
         image: "<?php echo base_url().THUMB_LARGE_PATH. $thumbnail_path;?>",       
-        width: "100%",
+        width: "50%",
  aspectratio: "16:9",
  //controls: false,
  //stretching: "exactfit",
@@ -209,12 +211,13 @@ $(window).on('beforeunload', function(){
        
        $i = 1;
        foreach ($scheduleBreaks as $row) {
-	   $offset = ($row->offset_hrs * 3600) + ($row->offset_minutes * 60) + ($row->offset_seconds);
+	   //$offset = ($row->offset_hrs * 3600) + ($row->offset_minutes * 60) + ($row->offset_seconds);
+	   $offset = $row['cue_points'];
 	   ?>
 		adbreak<?php echo $i; ?>: {
 		offset: "<?php echo $offset; ?>",
 		'skipoffset':5,
-		tag: "<?php echo base_url() . $row->relative_path; ?>"                     
+		tag: "<?php echo base_url() . $row['vast_file']; ?>?<?php echo $row['ads_id']?>/<?php echo $user_id?>/<?php echo $row['uid']?>"
 		},
 	   <?php $i++;
        } ?>                    
@@ -279,6 +282,116 @@ $(window).on('beforeunload', function(){
     
 });
    
+   //--- advetising analytics ---//
+   
+   function playAds(tag) {
+	$.ajax({
+		url: "<?php echo base_url()?>analytics/playads",
+		data:{
+		tag:tag,		
+                play: '1',
+		city: city,
+		state: states,
+		country: country,
+		country_code: country_code,
+		route: route,
+		postal_code: postal_code,
+		latitude: '<?php echo $lat;?>',
+		longitude: '<?php echo $long;?>'
+		},
+		cache: false,
+		type: "post"
+	})
+	.done(function(data){
+		$('#ads_analytics_id').val(data);
+	});
+   }
+   
+   //-- ads completed --//
+   function completeAds(ad_duration) {
+	
+        //code
+	var id = $('#ads_analytics_id').val();	
+        $.ajax({
+            url: "<?php echo base_url()?>analytics/ads_complete",
+            data: {
+                id: id,
+                watched_time: ad_duration,
+                complete: '1',
+		pause: 0
+                },
+                cache: false,
+                type: "POST"            
+        })
+        .done(function(data){
+          //  if (data > 0) {
+	//	$('#is_complete').val('1');
+	   // }
+        });
+    }
+    
+     function skipAds(ads_duration){
+	var id = $('#ads_analytics_id').val();
+	//alert(analytics_id);
+        $.ajax({
+            url:"<?php echo base_url()?>analytics/ads_skip",
+            data: {
+	        id: id,
+                watched_time: ads_duration,
+                skip: '1'
+		},
+                cache: false,
+                type: "POST"        
+        })
+        .done(function(data){
+            
+        });
+    }
+    
+/*
+var log = document.getElementById("log");
+var index = 0;
+var fallbacks = [
+  "http://second-adserver.com/vastResponse.xml",
+  "http://third-adserver.com/vastResponse.xml"
+]
+
+jwplayer().onAdError(function(event) {
+  var html = log.innerHTML;
+  if(index < fallbacks.length) {
+    html += "Tag "+index+" was empty, loading fallback tag "+(index+1)+".<br>";
+    log.innerHTML = html;
+    jwplayer().playAd(fallbacks[index]);
+    index++;
+  } else { 
+    html += "Tag "+index+" was empty, with no more fallbacks available.<br>";
+    log.innerHTML = html;
+  }
+});
+*/
+
+var ad_duration=0;
+//-- play ads ---//
+jwplayer().onAdImpression(function (event) {
+	var tag = event.tag;
+	playAds(tag);
+});
+
+jwplayer().onAdTime(function(event) {
+  ad_duration = Math.round(event.position);
+ //console.log(ad_duration);
+  //console.log("progress","The ad completes in "+remaining+" seconds.");
+});
+	
+//--- advertising analytics ---//
+jwplayer().onAdComplete(function(event){
+	completeAds(ad_duration);
+}); 
+   
+  jwplayer().onAdSkipped(function(event) {
+	skipAds(ad_duration);
+ });
+   
 $(document).ready(function(){ 
     /* User Interest Video by adding tags into user interest .  */
     
@@ -288,6 +401,8 @@ $(document).ready(function(){
     });
     AndroidApp.startVideo();    
 });
+
+
 </script>
 
 </body>

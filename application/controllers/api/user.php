@@ -175,7 +175,8 @@ class User extends REST_Controller
         $data = array( 
             'first_name' => $this->post('firstname'), 
             'last_name' => $this->post('lastname'),
-            'gender' => $this->post('gender'),            
+            'gender' => $this->post('gender'),
+	    'dob' => $this->post('dob'),
             'contact_no' => $this->post('phone')            
             );
            if($pic !='' && $pic != 0){

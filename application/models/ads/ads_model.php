@@ -621,7 +621,7 @@ class Ads_model extends CI_Model {
     function getAdsScheduleBreaks($id=0)
     { 
         $this->db->select('c.* ,((a.offset_hrs*3600)+(a.offset_minutes*60)+a.offset_seconds) as offset,a.*');
-	$this->db->from('contents_ads a');
+	$this->db->from('content_cuepoints a');
         $this->db->join('vast b', 'a.ads_id = b.ads_id', 'left');
         $this->db->join('files c', 'b.file_id = c.id OR a.file_id=c.id', 'left');
 	$this->db->where('a.status','1');    
@@ -839,4 +839,88 @@ class Ads_model extends CI_Model {
 	}
 	return $ret;
     }
+    
+    function getUserKeywords($id)
+    {
+      $this->db->select('k.keywords,c.gender,c.dob');
+      $this->db->from('user_content_keywords k');
+      $this->db->join('customers c','c.id=k.user_id','left');
+      $this->db->where('user_id',$id);
+      $this->db->limit(1);
+      $query = $this->db->get();
+     return $query->row();
+      /*if($result){
+	 return unserialize($result->keywords);
+      }else{
+	 return 0;
+      }*/
+    }
+        
+    /* function to get users location wise ads list */
+    function getUserLocationWiseAds($lat,$long,$id,$data,$limit=0){
+      $keywords = array();
+      if(!empty($data->keywords)){
+	$keywords = unserialize($data->keywords);	
+      }
+      
+      if(@$data->gender !=''){
+	$keywords[] = $data->gender;
+      }
+   if($keywords){
+    //  $this->db->where_in('k.name',unserialize($data->keywords));
+   }
+    
+    if(@$data->dob){
+       $date1 = date_create(date('Y-m-d'));
+       $date2 = date_create($data->dob);
+       $datediff =  date_diff($date1,$date2);
+       $age = $datediff->y;
+       $between = sprintf("%s BETWEEN a.age_group_from AND a.age_group_to",$age);
+    //  $this->db->where($between, null, false);      
+    }
+     
+      $this->db->select('a.uid,c.name as file_name,k.name as tags,c.relative_path as vast_file,al.ads_id,MIN(ROUND(((ACOS(SIN('.$lat.' * PI() / 180) * SIN(al.latitude * PI() / 180) + COS('.$lat.' * PI() / 180) * COS(al.latitude * PI() / 180) * COS(('.$long.' - al.longitude) * PI() / 180)) * 180 / PI()) * 60 * 1.1515))) AS distance');     
+      $this->db->from('ads a');
+      $this->db->join('ads_location al','a.id=al.ads_id','left');
+      $this->db->join('files c','a.vast_file_id=c.id','left');
+      $this->db->join('ads_keywords ak','a.id=ak.ads_id','left');
+      $this->db->join('keywords k','ak.keyword_id=k.id','left');
+      
+    //  $this->db->where('a.content_id',$id);
+     // $this->db->having('ROUND(distance) <= ' ,3);
+     $this->db->group_by('al.ads_id');
+      $this->db->order_by('distance');
+     // $this->db->limit($limit);
+      $query = $this->db->get();
+      //echo '<br>'.$this->db->last_query();die;
+      return $query->result();
+    }
+    
+    function getCuePoints($id,$flag=0){
+      if($flag){
+	 $this->db->select('count(id) as tot');
+	 $this->db->limit(1);
+      }else{
+	 $this->db->select('cue_points');
+      }
+      
+      $this->db->from('content_cuepoints');
+      $this->db->where('content_id',$id);
+      
+      $query = $this->db->get();
+     // echo '<br>'.$this->db->last_query();die;
+      if($flag){
+      $result = $query->row();
+	 return $result->tot;
+      }else{
+	 $result = $query->result_array();
+	 //-- convert array into element --//       
+        foreach ($result AS $key => $value) {
+            $cuepoints[] = $value['cue_points'];
+        }
+	return $cuepoints;
+        //-----------------------------------//
+      }
+    }
+    
 }

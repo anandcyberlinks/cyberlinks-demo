@@ -49,6 +49,12 @@
                     </ul>
                 </li>
           
+	  <li class="<?= (($this->uri->segment(2) == 'advertising')  ) ? 'active' : '' ?>">
+                <a href="<?php echo base_url() ?>advertising" >
+                    <i class="fa fa-fw fa-film"></i> <span><?php echo $welcome->loadPo('Advertising'); ?></span>
+                </a>
+               
+            </li>
             <li class="<?= ($this->uri->segment(1) == 'webtv' || $this->uri->segment(1) == 'livestream') ? 'active' : '' ?>">
                 <a href="<?php echo base_url() ?>webtv" >
                     <i class="fa fa-fw fa-film"></i> <span><?php echo $welcome->loadPo('WebTV'); ?></span>

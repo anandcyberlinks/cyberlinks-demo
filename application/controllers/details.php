@@ -22,19 +22,44 @@ class Details extends MY_Controller {
 		//-- get geocoding google api --//
 		$this->data['lat'] = $lat = $_GET['lat'];
 		$this->data['long'] = $lng = $_GET['lng'];
+		$id = $_GET['id'];
+		
 		$url = "http://maps.googleapis.com/maps/api/geocode/json?latlng=".$lat.",".$lng."&sensor=true";
 		$data = @file_get_contents($url);
 		$result = json_decode($data,true);
 		//echo '<pre>';print_r($result);die;
 		$this->data['geodata'] = $result['results'][0]['address_components'];
 		//------------------------------//
+		//-- get cue points for ads --//
+		$limit = $this->Ads_model->getCuePoints($id,1);
+		$cuePoints = $this->Ads_model->getCuePoints($id);
+		//----------------------------//
 		
+		$user_data = $this->Ads_model->getUserKeywords($_GET['user_id']);
+		//echo '<pre>';print_r($keywords);die;
+		//-- get radius for user location --//
+		$adsAlloc = $this->Ads_model->getUserLocationWiseAds($lat,$lng,$_GET['user_id'],$user_data,$limit);
+		//echo '<pre>';print_r($adsAlloc);
+		$i=0;
+		foreach($adsAlloc as $row){
+			$adsFinal[$i]['file_name'] 	= $row->file_name;
+			$adsFinal[$i]['vast_file'] 	= $row->vast_file;
+			$adsFinal[$i]['ads_id'] 	= $row->ads_id;
+			$adsFinal[$i]['uid'] 		= $row->uid;
+			$adsFinal[$i]['cue_points'] 	= @$cuePoints[$i];
+			
+			$i++;
+		}
+		 
+		//----------------------------------//
+		//echo '<pre>';print_r($adsFinal);die;
+		//echo '<pre>';print_r($keywords);die;
 		$this->load->helper('url');
-                $id = $_GET['id'];
+                
                 $device = $_GET['device'];
 		$this->data['user_id'] = $_GET['user_id'];
                 $this->data['result'] = $this->Video_model->video_play($id,$device);         
-		$this->data['scheduleBreaks'] = $this->Ads_model->getAdsScheduleBreaks();       
+		$this->data['scheduleBreaks'] = $adsFinal;       
                 $this->load->view('details',$this->data);
 	}
         
