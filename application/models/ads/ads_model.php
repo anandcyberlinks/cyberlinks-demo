@@ -879,7 +879,7 @@ class Ads_model extends CI_Model {
     //  $this->db->where($between, null, false);      
     }
      
-      $this->db->select('a.uid,c.name as file_name,k.name as tags,c.relative_path as vast_file,al.ads_id,MIN(ROUND(((ACOS(SIN('.$lat.' * PI() / 180) * SIN(al.latitude * PI() / 180) + COS('.$lat.' * PI() / 180) * COS(al.latitude * PI() / 180) * COS(('.$long.' - al.longitude) * PI() / 180)) * 180 / PI()) * 60 * 1.1515))) AS distance');     
+      $this->db->select('a.uid,a.ad_type,c.name as file_name,k.name as tags,c.relative_path as vast_file,al.ads_id,MIN(ROUND(((ACOS(SIN('.$lat.' * PI() / 180) * SIN(al.latitude * PI() / 180) + COS('.$lat.' * PI() / 180) * COS(al.latitude * PI() / 180) * COS(('.$long.' - al.longitude) * PI() / 180)) * 180 / PI()) * 60 * 1.1515))) AS distance');     
       $this->db->from('ads a');
       $this->db->join('ads_location al','a.id=al.ads_id','left');
       $this->db->join('files c','a.vast_file_id=c.id','left');
