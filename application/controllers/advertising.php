@@ -77,5 +77,23 @@ $this->show_view("advertising/cuepoints", $content);*/
         $data['result'] = $this->videos_model->getCuePointInfo($_REQUEST['IDs'],$sort, $sort_by);
         echo json_encode($data);
         
-    }    
+    }
+   function  inserCuePoint()
+    {
+       //print_r($_POST);
+      // die();
+     // echo "<pre>";
+      $data = array();
+      $i=0;
+       foreach($_POST['IDs'] as $key=>$val)
+       {
+          //$innerArray = array();
+          $data[$i]["content_id"]= $val;
+          $data[$i]["cue_points"]=$_POST['timeInMillisec'];
+          $data[$i]["title"] =$_POST['cueName'];
+          $i++;
+          }
+       $insertStatus = $this->videos_model->insertCuePoints($data);
+       
+    }
  }

@@ -275,11 +275,12 @@
 </div>
                             <!-- .table - Uses sparkline charts-->
                             <table class="table table-striped">
-				<tbody>
+                                <input type="hidden" name="maxDuration" id="maxDuration" value="">
+                                <tbody>
                                 <tr>
-                                    <th width='10%' style="border-right: 1px solid gray;padding: 0px">Sr No.</th>
-                                    <th width='30%' style="border-right: 1px solid gray;padding: 0px">Content</th>
-                                    <th width="60%" style="border-right: 1px solid gray;padding: 0px" class="loaderheader"><div id="closeClickEvent" class="tester"><div>
+                                    <th width='10%' style="border-right: 1px solid gray;">Sr No.</th>
+                                    <th width='30%' style="border-right: 1px solid gray;">Content</th>
+                                    <th width="60%" style="border-right: 1px solid gray;padding-left: 0px" class="loaderheader"><div id="closeClickEvent" class="tester"><div>
         <input type="text" id="range" value="" name="range" />
     </div>
 
@@ -345,5 +346,17 @@
     top: 22px;
     width: 16px;
 }*/
-    
+    .progress.xs {
+    height: 20px;
+}
+.progress {
+    background-color: #f5f5f5;
+    border-radius: 4px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) inset;
+    height: 20px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    width: 100%;
+    //padding-left: 8px;
+}
 </style>

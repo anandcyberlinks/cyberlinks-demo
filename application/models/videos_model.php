@@ -1156,5 +1156,16 @@ class Videos_model extends CI_Model {
         return $data;
     }
     
-
+   function insertCuePoints($post) {
+        //print_r($post);
+        //die();
+        $this->db->insert_batch('content_cuepoints', $post);
+        //if (isset($post['id'])) {
+          //  $this->db->where('id', $post['id']);
+           // unset($post['id']);
+           // $this->db->update('events', $post);
+        //} else {
+          //  $this->db->insert('events', $post);
+        //}
+    }
 }
