@@ -47,7 +47,7 @@ class Details extends MY_Controller {
 			$adsFinal[$i]['ads_id'] 	= $row->ads_id;
 			$adsFinal[$i]['uid'] 		= $row->uid;
 			$adsFinal[$i]['cue_points'] 	= @$cuePoints[$i];
-			
+			$adsFinal[$i]['ad_type'] 	= $row->ad_type;
 			$i++;
 		}
 		 

@@ -217,7 +217,7 @@ $(window).on('beforeunload', function(){
 		adbreak<?php echo $i; ?>: {
 		offset: "<?php echo $offset; ?>",
 		'skipoffset':5,
-		tag: "<?php echo base_url() . $row['vast_file']; ?>?<?php echo $row['ads_id']?>/<?php echo $user_id?>/<?php echo $row['uid']?>"
+		tag: "<?php echo ($row['ad_type'] != 'External' ? base_url():'') . $row['vast_file']; ?>?<?php echo $row['ads_id']?>/<?php echo $user_id?>/<?php echo $row['uid']?>"
 		},
 	   <?php $i++;
        } ?>                    
