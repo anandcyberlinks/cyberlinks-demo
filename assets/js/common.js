@@ -1087,7 +1087,9 @@ function cuepoint()
                     $(".irs").append("<span class='irs-single mybar1 "+ removeClass +"' style='left: "+finalPercentage +"%;'>"+ v.cue_points +"</span>");
                     $(".irs-with-grid").append("<span class='irs-bar mybar1 "+ removeClass +"' style='width:"+ finalPercentage +"%'></span>");
                     $(".irs-with-grid").append("<span class='irs-slider single mybar1 "+ removeClass +"' style='left: "+ finalPercentage +"%;'></span>");                    
+                 $(".irs-bar").remove();
                 });
+                
                 //console.log(lastKey);
             } 
         });          
@@ -1161,6 +1163,7 @@ function cuepoint()
                document.getElementById('closeClickEvent').style.pointerEvents = 'none';
              },
             onFinish: function (data) {
+                 $(".irs-bar").remove();
                 /*var maxDurationGet = $("#maxDuration").val();
                 if(data.from > maxDurationGet )
                 {
