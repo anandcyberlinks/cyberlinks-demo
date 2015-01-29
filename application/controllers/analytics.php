@@ -37,7 +37,7 @@ class Analytics extends MY_Controller {
 	
 	function index()
 	{
-		 print_r($this->result);die;
+		// print_r($this->result);die;
 		//-- get geocoding google api --//
 		$this->data['lat'] = $lat = $_GET['lat'];
 		$this->data['long'] = $lng = $_GET['lng'];
@@ -604,8 +604,45 @@ class Analytics extends MY_Controller {
            $content_ids = $this->Analytics_model->getContentKeywords($_POST['content_id']);
            if($content_ids!=null){
                $this->Analytics_model->saveUserContentKeywords($_POST['user_id'],$content_ids);
-           }
-           
+           }           
+        }
+	
+	   function playads()
+	   {
+		$post = $_POST;
+		
+		$post['browser'] = $this->result['browser'];
+		$post['browser_version'] = $this->result['version'];
+                $post['platform'] = $this->result['platform'];
+		
+		if($post){
+			$res = substr(strrchr($post['tag'],"?"),1);
+			$arr = explode("/",$res);
+			$post['ads_id'] = $arr[0];
+			$post['user_id'] = $arr[1];
+			$post['content_provider'] = $arr[2];
+			unset($post['tag']);
+			echo $this->Analytics_model->save_ads($post);
+		}
+		//print_r($post);
+		die;
+	   }
+	   
+	function ads_skip()
+        {
+            $post = $_POST;           
+            $where = array('id'=>$post['id']);
+           echo $this->Analytics_model->save_ads($post,$where);
+        }
+        
+        function ads_complete()
+        {
+            $post = $_POST;
+	    if($post){			
+			$where = array('id'=>$post['id']);
+			echo $this->Analytics_model->save_ads($post,$where);
+		}
+         die;   
         }
 }
 
