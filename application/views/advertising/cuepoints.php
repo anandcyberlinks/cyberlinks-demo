@@ -276,6 +276,7 @@
                             <!-- .table - Uses sparkline charts-->
                             <table class="table table-striped">
                                 <input type="hidden" name="maxDuration" id="maxDuration" value="">
+                                <input type="hidden" name="addFlag" id="addFlag" value="0">
                                 <tbody>
                                 <tr>
                                     <th width='10%' style="border-right: 1px solid gray;">Sr No.</th>
