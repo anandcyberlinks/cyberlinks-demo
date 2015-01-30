@@ -454,12 +454,16 @@ class Webtv_model extends CI_Model {
             unset($val['created']);
             unset($val['modified']);
             unset($val['id']);
-            $this->db->where($val);
+            $this->db->where(array('content_id'=>$val['content_id']));
+            $this->db->like('start_date', $date);
             $t = $this->db->get('playlist_epg')->result();
             //echo "<pre>";
             //echo $this->db->last_query();
-            //print_r($t);
+            //print_r($t); 
             if(count($t) > 0){
+                $this->db->where(array('id'=>$t[0]->id));
+                $this->db->set($val);
+                $this->db->update('playlist_epg');
                 $j++;
             }else{
                 

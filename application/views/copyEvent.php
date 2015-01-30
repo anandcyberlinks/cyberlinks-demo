@@ -34,6 +34,8 @@
             url = $form.attr("action");
         var posting = $.post(url, {playlist_id: playlist_id, date: date, datecopy:datecopy, url:url});
         posting.done(function (data) {
+            //console.log(data);
+            //return false;
             data = JSON.parse(data);
             
             if(data.success != 0){
@@ -44,7 +46,7 @@
             }
             if(data.failed != 0){
                 $("#loader").html('');
-                $("#failed").html(data.failed+' Events Allready exist at same time')
+                $("#failed").html(data.failed+' Events Updated')
             }
             console.log(data);
             
