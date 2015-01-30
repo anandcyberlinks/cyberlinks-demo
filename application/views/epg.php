@@ -1,5 +1,5 @@
 <!-- Right side column. Contains the navbar and content of the page -->
-<aside class="right-side">                
+<aside class="right-side" >                
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
@@ -26,7 +26,7 @@
                             if (isset($result['vod']))
                                 foreach ($result['vod'] as $key => $value) {
                                     ?>
-                                    <div class='external-event' style="background-color: <?= $value->color ?>" id="<?= $value->id ?>"><?= $value->title ?>[<?= $this->time_from_seconds($value->duration) ?>]</div><br>
+                                    <div class='external-event' style="background-color: <?= $value->color ?>" id="<?= $value->id ?>"><?= $value->title . '['. $this->time_from_seconds($value->duration) ?>]</div><br>
                                 <?php } ?>
                             <p class="loader"></p>
                             <!-- <input type='checkbox' id='drop-remove' /> <label for='drop-remove'>remove after drop</label> -->
