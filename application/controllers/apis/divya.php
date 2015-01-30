@@ -463,6 +463,8 @@ class Divya extends Apis{
                 $user['status'] = 'active'; 
                 $user['password'] = md5($user['password']);
                 
+                unset($user['image_type']);
+                
                 if($this->db->insert('customers',$user)){
                     
                     $user_id = $this->db->insert_id();
