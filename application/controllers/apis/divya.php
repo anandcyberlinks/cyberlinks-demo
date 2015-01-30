@@ -420,6 +420,7 @@ class Divya extends Apis{
         
         $validation = array('first_name','gender');
         $response = array();
+        $response['status'] = 0;
         
         //check validation
         foreach($validation as $key=>$val){
@@ -453,6 +454,7 @@ class Divya extends Apis{
                     $query = sprintf('update api_token set token = "%s",created_time = now(), hit_time = now() where user_id = %d',$token,$user->id);
                     $this->db->query($query);
                 }
+                $response['status'] = 1;
                 $response['token'] = $token;
             }else{
                 
@@ -483,6 +485,7 @@ class Divya extends Apis{
                         $query = sprintf('update api_token set token = "%s",created_time = now(), hit_time = now() where user_id = %d',$token,$user_id);
                         $this->db->query($query);
                     }
+                    $response['status'] = 1;
                     $response['token'] = $token;
                     
                 }
