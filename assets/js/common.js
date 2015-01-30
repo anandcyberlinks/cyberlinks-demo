@@ -1084,7 +1084,8 @@ function cuepoint()
                     var from_percentage = v.cue_points *(0.05301561);
                     var finalPercentage = from_percentage.toFixed(5);
                     var removeClass = "append_"+v.cue_points;
-                    $(".irs").append("<span class='irs-single mybar1 "+ removeClass +"' style='left: "+finalPercentage +"%;'>"+ v.cue_points +"</span>");
+                    var num = secTotime(v.cue_points);
+                    $(".irs").append("<span class='irs-single mybar1 "+ removeClass +"' style='left: "+finalPercentage +"%;'>"+  num +"</span>");
                     $(".irs-with-grid").append("<span class='irs-bar mybar1 "+ removeClass +"' style='width:"+ finalPercentage +"%'></span>");
                     $(".irs-with-grid").append("<span class='irs-slider single mybar1 "+ removeClass +"' style='left: "+ finalPercentage +"%;'></span>");                    
 
@@ -1108,14 +1109,24 @@ function cuepoint()
             max: 1800,
             from: 0,
             to: 1800,
+            from_min :0,
+            from_max :900,
             type: 'single',
-            step: 1,
+            step: 0,
            grid: true,
-           grid_num: 20,
+           grid_num: 2,
            from_shadow :true,
+           prettify: function (num) {
+                //console.log(num);
+                var date = new Date(1970,0,1);
+                date.setSeconds(num);
+                //return date.toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
+                return date.toTimeString().replace(/.*(\d{2}:\d{2}).*/, "$1");  
+             },
             onStart: function (data) {
                      $(".irs-bar").remove();
                      $("#addFlag").val('0');
+                     $("#cancelFlag").val(0);
                var initialVal = $(".irs-single").text();
                var initialValPer = $(".irs-single").css("left");
                  $("#percentage").val(initialVal);
@@ -1131,46 +1142,64 @@ function cuepoint()
                // console.log(inialValPoint);
                 //console.log(div_removeClass);
                 //console.log(text);
-                
-                if(text!=0)
+                var addFlag = $("#addFlag").val();
+                //console.log(data);
+                if(data.from!=0)
                 {
-                    var status = $("#addFlag").val();
+                    
+                    console.log(data.from);
+                    var cancelFlag = $("#cancelFlag").val();
+                    if(cancelFlag==1){
+                        var div_removeClass12 = "append_"+data.from;
+                      var from_percent = data.from_percent;
+                      var  from        = data.from;
+                         $(".irs").append("<span class='irs-single mybar1 "+ div_removeClass12 +"' style='left: "+ data.from_percent +"%;'>"+ data.from +"</span>");
+                        $(".irs-with-grid").append("<span class='irs-bar mybar1 "+ div_removeClass12 +"' style='left: 0.9009%; width:"+ data.from_percent +"'></span>");
+                        $(".irs-with-grid").append("<span class='irs-slider single mybar1 "+ div_removeClass12 +"' style='left: "+ data.from_percent +"%;'></span>");                         
+                    }else
+                    {
                         var div_removeClass = "append_"+text;
-                        var from_percent = text *(0.05301561)
+                        var from_percent = percentage;
+                        var  from        = text;
+                    }
+                    
+                        //var from_percent = text *(0.05301561)
                         $(".irs-bar").remove();
-                        $(".irs").append("<span class='irs-single mybar1 "+ div_removeClass +"' style='left: "+ from_percent +"%;'>"+ text +"</span>");
-                        $(".irs-with-grid").append("<span class='irs-bar mybar1 "+ div_removeClass +"' style='left: 0.9009%; width:"+ from_percent +"'></span>");
-                        $(".irs-with-grid").append("<span class='irs-slider single mybar1 "+ div_removeClass +"' style='left: "+ from_percent +"%;'></span>");     
+ 
                 } if(text==0)
                 {
                     var div_removeClass = "append_"+data.from;
                     $(".js-irs-0 .irs .irs-single,.js-irs-0 .irs-slider,.js-irs-0 .irs-single").not(".mybar1").addClass(div_removeClass);
                     
                 }
-                         console.log("Change Event");
-                        console.log(div_removeClass);
+                        // console.log("Change Event");
+                        //console.log(div_removeClass);
          //console.log(globalCheck);
 
-                var addFlag = $("#addFlag").val();
+                
                 if(addFlag == 1)
                 {
-                  $(".irs-single:last").remove();
-                   $(".irs-bar:last,.irs-slider:last").remove();
-                   $(".js-irs-0 .irs .irs-single:last").remove();
-                    
+                  //$(".irs-single:last").remove();
+                  // $(".irs-bar:last,.irs-slider:last").remove();
+                  // $(".js-irs-0 .irs .irs-single:last").remove();   
                 }
-               $("#text").val(data.from);
-               $("#percentage").val(data.from_percent);
                $(".popOver").show();
-               var intiaSetValPoint = $("#text").val();
-               var intiaSetValPer = $("#percentage").val();
-                $(".ss").val(intiaSetValPoint);
-                $("#inialValPoint").val(intiaSetValPoint);
-                $("#inialValPercentage").val(intiaSetValPer); 
+              // console.log(data.from);
+              // console.log(text);
+                    $("#text").val(data.from);
+                    $("#percentage").val(data.from_percent);               
+                    var intiaSetValPoint = $("#text").val();
+                    var intiaSetValPer = $("#percentage").val();
+                    $(".ss").val(intiaSetValPoint);
+                    $("#inialValPoint").val(intiaSetValPoint);
+                    $("#inialValPercentage").val(intiaSetValPer);
+                  
                document.getElementById('closeClickEvent').style.pointerEvents = 'none';
              },
             onFinish: function (data) {
                  $(".irs-bar").remove();
+                 //$("#cancelFlag").val(0);
+                 $("#addFlag").val(0);
                 /*var maxDurationGet = $("#maxDuration").val();
                 if(data.from > maxDurationGet )
                 {
@@ -1195,10 +1224,11 @@ function cuepoint()
          var removeDiv = ".append_"+intialPoint;
          globalCheck = "append_"+intialPoint;
          $("#addFlag").attr("globalCheck",globalCheck);
-         console.log("Cancel Event");
-        console.log(removeDiv);
-         console.log(globalCheck);
-        // $("#addFlag").val('0');
+         //console.log("Cancel Event");
+        //console.log(removeDiv);
+         //console.log(globalCheck);
+        // console.log(globalCheck);
+       $("#cancelFlag").val('1');
          //$("#text").val(0);
          //if()
         $(".js-irs-0 .irs "+removeDiv).remove(); 
@@ -1228,22 +1258,20 @@ $("#add").click(function(){
             data: {"timeInMillisec":timeInMillisec,"IDs" : IDs,"cueName" : cueName}  ,
             success: function (data)
             {
-                console.log(data);
+               // console.log(data);
                 $(".hh,.ms,ss,.mm,#cueName").val('');
                 $('.popOver').hide();
-                document.getElementById('closeClickEvent').style.pointerEvents = 'auto';
-                $("#text").val(timeInMillisec);
+                document.getElementById('closeClickEvent').style.pointerEvents = 'auto';              
                 var from_percentage1 = timeInMillisec *(0.05301561);
                     var finalPercentage1 = from_percentage1.toFixed(5);
                $("#percentage").val(finalPercentage1);
                $("#text").val(timeInMillisec);
-               $("#percentage").val(finalPercentage1);
                var div_removeClass1 = "append_"+timeInMillisec;
               // console.log(div_removeClass1);
                $("#addFlag").val('1');
-                    $(".irs").append("<span class='irs-single mybar1 "+ div_removeClass1 +"' style='left: "+ finalPercentage1 +"%;'>"+ timeInMillisec +"</span>");
-                    $(".irs-with-grid").append("<span class='irs-bar mybar1 "+ div_removeClass1 +"' style='left: 0.9009%; width:"+ finalPercentage1 +"'></span>");
-                    $(".irs-with-grid").append("<span class='irs-slider single mybar1 "+ div_removeClass1 +"' style='left: "+ finalPercentage1 +"%;'></span>");
+                    //$(".irs").append("<span class='irs-single mybar1 "+ div_removeClass1 +"' style='left: "+ finalPercentage1 +"%;'>"+ timeInMillisec +"</span>");
+                   // $(".irs-with-grid").append("<span class='irs-bar mybar1 "+ div_removeClass1 +"' style='left: 0.9009%; width:"+ finalPercentage1 +"'></span>");
+                   // $(".irs-with-grid").append("<span class='irs-slider single mybar1 "+ div_removeClass1 +"' style='left: "+ finalPercentage1 +"%;'></span>");
              // $(".innerResponse tbody").append(data);
             } 
         });
@@ -1254,8 +1282,22 @@ $(".ss").on("change",function(){
     alert($(this).val());    
 });
 
-/* functions used for comment section ends */
 
+setInterval(function(){
+  $(".js-irs-0 .irs-single.mybar1").on("click",function(){
+   console.log($(this).text());
+   
+});
+ // $('#ElementId').click();
+}, 1000);
+/* functions used for comment section ends */
+function secTotime(num)
+{
+                    var date = new Date(1970,0,1);
+                date.setSeconds(num);
+                //return date.toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
+                return date.toTimeString().replace(/.*(\d{2}:\d{2}).*/, "$1");  
+}
 
 
 
