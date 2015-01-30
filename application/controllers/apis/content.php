@@ -334,7 +334,7 @@ class Content extends Apis{
         $response = array();
         
         if(isset($qString['k']) && $qString['k'] != ''){
-            echo $query =  sprintf( 'select 
+            $query =  sprintf( 'select 
                             c.id,
                             pv.playlist_id,
                             c.title,
@@ -359,7 +359,7 @@ class Content extends Apis{
                             left join files cfile on cfile.id = v.file_id
                             left join video_thumbnails vt on vt.content_id = c.id
                             left join files vtfile on vtfile.id = vt.file_id
-                            where c.uid = %d AND pv.playlist_id = %d AND pv.status != 0 order by pv.index ',$this->app->id,$qString['k']);
+                            where pv.playlist_id = %d AND pv.status != 0 order by pv.index ',$qString['k']);
         
         
             $dataset = $this->db->query($query)->result();
