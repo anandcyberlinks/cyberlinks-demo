@@ -14,6 +14,7 @@
         numberOfMonths: 1
     });
     $("#copyform").submit(function (event) {
+        $("#failed").html('');
         $("#submit").addClass('disabled');
         $("#loader").html('Loading......')
         event.preventDefault();
@@ -36,6 +37,7 @@
             data = JSON.parse(data);
             
             if(data.success != 0){
+                
                 $("#form").html(data.success+' Events Succesfully Copied');
             }else{
                 $("#submit").removeClass('disabled');
