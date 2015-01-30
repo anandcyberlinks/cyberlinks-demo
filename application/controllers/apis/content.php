@@ -300,17 +300,13 @@ class Content extends Apis{
         $this->response($response);
     }
     
-    
-    
-    
-    
-    
     function webtv_get(){
         $qString = $this->get();
         $response = array();
         $query = sprintf('select p.id,p.name,p.description,p.status,p.start_date,p.end_date
                          from playlists p
-                         where p.uid = %d and p.status = "0" ',$this->app->id);
+                         left join channels c on c.id = p.channel_id
+                         where p.uid = %d and p.status = "0" and c.type = "Liner" ',$this->app->id);
         $dataset = $this->db->query($query)->result();
         foreach($dataset as $key=>$val){
             $response[] = $val;
