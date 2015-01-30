@@ -437,5 +437,41 @@ class Webtv_model extends CI_Model {
         $dataset = $this->db->query($query)->result();
         return $dataset;
     }
+    function eventcopy($data){
+        $date = $data['date'];
+        $datecopy = $data['datecopy'];
+        $playlist_id = $data['playlist_id'];
+        $this->db->like('start_date', $datecopy);
+        $this->db->like('playlist_id', $playlist_id);
+        $result = $this->db->get('playlist_epg')->result();
+        $temp = array();
+        $i = 0;
+        $j = 0;
+        foreach ($result as $key=>$val){
+            $val = (Array)$val;
+            $val['start_date'] = str_replace($datecopy, $date, $val['start_date']);
+            $val['end_date'] = str_replace($datecopy, $date, $val['end_date']);
+            unset($val['created']);
+            unset($val['modified']);
+            unset($val['id']);
+            $this->db->where($val);
+            $t = $this->db->get('playlist_epg')->result();
+            //echo "<pre>";
+            //echo $this->db->last_query();
+            //print_r($t);
+            if(count($t) > 0){
+                $j++;
+            }else{
+                
+                $this->db->set('created', 'NOW()', FALSE);
+                $this->db->set($val);
+                $this->db->insert('playlist_epg');
+                //echo $this->db->last_query(); die;
+            $i++;
+            }
+        }
+        //die;
+        return json_encode(array('success'=>$i, 'failed'=>$j));
+    }
 
 }

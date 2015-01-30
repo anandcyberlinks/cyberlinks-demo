@@ -352,7 +352,11 @@ class Webtv extends MY_Controller {
     }
     function eventCopy(){
         if($_POST){
-            print_r($_POST);
+            //print_r($_POST);
+            $data = $this->webtv_model->eventcopy($_POST);
+            //echo $data; die;
+            $this->session->set_flashdata('message', $this->_successmsg($this->loadPo($this->config->item('success_record_update'))));
+            echo $data;
             exit;
         } else {
             $this->load->view('copyEvent');
