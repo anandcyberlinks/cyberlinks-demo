@@ -22,7 +22,12 @@
                     </div>
                     <div class="box-body">
                         <div id='external-events'>
-                            
+                            <?php
+                            if (isset($result['vod']))
+                                foreach ($result['vod'] as $key => $value) {
+                                    ?>
+                                    <div class='external-event' style="background-color: <?= $value->color ?>" id="<?= $value->id ?>"><?= $value->title ?>[<?= $this->time_from_seconds($value->duration) ?>]</div><br>
+                                <?php } ?>
                             <p class="loader"></p>
                             <!-- <input type='checkbox' id='drop-remove' /> <label for='drop-remove'>remove after drop</label> -->
                         </div>
