@@ -39,7 +39,7 @@
                     </div>
                     <div class="box-body">
                         <div id='external-events'>
-                            <?php foreach ($result['youtube'] as $key => $value) { //echo '<pre>';print_r($value);echo '</pre>'; ?>
+                            <?php if(isset($result['youtube'])) foreach ($result['youtube'] as $key => $value) { //echo '<pre>';print_r($value);echo '</pre>'; ?>
                                 <div class='external-event' duration="<?= $value->duration ?>" style="background-color: <?= $value->color ?>" id="<?= $value->id ?>"><?= $value->title ?>[<?= $welcome->time_from_seconds($value->duration) ?>]</div><br>
                             <?php } ?>
                             <p class="loader"></p>

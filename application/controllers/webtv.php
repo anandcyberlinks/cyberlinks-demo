@@ -240,8 +240,9 @@ class Webtv extends MY_Controller {
         $data = array();
         $query = sprintf('select * from playlist_epg pe
                          left join (select * from playlist_video pv where pv.playlist_id = %d ) as pv on pv.content_id = pe.content_id
-                         where pe.playlist_id = %d and pe.user_id = %d and pe.start_date between "%s" and "%s" ', $_GET['playlist_id'], $_GET['playlist_id'], $this->uid, date('Y-m-d h:i:s', $_GET['start']), date('Y-m-d h:i:s', $_GET['end']));
+                         where pe.playlist_id = %d and pe.user_id = %d and pe.start_date between "%s" and "%s" order by pe.id ', $_GET['playlist_id'], $_GET['playlist_id'], $this->uid, date('Y-m-d 00:00:00', $_GET['start']), date('Y-m-d 23:59:59', $_GET['start']));
         $dataset = $this->db->query($query)->result();
+        
         foreach ($dataset as $key => $val) {
             $data[] = array('id' => $val->content_id,
                 'title' => $val->playlist_id,
@@ -268,7 +269,7 @@ class Webtv extends MY_Controller {
             $data['user_id'] = $this->uid;
             $data['start_date'] = isset($_POST['start_date']) && $_POST['start_date'] != '' ? date('Y-m-d H:i:s', strtotime($_POST['start_date'])) : date('Y-m-d H:i:s');
             $data['end_date'] = isset($_POST['end_date']) && $_POST['end_date'] != '' ? date('Y-m-d H:i:s', strtotime($_POST['end_date'])) : date('Y-m-d H:i:s', strtotime($data['start_date']) + 60 * 60);
-
+            
             $tmp = isset($_POST['action']) ? $_POST['action'] : 'save';
             switch ($tmp) {
                 case 'delete' :
