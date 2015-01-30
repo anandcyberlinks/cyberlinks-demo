@@ -172,13 +172,8 @@
                  */
             },
             eventDrop: function (event, delta, revertFunc) {
-
-                if (isOverlapping(event)) {
-                    revertFunc();
-                } else {
-                    event.action = 'update';
-                    __saveEvent(event);
-                }
+                event.action = 'update';
+                __saveEvent(event);
             },
             eventResize: function (event, delta, revertFunc) {
                 event.action = 'update';
