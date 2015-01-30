@@ -334,7 +334,7 @@ class Content extends Apis{
         $response = array();
         
         if(isset($qString['k']) && $qString['k'] != ''){
-            $query =  sprintf( 'select 
+            echo $query =  sprintf( 'select 
                             c.id,
                             pv.playlist_id,
                             c.title,
