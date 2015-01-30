@@ -27,9 +27,11 @@
         var posting = $.post(url, {playlist_id: playlist_id, date: date, datecopy:datecopy, url:url});
         posting.done(function (data) {
             data = JSON.parse(data);
-            $("#form").html('');
+            
             if(data.success != 0){
                 $("#form").html(data.success+' Events Succesfully Copied');
+            }else{
+                $("#submit").removeClass('disabled');
             }
             if(data.failed != 0){
                 $("#failed").html(data.failed+' Events Allready exist at same time')
