@@ -14,8 +14,8 @@
         numberOfMonths: 1
     });
     $("#copyform").submit(function (event) {
+        $("#submit").addClass('disabled');
         $("#loader").html('Loading......')
-         
         event.preventDefault();
         var $form = $(this),
             playlist_id = $form.find("input[name='playlist_id']").val(),
@@ -27,6 +27,7 @@
         var posting = $.post(url, {playlist_id: playlist_id, date: date, datecopy:datecopy, url:url});
         posting.done(function (data) {
             data = JSON.parse(data);
+            $("#form").html('');
             if(data.success != 0){
                 $("#form").html(data.success+' Events Succesfully Copied');
             }
@@ -34,7 +35,7 @@
                 $("#failed").html(data.failed+' Events Allready exist at same time')
             }
             console.log(data);
-            //$("#submit").addClass('disabled');
+            
         });
     });
 </script>

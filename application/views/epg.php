@@ -50,13 +50,13 @@
                 <a class="btn btn-warning" href="<?php echo base_url() . "webtv/playlist/" . $this->uri->segment(4) ?>"><i class="fa fa-mail-reply"></i> Back</a>
                 <div class="btn-group" role="group">
                     <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                       <i class="fa fa-download"></i> Dropdown
+                        <i class="fa fa-download"></i> Dropdown
                         <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu" role="menu">
-                        <li><a target="_blank" href="<?=  base_url().'webtv/export/pdf/'.$this->uri->segment(3)  ?>"> PDF</a></li>
-                        <li><a target="_blank" href="<?=  base_url().'webtv/export/csv/'.$this->uri->segment(3)  ?>"> CSV</a></li>
-                        <li><a target="_blank" href="<?=  base_url().'webtv/export/xml/'.$this->uri->segment(3)  ?>"> XML</a></li>
+                        <li><a target="_blank" href="<?= base_url() . 'webtv/export/pdf/' . $this->uri->segment(3) ?>"> PDF</a></li>
+                        <li><a target="_blank" href="<?= base_url() . 'webtv/export/csv/' . $this->uri->segment(3) ?>"> CSV</a></li>
+                        <li><a target="_blank" href="<?= base_url() . 'webtv/export/xml/' . $this->uri->segment(3) ?>"> XML</a></li>
                     </ul>
                 </div>
             </div><!-- /.col -->
@@ -81,13 +81,13 @@
 
         var playlist_id = <?= $this->uri->segment(3); ?>;
         $('#drop-remove').prop('checked', true);
-        
-        $('.box-body').each(function(index){
-            if($(this).height() > 200){
+
+        $('.box-body').each(function (index) {
+            if ($(this).height() > 200) {
                 //$(this).attr('style','height: 300px; overflow-x: auto;');
             }
         });
-        
+
         function ini_events(ele) {
             ele.each(function () {
 
@@ -130,11 +130,11 @@
                 week: 'week',
                 day: 'day'
             },
-            defaultView : 'agendaDay',
+            defaultView: 'agendaDay',
             events: "<?= base_url() ?>webtv/renderevent?playlist_id=" + playlist_id + '&',
             minTime: 0,
             maxTime: 24,
-            slotMinutes: 15,
+            slotMinutes: 1,
             editable: true,
             droppable: true, // this allows things to be dropped onto the calendar !!!
             drop: function (date, allDay, ui) {
@@ -172,11 +172,13 @@
                  */
             },
             eventDrop: function (event, delta, revertFunc) {
-                event.action = 'update';
 
-                console.log(event);
-
-                __saveEvent(event);
+                if (isOverlapping(event)) {
+                    revertFunc();
+                } else {
+                    event.action = 'update';
+                    __saveEvent(event);
+                }
             },
             eventResize: function (event, delta, revertFunc) {
                 event.action = 'update';
@@ -189,17 +191,43 @@
                     __saveEvent(event);
                 }
             },
-            eventOverlap: false,
+            slotEventOverlap: false,
             eventDurationEditable: false
         });
-        
+
+
+        function isOverlapping(event) {
+            var array = cal.fullCalendar('clientEvents');
+            for (i in array) {
+                if (array[i].id != event.id) {
+                    alert(array[i].start);
+                    alert(event.start);
+                    if (event.end >= array[i].start && event.start <= array[i].end) {
+                        return 1;
+                    }
+                }
+            }
+            return 0;
+        }
+
         custom_buttons = '<span class="fc-button fc-button-eventcopy fc-state-default fc-corner-left" unselectable="on" style="-moz-user-select: none;">Event Copy</span>'
         $('.fc-button-agendaDay').after(custom_buttons);
 
         $('.fc-button-eventcopy').on('click', function () {
-            alert('done');
+            var moment = $('#calendar').fullCalendar('getDate');
+            var d = new Date(moment);
+            var url = '<?= base_url() . 'webtv/eventCopy?url='.  current_full_url().'&playlist_id=' . $this->uri->segment(3).'&date='?>' + d.getUTCFullYear() + '-' + (d.getUTCMonth() + 1) + '-' + d.getUTCDate(); 
+            bootbox.dialog({message: 'wait...', title: "Event Copy"});
+            $.ajax({
+                type: "GET",
+                url: url,
+                dataType: "html",
+                success: function (response) {
+                    $('.modal-dialog .modal-content .modal-body .bootbox-body').html(response);
+                }
+            });
         });
-
+        $('.fc-button-month').hide();
         function __saveEvent(event) {
             var subUrl = "<?= base_url() ?>webtv/saveevent";
             $('.loader').html('loading.....');
