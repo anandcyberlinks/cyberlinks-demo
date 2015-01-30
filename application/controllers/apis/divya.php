@@ -408,4 +408,86 @@ class Divya extends Apis{
         exit;
     }
     
+    
+    /*** User registration ***/
+    function register_post(){
+        $user = array_merge(array('first_name'=>'','last_name'=>'','gender'=>'','email'=>'','password'=>'123456',
+                                  'contact_no'=>'','image'=>'','image_type'=>'','status'=>'inactive',
+                                  'language'=>'english','role_id'=>'NULL','token'=>md5(uniqid()),'owner_id'=>$this->app->id,
+                                  'created'=>date("Y-m-d H:i:s"),'modified'=>date("Y-m-d H:i:s")),$this->post());
+        
+        
+        
+        $validation = array('first_name','gender');
+        $response = array();
+        
+        //check validation
+        foreach($validation as $key=>$val){
+            if(empty($user[$val])){
+                $response['error'][] = sprintf('%s field is required',ucwords($val));
+            }    
+        }
+        
+        if(empty($user['contact_no']) && empty($user['email'])){
+            $response['error'][] = sprintf('Email or Contact No. : One field is required');
+        } 
+        
+        if(!isset($response['error'])){
+            //check user already register with US
+            $condition  = empty($user['email']) ? sprintf(' c.contact_no = "%s" ',$user['contact_no']) : sprintf(' c.email = "%s" ',$user['email']);
+            $query = sprintf('select * from customers c where %s and c.owner_id = %d',$condition,$this->app->id);
+            $dataset = $this->db->query($query)->result();
+            if(count($dataset) > 0){
+                $user = reset($dataset);
+                
+                //Create/update token in api_token table
+                $query = sprintf('select * from api_token where user_id = %d ',$user->id);
+                $dataset = $this->db->query($query)->result();
+                $token = md5(uniqid());
+                if(count($dataset) <= 0){
+                    //insert
+                    $query = sprintf('insert into api_token values(null,"%s",%d,now(),now())',$token,$user->id);
+                    $this->db->query($query);
+                }else{
+                    //update
+                    $query = sprintf('update api_token set token = "%s",created_time = now(), hit_time = now() where user_id = %d',$token,$user->id);
+                    $this->db->query($query);
+                }
+                $response['token'] = $token;
+            }else{
+                
+                //Insert new user
+                $tmp_userpassword = $user['password'];
+                $user['email'] = empty($user['email']) ? $user['contact_no'].'@gmail.com' : $user['email'] ; 
+                $user['username'] = $user['email'];
+                $user['status'] = 'active'; 
+                $user['password'] = md5($user['password']);
+                
+                if($this->db->insert('customers',$user)){
+                    
+                    $user_id = $this->db->insert_id();
+                    $this->db->insert('user_password',array('user_id'=>$user_id,'u_password'=>$tmp_userpassword));
+                    
+                    //Create/update token in api_token table
+                    $query = sprintf('select * from api_token where user_id = %d ',$user_id);
+                    $dataset = $this->db->query($query)->result();
+                    $token = md5(uniqid());
+                    if(count($dataset) <= 0){
+                        //insert
+                        $query = sprintf('insert into api_token values(null,"%s",%d,now(),now())',$token,$user_id);
+                        $this->db->query($query);
+                    }else{
+                        //update
+                        $query = sprintf('update api_token set token = "%s",created_time = now(), hit_time = now() where user_id = %d',$token,$user_id);
+                        $this->db->query($query);
+                    }
+                    $response['token'] = $token;
+                    
+                }
+            }
+        }
+        $this->response($response);
+        exit;
+    }
+    
 }
