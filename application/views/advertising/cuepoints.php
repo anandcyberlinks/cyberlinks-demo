@@ -225,7 +225,7 @@
 </div> 
 <div class="modal fade" id="tester" tabindex="-1" role="dialog" 
      aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog" style="width:95%">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" 
@@ -277,6 +277,7 @@
                             <table class="table table-striped">
                                 <input type="hidden" name="maxDuration" id="maxDuration" value="">
                                 <input type="hidden" name="addFlag" id="addFlag" value="0">
+                                <input type="hidden" name="cancelFlag" id="cancelFlag" value="0">
                                 <tbody>
                                 <tr>
                                     <th width='10%' style="border-right: 1px solid gray;">Sr No.</th>
