@@ -284,6 +284,9 @@ class Webtv_model extends CI_Model {
         if($type=='Loop'){
              $this->db->where('contents.type','youtube');
         }
+        if($type=='Liner'){
+             $this->db->where('contents.type !=', 'youtube');
+        }
         $this->db->where_not_in('contents.id', $ids);
         if (isset($data['content_title']) && $data['content_title'] != '') {
             $this->db->like('title', trim($data['content_title']));
@@ -330,6 +333,9 @@ class Webtv_model extends CI_Model {
         $this->db->from('contents a');
         if($type=='Loop'){
              $this->db->where('a.type','youtube');
+        }
+        if($type=='Liner'){
+             $this->db->where('a.type !=', 'youtube');
         }
         $this->db->where_in('a.uid', $id);
         $this->db->where_not_in('a.id', $ids);
