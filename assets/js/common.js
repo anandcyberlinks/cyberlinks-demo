@@ -1069,9 +1069,10 @@ function cuepoint()
             {
                 
                 var videInfo = $.parseJSON(data1);
-                //console.log(videInfo);
+                console.log(videInfo);
             var i=1;
             var maxDuration = videInfo['result'][0].duration;
+            console.log(maxDuration);
              $("#range").data("ionRangeSlider").update({"from_max" :maxDuration});
             
             //console.log("===============>"+first.duration);
@@ -1079,7 +1080,7 @@ function cuepoint()
             videoFile = val.file;     
             var from_percentageSet = val.duration *(0.05301561);
             var finalPercentageSet = from_percentageSet.toFixed(5);
-            innerHtml +='<tr  class="'+className+'"><td style="border-right: 1px solid gray;">'+i+'</td><td style="border-right: 1px solid gray;"><img width="50px" height="50px" src="'+val.thumbnail+'"></td><td style="border-right: 1px solid gray;padding-left: 15px" class="loading"><div class="progress xs"><div style="width: '+finalPercentageSet+'%;" class="progress-bar progress-bar-reen"></div></div></td><input type="hidden" class="video_id" name="video_id" value="'+val.id+'"><input type="hidden" class="duration" name="duration" value="'+val.duration+'"><input type="hidden" class="videoFile" name="videoFile" value="'+val.file+'"></tr>';
+            innerHtml +='<tr  class="'+className+'"><td style="border-right: 1px solid gray;">'+i+'</td><td style="border-right: 1px solid gray;"><img width="50px" height="30px" src="'+val.thumbnail+'"></td><td style="border-right: 1px solid gray;padding-left: 20px" class="loading"><div class="progress xs"><div style="width: '+finalPercentageSet+'%;" class="progress-bar progress-bar-reen"></div></div></td><input type="hidden" class="video_id" name="video_id" value="'+val.id+'"><input type="hidden" class="duration" name="duration" value="'+val.duration+'"><input type="hidden" class="videoFile" name="videoFile" value="'+val.file+'"></tr>';
             i++;
             });
             if(IDs.length ==1)
