@@ -51,7 +51,7 @@
                                                     <option value="Loop">Loop TV</option>
                                                     <option value="Live">Live Stream</option>
                                                     <option value="Youtube">Youtube Channel</option>
-                                                    <option value="Liner">Liner</option>
+                                                    <option value="Linear">Linear</option>
                                                 </select>
                                             </div>
                                             <?php } ?>
