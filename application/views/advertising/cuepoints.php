@@ -225,7 +225,7 @@
 </div> 
 <div class="modal fade" id="tester" tabindex="-1" role="dialog" 
      aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog" style="width:95%">
+    <div class="modal-dialog" style="width:70%">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" 
@@ -251,9 +251,124 @@
                                 </div>   -->
                                 <div class="box-body no-padding">
 			<div class="table-responsive">
+                             <input type="hidden" name="forChangeVal" id="forChangeVal">
                                 <input type="hidden" name="text" id="text">
     <input type="hidden" name="percentage" id="percentage">
 <div class="popOver">
+    <div class="content">
+    <div class="row">
+    <section class="col-lg-6 addCueDiv">
+        <!-- Box (with bar chart) -->
+        <div class="box box-danger">
+            <div class="box-header">           
+            <h3 class="box-title">Add New Cue Point</h3>
+            </div><!-- /.box-header -->
+            <div class="box-body no-padding">
+            <div class="row">
+                <div class="col-sm-10">
+                                <div class="form-group">
+                                    
+                                    <input type="hidden" value="" name="singleVideoFlag" id="singleVideoFlag">
+                                    <input type="hidden" value="" name="inialValPoint" id="inialValPoint">
+                                <input type="hidden" value="" name="inialValPercentage" id="inialValPercentage">
+                                    <label style="display:block;" for="exampleInputEmail1">Timecode(hh:mm:ss)</label>
+                                    <input maxlength=3 style='width:35px;display:inline' type="text" name="hh" id="hh" placeholder="hh" class="form-control input-sm hh">:                                    
+                                    <input maxlength=3 style='width:35px;display:inline' type="text" name="mm" id="mm" placeholder="mm" class="form-control input-sm mm">:                                    
+                                    <input maxlength=3 style='width:35px;display:inline' type="text" name="ss" id="ss" placeholder="ss" class="form-control input-sm ss">
+                                </div>
+                                <div class="form-group">
+                                            <label for="exampleInputEmail1">Name (optional)</label>
+                                            <input type="email" id="cueName" name="cueName" placeholder="Name" id="exampleInputEmail1" class="form-control">
+                                        </div>
+                                <div class="box-footer">
+                                    <button class="btn btn-primary" type="submit" name="add" id="add">Add</button><button class="btn btn-primary" type="submit" name="update" id="update">Update</button>&nbsp;<a href="#" id="cancel" class="cancel">cancel</a>
+                                </div>
+                </div>
+            </div><!-- /.row - inside box -->
+            </div><!-- /.box-body -->
+        </div><!-- /.box -->
+        </section>
+   
+   
+    <section class="col-lg-6 infoDiv">
+        <!-- Box (with bar chart) -->
+        <div class="box box-danger">
+            <div class="box-header">           
+            <h3 class="box-title">To Add Cue Point</h3>
+            </div><!-- /.box-header -->
+            <div class="box-body no-padding">
+            <div class="row">
+                <div class="col-sm-10">
+                                Click Cue point button in the video player or click anywhere in the timeline below.
+                </div>
+            </div><!-- /.row - inside box -->
+            </div><!-- /.box-body -->
+        </div><!-- /.box -->
+        </section>
+   
+    <section class="col-lg-5 playerDiv" style='float:right;'>
+        <!-- Box (with bar chart) -->
+        <div class="box box-danger">
+            <div class="box-header">           
+            <h3 class="box-title">Add New Cue Point</h3>
+            </div><!-- /.box-header -->
+            <div class="box-body no-padding">
+            <div class="row">
+                <div class="col-sm-10">
+                               
+        <div id="prevElement1" class="innerResponse" >
+        </div>
+
+        <div class="box-footer">
+        <button class="btn btn-primary" onclick='play()' type="button" name="cue_point" id="cue_point">Cue points</button>
+        </div>
+                </div>
+            </div><!-- /.row - inside box -->
+            </div><!-- /.box-body -->
+        </div><!-- /.box -->
+        </section>
+    </div>
+</div>
+<script>
+   
+    function play()
+    {
+       jwplayer().play();
+       state = jwplayer().getState();
+       //alert(state);
+       if (state==="PAUSED") {
+        //alert(jwplayer().getPosition());
+        console.log(jwplayer().getPosition());
+        var pos = Math.floor(jwplayer().getPosition());
+        //pos.split(".");
+        //console.log(pos);
+                    var sectToTime = secTotime(pos);
+                    var splitArrTime = sectToTime.split(":");
+                    $(".mm").val(splitArrTime[0]);
+                    $(".ss").val(splitArrTime[1]);
+                    var from_percentage = pos *(0.05301561);
+                    var finalPercentage = from_percentage.toFixed(5);
+                    var removeClass = "append_"+pos;
+                    //var num = secTotime(v.cue_points);
+                    $(".infoDiv").hide();
+                    $(".addCueDiv").show();
+                    document.getElementById('closeClickEvent').style.pointerEvents = 'none';
+                    $('#text').val(pos);
+                    
+                    $('#percentage').val(finalPercentage);
+                    $(".irs").append("<span class='irs-single mybar1 "+ removeClass +"' style='left: "+finalPercentage +"%;'>"+  sectToTime +"</span>");
+                    $(".irs-with-grid").append("<span class='irs-bar mybar1 "+ removeClass +"' style='width:"+ finalPercentage +"%'></span>");
+                    $(".irs-with-grid").append("<span class='irs-slider single mybar1 "+ removeClass +"' style='left: "+ finalPercentage +"%;'></span>");         
+       }
+    }
+    //--set video player --//
+    
+
+</script>
+</div>
+
+    
+    <!--<div class="popOver">
     <div id="innerHtml">
         <h5 style="font: 12px">Add New Cue Point</h5>
         <input type="hidden" value="" name="inialValPoint" id="inialValPoint"> 
@@ -264,15 +379,15 @@
             <input class="mm" name="mm" id="mm"> :
             <input class="ss" name="ss" id="ss"> :
             <input class="ms" name="ms" id="ms">
-        </div><br>
+        </div>
         <span> Name (Optional)</span>
         <input type="text" id="cueName" name="cueName"><br><br>
-        <input type="submit" name="add" id="add" value="Add">&nbsp;<a href="#" id="cancel" class="cancel">cancel</a>
+        <input type="submit" name="add" id="add" value="Add"><input type="submit" name="update" id="update" value="Update">&nbsp;<a href="#" id="cancel" class="cancel">cancel</a>
         
         
     
 </div>
-</div>
+</div>-->
                             <!-- .table - Uses sparkline charts-->
                             <table class="table table-striped">
                                 <input type="hidden" name="maxDuration" id="maxDuration" value="">
@@ -280,9 +395,9 @@
                                 <input type="hidden" name="cancelFlag" id="cancelFlag" value="0">
                                 <tbody>
                                 <tr>
-                                    <th width='10%' style="border-right: 1px solid gray;">Sr No.</th>
-                                    <th width='30%' style="border-right: 1px solid gray;">Content</th>
-                                    <th width="60%" style="border-right: 1px solid gray;padding-left: 0px" class="loaderheader"><div id="closeClickEvent" class="tester"><div>
+                                    <th width='5%' style="border-right: 1px solid gray;">Sr No.</th>
+                                    <th width='8%' style="border-right: 1px solid gray;">Content</th>
+                                    <th width="60%" style="border-right: 1px solid gray;padding-left: 10px" class="loaderheader"><div id="closeClickEvent" class="tester"><div>
         <input type="text" id="range" value="" name="range" />
     </div>
 
@@ -299,34 +414,7 @@
     </div><!-- /.modal -->
 </div>
 <style>
-     /*.irs-line-left 
-    {
-        background-color: grey;
-        
-    }
-    .irs-line-mid
-    {
-        background-color: grey;
-    }.irs-line-right
-    {
-        background-color: grey;
-        
-    }.irs-bar
-    {
-        background-color: grey;
-        
-    }
-    .irs-bar-edge
-    {
-        background-color: grey;
-        
-    }
-    .irs-slider
-    {
-        background-color: grey;
-        width: 2px;
-        
-    }*/    .popOver
+    /*.popOver
     {
            width: 300px;
            height: 300px;
@@ -340,7 +428,7 @@
     {
           width: 25px;  
         
-    }
+    }*/
   /*.irs-slider {
     background-color: gray!important;
     background-position: 0 -120px;

@@ -87,13 +87,44 @@ $this->show_view("advertising/cuepoints", $content);*/
       $i=0;
        foreach($_POST['IDs'] as $key=>$val)
        {
-          //$innerArray = array();
+          $innerArray = array();
           $data[$i]["content_id"]= $val;
           $data[$i]["cue_points"]=$_POST['timeInMillisec'];
           $data[$i]["title"] =$_POST['cueName'];
           $i++;
           }
-       $insertStatus = $this->videos_model->insertCuePoints($data);
+          $editFlag = $_POST['editFlag'];
+       $insertStatus = $this->videos_model->insertCuePoints($data,$uniquePoints,$editFlag);
        
     }
+function  updateCuePoint()
+    {
+    //echo "<pre>";
+      // print_r($_POST);
+       //die();
+     // echo "<pre>";
+      $data = array();
+      $i=0;
+       foreach($_POST['IDs'] as $key=>$val)
+       {
+           $j=0;
+          $innerArray = array();
+          
+          foreach ($_POST['cuepointArr'] as $k=>$v)
+              {
+              $excludeArray = explode(":", $v[$j]);
+              print_r($excludeArray);
+                $data[$i][$j]['cue_points'] = $v[$j];
+                $data[$i][$j]["content_id"]= $val;
+                $j++;        
+                        }
+          $i++;
+          }
+          //echo "<pre>";
+          //print_r($data);
+          //die();
+          //$editFlag = $_POST['editFlag'];
+      // $updateStatus = $this->videos_model->updateCuePoints($data,$_POST['IDs']);
+       
+    }    
  }
