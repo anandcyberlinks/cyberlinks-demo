@@ -1130,7 +1130,7 @@ class Videos_model extends CI_Model {
         $this->db->join('files c3', 'h.file_id = c3.id', 'left');        
         $this->db->where_in('a.id',$IDs);    
         $this->db->group_by('a.id');
-        //$this->db->order_by($sort, $sort_by);
+        $this->db->order_by($sort, $sort_by);
         //$this->db->limit($limit, $start);
         $query = $this->db->get();
         //echo $this->db->last_query();
