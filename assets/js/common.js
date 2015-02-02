@@ -1151,7 +1151,7 @@ function cuepoint()
             type: 'single',
             step: 0,
            grid: true,
-           grid_num: 2,
+           grid_num: 10,
            from_shadow :true,
            prettify: function (num) {
                 //console.log(num);
