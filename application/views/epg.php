@@ -142,7 +142,7 @@
                 var view = $('#calendar').fullCalendar('getView');
                 switch (view.name) {
                     case 'month' :
-                        alert('month view');
+                        //alert('month view');
                         break;
                     default :
                         // retrieve the dropped element's stored Event Object
