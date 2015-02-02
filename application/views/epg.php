@@ -104,7 +104,7 @@
                 $(this).draggable({
                     zIndex: 1070,
                     revert: true, // will cause the event to go back to its
-                    revertDuration: 0  //  original position after the drag
+                    revertDuration: 500  //  original position after the drag
                 });
 
             });
@@ -138,32 +138,38 @@
             editable: true,
             droppable: true, // this allows things to be dropped onto the calendar !!!
             drop: function (date, allDay, ui) {
-
-                // retrieve the dropped element's stored Event Object
-                var originalEventObject = $(this).data('eventObject');
-
-                // we need to copy it, so that multiple events don't have a reference to the same object
-                var copiedEventObject = $.extend({}, originalEventObject);
-
-                var duration = $(this).attr("duration");
-
-                // assign it the date that was reported
-                copiedEventObject.id = $(this).attr("id");
-                copiedEventObject.start = date;
-                copiedEventObject.end = new Date(date.getTime() + (duration * 1000));
-                copiedEventObject.allDay = allDay;
-                copiedEventObject.backgroundColor = $(this).css("background-color");
-                copiedEventObject.borderColor = $(this).css("border-color");
-
-                // render the event on the calendar
-                // the last `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
-                $('#calendar').fullCalendar('renderEvent', copiedEventObject, true);
-
-                __saveEvent(copiedEventObject);
-
-                $(this).remove();
-
-                // is the "remove after drop" checkbox checked?
+                
+                var view = $('#calendar').fullCalendar('getView');
+                switch (view.name) {
+                    case 'month' :
+                        alert('month view');
+                        break;
+                    default :
+                        // retrieve the dropped element's stored Event Object
+                        var originalEventObject = $(this).data('eventObject');
+        
+                        // we need to copy it, so that multiple events don't have a reference to the same object
+                        var copiedEventObject = $.extend({}, originalEventObject);
+        
+                        var duration = $(this).attr("duration");
+        
+                        // assign it the date that was reported
+                        copiedEventObject.id = $(this).attr("id");
+                        copiedEventObject.start = date;
+                        copiedEventObject.end = new Date(date.getTime() + (duration * 1000));
+                        copiedEventObject.allDay = allDay;
+                        copiedEventObject.backgroundColor = $(this).css("background-color");
+                        copiedEventObject.borderColor = $(this).css("border-color");
+        
+                        // render the event on the calendar
+                        // the last `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
+                        $('#calendar').fullCalendar('renderEvent', copiedEventObject, true);
+        
+                        __saveEvent(copiedEventObject);
+        
+                        $(this).remove();
+                        break;
+                }
                 /*
                  if ($('#drop-remove').is(':checked')) {
                  // if so, remove the element from the "Draggable Events" list
@@ -172,12 +178,12 @@
                  */
             },
             eventDrop: function (event, delta, revertFunc) {
-                event.action = 'update';
-                __saveEvent(event);
+                //event.action = 'update';
+                //__saveEvent(event);
             },
             eventResize: function (event, delta, revertFunc) {
-                event.action = 'update';
-                __saveEvent(event);
+                //event.action = 'update';
+                //__saveEvent(event);
             },
             eventClick: function (event, jsEvent, view) {
                 var r = confirm("Delete " + event.title);
@@ -222,7 +228,7 @@
                 }
             });
         });
-        $('.fc-button-month').hide();
+        
         function __saveEvent(event) {
             var subUrl = "<?= base_url() ?>webtv/saveevent";
             $('.loader').html('loading.....');
