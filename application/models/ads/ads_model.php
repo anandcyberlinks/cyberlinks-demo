@@ -867,7 +867,7 @@ class Ads_model extends CI_Model {
 	$keywords[] = $data->gender;
       }
    if($keywords){
-    //  $this->db->where_in('k.name',unserialize($data->keywords));
+      $this->db->where_in('k.name',unserialize($data->keywords));
    }
     
     if(@$data->dob){
@@ -876,10 +876,10 @@ class Ads_model extends CI_Model {
        $datediff =  date_diff($date1,$date2);
        $age = $datediff->y;
        $between = sprintf("%s BETWEEN a.age_group_from AND a.age_group_to",$age);
-    //  $this->db->where($between, null, false);      
+      $this->db->where($between, null, false);      
     }
      
-      $this->db->select('a.uid,a.ad_type,c.name as file_name,k.name as tags,c.relative_path as vast_file,al.ads_id,MIN(ROUND(((ACOS(SIN('.$lat.' * PI() / 180) * SIN(al.latitude * PI() / 180) + COS('.$lat.' * PI() / 180) * COS(al.latitude * PI() / 180) * COS(('.$long.' - al.longitude) * PI() / 180)) * 180 / PI()) * 60 * 1.1515))) AS distance');     
+      $this->db->select('a.uid,a.ad_type,c.name as file_name,k.name as tags,c.relative_path as vast_file,a.id as ads_id,MIN(ROUND(((ACOS(SIN('.$lat.' * PI() / 180) * SIN(al.latitude * PI() / 180) + COS('.$lat.' * PI() / 180) * COS(al.latitude * PI() / 180) * COS(('.$long.' - al.longitude) * PI() / 180)) * 180 / PI()) * 60 * 1.1515))) AS distance');     
       $this->db->from('ads a');
       $this->db->join('ads_location al','a.id=al.ads_id','left');
       $this->db->join('files c','a.vast_file_id=c.id','left');
@@ -888,11 +888,11 @@ class Ads_model extends CI_Model {
       
     //  $this->db->where('a.content_id',$id);
      // $this->db->having('ROUND(distance) <= ' ,3);
-     $this->db->group_by('al.ads_id');
+     $this->db->group_by('a.id');
       $this->db->order_by('distance');
      // $this->db->limit($limit);
       $query = $this->db->get();
-      //echo '<br>'.$this->db->last_query();die;
+     // echo '<br>'.$this->db->last_query();die;
       return $query->result();
     }
     

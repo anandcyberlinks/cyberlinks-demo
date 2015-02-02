@@ -58,7 +58,12 @@ class Details extends MY_Controller {
                 
                 $device = $_GET['device'];
 		$this->data['user_id'] = $_GET['user_id'];
-                $this->data['result'] = $this->Video_model->video_play($id,$device);         
+                $result = $this->Video_model->video_play($id,$device);
+		if($result){
+			$this->data['result'] =$result;	
+		}else{
+			$this->data['result'] = $this->Video_model->video_play_youtube($id,'youtube');
+		}
 		$this->data['scheduleBreaks'] = $adsFinal;       
                 $this->load->view('details',$this->data);
 	}

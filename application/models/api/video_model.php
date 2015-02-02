@@ -484,7 +484,7 @@ class Video_model extends CI_Model {
    
    public function video_play($id,$device)
    {
-        $this->db->select('a.id as content_id,a.uid as content_provider,c1.name as thumbnail_path,e.path as video_path');
+        $this->db->select('a.type, a.id as content_id,a.uid as content_provider,c1.name as thumbnail_path,e.path as video_path');
 	$this->db->from('contents a');               
         $this->db->join('flavored_video e', 'a.id = e.content_id', 'left');
         $this->db->join('video_flavors f', 'f.id = e.flavor_id', 'left');
@@ -498,6 +498,23 @@ class Video_model extends CI_Model {
        //echo '<br>'.$this->db->last_query();die;
         return $query->row();
    }
+   
+   public function video_play_youtube($id,$type='youtube')
+   {
+        $this->db->select('a.type,a.id as content_id,a.uid as content_provider,c1.name as thumbnail_path,f.relative_path as video_path');
+	$this->db->from('contents a');               
+        $this->db->join('video_thumbnails h','h.content_id=a.id AND h.default_thumbnail=1','left');
+        $this->db->join('files c1', 'h.file_id = c1.id', 'left');
+	$this->db->join('videos v','v.content_id=a.id','inner');
+	$this->db->join('files f','f.id=v.file_id');
+        $this->db->where('a.status','1');
+        $this->db->where('a.id',$id);
+       $this->db->where('a.type',$type);
+        $query = $this->db->get();
+       //echo '<br>'.$this->db->last_query();die;
+        return $query->row();
+   }
+   
    public function video_flavors()
    {
        $this->db->select('a.id as map_id,a.flavor_id,d.flavor_name,a.content_id,c.name,c.minetype as content_type,c.absolute_path as video_file_name');
