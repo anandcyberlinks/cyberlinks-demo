@@ -25,8 +25,7 @@
                             <?php
                                 if(isset($result['vod'])){
                                     foreach ($result['vod'] as $key => $value) {
-                                        echo '<pre>';print_r($value);echo '</pre>';
-                                        //echo sprintf('<div class="external-event" style="background-color: %s " id="%d">%s[%s]</div><br>"',$value->color,$value->id,$value->title,$this->time_from_seconds($value->duration));
+                                        echo sprintf('<div class="external-event" style="background-color: %s " id="%d">%s[]</div><br>"',$value->color,$value->id,$value->title);
                                     }
                                 }
                             ?>
