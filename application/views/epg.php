@@ -23,10 +23,10 @@
                     <div class="box-body">
                         <div id='external-events'>
                             <?php
-                                echo '<pre>';print_r($result);echo '</pre>';
                                 if(isset($result['vod'])){
                                     foreach ($result['vod'] as $key => $value) {
-                                        echo sprintf('<div class="external-event" style="background-color: %s " id="%d">%s[%s]</div><br>"',$value->color,$value->id,$value->title,$this->time_from_seconds($value->duration));
+                                        echo '<pre>';print_r($value);echo '</pre>';
+                                        //echo sprintf('<div class="external-event" style="background-color: %s " id="%d">%s[%s]</div><br>"',$value->color,$value->id,$value->title,$this->time_from_seconds($value->duration));
                                     }
                                 }
                             ?>
