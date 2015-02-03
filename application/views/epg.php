@@ -133,7 +133,7 @@
             defaultView: 'agendaDay',
             events: "<?= base_url() ?>webtv/renderevent?playlist_id=" + playlist_id + '&',
             minTime: 0,
-            maxTime: 24,
+            maxTime: 12,
             slotMinutes: 1,
             editable: true,
             droppable: true, // this allows things to be dropped onto the calendar !!!
@@ -178,12 +178,19 @@
                  */
             },
             eventDrop: function (event, delta, revertFunc) {
-                //event.action = 'update';
-                //__saveEvent(event);
+                var view = $('#calendar').fullCalendar('getView');
+                switch (view.name) {
+                    case 'month' :
+                        break;
+                    default :
+                        event.action = 'update';
+                        __saveEvent(event);
+                        break;
+                }
             },
             eventResize: function (event, delta, revertFunc) {
-                //event.action = 'update';
-                //__saveEvent(event);
+                event.action = 'update';
+                __saveEvent(event);
             },
             eventClick: function (event, jsEvent, view) {
                 var r = confirm("Delete " + event.title);
@@ -192,8 +199,8 @@
                     __saveEvent(event);
                 }
             },
-            slotEventOverlap: false,
-            eventDurationEditable: false
+            slotEventOverlap: false
+            //eventDurationEditable: false
         });
 
 
