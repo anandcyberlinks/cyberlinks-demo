@@ -87,7 +87,7 @@
                                     <thead>
                                         <tr>
                                             <th>select</th>
-                                            <th width="15px"><a href="<?php echo base_url(); ?>advertising/live_stream/title/<?php echo (!empty($show_t)) ? $show_t : 'asc'; ?>"><?php echo $welcome->loadPo('Title') ?></a></th>
+                                            <th width="15px"><?php echo $welcome->loadPo('Channel') ?></th>
                                             
                                             <th><?php echo $welcome->loadPo('Category') ?></th>
                                             <th><?php echo $welcome->loadPo('User') ?></th>

@@ -49,18 +49,18 @@
                     </ul>
                 </li>
           
-	  <li class="<?= (($this->uri->segment(2) == 'advertising')  ) ? 'active' : '' ?>">
-                <a href="<?php echo base_url() ?>advertising" >
-                    <i class="fa fa-fw fa-film"></i> <span><?php echo $welcome->loadPo('Advertising'); ?></span>
-                </a>
-               
-            </li>
-	  <li class="<?= (($this->uri->segment(2) == 'live_stream')  ) ? 'active' : '' ?>">
-                <a href="<?php echo base_url() ?>advertising/live_stream" >
-                    <i class="fa fa-fw fa-film"></i> <span><?php echo $welcome->loadPo('Live Streaming'); ?></span>
-                </a>
-               
-            </li>
+	  <li class="treeview <?= ($this->uri->segment(1) == 'advertising') ? 'active' : '' ?>">
+                    <a href="#">
+                        <i class="fa fa-fw fa-film"></i>
+                        <span><?php echo $welcome->loadPo('Advertising'); ?></span>
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li class="<?= ($this->uri->segment(1) == 'advertising' && $this->uri->segment(2) == '' ) ? 'active' : '' ?>"><a href="<?php echo base_url() ?>advertising"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('Video'); ?></a></li>
+                        <li class="<?= ($this->uri->segment(1) == 'advertising' && $this->uri->segment(2) == 'live_stream') ? 'active' : '' ?>"><a href="<?php echo base_url() ?>advertising/live_stream"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('Live stream'); ?></a></li>
+                    </ul>
+                </li>
+			 
             <li class="<?= ($this->uri->segment(1) == 'webtv' || $this->uri->segment(1) == 'livestream') ? 'active' : '' ?>">
                 <a href="<?php echo base_url() ?>webtv" >
                     <i class="fa fa-fw fa-film"></i> <span><?php echo $welcome->loadPo('WebTV'); ?></span>
