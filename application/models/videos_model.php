@@ -1156,10 +1156,10 @@ class Videos_model extends CI_Model {
         return $data;
     }
     
-   function insertCuePoints($post) {
+   function insertCuePoints($post) {	
         $this->db->insert_batch('content_cuepoints', $post);
     }
-   function updateCuePoints($post,$IDs) {
+   function updateCuePoints($post,$IDs,$m="") {
     //print_r($post);
        $this->db->where_in('content_id', $IDs);
        $this->db->delete('content_cuepoints');
@@ -1168,7 +1168,9 @@ class Videos_model extends CI_Model {
             {               
               //  $this->db->insert_batch('content_cuepoints', $v);
             }*/
-       $this->db->insert_batch('content_cuepoints', $post);
+	if(count($post) >1 && $m !='del'){	   
+	    $this->db->insert_batch('content_cuepoints', $post);
+	}
     }
     
     function validate_cuepoint_duration($id,$v)

@@ -83,15 +83,22 @@ $this->show_view("advertising/cuepoints", $content);*/
        //print_r($_POST);
       // die();
      // echo "<pre>";
+     $created = date('Y-m-d h:i:s');
       $data = array();
       $i=0;
-       foreach($_POST['IDs'] as $key=>$val)
+       foreach($_POST['IDs'] as $key=>$id)
        {
+           //-- check if cue point is greater than video duration --//
+            $result = $this->videos_model->validate_cuepoint_duration($id,$_POST['timeInMillisec']);
+               
           $innerArray = array();
-          $data[$i]["content_id"]= $val;
-          $data[$i]["cue_points"]=$_POST['timeInMillisec'];
-          $data[$i]["title"] =$_POST['cueName'];
-          $i++;
+           if($result ==1){  
+               $data[$i]["content_id"]= $id;
+               $data[$i]["cue_points"]=$_POST['timeInMillisec'];
+               $data[$i]["title"] =$_POST['cueName'];
+               $data[$i]["created"] = $created;
+               $i++;
+            }
           }
           $editFlag = $_POST['editFlag'];
        $insertStatus = $this->videos_model->insertCuePoints($data,$uniquePoints,$editFlag);
@@ -104,6 +111,7 @@ function  updateCuePoint()
        //die();
      // echo "<pre>";
          
+      $created = date('Y-m-d h:i:s');
       $data = array();
       $i=0;
        foreach($_POST['IDs'] as $key=>$id)
@@ -117,7 +125,8 @@ function  updateCuePoint()
                $result = $this->videos_model->validate_cuepoint_duration($id,$v);
                if($result ==1){              
                 $data[$i]['cue_points'] = $v;
-                $data[$i]["content_id"]= $id;             
+                $data[$i]["content_id"]= $id;
+                $data[$i]["created"] = $created;
                 $i++;
                }
                } 
@@ -137,9 +146,11 @@ function  updateCuePoint()
        //die();
      // echo "<pre>";
       $post = $_POST['cuepointArr'];
-      $delVal = $_POST['delval'];         
-     unset($post[array_search($delVal, $post)]);    
-     
+      $delVal = $_POST['delval'];
+      
+      if(count($post) >1){
+         unset($post[array_search($delVal, $post)]);    
+      }
       $data = array();
       $i=0;
        foreach($_POST['IDs'] as $key=>$id)
@@ -163,7 +174,7 @@ function  updateCuePoint()
           //die();
           //$editFlag = $_POST['editFlag'];
           if(!empty($data)){
-       $updateStatus = $this->videos_model->updateCuePoints($data,$_POST['IDs']);
+       $updateStatus = $this->videos_model->updateCuePoints($data,$_POST['IDs'],"del");
           }
        
     }
