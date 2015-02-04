@@ -1139,9 +1139,9 @@ function cuepoint()
                     var finalPercentage = from_percentage.toFixed(5);
                     var removeClass = "append_"+v.cue_points;
                     var num = secTotime(v.cue_points);
-                    $(".irs").append("<span class='irs-single mybar1 "+ removeClass +"' checkAttr = '"+v.title+"' style='left: "+finalPercentage +"%;'>"+  num +"</span>");
+                    $(".irs").append("<span class='irs-single mybar1 "+ removeClass +"'  style='left: "+finalPercentage +"%;'>"+  num +"</span>");
                     $(".irs-with-grid").append("<span class='irs-bar mybar1 "+ removeClass +"' style='width:"+ finalPercentage +"%'></span>");
-                    $(".irs-with-grid").append("<span class='irs-slider single mybar1 "+ removeClass +"' style='left: "+ finalPercentage +"%;'></span>");                    
+                    $(".irs-with-grid").append("<span class='irs-slider single mybar1 "+ removeClass +"' checkAttr = '"+v.title+"' style='left: "+ finalPercentage +"%;'></span>");                    
                             
                  $(".irs-bar").remove();
                 });
@@ -1251,6 +1251,7 @@ function cuepoint()
                    //console.log(splitArr);
                    $(".mm").val(splitArr[0]);
                     $(".ss").val(splitArr[1]);
+                    $("#cueName").val('');
                     $("#inialValPoint").val(intiaSetValPoint);
                     $("#forChangeVal").val(intiaSetValPoint);
                     $("#inialValPercentage").val(intiaSetValPer);
@@ -1342,9 +1343,9 @@ $("#add").click(function(){
                   $(".js-irs-0 .irs-single."+div_removeClass1).remove();
                   $(".js-irs-0 .irs .irs-single."+div_removeClass1).remove();
                   
-                    $(".js-irs-0").append("<span class='irs-single mybar1 "+ div_removeClass1 +"' checkAttr = '"+cueName+"' style='left: "+ finalPercentage1 +"%;'>"+ secTotime(timeInMillisec) +"</span>");
+                    $(".js-irs-0").append("<span class='irs-single mybar1 "+ div_removeClass1 +"' style='left: "+ finalPercentage1 +"%;'>"+ secTotime(timeInMillisec) +"</span>");
                     $(".irs-with-grid").append("<span class='irs-bar mybar1 "+ div_removeClass1 +"' style='left: 0%; width:"+ finalPercentage1 +"'></span>");
-                    $(".irs-with-grid").append("<span class='irs-slider single mybar1 "+ div_removeClass1 +"' style='left: "+ finalPercentage1 +"%;'></span>");
+                    $(".irs-with-grid").append("<span class='irs-slider single mybar1 "+ div_removeClass1 +"' checkAttr = '"+cueName+"' style='left: "+ finalPercentage1 +"%;'></span>");
 
                     //$(".js-irs-0 .irs "+removeDiv1).remove(); 
                   //  $(".js-irs-0 .irs .irs "+removeDiv1).remove();
@@ -1432,9 +1433,9 @@ $("#update").click(function(){
    // console.log(div_removeClass2);
     if(newVal!= forChangeVal)
                 {
-                    $(".irs").append("<span class='irs-single mybar1 "+ div_removeClass2 +"' checkAttr ='"+cueName+"' style='left: "+ finalPercentage1 +"%;'>"+ secTotime(newVal)+"</span>");
+                    $(".irs").append("<span class='irs-single mybar1 "+ div_removeClass2 +"' style='left: "+ finalPercentage1 +"%;'>"+ secTotime(newVal)+"</span>");
                     $(".irs-with-grid").append("<span class='irs-bar mybar1 "+ div_removeClass2 +"' style='left: 0.9009%; width:"+ finalPercentage1 +"'></span>");
-                    $(".irs-with-grid").append("<span class='irs-slider single mybar1 "+ div_removeClass2 +"' style='left: "+ finalPercentage1 +"%;'></span>");
+                    $(".irs-with-grid").append("<span class='irs-slider single mybar1 "+ div_removeClass2 +"' checkAttr = '"+cueName+"' style='left: "+ finalPercentage1 +"%;'></span>");
 
                     $(".js-irs-0 .irs "+removeDiv2).remove(); 
                     $(".js-irs-0 .irs .irs "+removeDiv2).remove();
@@ -1444,9 +1445,9 @@ $("#update").click(function(){
                     
                 }else
                 {
-                     $(".irs").append("<span class='irs-single mybar1 "+ div_removeClass2 +"' checkAttr ='"+cueName+"' style='left: "+ finalPercentage1 +"%;'>"+ secTotime(forChangeVal)+"</span>");
+                     $(".irs").append("<span class='irs-single mybar1 "+ div_removeClass2 +"' style='left: "+ finalPercentage1 +"%;'>"+ secTotime(forChangeVal)+"</span>");
                     $(".irs-with-grid").append("<span class='irs-bar mybar1 "+ div_removeClass2 +"' style='left: 0.9009%; width:"+ finalPercentage1 +"'></span>");
-                    $(".irs-with-grid").append("<span class='irs-slider single mybar1 "+ div_removeClass2 +"' style='left: "+ finalPercentage1 +"%;'></span>");
+                    $(".irs-with-grid").append("<span class='irs-slider single mybar1 "+ div_removeClass2 +"' checkAttr ='"+cueName+"' style='left: "+ finalPercentage1 +"%;'></span>");
                     
                 }
         //--- get updated cuepoints list in array ---//
