@@ -178,4 +178,55 @@ function  updateCuePoint()
           }
        
     }
+    
+    function live_stream()
+    {
+        $data['welcome'] = $this;
+        $sort_by = 'desc';
+        $sort = 'a.id';
+        if (isset($_POST['submit']) && $_POST['submit'] == 'Search') {
+            $this->session->set_userdata('search_form', $_POST);
+        } else if (isset($_POST['reset']) && $_POST['reset'] == 'Reset') {
+            $this->session->unset_userdata('search_form');
+        }
+        $searchterm = $this->session->userdata('search_form');
+        $this->load->library("pagination");
+        $config = array();
+        $config["base_url"] = base_url() . "advertising/live_stream/";
+        $config["total_rows"] = $this->videos_model->get_livestreamcount($this->uid, $searchterm);
+        $config["per_page"] = 10;
+        $config["uri_segment"] = 3;
+        $this->pagination->initialize($config);
+        $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        $data['category'] = $this->videos_model->get_channel_categories();
+        $data['result'] = $this->videos_model->get_livestream($this->uid, PER_PAGE, $page, $sort, $sort_by, $searchterm);
+        $data["links"] = $this->pagination->create_links();
+  //echo '<pre>';print_r( $data['result']);
+        $this->show_view('advertising/live_stream',$data);
+    }
+    
+    function  inserCuePointLiveStream()
+    {
+      $data = array();
+      $created = date('Y-m-d h:i:s');
+      
+      //echo '<pre>';              print_r($_POST);
+       foreach($_POST['channel_ids'] as $key=>$val)
+       {
+          $i=0;
+          
+          foreach($_POST['cue_points'] as $key1 => $val1)
+          {
+              $data[$i]["content_id"]= $val;
+              $data[$i]["title"] =$_POST['cue_name'];
+              $data[$i]["type"]='live';
+              $data[$i]["cue_points"]=$val1;
+              $data[$i]["created"]=$created;
+              $i++;
+          }
+          //echo '<pre>';          print_r($data);
+          $insertStatus = $this->videos_model->insertCuePointsLivestream($data);
+        }
+       
+    }
  }

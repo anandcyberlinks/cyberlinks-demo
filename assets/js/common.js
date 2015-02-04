@@ -1538,6 +1538,134 @@ $("#delete").click(function(){
         });   
 });
 
+$("#linkClicklive").click(function(){
+    var len = $(".video:checked").length;
+    if(len<=0){
+        bootbox.alert('Please select at least one content.');
+        return false;
+    }else{
+        cuepoint_live();
+    }
+});
+function cuepoint_live()
+{
+    
+    $("#singleVideoFlag").val(0);    
+    $(".main_tr").remove();
+    $(".popOver").hide();
+    var j =0;
+    var IDs = [];
+    var CHANNELids = [];
+    //var THUMBNAILs = [];
+    var innerHtml = ''; 
+    var className = "main_tr";
+    
+    
+    $('.video:checked').each(function() {
+        j++;
+        IDs.push($(this).val());
+        CHANNELids.push($(this).attr("channel_id"));
+        //THUMBNAILs.push($(this).attr("thumbnail"));
+        innerHtml +='<tr  class="'+className+'"><td style="border-right: 1px solid gray;">'+j+'</td><td style="border-right: 1px solid gray;"><img width="50px" height="30px" src="'+$(this).attr("thumbnail")+'"></td><td style="border-right: 1px solid gray;padding-left: 20px" class="loading">'+$(this).attr("channel")+'</td></tr>';
+        
+     });
+     
+   
+    
+     var myJsonString = JSON.stringify(CHANNELids);
+     
+     innerHtml += '<input type="hidden" name="channel_ids" id="channel_ids" value="">';
+     
+     if(innerHtml!=''){    
+              $(".innerResponse tbody").append(innerHtml);
+     }
+     $("#channel_ids").val(myJsonString);
+     if(IDs.length == 1)
+     {
+         $(".popOver").show();
+         $(".playerDiv").show();
+         $(".addCueDiv").hide();
+         $(".infoDiv").show();
+        // document.getElementById('closeClickEvent').style.pointerEvents = 'none';
+         $("#singleVideoFlag").val(1);
+     }
+     //JSON.stringify(IDs);
+           $.ajax({
+            type: "POST",
+            url: baseurl + "advertising/getlistdetail_live",
+            sync: true,
+            data: {"IDs":IDs}  ,
+            success: function (data1)
+            {
+                
+                var videInfo = $.parseJSON(data1);
+                console.log(videInfo);
+            var i=1;
+            var maxDuration = videInfo['result'][0].duration;
+            console.log(maxDuration);
+             $("#range").data("ionRangeSlider").update({"from_max" :maxDuration});
+            
+            //console.log("===============>"+first.duration);
+            $.each(videInfo['result'],function(key,val){
+            videoFile = val.file;     
+            var from_percentageSet = val.duration *(0.05301561);
+            var finalPercentageSet = from_percentageSet.toFixed(5);
+            innerHtml +='<tr  class="'+className+'"><td style="border-right: 1px solid gray;">'+i+'</td><td style="border-right: 1px solid gray;"><img width="50px" height="30px" src="'+val.thumbnail+'"></td><td style="border-right: 1px solid gray;padding-left: 20px" class="loading"><div class="progress xs"><div style="width: '+finalPercentageSet+'%;" class="progress-bar progress-bar-reen"></div></div></td><input type="hidden" class="video_id" name="video_id" value="'+val.id+'"><input type="hidden" class="duration" name="duration" value="'+val.duration+'"><input type="hidden" class="videoFile" name="videoFile" value="'+val.file+'"></tr>';
+            i++;
+            });
+            if(IDs.length ==1)
+            {
+                /* Video Player Script */
+                    var file_path = videoFile;
+                    var str = '<script type="text/javascript">';
+                     str += 'jwplayer("prevElement1").setup({ ';
+                    str += 'primary: "html5",';
+                    str += 'width: "320",';
+                    str += 'height: 320/1.5,';
+                    // str += 'aspectratio: "16:9",';
+                    str += 'file: ' + '"' + file_path + '"';
+                     str += '});';
+                    str += '<\/script>';
+                     $('#myModal #prevElement').html(str);
+                /* End Video Player Script */
+            }
+            //console.log(videoFile);
+            if(innerHtml!=''){    
+              $(".innerResponse tbody").append(innerHtml);
+          } 
+  $.ajax({
+            type: "POST",
+            url: baseurl + "advertising/setcuepoint",
+            data: {"IDs" : IDs}  ,
+            sync: true,
+            success: function (data)
+            {
+                //console.log(data);
+                var cuePointInfo = $.parseJSON(data);
+                //return cuePointInfo;
+                //console.log(cuePointInfo);
+                var lastKey;
+                $.each(cuePointInfo['result'],function(k,v){
+                    //var onePercentage = 0.02302;
+                    lastKey = v.cue_points;
+                    var from_percentage = v.cue_points *(0.05301561);
+                    var finalPercentage = from_percentage.toFixed(5);
+                    var removeClass = "append_"+v.cue_points;
+                    var num = secTotime(v.cue_points);
+                    $(".irs").append("<span class='irs-single mybar1 "+ removeClass +"' style='left: "+finalPercentage +"%;'>"+  num +"</span>");
+                    $(".irs-with-grid").append("<span class='irs-bar mybar1 "+ removeClass +"' style='width:"+ finalPercentage +"%'></span>");
+                    $(".irs-with-grid").append("<span class='irs-slider single mybar1 "+ removeClass +"' style='left: "+ finalPercentage +"%;'></span>");                    
+                            
+                 $(".irs-bar").remove();
+                });
+                
+                //console.log(lastKey);
+            } 
+        });          
+            } 
+        });
+}
+
 /* functions used for comment section ends */
 function secTotime(num)
 {

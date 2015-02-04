@@ -1188,4 +1188,116 @@ class Videos_model extends CI_Model {
       else
 	return 0;
     }
+        
+    
+    function get_livestreamcount($uid, $data=''){
+        $timeStart = " 00:00:00";
+        $timeEnd = " 23:59:59";
+        $id = $this->get_ownerid($uid);
+        array_push($id, $uid);
+        $this->db->select('channels.*');
+        $this->db->from('channels');
+        $this->db->join('livestream', 'channels.id = livestream.channel_id', 'inner');
+        $this->db->join('channel_categories', 'channels.category_id = channel_categories.id', 'left');
+        $this->db->where_in('channels.uid', $id);
+        if (isset($data['content_title']) && $data['content_title'] != '') {
+            $this->db->like('name', trim($data['content_title']));
+        }
+        if (isset($data['category']) && $data['category'] != '') {
+            $this->db->where('channel_categories.category', $data['category']);
+        }
+        if ((isset($data['datepickerstart']) && $data['datepickerstart'] != '') && (isset($data['datepickerend']) && $data['datepickerend'] != '')) {
+            $date = str_replace('/', '-', $data['datepickerstart']);
+            $datestart = date('y-m-d', strtotime($date));
+            $date = str_replace('/', '-', $data['datepickerend']);
+            $dateend = date('y-m-d', strtotime($date));
+            $dateTimeStart = $datestart . $timeStart;
+            $dateTimeEnd = $dateend . $timeEnd;
+            $this->db->where("channels.created BETWEEN '$dateTimeStart' and '$dateTimeEnd'", NULL, FALSE);
+        } else {
+            if (isset($data['datepickerstart']) && $data['datepickerstart'] != '') {
+                $date = str_replace('/', '-', $data['datepickerstart']);
+                $datestart = date('y-m-d', strtotime($date));
+                $dateTimeStart = $datestart . $timeStart;
+                $dateTimeEnd = $datestart . $timeEnd;
+                $this->db->where("channels.created BETWEEN '$dateTimeStart' and '$dateTimeEnd'", NULL, FALSE);
+            }
+            if (isset($data['datepickerend']) && $data['datepickerend'] != '') {
+                $date = str_replace('/', '-', $data['datepickerend']);
+                $dateend = date('y-m-d', strtotime($date));
+                $dateTimeStart = $dateend . $timeStart;
+                $dateTimeEnd = $dateend . $timeEnd;
+                $this->db->where("channels.created BETWEEN '$dateTimeStart' and '$dateTimeEnd'", NULL, FALSE);
+            }
+        }
+
+        $query = $this->db->get();
+        //echo $this->db->last_query();
+        return count($query->result());
+    }
+
+    function get_livestream($uid, $limit, $start, $sort = '', $sort_by = '', $data) {
+        $timeStart = " 00:00:00";
+        $timeEnd = " 23:59:59";
+        $id = $this->get_ownerid($uid);
+        array_push($id, $uid);
+        $this->db->select('a.*, b.*,b.youtube as file , c.username, d.category');        
+        $this->db->from('channels a');
+        $this->db->where_in('a.uid', $id); 
+        $this->db->join('livestream b', 'a.id = b.channel_id', 'inner');
+        $this->db->join('channel_categories d', 'a.category_id = d.id', 'left');
+        $this->db->join('users c', 'a.uid = c.id', 'left');
+        
+        //$this->db->join('video_rating f', 'a.id = f.content_id', 'left');
+        if (isset($data['content_title']) && $data['content_title'] != '') {
+            $this->db->like('name', trim($data['content_title']));
+        }
+        if (isset($data['category']) && $data['category'] != '') {
+            $this->db->where('d.category', $data['category']);
+        }
+        if ((isset($data['datepickerstart']) && $data['datepickerstart'] != '') && (isset($data['datepickerend']) && $data['datepickerend'] != '')) {
+            $date = str_replace('/', '-', $data['datepickerstart']);
+            $datestart = date('y-m-d', strtotime($date));
+            $date = str_replace('/', '-', $data['datepickerend']);
+            $dateend = date('y-m-d', strtotime($date));
+            $dateTimeStart = $datestart . $timeStart;
+            $dateTimeEnd = $dateend . $timeEnd;
+            $this->db->where("a.created BETWEEN '$dateTimeStart' and '$dateTimeEnd'", NULL, FALSE);
+        } else {
+            if (isset($data['datepickerstart']) && $data['datepickerstart'] != '') {
+                $date = str_replace('/', '-', $data['datepickerstart']);
+                $datestart = date('y-m-d', strtotime($date));
+                $dateTimeStart = $datestart . $timeStart;
+                $dateTimeEnd = $datestart . $timeEnd;
+                $this->db->where("a.created BETWEEN '$dateTimeStart' and '$dateTimeEnd'", NULL, FALSE);
+            }
+            if (isset($data['datepickerend']) && $data['datepickerend'] != '') {
+                $date = str_replace('/', '-', $data['datepickerend']);
+                $dateend = date('y-m-d', strtotime($date));
+                $dateTimeStart = $dateend . $timeStart;
+                $dateTimeEnd = $dateend . $timeEnd;
+                $this->db->where("a.created BETWEEN '$dateTimeStart' and '$dateTimeEnd'", NULL, FALSE);
+            }
+        }
+
+        $this->db->group_by('a.id');
+        $this->db->order_by($sort, $sort_by);
+        $this->db->limit($limit, $start);
+        $query = $this->db->get();
+        //echo $this->db->last_query();
+        
+        $data = $query->result();
+        return $data;
+    }
+    
+    function insertCuePointsLivestream($post) {
+        $this->db->insert_batch('content_cuepoints', $post);
+    }
+    
+    function get_channel_categories(){
+        $this->db->select('id,category');
+        $query = $this->db->get('channel_categories');
+        $data = $query->result();
+        return $data;
+    }
 }
