@@ -1394,7 +1394,13 @@ $("#add").click(function(){
 setInterval(function(){
   $(".js-irs-0 .irs-single.mybar1").on("click",function(){
       var setPoint = $(this).text();
-      //alert(setPoint);
+      
+    //-- get currently selected cuepoint --//
+      var myStr = $(this).attr("class");
+      var subStr = myStr.match("append_(.*)");
+      //var delval = ;
+      $('#delVal').val(subStr[1]);
+    //-------//
    //$()
                   //var secToTime = secTotime($(this).text);
                    var splitArr = setPoint.split(":");
@@ -1424,17 +1430,9 @@ $("#update").click(function(){
      $('.video_id').each(function() {
         IDs.push($(this).val());
      });
+    
      var cuepointArr = [];
-     $(".js-irs-0 .irs-single.mybar1").each(function(){
-         var time = $(this).text();
-         var SplitArray = time.split(":");
-         var finalTime = parseInt(SplitArray[0]*60) + parseInt(SplitArray[0]); 
-         cuepointArr.push(finalTime); 
-     });
-     var uniquePoints = [];
-    $.each(cuepointArr, function(i, el){
-        if($.inArray(el, uniquePoints) === -1) uniquePoints.push(el);
-    });
+     
     var mm = $(".mm").val();
     var ss = $(".ss").val();
      var newVal= parseInt(mm*60)+parseInt(ss);
@@ -1458,7 +1456,21 @@ $("#update").click(function(){
                     $(".js-irs-0 .irs .irs-single"+removeDiv2).remove();
                     
                 }
-    //console.log(uniquePoints);
+        //--- get updated cuepoints list in array ---//        
+            $(".js-irs-0 .irs-single.mybar1").each(function(){
+             var time = $(this).text();
+             var SplitArray = time.split(":");
+             var finalTime = parseInt(SplitArray[0]*60) + parseInt(SplitArray[1]); 
+             cuepointArr.push(finalTime); 
+            });
+            console.log(cuepointArr);
+            var uniquePoints = [];
+            $.each(cuepointArr, function(i, el){
+              if($.inArray(el, uniquePoints) === -1) uniquePoints.push(el);
+            });
+        
+        //----------------------------------------------------//
+    
    $.ajax({
             type: "POST",
             url: baseurl + "advertising/updateCuePoint",
@@ -1489,6 +1501,68 @@ $("#update").click(function(){
             } 
         });   
 });
+
+$("#delete").click(function(){
+        var IDs = [];
+     $('.video_id').each(function() {
+        IDs.push($(this).val());
+     });
+     var delVal = $('#delVal').val(); //-- use to delete cue point --//
+     var cuepointArr = [];
+     
+    var mm = $(".mm").val();
+    var ss = $(".ss").val();
+     var newVal= parseInt(mm*60)+parseInt(ss);
+    var forChangeVal =$("#forChangeVal").val();
+    var removeDiv2       = ".append_"+delVal;
+    var div_removeClass2 = "append_"+delVal;
+    var from_percentage1 = newVal *(0.05301561);
+    var finalPercentage1 = from_percentage1.toFixed(5);
+       
+        //--- get updated cuepoints list in array ---//        
+            $(".js-irs-0 .irs-single.mybar1").each(function(){
+             var time = $(this).text();
+             var SplitArray = time.split(":");
+             var finalTime = parseInt(SplitArray[0]*60) + parseInt(SplitArray[1]); 
+             cuepointArr.push(finalTime); 
+            });
+           
+            var uniquePoints = [];
+            $.each(cuepointArr, function(i, el){
+              if($.inArray(el, uniquePoints) === -1) uniquePoints.push(el);
+            });
+
+        //----------------------------------------------------//
+    
+   $.ajax({
+            type: "POST",
+            url: baseurl + "advertising/deleteCuePoint",
+            data: {"IDs":IDs,"cuepointArr" : uniquePoints,"delval":delVal}  ,
+            success: function (data)
+            {
+                $(".hh,.ms,ss,.mm,#cueName").val('');
+                var singleVideoFlag = $("#singleVideoFlag").val();
+                $(".js-irs-0 .irs "+removeDiv2).remove(); 
+                $(".js-irs-0 .irs .irs "+removeDiv2).remove();
+                $(".js-irs-0 .irs-slider"+removeDiv2).remove(); 
+                $(".js-irs-0 .irs-single"+removeDiv2).remove(); 
+        if(singleVideoFlag ==1)
+        {
+            $('.popOver').show();
+            $(".infoDiv,.playerDiv").show();
+            $(".addCueDiv").hide();    
+            
+        }else
+        {
+            $(".popOver").hide();
+        }
+                //$('.popOver').hide();
+                document.getElementById('closeClickEvent').style.pointerEvents = 'auto';          
+                $("#percentage").val(finalPercentage1);
+            } 
+        });   
+});
+
 /* functions used for comment section ends */
 function secTotime(num)
 {
