@@ -225,7 +225,7 @@
 </div> 
 <div class="modal fade" id="tester" tabindex="-1" role="dialog" 
      aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog" style="width:95%">
+    <div class="modal-dialog" style="width:75%">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" 
@@ -238,43 +238,54 @@
             <div class="modal-body no-padding">        
                       
                             <div id="prevElement" class="innerResponse">
-                                <!--<div class="headerTb" style="border:1px solid gray;min-height: 200px;padding: 0px 10px">
-                                    <div class="headingTb">
-                                        <div style="background-color: gray;padding:10px 0px;color: white">Click on scrollbar to add or edit</div>
-                                        <div class="ionslider" id="ionslider">
-                                            <div class="thumbLeft" style="float:left; width: 20%">1</div>
-                                            <div class="thumbRight"  style="float:left;width: 80%">Slider</div>
-                                        </div>
-                                        <div class="thumbLeft" style="float:left; width: 20%">1</div>
-                                        <div class="thumbRight"  style="float:left;width: 80%">2</div>
-                                    </div>
-                                </div>   -->
+                               
                                 <div class="box-body no-padding">
 			<div class="table-responsive">
                                 <input type="hidden" name="text" id="text">
     <input type="hidden" name="percentage" id="percentage">
 <div class="popOver1">
-    <div id="innerHtml">
-        <span id="success11" style="color:green; display: none;">Cue Points added successfully.</span>
-        <h5 style="font: 12px">Add New Cue Point</h5>
-        <form action="" id="addcue_form">
-        <input type="hidden" value="" name="inialValPoint" id="inialValPoint"> 
-        <input type="hidden" value="" name="inialValPercentage" id="inialValPercentage">
-        <div class="input_fields_wrap">
-            <button class="add_field_button">Add More Cuetimes</button>
-            <div>Timecode(hh:mm:ss) <input class="hh" name="hh[]"> :<input class="mm" name="mm[]"> : <input class="ss" name="ss[]"> <span id="errTime_1" style="color:red; display: none;">Please fill valid time format.</span></div>
+    <div class="content">
+     <div class="row">
+    <section class="col-lg-6">
+        <!-- Box (with bar chart) -->
+        <div class="box box-danger">
+            <div class="box-header">           
+            <h3 class="box-title">Add New Cue Point</h3>
+            </div><!-- /.box-header -->
+            <div class="box-body no-padding">
+            <div class="row">
+                <div class="col-sm-10" style="margin-left:10px">
+                    <form action="" id="addcue_form">
+                    <input type="hidden" value="" name="inialValPoint" id="inialValPoint"> 
+                    <input type="hidden" value="" name="inialValPercentage" id="inialValPercentage">
+                    <div class="form-group">                        
+                     <label style="display:block;" for="exampleInputEmail1">Timecode(hh:mm:ss)</label>
+                    <div class="input_fields_wrap">
+                    <input maxlength=3 style='width:35px;display:inline' type="text" name="hh[]" id="hh" placeholder="hh" class="form-control input-sm hh">:
+                    <input maxlength=2 style='width:35px;display:inline;' type="text" name="mm[]" id="mm" placeholder="mm" class="form-control input-sm mm">:                                    
+                    <input maxlength=2 style='width:35px;display:inline' type="text" name="ss[]" id="ss" placeholder="ss" class="form-control input-sm ss">
+                    <button class="add_field_button">Add More</button>
+                    <span id="errTime_1" style="color:red; display: none;">Please fill valid time format.</span>
+                    </div>
+                    </div>
+                    <div class="form-group">
+                    <label for="exampleInputEmail1">Name (optional)</label>
+                    <input type="email" id="cueName" name="cueName" placeholder="Name" id="exampleInputEmail1" class="form-control">
+                    </div>
+                    <div class="box-footer">
+                    <button class="btn btn-primary" type="submit" name="adds" id="adds" onclick="return addCuePoints();">Add</button>&nbsp;<a href="#" id="cancel" class="cancel">cancel</a>                    
+                    </div>
+                    </form>         
+                    <div id="innerHtml">
+        <span id="success11" style="color:green; display: none;">Cue Points added successfully.</span>        
+    </div>
+                </div>
+            </div>
+            </div>
         </div>
-        <span> Name (Optional)</span>
-        <input type="text" id="cueName" name="cueName"><br><br>
-        <input type="submit" name="adds" id="adds" value="Add" onclick="return addCuePoints();">&nbsp;<a href="#" id="cancel" class="cancel">cancel</a>
-        </form>
-            
-        
-         
-        
-       
-    
-</div>
+    </section>
+    </div>
+    </div>     
 </div>
                             <!-- .table - Uses sparkline charts-->
                             <table class="table table-striped">
@@ -283,13 +294,11 @@
                                 <input type="hidden" name="cancelFlag" id="cancelFlag" value="0">
                                 <tbody>
                                 <tr>
-                                    <th width='10%' style="border-right: 1px solid gray;">Sr No.</th>
-                                    <th width='30%' style="border-right: 1px solid gray;">Thumbnail</th>
+                                    <th width='5%' style="border-right: 1px solid gray;">Sr No.</th>
+                                    <th width='5%' style="border-right: 1px solid gray;">Thumbnail</th>
                                     <th width='30%' style="border-right: 1px solid gray;">Channel Name</th>
         <!--<input type="text" id="range" value="" name="range" /> -->
-    </div>
-
-</div></th>							
+							
 				</tr>
 			        </tbody></table>
                         </div>
@@ -300,75 +309,7 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal -->
 </div>
-<style>
-     /*.irs-line-left 
-    {
-        background-color: grey;
-        
-    }
-    .irs-line-mid
-    {
-        background-color: grey;
-    }.irs-line-right
-    {
-        background-color: grey;
-        
-    }.irs-bar
-    {
-        background-color: grey;
-        
-    }
-    .irs-bar-edge
-    {
-        background-color: grey;
-        
-    }
-    .irs-slider
-    {
-        background-color: grey;
-        width: 2px;
-        
-    }*/    .popOver
-    {
-           width: 300px;
-           height: 300px;
-           border: 1px solid gray;
-           background: aliceblue;
-           margin: 0px;
-           padding: 0px;
-           display: none;
-    }
-    .timeDiv input
-    {
-          width: 25px;  
-        
-    }
-    .input_fields_wrap input
-    {
-          width: 25px;  
-        
-    }
-  /*.irs-slider {
-    background-color: gray!important;
-    background-position: 0 -120px;
-    height: 89px!important;
-    top: 22px;
-    width: 16px;
-}*/
-    .progress.xs {
-    height: 20px;
-}
-.progress {
-    background-color: #f5f5f5;
-    border-radius: 4px;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) inset;
-    height: 20px;
-    margin-bottom: 20px;
-    overflow: hidden;
-    width: 100%;
-    //padding-left: 8px;
-}
-</style>
+
 <script type="text/javascript">
     $(document).ready(function() {
     var max_fields      = 10; //maximum input boxes allowed
@@ -380,7 +321,13 @@
         e.preventDefault();
         if(x < max_fields){ //max input box allowed
             x++; //text box increment
-            $(wrapper).append('<div>Timecode(hh:mm:ss) <input class="hh" name="hh[]"> :<input class="mm" name="mm[]"> : <input class="ss" name="ss[]"><a href="#" class="remove_field">Remove</a> <span id="errTime_'+x+'" style="color:red; display: none;">Please fill valid time format.</span></div>'); //add input box
+            //$(wrapper).append('<div>Timecode(hh:mm:ss) <input class="hh" name="hh[]"> :<input class="mm" name="mm[]"> : <input class="ss" name="ss[]"><a href="#" class="remove_field">Remove</a> <span id="errTime_'+x+'" style="color:red; display: none;">Please fill valid time format.</span></div>'); //add input box
+        var htm = '<div><input maxlength=3 style="width:35px;display:inline" type="text" name="hh[]" id="hh" placeholder="hh" class="form-control input-sm hh">: ';
+      htm +='<input maxlength=2 style="width:35px;display:inline;" type="text" name="mm[]" id="mm" placeholder="mm" class="form-control input-sm mm">: '; 
+      htm += '<input maxlength=2 style="width:35px;display:inline" type="text" name="ss[]" id="ss" placeholder="ss" class="form-control input-sm ss">';                    
+    htm +='<a href="#" class="remove_field">Remove</a><span id="errTime_'+x+'" style="color:red; display: none;">Please fill valid time format.</span></div> ';
+    //console.log(htm);
+    $(wrapper).append(htm);
         }
     });
    
@@ -425,7 +372,7 @@ function addCuePoints(){
                 var a = i+1;
                 $("#errTime_"+a).show();
                 return false;
-            }else{
+            }else{                
                 $("#errTime_"+a).hide();
                 cuePoints.push(((hh*60*60)+(mm*60)+(ss*1)));
             }
@@ -458,7 +405,7 @@ function saveLiveCuePoints(channel_ids,cuePoints){
                 
                 setTimeout(function() {
                        $("#tester").hide();
-                       location.reload();
+                      // location.reload();
                 }, 1000);
                 
             } 

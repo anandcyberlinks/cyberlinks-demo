@@ -40,6 +40,7 @@ if (!defined('BASEPATH'))
         $config["uri_segment"] = 3;
         $this->pagination->initialize($config);
         $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        $data['category'] = $this->videos_model->get_category($this->uid);
         $data['result'] = $this->videos_model->get_video($this->uid, PER_PAGE, $page, $sort, $sort_by, $searchterm);
         $data["links"] = $this->pagination->create_links();
   //echo '<pre>';print_r( $data['result']);

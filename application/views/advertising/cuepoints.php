@@ -455,7 +455,7 @@
 <script>
     $(document).ready(function (){
         $('#tester').on('hidden.bs.modal', function () {
-    window.location.reload(true);
+    window.location.reload();
 })
     });
 </script>
