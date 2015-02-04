@@ -124,7 +124,8 @@ function  updateCuePoint()
                //-- check if cue point is greater than video duration --//
                $result = $this->videos_model->validate_cuepoint_duration($id,$v);
                if($result ==1){              
-                $data[$i]['cue_points'] = $v;
+                $data[$i]['cue_points'] = $k;
+                 $data[$i]['title'] = $v;
                 $data[$i]["content_id"]= $id;
                 $data[$i]["created"] = $created;
                 $i++;
