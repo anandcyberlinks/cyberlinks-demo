@@ -515,6 +515,19 @@ class Video_model extends CI_Model {
         return $query->row();
    }
    
+   public function livestream_play()
+   {
+      $this->db->select('ch.id as content_id,ch.uid as content_provider,ch.ch_name,l.thumbnail_url as thumbnail_path, IF(l.youtube !="",l.youtube,web) as video_path');
+      $this->db->from('channels ch');
+      $this->db->join('livestream l','ch.id=l.channel_id');
+      $this->db->where('l.status','1');
+      $this->db->where('ch.status','1');
+      $this->db->where('ch.id',$id);
+      $this->db->limit(1);
+      $query = $this->db->get();      
+      return $query->row();
+   }
+   
    public function video_flavors()
    {
        $this->db->select('a.id as map_id,a.flavor_id,d.flavor_name,a.content_id,c.name,c.minetype as content_type,c.absolute_path as video_file_name');

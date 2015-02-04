@@ -1160,14 +1160,30 @@ class Videos_model extends CI_Model {
         $this->db->insert_batch('content_cuepoints', $post);
     }
    function updateCuePoints($post,$IDs) {
+    //print_r($post);
        $this->db->where_in('content_id', $IDs);
        $this->db->delete('content_cuepoints');
         //print_r($post);
-        foreach($post as $k=>$v)
-            {
-                
-                $this->db->insert_batch('content_cuepoints', $v);
-            }
-       //$this->db->insert_batch('content_cuepoints', $post);
-    } 
+        /*foreach($post as $k=>$v)
+            {               
+              //  $this->db->insert_batch('content_cuepoints', $v);
+            }*/
+       $this->db->insert_batch('content_cuepoints', $post);
+    }
+    
+    function validate_cuepoint_duration($id,$v)
+    {
+      $this->db->select('id');
+      $this->db->from('videos v');      
+      $this->db->where('v.content_id',$id);
+      $this->db->where('v.duration >=',$v);
+      $this->db->limit('1');
+      $query = $this->db->get();
+      $result = $query->row();
+     // echo $this->db->last_query();
+      if($result)
+	return 1;
+      else
+	return 0;
+    }
 }
