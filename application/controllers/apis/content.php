@@ -342,9 +342,7 @@ class Content extends Apis{
                             c.uid as `creater_id`,
                             cat.id as `category_id`,
                             cat.category as `category_name`,
-                            if(v.views > 0,v.views,0) as `views`,
                             c.feature_video as featured,
-                            v.duration as `duration`,
                             cfile.name as `filename`,
                             cfile.absolute_path as `video_basepath`,
                             vtfile.relative_path as `video_basethumb`,
@@ -520,7 +518,7 @@ class Content extends Apis{
                               thumbnail_url as thumb
                               from livestream where channel_id = %d ',$channel_id);
         $dataset = $this->db->query($query)->result();
-        return reset($dataset);
+        return array_merge(array(),reset($dataset));
     }
     
     function getPlaylistDetail($playlist_id){
