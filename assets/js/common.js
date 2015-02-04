@@ -1533,9 +1533,6 @@ function secTotime(num)
                 //return date.toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
                 return date.toTimeString().replace(/.*(\d{2}:\d{2}).*/, "$1");  
 }
-/* page Refresh On Modal Close */
-$('#tester').on('hidden.bs.modal', function () {
-    window.location.reload(true);
-})
+
 /* Advertising Slider Code End */
 
