@@ -1086,10 +1086,10 @@ function cuepoint()
             {
                 
                 var videInfo = $.parseJSON(data1);
-                console.log(videInfo);
+                //console.log(videInfo);
             var i=1;
             var maxDuration = videInfo['result'][0].duration;
-            console.log(maxDuration);
+            //console.log(maxDuration);
              $("#range").data("ionRangeSlider").update({"from_max" :maxDuration});
             
             //console.log("===============>"+first.duration);
@@ -1130,7 +1130,7 @@ function cuepoint()
                 //console.log(data);
                 var cuePointInfo = $.parseJSON(data);
                 //return cuePointInfo;
-                //console.log(cuePointInfo);
+                console.log(cuePointInfo);
                 var lastKey;
                 $.each(cuePointInfo['result'],function(k,v){
                     //var onePercentage = 0.02302;
@@ -1139,7 +1139,7 @@ function cuepoint()
                     var finalPercentage = from_percentage.toFixed(5);
                     var removeClass = "append_"+v.cue_points;
                     var num = secTotime(v.cue_points);
-                    $(".irs").append("<span class='irs-single mybar1 "+ removeClass +"' style='left: "+finalPercentage +"%;'>"+  num +"</span>");
+                    $(".irs").append("<span class='irs-single mybar1 "+ removeClass +"' checkAttr = '"+v.title+"' style='left: "+finalPercentage +"%;'>"+  num +"</span>");
                     $(".irs-with-grid").append("<span class='irs-bar mybar1 "+ removeClass +"' style='width:"+ finalPercentage +"%'></span>");
                     $(".irs-with-grid").append("<span class='irs-slider single mybar1 "+ removeClass +"' style='left: "+ finalPercentage +"%;'></span>");                    
                             
@@ -1342,7 +1342,7 @@ $("#add").click(function(){
                   $(".js-irs-0 .irs-single."+div_removeClass1).remove();
                   $(".js-irs-0 .irs .irs-single."+div_removeClass1).remove();
                   
-                    $(".js-irs-0").append("<span class='irs-single mybar1 "+ div_removeClass1 +"' style='left: "+ finalPercentage1 +"%;'>"+ secTotime(timeInMillisec) +"</span>");
+                    $(".js-irs-0").append("<span class='irs-single mybar1 "+ div_removeClass1 +"' checkAttr = '"+cueName+"' style='left: "+ finalPercentage1 +"%;'>"+ secTotime(timeInMillisec) +"</span>");
                     $(".irs-with-grid").append("<span class='irs-bar mybar1 "+ div_removeClass1 +"' style='left: 0%; width:"+ finalPercentage1 +"'></span>");
                     $(".irs-with-grid").append("<span class='irs-slider single mybar1 "+ div_removeClass1 +"' style='left: "+ finalPercentage1 +"%;'></span>");
 
@@ -1369,6 +1369,7 @@ $("#add").click(function(){
 setInterval(function(){
   $(".js-irs-0 .irs-single.mybar1").on("click",function(){
       var setPoint = $(this).text();
+      var cueName = $(this).attr("checkAttr");
       $("#updateFlag").val(1);
     //-- get currently selected cuepoint --//
       var myStr = $(this).attr("class");
@@ -1382,8 +1383,10 @@ setInterval(function(){
                    //console.log(splitArr);
                    $(".mm").val(splitArr[0]);
                     $(".ss").val(splitArr[1]);
+                    $("#cueName").val(cueName);
                     var forChangeVal= parseInt(splitArr[0]*60)+parseInt(splitArr[1]);
                     $("#forChangeVal").val(forChangeVal);
+                    $("#forChangeVal").attr("checkAttr",cueName);
                                     var singleVideoFlag1 = $("#singleVideoFlag").val();
                                    $("#update,#delete").show();
                                    $("#add").hide();
@@ -1406,10 +1409,12 @@ $("#update").click(function(){
         IDs.push($(this).val());
      });
     
-     var cuepointArr = [];
+     var cuepointArr = {};
      
     var mm = $(".mm").val();
     var ss = $(".ss").val();
+   var old_cueName =  $("#forChangeVal").attr("checkAttr");
+     var cueName = $("#cueName").val();
      var newVal= parseInt(mm*60)+parseInt(ss);
     var forChangeVal =$("#forChangeVal").val();
     var removeDiv2       = ".append_"+forChangeVal;
@@ -1420,7 +1425,7 @@ $("#update").click(function(){
    // console.log(div_removeClass2);
     if(newVal!= forChangeVal)
                 {
-                    $(".irs").append("<span class='irs-single mybar1 "+ div_removeClass2 +"' style='left: "+ finalPercentage1 +"%;'>"+ secTotime(newVal)+"</span>");
+                    $(".irs").append("<span class='irs-single mybar1 "+ div_removeClass2 +"' checkAttr ='"+cueName+"' style='left: "+ finalPercentage1 +"%;'>"+ secTotime(newVal)+"</span>");
                     $(".irs-with-grid").append("<span class='irs-bar mybar1 "+ div_removeClass2 +"' style='left: 0.9009%; width:"+ finalPercentage1 +"'></span>");
                     $(".irs-with-grid").append("<span class='irs-slider single mybar1 "+ div_removeClass2 +"' style='left: "+ finalPercentage1 +"%;'></span>");
 
@@ -1430,26 +1435,41 @@ $("#update").click(function(){
                     $(".js-irs-0 .irs-single"+removeDiv2).remove();
                     $(".js-irs-0 .irs .irs-single"+removeDiv2).remove();
                     
+                }else
+                {
+                     $(".irs").append("<span class='irs-single mybar1 "+ div_removeClass2 +"' checkAttr ='"+cueName+"' style='left: "+ finalPercentage1 +"%;'>"+ secTotime(forChangeVal)+"</span>");
+                    $(".irs-with-grid").append("<span class='irs-bar mybar1 "+ div_removeClass2 +"' style='left: 0.9009%; width:"+ finalPercentage1 +"'></span>");
+                    $(".irs-with-grid").append("<span class='irs-slider single mybar1 "+ div_removeClass2 +"' style='left: "+ finalPercentage1 +"%;'></span>");
+                    
                 }
-        //--- get updated cuepoints list in array ---//        
+        //--- get updated cuepoints list in array ---//
+        var i=0;
             $(".js-irs-0 .irs-single.mybar1").each(function(){
+            var innerArray =[];
              var time = $(this).text();
+             var cueName = $(this).attr("checkAttr");
              var SplitArray = time.split(":");
-             var finalTime = parseInt(SplitArray[0]*60) + parseInt(SplitArray[1]); 
-             cuepointArr.push(finalTime); 
+             var finalTime = parseInt(SplitArray[0]*60) + parseInt(SplitArray[1]);
+             
+             //cuepointArr[i]['time']=time;
+             //cuepointArr[i]['cuename']=cueName;
+              var arrayPush = {};
+              cuepointArr[finalTime] = cueName;
+                //cuepointArr.push(arrayPush); 
+           i++;
             });
-            console.log(cuepointArr);
-            var uniquePoints = [];
-            $.each(cuepointArr, function(i, el){
-              if($.inArray(el, uniquePoints) === -1) uniquePoints.push(el);
-            });
-        
+            //console.log(cuepointArr);
+            //var uniquePoints = [];
+            //$.each(cuepointArr, function(i, el){
+             // if($.inArray(el, uniquePoints) === -1) uniquePoints.push(el);
+           // });
+       // console.log(uniquePoints);
         //----------------------------------------------------//
     
    $.ajax({
             type: "POST",
             url: baseurl + "advertising/updateCuePoint",
-            data: {"IDs":IDs,"cuepointArr" : uniquePoints}  ,
+            data: {"IDs":IDs,"cuepointArr" : cuepointArr}  ,
             success: function (data)
             {
                 $(".hh,.ms,ss,.mm,#cueName").val('');
