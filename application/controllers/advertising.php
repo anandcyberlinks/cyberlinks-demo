@@ -100,31 +100,71 @@ $this->show_view("advertising/cuepoints", $content);*/
 function  updateCuePoint()
     {
     //echo "<pre>";
-      // print_r($_POST);
+     //  print_r($_POST);
        //die();
      // echo "<pre>";
+         
       $data = array();
       $i=0;
-       foreach($_POST['IDs'] as $key=>$val)
-       {
-           $j=0;
+       foreach($_POST['IDs'] as $key=>$id)
+       {         
           $innerArray = array();
           
           foreach ($_POST['cuepointArr'] as $k=>$v)
               {
-              $excludeArray = explode(":", $v[$j]);
-              print_r($excludeArray);
-                $data[$i][$j]['cue_points'] = $v[$j];
-                $data[$i][$j]["content_id"]= $val;
-                $j++;        
-                        }
-          $i++;
+               
+               //-- check if cue point is greater than video duration --//
+               $result = $this->videos_model->validate_cuepoint_duration($id,$v);
+               if($result ==1){              
+                $data[$i]['cue_points'] = $v;
+                $data[$i]["content_id"]= $id;             
+                $i++;
+               }
+               } 
           }
           //echo "<pre>";
           //print_r($data);
           //die();
           //$editFlag = $_POST['editFlag'];
-      // $updateStatus = $this->videos_model->updateCuePoints($data,$_POST['IDs']);
+       $updateStatus = $this->videos_model->updateCuePoints($data,$_POST['IDs']);
        
-    }    
+    }
+        
+   function  deleteCuePoint()
+    {
+    //echo "<pre>";
+       //print_r($_POST);
+       //die();
+     // echo "<pre>";
+      $post = $_POST['cuepointArr'];
+      $delVal = $_POST['delval'];         
+     unset($post[array_search($delVal, $post)]);    
+     
+      $data = array();
+      $i=0;
+       foreach($_POST['IDs'] as $key=>$id)
+       {         
+          $innerArray = array();
+          
+          foreach ($post as $k=>$v)
+              {               
+               //-- check if cue point is greater than video duration --//
+               $result = $this->videos_model->validate_cuepoint_duration($id,$v);
+                  if($result ==1){                 
+                   $data[$i]['cue_points'] = $v;
+                   $data[$i]["content_id"]= $id;
+               
+                   $i++;
+                  }
+               } 
+          }
+          //echo "<pre>";
+          //print_r($data);
+          //die();
+          //$editFlag = $_POST['editFlag'];
+          if(!empty($data)){
+       $updateStatus = $this->videos_model->updateCuePoints($data,$_POST['IDs']);
+          }
+       
+    }
  }

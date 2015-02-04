@@ -267,7 +267,7 @@
             <div class="row">
                 <div class="col-sm-10">
                                 <div class="form-group">
-                                    
+                                    <input type='text' name="delVal" id="delVal">
                                     <input type="hidden" value="" name="singleVideoFlag" id="singleVideoFlag">
                                     <input type="hidden" value="" name="inialValPoint" id="inialValPoint">
                                 <input type="hidden" value="" name="inialValPercentage" id="inialValPercentage">
@@ -282,6 +282,7 @@
                                         </div>
                                 <div class="box-footer">
                                     <button class="btn btn-primary" type="submit" name="add" id="add">Add</button><button class="btn btn-primary" type="submit" name="update" id="update">Update</button>&nbsp;<a href="#" id="cancel" class="cancel">cancel</a>
+                                <span style="float:right;"><a href="#" id="delete" class="cancel">delete</a></span>
                                 </div>
                 </div>
             </div><!-- /.row - inside box -->
