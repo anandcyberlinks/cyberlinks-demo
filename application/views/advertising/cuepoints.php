@@ -267,7 +267,7 @@
             <div class="row">
                 <div class="col-sm-10">
                                 <div class="form-group">
-                                    <input type='text' name="delVal" id="delVal">
+                                    <input type='hidden' name="delVal" id="delVal">
                                     <input type="hidden" value="" name="singleVideoFlag" id="singleVideoFlag">
                                     <input type="hidden" value="" name="inialValPoint" id="inialValPoint">
                                 <input type="hidden" value="" name="inialValPercentage" id="inialValPercentage">
@@ -333,7 +333,7 @@
 <script>
    
     function play()
-    {
+    {        
        jwplayer().play();
        state = jwplayer().getState();
        //alert(state);
@@ -352,6 +352,7 @@
                     var removeClass = "append_"+pos;
                     //var num = secTotime(v.cue_points);
                     $(".infoDiv").hide();
+                    $("#update").hide();
                     $(".addCueDiv").show();
                     document.getElementById('closeClickEvent').style.pointerEvents = 'none';
                     $('#text').val(pos);
