@@ -1367,25 +1367,32 @@ $("#add").click(function(){
    //console.log("gffgfg"); 
 });
 setInterval(function(){
-  $(".js-irs-0 .irs-single.mybar1").on("click",function(){
+  $(".js-irs-0 .irs-slider.mybar1").on("click",function(){
       var setPoint = $(this).text();
       var cueName = $(this).attr("checkAttr");
+      //var jt = $(this).attr('class');
+     // var classes=$(this).attr("class").split(" ");
+    //var className=classes[classes.length-1];  
+      //var classArr = className.split("_");
+      //console.log(classArr[1]);
+      //alert(className);
       $("#updateFlag").val(1);
     //-- get currently selected cuepoint --//
       var myStr = $(this).attr("class");
       var subStr = myStr.match("append_(.*)");
+      //console.log(subStr[1]);
       //var delval = ;
       $('#delVal').val(subStr[1]);
     //-------//
    //$()
-                  //var secToTime = secTotime($(this).text);
-                   var splitArr = setPoint.split(":");
+                  var secToTime = secTotime(subStr[1]);
+                   var splitArr = secToTime.split(":");
                    //console.log(splitArr);
                    $(".mm").val(splitArr[0]);
                     $(".ss").val(splitArr[1]);
                     $("#cueName").val(cueName);
                     var forChangeVal= parseInt(splitArr[0]*60)+parseInt(splitArr[1]);
-                    $("#forChangeVal").val(forChangeVal);
+                    $("#forChangeVal").val(subStr[1]);
                     $("#forChangeVal").attr("checkAttr",cueName);
                                     var singleVideoFlag1 = $("#singleVideoFlag").val();
                                    $("#update,#delete").show();
