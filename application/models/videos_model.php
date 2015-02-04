@@ -1200,30 +1200,30 @@ class Videos_model extends CI_Model {
         $this->db->join('livestream', 'channels.id = livestream.channel_id', 'inner');
         $this->db->join('channel_categories', 'channels.category_id = channel_categories.id', 'left');
         $this->db->where_in('channels.uid', $id);
-        if (isset($data['content_title']) && $data['content_title'] != '') {
-            $this->db->like('name', trim($data['content_title']));
+        if (isset($data['content_title_live']) && $data['content_title_live'] != '') {
+            $this->db->like('name', trim($data['content_title_live']));
         }
-        if (isset($data['category']) && $data['category'] != '') {
-            $this->db->where('channel_categories.category', $data['category']);
+        if (isset($data['category_live']) && $data['category_live'] != '') {
+            $this->db->where('channel_categories.category', $data['category_live']);
         }
-        if ((isset($data['datepickerstart']) && $data['datepickerstart'] != '') && (isset($data['datepickerend']) && $data['datepickerend'] != '')) {
-            $date = str_replace('/', '-', $data['datepickerstart']);
+        if ((isset($data['datepickerstart_live']) && $data['datepickerstart_live'] != '') && (isset($data['datepickerend_live']) && $data['datepickerend_live'] != '')) {
+            $date = str_replace('/', '-', $data['datepickerstart_live']);
             $datestart = date('y-m-d', strtotime($date));
-            $date = str_replace('/', '-', $data['datepickerend']);
+            $date = str_replace('/', '-', $data['datepickerend_live']);
             $dateend = date('y-m-d', strtotime($date));
             $dateTimeStart = $datestart . $timeStart;
             $dateTimeEnd = $dateend . $timeEnd;
             $this->db->where("channels.created BETWEEN '$dateTimeStart' and '$dateTimeEnd'", NULL, FALSE);
         } else {
-            if (isset($data['datepickerstart']) && $data['datepickerstart'] != '') {
-                $date = str_replace('/', '-', $data['datepickerstart']);
+            if (isset($data['datepickerstart_live']) && $data['datepickerstart_live'] != '') {
+                $date = str_replace('/', '-', $data['datepickerstart_live']);
                 $datestart = date('y-m-d', strtotime($date));
                 $dateTimeStart = $datestart . $timeStart;
                 $dateTimeEnd = $datestart . $timeEnd;
                 $this->db->where("channels.created BETWEEN '$dateTimeStart' and '$dateTimeEnd'", NULL, FALSE);
             }
-            if (isset($data['datepickerend']) && $data['datepickerend'] != '') {
-                $date = str_replace('/', '-', $data['datepickerend']);
+            if (isset($data['datepickerend_live']) && $data['datepickerend_live'] != '') {
+                $date = str_replace('/', '-', $data['datepickerend_live']);
                 $dateend = date('y-m-d', strtotime($date));
                 $dateTimeStart = $dateend . $timeStart;
                 $dateTimeEnd = $dateend . $timeEnd;
@@ -1249,30 +1249,30 @@ class Videos_model extends CI_Model {
         $this->db->join('users c', 'a.uid = c.id', 'left');
         
         //$this->db->join('video_rating f', 'a.id = f.content_id', 'left');
-        if (isset($data['content_title']) && $data['content_title'] != '') {
-            $this->db->like('name', trim($data['content_title']));
+        if (isset($data['content_title_live']) && $data['content_title_live'] != '') {
+            $this->db->like('name', trim($data['content_title_live']));
         }
-        if (isset($data['category']) && $data['category'] != '') {
-            $this->db->where('d.category', $data['category']);
+        if (isset($data['category_live']) && $data['category_live'] != '') {
+            $this->db->where('d.category', $data['category_live']);
         }
-        if ((isset($data['datepickerstart']) && $data['datepickerstart'] != '') && (isset($data['datepickerend']) && $data['datepickerend'] != '')) {
-            $date = str_replace('/', '-', $data['datepickerstart']);
+        if ((isset($data['datepickerstart_live']) && $data['datepickerstart_live'] != '') && (isset($data['datepickerend_live']) && $data['datepickerend_live'] != '')) {
+            $date = str_replace('/', '-', $data['datepickerstart_live']);
             $datestart = date('y-m-d', strtotime($date));
-            $date = str_replace('/', '-', $data['datepickerend']);
+            $date = str_replace('/', '-', $data['datepickerend_live']);
             $dateend = date('y-m-d', strtotime($date));
             $dateTimeStart = $datestart . $timeStart;
             $dateTimeEnd = $dateend . $timeEnd;
             $this->db->where("a.created BETWEEN '$dateTimeStart' and '$dateTimeEnd'", NULL, FALSE);
         } else {
-            if (isset($data['datepickerstart']) && $data['datepickerstart'] != '') {
-                $date = str_replace('/', '-', $data['datepickerstart']);
+            if (isset($data['datepickerstart_live']) && $data['datepickerstart_live'] != '') {
+                $date = str_replace('/', '-', $data['datepickerstart_live']);
                 $datestart = date('y-m-d', strtotime($date));
                 $dateTimeStart = $datestart . $timeStart;
                 $dateTimeEnd = $datestart . $timeEnd;
                 $this->db->where("a.created BETWEEN '$dateTimeStart' and '$dateTimeEnd'", NULL, FALSE);
             }
-            if (isset($data['datepickerend']) && $data['datepickerend'] != '') {
-                $date = str_replace('/', '-', $data['datepickerend']);
+            if (isset($data['datepickerend_live']) && $data['datepickerend_live'] != '') {
+                $date = str_replace('/', '-', $data['datepickerend_live']);
                 $dateend = date('y-m-d', strtotime($date));
                 $dateTimeStart = $dateend . $timeStart;
                 $dateTimeEnd = $dateend . $timeEnd;
@@ -1292,6 +1292,10 @@ class Videos_model extends CI_Model {
     
     function insertCuePointsLivestream($post) {
         $this->db->insert_batch('content_cuepoints', $post);
+    }
+    function deleteCuePointsLivestream($IDs) {
+        $this->db->where_in('content_id', $IDs);
+        $this->db->delete('content_cuepoints');
     }
     
     function get_channel_categories(){

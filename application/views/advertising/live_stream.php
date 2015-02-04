@@ -34,18 +34,18 @@
                                         <div class="form-group col-lg-4">
                                             <div class="input text">
                                                 <label for=""><?php echo $welcome->loadPo('Title') ?></label>
-                                                <input type="text" name="content_title" id="content_title" class="form-control" value="<?php echo (isset($search['content_title'])) ? $search['content_title'] : ''; ?>" placeholder="<?php echo $welcome->loadPo('Title') ?>">
+                                                <input type="text" name="content_title_live" id="content_title" class="form-control" value="<?php echo (isset($search['content_title_live'])) ? $search['content_title_live'] : ''; ?>" placeholder="<?php echo $welcome->loadPo('Title') ?>">
                                             </div>
                                         </div>
                                         <div class="form-group col-lg-4">
                                             <div class="input select">
                                                 <label for="searchCategory"><?php echo $welcome->loadPo('Category') ?></label>
-                                                <select name="category" class="form-control" placeholder="<?php echo $welcome->loadPo('Category') ?>" id="searchCategory">
+                                                <select name="category_live" class="form-control" placeholder="<?php echo $welcome->loadPo('Category') ?>" id="searchCategory">
                                                     <option value=""><?php echo $welcome->loadPo('Select') ?></option>
                                                     <?php foreach ($category as $key=>$val) { ?>
-                                                        <option value="<?php echo $key; ?>" <?php
-                                                        if (isset($search['category'])) {
-                                                            if ($key == $search['category']) {
+                                                        <option value="<?php echo $val->category; ?>" <?php
+                                                        if (isset($search['category_live'])) {
+                                                            if ($val->category == $search['category_live']) {
                                                                 echo 'selected';
                                                             }
                                                         }
@@ -59,13 +59,13 @@
                                         <div class="form-group col-lg-4">
                                             <div class="input text">
                                                 <label for="url"><?php echo $welcome->loadPo('Start Date') ?></label>
-                                                <input type="text" class="form-control"  id="datepickerstart" name="datepickerstart" placeholder="<?php echo $welcome->loadPo('Start Date') ?>" value="<?php echo (isset($search['datepickerstart'])) ? $search['datepickerstart'] : ''; ?>" >											
+                                                <input type="text" class="form-control"  id="datepickerstart" name="datepickerstart_live" placeholder="<?php echo $welcome->loadPo('Start Date') ?>" value="<?php echo (isset($search['datepickerstart_live'])) ? $search['datepickerstart_live'] : ''; ?>" >											
                                             </div>
                                         </div>
                                         <div class="form-group col-lg-4">
                                             <div class="input text">
                                                 <label for="url"><?php echo $welcome->loadPo('End Date') ?></label>
-                                                <input type="text" class="form-control"  id="datepickerend" name="datepickerend" placeholder="<?php echo $welcome->loadPo('End Date') ?>" value="<?php echo (isset($search['datepickerend'])) ? $search['datepickerend'] : ''; ?>">
+                                                <input type="text" class="form-control"  id="datepickerend" name="datepickerend_live" placeholder="<?php echo $welcome->loadPo('End Date') ?>" value="<?php echo (isset($search['datepickerend_live'])) ? $search['datepickerend_live'] : ''; ?>">
                                             </div>
                                         </div>
                                     </div>
@@ -455,6 +455,12 @@ function saveLiveCuePoints(channel_ids,cuePoints){
             success: function (data)
             {
                 $("#success11").show();
+                
+                setTimeout(function() {
+                       $("#tester").hide();
+                       location.reload();
+                }, 1000);
+                
             } 
         });
 }

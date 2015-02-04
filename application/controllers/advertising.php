@@ -211,7 +211,7 @@ function  updateCuePoint()
       $data = array();
       $created = date('Y-m-d h:i:s');
       
-      //echo '<pre>';              print_r($_POST);
+       $this->videos_model->deleteCuePointsLivestream($_POST['channel_ids']);
        foreach($_POST['channel_ids'] as $key=>$val)
        {
           $i=0;
