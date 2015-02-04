@@ -351,9 +351,8 @@
                     var finalPercentage = from_percentage.toFixed(5);
                     var removeClass = "append_"+pos;
                     //var num = secTotime(v.cue_points);
-                    $(".infoDiv").hide();
-                    $("#update").hide();
-                    $(".addCueDiv").show();
+                    $(".infoDiv,#update,#delete").hide();
+                    $(".addCueDiv,#add").show();
                     document.getElementById('closeClickEvent').style.pointerEvents = 'none';
                     $('#text').val(pos);
                     
@@ -394,6 +393,7 @@
                             <table class="table table-striped">
                                 <input type="hidden" name="maxDuration" id="maxDuration" value="">
                                 <input type="hidden" name="addFlag" id="addFlag" value="0">
+                                <input type="hidden" name="updateFlag" id="updateFlag" value="0">                               
                                 <input type="hidden" name="cancelFlag" id="cancelFlag" value="0">
                                 <tbody>
                                 <tr>
@@ -452,3 +452,10 @@
     //padding-left: 8px;
 }
 </style>
+<script>
+    $(document).ready(function (){
+        $('#tester').on('hidden.bs.modal', function () {
+    window.location.reload(true);
+})
+    });
+</script>
