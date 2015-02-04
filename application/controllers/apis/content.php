@@ -518,7 +518,8 @@ class Content extends Apis{
                               thumbnail_url as thumb
                               from livestream where channel_id = %d ',$channel_id);
         $dataset = $this->db->query($query)->result();
-        return array_merge(array(),reset($dataset));
+        $tmp = array('ios'=> false,'android'=>false,'web'=>false,'windows'=>false,'youtube'=>false,'thumb'=>false);
+        return array_merge($tmp,(Array)reset($dataset));
     }
     
     function getPlaylistDetail($playlist_id){
