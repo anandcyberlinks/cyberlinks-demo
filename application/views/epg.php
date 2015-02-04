@@ -104,7 +104,7 @@
                 $(this).draggable({
                     zIndex: 1070,
                     revert: true, // will cause the event to go back to its
-                    revertDuration: 500  //  original position after the drag
+                    revertDuration: 50  //  original position after the drag
                 });
 
             });
@@ -134,7 +134,7 @@
             events: "<?= base_url() ?>webtv/renderevent?playlist_id=" + playlist_id + '&',
             minTime: 0,
             maxTime: 12,
-            slotMinutes: 10,
+            slotMinutes: 5,
             editable: true,
             droppable: true, // this allows things to be dropped onto the calendar !!!
             drop: function (date, allDay, ui) {
