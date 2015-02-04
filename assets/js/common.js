@@ -1034,6 +1034,7 @@ function comment_approved_status(ID, PAGE, approve) {
         }
     });
 }
+/* Advertising Slider Code Start */
 $("#linkClick").click(function(){
     cuepoint();
 });
@@ -1207,11 +1208,6 @@ function cuepoint()
                     $(".js-irs-0 .irs .irs-single,.js-irs-0 .irs-slider,.js-irs-0 .irs-single").not(".mybar1").addClass(div_removeClass);
                     
                 }
-                        // console.log("Change Event");
-                        //console.log(div_removeClass);
-         //console.log(globalCheck);
-
-                
                 if(addFlag == 1)
                 {
                                             var div_removeClass12 = "append_"+data.from;
@@ -1233,9 +1229,6 @@ function cuepoint()
                 }
                                                   $("#update,#delete").hide();
                                    $("#add").show();
-               
-              // console.log(data.from);
-              // console.log(text);
                     $("#text").val(data.from);
                     $("#percentage").val(data.from_percent);               
                     var intiaSetValPoint = $("#text").val();
@@ -1253,18 +1246,8 @@ function cuepoint()
              },
             onFinish: function (data) {
                  $(".irs-bar").remove();
-                 //$("#cancelFlag").val(0);
                  $("#addFlag").val(0);
-                /*var maxDurationGet = $("#maxDuration").val();
-                if(data.from > maxDurationGet )
-                {
-                var removeDiv = "append_"+data.from;
-                    $(".js-irs-0 .irs "+removeDiv).remove(); 
-                    $(".js-irs-0 .irs .irs "+removeDiv).remove();
-                     $(".js-irs-0 .irs-slider"+removeDiv).remove(); 
-                      $(".js-irs-0 .irs-single"+removeDiv).remove();                   
-                    
-                }*/
+               
                 document.getElementById('closeClickEvent').style.pointerEvents = 'none';
              },
         });
@@ -1335,40 +1318,6 @@ $("#add").click(function(){
                var div_removeClass1 = "append_"+timeInMillisec;
                var forChangeVal     = $("#forChangeVal").val();
                var removeDiv1       = ".append_"+forChangeVal;
-               //console.log(removeDiv1);
-               /*console.log(text +"=============>"+timeInMillisec);
-               
-               
-                //console.log(data);
-                if(text!=0)
-                {
-                     $(".js-irs-0 .irs "+removeDiv1).remove(); 
-                  $(".js-irs-0 .irs .irs "+removeDiv1).remove();
-                   $(".js-irs-0 .irs-slider"+removeDiv1).remove(); 
-                    $(".js-irs-0 .irs-single"+removeDiv1).remove();
-                   $(".js-irs-0 .irs .irs-single"+removeDiv1).remove();                   
-                   //console.log(data.from);
-                    //var cancelFlag = $("#cancelFlag").val();
-                    //if(cancelFlag==1){
-                        var div_removeClass12 = "append_"+text;
-                      var from_percent = $("#percentage").val();
-                      var  from        = secTotime(text);
-                         $(".irs").append("<span class='irs-single mybar1 "+ div_removeClass12 +"' style='left: "+ from_percent +"%;'>"+ from +"</span>");
-                        $(".irs-with-grid").append("<span class='irs-bar mybar1 "+ div_removeClass12 +"' style='left: 0.9009%; width:"+ from_percent +"'></span>");
-                        $(".irs-with-grid").append("<span class='irs-slider single mybar1 "+ div_removeClass12 +"' style='left: "+ from_percent +"%;'></span>");                         
-                    //}else
-                    
-                        //var from_percent = text *(0.05301561)
-                        $(".irs-bar").remove();
- 
-                } if(text==0)
-                {
-                    var div_removeClass = "append_"+text;
-                    $(".js-irs-0 .irs .irs-single,.js-irs-0 .irs-slider,.js-irs-0 .irs-single").not(".mybar1").addClass(div_removeClass);
-                    
-                }*/
-               
-               
                console.log("Text===>"+text +"Time Change ==>>"+ timeInMillisec+"class==>"+div_removeClass1);
                
                 if(text == timeInMillisec)
@@ -1584,6 +1533,9 @@ function secTotime(num)
                 //return date.toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
                 return date.toTimeString().replace(/.*(\d{2}:\d{2}).*/, "$1");  
 }
-
-
+/* page Refresh On Modal Close */
+$('#tester').on('hidden.bs.modal', function () {
+    window.location.reload(true);
+})
+/* Advertising Slider Code End */
 
