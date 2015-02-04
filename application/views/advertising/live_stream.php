@@ -386,7 +386,7 @@ function addCuePoints(){
 
 function IsValidTime(timeString)
 {
-    var pattern = /^(?:2[0-3]|[01]?[0-9]):[0-5][0-9]:[0-5][0-9]$/;
+    var pattern = /^(?:1[0-2]|0?[0-9]):[0-5][0-9]:[0-5][0-9]$/;
     if (!timeString.match(pattern)){
         return false;
     }
@@ -405,7 +405,7 @@ function saveLiveCuePoints(channel_ids,cuePoints){
                 
                 setTimeout(function() {
                        $("#tester").hide();
-                      // location.reload();
+                       location.reload();
                 }, 1000);
                 
             } 
