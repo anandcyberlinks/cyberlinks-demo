@@ -265,15 +265,15 @@
             </div><!-- /.box-header -->
             <div class="box-body no-padding">
             <div class="row">
-                <div class="col-sm-10">
+                <div class="col-sm-10" style="margin-left:10px">
                                 <div class="form-group">
                                     <input type='hidden' name="delVal" id="delVal">
                                     <input type="hidden" value="" name="singleVideoFlag" id="singleVideoFlag">
                                     <input type="hidden" value="" name="inialValPoint" id="inialValPoint">
                                 <input type="hidden" value="" name="inialValPercentage" id="inialValPercentage">
-                                    <label style="display:block;" for="exampleInputEmail1">Timecode(hh:mm:ss)</label>
-                                    <input maxlength=3 style='width:35px;display:inline' type="text" name="hh" id="hh" placeholder="hh" class="form-control input-sm hh">:                                    
-                                    <input maxlength=3 style='width:35px;display:inline' type="text" name="mm" id="mm" placeholder="mm" class="form-control input-sm mm">:                                    
+                                    <label style="display:block;" for="exampleInputEmail1">Timecode(mm:ss)</label>
+                                    <!--<input maxlength=3 style='width:35px;display:inline' type="text" name="hh" id="hh" placeholder="hh" class="form-control input-sm hh">:   -->                                 
+                                    <input maxlength=3 style='width:35px;display:inline;' type="text" name="mm" id="mm" placeholder="mm" class="form-control input-sm mm">:                                    
                                     <input maxlength=3 style='width:35px;display:inline' type="text" name="ss" id="ss" placeholder="ss" class="form-control input-sm ss">
                                 </div>
                                 <div class="form-group">
