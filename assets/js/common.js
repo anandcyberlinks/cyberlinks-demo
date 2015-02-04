@@ -1036,10 +1036,23 @@ function comment_approved_status(ID, PAGE, approve) {
 }
 /* Advertising Slider Code Start */
 $("#linkClick").click(function(){
-    cuepoint();
+    var IDs = [];
+     $('.video:checked').each(function() {
+        IDs.push($(this).val());
+     });
+     if(IDs.length ==0)
+     {
+         bootbox.alert("Select At Least One Checkbox.");
+         return false;
+     }else
+     {
+         cuepoint();
+     }
+    
 });
 function cuepoint()
 {
+ 
     
     $("#singleVideoFlag").val(0);
     $("#addFlag,#updateFlag,#cancelFlag").val(0);
@@ -1318,11 +1331,11 @@ $("#add").click(function(){
                var div_removeClass1 = "append_"+timeInMillisec;
                var forChangeVal     = $("#forChangeVal").val();
                var removeDiv1       = ".append_"+forChangeVal;
-               console.log("Text===>"+text +"Time Change ==>>"+ timeInMillisec+"class==>"+div_removeClass1);
+             //  console.log("Text===>"+text +"Time Change ==>>"+ timeInMillisec+"class==>"+div_removeClass1);
                
                 if(text == timeInMillisec)
                 {
-                    console.log("==========>"+div_removeClass1);
+                    //console.log("==========>"+div_removeClass1);
                   $(".js-irs-0 .irs ."+div_removeClass1).remove(); 
                   $(".js-irs-0 .irs .irs ."+div_removeClass1).remove();
                   $(".js-irs-0 .irs-slider."+div_removeClass1).remove(); 
