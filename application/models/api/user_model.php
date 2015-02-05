@@ -82,7 +82,7 @@ class User_model extends CI_Model {
         $this->db->where('a.password',$password); 
         $this->db->where('a.status',1); 
         $query = $this->db->get();
-       // echo '<br>'.$this->db->last_query();die;
+        //echo '<br>'.$this->db->last_query();die;
         $result = $query->row();
         if($result)
             return $result->id;
@@ -251,5 +251,19 @@ function delete_user($id){
          return $result->id;
       else
          return 0;
+  }
+  
+  function validate_device($id)
+  {
+   $this->db->select('a.id');
+   $this->db->from('customers a');
+   $this->db->where('a.device_unique_id');
+   $this->db->limit(1);
+   $query = $this->db->get();
+   $result = $query->row();
+   if($result)
+      return $result->id;
+   else
+      return 0;
   }
 }

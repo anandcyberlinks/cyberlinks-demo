@@ -49,6 +49,17 @@ class User extends REST_Controller
         }
     }
     
+    function checkdevice_get()
+    {
+	$id = $this->get('did');
+	$result = $this->User_model->validate_device($id);
+	if($result >0){
+            $this->response(array('code'=>1, 'result' => $result), 200);
+        }  else {
+            $this->response(array('code'=>0,'error' => "No record found"), 404);
+        }
+    }
+    
     function add_post()
     {
        $token = sha1($this->post('email').$this->post('password').rand());
@@ -360,8 +371,10 @@ class User extends REST_Controller
     function social_post()
     {
         $provider = $this->post('provider');
+	$access_token = $this->post('access_key');
+	$uniqueId = $this->post('uniqueID');
         $userdetails = json_decode($this->post('social'));
-	       
+
        //-- check if Admin token is valid --//
 	   $owner_id =  $this->User_model->checkAdminToken($this->admin_token);
 	    if($owner_id <= 0){
@@ -379,6 +392,7 @@ class User extends REST_Controller
             $password = md5($socialid);
 	    $image = $userdetails->image;
             $token = sha1($socialid.rand());
+	    $age = $userdetails->age;
         }
         
         if($provider=='google')
@@ -399,6 +413,7 @@ class User extends REST_Controller
             $password = md5($socialid);
             $token = sha1($socialid.rand());
 	    $image = $userdetails->image;
+	    $age = $userdetails->age;
             //echo '<pre>'; print_r($userdetails);die;
         }
                 	
@@ -420,6 +435,8 @@ class User extends REST_Controller
             'email' => $email, 
             'password' => $password,
 	    'image' => $image,
+	    'age' => $age,
+	    'device_unique_id' => $uniqueId,
             //'token' => $token,
             'status' => 'active'
             //'created'=>date('Y-m-d h:i:s')
