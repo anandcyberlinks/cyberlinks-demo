@@ -188,6 +188,7 @@ class Webtv extends MY_Controller {
         $this->db->where('id', $chid);
         $result = $this->db->get('channels')->result();
         $type = $result[0]->type;
+        //echo $type;
         $searchterm = '';
         if ($this->uri->segment(2) == '') {
             $this->session->unset_userdata('search_form');

@@ -164,7 +164,7 @@ $.validator.addClassRules({
     },
       'package_name':{
       'required':'Package should not be blank',
-      'remote':'Already Exist Please try Diffrent'
+      'remote':'Already exist please try different'
     },
     'days':{
       'number':'Please enter valid duration in Days'

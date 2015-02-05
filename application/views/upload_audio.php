@@ -1,4 +1,4 @@
-<aside class="right-side">                
+<aside class="right-side">
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
@@ -11,7 +11,6 @@
             <li class="active">Upload</li>
         </ol>
     </section>
-
     <!-- Main content -->
     <section class="content">
         <div id="msg_div"></div>
@@ -78,7 +77,6 @@
         row_data += '<table class="table table-bordered"><tr class="unread"><th class="small-col"><?php echo $welcome->loadPo('Filename') ?></th><th class="small-col"><?php echo $welcome->loadPo('FileSize') ?></th><th class="small-col"><?php echo $welcome->loadPo('File Type') ?></th><th class="small-col"><?php echo $welcome->loadPo('Progress') ?></th></tr><tr class="unread"><td class="small-col">' + fileName + '</td><td class="small-col">' + fsize + ' MB</td><td class="small-col">' + fileType + '</td><td class="small-col" id="size"  width="300"><div class="progress progress-striped "><div style="width: ' + 0 + '%" class="progress-bar progress-bar-primary" id="progressbar"></div></div></td></tr></table>';
         $('#displayfile').html(row_data).show();
     }
-
 
     $('#load').on('click', uploadFiles);
     // Catch the form submit and upload the files
