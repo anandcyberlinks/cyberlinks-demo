@@ -161,36 +161,36 @@
                         copiedEventObject.backgroundColor = $(this).css("background-color");
                         copiedEventObject.borderColor = $(this).css("border-color");
         
-                        // render the event on the calendar
-                        // the last `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
-                        $('#calendar').fullCalendar('renderEvent', copiedEventObject, true);
-        
-                        __saveEvent(copiedEventObject);
-        
-                        $(this).remove();
+                        if(isOverlapping(copiedEventObject)){
+                            $('#calendar').fullCalendar('renderEvent', copiedEventObject, true);
+                            __saveEvent(copiedEventObject);
+                            $(this).remove();
+                        }
                         break;
                 }
-                /*
-                 if ($('#drop-remove').is(':checked')) {
-                 // if so, remove the element from the "Draggable Events" list
-                 $(this).remove();
-                 }
-                 */
             },
-            eventDrop: function (event, delta, revertFunc) {
+            eventDrop: function (event, dayDelta, minuteDelta, allDay, revertFunc) {
                 var view = $('#calendar').fullCalendar('getView');
                 switch (view.name) {
                     case 'month' :
                         break;
                     default :
-                        event.action = 'update';
-                        __saveEvent(event);
+                        if(isOverlapping(event)){
+                            event.action = 'update';
+                            __saveEvent(event);    
+                        }else{
+                            revertFunc();
+                        }
                         break;
                 }
             },
-            eventResize: function (event, delta, revertFunc) {
-                event.action = 'update';
-                __saveEvent(event);
+            eventResize: function (event, dayDelta, minuteDelta, revertFunc) {
+                if(isOverlapping(event)){
+                    event.action = 'update';
+                    __saveEvent(event);    
+                }else{
+                    revertFunc();
+                }
             },
             eventClick: function (event, jsEvent, view) {
                 var r = confirm("Delete " + event.title);
@@ -203,19 +203,25 @@
             //eventDurationEditable: false
         });
 
-
+        
         function isOverlapping(event) {
-            var array = cal.fullCalendar('clientEvents');
-            for (i in array) {
-                if (array[i].id != event.id) {
-                    alert(array[i].start);
-                    alert(event.start);
-                    if (event.end >= array[i].start && event.start <= array[i].end) {
-                        return 1;
-                    }
+            var validDrop = true;
+            var ev = $("#calendar").fullCalendar("clientEvents");
+            for(var e in ev)
+            {   
+                if(ev[e].id!=event.id)
+                {
+                    if(ev[e].start>=event.start && ev[e].end<=event.end)
+                        validDrop=false;
+                    if(ev[e].start<=event.start && ev[e].end>=event.end) 
+                        validDrop=false;
+                    if(ev[e].start<event.start && ev[e].end<event.end && ev[e].end>event.start)
+                        validDrop=false;
+                    if(ev[e].end>event.end && ev[e].start>event.start && ev[e].start<event.end)
+                        validDrop=false;
                 }
             }
-            return 0;
+            return validDrop;
         }
 
         custom_buttons = '<span class="fc-button fc-button-eventcopy fc-state-default fc-corner-left" unselectable="on" style="-moz-user-select: none;">Event Copy</span>'
