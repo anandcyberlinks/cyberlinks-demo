@@ -1136,7 +1136,7 @@ function cuepoint()
                 //console.log(data);
                 var cuePointInfo = $.parseJSON(data);
                 //return cuePointInfo;
-                console.log(cuePointInfo);
+                //console.log(cuePointInfo);
                 var lastKey;
                 $.each(cuePointInfo['result'],function(k,v){
                     //var onePercentage = 0.02302;
@@ -1458,17 +1458,24 @@ $("#update").click(function(){
                 }
         //--- get updated cuepoints list in array ---//
         var i=0;
-            $(".js-irs-0 .irs-single.mybar1").each(function(){
+            $(".js-irs-0 .irs-slider.mybar1").each(function(){
             var innerArray =[];
-             var time = $(this).text();
-             var cueName = $(this).attr("checkAttr");
-             var SplitArray = time.split(":");
+             //var time = $(this).text();
+              var myStr = $(this).attr("class");
+              var subStr = myStr.match("append_(.*)");
+
+                  var secToTime = secTotime(subStr[1]);
+                   var SplitArray = secToTime.split(":");
+
+             var cueName1 = $(this).attr("checkAttr");
+             //console.log(cueName1);
+             
              var finalTime = parseInt(SplitArray[0]*60) + parseInt(SplitArray[1]);
              
              //cuepointArr[i]['time']=time;
              //cuepointArr[i]['cuename']=cueName;
               var arrayPush = {};
-              cuepointArr[finalTime] = cueName;
+              cuepointArr[finalTime] = cueName1;
                 //cuepointArr.push(arrayPush); 
            i++;
             });
