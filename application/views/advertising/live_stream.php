@@ -342,10 +342,11 @@ function addCuePoints(){
 
     var cuePoints = [];
     var myForm = document.forms.addcue_form;
+    //var hhTest =  $("#hh").val();
     var hhControls = myForm.elements['hh[]'];
     var mmControls = myForm.elements['mm[]'];
     var ssControls = myForm.elements['ss[]'];
-    //console.log(CHANNELs);
+    //console.log(hhTest+"=================>"+hhTest.length);
     
     if(typeof hhControls.length==="undefined"){
         var hh = hhControls.value;
@@ -362,14 +363,15 @@ function addCuePoints(){
             saveLiveCuePoints(channel_ids,cuePoints);
         }
     }else{
+        var a = 0;
         for (var i = 0; i < hhControls.length; i++) {
             var hh = hhControls[i].value;
             var mm = mmControls[i].value;
             var ss = ssControls[i].value;
             var timeString = hh+':'+mm+':'+ss;
-
+            a = a+1;    
             if(IsValidTime(timeString)==false){
-                var a = i+1;
+                
                 $("#errTime_"+a).show();
                 return false;
             }else{                
