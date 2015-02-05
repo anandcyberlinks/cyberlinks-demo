@@ -495,6 +495,10 @@ function prepareUpload(event) {
 $('#uploadcsv').on('click', function () {
     $('#displayfile').html('<img src="' + baseurl + 'assets/img/loader.gif"> loading...');
     var csvFilesCount = csvFilesArr.length;
+    if (csvFilesCount == 0) {
+        $('#displayfile').html("Please select Valid CSV");
+        return false;
+    }
     for (var i = 0; i < csvFilesCount; i++) {
         if (csvFilesArr[i].length == colLength) {
             var content_title = csvFilesArr[i]['0'];
@@ -544,31 +548,31 @@ $('#uploadcsv').on('click', function () {
 });
 
 
+
 /* bulk upload Ads by CSV file only */
 
 // Variable to store your files
-var filesAds;
-var csvFilesArr1 = [];
-var colLength1 = 4;
+var files;
+var csvFilesArr = [];
+var colLength = 5;
 // uplaod events
-$('#csv_ads_file').on('change', prepareUploadads);
+$('#csv_file').on('change', prepareUpload);
 // Grab the files and set them to our variable
 
-function prepareUploadads(event) {
+function prepareUpload(event) {
     $('#status_csv_file').html('');
     $('#csvFileList').html('');
-    filesAds = event.target.files;
-   
-    var fileName = filesAds[0].name;
-    var fileSize = filesAds[0].size;
-    var fileType = filesAds[0].type;
+    files = event.target.files;
+    var fileName = this.files[0].name;
+    var fileSize = this.files[0].size;
+    var fileType = this.files[0].type;
     var size = fileSize / 1048576;
     var fsize = size.toFixed(2);
-    if (filesAds && filesAds.length > 0) {
+    if (this.files && this.files.length > 0) {
         $('#displayfile').html('<img src="' + baseurl + 'assets/img/loader.gif"> loading...');
-        filesArray = filesAds
-        $.each(filesAds, function (index, value) {            
-            if (value.type == 'text/csv' || value.type=='application/csv') {
+        filesArray = this.files;
+        $.each(this.files, function (index, value) {
+            if (value.type == 'text/csv' || value.type == 'application/csv') {
                 var reader = new FileReader();
                 var link_reg = /(http:\/\/|https:\/\/)/i;
                 reader.readAsText(value);
@@ -583,7 +587,7 @@ function prepareUploadads(event) {
                         var tr = document.createElement('tr');
                         tr.id = "tr_" + i;
                         var arr = rows[i].split(',');
-                        if (arr.length == colLength1) {
+                        if (arr.length == colLength) {
                             var tmpArr = [];
                             for (var j = 0; j < arr.length; j++) {
                                 if (i == 0) {
@@ -606,7 +610,7 @@ function prepareUploadads(event) {
                                 tr.appendChild(td);
                             }
                             if (i != 0) {
-                                csvFilesArr1.push(tmpArr);
+                                csvFilesArr.push(tmpArr);
                             }
                             tbody.appendChild(tr);
                         }
@@ -619,6 +623,7 @@ function prepareUploadads(event) {
                 row_data1 += '<section class="content"><div class="col-xs-12"><div class="alert alert-danger alert-dismissable"><i class="fa fa-ban"></i>Only .csv file accepted</div><div></section>';
                 $('#msgftp').html(row_data1).fadeTo(3000, 500).slideUp(3000);
                 $('#displayfile').hide();
+                $('#csv_file').val('');
                 return false;
             }
         });
@@ -630,7 +635,7 @@ function prepareUploadads(event) {
 $('#uploadadscsv').on('click', function () {
     $('#displayfile').html('<img src="' + baseurl + 'assets/img/loader.gif"> loading...');
     var csvFilesCount = csvFilesArr1.length;
-    
+
     for (var i = 0; i < csvFilesCount; i++) {
         if (csvFilesArr1[i].length == colLength1) {
             var content_title = csvFilesArr1[i]['0'];
@@ -678,6 +683,7 @@ $('#uploadadscsv').on('click', function () {
     }
     return false;
 });
+
 
 /* function to validate url starts */
 
@@ -767,11 +773,13 @@ function connect() {
     $('#displayfileftp').html('<img src="' + baseurl + 'assets/img/loader.gif"> loading...');
 
     $.ajax({
+        
         type: "POST",
         url: baseurl + "video/ftpLogin",
         data: {'ftpserver': ftpserver, 'username': username, 'password': password, 'ftpPath': ftpPath},
         dataType: 'json',
         success: function (response) {
+            console.log(response);
             if (response.status == 'success')
             {
                 $('#displayfileftp').html('');
@@ -780,13 +788,16 @@ function connect() {
                 $('#ftpdata,#search').show();
 
             } else {
-                $('#displayfileftp').html('');
+                $('#displayfileftp').html(response.message);
+                //$('#displayfileftp').html('')
                 //$('#ftpBulkuploadForm .loader').html('');
             }
         }
     });
+    //$('#displayfileftp').html('')
     return false;
 }
+
 
 /* functions to check png image in video setting section starts */
 
