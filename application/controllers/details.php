@@ -58,11 +58,16 @@ class Details extends MY_Controller {
                 
                 $device = $_GET['device'];
 		$this->data['user_id'] = $_GET['user_id'];
-                $result = $this->Video_model->video_play($id,$device);
-		if($result){
-			$this->data['result'] =$result;	
+		$type= $_GET['type'];
+		if($type=='live'){
+			$this->data['result'] =  $this->Video_model->livestream_play($id);	
 		}else{
-			$this->data['result'] = $this->Video_model->video_play_youtube($id,'youtube');
+			$result = $this->Video_model->video_play($id,$device);
+			if($result){
+				$this->data['result'] =$result;	
+			}else{
+				$this->data['result'] = $this->Video_model->video_play_youtube($id,'youtube');
+			}
 		}
 		$this->data['scheduleBreaks'] = $adsFinal;       
                 $this->load->view('details',$this->data);

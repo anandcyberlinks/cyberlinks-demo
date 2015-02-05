@@ -515,9 +515,9 @@ class Video_model extends CI_Model {
         return $query->row();
    }
    
-   public function livestream_play()
+   public function livestream_play($id)
    {
-      $this->db->select('ch.id as content_id,ch.uid as content_provider,ch.ch_name,l.thumbnail_url as thumbnail_path, IF(l.youtube !="",l.youtube,web) as video_path');
+      $this->db->select('ch.id as content_id,ch.uid as content_provider,ch.name,l.thumbnail_url as thumbnail_path, l.web as video_path');
       $this->db->from('channels ch');
       $this->db->join('livestream l','ch.id=l.channel_id');
       $this->db->where('l.status','1');
