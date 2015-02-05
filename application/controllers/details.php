@@ -23,6 +23,7 @@ class Details extends MY_Controller {
 		$this->data['lat'] = $lat = $_GET['lat'];
 		$this->data['long'] = $lng = $_GET['lng'];
 		$id = $_GET['id'];
+		$type= $_GET['type'];
 		
 		$url = "http://maps.googleapis.com/maps/api/geocode/json?latlng=".$lat.",".$lng."&sensor=true";
 		$data = @file_get_contents($url);
@@ -31,8 +32,9 @@ class Details extends MY_Controller {
 		$this->data['geodata'] = $result['results'][0]['address_components'];
 		//------------------------------//
 		//-- get cue points for ads --//
-		$limit = $this->Ads_model->getCuePoints($id,1);
-		$cuePoints = $this->Ads_model->getCuePoints($id);
+		
+		$limit = $this->Ads_model->getCuePoints($id,$type,1);
+		$cuePoints = $this->Ads_model->getCuePoints($id,$type);
 		//----------------------------//
 		
 		$user_data = $this->Ads_model->getUserKeywords($_GET['user_id']);
@@ -58,7 +60,7 @@ class Details extends MY_Controller {
                 
                 $device = $_GET['device'];
 		$this->data['user_id'] = $_GET['user_id'];
-		$type= $_GET['type'];
+		
 		if($type=='live'){
 			$this->data['result'] =  $this->Video_model->livestream_play($id);	
 		}else{

@@ -896,7 +896,7 @@ class Ads_model extends CI_Model {
       return $query->result();
     }
     
-    function getCuePoints($id,$flag=0){
+    function getCuePoints($id,$type,$flag=0){
       if($flag){
 	 $this->db->select('count(id) as tot');
 	 $this->db->limit(1);
@@ -904,6 +904,9 @@ class Ads_model extends CI_Model {
 	 $this->db->select('cue_points');
       }
       
+      if($type=='live'){
+	 $this->db->where('type',$type);
+      }
       $this->db->from('content_cuepoints');
       $this->db->where('content_id',$id);
       
