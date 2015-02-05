@@ -101,15 +101,15 @@ $this->show_view("advertising/cuepoints", $content);*/
                $i++;
             }
           }
-          $editFlag = $_POST['editFlag'];
-       $insertStatus = $this->videos_model->insertCuePoints($data,$uniquePoints,$editFlag);
+         // $editFlag = $_POST['editFlag'];
+       $insertStatus = $this->videos_model->insertCuePoints($data);
        
     }
 function  updateCuePoint()
     {
-    //echo "<pre>";
+   // echo "<pre>";
      //  print_r($_POST);
-       //die();
+      // die();
      // echo "<pre>";
          
       $created = date('Y-m-d h:i:s');
