@@ -1122,7 +1122,7 @@ class Videos_model extends CI_Model {
         $timeEnd = " 23:59:59";
         //$id = $this->get_ownerid($uid);
        // array_push($id, $uid);
-        $this->db->select('a.id,a.title, e.name as file,e.relative_path as video_path,c3.relative_path as thumbnail,d.duration');        
+        $this->db->select('a.type,a.id,a.title, e.name as file,e.relative_path as video_path,c3.relative_path as thumbnail,d.duration');        
         $this->db->from('contents a');
         $this->db->join('videos d', 'a.id = d.content_id', 'left');
         $this->db->join('files e', 'd.file_id = e.id', 'left');

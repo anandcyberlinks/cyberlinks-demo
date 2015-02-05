@@ -273,7 +273,7 @@
                     <input type="email" id="cueName" name="cueName" placeholder="Name" id="exampleInputEmail1" class="form-control">
                     </div>
                     <div class="box-footer">
-                    <button class="btn btn-primary" type="submit" name="adds" id="adds" onclick="return addCuePoints();">Add</button>&nbsp;<a href="#" id="cancel" class="cancel">cancel</a>                    
+                    <button class="btn btn-primary" type="submit" name="adds" id="adds" onclick="return addCuePoints();">Add</button>&nbsp;<a href="<?php echo base_url()?>advertising/live_stream" id="cancel" class="cancel">cancel</a>                    
                     </div>
                     </form>         
                     <div id="innerHtml">
