@@ -257,9 +257,10 @@ function delete_user($id){
   {
    $this->db->select('a.id');
    $this->db->from('customers a');
-   $this->db->where('a.device_unique_id');
+   $this->db->where('a.device_unique_id',$id);
    $this->db->limit(1);
    $query = $this->db->get();
+  // echo '<br>'.$this->db->last_query();die;
    $result = $query->row();
    if($result)
       return $result->id;
