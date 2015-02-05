@@ -272,7 +272,8 @@ class Webtv_model extends CI_Model {
         return $query->result();
     }
 
-    function get_videocount($uid, $data = '', $ids, $type) {
+    function get_videocount($uid, $ids, $data = '', $type) {
+        echo $type;
         $timeStart = " 00:00:00";
         $timeEnd = " 23:59:59";
         $id = $this->get_ownerid($uid);
@@ -284,7 +285,7 @@ class Webtv_model extends CI_Model {
         if($type=='Loop'){
              $this->db->where('contents.type','youtube');
         }
-        if($type=='Liner'){
+        if($type=='Linear'){
              $this->db->where('contents.type !=', 'youtube');
         }
         $this->db->where_not_in('contents.id', $ids);
@@ -334,7 +335,7 @@ class Webtv_model extends CI_Model {
         if($type=='Loop'){
              $this->db->where('a.type','youtube');
         }
-        if($type=='Liner'){
+        if($type=='Linear'){
              $this->db->where('a.type !=', 'youtube');
         }
         $this->db->where_in('a.uid', $id);
