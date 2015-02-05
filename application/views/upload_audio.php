@@ -71,7 +71,7 @@
             row_data1 += '<section class="content"><div class="col-xs-12"><div class="alert alert-danger alert-dismissable"><i class="fa fa-check"></i>only MP3 Audio file is allow!</div><div></section>';
             $('#msg_div').html(row_data1).fadeTo(3000, 500).slideUp(3000);
             $('#displayfile').hide();
-            $('#video_file').val('');
+            $('#audio_file').val('');
             return false;
         }
         var row_data = "";

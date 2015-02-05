@@ -43,6 +43,21 @@ $.validator.addClassRules({
       'url':{
         'required':true,
       },
+      'url[youtube]':{
+        'required':true,
+      },
+      'url[ios]':{
+        'required':true,
+      },
+      'url[android]':{
+        'required':true,
+      },
+      'url[window]':{
+        'required':true,
+      },
+      'url[web]':{
+        'required':true,
+      },
       'title':{
         'required':true,
       },

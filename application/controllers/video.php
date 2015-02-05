@@ -500,7 +500,7 @@ class Video extends MY_Controller {
      */
 
     function youtube() {
-        $videoUrl = $_POST['url'];
+        $videoUrl = trim($_POST['url']);
         preg_match('%https?://(?:www\.)?youtube\.com/watch\?v=([^&]+)%', $videoUrl, $matches);
         if ($matches) {
             $post = array();
@@ -720,7 +720,7 @@ class Video extends MY_Controller {
         $ftp_userpass = $_POST['password'];
         $ftp_path = $_POST['ftpPath'];
         if ($ftp_server != "" && $ftp_username != "" && $ftp_userpass != "") {
-            $ftp_conn = ftp_connect($ftp_server) or die("Could not connect to $ftp_server");
+            $ftp_conn = @ftp_connect($ftp_server);
             if ($ftp_conn) {
                 $ftpLogin = ftp_login($ftp_conn, $ftp_username, $ftp_userpass);
                 if ($ftpLogin) {
@@ -793,13 +793,14 @@ class Video extends MY_Controller {
                     $message = $this->_warningmsg($this->loadPo($this->config->item('warning_username_password')));
                 }
             } else {
-                $result = 'error';
-                $message = $this->_warningmsg($this->loadPo($this->config->item('error_server_connect')));
+                $result =  "erroe";
+                $message = "Invalid login";
             }
         } else {
             $result = 'error';
             $message = $this->_warningmsg($this->loadPo($this->config->item('warning_fields_empty')));
         }
+        $response = array();
         $response['status'] = $result;
         $response['message'] = $message;
         echo json_encode($response);
