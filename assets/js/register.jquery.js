@@ -43,6 +43,9 @@ $.validator.addClassRules({
       'content_title':{
         'required':true,
       },
+      'category_id':{
+        'required':true  
+      },
       'content_category':{
         'required':true,
       },

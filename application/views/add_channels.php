@@ -38,13 +38,42 @@
                                     <div class="row">
                                         <div class="form-group col-md-10">
                                             <label><?php echo $welcome->loadPo('Channels Name'); ?></label>
-                                            <input class="form-control" type="text" name="name" value="<?php if (isset($value)) { echo $value[0]->name; } ?>">
+                                            <input class="form-control" type="text" name="name" value="<?php
+                                            if (isset($value)) {
+                                                echo $value[0]->name;
+                                            }
+                                            ?>">
+                                            
                                         </div>
                                         <div class="form-group col-md-10">
-                                            <label><?php echo $welcome->loadPo('Channels Number'); ?></label>
-                                            <input class="form-control" type="text" name="number" value="<?php if (isset($value)) { echo $value[0]->number; } ?>">
+                                            <label><?php echo $welcome->loadPo('Category'); ?></label>
+                                            <select name="category_id" id="category_id" class="form-control">
+                                                <option value="">Select</option>
+                                                <?php foreach ($catogory as $val) { ?>
+                                                    <option value="<?= $val->id ?>"
+                                                    <?php
+                                                    if (isset($value)) {
+                                                        if ($value[0]->category_id == $val->id) {
+                                                            echo "selected";
+                                                        }
+                                                    }
+                                                    ?>
+
+
+
+                                                            ><?= $val->category ?></option>
+                                                        <?php } ?>
+                                            </select>
+                                            
                                         </div>
-                                            <?php if (!isset($value)) { ?>
+                                        <div id="load" class="col-md-4"></div>
+                                        <div class="form-group col-md-10">
+                                            <label><?php echo $welcome->loadPo('Channels Number'); ?></label>
+                                            <select name="number" id="ch_number" class="form-control">
+                                                <option value="">Select Number</option>
+                                            </select>
+                                        </div>
+                                        <?php if (!isset($value)) { ?>
                                             <div class="form-group col-md-10">
                                                 <label><?php echo $welcome->loadPo('Channels Type'); ?></label>
                                                 <select name="type" class="form-control">
@@ -54,33 +83,18 @@
                                                     <option value="Linear">Linear</option>
                                                 </select>
                                             </div>
-                                            <?php } ?>
-                                        <div class="form-group col-md-10">
-                                                <label><?php echo $welcome->loadPo('Category'); ?></label>
-                                                <select name="category_id" class="form-control">
-                                                    <option value="">Select</option>
-                                                    <?php foreach ($catogory as $val){ ?>
-                                                    <option value="<?=$val->id ?>"
-                                                            <?php if (isset($value)) {
-                                                                        if ($value[0]->category_id == $val->id) {
-                                                                            echo "selected";
-                                                                        }
-                                                                    } ?>
-                                                            
-                                                            
-                                                            
-                                                            ><?=$val->category ?></option>
-                                                    <?php } ?>
-                                                </select>
-                                            </div>
+                                        <?php } ?>
+
                                         <div class="form-group col-md-10">
                                             <label><?php echo $welcome->loadPo('Status'); ?></label>
                                             <input type="hidden" name="status" value="0">
-                                            <input type="checkbox" name="status" value="1" <?php if (isset($value)) {
+                                            <input type="checkbox" name="status" value="1" <?php
+                                            if (isset($value)) {
                                                 if ($value[0]->status == '1') {
                                                     echo "checked";
                                                 }
-                                            } ?>>
+                                            }
+                                            ?>>
                                         </div>
                                         <div class="form-group col-md-5">
                                             <input type="submit" name="submit" value="Submit" class="btn btn-success">
@@ -96,3 +110,23 @@
         </section><!-- /.content -->
     </aside><!-- /.right-side -->
 </div><!-- ./wrapper -->
+<script>
+    $("#category_id").change(function () {
+        $('#ch_number').empty();
+        $('#load').html('<img src="' + baseurl + 'assets/img/loader.gif"> loading...');
+        var c_id = $("#category_id").val();
+        $.ajax({
+            url: '<?= base_url() . 'webtv/ch_number?cat_id=' ?>' + c_id,
+            dataType: "json",
+            success: function (response) {
+                $('#ch_number').append('<option value="*">Select</option>');
+                $.each(response,function(key, value){
+		    $('#ch_number').append('<option value=' + value.range + '>' + value.range + '</option>');  
+		});
+
+                //console.log(response);
+            }
+        });
+        $('#load').html('');
+    });
+</script>
