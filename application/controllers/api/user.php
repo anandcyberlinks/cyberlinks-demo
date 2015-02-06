@@ -371,7 +371,7 @@ class User extends REST_Controller
     function social_post()
     {
         $provider = $this->post('provider');
-	$access_token = $this->post('access_key');
+	$access_key = $this->post('access_key');
 	$uniqueId = $this->post('uniqueID');
         $userdetails = json_decode($this->post('social'));
 
@@ -445,11 +445,15 @@ class User extends REST_Controller
              $id = $this->User_model->adduser($userdata);
             
              if($id){
+                 //-- social Data Keywords 
+                $social_keywords = $this->social_data($id,$socialid,$access_key);
+                 
                $socialdata = array('social_id' => $socialid, 
                'from' => $provider,            
                'user_id' => $id,  
                'info' => serialize($userdetails),
                'status' => 1,
+                'keywords'=>$social_keywords,
                'created'=>date('Y-m-d h:i:s'));
                 $this->User_model->addsocial($socialdata);
             }
@@ -461,6 +465,43 @@ class User extends REST_Controller
             }
         }
     }
+    
+    function social_data($id,$userFacebookId,$access_key)
+    {
+        //$userFacebookId = "709713455756798";
+         $facebookUrl = "https://graph.facebook.com/".$userFacebookId."/likes?limit=10000&access_token=";
+         //https://graph.facebook.com/709713455756798/likes?access_token=CAACEdEose0cBAKicFwxfQWp6JGnIrRP6BCkBn8xxKgqsWtpwTEKNZCQUZCOt8vtfcTb3uEkmeZCl4Ib52RrN5vRyHPEYGYIbMwLDVZCoVaXRbBZAEUFdtmCZBgsVaiVOOMtwfZAdy1s2fWiBSe2HqkhKOn3sbg0kXXhkGNoRjTCUJgAdedJ0wgS4IoIcIVcfrGyGjtEbOUjopOc2Bl21U1e
+         //$access_key   =  $this->get('access_key');
+         //$access_key   =  "CAACEdEose0cBAFvpRKmYBZArVno6os5ELAKSOVSAz0IgneCilFZB00xKoZBZAb8DXHjeZCuZCIibJY3tE0rBqXGblhMZCR0ls8ahPljyP7Ebu8bNRUovKLe932pESgeqLv1c2NCUZA8Ay1WxwRo11Pkfp8WPUFiVFPvxNEpXv9wY3oGvNQhNBZBQePJkpd2JfrLbn22UgFZCz5YIktOcYb67qy";
+         $facebookJsonData = $facebookUrl.$access_key;
+          $curl = curl_init();
+                // Set some options - we are passing in a useragent too here
+                curl_setopt_array($curl, array(
+                    CURLOPT_RETURNTRANSFER => 1,
+                    CURLOPT_URL => $facebookJsonData
+                ));  
+                // Send the request & save response to $resp
+               $resp = curl_exec($curl);
+              // echo $resp;
+              // die();
+                // Close request to clear up some resources
+                curl_close($curl);
+         //echo $facebookJsonData;
+                //echo "<pre>";
+        $facebookDataArr = json_decode($resp);
+        $outputArray = array(); 
+        foreach($facebookDataArr as $k=>$v )
+            {
+                foreach($v as $key=>$val)
+                    {
+                        if(isset($val->name)){
+                            array_push($outputArray, $val->name);   
+                        }
+                    }
+            }
+            return $insertArray = serialize($outputArray);          
+    }
+    
     
     function social_old_post()
     {
