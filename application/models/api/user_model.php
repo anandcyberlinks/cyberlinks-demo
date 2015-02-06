@@ -267,4 +267,22 @@ function delete_user($id){
    else
       return 0;
   }
+  public function userprofile($id)
+  {
+      $this->db->select('c.id,c.first_name,c.last_name,c.gender,c.location,c.age,a.keywords');
+      $this->db->from('social_connects a');
+      $this->db->join('customers c', 'c.id = a.user_id', 'left');
+      $this->db->where('user_id',$id);
+      $this->db->limit(1);
+      $query = $this->db->get();
+      $result = $query->row();
+      if($result)
+          {
+          return $result;
+          }else
+              {
+                return 0;
+              }
+      
+  }
 }
