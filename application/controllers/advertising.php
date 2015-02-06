@@ -93,7 +93,7 @@ $this->show_view("advertising/cuepoints", $content);*/
             $result = $this->videos_model->validate_cuepoint_duration($id,$_POST['timeInMillisec']);
                
           $innerArray = array();
-           if($result ==1){  
+           if($result ==1){
                $data[$i]["content_id"]= $id;
                $data[$i]["cue_points"]=$_POST['timeInMillisec'];
                $data[$i]["title"] =$_POST['cueName'];

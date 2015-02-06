@@ -116,7 +116,7 @@
                                                     <?php if(in_array($value->minetype,array('video/wmv','video/avi'))) { ?>
                                                     --
                                                     <?php } else { ?>
-                                                    <a class="prev_video" href="#myModal" data-backdrop="static" data-toggle="modal" data-img-url="<?php echo baseurl.serverVideoRelPath.$value->file; ?>">Preview</a>
+                                                    <a class="prev_video" href="#myModal" data-backdrop="static" data-toggle="modal" data-img-url="<?php echo ($value->type=='youtube' ? $value->file : baseurl.serverVideoRelPath.$value->file); ?>">Preview</a>
                                                     <?php } ?>
                                                 </td>
                                                 <td  width="120"><?php echo date('M d,Y', strtotime($value->created)); ?></td>
