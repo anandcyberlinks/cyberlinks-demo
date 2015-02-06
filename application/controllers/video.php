@@ -475,13 +475,13 @@ class Video extends MY_Controller {
                         $last_id = $this->videos_model->_saveVideo($data);
                         $msg = $this->loadPo($this->config->item('success_file_upload'));
                         $this->log($this->user, $msg);
-                        $data['id'] = base64_encode($last_id);
-                        $data['message'] = $this->_successmsg($msg);
-                        echo json_encode($data);
+                        $temp['id'] = base64_encode($last_id);
+                        $temp['message'] = $this->_successmsg($msg);
+                        echo json_encode($temp);
                     } else {
                         $msg = $this->loadPo($this->config->item('error_file_upload'));
-                        $data['message'] = $this->_errormsg($msg);
-                        echo json_encode($data);
+                        $temp['message'] = $this->_errormsg($msg);
+                        echo json_encode($temp);
                     }
                 }
             } else {
