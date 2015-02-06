@@ -40,6 +40,12 @@ $.validator.addClassRules({
         'required':true,
         'minlength':5
       },
+      'content_title':{
+        'required':true,
+      },
+      'content_category':{
+        'required':true,
+      },
       'url':{
         'required':true,
       },
@@ -89,11 +95,7 @@ $.validator.addClassRules({
         'minlength':4,
         'maxlength':30
       },
-      'description':{
-        'required':true,
-        'minlength':4,
-      },
-      
+           
       'start_date':{
         'required':true,
       },

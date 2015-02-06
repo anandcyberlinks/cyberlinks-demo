@@ -1,8 +1,13 @@
+<style>
+    .error{
+        color: red
+    }
+</style>
 <div class="tab-pane active" id="tab_1">
     <div class="box box-solid">
         <div class="box-body">
             <div class="row">
-                <form id="metadata" name="metadata" action="" method="post">
+                <form id="registerId" name="metadata" action="" method="post">
                         <div class="form-group col-lg-6">
                             <label for="exampleInputEmail1"><?php echo $welcome->loadPo('Title') ?></label>
                             <input name="content_title" class="form-control" id="content_title" type="text" placeholder="Enter Content Title"  value="<?php if(isset($result['title'])) { echo $result['title']; } ?>"/>

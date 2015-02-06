@@ -121,7 +121,7 @@
                                                 </td>
                                                 <td  width="120"><?php echo date('M d,Y', strtotime($value->created)); ?></td>
                                                 <td  width="150"> 
-                                                    <a href="#" class="link" links="<?php echo base_url(); ?>webtv/VideoPack/<?php echo $this->uri->segment(3)."/".$value->id; ?>" ><?php echo $welcome->loadPo('Add') ?></a>
+                                                    <a href="add_video" class="link" links="<?php echo base_url(); ?>webtv/VideoPack/<?php echo $this->uri->segment(3)."/".$value->id; ?>" ><?php echo $welcome->loadPo('Add') ?></a>
                                                 </tr>
                                         <?php } ?>
                                     </tbody>

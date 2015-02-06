@@ -42,17 +42,17 @@ class Video extends MY_Controller {
                 'field' => 'content_category',
                 'label' => 'Content Category',
                 'rules' => 'trim|required'
-            ),
+            )
             /* array(
               'field' => 'content_channel',
               'label' => 'Content Channel',
               'rules' => 'trim|required'
-              ), */
+              ), 
             array(
                 'field' => 'description',
                 'label' => 'Description',
                 'rules' => 'trim|required'
-            )
+            ) */
         ),
         'video_schedule' => array(
             array(

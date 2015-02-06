@@ -259,7 +259,7 @@ class Webtv_model extends CI_Model {
         $this->db->where_not_in('a.id', $ids);
         $this->db->order_by('id', 'DESC');
         $query = $this->db->get();
-        echo $this->db->last_query();
+        //echo $this->db->last_query();
         $data = $query->result();
         //echo "<pre>"; print_r($data); exit;
         return $data;
@@ -273,7 +273,6 @@ class Webtv_model extends CI_Model {
     }
 
     function get_videocount($uid, $ids, $data = '', $type) {
-        echo $type;
         $timeStart = " 00:00:00";
         $timeEnd = " 23:59:59";
         $id = $this->get_ownerid($uid);
