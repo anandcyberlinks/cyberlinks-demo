@@ -148,7 +148,32 @@ class User extends REST_Controller
         }
         //$this->response($message, 200); // 200 being the HTTP response code
     }
-    
+    function detail_get()
+    {
+        //--- validate token ---//        
+            $this->validateToken();
+        //------------------------//
+        $id = $this->get('id');
+                if(!$id)
+                    {
+                    
+                     $this->response(array('code'=>0,'error' => "Record Not Found."), 404);
+                    }
+                else{
+                   $userProfile = $this->User_model->userprofile($id);
+                    //print_r($userProfile);
+                   //die();
+                   if($userProfile){
+                    $this->response(array('code'=>1,'result'=>$userProfile), 200); // 200 being the HTTP response code
+                   }else{
+                        $this->response(array('code'=>0,'error' => "Record Not Found."), 404);
+                   }
+                    
+                   }
+
+                
+            
+    }   
     
     function edit_post()
     {
@@ -188,7 +213,8 @@ class User extends REST_Controller
             'last_name' => $this->post('lastname'),
             'gender' => $this->post('gender'),
 	    'dob' => $this->post('dob'),
-            'contact_no' => $this->post('phone')            
+            'contact_no' => $this->post('phone'),
+            'keywords'   => serialize($this->post('keywords'))
             );
            if($pic !='' && $pic != 0){
                $data['image']=$pic;
@@ -445,9 +471,13 @@ class User extends REST_Controller
              $id = $this->User_model->adduser($userdata);
             
              if($id){
+                 if($provider=='facebook'){
                  //-- social Data Keywords 
                 $social_keywords = $this->social_data($id,$socialid,$access_key);
-                 
+                 }else
+                     {
+                        $social_keywords = '';
+                     }
                $socialdata = array('social_id' => $socialid, 
                'from' => $provider,            
                'user_id' => $id,  
