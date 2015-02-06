@@ -163,6 +163,7 @@ class Category extends MY_Controller {
                     if ($this->form_validation->run()) {
                         $result = $this->Category_model->checkCategory($_POST['category'],$this->uid);
                         if ($result == 0) {
+                            print_r($_POST); die;
                             $this->Category_model->_saveCategory($_POST);
                             $msg = $this->loadPo($this->config->item('success_record_add'));
                             $this->log($this->user, $msg);
