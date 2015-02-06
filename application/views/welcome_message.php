@@ -116,6 +116,7 @@ $socialfb = '{"link":"https://www.facebook.com/app_scoped_user_id/87103801626994
     <li><strong> Social login: </strong>
         <br> JSON:
     <form action="<?php echo site_url('api/user/social');?>" method='post'>
+    <input name='uniqueID' type="text">
        <textarea type='text' cols="100" rows="10" id='socialfb' name='social' ><?php echo $socialfb;?></textarea>  
       <textarea style='display:none' type='text' cols="100" rows="10" id='socialgoogle' name='social' ><?php echo $socialgoogle;?></textarea>  
        <br>
