@@ -161,8 +161,9 @@ class User extends REST_Controller
                     }
                 else{
                    $userProfile = $this->User_model->userprofile($id);
-                    //print_r($userProfile);
-                   //die();
+                   $socialKeywords = json_encode(unserialize($userProfile->keywords));
+                    $userProfile->keywords = $socialKeywords;
+                   
                    if($userProfile){
                     $this->response(array('code'=>1,'result'=>$userProfile), 200); // 200 being the HTTP response code
                    }else{
@@ -413,15 +414,18 @@ class User extends REST_Controller
        
         //print_r($userdetails);die;
         if(strtolower($provider)=='facebook'){
+            
+            $imageUrl = social_data_image($access_key);
+            
             $firstname = $userdetails->first_name;
             $lastname = $userdetails->last_name;
             $email = $userdetails->email;
             $gender = $userdetails->gender;
             $socialid = $userdetails->id;
             $password = md5($socialid);
-	    $image = $userdetails->image;
+	    $image = $imageUrl;
             $token = sha1($socialid.rand());
-	    $age = $userdetails->age;
+	    $age = $userdetails->dob;
         }
         
         if(strtolower($provider)=='google')
@@ -442,7 +446,7 @@ class User extends REST_Controller
             $password = md5($socialid);
             $token = sha1($socialid.rand());
 	    $image = $userdetails->image;
-	    $age = $userdetails->age;
+	    $age = $userdetails->dob;
             //echo '<pre>'; print_r($userdetails);die;
         }
                 	
@@ -535,7 +539,30 @@ class User extends REST_Controller
             }
             return $insertArray = serialize($outputArray);          
     }
-    
+    function social_data_image($access_key)
+    {
+        //$userFacebookId = "709713455756798";
+         $facebookUrl = "https://graph.facebook.com/me/picture?&redirect=false&width=480&height=480&access_token=";
+         $facebookJsonData = $facebookUrl.$access_key;
+          $curl = curl_init();
+                // Set some options - we are passing in a useragent too here
+                curl_setopt_array($curl, array(
+                    CURLOPT_RETURNTRANSFER => 1,
+                    CURLOPT_URL => $facebookJsonData
+                ));  
+                // Send the request & save response to $resp
+               $resp = curl_exec($curl);
+              // echo $resp;
+              // die();
+                // Close request to clear up some resources
+                curl_close($curl);
+         //echo $facebookJsonData;
+                //echo "<pre>";
+        $facebookDataArr = json_decode($resp);
+         return $imageUrl = $facebookDataArr->url; 
+        
+            
+    }    
     
     function social_old_post()
     {
