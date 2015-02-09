@@ -96,18 +96,18 @@ $s = $this->session->all_userdata();
                         <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <i class="glyphicon glyphicon-user"></i>
-                                <span><?php echo $s[0]->username; ?><i class="caret"></i></span>
+                                <span><?php echo $s[0]->first_name; ?><i class="caret"></i></span>
                             </a>
                             <ul class="dropdown-menu">
                                 <!-- User image -->
-                                <li class="user-header bg-light-blue">
+                  <?php /*              <li class="user-header bg-light-blue">
                                     <div><img alt="User Pic" src="<?php echo $welcome->getimage() ?>" width="<?php echo $width ?>" height="<?php echo $height ?>"></div>
                                     <p>
                                         <?php echo $s[0]->email; ?>
                                         <small>Member since.  <?php echo $s[0]->created; ?></small>
                                         <small>Role.  <?php echo $s[0]->role; ?></small>
                                     </p>
-                                </li>
+                                </li> */ ?>
                                 <!-- Menu Footer-->
                                 <li class="user-footer">
                                     <div class="pull-left">
