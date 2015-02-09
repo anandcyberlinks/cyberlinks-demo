@@ -271,10 +271,12 @@ function delete_user($id){
   {
       $this->db->select('c.id,c.first_name,c.last_name,c.gender,c.location,c.age,a.keywords');
       $this->db->from('social_connects a');
-      $this->db->join('customers c', 'c.id = a.user_id', 'left');
-      $this->db->where('user_id',$id);
+      $this->db->join('customers c', 'c.id = a.user_id', 'right');
+      $this->db->where('c.id',$id);
+      $this->db->where('c.status','active');
       $this->db->limit(1);
       $query = $this->db->get();
+      //echo $this->db->last_query();
       $result = $query->row();
       if($result)
           {
