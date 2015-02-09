@@ -409,7 +409,7 @@ class User extends REST_Controller
        //-----------------------------------//
        
         //print_r($userdetails);die;
-        if($provider=='facebook'){
+        if(strtolower($provider)=='facebook'){
             $firstname = $userdetails->first_name;
             $lastname = $userdetails->last_name;
             $email = $userdetails->email;
@@ -421,7 +421,7 @@ class User extends REST_Controller
 	    $age = $userdetails->age;
         }
         
-        if($provider=='google')
+        if(strtolower($provider)=='google')
         {
             /*$firstname = $userdetails->profile->name->givenName;
             $lastname = $userdetails->profile->name->familyName;
