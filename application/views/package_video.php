@@ -36,7 +36,7 @@
                                     <thead>
                                         <tr>
                                             <th><?php echo $welcome->loadPo('Title') ?></th>
-                                            
+
                                             <th><?php echo $welcome->loadPo('Category') ?></th>
                                             <th><?php echo $welcome->loadPo('Preview') ?></th>
                                             <th><?php echo $welcome->loadPo('Publish Date') ?></th>
@@ -46,26 +46,39 @@
 
                                     <tbody>
                                         <?php foreach ($result as $value) { ?>
-                                        <tr id="<?php echo $value->id ?>">
-                                                <td  width="350"><a href="<?php echo base_url(); ?>video/detail/<?php echo $value->id; ?>"><?php echo strlen($value->title) > 40 ?  substr($value->title,0,40).'...' : $value->title; ?></td>
+                                            <tr id="<?php echo $value->id ?>">
+                                                <td  width="350"><a href="<?php echo base_url(); ?>video/detail/<?php echo $value->id; ?>"><?php echo strlen($value->title) > 40 ? substr($value->title, 0, 40) . '...' : $value->title; ?></td>
                                                 <td><?php echo $value->category; ?></td>
-                                                                                                <td style='text-align:center'>
-                                                    <?php if(in_array($value->minetype,array('video/wmv','video/avi'))) { ?>
-                                                    --
+                                                <td style='text-align:center'>
+                                                    <?php if (in_array($value->minetype, array('video/wmv', 'video/avi'))) { ?>
+                                                        --
                                                     <?php } else { ?>
-                                                    <a class="prev_video" href="#myModal" data-backdrop="static" data-toggle="modal" data-img-url="<?php echo baseurl.serverVideoRelPath.$value->file; ?>">Preview</a>
+                                                        <a class="prev_video" href="#myModal" data-backdrop="static" data-toggle="modal" data-img-url="<?php echo baseurl . serverVideoRelPath . $value->file; ?>">Preview</a>
                                                     <?php } ?>
                                                 </td>
                                                 <td  width="120"><?php echo date('M d,Y', strtotime($value->created)); ?></td>
                                                 <td><a href="#" class="link" links="<?php echo base_url(); ?>package/delete/<?php echo $value->vpid; ?>" ><?php echo $welcome->loadPo('Delete') ?></a></td>
-                                                </tr>
+                                            </tr>
                                         <?php } ?>
-                                            
+
                                     </tbody>
+                                    
+                                    <div class="pull-right">
+                                        
+                                        <a href="<?php echo base_url() . "package/addVideo/" . $this->uri->segment(3) ?>" class="btn btn-success">Add Video</a>
+                                        <a href="<?php echo base_url(); ?>package" class="btn btn-primary">Back</a>
+                                    </div>
+                                    
                                 </table>
-                                <br>
-                                <a href="<?php echo base_url()."package/addVideo/".$this->uri->segment(3) ?>" class="btn btn-success">Add Video</a>
-                                <a href="<?php echo base_url(); ?>package" class="btn btn-primary">Back</a>
+
+
+                                <div class="pull-right">
+                                    <div class="col-xs-12">
+                                        <div class="paging_bootstrap">
+                                            <ul class="pagination"><li><?php echo $links ?></li></ul> 
+                                        </div>
+                                    </div>
+                                </div>
                             </div>		
                             <!-- Pagination end -->
                         </div><!-- /.box-body -->
@@ -110,21 +123,21 @@
     </div><!-- /.modal -->
 </div> 
 <script type="text/javascript">
-        $(function(){
-            $('.link').click(function(){
-                var elem = $(this);
-                $.ajax({
-                    type: "GET",
-                    url: elem.attr('links'),
-                    dataType:"json",  
-                    success: function(data) {
-                        if(data.success){
-                               elem.closest("tr").fadeOut('3000');
-                               $('#msg_div').html(data.message);
-                        }
+    $(function () {
+        $('.link').click(function () {
+            var elem = $(this);
+            $.ajax({
+                type: "GET",
+                url: elem.attr('links'),
+                dataType: "json",
+                success: function (data) {
+                    if (data.success) {
+                        elem.closest("tr").fadeOut('3000');
+                        $('#msg_div').html(data.message);
                     }
-                });
-                return false;
+                }
             });
+            return false;
         });
+    });
 </script>

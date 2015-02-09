@@ -30,7 +30,6 @@ $s = $this->session->all_userdata();
         <!-- tagit.ui-zendesk.css-->
         <link href="<?php echo base_url() ?>assets/css/tagit.ui-zendesk.css" rel="stylesheet" type="text/css">
         <link href="<?php echo base_url(); ?>assets/css/timepicker/bootstrap-timepicker.min.css" rel="stylesheet"/>
-        
         <link href="<?php echo base_url(); ?>assets/css/ion.rangeSlider.css" rel="stylesheet"/>
         <link href="<?php echo base_url(); ?>assets/css/ion.rangeSlider.skinFlat.css" rel="stylesheet"/>
         <!-- jquery-1.10.2 -->
@@ -42,7 +41,6 @@ $s = $this->session->all_userdata();
         <script src="<?php echo base_url() ?>assets/js/jquery-1.10.2.js"></script>
         <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jwplayer.js" ></script>
         <script type="text/javascript">jwplayer.key = "BC9ahgShNRQbE4HRU9gujKmpZItJYh5j/+ltVg==";</script>
-        
     </head>
     <body class="skin-blue">
         <!-- header logo: style can be found in header.less -->
@@ -100,14 +98,15 @@ $s = $this->session->all_userdata();
                             </a>
                             <ul class="dropdown-menu">
                                 <!-- User image -->
-                  <?php /*              <li class="user-header bg-light-blue">
+                  <?php /*  <li class="user-header bg-light-blue">
                                     <div><img alt="User Pic" src="<?php echo $welcome->getimage() ?>" width="<?php echo $width ?>" height="<?php echo $height ?>"></div>
                                     <p>
                                         <?php echo $s[0]->email; ?>
                                         <small>Member since.  <?php echo $s[0]->created; ?></small>
                                         <small>Role.  <?php echo $s[0]->role; ?></small>
                                     </p>
-                                </li> */ ?>
+                                </li> 
+                   */ ?>
                                 <!-- Menu Footer-->
                                 <li class="user-footer">
                                     <div class="pull-left">

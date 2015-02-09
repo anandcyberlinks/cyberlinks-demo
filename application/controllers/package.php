@@ -47,8 +47,23 @@ class Package extends MY_Controller {
     function video_detail(){
         $data['welcome'] = $this;
         $id = $this->uri->segment(3);
+        
+        
+        
+        
+        $this->load->library("pagination");
+        $config = array();
+        $config["base_url"] = base_url() . "package/video_detail/".$id.'/';
+        $config["total_rows"] = count($this->Package_model->get_video($id));
+        $config["per_page"] = 10;
+        $config["uri_segment"] = 4;
+        $this->pagination->initialize($config);
+        $page = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+        $data["links"] = $this->pagination->create_links();
+        
+        
         $data['package'] = $this->Package_model->getPack($id);
-        $data['result'] = $this->Package_model->get_video($id);
+        $data['result'] = $this->Package_model->get_video($id, $config["per_page"], $page);
         $this->show_view('package_video', $data);
     }
     

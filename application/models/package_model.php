@@ -5,7 +5,7 @@ class Package_model extends CI_Model{
         parent::__construct();
         $this->load->database();
     }
-    function get_video($id){
+    function get_video($id, $limit = '', $start = ''){
         $this->db->select('a.*, b.category , e.name as file,e.minetype, c.id as vpid');
         $this->db->from('contents a');
         
@@ -16,6 +16,10 @@ class Package_model extends CI_Model{
         //$this->db->join('video_rating f', 'a.id = f.content_id', 'left');
         $this->db->group_by('a.id');
         $this->db->where('c.package_id', $id); 
+        if($limit !=''){
+            $this->db->limit($limit, $start);
+                 
+        }
         $query = $this->db->get();
        //echo $this->db->last_query();
         
