@@ -276,7 +276,7 @@ function delete_user($id){
   }
   public function userprofile($id)
   {
-      $this->db->select('c.id,c.first_name,c.last_name,c.gender,c.location,c.dob,a.keywords');
+      $this->db->select('c.id,c.first_name,c.last_name,c.gender,c.location,c.dob,a.keywords,c.image');
       $this->db->from('social_connects a');
       $this->db->join('customers c', 'c.id = a.user_id', 'right');
       $this->db->where('c.id',$id);
