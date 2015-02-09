@@ -241,9 +241,9 @@ class User_model extends CI_Model {
         $this->db->delete('api_token'); 
   }
 function delete_user($id){
-        $this->db->set('status','inactive');
+       // $this->db->set('status','inactive');
         $this->db->where('id', $id);
-        $this->db->update('customers');
+        $this->db->delete('customers');
 	 return true;
   }
   
