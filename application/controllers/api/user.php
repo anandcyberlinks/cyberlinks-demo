@@ -213,13 +213,16 @@ class User extends REST_Controller
             'last_name' => $this->post('lastname'),
             'gender' => $this->post('gender'),
 	    'dob' => $this->post('dob'),
-            'contact_no' => $this->post('phone'),
-            'keywords'   => serialize($this->post('keywords'))
+            'contact_no' => $this->post('phone')
+            
             );
+        $keywordData = array('keywords'   => serialize($this->post('keywords')));
+        
            if($pic !='' && $pic != 0){
                $data['image']=$pic;
            }           
             $result = $this->User_model->update_user($data,$id);
+            $result_social = $this->User_model->update_usersocial($keywordData,$id);
             if($result){
 		$output = $this->User_model->getuser($id);
 		if($output->image !=""){

@@ -219,6 +219,13 @@ class User_model extends CI_Model {
     $this->db->update('customers', $data); 
     return true;
   }
+  function update_usersocial($data,$id)
+  {
+    $this->db->set('modified', 'NOW()', FALSE); 
+    $this->db->where('id', $id);
+    $this->db->update('social_connects', $data); 
+    return true;
+  }  
   
   function update_api($token)
   {
