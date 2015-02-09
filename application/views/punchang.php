@@ -75,6 +75,7 @@
                                             <span class="btn btn-default btn-file btn-sm"><i class="fa fa-fw fa-folder-open-o"></i>
                                                 Import CSV <input name="csv" id="video_file" atr="files" type="file">
                                             </span>
+                                            <a target="_download" class="btn btn-default" href="<?=  base_url().'assets/upload/csv/Panchang.csv'?>">Download sample</a>
                                         </div>
                                         <input type="submit" name="submit" value="Submit" class="btn btn-success"><div id="load"></div>
                                     </div>

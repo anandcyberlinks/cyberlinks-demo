@@ -5,7 +5,7 @@
 </style>
 <div class="wrapper row-offcanvas row-offcanvas-left">
     <!-- Right side column. Contains the navbar and content of the page -->
-    <aside class="right-side">                
+    <aside class="right-side">
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1><?php echo $welcome->loadPo('Add Channels'); ?><small><?php echo $welcome->loadPo('Control panel'); ?></small></h1>
@@ -16,7 +16,7 @@
             </ol>
         </section>
         <!-- Main content -->
-        <section class="content">                
+        <section class="content">
             <div id="content">
                 <div class="row">
                     <!-- left column -->
@@ -43,7 +43,7 @@
                                                 echo $value[0]->name;
                                             }
                                             ?>">
-                                            
+
                                         </div>
                                         <div class="form-group col-md-10">
                                             <label><?php echo $welcome->loadPo('Category'); ?></label>
@@ -64,7 +64,7 @@
                                                             ><?= $val->category ?></option>
                                                         <?php } ?>
                                             </select>
-                                            
+
                                         </div>
                                         <div id="load" class="col-md-4"></div>
                                         <div class="form-group col-md-10">
@@ -120,11 +120,9 @@
             dataType: "json",
             success: function (response) {
                 $('#ch_number').append('<option value="*">Select</option>');
-                $.each(response,function(key, value){
-		    $('#ch_number').append('<option value=' + value.range + '>' + value.range + '</option>');  
-		});
-
-                //console.log(response);
+                $.each(response, function (key, value) {
+                    $('#ch_number').append('<option value=' + value.range + '>' + value.range + '</option>');
+                });
             }
         });
         $('#load').html('');
