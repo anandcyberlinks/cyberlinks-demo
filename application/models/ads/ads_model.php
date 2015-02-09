@@ -892,7 +892,7 @@ class Ads_model extends CI_Model {
       $this->db->order_by('distance');
      // $this->db->limit($limit);
       $query = $this->db->get();
-      echo '<br>'.$this->db->last_query();
+     // echo '<br>'.$this->db->last_query();die;
       return $query->result();
     }
     

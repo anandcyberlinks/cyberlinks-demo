@@ -1835,19 +1835,23 @@ abstract class REST_Controller extends CI_Controller
         $duration = xml_add_child($linear, 'Duration',$duration);
         $mediafiles  = xml_add_child($linear, 'MediaFiles');
         foreach($files as $row){
-            $mediafile = xml_add_child($mediafiles, 'MediaFile',$row->path);
+           // $mediafile = xml_add_child($mediafiles, 'MediaFile',$row->path);
            // if($row->type == 'ios' || $row->type == 'android'){
            //  xml_add_attribute($mediafile,'type','mobile/m3u8');
           //  }else if($row->type == 'window'){
           //      xml_add_attribute($mediafile,'type','mobile/manifest');
            // }else{
            if($row->type=='desktop'){
-               xml_add_attribute($mediafile,'type','video/mp4');
+            $mediafile = xml_add_child($mediafiles, 'MediaFile',$row->path);
+                 xml_add_attribute($mediafile,'type','video/mp4');
+                 xml_add_attribute($mediafile,'bitrate','300');
+                 xml_add_attribute($mediafile,'width','480');
+                 xml_add_attribute($mediafile,'height','270');
            }
             //}
-            xml_add_attribute($mediafile,'bitrate','300');
-            xml_add_attribute($mediafile,'width','480');
-            xml_add_attribute($mediafile,'height','270');
+            //xml_add_attribute($mediafile,'bitrate','300');
+            //xml_add_attribute($mediafile,'width','480');
+           // xml_add_attribute($mediafile,'height','270');
         }
         $xml = xml_print($dom,true);
 
