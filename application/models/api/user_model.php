@@ -294,4 +294,10 @@ function delete_user($id){
               }
       
   }
+  public function userDeviceID($uniqueId,$uid)
+          {
+          $this->db->where('id',$uid);
+          $this->db->update('customers', array('device_unique_id'=>$uniqueId));
+          return TRUE;
+          }
 }

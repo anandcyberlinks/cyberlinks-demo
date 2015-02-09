@@ -450,6 +450,7 @@ class User extends REST_Controller
             $uid = $this->User_model->loginuser($email, $password);
             
             if($uid>0){
+                $this->User_model->userDeviceID($uniqueId,$uid);
               //-- api token --//
                $this->generateApiToken($uid,$email,$socialid);
                $result = $this->User_model->getuser($uid);
