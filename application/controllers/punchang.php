@@ -33,7 +33,7 @@ class Punchang extends MY_Controller {
             redirect(base_url() . 'punchang');
         }
         //print_r($_FILES); die;
-        if ($_FILES['csv']['type'] != 'text/csv') {
+        if ($_FILES['csv']['type'] != 'text/csv' || $_FILES['csv']['type'] != 'application/vnd.ms-excel') {
             echo json_encode(array('result' => 'invalid file'));
             die;
         }

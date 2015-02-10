@@ -93,16 +93,13 @@ class Webtv extends MY_Controller {
         $this->db->select('number');
         $this->db->where('category_id', $_GET['cat_id']);
         $numbers = $this->db->get('channels')->result();
-        
         $notValid = array();
         foreach($numbers as $key=>$val){
             $notValid[] = $val->number;
         }
-        
         $this->db->select('range_from, range_to');
         $this->db->where('id', $_GET['cat_id']);
         $result = $this->db->get('channel_categories')->result();
-        
         $temp = array();
         for($i=$result[0]->range_from; $i<=$result[0]->range_to; $i++){
             if(!in_array($i, $notValid)){
@@ -137,7 +134,6 @@ class Webtv extends MY_Controller {
             $post['uid'] = $this->uid;
             $post['description'] = $_POST['description'];
             $post['status'] = $_POST['status'];
-
             $this->webtv_model->insert($post);
             $this->session->set_flashdata('message', $this->_successmsg($this->loadPo($this->config->item('success_record_update'))));
             redirect(base_url() . 'webtv/playlist/' . $this->uri->segment(3));
