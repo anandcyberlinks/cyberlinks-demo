@@ -410,7 +410,7 @@ $(document).ready(function () {
 
 
 
-/* bulk upload by CSV file only */
+/* bulk upload by CSV file only 
 
 // Variable to store your files
 var files;
@@ -419,7 +419,7 @@ var colLength = 5;
 // uplaod events
 $('#csv_file').on('change', prepareUpload);
 // Grab the files and set them to our variable
-
+*/
 function prepareUpload(event) {
     $('#status_csv_file').html('');
     $('#csvFileList').html('');
@@ -559,6 +559,7 @@ var colLength = 5;
 $('#csv_file').on('change', prepareUpload);
 // Grab the files and set them to our variable
 
+/*
 function prepareUpload(event) {
     $('#status_csv_file').html('');
     $('#csvFileList').html('');
@@ -631,7 +632,7 @@ function prepareUpload(event) {
     }
     $('#displayfile').html('');
 
-}
+} */
 
 $('#uploadadscsv').on('click', function () {
     $('#displayfile').html('<img src="' + baseurl + 'assets/img/loader.gif"> loading...');
