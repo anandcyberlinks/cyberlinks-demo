@@ -415,7 +415,7 @@ class User extends REST_Controller
         //print_r($userdetails);die;
         if(strtolower($provider)=='facebook'){
             
-            $imageUrl = social_data_image($access_key);
+            $imageUrl = $this->social_data_image($access_key);
             
             $firstname = $userdetails->first_name;
             $lastname = $userdetails->last_name;
