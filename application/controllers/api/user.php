@@ -559,7 +559,17 @@ class User extends REST_Controller
          //echo $facebookJsonData;
                 //echo "<pre>";
         $facebookDataArr = json_decode($resp);
-         return $imageUrl = $facebookDataArr->url; 
+        //print_r($facebookDataArr);
+        //die();
+        foreach($facebookDataArr as $k=>$v)
+            {
+            $imageUrlFetch = $v->url;
+            }
+           // echo $imageUrlFetch;
+          //  die();
+        //echo $facebookDataArr->url;
+        ///die();
+         return $imageUrl = $imageUrlFetch; 
         
             
     }    
