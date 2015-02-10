@@ -800,7 +800,7 @@ class Video extends MY_Controller {
             $result = 'error';
             $message = $this->_warningmsg($this->loadPo($this->config->item('warning_fields_empty')));
         }
-        $response = array();
+        //$response = array();
         $response['status'] = $result;
         $response['message'] = $message;
         echo json_encode($response);
