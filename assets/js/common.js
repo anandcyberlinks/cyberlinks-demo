@@ -572,8 +572,8 @@ function prepareUpload(event) {
         $('#displayfile').html('<img src="' + baseurl + 'assets/img/loader.gif"> loading...');
         filesArray = this.files;
         $.each(this.files, function (index, value) {
-            alert(value.type);
-            if (value.type == 'text/csv' || value.type == 'application/csv') {
+            //alert(value.type);
+            if (value.type == 'text/csv' || value.type == 'application/csv' || value.type == 'application/vnd.ms-excel') {
                 var reader = new FileReader();
                 var link_reg = /(http:\/\/|https:\/\/)/i;
                 reader.readAsText(value);
