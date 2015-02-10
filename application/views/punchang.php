@@ -11,18 +11,19 @@
                 <li class="active"><?php echo $welcome->loadPo('Punchang') ?></li>
             </ol>
         </section>
-        
+
         <!-- Main content -->
         <section class="content">
             <?php $search = $this->session->userdata('search_form');
             ?></pre>
             <div id="content">
-                 <div id="msg">
-                     <?php $msg = $this->session->flashdata('message');
-                     if($msg != ''){
+                <div id="msg">
+                    <?php
+                    $msg = $this->session->flashdata('message');
+                    if ($msg != '') {
                         echo $msg;
-                     }
-                     ?>
+                    }
+                    ?>
                 </div>
                 <?php /* <div class="row">
                   <!-- left column -->
@@ -75,7 +76,8 @@
                                             <span class="btn btn-default btn-file btn-sm"><i class="fa fa-fw fa-folder-open-o"></i>
                                                 Import CSV <input name="csv" id="video_file" atr="files" type="file">
                                             </span>
-                                            <a target="_download" class="btn btn-default" href="<?=  base_url().'assets/upload/csv/Panchang.csv'?>">Download sample</a>
+                                            <a target="_download" class="btn btn-default" href="<?= base_url() . 'assets/upload/csv/Panchang.csv' ?>">Download sample</a>
+                                            <span id="msg_file"></span>
                                         </div>
                                         <input type="submit" name="submit" value="Submit" class="btn btn-success"><div id="load"></div>
                                     </div>
@@ -95,60 +97,60 @@
                                             <th>Action</th>
                                         </tr>
                                     </thead>
-                                    <?php foreach ($result as $val){ ?>
-                                    <tr>
-                                        <td><?=$val->date?></td>
-                                        <td><?=$val->month?></td>
-                                        <td><?=$val->pakshya?></td>
-                                        <td><?=$val->tithi?></td>
-                                        <td><?=$val->sunrise?></td>
-                                        <td><?=$val->sunset?></td>
-                                        <td><?=$val->rahukal?></td>
-                                        <td>
-                                            <a href="<?= base_url(). 'punchang/delete/'.$val->id ?>" class="btn btn-danger btn-sm confirm_delete">Delete</a>
-                                            <a href="<?= base_url(). 'punchang/add/'.$val->id ?>" class="btn btn-warning btn-sm">Edit</a>
-                                        </td>
-                                    </tr>
-                                        <?php } ?>
+<?php foreach ($result as $val) { ?>
+                                        <tr>
+                                            <td><?= $val->date ?></td>
+                                            <td><?= $val->month ?></td>
+                                            <td><?= $val->pakshya ?></td>
+                                            <td><?= $val->tithi ?></td>
+                                            <td><?= $val->sunrise ?></td>
+                                            <td><?= $val->sunset ?></td>
+                                            <td><?= $val->rahukal ?></td>
+                                            <td>
+                                                <a href="<?= base_url() . 'punchang/delete/' . $val->id ?>" class="btn btn-danger btn-sm confirm_delete">Delete</a>
+                                                <a href="<?= base_url() . 'punchang/add/' . $val->id ?>" class="btn btn-warning btn-sm">Edit</a>
+                                            </td>
+                                        </tr>
+<?php } ?>
                                     <tbody>
                                     </tbody>
                                 </table>
                                 <!-- Pagination start --->
                                 <?php
-                                  if ($this->pagination->total_rows == '0') {
-                                  echo "<tr><td colspan=\"7\"><h4>" . $welcome->loadPo('No Record Found') . "</td></tr></h4>";
-                                  } else {
-                                  ?>
-                                  </table>
-                                  <div class="row pull-left">
-                                  <div class="dataTables_info" id="example2_info"><br>
+                                if ($this->pagination->total_rows == '0') {
+                                    echo "<tr><td colspan=\"7\"><h4>" . $welcome->loadPo('No Record Found') . "</td></tr></h4>";
+                                } else {
+                                    ?>
+                                    </table>
+                                    <div class="row pull-left">
+                                        <div class="dataTables_info" id="example2_info"><br>
 
-                                  <?php
-                                  $param = $this->pagination->cur_page * $this->pagination->per_page;
-                                  if ($param > $this->pagination->total_rows) {
-                                  $param = $this->pagination->total_rows;
-                                  }
-                                  if ($this->pagination->cur_page == '0') {
-                                  $param = $this->pagination->total_rows;
-                                  }
-                                  $off = $this->pagination->cur_page;
-                                  if ($this->pagination->cur_page > '1') {
-                                  $off = (($this->pagination->cur_page * '10') - 9);
-                                  }
-                                  echo "&nbsp;&nbsp;Showing <b>" . $off . "-" . $param . "</b> of <b>" . $this->pagination->total_rows . "</b> total results";
-                                  }
-                                  ?>
+                                            <?php
+                                            $param = $this->pagination->cur_page * $this->pagination->per_page;
+                                            if ($param > $this->pagination->total_rows) {
+                                                $param = $this->pagination->total_rows;
+                                            }
+                                            if ($this->pagination->cur_page == '0') {
+                                                $param = $this->pagination->total_rows;
+                                            }
+                                            $off = $this->pagination->cur_page;
+                                            if ($this->pagination->cur_page > '1') {
+                                                $off = (($this->pagination->cur_page * '10') - 9);
+                                            }
+                                            echo "&nbsp;&nbsp;Showing <b>" . $off . "-" . $param . "</b> of <b>" . $this->pagination->total_rows . "</b> total results";
+                                        }
+                                        ?>
 
-                                  </div>
+                                    </div>
 
-                                  </div>
-                                  <div class="row pull-right">
-                                  <div class="col-xs-12">
-                                  <div class="dataTables_paginate paging_bootstrap">
-                                  <ul class="pagination"><li><?php echo $welcome->loadPo($links); ?></li></ul>
-                                  </div>
-                                  </div>
-                                  </div> 
+                                </div>
+                                <div class="row pull-right">
+                                    <div class="col-xs-12">
+                                        <div class="dataTables_paginate paging_bootstrap">
+                                            <ul class="pagination"><li><?php echo $welcome->loadPo($links); ?></li></ul>
+                                        </div>
+                                    </div>
+                                </div> 
                             </div>		
                             <!-- Pagination end -->
                         </div><!-- /.box-body -->
@@ -193,6 +195,19 @@
 </div> 
 <script>
     $("#msg").fadeOut(3500);
+    $('#video_file').on('change', function () {
+        var fileType = this.files[0].type;
+        var fileName = this.files[0].name;
+        if (fileType == 'text/csv' || fileType == 'application/csv' || fileType == 'application/vnd.ms-excel') {
+            $("#msg_file").html(fileName);
+        } else {
+            $('#video_file').val('');
+            var msg = "<div class=\"alert alert-danger alert-dismissable\"><i class=\"fa fa-ban\"></i><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">×</button><b>Alert!</b> Please Select Valid CSV File</div>";
+            $("#msg").html(msg);
+            $("#msg").fadeIn();
+            $("#msg").fadeOut(3500);
+        }
+    });
     $('#submitcsv')
             .submit(function (e) {
                 $("#load").html('loading.....')
@@ -212,11 +227,11 @@
                         $("#msg").fadeIn();
                         $("#msg").fadeOut(3500);
                         window.setTimeout(function () {
-                            window.location.href = "<?php echo base_url().'punchang'; ?>";
+                            window.location.href = "<?php echo base_url() . 'punchang'; ?>";
                         }, 2000);
-                    }else{
-                    $("#load").html('');
-                         var msg = "<div class=\"alert alert-danger alert-dismissable\"><i class=\"fa fa-ban\"></i><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">×</button><b>Alert!</b> Please Select Valid CSV File</div>";
+                    } else {
+                        $("#load").html('');
+                        var msg = "<div class=\"alert alert-danger alert-dismissable\"><i class=\"fa fa-ban\"></i><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">×</button><b>Alert!</b> Please Select Valid CSV File</div>";
                         $("#msg").html(msg);
                         $("#msg").fadeIn();
                         $("#msg").fadeOut(3500);
