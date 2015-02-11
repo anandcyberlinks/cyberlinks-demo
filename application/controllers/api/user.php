@@ -106,11 +106,14 @@ class User extends REST_Controller
             'gender' => $this->post('gender'),
             'email' => $this->post('email'), 
             'password' => $this->post('password'),
-            'contact_no' => $this->post('phone'),
-            'image' => @$pic,           
+            'contact_no' => $this->post('phone'),                     
             'status' => 'inactive'           
             );
                 
+	    if($pic !='' && $pic != 0){
+               $data['image']=base_url().PROFILEPIC_PATH.$pic;
+           }
+	   
         if($this->validateuser($data)){
             $data['password'] = md5($this->post('password'));
             //-- check if user already exist --//
@@ -220,16 +223,16 @@ class User extends REST_Controller
         $keywordData = array('keywords'   => $this->post('keywords'));
         
            if($pic !='' && $pic != 0){
-               $data['image']=$pic;
+               $data['image']=base_url().PROFILEPIC_PATH.$pic;
            }
 	
             $result = $this->User_model->update_user($data,$id);
             $result_social = $this->User_model->update_usersocial($keywordData,$id);
             if($result){
 		$output = $this->User_model->getuser($id);
-		if($output->image !=""){
+		/*if($output->image !=""){
                  //   $output->image = base_url().PROFILEPIC_PATH.$output->image;
-     		}
+     		}*/
 		
                 $this->response(array('code'=>1,'result'=>$output), 200); // 200 being the HTTP response code
             }
