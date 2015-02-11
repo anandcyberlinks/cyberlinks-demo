@@ -217,7 +217,7 @@ class User extends REST_Controller
             'contact_no' => $this->post('contact_no'),
             'location'=>$this->post('location')
             );
-        $keywordData = array('keywords'   => serialize($this->post('keywords')));
+        $keywordData = array('keywords'   => $this->post('keywords'));
         
            if($pic !='' && $pic != 0){
                $data['image']=$pic;
