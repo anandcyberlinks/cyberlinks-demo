@@ -1,7 +1,6 @@
     <?php
     ini_set('display_errors',1);
-    if (!defined('BASEPATH'))
-        exit('No direct script access allowed');
+    if (!defined('BASEPATH')) exit('No direct script access allowed');
     
     class Youtubecurl extends MY_Controller {
     
@@ -13,7 +12,10 @@
         unset($this->session);
     }
     
-    function index() {
+    function index($data = null) {
+        
+        if($data != null) $_POST = $data;
+        
         if (isset($_POST) && (!empty($_POST))) {
             if($this->file_exists($_POST['filename'])) {
                 $userId = $_POST['uid'];
@@ -140,6 +142,8 @@
                                         $params['info'] = serialize($data);
                                     }
                                     
+                                    $this->index($params);
+                                    /*
                                     $ch = curl_init();  
                                     curl_setopt($ch,CURLOPT_URL,$postUrl);
                                     curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
@@ -148,7 +152,7 @@
                                     curl_setopt($ch,CURLOPT_POSTFIELDS, $params);    
                                     $output = curl_exec($ch);
                                     curl_close($ch);
-
+                                    */
                                 } 
                             }
                         }

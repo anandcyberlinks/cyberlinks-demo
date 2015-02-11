@@ -191,7 +191,8 @@ class Category_model extends CI_Model {
             $catData = array(
                 'category' => $category,
                 'parent_id' => '',
-                'description' => '',
+                'type'=>'video',
+		'description' => '',
                 'color' => '',
                 'file_id' => '',
                 'status' => 1,
