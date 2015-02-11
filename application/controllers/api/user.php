@@ -161,8 +161,8 @@ class User extends REST_Controller
                     }
                 else{
                    $userProfile = $this->User_model->userprofile($id);
-                   $socialKeywords = json_encode(unserialize($userProfile->keywords));
-                    $userProfile->keywords = $socialKeywords;
+                   //$socialKeywords = json_encode(unserialize($userProfile->keywords));
+                    //$userProfile->keywords = $socialKeywords;
                    
                    if($userProfile){
                     $this->response(array('code'=>1,'result'=>$userProfile), 200); // 200 being the HTTP response code
