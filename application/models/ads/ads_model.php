@@ -848,7 +848,7 @@ class Ads_model extends CI_Model {
       $this->db->where('user_id',$id);
       $this->db->limit(1);
       $query = $this->db->get();
-     return $query->row();
+     return $query->row_array();
       /*if($result){
 	 return unserialize($result->keywords);
       }else{
