@@ -151,6 +151,7 @@ $socialfb = '{"link":"https://www.facebook.com/app_scoped_user_id/87103801626994
         <p><strong>Users Webservice</strong></p>
 <ul><li><strong> Edit Profile: </strong>
     <form action="<?php echo site_url('api/user/edit/token/1234567890/id/32');?>" method='post' enctype='multipart/form-data'>
+   Keywords: <input type='text' name='keywords'>
     First Name: <input type='text' name='firstname'>
     Last Name: <input type='text' name='lastname'>
     Gender: <input type='radio' name='gender' value='Male' checked> Male <input type='radio' name='gender' value='Female'> Female
