@@ -210,12 +210,12 @@ class User extends REST_Controller
                 }
         }
         $data = array( 
-            'first_name' => $this->post('firstname'), 
-            'last_name' => $this->post('lastname'),
+            'first_name' => $this->post('first_name'), 
+            'last_name' => $this->post('last_name'),
             'gender' => $this->post('gender'),
 	    'dob' => $this->post('dob'),
-            'contact_no' => $this->post('phone')
-            
+            'contact_no' => $this->post('contact_no'),
+            'location'=>$this->post('location')
             );
         $keywordData = array('keywords'   => serialize($this->post('keywords')));
         

@@ -139,7 +139,7 @@ class User_model extends CI_Model {
    
    public function getuser($id)
    {
-        $this->db->select('a.id,a.first_name,a.last_name,a.gender,a.email,a.created,b.token,a.image');
+        $this->db->select('a.id,a.first_name,a.last_name,a.gender,a.location,a.dob,a.email,a.created,b.token,a.image');
 	$this->db->from('customers a');
         $this->db->join('api_token b','a.id = b.user_id','left');
         $this->db->where('a.id',$id);
