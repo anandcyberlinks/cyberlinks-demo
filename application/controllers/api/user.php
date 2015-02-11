@@ -221,13 +221,14 @@ class User extends REST_Controller
         
            if($pic !='' && $pic != 0){
                $data['image']=$pic;
-           }           
+           }
+	
             $result = $this->User_model->update_user($data,$id);
             $result_social = $this->User_model->update_usersocial($keywordData,$id);
             if($result){
 		$output = $this->User_model->getuser($id);
 		if($output->image !=""){
-                    $output->image = base_url().PROFILEPIC_PATH.$output->image;
+                 //   $output->image = base_url().PROFILEPIC_PATH.$output->image;
      		}
 		
                 $this->response(array('code'=>1,'result'=>$output), 200); // 200 being the HTTP response code
