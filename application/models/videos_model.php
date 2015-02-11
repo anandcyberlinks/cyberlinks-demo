@@ -1309,4 +1309,13 @@ class Videos_model extends CI_Model {
         $data = $query->result();
         return $data;
     }
+    
+    function getChannelCuePoints($channel_id){
+        $this->db->select('title,cue_points');
+        $this->db->where('content_id', $channel_id);
+        $this->db->order_by('cue_points', 'asc');
+        $query = $this->db->get('content_cuepoints');
+        $data = $query->result();
+        return $data;
+    }
 }

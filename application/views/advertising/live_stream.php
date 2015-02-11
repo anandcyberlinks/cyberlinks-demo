@@ -1,4 +1,6 @@
-<
+<script type="text/javascript">
+    $(function () { $("[data-toggle='tooltip']").tooltip(); });
+</script>
 <div class="wrapper row-offcanvas row-offcanvas-left">
     <!-- Right side column. Contains the navbar and content of the page -->
     <aside class="right-side"> 
@@ -261,9 +263,9 @@
                     <div class="form-group">                        
                      <label style="display:block;" for="exampleInputEmail1">Timecode(hh:mm:ss)</label>
                     <div class="input_fields_wrap">
-                    <input maxlength=3 style='width:35px;display:inline' type="text" name="hh[]" id="hh" placeholder="hh" class="form-control input-sm hh">:
-                    <input maxlength=2 style='width:35px;display:inline;' type="text" name="mm[]" id="mm" placeholder="mm" class="form-control input-sm mm">:                                    
-                    <input maxlength=2 style='width:35px;display:inline' type="text" name="ss[]" id="ss" placeholder="ss" class="form-control input-sm ss">
+                    <input maxlength=3 style='width:35px;display:inline' type="text" name="hh[]" id="hh_1" placeholder="hh" class="form-control input-sm hh">:
+                    <input maxlength=2 style='width:35px;display:inline;' type="text" name="mm[]" id="mm_1" placeholder="mm" class="form-control input-sm mm">:                                    
+                    <input maxlength=2 style='width:35px;display:inline' type="text" name="ss[]" id="ss_1" placeholder="ss" class="form-control input-sm ss">
                     <button class="add_field_button">Add More</button>
                     <span id="errTime_1" style="color:red; display: none;">Please fill valid time format.</span>
                     </div>
@@ -273,7 +275,7 @@
                     <input type="email" id="cueName" name="cueName" placeholder="Name" id="exampleInputEmail1" class="form-control">
                     </div>
                     <div class="box-footer">
-                    <button class="btn btn-primary" type="submit" name="adds" id="adds" onclick="return addCuePoints();">Add</button>&nbsp;<a href="<?php echo base_url()?>advertising/live_stream" id="cancel" class="cancel">cancel</a>                    
+                    <button class="btn btn-primary" type="submit" name="adds" id="adds" onclick="return addCuePoints();">Save</button>&nbsp;<a href="<?php echo base_url()?>advertising/live_stream" id="cancel" class="cancel">cancel</a>                    
                     </div>
                     </form>         
                     <div id="innerHtml">
@@ -284,11 +286,29 @@
             </div>
         </div>
     </section>
+    <section class="col-lg-6">
+        <!-- Box (with bar chart) -->
+        <div class="box box-danger">
+            <div class="box-header">           
+                <h3 class="box-title">Cue Points <span id="cue_title"></span></h3>
+            </div><!-- /.box-header -->
+            <div class="box-body no-padding">
+            <div class="row">
+                <div class="col-sm-10" style="margin-left:10px">
+                    <div id="innerHtmlPoints">
+                        
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </section>
     </div>
     </div>     
 </div>
                             <!-- .table - Uses sparkline charts-->
                             <table class="table table-striped">
+                                <input type="hidden" name="totalCuePoints" id="totalCuePoints" value="">
                                 <input type="hidden" name="maxDuration" id="maxDuration" value="">
                                 <input type="hidden" name="addFlag" id="addFlag" value="0">
                                 <input type="hidden" name="cancelFlag" id="cancelFlag" value="0">
@@ -297,6 +317,7 @@
                                     <th width='5%' style="border-right: 1px solid gray;">Sr No.</th>
                                     <th width='5%' style="border-right: 1px solid gray;">Thumbnail</th>
                                     <th width='30%' style="border-right: 1px solid gray;">Channel Name</th>
+                                    <th width='10%' style="border-right: 1px solid gray;">Action</th>
         <!--<input type="text" id="range" value="" name="range" /> -->
 							
 				</tr>
@@ -312,19 +333,25 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-    var max_fields      = 10; //maximum input boxes allowed
+    var max_fields      = <?php echo MAX_CUEPOINTS_FIELDS; ?>; //maximum input boxes allowed
     var wrapper         = $(".input_fields_wrap"); //Fields wrapper
     var add_button      = $(".add_field_button"); //Add button ID
    
     var x = 1; //initlal text box count
     $(add_button).click(function(e){ //on add input button click
         e.preventDefault();
-        if(x < max_fields){ //max input box allowed
+        if(document.getElementById('totalCuePoints').value!==''){
+            x = parseInt(document.getElementById('totalCuePoints').value);
+            document.getElementById('totalCuePoints').value = '';
+        }
+        
+        if(x < max_fields){
             x++; //text box increment
+            
             //$(wrapper).append('<div>Timecode(hh:mm:ss) <input class="hh" name="hh[]"> :<input class="mm" name="mm[]"> : <input class="ss" name="ss[]"><a href="#" class="remove_field">Remove</a> <span id="errTime_'+x+'" style="color:red; display: none;">Please fill valid time format.</span></div>'); //add input box
-        var htm = '<div><input maxlength=3 style="width:35px;display:inline" type="text" name="hh[]" id="hh" placeholder="hh" class="form-control input-sm hh">: ';
-      htm +='<input maxlength=2 style="width:35px;display:inline;" type="text" name="mm[]" id="mm" placeholder="mm" class="form-control input-sm mm">: '; 
-      htm += '<input maxlength=2 style="width:35px;display:inline" type="text" name="ss[]" id="ss" placeholder="ss" class="form-control input-sm ss">';                    
+        var htm = '<div id="timecode_'+x+'"><input maxlength=3 style="width:35px;display:inline" type="text" name="hh[]" id="hh_'+x+'" placeholder="hh" class="form-control input-sm hh">: ';
+      htm +='<input maxlength=2 style="width:35px;display:inline;" type="text" name="mm[]" id="mm_'+x+'" placeholder="mm" class="form-control input-sm mm">: '; 
+      htm += '<input maxlength=2 style="width:35px;display:inline" type="text" name="ss[]" id="ss_'+x+'" placeholder="ss" class="form-control input-sm ss">';                    
     htm +='<a href="#" class="remove_field">Remove</a><span id="errTime_'+x+'" style="color:red; display: none;">Please fill valid time format.</span></div> ';
     //console.log(htm);
     $(wrapper).append(htm);
@@ -412,5 +439,92 @@ function saveLiveCuePoints(channel_ids,cuePoints){
                 
             } 
         });
+}
+
+function showPoints(channel_id,channel_name){
+    
+    $.ajax({
+            type: "POST",
+            url: baseurl + "advertising/channelCuePoints",
+            data: {"channel_id" : channel_id},
+            sync: true,
+            success: function (data)
+            {
+                $.ajax({
+                    type: "POST",
+                    url: baseurl + "advertising/editChannelCuePoints",
+                    data: {"channel_id" : channel_id},
+                    sync: true,
+                    success: function (data1)
+                    {
+                        form_reset();
+                        editForm(data1);
+                    } 
+                });
+                
+                document.getElementById('cue_title').innerHTML = 'of '+channel_name;
+                document.getElementById('innerHtmlPoints').innerHTML = data;
+                
+            } 
+        });
+        return false;
+    
+}
+
+function editForm(data1){
+    var cueData = jQuery.parseJSON(data1);
+    document.getElementById('totalCuePoints').value = Object.keys(cueData).length;
+    
+    var max_fields      = <?php echo MAX_CUEPOINTS_FIELDS; ?>; //maximum input boxes allowed
+    var wrapper         = $(".input_fields_wrap"); //Fields wrapper
+    var add_button      = $(".add_field_button"); //Add button ID
+    
+    
+    
+    for (i = 1; i <= Object.keys(cueData).length; i++) {
+        cueTitle = cueData[i].title;
+        cueTime = cueData[i].cuepoint.split(':');
+        hh = cueTime['0']; 
+        mm = cueTime['1']; 
+        ss = cueTime['2'];
+    
+        if(i < max_fields){ //max input box allowed
+            
+            if(i==1){
+                $('#hh_1').val(hh);
+                $('#mm_1').val(mm);
+                $('#ss_1').val(ss);
+            }else{
+                var htm = '<div id="timecode_'+i+'"><input maxlength=3 style="width:35px;display:inline" type="text" name="hh[]" id="hh_'+i+'" value="'+hh+'" class="form-control input-sm hh">: ';
+                htm +='<input maxlength=2 style="width:35px;display:inline;" type="text" name="mm[]" id="mm_'+i+'" value="'+mm+'" class="form-control input-sm mm">: '; 
+                htm += '<input maxlength=2 style="width:35px;display:inline" type="text" name="ss[]" id="ss_'+i+'" value="'+ss+'" class="form-control input-sm ss">';                    
+                htm +='<a href="#" class="remove_field">Remove</a><span id="errTime_'+i+'" style="color:red; display: none;">Please fill valid time format.</span></div> ';
+
+                $(wrapper).append(htm);
+            }
+            $('#cueName').val(cueTitle);
+        }
+   
+        $(wrapper).on("click",".remove_field", function(e){ //user click on remove text
+            e.preventDefault(); $(this).parent('div').remove(); x--;
+        })
+        
+    }
+    
+}
+
+function form_reset(){
+    var max_fields      = <?php echo MAX_CUEPOINTS_FIELDS; ?>; //maximum input boxes allowed
+    $('#hh_1').val('');;
+    $('#mm_1').val('');;
+    $('#ss_1').val('');;
+    $('#cueName').val('');;
+    
+    for (i = 2; i <= max_fields; i++) {
+        
+        $( "#timecode_"+i ).remove();
+        $( "#errTime_"+i ).remove();
+        $( ".remove_field" ).remove();
+    }
 }
     </script>

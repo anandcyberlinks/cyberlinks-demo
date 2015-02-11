@@ -140,5 +140,6 @@ define('SPLASH_SCREEN_DIMENSION', serialize($dimensions));
 define('VAST_PATH','./assets/upload/ads/vast/');
 define('IMG_PATH','./assets/img/');
 define('CSV_PATH','./assets/ads/csv/');
+define('MAX_CUEPOINTS_FIELDS',10);  // aDD NEW CUE POIND FIELD LIMIT
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */

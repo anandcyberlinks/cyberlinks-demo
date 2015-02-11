@@ -1515,6 +1515,9 @@ $("#linkClicklive").click(function(){
         bootbox.alert('Please select at least one content.');
         return false;
     }else{
+        document.getElementById('cue_title').innerHTML = '';
+        document.getElementById('innerHtmlPoints').innerHTML = '';
+        form_reset();
         cuepoint_live();
     }
 });
@@ -1537,7 +1540,8 @@ function cuepoint_live()
         IDs.push($(this).val());
         CHANNELids.push($(this).attr("channel_id"));
         //THUMBNAILs.push($(this).attr("thumbnail"));
-        innerHtml +='<tr  class="'+className+'"><td style="border-right: 1px solid gray;">'+j+'</td><td style="border-right: 1px solid gray;"><img width="50px" height="30px" src="'+$(this).attr("thumbnail")+'"></td><td style="border-right: 1px solid gray;padding-left: 20px" class="loading">'+$(this).attr("channel")+'</td></tr>';
+        var channel_name = "'"+$(this).attr("channel")+"'";
+        innerHtml +='<tr  class="'+className+'"><td style="border-right: 1px solid gray;">'+j+'</td><td style="border-right: 1px solid gray;"><img width="50px" height="30px" src="'+$(this).attr("thumbnail")+'"></td><td style="border-right: 1px solid gray;padding-left: 20px" class="loading">'+$(this).attr("channel")+'</td><td><a href="" onclick="return showPoints('+$(this).attr("channel_id")+','+channel_name+');">View</a></td></tr>';
         
      });
      

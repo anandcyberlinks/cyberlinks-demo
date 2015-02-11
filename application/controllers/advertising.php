@@ -203,4 +203,38 @@ function  updateCuePoint()
         }
        
     }
+    
+    function channelCuePoints(){
+        $channel_cue_points = $this->videos_model->getChannelCuePoints($_POST['channel_id']);
+        if(count($channel_cue_points) > 0){
+            $i =1;
+            $html = '<table class="table table-striped"><tbody><tr><th width="5%" style="border-right: 1px solid gray;">Sr No.</th><th width="10%" style="border-right: 1px solid gray;">Title</th><th width="5%" style="border-right: 1px solid gray;">Cuepoint</th></tr>';
+            foreach($channel_cue_points as $key => $val){
+                $html .= '<tr>';
+                $html .= '<td  width="5%" style="border-right: 1px solid gray;">'.$i.'</td>';
+                $html .= '<td  width="10%" style="border-right: 1px solid gray;">'.$val->title.'</td>';
+                $html .= '<td  width="10%" style="border-right: 1px solid gray;">'.  time_from_seconds($val->cue_points).'</td>';
+                $html .= '</tr>';
+                $i++;
+                
+            }
+            $html .= '</tbody></table>';
+            echo $html;
+        }
+        exit;
+    }
+    
+    function editChannelCuePoints(){
+        //$new_array = array();
+        $channel_cue_points = $this->videos_model->getChannelCuePoints($_POST['channel_id']);
+        if(count($channel_cue_points) > 0){
+            $i = 1;
+            foreach($channel_cue_points as $key => $val){
+                $new_array[$i]['title'] = $val->title;
+                $new_array[$i]['cuepoint'] = time_from_seconds($val->cue_points);
+                $i++;
+            }
+        }
+        echo  json_encode($new_array); exit;
+    }
  }
