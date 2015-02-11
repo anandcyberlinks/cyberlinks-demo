@@ -89,26 +89,28 @@ class Webtv extends MY_Controller {
         }
         $this->show_view('add_channels', $data);
     }
-    function ch_number(){
+
+    function ch_number() {
         $this->db->select('number');
         $this->db->where('category_id', $_GET['cat_id']);
         $numbers = $this->db->get('channels')->result();
         $notValid = array();
-        foreach($numbers as $key=>$val){
+        foreach ($numbers as $key => $val) {
             $notValid[] = $val->number;
         }
         $this->db->select('range_from, range_to');
         $this->db->where('id', $_GET['cat_id']);
         $result = $this->db->get('channel_categories')->result();
         $temp = array();
-        for($i=$result[0]->range_from; $i<=$result[0]->range_to; $i++){
-            if(!in_array($i, $notValid)){
+        for ($i = $result[0]->range_from; $i <= $result[0]->range_to; $i++) {
+            if (!in_array($i, $notValid)) {
                 $temp[]['range'] = $i;
             }
         }
         echo json_encode($temp);
     }
-            function delete() {
+
+    function delete() {
         $id = $_GET['id'];
         $this->webtv_model->delete($id);
         $this->session->set_flashdata('message', $this->_successmsg($this->loadPo($this->config->item('success_record_delete'))));
@@ -260,7 +262,6 @@ class Webtv extends MY_Controller {
                          left join (select * from playlist_video pv where pv.playlist_id = %d ) as pv on pv.content_id = pe.content_id
                          where pe.playlist_id = %d and pe.user_id = %d and pe.start_date between "%s" and "%s" order by pe.id ', $_GET['playlist_id'], $_GET['playlist_id'], $this->uid, date('Y-m-d 00:00:00', $_GET['start']), date('Y-m-d 23:59:59', $_GET['end']));
         $dataset = $this->db->query($query)->result();
-        
         foreach ($dataset as $key => $val) {
             $data[] = array('id' => $val->content_id,
                 'title' => $val->playlist_id,
@@ -279,7 +280,6 @@ class Webtv extends MY_Controller {
     function saveevent() {
         $response = array();
         if (isset($_POST['id'])) {
-
             $data = array();
             $data['content_id'] = $_POST['id'];
             $data['playlist_id'] = $_POST['playlist_id'];
@@ -287,7 +287,6 @@ class Webtv extends MY_Controller {
             $data['user_id'] = $this->uid;
             $data['start_date'] = isset($_POST['start_date']) && $_POST['start_date'] != '' ? date('Y-m-d H:i:s', strtotime($_POST['start_date'])) : date('Y-m-d H:i:s');
             $data['end_date'] = isset($_POST['end_date']) && $_POST['end_date'] != '' ? date('Y-m-d H:i:s', strtotime($_POST['end_date'])) : date('Y-m-d H:i:s', strtotime($data['start_date']) + 60 * 60);
-            
             $tmp = isset($_POST['action']) ? $_POST['action'] : 'save';
             switch ($tmp) {
                 case 'delete' :
@@ -359,18 +358,18 @@ class Webtv extends MY_Controller {
                     $dataRpt[$num]['hits'] = $p->status;
                     $num++;
                 }
-                query_to_csv($dataRpt, $heading,'');
+                query_to_csv($dataRpt, $heading, '');
 
                 break;
 
             case 'xml':
                 echo 'xml';
                 break;
-            
         }
     }
-    function eventCopy(){
-        if($_POST){
+
+    function eventCopy() {
+        if ($_POST) {
             //print_r($_POST);
             $data = $this->webtv_model->eventcopy($_POST);
             //echo $data; die;
