@@ -458,9 +458,7 @@ class User extends REST_Controller
                 $this->User_model->userDeviceID($uniqueId,$uid);
               //-- api token --//
                $this->generateApiToken($uid,$email,$socialid);
-               $result = $this->User_model->getuser($uid);
-	       $socialKeywords = unserialize($result->keywords);
-                $result->keywords = json_encode($socialKeywords);
+               $result = $this->User_model->getuser($uid);	       
                $this->response(array('code'=>1,'result'=>$result), 200); 
             }else{              
             //-----------Register user-----------------//
@@ -501,10 +499,7 @@ class User extends REST_Controller
             if($id){
                  //-- api token --//
                 $this->generateApiToken($id,$email,$socialid);
-                $result = $this->User_model->getuser($id);
-		$socialKeywords = unserialize($result->keywords);
-                $result->keywords = json_encode($socialKeywords);
-		    
+                $result = $this->User_model->getuser($id);				    
                $this->response(array('code'=>1,'result'=>$result), 200);
             }
         }
@@ -544,8 +539,8 @@ class User extends REST_Controller
                     }
             }
 	    
-	   // $outputArray = $outputArray;	   
-            return $insertArray = serialize($outputArray);          
+	    $outputArray = implode(",",$outputArray);	   
+            return $insertArray = $outputArray;          
     }
     function social_data_image($access_key)
     {
