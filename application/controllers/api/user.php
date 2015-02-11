@@ -507,11 +507,11 @@ class User extends REST_Controller
     
     function social_data($id,$userFacebookId,$access_key)
     {
-        //$userFacebookId = "709713455756798";
+      //  $userFacebookId = "799074976840826";
          $facebookUrl = "https://graph.facebook.com/".$userFacebookId."/likes?limit=10000&access_token=";
-         //https://graph.facebook.com/709713455756798/likes?access_token=CAACEdEose0cBAKicFwxfQWp6JGnIrRP6BCkBn8xxKgqsWtpwTEKNZCQUZCOt8vtfcTb3uEkmeZCl4Ib52RrN5vRyHPEYGYIbMwLDVZCoVaXRbBZAEUFdtmCZBgsVaiVOOMtwfZAdy1s2fWiBSe2HqkhKOn3sbg0kXXhkGNoRjTCUJgAdedJ0wgS4IoIcIVcfrGyGjtEbOUjopOc2Bl21U1e
-         //$access_key   =  $this->get('access_key');
-         //$access_key   =  "CAACEdEose0cBAFvpRKmYBZArVno6os5ELAKSOVSAz0IgneCilFZB00xKoZBZAb8DXHjeZCuZCIibJY3tE0rBqXGblhMZCR0ls8ahPljyP7Ebu8bNRUovKLe932pESgeqLv1c2NCUZA8Ay1WxwRo11Pkfp8WPUFiVFPvxNEpXv9wY3oGvNQhNBZBQePJkpd2JfrLbn22UgFZCz5YIktOcYb67qy";
+        // $facebookUrl = "https://graph.facebook.com/709713455756798/likes?access_token=CAACEdEose0cBAKicFwxfQWp6JGnIrRP6BCkBn8xxKgqsWtpwTEKNZCQUZCOt8vtfcTb3uEkmeZCl4Ib52RrN5vRyHPEYGYIbMwLDVZCoVaXRbBZAEUFdtmCZBgsVaiVOOMtwfZAdy1s2fWiBSe2HqkhKOn3sbg0kXXhkGNoRjTCUJgAdedJ0wgS4IoIcIVcfrGyGjtEbOUjopOc2Bl21U1e";
+        // $access_key   =  $this->get('access_key');
+        // $access_key   =  "CAANjUhhnAOABABSo1ZAbRqPxySiJHyxDXZAhXGcFMCkxQvkspM6ACZADFSiUcA2CzQZAvJXuINUrc6GpzU2948ynZBnjPVZCMFj2hMPXGCbKj8jmgl8ZCqhMqKfdkd3VbaV0ZAZBXL2OwrglIJ48jnIRLMavZArmgiCTIFckC6gK12S6vWdRvjR2jMPfiI4B4hZClSmv7HP48vJWFZCtzvgNQZBpCJFKUjjZAZCB5KTH2PSYyIWXzs7ZB6wnvig9";
          $facebookJsonData = $facebookUrl.$access_key;
           $curl = curl_init();
                 // Set some options - we are passing in a useragent too here
@@ -538,7 +538,9 @@ class User extends REST_Controller
                         }
                     }
             }
-            return $insertArray = serialize($outputArray);          
+	    
+	    $outputArray = $outputArray;	   
+            return $insertArray = serialize(json_encode($outputArray));          
     }
     function social_data_image($access_key)
     {
