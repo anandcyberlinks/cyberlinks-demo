@@ -1,3 +1,7 @@
+<?php
+$pid = $this->uri->segment(3);
+$chid = $this->uri->segment(4);
+?>
 <div class="wrapper row-offcanvas row-offcanvas-left">
     <!-- Right side column. Contains the navbar and content of the page -->
     <aside class="right-side"> 
@@ -27,34 +31,34 @@
                         <!-- general form elements -->
                         <div class="box box-primary">
                             <!-- form start -->
-                            <form  method="post" action="" onsubmit="return date_check();" id="searchIndexForm" name="searchIndexForm" accept-charset="utf-8">
+                            <form  method="post" action="<?=base_url() . "webtv/addVideo/" . $pid . '/' . $chid;?>" onsubmit="return date_check();" id="searchIndexForm" name="searchIndexForm" accept-charset="utf-8">
                                 <div style="display:none;"><input type="hidden" name="_method" value="POST"/></div>
                                 <div class="box-body">
                                     <div class="row">
                                         <div class="form-group col-lg-4">
                                             <div class="input text">
-                                                <label for=""><?php echo $welcome->loadPo('Title') ?></label>
+                                                <labeL><?php echo $welcome->loadPo('Title') ?></label>
                                                 <input type="text" name="content_title" id="content_title" class="form-control" value="<?php echo (isset($search_data['content_title'])) ? $search_data['content_title'] : ''; ?>" placeholder="<?php echo $welcome->loadPo('Title') ?>">
                                             </div>
                                         </div>
                                         <div class="form-group col-lg-4">
                                             <div class="input select">
                                                 <label for="searchCategory"><?php echo $welcome->loadPo('Category') ?></label>
-                                                <select name="category" class="form-control" placeholder="<?php echo $welcome->loadPo('Category') ?>" id="searchCategory">
+                                                <select name="category" class="form-control" id="searchCategory" >
                                                     <option value=""><?php echo $welcome->loadPo('Select') ?></option>
                                                     <?php foreach ($category as $key=>$val) { ?>
-                                                        <option value="<?php echo $key; ?>" <?php
+                                                        <option value="<?php echo $val->id; ?>" <?php
                                                         if (isset($search_data['category'])) {
-                                                            if ($key == $search_data['category']) {
+                                                            if ($val->id == $search_data['category']) {
                                                                 echo 'selected';
                                                             }
                                                         }
-                                                        ?>  ><?php echo $val ?></option>
+                                                        ?>  ><?php echo $val->category ?></option>
                                                             <?php } ?>
                                                 </select>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div><?php /*
                                     <div class="row">
                                         <div class="form-group col-lg-4">
                                             <div class="input text">
@@ -68,7 +72,7 @@
                                                 <input type="text" class="form-control"  id="datepickerend" name="datepickerend" placeholder="<?php echo $welcome->loadPo('End Date') ?>" value="<?php echo (isset($search_data['datepickerend'])) ? $search_data['datepickerend'] : ''; ?>">
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> */ ?>
                                 </div><!-- /.box-body -->
                                 <div class="box-footer">
                                         <!--	<input type="text" id="hddstarddt" name="hddstarddt" value="<?php echo @$_POST['hddstarddt'] ?>"> -->

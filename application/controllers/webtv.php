@@ -231,14 +231,19 @@ class Webtv extends MY_Controller {
         $this->load->library("pagination");
         $config = array();
         $config["base_url"] = base_url() . "webtv/addVideo/" . $pid . '/' . $chid;
-        $config["total_rows"] = $this->webtv_model->get_videocount($this->uid, $searchterm, $ids, $type);
+        $config["total_rows"] = $this->webtv_model->get_videocount($this->uid, $ids, $searchterm, $type);
+        //echo $config["total_rows"];
+        
         $config["per_page"] = 10;
         $config["uri_segment"] = 5;
         $this->pagination->initialize($config);
         $page = ($this->uri->segment(5)) ? $this->uri->segment(5) : 0;
         $data['result'] = $this->webtv_model->get_allvideo($ids, $this->uid, PER_PAGE, $page, $searchterm, $type);
         $data["links"] = $this->pagination->create_links();
-        $data['category'] = $this->webtv_model->get_category($this->uid);
+        $data['category'] = $this->webtv_model->get_Vidcategory($this->uid);
+        
+        //print_r($data['category']);
+        
         $data['total_rows'] = $config["total_rows"];
         $this->show_view('video_playlist', $data);
     }

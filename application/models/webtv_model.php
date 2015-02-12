@@ -121,6 +121,16 @@ class Webtv_model extends CI_Model {
         //print_r($result); die;
         return $result;
     }
+    
+    function get_Vidcategory($uid) {
+        $this->db->select('id, category');
+        $this->db->where('u_id', $uid);
+        $this->db->from('categories');
+        $result = $this->db->get()->result();
+        //print_r($result); die;
+        return $result;
+    }
+    
 
     function insert_channels($post) {
         if (isset($post['id'])) {
