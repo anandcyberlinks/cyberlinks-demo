@@ -1,6 +1,7 @@
 <?php
 $pid = $this->uri->segment(3);
 $chid = $this->uri->segment(4);
+$search_data = $this->session->userdata('search_form');
 ?>
 <div class="wrapper row-offcanvas row-offcanvas-left">
     <!-- Right side column. Contains the navbar and content of the page -->
@@ -77,6 +78,7 @@ $chid = $this->uri->segment(4);
                                 <div class="box-footer">
                                         <!--	<input type="text" id="hddstarddt" name="hddstarddt" value="<?php echo @$_POST['hddstarddt'] ?>"> -->
                                     <button type="submit" name="submit" value="Search"class="btn btn-primary"><?php echo $welcome->loadPo('Search') ?></button>
+                                    <button type="submit" name="reset" value="reset" class="btn btn-warning"><?php echo $welcome->loadPo('Reset') ?></button>
                                     <div class="pull-right"><a href="<?php echo base_url()."webtv/video_detail/".$this->uri->segment(3).'/'.$this->uri->segment(4) ?>" class="btn btn-primary">Back To Playlist Videos</a></div>
                                 </div>
                             </form>

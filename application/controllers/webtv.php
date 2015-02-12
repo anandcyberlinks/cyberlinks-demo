@@ -209,7 +209,7 @@ class Webtv extends MY_Controller {
         $type = $result[0]->type;
         //echo $type;
         $searchterm = '';
-        if ($this->uri->segment(2) == '') {
+        if(isset($_POST['reset'])) {
             $this->session->unset_userdata('search_form');
         }
         $sort = $this->uri->segment(3);
