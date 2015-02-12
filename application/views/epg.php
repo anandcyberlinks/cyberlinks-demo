@@ -15,20 +15,16 @@
     <!-- Main content -->
     <section class="content">
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-3 eventlist">
                 <div class="box box-primary">
                     <div class="box-header">
                         <h4 class="box-title">Vod Video list</h4>
                     </div>
                     <div class="box-body">
                         <div id='external-events'>
-                            <?php
-                                if(isset($result['vod'])){
-                                    foreach ($result['vod'] as $key => $value) {
-                                        echo sprintf('<div class="external-event" style="background-color: %s " id="%d">%s</div><br>',$value->color,$value->id,$value->title);
-                                    }
-                                }
-                            ?>
+                            <?php if(isset($result['vod'])) foreach ($result['vod'] as $key => $value) { $value->duration = $value->duration > 0 ? $value->duration : 300; ?>
+                                <div class='external-event' duration="<?= $value->duration ?>" style="background-color: <?= $value->color ?>" id="<?= $value->id ?>"><?= $value->title ?>[<?= $welcome->time_from_seconds($value->duration) ?>]</div><br>
+                            <?php } ?>
                             <p class="loader"></p>
                         </div>
                     </div><!-- /.box-body -->
@@ -47,7 +43,7 @@
                         </div>
                     </div><!-- /.box-body -->
                 </div><!-- /. box -->
-                <a class="btn btn-warning" href="<?php echo base_url() . "webtv/playlist/" . $this->uri->segment(4) ?>"><i class="fa fa-mail-reply"></i> Back</a>
+                <a class="btn btn-warning" href="<?php echo base_url() . "webtv/playlist/" . $this->uri->segment(4) ?>">Back</a>
                 <div class="btn-group" role="group">
                     <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                         <i class="fa fa-download"></i> Dropdown
@@ -59,8 +55,9 @@
                         <li><a target="_blank" href="<?= base_url() . 'webtv/export/xml/' . $this->uri->segment(3) ?>"> XML</a></li>
                     </ul>
                 </div>
+                <a class="btn btn-warning zoom" href="javascript:void(0)">Zoom</a>
             </div><!-- /.col -->
-            <div class="col-md-9">
+            <div class="col-md-9 fullview">
                 <div class="box box-primary">                                
                     <div class="box-body no-padding">
                         <!-- THE CALENDAR -->
@@ -87,7 +84,11 @@
                 //$(this).attr('style','height: 300px; overflow-x: auto;');
             }
         });
-
+        
+        $('.zoom').on('click',function(){
+            $('.sidebar-toggle').trigger('click');
+        });
+        
         function ini_events(ele) {
             ele.each(function () {
 
@@ -118,7 +119,7 @@
         var d = date.getDate(), m = date.getMonth(), y = date.getFullYear();
         var cal = $('#calendar').fullCalendar({
             header: {
-                left: 'prev,next today',
+                left: 'next today',
                 center: 'title',
                 right: 'month,agendaDay'
             },
@@ -134,7 +135,7 @@
             events: "<?= base_url() ?>webtv/renderevent?playlist_id=" + playlist_id + '&',
             minTime: 0,
             maxTime: 12,
-            slotMinutes: 5,
+            slotMinutes: 15,
             editable: true,
             droppable: true, // this allows things to be dropped onto the calendar !!!
             drop: function (date, allDay, ui) {
@@ -199,7 +200,8 @@
                     __saveEvent(event);
                 }
             },
-            slotEventOverlap: false
+            slotEventOverlap: false,
+            forceEventDuration : true
             //eventDurationEditable: false
         });
 
@@ -223,7 +225,10 @@
             }
             return validDrop;
         }
-
+        
+        custom_buttons = '<span class="fc-button fc-button-today fc-state-default fc-corner-left fc-corner-right fc-state-disabled" unselectable="on" style="-moz-user-select: none;">today</span>'
+        $('.fc-button-today').after(custom_buttons);
+        
         custom_buttons = '<span class="fc-button fc-button-eventcopy fc-state-default fc-corner-left" unselectable="on" style="-moz-user-select: none;">Event Copy</span>'
         $('.fc-button-agendaDay').after(custom_buttons);
 

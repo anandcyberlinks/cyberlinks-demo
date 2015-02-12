@@ -270,7 +270,7 @@ class Webtv extends MY_Controller {
         foreach ($dataset as $key => $val) {
             $data[] = array('id' => $val->content_id,
                 'title' => $val->playlist_id,
-                'title' => $val->title,
+                'title' => strlen($val->title) > 15 ? substr($val->title,0,12).'...' : $val->title ,
                 'start' => date('Y-m-d H:i:s', strtotime($val->start_date)),
                 'end' => date('Y-m-d H:i:s', strtotime($val->end_date)),
                 'backgroundColor' => $val->color,
