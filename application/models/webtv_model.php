@@ -166,6 +166,7 @@ class Webtv_model extends CI_Model {
         if (isset($data[0]->type) && $data[0]->type != '') {
             switch (strtolower($data[0]->type)) {
                 case 'loop':
+                case 'linear':
                     //Get all playlist of channels
                     $this->db->select('id');
                     $this->db->from('playlists');
@@ -195,6 +196,10 @@ class Webtv_model extends CI_Model {
                     //Delete from channels list
                     $this->db->delete('channels', array('id' => $id));
                     break;
+                
+                    
+                    
+                    
                 case 'live' :
                 case 'youtube' :
                     //Detele data from livestream table
