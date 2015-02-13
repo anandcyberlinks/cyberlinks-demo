@@ -437,43 +437,44 @@ class Content extends Apis{
          $response['feelingLucky'] =array();
         if($id){
             $feelLucky = $this->getFeelingLucky($id);
-            
+            if($feelLucky){
             $response['feelingLucky'] = $this->getFormatData($feelLucky,'category',0);
             
             $counter = 0;
-        foreach($response['feelingLucky'] as $k1=>$v1){
-            foreach($v1['chList'] as $k2=>$v2){
-                switch(strtolower($v2['chTyp'])){
-                    case 'linear' :
-                        if(isset($v2['chCtnt'])){
-                            array_walk($v2['chCtnt'],function(&$data) use ($ads){
-                                $data['PCtnt'] = $this->getPlaylistDetail($data['PId'],'linear');
-                            });
-                        }
-                        break;
-                    case 'loop' :
-                        if(isset($v2['chCtnt'])){
-                            array_walk($v2['chCtnt'],function(&$data) use ($ads){
-                                $data['PCtnt'] = $this->getPlaylistDetail($data['PId'],'loop');
-                                if(is_array($data['PCtnt'])){
-                                    foreach($data['PCtnt'] as $key=>$val){
-                                        $data['PCtnt'][$key]->ctnAd = $ads[rand(0,count($ads)-1)];
+            foreach($response['feelingLucky'] as $k1=>$v1){
+                foreach($v1['chList'] as $k2=>$v2){
+                    switch(strtolower($v2['chTyp'])){
+                        case 'linear' :
+                            if(isset($v2['chCtnt'])){
+                                array_walk($v2['chCtnt'],function(&$data) use ($ads){
+                                    $data['PCtnt'] = $this->getPlaylistDetail($data['PId'],'linear');
+                                });
+                            }
+                            break;
+                        case 'loop' :
+                            if(isset($v2['chCtnt'])){
+                                array_walk($v2['chCtnt'],function(&$data) use ($ads){
+                                    $data['PCtnt'] = $this->getPlaylistDetail($data['PId'],'loop');
+                                    if(is_array($data['PCtnt'])){
+                                        foreach($data['PCtnt'] as $key=>$val){
+                                            $data['PCtnt'][$key]->ctnAd = $ads[rand(0,count($ads)-1)];
+                                        }
                                     }
-                                }
-                            });
-                        }
-                        break;
-                    case 'youtube' :
-                        
-                        break;
-                    case 'live' :
-                        if(isset($v2['chCtnt'])){
-                            $v2['chCtnt']['ctntUrl'] = $this->getLiveUrl($v2['chId']);
-                            $v2['chCtnt']['ctnAd'] = $ads[rand(0,count($ads)-1)];
-                        }
-                        break;
+                                });
+                            }
+                            break;
+                        case 'youtube' :
+                            
+                            break;
+                        case 'live' :
+                            if(isset($v2['chCtnt'])){
+                                $v2['chCtnt']['ctntUrl'] = $this->getLiveUrl($v2['chId']);
+                                $v2['chCtnt']['ctnAd'] = $ads[rand(0,count($ads)-1)];
+                            }
+                            break;
+                    }
+                    $response['feelingLucky'][$k1]['chList'][$k2] = $v2;
                 }
-                $response['feelingLucky'][$k1]['chList'][$k2] = $v2;
             }
         }
         }
@@ -782,7 +783,7 @@ class Content extends Apis{
                               from customers where id = %d ',$id);
         $dataset = $this->db->query($query)->row();
         
-        if(!empty($dataset)){
+        if(!empty($dataset) && $dataset->keywords!=''){
         $keywords = explode(',',$dataset->keywords);       
             foreach($keywords as $val){
              $this->db->or_like('c.keywords',$val);
@@ -811,7 +812,7 @@ class Content extends Apis{
         $this->db->where('c.status','1');
       
         $query = $this->db->get();
-        // echo $this->db->last_query();die;
+         //echo $this->db->last_query();die;
         return $query->result();   
         }
            
