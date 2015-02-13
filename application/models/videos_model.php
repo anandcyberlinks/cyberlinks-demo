@@ -344,7 +344,7 @@ class Videos_model extends CI_Model {
         $timeEnd = " 23:59:59";
         $id = $this->get_ownerid($uid);
         array_push($id, $uid);
-        $this->db->select('channels.*,playlists.url,channel_categories.category,users.username');
+        $this->db->select('channels.*,playlists.id,playlists.url,channel_categories.category,users.username');
         $this->db->from('channels');
         $this->db->join('playlists', 'channels.id = playlists.channel_id', 'inner');
         $this->db->join('channel_categories', 'channels.category_id = channel_categories.id', 'left');
@@ -1273,11 +1273,11 @@ class Videos_model extends CI_Model {
         //$id = $this->get_ownerid($uid);
        // array_push($id, $uid);
         
-        $this->db->select('channels.*,playlists.url,3600 as duration',FALSE);
+        $this->db->select('channels.*,playlists.id,playlists.url,3600 as duration',FALSE);
         $this->db->from('channels');
         $this->db->join('playlists', 'channels.id = playlists.channel_id', 'inner');
-        $this->db->where_in('channels.id', $IDs);
-        $this->db->group_by('channels.id');
+        $this->db->where_in('playlists.id', $IDs);
+        $this->db->group_by('playlists.id');
         //$this->db->order_by($sort, $sort_by);
         //$this->db->limit($limit, $start);
         $query = $this->db->get();
@@ -1348,7 +1348,7 @@ class Videos_model extends CI_Model {
     function validate_cuepoint_duration($id,$v)
     {
       $this->db->select('id');
-      $this->db->from('channels v');      
+      $this->db->from('playlists v');      
       $this->db->where('v.id',$id);
       $this->db->where('3600 >=',$v,FALSE);
       $this->db->limit('1');
