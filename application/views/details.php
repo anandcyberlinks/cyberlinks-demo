@@ -15,11 +15,11 @@
 */
 </script>
 </head>
-<body style='background:#FFF'>
+<body style='background:#000'>
 	<input type='hidden' name='analytics_id' id='analytics_id'>
 	<input type='hidden' name='ads_analytics_id' id='ads_analytics_id'>
 	<input type='hidden' name='is_complete' id='is_complete'>
-        <div id="myElement" style='width:50%;height:50%'></div>
+        <div id="myElement" style='width:100%;height:100%'></div>
        <pre id="log"></pre>
 <script type="text/javascript" src="<?php echo base_url(); ?>./assets/js/jwplayer.js" ></script>
 <script type="text/javascript">jwplayer.key = "BC9ahgShNRQbE4HRU9gujKmpZItJYh5j/+ltVg==";</script>
@@ -194,10 +194,10 @@ $(window).on('beforeunload', function(){
         primary: "html5",
         file: "<?php echo $video_path;?>",
         image: "<?php echo base_url().THUMB_LARGE_PATH. $thumbnail_path;?>",       
-        width: "50%",
+        width: "100%",
  aspectratio: "16:9",
  //controls: false,
- //stretching: "exactfit",
+ stretching: "exactfit",
 //autostart: 1,
         logo: {
         file: "<?php echo base_url()?>assets/img/logo.jpg",	
