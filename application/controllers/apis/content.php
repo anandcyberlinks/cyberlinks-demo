@@ -566,8 +566,8 @@ class Content extends Apis{
                     $query = sprintf('select * from playlists where playlists.status = "1" and playlists.id = %d',$playlist_id);
                     $tmp = $this->db->query($query)->result();
                     if(isset($tmp[0]->url)){
-                       $cntUrl =  base_url().'index.php/details?id='.$playlist_id.'&type=linear';                        
-                        $dataset = array('ctntUrl'=>$cntUrl,'chEpg'=>$this->getEpg($playlist_id));    
+                        $cntUrl =  base_url().'index.php/details?id='.$playlist_id.'&type=linear';                        
+                        $dataset = array(array('ctntUrl'=>array($cntUrl),'chEpg'=>$this->getEpg($playlist_id)));
                     }
                 break;
         }
