@@ -373,7 +373,8 @@ class Content extends Apis{
     
     function channels_get(){
         $response = array();
-        
+        $id=$this->get('id');
+               
         $query = sprintf('SELECT
                          cc.id as channel_cat_id,
                          cc.category as channel_cat_name,
@@ -395,6 +396,9 @@ class Content extends Apis{
         
         $dataset = $this->db->query($query)->result();
         $response['data'] = $this->getFormatData($dataset,'category',0);
+               
+      // echo '<pre>'; print_r($dataset);die;
+        //-----//
         
         //$ads = $this->get_data('http://182.18.165.43/multitvfinal/api/ads/list');
         //$ads = json_decode($ads);
@@ -426,6 +430,52 @@ class Content extends Apis{
                      'https://www.youtube.com/watch?v=FHgRZx4uAOM');
         
         shuffle($ads);
+        
+        
+         
+         //-- get user keywords --//
+        if($id){
+            $feelLucky = $this->getFeelingLucky($id);
+            $response['feelingLucky'] = $this->getFormatData($feelLucky,'category',0);
+            
+            $counter = 0;
+        foreach($response['feelingLucky'] as $k1=>$v1){
+            foreach($v1['chList'] as $k2=>$v2){
+                switch(strtolower($v2['chTyp'])){
+                    case 'linear' :
+                        if(isset($v2['chCtnt'])){
+                            array_walk($v2['chCtnt'],function(&$data) use ($ads){
+                                $data['PCtnt'] = $this->getPlaylistDetail($data['PId'],'linear');
+                            });
+                        }
+                        break;
+                    case 'loop' :
+                        if(isset($v2['chCtnt'])){
+                            array_walk($v2['chCtnt'],function(&$data) use ($ads){
+                                $data['PCtnt'] = $this->getPlaylistDetail($data['PId'],'loop');
+                                if(is_array($data['PCtnt'])){
+                                    foreach($data['PCtnt'] as $key=>$val){
+                                        $data['PCtnt'][$key]->ctnAd = $ads[rand(0,count($ads)-1)];
+                                    }
+                                }
+                            });
+                        }
+                        break;
+                    case 'youtube' :
+                        
+                        break;
+                    case 'live' :
+                        if(isset($v2['chCtnt'])){
+                            $v2['chCtnt']['ctntUrl'] = $this->getLiveUrl($v2['chId']);
+                            $v2['chCtnt']['ctnAd'] = $ads[rand(0,count($ads)-1)];
+                        }
+                        break;
+                }
+                $response['feelingLucky'][$k1]['chList'][$k2] = $v2;
+            }
+        }
+        }
+        //--------------------------------//
         
         $counter = 0;
         foreach($response['data'] as $k1=>$v1){
@@ -467,6 +517,7 @@ class Content extends Apis{
     }
     
     function getFormatData($data = array(),$type,$id){
+       
         $response = array();
         switch($type){
             case 'category' :
@@ -721,6 +772,46 @@ class Content extends Apis{
         exit;
     }
     
+    function getFeelingLucky($id)
+    {
+        //--- get user keywords --//
+         $query = sprintf('select                              
+                              keywords
+                              from customers where id = %d ',$id);
+        $dataset = $this->db->query($query)->row();
+        $keywords = explode(',',$dataset->keywords);
+        
+        if($keywords){
+            foreach($keywords as $val){
+             $this->db->or_like('c.keywords',$val);
+             $this->db->or_like('c.name',$val);
+             $this->db->or_like('p.name',$val);
+            }
+        }
+        //--- get keywords content ---//
+        $this->db->select('cc.id as channel_cat_id,
+                         cc.category as channel_cat_name,
+                         cc.color as channel_cat_color,
+                         cc.index as channel_cat_index,
+                         concat(cc.range_from,"-",cc.range_to) as channel_cat_range,
+                         c.id as channel_id,
+                         c.name as channel_name,
+                         c.number as channel_number,
+                         c.type as channel_type,
+                         p.id as playlist_id,
+                         p.name as playlist_name,
+                         p.start_date as playlist_startdate,
+                         p.end_date as playlist_enddate',false);
+        $this->db->from('channels c');
+        $this->db->join('channel_categories cc','cc.id=c.category_id','left');
+        $this->db->join('playlists p','p.channel_id = c.id','left');
+        $this->db->where('c.category_id <> 0');
+        $this->db->where('c.status','1');
+      
+        $query = $this->db->get();
+         //echo $this->db->last_query();die;
+        return $query->result();      
+    }
     /****** APIs for Divya TV channels **************/
     
     
