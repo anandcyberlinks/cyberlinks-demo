@@ -499,6 +499,19 @@ class Video_model extends CI_Model {
         return $query->row();
    }
    
+   
+   public function channel_play($id)
+   {
+        $this->db->select('a.id as channel_id,a.type,a.name, a.uid as content_provider,b.id as playlist_id,b.url as video_path');
+	$this->db->from('channels a');               
+        $this->db->join('playlists b', 'a.id = b.channel_id', 'inner');                     
+        $this->db->where('b.status','1');
+        $this->db->where('b.id',$id);        
+        $query = $this->db->get();
+      // echo '<br>'.$this->db->last_query();die;
+        return $query->row();
+   }
+   
    public function video_play_youtube($id,$type='youtube')
    {
         $this->db->select('a.type,a.id as content_id,a.uid as content_provider,c1.name as thumbnail_path,f.relative_path as video_path');
@@ -515,16 +528,17 @@ class Video_model extends CI_Model {
         return $query->row();
    }
    
-   public function livestream_play($id)
+   public function livestream_play($id,$device)
    {
-      $this->db->select('ch.id as content_id,ch.uid as content_provider,ch.name,l.thumbnail_url as thumbnail_path, l.web as video_path');
+      $this->db->select('ch.id as content_id,ch.uid as content_provider,ch.name,l.thumbnail_url as thumbnail_path, l.'.$device.' as video_path');
       $this->db->from('channels ch');
       $this->db->join('livestream l','ch.id=l.channel_id');
       $this->db->where('l.status','1');
-      $this->db->where('ch.status','1');
+     // $this->db->where('ch.status','1');
       $this->db->where('ch.id',$id);
       $this->db->limit(1);
-      $query = $this->db->get();      
+      $query = $this->db->get();
+     // echo '<br>'.$this->db->last_query();die;
       return $query->row();
    }
    

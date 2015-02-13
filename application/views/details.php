@@ -200,7 +200,8 @@ $(window).on('beforeunload', function(){
  //stretching: "exactfit",
 //autostart: 1,
         logo: {
-        file: "<?php echo base_url()?>assets/img/logo.jpg",        
+        //file: "<?php echo base_url()?>assets/img/logo.jpg",
+	file: "http://54.208.234.47:1935/live/tez_160p/Manifest",
         },
         advertising: {
 	//admessage: 'Ad: your video resumes in XX seconds...',		

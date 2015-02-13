@@ -37,7 +37,7 @@ class Ads_analytics extends MY_Controller {
 	
 	function index()
 	{
-		 print_r($this->result);die;
+		// print_r($this->result);die;
 		//-- get geocoding google api --//
 		$this->data['lat'] = $lat = $_GET['lat'];
 		$this->data['long'] = $lng = $_GET['lng'];
