@@ -352,8 +352,7 @@ class Content extends Apis{
                             from contents c
                             left join categories cat on cat.id = c.category
                             left join playlist_video pv on pv.content_id = c.id
-                            left join playlist_010*65
-                            pe on pe.content_id = pv.content_id
+                            left join playlist_epg pe on pe.content_id = pv.content_id
                             left join videos v on v.content_id = c.id
                             left join files cfile on cfile.id = v.file_id
                             left join video_thumbnails vt on vt.content_id = c.id
@@ -432,10 +431,17 @@ class Content extends Apis{
         foreach($response['data'] as $k1=>$v1){
             foreach($v1['chList'] as $k2=>$v2){
                 switch(strtolower($v2['chTyp'])){
+                    case 'linear' :
+                        if(isset($v2['chCtnt'])){
+                            array_walk($v2['chCtnt'],function(&$data) use ($ads){
+                                $data['PCtnt'] = $this->getPlaylistDetail($data['PId'],'linear');
+                            });
+                        }
+                        break;
                     case 'loop' :
                         if(isset($v2['chCtnt'])){
                             array_walk($v2['chCtnt'],function(&$data) use ($ads){
-                                $data['PCtnt'] = $this->getPlaylistDetail($data['PId']);
+                                $data['PCtnt'] = $this->getPlaylistDetail($data['PId'],'loop');
                                 if(is_array($data['PCtnt'])){
                                     foreach($data['PCtnt'] as $key=>$val){
                                         $data['PCtnt'][$key]->ctnAd = $ads[rand(0,count($ads)-1)];
@@ -444,7 +450,9 @@ class Content extends Apis{
                             });
                         }
                         break;
-                    //case 'youtube' :
+                    case 'youtube' :
+                        
+                        break;
                     case 'live' :
                         if(isset($v2['chCtnt'])){
                             $v2['chCtnt']['ctntUrl'] = $this->getLiveUrl($v2['chId']);
@@ -475,6 +483,14 @@ class Content extends Apis{
                 foreach($data as $key=>$val){
                     if($val->channel_cat_id == $id  && $val->channel_id > 0)
                     switch($val->channel_type){
+                        case 'Linear' :
+                            $response[$val->channel_id] = array('chNm'=>$val->channel_name,
+                                               'chId'=>$val->channel_id,
+                                               'chNmbr'=>$val->channel_number,
+                                               'chTyp'=>$val->channel_type,
+                                               'chSTym'=>date('Y-m-d h:i:s'),
+                                               'chCtnt'=>$this->getFormatData($data,'playlist',$val->channel_id));    
+                            break;
                         case 'Loop' :
                             $response[$val->channel_id] = array('chNm'=>$val->channel_name,
                                                'chId'=>$val->channel_id,
@@ -523,8 +539,11 @@ class Content extends Apis{
         return array_merge($tmp,(Array)reset($dataset));
     }
     
-    function getPlaylistDetail($playlist_id){
-        $query = sprintf('select
+    function getPlaylistDetail($playlist_id,$type){
+        $dataset = false;
+        switch($type){
+            case 'loop' :
+                    $query = sprintf('select
                             c.title as `ctntNm`,
                             c.id as `ctntId`,
                             concat("http://img.youtube.com/vi/",c.content_token,"/0.jpg") as `ctnThmb`,
@@ -535,12 +554,33 @@ class Content extends Apis{
                             left join files f on f.id = v.file_id
                             left join playlist_video pv on pv.content_id = c.id
                             where c.type = "youtube" and pv.playlist_id = %d',$playlist_id);
-                
-        $dataset = $this->db->query($query)->result();
+                    $dataset = $this->db->query($query)->result();
+                break;
+            case 'linear' :
+                    $query = sprintf('select * from playlists where playlists.status = "1" and playlists.id = %d',$playlist_id);
+                    $tmp = $this->db->query($query)->result();
+                    if(isset($tmp[0]->url)){
+                        $dataset = array('ctntUrl'=>$tmp[0]->url,'chEpg'=>$this->getEpg($playlist_id));    
+                    }
+                break;
+        }
         return $dataset;
     }
     
-    
+    function getEpg($playlist_id){
+        
+        $query = sprintf('select *,TIMEDIFF(playlist_epg.end_date,playlist_epg.start_date) as diff from playlist_epg where playlist_id = %d',$playlist_id);
+        $tmp = $this->db->query($query)->result();
+        $response = array();
+        foreach($tmp as $key=>$val){
+            $response[] = array('Plst'=>$val->playlist_id,
+                                'ttl'=>$val->title,
+                                'EStTym'=>$val->start_date,
+                                'EEdTym'=>$val->end_date,
+                                'Dur'=>$val->diff);
+        }
+        return $response;
+    }
     
     /******* Insert Data *******/
     function insertdata_get(){
