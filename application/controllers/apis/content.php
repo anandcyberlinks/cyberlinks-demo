@@ -434,8 +434,10 @@ class Content extends Apis{
         
          
          //-- get user keywords --//
+         $response['feelingLucky'] =array();
         if($id){
             $feelLucky = $this->getFeelingLucky($id);
+            
             $response['feelingLucky'] = $this->getFormatData($feelLucky,'category',0);
             
             $counter = 0;
@@ -779,16 +781,16 @@ class Content extends Apis{
                               keywords
                               from customers where id = %d ',$id);
         $dataset = $this->db->query($query)->row();
-        $keywords = explode(',',$dataset->keywords);
         
-        if($keywords){
+        if(!empty($dataset)){
+        $keywords = explode(',',$dataset->keywords);       
             foreach($keywords as $val){
              $this->db->or_like('c.keywords',$val);
              $this->db->or_like('c.name',$val);
              $this->db->or_like('p.name',$val);
             }
-        }
-        //--- get keywords content ---//
+            
+            //--- get keywords content ---//
         $this->db->select('cc.id as channel_cat_id,
                          cc.category as channel_cat_name,
                          cc.color as channel_cat_color,
@@ -809,8 +811,10 @@ class Content extends Apis{
         $this->db->where('c.status','1');
       
         $query = $this->db->get();
-         //echo $this->db->last_query();die;
-        return $query->result();      
+        // echo $this->db->last_query();die;
+        return $query->result();   
+        }
+           
     }
     /****** APIs for Divya TV channels **************/
     
