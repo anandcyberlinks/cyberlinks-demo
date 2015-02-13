@@ -83,6 +83,7 @@ class Webtv extends MY_Controller {
             $post['uid'] = $this->uid;
             $post['category_id'] = $_POST['category_id'];
             $post['status'] = $_POST['status'];
+            $post['keywords'] = $_POST['tags'];
             $this->webtv_model->insert_channels($post);
             $this->session->set_flashdata('message', $this->_successmsg($this->loadPo($this->config->item('success_record_add'))));
             redirect(base_url() . 'webtv');
@@ -155,6 +156,7 @@ class Webtv extends MY_Controller {
             $post['category_id'] = $_POST['category_id'];
             $post['uid'] = $this->uid;
             $post['status'] = $_POST['status'];
+            $post['keywords'] = $_POST['tags'];
             $this->webtv_model->insert_channels($post);
             $this->session->set_flashdata('message', $this->_successmsg($this->loadPo($this->config->item('success_record_update'))));
             redirect(base_url() . 'webtv');

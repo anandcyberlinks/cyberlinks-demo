@@ -87,12 +87,11 @@
                                     <thead>
                                         <tr>
                                             <th>select</th>
-                                            <th width="15px"><a href="<?php echo base_url(); ?>advertising/index/title/<?php echo (!empty($show_t)) ? $show_t : 'asc'; ?>"><?php echo $welcome->loadPo('Title') ?></a></th>
+                                            <th width="15px"><a href="<?php echo base_url(); ?>advertising/index/title/<?php echo (!empty($show_t)) ? $show_t : 'asc'; ?>"><?php echo $welcome->loadPo('Channel Name') ?></a></th>
                                             
                                             <th><?php echo $welcome->loadPo('Category') ?></th>
                                             <th><?php echo $welcome->loadPo('User') ?></th>
                                             <th><?php echo $welcome->loadPo('Status') ?></th>
-                                            <th><?php echo $welcome->loadPo('Duration') ?></th>                                            
                                             <th><?php echo $welcome->loadPo('Preview') ?></th>
                                             <th><?php echo $welcome->loadPo('Publish Date') ?></th>
                                             
@@ -103,7 +102,7 @@
                                         <?php foreach ($result as $value) { ?>
                                         <tr id="<?php echo $value->id ?>">
                                             <td><input type='checkbox' name='video[]' class="video" value="<?php echo $value->id; ?>"></td>
-                                                <td  width="350"><?php echo strlen($value->title) > 40 ?  substr($value->title,0,40).'...' : $value->title; ?></td>
+                                                <td  width="350"><?php echo strlen($value->name) > 40 ?  substr($value->name,0,40).'...' : $value->name; ?></td>
                                                 <td><?php echo $value->category; ?></td>
                                                 <td><?php echo $value->username; ?></td>
                                                 <td><?php if ($value->status == 1) { ?>
@@ -111,12 +110,11 @@
                                                     <?php } else { ?>
                                                         <img src="<?php echo base_url(); ?>assets/img/test-fail-icon.png" alt="Active" />
                                                     <?php } ?></td>
-                                                <td><?php echo time_from_seconds($value->duration); ?></td>                                                
                                                 <td style='text-align:center'>
-                                                    <?php if(in_array($value->minetype,array('video/wmv','video/avi'))) { ?>
+                                                    <?php if(in_array(@$value->minetype,array('video/wmv','video/avi'))) { ?>
                                                     --
                                                     <?php } else { ?>
-                                                    <a class="prev_video" href="#myModal" data-backdrop="static" data-toggle="modal" data-img-url="<?php echo ($value->type=='youtube' ? $value->file : baseurl.serverVideoRelPath.$value->file); ?>">Preview</a>
+                                                    <a class="prev_video" href="#myModal" data-backdrop="static" data-toggle="modal" data-img-url="<?php echo $value->url; ?>">Preview</a>
                                                     <?php } ?>
                                                 </td>
                                                 <td  width="120"><?php echo date('M d,Y', strtotime($value->created)); ?></td>
@@ -272,7 +270,7 @@
                                     <input type="hidden" value="" name="inialValPoint" id="inialValPoint">
                                 <input type="hidden" value="" name="inialValPercentage" id="inialValPercentage">
                                     <label style="display:block;" for="exampleInputEmail1">Timecode(mm:ss)</label>
-                                    <!--<input maxlength=3 style='width:35px;display:inline' type="text" name="hh" id="hh" placeholder="hh" class="form-control input-sm hh">:   -->                                 
+                                    <input maxlength=3 style='width:35px;display:inline' type="text" name="hh" id="hh" placeholder="hh" class="form-control input-sm hh">:
                                     <input maxlength=3 style='width:35px;display:inline;' type="text" name="mm" id="mm" placeholder="mm" class="form-control input-sm mm">:                                    
                                     <input maxlength=3 style='width:35px;display:inline' type="text" name="ss" id="ss" placeholder="ss" class="form-control input-sm ss">
                                 </div>

@@ -1025,9 +1025,9 @@ function cuepoint()
             
             //console.log("===============>"+first.duration);
             $.each(videInfo['result'],function(key,val){
-            videoFile = val.video_path;
+            videoFile = val.url;
             type = val.type;
-            var from_percentageSet = val.duration *(0.05301561);
+            var from_percentageSet = val.duration *(0.027154205);
             var finalPercentageSet = from_percentageSet.toFixed(5);
             innerHtml +='<tr  class="'+className+'"><td style="border-right: 1px solid gray;">'+i+'</td><td style="border-right: 1px solid gray;"><img width="50px" height="30px" src="'+val.thumbnail+'"></td><td style="border-right: 1px solid gray;padding-left: 20px" class="loading"><div class="progress xs"><div style="width: '+finalPercentageSet+'%;" class="progress-bar progress-bar-reen"></div></div></td><input type="hidden" class="video_id" name="video_id" value="'+val.id+'"><input type="hidden" class="duration" name="duration" value="'+val.duration+'"><input type="hidden" class="videoFile" name="videoFile" value="'+val.file+'"></tr>';
             i++;
@@ -1096,15 +1096,15 @@ function cuepoint()
             hide_min_max: true,
             keyboard: true,
             min: 0,
-            max: 1800,
+            max: 3600,
             from: 0,
-            to: 1800,
+            to: 3600,
             from_min :0,
             //from_max :900,
             type: 'single',
             step: 0,
            grid: true,
-           grid_num: 10,
+           grid_num: 20,
            from_shadow :true,
            prettify: function (num) {
                 //console.log(num);
@@ -1237,7 +1237,7 @@ $("#add").click(function(){
    var mm = $('.mm').val();
    var ss =  $('.ss').val();
    var ms =  $('.ms').val();
-    var timeInMillisec  = parseInt(mm*60)+parseInt(ss);
+    var timeInMillisec  = parseInt(hh*60*60)+parseInt(mm*60)+parseInt(ss);
     var cueName = $("#cueName").val();
     var IDs = [];
      $('.video_id').each(function() {
@@ -1262,9 +1262,10 @@ $("#add").click(function(){
                 }
                 
                 document.getElementById('closeClickEvent').style.pointerEvents = 'auto';              
-                var from_percentage1 = timeInMillisec *(0.05301561);
+                var from_percentage1 = timeInMillisec *(0.027154205);
                 var finalPercentage1 = from_percentage1.toFixed(5);
                 var text     = $("#text").val();
+                
                var div_removeClass1 = "append_"+timeInMillisec;
                var forChangeVal     = $("#forChangeVal").val();
                var removeDiv1       = ".append_"+forChangeVal;
@@ -1363,7 +1364,7 @@ $("#update").click(function(){
     var forChangeVal =$("#forChangeVal").val();
     var removeDiv2       = ".append_"+forChangeVal;
     var div_removeClass2 = "append_"+newVal;
-    var from_percentage1 = newVal *(0.05301561);
+    var from_percentage1 = newVal *(0.027154205);
     var finalPercentage1 = from_percentage1.toFixed(5);
    // console.log(removeDiv2);
    // console.log(div_removeClass2);
@@ -1462,7 +1463,7 @@ $("#delete").click(function(){
     var forChangeVal =$("#forChangeVal").val();
     var removeDiv2       = ".append_"+delVal;
     var div_removeClass2 = "append_"+delVal;
-    var from_percentage1 = newVal *(0.05301561);
+    var from_percentage1 = newVal *(0.027154205);
     var finalPercentage1 = from_percentage1.toFixed(5);
        
         //--- get updated cuepoints list in array ---//        

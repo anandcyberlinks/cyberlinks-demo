@@ -289,6 +289,108 @@ class Videos_model extends CI_Model {
         $data = $query->result();
         return $data;
     }
+    
+    function get_channelCount($uid, $data=''){
+        $timeStart = " 00:00:00";
+        $timeEnd = " 23:59:59";
+        $id = $this->get_ownerid($uid);
+        array_push($id, $uid);
+        $this->db->select('channels.*');
+        $this->db->from('channels');
+        $this->db->join('playlists', 'channels.id = playlists.channel_id', 'inner');
+        $this->db->join('channel_categories', 'channels.category_id = channel_categories.id', 'left');
+        $this->db->where('channels.type', 'Linear');
+        $this->db->where('channels.status', '1');
+        $this->db->where('playlists.status', '1');
+        $this->db->where_in('channels.uid', $id);
+        if (isset($data['content_title']) && $data['content_title'] != '') {
+            $this->db->like('name', trim($data['content_title']));
+        }
+        if (isset($data['category']) && $data['category'] != '') {
+            $this->db->where('channels.category_id', $data['category']);
+        }
+        if ((isset($data['datepickerstart']) && $data['datepickerstart'] != '') && (isset($data['datepickerend']) && $data['datepickerend'] != '')) {
+            $date = str_replace('/', '-', $data['datepickerstart']);
+            $datestart = date('y-m-d', strtotime($date));
+            $date = str_replace('/', '-', $data['datepickerend']);
+            $dateend = date('y-m-d', strtotime($date));
+            $dateTimeStart = $datestart . $timeStart;
+            $dateTimeEnd = $dateend . $timeEnd;
+            $this->db->where("channels.created BETWEEN '$dateTimeStart' and '$dateTimeEnd'", NULL, FALSE);
+        } else {
+            if (isset($data['datepickerstart']) && $data['datepickerstart'] != '') {
+                $date = str_replace('/', '-', $data['datepickerstart']);
+                $datestart = date('y-m-d', strtotime($date));
+                $dateTimeStart = $datestart . $timeStart;
+                $dateTimeEnd = $datestart . $timeEnd;
+                $this->db->where("channels.created BETWEEN '$dateTimeStart' and '$dateTimeEnd'", NULL, FALSE);
+            }
+            if (isset($data['datepickerend']) && $data['datepickerend'] != '') {
+                $date = str_replace('/', '-', $data['datepickerend']);
+                $dateend = date('y-m-d', strtotime($date));
+                $dateTimeStart = $dateend . $timeStart;
+                $dateTimeEnd = $dateend . $timeEnd;
+                $this->db->where("channels.created BETWEEN '$dateTimeStart' and '$dateTimeEnd'", NULL, FALSE);
+            }
+        }
+
+        $query = $this->db->get();
+        //echo $this->db->last_query();
+        return count($query->result());
+    }
+    
+    function get_channels($uid, $limit, $start, $sort = '', $sort_by = '', $data){
+        $timeStart = " 00:00:00";
+        $timeEnd = " 23:59:59";
+        $id = $this->get_ownerid($uid);
+        array_push($id, $uid);
+        $this->db->select('channels.*,playlists.url,channel_categories.category,users.username');
+        $this->db->from('channels');
+        $this->db->join('playlists', 'channels.id = playlists.channel_id', 'inner');
+        $this->db->join('channel_categories', 'channels.category_id = channel_categories.id', 'left');
+        $this->db->join('users', 'channels.uid = users.id', 'left');
+        $this->db->where('channels.type', 'Linear');
+        $this->db->where('channels.status', '1');
+        $this->db->where('playlists.status', '1');
+        $this->db->where_in('channels.uid', $id);
+        if (isset($data['content_title']) && $data['content_title'] != '') {
+            $this->db->like('name', trim($data['content_title']));
+        }
+        if (isset($data['category']) && $data['category'] != '') {
+            $this->db->where('channels.category_id', $data['category']);
+        }
+        if ((isset($data['datepickerstart']) && $data['datepickerstart'] != '') && (isset($data['datepickerend']) && $data['datepickerend'] != '')) {
+            $date = str_replace('/', '-', $data['datepickerstart']);
+            $datestart = date('y-m-d', strtotime($date));
+            $date = str_replace('/', '-', $data['datepickerend']);
+            $dateend = date('y-m-d', strtotime($date));
+            $dateTimeStart = $datestart . $timeStart;
+            $dateTimeEnd = $dateend . $timeEnd;
+            $this->db->where("channels.created BETWEEN '$dateTimeStart' and '$dateTimeEnd'", NULL, FALSE);
+        } else {
+            if (isset($data['datepickerstart']) && $data['datepickerstart'] != '') {
+                $date = str_replace('/', '-', $data['datepickerstart']);
+                $datestart = date('y-m-d', strtotime($date));
+                $dateTimeStart = $datestart . $timeStart;
+                $dateTimeEnd = $datestart . $timeEnd;
+                $this->db->where("channels.created BETWEEN '$dateTimeStart' and '$dateTimeEnd'", NULL, FALSE);
+            }
+            if (isset($data['datepickerend']) && $data['datepickerend'] != '') {
+                $date = str_replace('/', '-', $data['datepickerend']);
+                $dateend = date('y-m-d', strtotime($date));
+                $dateTimeStart = $dateend . $timeStart;
+                $dateTimeEnd = $dateend . $timeEnd;
+                $this->db->where("channels.created BETWEEN '$dateTimeStart' and '$dateTimeEnd'", NULL, FALSE);
+            }
+        }
+
+        $this->db->group_by('channels.id');
+        $this->db->order_by($sort, $sort_by);
+        $this->db->limit($limit, $start);
+        $query = $this->db->get();
+        //echo $this->db->last_query();
+        return $query->result();
+    }
     function get_ownerid($uid){
         $this->db->select('id');
         $this->db->where('owner_id', $uid);
@@ -351,6 +453,32 @@ class Videos_model extends CI_Model {
         $this->db->select('child.id,child.category,child.parent_id,parent.category as parent');
         $this->db->from('categories child');
         $this->db->join('categories parent', 'child.parent_id = parent.id', 'left');
+        $this->db->where('child.u_id', $uid);
+        $this->db->order_by('child.category', 'asc');
+        $query = $this->db->get();
+        $result = $query->result();
+        
+        $category = array();
+        if($relation === false){
+            foreach($result as $key=>$val){
+                $category[$val->id] = ucfirst(strtolower($val->category));
+            }
+        }else{
+            foreach($result as $key=>$val){
+                if($val->parent_id > 0){
+                    $category[$val->parent][$val->id] = ucfirst(strtolower($val->category));
+                }else{
+                    $category[$val->id] = ucfirst(strtolower($val->category));
+                }
+            }
+        }
+        return $category;
+    }
+    
+    function get_channelCategory($uid,$relation = false) {
+        $this->db->select('child.id,child.category,child.parent_id,parent.category as parent');
+        $this->db->from('channel_categories child');
+        $this->db->join('channel_categories parent', 'child.parent_id = parent.id', 'left');
         $this->db->where('child.u_id', $uid);
         $this->db->order_by('child.category', 'asc');
         $query = $this->db->get();
@@ -1138,6 +1266,26 @@ class Videos_model extends CI_Model {
         $data = $query->result();
         return $data;
     }
+    
+    function get_cuepoint_channel($IDs, $sort = '', $sort_by = '') {
+        $timeStart = " 00:00:00";
+        $timeEnd = " 23:59:59";
+        //$id = $this->get_ownerid($uid);
+       // array_push($id, $uid);
+        
+        $this->db->select('channels.*,playlists.url,3600 as duration',FALSE);
+        $this->db->from('channels');
+        $this->db->join('playlists', 'channels.id = playlists.channel_id', 'inner');
+        $this->db->where_in('channels.id', $IDs);
+        $this->db->group_by('channels.id');
+        //$this->db->order_by($sort, $sort_by);
+        //$this->db->limit($limit, $start);
+        $query = $this->db->get();
+        //echo $this->db->last_query();
+        
+        $data = $query->result();
+        return $data;
+    }
 
      function getCuePointInfo($IDs, $sort = '', $sort_by = '') {
         $timeStart = " 00:00:00";
@@ -1156,8 +1304,11 @@ class Videos_model extends CI_Model {
         return $data;
     }
     
-   function insertCuePoints($post) {	
-        $this->db->insert_batch('content_cuepoints', $post);
+   function insertCuePoints($post) {
+       foreach($post as $key => $val){
+           $this->db->insert('content_cuepoints', $val);
+       }
+        
     }
    function updateCuePoints($post,$IDs) {
     //print_r($post);
@@ -1178,12 +1329,28 @@ class Videos_model extends CI_Model {
 	$this->db->delete('content_cuepoints');	
     }
     
-    function validate_cuepoint_duration($id,$v)
+    function validate_cuepoint_durationOld($id,$v)
     {
       $this->db->select('id');
       $this->db->from('videos v');      
       $this->db->where('v.content_id',$id);
       $this->db->where('v.duration >=',$v);
+      $this->db->limit('1');
+      $query = $this->db->get();
+      $result = $query->row();
+     // echo $this->db->last_query();
+      if($result)
+	return 1;
+      else
+	return 0;
+    }
+    
+    function validate_cuepoint_duration($id,$v)
+    {
+      $this->db->select('id');
+      $this->db->from('channels v');      
+      $this->db->where('v.id',$id);
+      $this->db->where('3600 >=',$v,FALSE);
       $this->db->limit('1');
       $query = $this->db->get();
       $result = $query->row();

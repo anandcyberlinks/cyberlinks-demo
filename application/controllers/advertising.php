@@ -25,7 +25,7 @@ if (!defined('BASEPATH'))
     {
         $data['welcome'] = $this;
         $sort_by = 'desc';
-        $sort = 'a.id';
+        $sort = 'channels.id';
         if (isset($_POST['submit']) && $_POST['submit'] == 'Search') {
             $this->session->set_userdata('search_form', $_POST);
         } else if (isset($_POST['reset']) && $_POST['reset'] == 'Reset') {
@@ -35,22 +35,24 @@ if (!defined('BASEPATH'))
         $this->load->library("pagination");
         $config = array();
         $config["base_url"] = base_url() . "advertising/index/";
-        $config["total_rows"] = $this->videos_model->get_videocount($this->uid, $searchterm);
+        $config["total_rows"] = $this->videos_model->get_channelCount($this->uid, $searchterm);
         $config["per_page"] = 10;
         $config["uri_segment"] = 3;
         $this->pagination->initialize($config);
         $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
-        $data['category'] = $this->videos_model->get_category($this->uid);
-        $data['result'] = $this->videos_model->get_video($this->uid, PER_PAGE, $page, $sort, $sort_by, $searchterm);
+        $data['category'] = $this->videos_model->get_channelCategory($this->uid);
+        $data['result'] = $this->videos_model->get_channels($this->uid, PER_PAGE, $page, $sort, $sort_by, $searchterm);
         $data["links"] = $this->pagination->create_links();
-  //echo '<pre>';print_r( $data['result']);
+  //echo '<pre>';print_r( $data['result']); exit;
         $this->show_view('advertising/cuepoints',$data);
     }
     function getlistdetail()
     {
-         $sort_by = 'desc';
-        $sort = 'd.duration';
-        $data['result'] = $this->videos_model->get_cuepoint_video($_REQUEST['IDs'],$sort, $sort_by);
+         //$sort_by = 'desc';
+        //$sort = 'd.duration';
+         $sort_by = '';
+        $sort = '';
+        $data['result'] = $this->videos_model->get_cuepoint_channel($_REQUEST['IDs'],$sort, $sort_by);
        $innerHtml = '';
        //echo "<pre>";
        //print_r($data['result']);
@@ -107,9 +109,9 @@ $this->show_view("advertising/cuepoints", $content);*/
     }
 function  updateCuePoint()
     {
-   // echo "<pre>";
-     //  print_r($_POST);
-      // die();
+    //echo "<pre>";
+       //print_r($_POST);
+       //die();
      // echo "<pre>";
          
       $created = date('Y-m-d h:i:s');
@@ -123,7 +125,7 @@ function  updateCuePoint()
           foreach ($_POST['cuepointArr'] as $k=>$v)
               {               
                //-- check if cue point is greater than video duration --//
-               $result = $this->videos_model->validate_cuepoint_duration($id,$v);               
+               $result = $this->videos_model->validate_cuepoint_duration($id,$k);               
                if($result ==1){
                 $data[$i]['cue_points'] = $k;
                  $data[$i]['title'] = $v;

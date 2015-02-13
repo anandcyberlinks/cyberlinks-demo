@@ -96,6 +96,11 @@
                                             }
                                             ?>>
                                         </div>
+                                        <div class="form-group col-lg-12">
+                                            <label for="exampleInputEmail1"><?php echo $welcome->loadPo('Keywords') ?></label>
+                                            <input name="tags" class="form-control" id="myTags" type="text" placeholder="Enter keywords"  value="<?php echo @$value[0]->keywords; ?>" /> 
+                                            <?php //echo form_error('content_keyword', '<span class="text-danger">', '</span>'); ?>
+                                        </div>
                                         <div class="form-group col-md-5">
                                             <input type="submit" name="submit" value="Submit" class="btn btn-success">
                                             <a class="btn btn-warning" href="<?php echo base_url() ?>webtv"><i class="fa fa-mail-reply"></i> Back</a>
