@@ -372,8 +372,7 @@ class Content extends Apis{
     }
     
     function channels_get(){
-        $response = array();
-        $id=$this->get('id');
+        $response = array();        
                
         $query = sprintf('SELECT
                          cc.id as channel_cat_id,
@@ -431,54 +430,6 @@ class Content extends Apis{
         
         shuffle($ads);
         
-        
-         
-         //-- get user keywords --//
-         $response['feelingLucky'] =array();
-        if($id){
-            $feelLucky = $this->getFeelingLucky($id);
-            if($feelLucky){
-            $response['feelingLucky'] = $this->getFormatData($feelLucky,'category',0);
-            
-            $counter = 0;
-            foreach($response['feelingLucky'] as $k1=>$v1){
-                foreach($v1['chList'] as $k2=>$v2){
-                    switch(strtolower($v2['chTyp'])){
-                        case 'linear' :
-                            if(isset($v2['chCtnt'])){
-                                array_walk($v2['chCtnt'],function(&$data) use ($ads){
-                                    $data['PCtnt'] = $this->getPlaylistDetail($data['PId'],'linear');
-                                });
-                            }
-                            break;
-                        case 'loop' :
-                            if(isset($v2['chCtnt'])){
-                                array_walk($v2['chCtnt'],function(&$data) use ($ads){
-                                    $data['PCtnt'] = $this->getPlaylistDetail($data['PId'],'loop');
-                                    if(is_array($data['PCtnt'])){
-                                        foreach($data['PCtnt'] as $key=>$val){
-                                            $data['PCtnt'][$key]->ctnAd = $ads[rand(0,count($ads)-1)];
-                                        }
-                                    }
-                                });
-                            }
-                            break;
-                        case 'youtube' :
-                            
-                            break;
-                        case 'live' :
-                            if(isset($v2['chCtnt'])){
-                                $v2['chCtnt']['ctntUrl'] = $this->getLiveUrl($v2['chId']);
-                                $v2['chCtnt']['ctnAd'] = $ads[rand(0,count($ads)-1)];
-                            }
-                            break;
-                    }
-                    $response['feelingLucky'][$k1]['chList'][$k2] = $v2;
-                }
-            }
-        }
-        }
-        //--------------------------------//
         
         $counter = 0;
         foreach($response['data'] as $k1=>$v1){
@@ -816,6 +767,66 @@ class Content extends Apis{
         return $query->result();   
         }
            
+    }
+    
+    
+    function feelinglucky_get()
+    {
+        $id = $this->get('id');
+         //-- get user keywords --//
+         $response['feelingLucky'] =array();
+        if($id){
+            $feelLucky = $this->getFeelingLucky($id);
+            
+            array_walk ( $feelLucky, function (&$key) { 
+                $key->channel_cat_id = 99999;
+                $key->channel_cat_name ="Feeling Lucky";
+                $key->channel_cat_range ='';
+            });
+            //echo '<pre>';//print_r($feelLucky);die;
+            if($feelLucky){
+            $response['feelingLucky'] = $this->getFormatData($feelLucky,'category',0);
+           // print_r($response['feelingLucky']);die;
+            $counter = 0;
+            foreach($response['feelingLucky'] as $k1=>$v1){
+                foreach($v1['chList'] as $k2=>$v2){
+                    switch(strtolower($v2['chTyp'])){
+                        case 'linear' :
+                            if(isset($v2['chCtnt'])){
+                                array_walk($v2['chCtnt'],function(&$data) use ($ads){
+                                    $data['PCtnt'] = $this->getPlaylistDetail($data['PId'],'linear');
+                                });
+                            }
+                            break;
+                        case 'loop' :
+                            if(isset($v2['chCtnt'])){
+                                array_walk($v2['chCtnt'],function(&$data) use ($ads){
+                                    $data['PCtnt'] = $this->getPlaylistDetail($data['PId'],'loop');
+                                    if(is_array($data['PCtnt'])){
+                                        foreach($data['PCtnt'] as $key=>$val){
+                                            $data['PCtnt'][$key]->ctnAd = $ads[rand(0,count($ads)-1)];
+                                        }
+                                    }
+                                });
+                            }
+                            break;
+                        case 'youtube' :
+                            
+                            break;
+                        case 'live' :
+                            if(isset($v2['chCtnt'])){
+                                $v2['chCtnt']['ctntUrl'] = $this->getLiveUrl($v2['chId']);
+                                $v2['chCtnt']['ctnAd'] = $ads[rand(0,count($ads)-1)];
+                            }
+                            break;
+                    }
+                    $response['feelingLucky'][$k1]['chList'][$k2] = $v2;
+                }
+            }
+        }
+        }
+        $this->response($response);
+        //--------------------------------//
     }
     /****** APIs for Divya TV channels **************/
     
