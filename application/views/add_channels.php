@@ -46,7 +46,7 @@
                                         </div>
                                         <div class="form-group col-md-10">
                                             <label><?php echo $welcome->loadPo('Category'); ?></label>
-                                            <select name="category_id" id="category_id" class="form-control" <?=(isset($value))? 'disabled="true"':''?>>
+                                            <select name="category_id" id="category_id" class="form-control" <?=(isset($value))? 'readonly="true"':''?>>
                                                 <option value="">Select</option>
                                                 <?php foreach ($catogory as $val) { ?>
                                                     <option value="<?= $val->id ?>"
@@ -65,7 +65,7 @@
                                         <div class="form-group col-md-10">
                                             <label><?php echo $welcome->loadPo('Channels Number'); ?></label>
                                             <?php if(isset($value)){ ?>
-                                            <input type="text" class="form-control" value="<?=$value[0]->number?>" disabled="true" />
+                                            <input type="text" name="number" class="form-control" value="<?=$value[0]->number?>" readonly="true" />
                                                 <?php }else{ ?>
                                             <select name="number" id="ch_number" class="form-control">
                                                 <option value="">Select Number</option>
