@@ -212,8 +212,8 @@ class User extends REST_Controller
                     //$_POST['file'] = $_POST['logo'];
                 }
         }
-	$keywordData = array('keywords'   => $this->post('keywords'));
-	
+	//$keywordData = array('keywords'   => $this->post('keywords'));
+	$keywordData =  $this->post('keywords');
         $data = array( 
             'first_name' => $this->post('first_name'), 
             'last_name' => $this->post('last_name'),
