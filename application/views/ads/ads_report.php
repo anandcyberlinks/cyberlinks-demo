@@ -6,6 +6,7 @@
             <?php echo $welcome->loadPo('Ads Analytics'); ?>
             <small><?php echo $welcome->loadPo('Control panel'); ?></small>
         </h1>
+		
         <ol class="breadcrumb">
             <i class="fa fa-dashboard"></i>
             <li class="active"><?php echo $welcome->loadPo('Ads Analytics') ?></li>
@@ -91,23 +92,7 @@
 		    </a>-->
                 </div>
             </div><!-- ./col -->
-            <div class="col-lg-2 col-xs-6">
-                <!-- small box -->
-                <div class="small-box bg-yellow">
-                    <div class="inner">
-                        <h3>
-                            <?php echo $summary->total_replay;?>
-                        </h3>
-                        <p>
-                            <?php echo $welcome->loadPo('Replay Video'); ?>
-                        </p>
-                    </div>
-                    
-                    <!--a href="<?php //echo base_url() ?>video/video_status" class="small-box-footer">
-                        <?php //echo $welcome->loadPo('More info'); ?> <i class="fa fa-arrow-circle-right"></i>
-                    </a>-->
-                </div>
-            </div><!-- ./col -->
+            
             <div class="col-lg-2 col-xs-6">
                 <!-- small box -->
                 <div class="small-box bg-purple">

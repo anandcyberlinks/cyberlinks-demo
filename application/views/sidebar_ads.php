@@ -1,5 +1,5 @@
 <?php $s = $this->session->all_userdata(); ?>
-<aside class="left-side sidebar-">                
+<aside class="left-side sidebar- ">                
     <section class="sidebar">
         <!-- Sidebar user panel -->
         <div class="user-panel">
