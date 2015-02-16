@@ -193,6 +193,7 @@ $(window).on('beforeunload', function(){
        //flashplayer: "assets/player.swf",
         primary: "html5",
         file: "<?php echo $video_path;?>",
+       //file: "http://localhost/multitvfinal-demo/assets/upload/video/53f709efce75f.mp4",
         image: "<?php echo base_url().THUMB_LARGE_PATH. $thumbnail_path;?>",       
         width: "100%",
  aspectratio: "16:9",
@@ -216,7 +217,7 @@ $(window).on('beforeunload', function(){
 	   ?>
 		adbreak<?php echo $i; ?>: {
 		offset: "<?php echo $offset; ?>",
-		'skipoffset':5,
+		//'skipoffset':5,
 		tag: "<?php echo ($row['ad_type'] != 'External' ? base_url():'') . $row['vast_file']; ?>?<?php echo $row['ads_id']?>/<?php echo $user_id?>/<?php echo $row['uid']?>"
 		},
 	   <?php $i++;

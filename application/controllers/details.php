@@ -38,10 +38,10 @@ class Details extends MY_Controller {
 		//----------------------------//
 		
 		$user_data = $this->Ads_model->getUserKeywords($_GET['user_id']);
-		//echo '<pre>';print_r($keywords);die;
+		//echo '<pre>';print_r($user_data);die;
 		//-- get radius for user location --//
 		$adsAlloc = $this->Ads_model->getUserLocationWiseAds($lat,$lng,$_GET['user_id'],$user_data,$limit);
-		//echo '<pre>';print_r($adsAlloc);
+		//echo '<pre>';print_r($adsAlloc);die;
 		$i=0;
 		foreach($adsAlloc as $row){
 			$adsFinal[$i]['file_name'] 	= $row->file_name;
