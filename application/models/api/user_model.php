@@ -139,7 +139,7 @@ class User_model extends CI_Model {
    
    public function getuser($id)
    {
-        $this->db->select('a.id,a.first_name,a.last_name,a.gender,a.location,a.contact_no,a.dob,a.email,a.created,b.token,a.image,c.keywords');
+        $this->db->select('a.id,a.first_name,a.last_name,a.gender,a.location,a.contact_no,a.dob,a.email,a.created,b.token,a.image,a.keywords');
 	$this->db->from('customers a');
         $this->db->join('api_token b','a.id = b.user_id','left');
 	$this->db->join('social_connects c','c.user_id=a.id','left');
@@ -277,7 +277,7 @@ function delete_user($id){
   }
   public function userprofile($id)
   {
-      $this->db->select('c.id,c.first_name,c.last_name,c.gender,c.contact_no,c.location,c.dob,a.keywords,c.image');
+      $this->db->select('c.id,c.first_name,c.last_name,c.gender,c.contact_no,c.location,c.dob,c.keywords,c.image');
       $this->db->from('social_connects a');
       $this->db->join('customers c', 'c.id = a.user_id', 'right');   
       $this->db->where('c.id',$id);
