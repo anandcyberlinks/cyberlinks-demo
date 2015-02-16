@@ -881,7 +881,7 @@ class Ads_model extends CI_Model {
        $datediff =  date_diff($date1,$date2);
        $age = $datediff->y;
        $between = sprintf("%s BETWEEN a.age_group_from AND a.age_group_to",$age);
-      $this->db->where($between, null, false);      
+      $this->db->or_where($between, null, false);      
     }
      
      if($lat !='' && $long!=''){
