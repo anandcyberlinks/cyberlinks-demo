@@ -212,22 +212,24 @@ class User extends REST_Controller
                     //$_POST['file'] = $_POST['logo'];
                 }
         }
+	$keywordData = array('keywords'   => $this->post('keywords'));
+	
         $data = array( 
             'first_name' => $this->post('first_name'), 
             'last_name' => $this->post('last_name'),
             'gender' => $this->post('gender'),
 	    'dob' => $this->post('dob'),
             'contact_no' => $this->post('contact_no'),
-            'location'=>$this->post('location')
+            'location'=>$this->post('location'),
+	    'keywords' => $keywordData
             );
-        $keywordData = array('keywords'   => $this->post('keywords'));
-        
+                
            if($pic !='' && $pic != 0){
                $data['image']=base_url().PROFILEPIC_PATH.$pic;
            }
 	
             $result = $this->User_model->update_user($data,$id);
-            $result_social = $this->User_model->update_usersocial($keywordData,$id);
+         //   $result_social = $this->User_model->update_usersocial($keywordData,$id);
             if($result){
 		$output = $this->User_model->getuser($id);
 		/*if($output->image !=""){
@@ -408,7 +410,7 @@ class User extends REST_Controller
 	$access_key = $this->post('access_key');
 	$uniqueId = $this->post('uniqueID');
         $userdetails = json_decode($this->post('social'));
-
+    
        //-- check if Admin token is valid --//
 	   $owner_id =  $this->User_model->checkAdminToken($this->admin_token);
 	    if($owner_id <= 0){
@@ -430,10 +432,14 @@ class User extends REST_Controller
 	    $image = $imageUrl;
             $token = sha1($socialid.rand());
 	    $age = $userdetails->dob;
+	    
+	    //-- get user keywords --//
+	    $social_keywords = $this->social_data($id,$socialid,$access_key);
         }
         
         if(strtolower($provider)=='google')
         {
+	    $social_keywords='';
             /*$firstname = $userdetails->profile->name->givenName;
             $lastname = $userdetails->profile->name->familyName;
             $email = $userdetails->profile->email;
@@ -463,7 +469,8 @@ class User extends REST_Controller
                $this->generateApiToken($uid,$email,$socialid);
                $result = $this->User_model->getuser($uid);	       
                $this->response(array('code'=>1,'result'=>$result), 200); 
-            }else{              
+            }else{
+		
             //-----------Register user-----------------//
             $userdata = array(
 	    'owner_id' => $owner_id,
@@ -475,6 +482,7 @@ class User extends REST_Controller
 	    'image' => $image,
 	    'age' => $age,
 	    'device_unique_id' => $uniqueId,
+	    'keywords'=>$social_keywords,
             //'token' => $token,
             'status' => 'active'
             //'created'=>date('Y-m-d h:i:s')
@@ -483,19 +491,20 @@ class User extends REST_Controller
              $id = $this->User_model->adduser($userdata);
             
              if($id){
+		/*
                  if($provider=='facebook'){
                  //-- social Data Keywords 
                 $social_keywords = $this->social_data($id,$socialid,$access_key);
                  }else
                      {
                         $social_keywords = '';
-                     }
+                     }*/
                $socialdata = array('social_id' => $socialid, 
                'from' => $provider,            
                'user_id' => $id,  
                'info' => serialize($userdetails),
                'status' => 1,
-                'keywords'=>$social_keywords,
+               // 'keywords'=>$social_keywords,
                'created'=>date('Y-m-d h:i:s'));
                 $this->User_model->addsocial($socialdata);
             }
