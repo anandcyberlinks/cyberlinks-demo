@@ -40,10 +40,12 @@ class Details extends MY_Controller {
 		$user_data = $this->Ads_model->getUserKeywords($_GET['user_id']);
 		//echo '<pre>';print_r($user_data);die;
 		//-- get radius for user location --//
+		if($id !=38){  //- check if newsnation no ads display --//
 		$adsAlloc = $this->Ads_model->getUserLocationWiseAds($lat,$lng,$_GET['user_id'],$user_data,$limit);
 		//echo '<pre>';print_r($adsAlloc);die;
 		$i=0;
 		foreach($adsAlloc as $row){
+			
 			$adsFinal[$i]['file_name'] 	= $row->file_name;
 			$adsFinal[$i]['vast_file'] 	= $row->vast_file;
 			$adsFinal[$i]['ads_id'] 	= $row->ads_id;
@@ -52,7 +54,7 @@ class Details extends MY_Controller {
 			$adsFinal[$i]['ad_type'] 	= $row->ad_type;
 			$i++;
 		}
-		 
+		}
 		//----------------------------------//
 		//echo '<pre>';print_r($adsFinal);die;
 		//echo '<pre>';print_r($keywords);die;

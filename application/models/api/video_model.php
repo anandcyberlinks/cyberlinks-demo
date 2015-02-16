@@ -502,7 +502,7 @@ class Video_model extends CI_Model {
    
    public function channel_play($id)
    {
-        $this->db->select('a.id as channel_id,a.type,a.name, a.uid as content_provider,b.id as playlist_id,b.url as video_path');
+        $this->db->select('a.id as content_id,a.type,a.name, a.uid as content_provider,b.id as playlist_id,b.url as video_path');
 	$this->db->from('channels a');               
         $this->db->join('playlists b', 'a.id = b.channel_id', 'inner');                     
         $this->db->where('b.status','1');
