@@ -24,7 +24,7 @@
                         <!-- general form elements -->
                         <div class="box box-primary">
                             <div class="box-header">
-                                <?php if (!isset($value)) { ?>
+                                <?php if (!isset($value)) {  ?>
                                     <h3 class="box-title"><?php echo $welcome->loadPo('Add') . ' ' . $welcome->loadPo('Channels'); ?></h3>
                                 <?php } else { ?>
                                     <h3 class="box-title"><?php echo $welcome->loadPo('Edit') . ' ' . $welcome->loadPo('Channels'); ?></h3>
@@ -43,11 +43,10 @@
                                                 echo $value[0]->name;
                                             }
                                             ?>">
-
                                         </div>
                                         <div class="form-group col-md-10">
                                             <label><?php echo $welcome->loadPo('Category'); ?></label>
-                                            <select name="category_id" id="category_id" class="form-control">
+                                            <select name="category_id" id="category_id" class="form-control" <?=(isset($value))? 'disabled="true"':''?>>
                                                 <option value="">Select</option>
                                                 <?php foreach ($catogory as $val) { ?>
                                                     <option value="<?= $val->id ?>"
@@ -58,20 +57,20 @@
                                                         }
                                                     }
                                                     ?>
-
-
-
                                                             ><?= $val->category ?></option>
                                                         <?php } ?>
                                             </select>
-
                                         </div>
                                         <div id="load" class="col-md-4"></div>
                                         <div class="form-group col-md-10">
                                             <label><?php echo $welcome->loadPo('Channels Number'); ?></label>
+                                            <?php if(isset($value)){ ?>
+                                            <input type="text" class="form-control" value="<?=$value[0]->number?>" disabled="true" />
+                                                <?php }else{ ?>
                                             <select name="number" id="ch_number" class="form-control">
                                                 <option value="">Select Number</option>
                                             </select>
+                                                <?php } ?>
                                         </div>
                                         <?php if (!isset($value)) { ?>
                                             <div class="form-group col-md-10">
@@ -84,7 +83,6 @@
                                                 </select>
                                             </div>
                                         <?php } ?>
-
                                         <div class="form-group col-md-10">
                                             <label><?php echo $welcome->loadPo('Status'); ?></label>
                                             <input type="hidden" name="status" value="0">
