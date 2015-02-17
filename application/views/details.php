@@ -238,6 +238,7 @@ $(window).on('beforeunload', function(){
 	console.log(jwplayer().getState());
 	if (jwplayer().getState()=='BUFFERING') {		
 		JsHandler.bufferingStart();
+		 AndroidApp.startVideo();   
 	}else{
 		JsHandler.bufferingStop();
 	}
@@ -412,7 +413,7 @@ $(document).ready(function(){
             //var foo = JSON.parse(data);
             //alert(data)
     });
-    AndroidApp.startVideo();    
+  // AndroidApp.startVideo();    
 });
 
 
