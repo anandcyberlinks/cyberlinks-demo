@@ -237,10 +237,11 @@ $(window).on('beforeunload', function(){
     jwplayer().onBuffer(function(event){
 	console.log(jwplayer().getState());
 	if (jwplayer().getState()=='BUFFERING') {		
-		JsHandler.bufferingStart();
+		//JsHandler.bufferingStart();
 		 AndroidApp.startVideo();   
 	}else{
-		JsHandler.bufferingStop();
+		 AndroidApp.startVideo();
+		//JsHandler.bufferingStop();
 	}
     });
     
