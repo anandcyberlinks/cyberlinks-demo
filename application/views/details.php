@@ -237,9 +237,9 @@ $(window).on('beforeunload', function(){
     jwplayer().onBuffer(function(event){
 	console.log(jwplayer().getState());
 	if (jwplayer().getState()=='BUFFERING') {		
-		window.JsHandler.bufferingStart();
+		JsHandler.bufferingStart();
 	}else{
-		window.JsHandler.bufferingStop();
+		JsHandler.bufferingStop();
 	}
     });
     
