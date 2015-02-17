@@ -225,6 +225,11 @@ $(window).on('beforeunload', function(){
 	   <?php $i++;
        } ?>                    
 	}
+	},
+	events:{
+		onBuffer: function(){
+			AndroidApp.startVideo();   
+		}
 	}
         //skin: "myCoolSkin/roundster.xml",       
     });
@@ -234,7 +239,7 @@ $(window).on('beforeunload', function(){
 	var duration;  
 	var pos=0;
     
-    jwplayer().onBuffer(function(event){
+    /*jwplayer().onBuffer(function(event){
 	console.log(jwplayer().getState());
 	if (jwplayer().getState()=='BUFFERING') {		
 		//JsHandler.bufferingStart();
@@ -243,7 +248,7 @@ $(window).on('beforeunload', function(){
 		 AndroidApp.startVideo();
 		//JsHandler.bufferingStop();
 	}
-    });
+    });*/
     
     jwplayer().onPause(function () {
             state = jwplayer().getState();
@@ -416,10 +421,7 @@ $(document).ready(function(){
     });
   // AndroidApp.startVideo();    
 });
-function test()
-{
-	alert('test');
-}
+
 
 </script>
 
