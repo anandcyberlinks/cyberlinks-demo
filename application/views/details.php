@@ -237,7 +237,7 @@ $(window).on('beforeunload', function(){
     jwplayer().onBuffer(function(event){
 	console.log(jwplayer().getState());
 	if (jwplayer().getState()=='BUFFERING') {		
-		window.sHandler.bufferingStart();
+		window.JsHandler.bufferingStart();
 	}else{
 		window.JsHandler.bufferingStop();
 	}
