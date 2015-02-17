@@ -227,27 +227,26 @@ $(window).on('beforeunload', function(){
 	   <?php $i++;
        } ?>                    
 	}
-	}
+	
+}
 	
         //skin: "myCoolSkin/roundster.xml",       
     });
-        
+
 	autoplay(); //--auto play jwplayer --//
 	
 	var duration;  
 	var pos=0;
-	jwplayer().onBuffer(this.onMyEventHandler);
+	
     
     jwplayer().onBuffer(function(event){
-	console.log(jwplayer().getState());
+	//console.log(jwplayer().getState());
 	if (jwplayer().getState()=='BUFFERING') {		
-		console.log('123');
-	}else{
-		console.log('456');
-		// AndroidApp.startVideo();
-		//JsHandler.bufferingStop();
+		//$( document ).trigger( "myCustomEvent" );
+		window.location.href="http://localhost/multitvfinal-demo/index.php/details?user_id=1&id=37&device=3g&lat=28.472097&lng=77.072546&type=live&device=android#123"
 	}
     });
+    
 
     jwplayer().onPause(function () {
             state = jwplayer().getState();
@@ -266,6 +265,7 @@ $(window).on('beforeunload', function(){
 
     jwplayer().onPlay(function () {
 	//var id = $('#analytics_id').val();
+	window.location.href="http://localhost/multitvfinal-demo/index.php/details?user_id=1&id=37&device=3g&lat=28.472097&lng=77.072546&type=live&device=android#1234"
 	console.log(jwplayer().getControls());
 	var is_complete = $('#is_complete').val();
 		//alert(is_complete);
