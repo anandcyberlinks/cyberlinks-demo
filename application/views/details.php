@@ -228,7 +228,7 @@ $(window).on('beforeunload', function(){
 	},
 	events:{
 		onBuffer: function(){
-			AndroidApp.startVideo();   
+			test()   
 		}
 	}
         //skin: "myCoolSkin/roundster.xml",       
@@ -421,7 +421,11 @@ $(document).ready(function(){
     });
   // AndroidApp.startVideo();    
 });
-
+function test()
+{
+	//JsHandler.bufferingStart();
+	 AndroidApp.startVideo();
+}
 
 </script>
 
