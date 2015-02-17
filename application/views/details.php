@@ -199,7 +199,7 @@ $(window).on('beforeunload', function(){
         skin: "<?php echo base_url()?>assets/myskinjw/custom.xml",
 	width: "100%",
  aspectratio: "16:9",
- //controls: false,
+ controls: false,
  stretching: "exactfit",
 //autostart: 1,
         logo: {
@@ -233,6 +233,10 @@ $(window).on('beforeunload', function(){
 	
 	var duration;  
 	var pos=0;
+    
+    jwplayer().onBuffer(function(event){
+	console.log(jwplayer().getState());
+    });
     
     jwplayer().onPause(function () {
             state = jwplayer().getState();
