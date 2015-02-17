@@ -192,21 +192,21 @@ $(window).on('beforeunload', function(){
     jwplayer("myElement").setup({
        //flashplayer: "assets/player.swf",
         primary: "html5",
-        file: "<?php echo $video_path;?>",
-       //file: "http://localhost/multitvfinal-demo/assets/upload/video/53f709efce75f.mp4",
+       // file: "<?php echo $video_path;?>",
+       file: "http://localhost/multitvfinal-demo/assets/upload/video/53f709efce75f.mp4",
         image: "<?php echo base_url().THUMB_LARGE_PATH. $thumbnail_path;?>",       
         width: "100%",
  aspectratio: "16:9",
- //controls: false,
+ controls: false,
  stretching: "exactfit",
 //autostart: 1,
         logo: {
         file: "<?php echo base_url()?>assets/img/logo.jpg",	
         },
         advertising: {
-	//admessage: 'Ad: your video resumes in XX seconds...',		
+	admessage: ' ',		
 	client: "vast",
-	skipoffset: 5,
+	//skipoffset: 5,
 	schedule: {
        <?php
        
