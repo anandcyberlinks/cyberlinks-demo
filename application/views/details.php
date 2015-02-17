@@ -227,7 +227,7 @@ $(window).on('beforeunload', function(){
 	}
 	},
 	events:{
-		'onPlay':test 
+		'onBuffer':test 
 		
 	}
         //skin: "myCoolSkin/roundster.xml",       
