@@ -193,11 +193,13 @@ $(window).on('beforeunload', function(){
        //flashplayer: "assets/player.swf",
         primary: "html5",
         file: "<?php echo $video_path;?>",
+	//file: "http://54.179.170.143:1935/live/370/playlist.m3u8",
        //file: "http://localhost/multitvfinal-demo/assets/upload/video/53f709efce75f.mp4",
         image: "<?php echo base_url().THUMB_LARGE_PATH. $thumbnail_path;?>",       
-        width: "100%",
+        skin: "<?php echo base_url()?>assets/myskinjw/custom.xml",
+	width: "100%",
  aspectratio: "16:9",
- controls: false,
+ //controls: false,
  stretching: "exactfit",
 //autostart: 1,
         logo: {
@@ -249,6 +251,7 @@ $(window).on('beforeunload', function(){
 
     jwplayer().onPlay(function () {
 	//var id = $('#analytics_id').val();
+	console.log(jwplayer().getControls());
 	var is_complete = $('#is_complete').val();
 		//alert(is_complete);
 		if (is_complete == '1' && state != 'PAUSED') {		
