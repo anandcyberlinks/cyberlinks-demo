@@ -192,8 +192,8 @@ $(window).on('beforeunload', function(){
     jwplayer("myElement").setup({
        //flashplayer: "assets/player.swf",
         primary: "html5",
-       // file: "<?php echo $video_path;?>",
-       file: "http://localhost/multitvfinal-demo/assets/upload/video/53f709efce75f.mp4",
+        file: "<?php echo $video_path;?>",
+       //file: "http://localhost/multitvfinal-demo/assets/upload/video/53f709efce75f.mp4",
         image: "<?php echo base_url().THUMB_LARGE_PATH. $thumbnail_path;?>",       
         width: "100%",
  aspectratio: "16:9",
