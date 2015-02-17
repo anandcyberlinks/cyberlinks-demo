@@ -24,6 +24,7 @@
 <script type="text/javascript" src="<?php echo base_url(); ?>./assets/js/jwplayer.js" ></script>
 <script type="text/javascript">jwplayer.key = "BC9ahgShNRQbE4HRU9gujKmpZItJYh5j/+ltVg==";</script>
 <script src="<?php echo base_url() ?>assets/js/jquery-1.10.2.js"></script>
+<script src="<?php echo base_url() ?>assets/js/aa.js"></script>
 <?php if(count($result)>0){
 	$content_id = $result->content_id;
 	$content_provider = $result->content_provider;
@@ -98,7 +99,8 @@ $(window).on('beforeunload', function(){
     }
     
     function play() {
-	
+	 
+
 	$.ajax({
 		url: "<?php echo base_url() ?>analytics/play",
 	        data: {		
@@ -225,11 +227,8 @@ $(window).on('beforeunload', function(){
 	   <?php $i++;
        } ?>                    
 	}
-	},
-	events:{
-		'onBuffer':test 
-		
 	}
+	
         //skin: "myCoolSkin/roundster.xml",       
     });
         
@@ -237,18 +236,19 @@ $(window).on('beforeunload', function(){
 	
 	var duration;  
 	var pos=0;
+	jwplayer().onBuffer(this.onMyEventHandler);
     
-    /*jwplayer().onBuffer(function(event){
+    jwplayer().onBuffer(function(event){
 	console.log(jwplayer().getState());
 	if (jwplayer().getState()=='BUFFERING') {		
-		//JsHandler.bufferingStart();
-		 AndroidApp.startVideo();   
+		console.log('123');
 	}else{
-		 AndroidApp.startVideo();
+		console.log('456');
+		// AndroidApp.startVideo();
 		//JsHandler.bufferingStop();
 	}
-    });*/
-    
+    });
+
     jwplayer().onPause(function () {
             state = jwplayer().getState();
             if(pos >0){
@@ -422,9 +422,13 @@ $(document).ready(function(){
 });
 function test()
 {
+	console.log("gdfg");
+	//test1();
 	//JsHandler.bufferingStart();
-	 AndroidApp.startVideo();
+	AndroidApp.startVideo();
 }
+
+
 
 </script>
 
