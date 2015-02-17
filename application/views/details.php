@@ -416,7 +416,10 @@ $(document).ready(function(){
     });
   // AndroidApp.startVideo();    
 });
-
+function test()
+{
+	alert('test');
+}
 
 </script>
 
