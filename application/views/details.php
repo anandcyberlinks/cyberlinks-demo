@@ -251,7 +251,7 @@ $(window).on('beforeunload', function(){
     jwplayer().onTime(function(event){	
 	console.log(event.position);
 	var epos = event.position;
-	if (epos >= 3.0 && epos < 4.0) {
+	if (epos >= 2.0 && epos < 4.0) {
 		jwplayer().setMute(false);
 		console.log('123stop');
 		window.location.href="<?php echo $uri;?>#1234"
