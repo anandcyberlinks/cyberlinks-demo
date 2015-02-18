@@ -33,6 +33,15 @@ $.validator.addClassRules({
     }
 });
 
+$('#CategoryForm').validate({
+    rules:{
+      'category':{
+        'required':true,
+        'minlength':2
+      },
+    }
+})
+
 
   $('#registerId').validate({
     rules:{
