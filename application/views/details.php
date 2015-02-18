@@ -194,10 +194,10 @@ $(window).on('beforeunload', function(){
     jwplayer("myElement").setup({
        //flashplayer: "assets/player.swf",
         primary: "html5",
-        file: "<?php echo $video_path;?>",
+        //file: "<?php echo $video_path;?>",
 	//file: "http://54.179.170.143:1935/live/370/playlist.m3u8",
        //file: "http://localhost/multitvfinal-demo/assets/upload/video/53f709efce75f.mp4",
-       //file: "rtmp://54.255.176.172:1935/live/newsnation_360p",
+       file: "rtmp://54.255.176.172:1935/live/newsnation_360p",
 	image: "<?php echo base_url().THUMB_LARGE_PATH. $thumbnail_path;?>",       
         //skin: "<?php echo base_url()?>assets/myskinjw/custom.xml",
 	width: "100%",
@@ -247,7 +247,14 @@ $(window).on('beforeunload', function(){
 		console.log('123start');
 	}
     });
-    
+    jwplayer().onTime(function(event){
+	console.log(event.position);
+	var epos = event.position;
+	if (epos >= 0.1) {
+		console.log('123stop');
+		window.location.href="<?php echo $uri;?>#1234"
+	}	
+    });
 
     jwplayer().onPause(function () {
             state = jwplayer().getState();
@@ -267,7 +274,8 @@ $(window).on('beforeunload', function(){
     jwplayer().onPlay(function () {
 	//var id = $('#analytics_id').val();
 	window.location.href="<?php echo $uri;?>#1234"
-	console.log('123stop');
+	//console.log(jwplayer().getState());
+	//console.log('123stop');
 	//console.log(jwplayer().getControls());
 	var is_complete = $('#is_complete').val();
 		//alert(is_complete);
