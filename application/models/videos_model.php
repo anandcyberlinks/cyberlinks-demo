@@ -304,7 +304,7 @@ class Videos_model extends CI_Model {
         $this->db->where('playlists.status', '1');
         $this->db->where_in('channels.uid', $id);
         if (isset($data['content_title']) && $data['content_title'] != '') {
-            $this->db->like('name', trim($data['content_title']));
+            $this->db->like('channels.name', trim($data['content_title']));
         }
         if (isset($data['category']) && $data['category'] != '') {
             $this->db->where('channels.category_id', $data['category']);
@@ -354,7 +354,7 @@ class Videos_model extends CI_Model {
         $this->db->where('playlists.status', '1');
         $this->db->where_in('channels.uid', $id);
         if (isset($data['content_title']) && $data['content_title'] != '') {
-            $this->db->like('name', trim($data['content_title']));
+            $this->db->like('channels.name', trim($data['content_title']));
         }
         if (isset($data['category']) && $data['category'] != '') {
             $this->db->where('channels.category_id', $data['category']);
