@@ -1,5 +1,6 @@
 $(document).ready(function(){
     var videoPath;
+    window.percents = 0.027154205;
     
 })
 $(function () {
@@ -1027,7 +1028,7 @@ function cuepoint()
             $.each(videInfo['result'],function(key,val){
             videoFile = val.url;
             type = val.type;
-            var from_percentageSet = val.duration *(0.027154205);
+            var from_percentageSet = val.duration *(window.percents);
             var finalPercentageSet = from_percentageSet.toFixed(5);
             innerHtml +='<tr  class="'+className+'"><td style="border-right: 1px solid gray;">'+i+'</td><td style="border-right: 1px solid gray;"><img width="50px" height="30px" src="'+val.thumbnail+'"></td><td style="border-right: 1px solid gray;padding-left: 20px" class="loading"><div class="progress xs"><div style="width: '+finalPercentageSet+'%;" class="progress-bar progress-bar-reen"></div></div></td><input type="hidden" class="video_id" name="video_id" value="'+val.id+'"><input type="hidden" class="duration" name="duration" value="'+val.duration+'"><input type="hidden" class="videoFile" name="videoFile" value="'+val.file+'"></tr>';
             i++;
@@ -1071,11 +1072,11 @@ function cuepoint()
                 $.each(cuePointInfo['result'],function(k,v){
                     //var onePercentage = 0.02302;
                     lastKey = v.cue_points;
-                    var from_percentage = v.cue_points *(0.05301561);
+                    var from_percentage = v.cue_points *(window.percents);
                     var finalPercentage = from_percentage.toFixed(5);
                     var removeClass = "append_"+v.cue_points;
                     var num = secTotime(v.cue_points);
-                    $(".irs").append("<span class='irs-single mybar1 "+ removeClass +"'  style='left: "+finalPercentage +"%;'>"+  num +"</span>");
+                    $(".irs").append("<span class='irs-single mybar1 "+ removeClass +"'  style='left: "+(finalPercentage-1) +"%;'>"+  num +"</span>");
                     $(".irs-with-grid").append("<span class='irs-bar mybar1 "+ removeClass +"' style='width:"+ finalPercentage +"%'></span>");
                     $(".irs-with-grid").append("<span class='irs-slider single mybar1 "+ removeClass +"' checkAttr = '"+v.title+"' style='left: "+ finalPercentage +"%;'></span>");                    
                             
@@ -1185,8 +1186,9 @@ function cuepoint()
                    var secToTime = secTotime(data.from);
                    var splitArr = secToTime.split(":");
                    //console.log(splitArr);
-                   $(".mm").val(splitArr[0]);
-                    $(".ss").val(splitArr[1]);
+                   $(".hh").val(splitArr[0]);
+                   $(".mm").val(splitArr[1]);
+                    $(".ss").val(splitArr[2]);
                     $("#cueName").val('');
                     $("#inialValPoint").val(intiaSetValPoint);
                     $("#forChangeVal").val(intiaSetValPoint);
@@ -1249,7 +1251,7 @@ $("#add").click(function(){
             data: {"timeInMillisec":timeInMillisec,"IDs" : IDs,"cueName" : cueName}  ,
             success: function (data)
             {
-               // console.log(data);
+              //console.log(data);
                 $(".hh,.ms,ss,.mm,#cueName").val('');
                 var singleVideoFlag1 = $("#singleVideoFlag").val();
                 if(singleVideoFlag1 == 1)
@@ -1262,25 +1264,27 @@ $("#add").click(function(){
                 }
                 
                 document.getElementById('closeClickEvent').style.pointerEvents = 'auto';              
-                var from_percentage1 = timeInMillisec *(0.027154205);
+                var from_percentage1 = timeInMillisec *(window.percents);
                 var finalPercentage1 = from_percentage1.toFixed(5);
+                //console.log(finalPercentage1)
                 var text     = $("#text").val();
                 
                var div_removeClass1 = "append_"+timeInMillisec;
+               var div_removeClass2 = "append_"+text;
                var forChangeVal     = $("#forChangeVal").val();
                var removeDiv1       = ".append_"+forChangeVal;
-             //  console.log("Text===>"+text +"Time Change ==>>"+ timeInMillisec+"class==>"+div_removeClass1);
+               //console.log("Text===>"+text +"Time Change ==>>"+ timeInMillisec+"class==>"+div_removeClass1);
                
-                if(text == timeInMillisec)
-                {
+                //if(text == timeInMillisec)
+                //{
                     //console.log("==========>"+div_removeClass1);
-                  $(".js-irs-0 .irs ."+div_removeClass1).remove(); 
-                  $(".js-irs-0 .irs .irs ."+div_removeClass1).remove();
-                  $(".js-irs-0 .irs-slider."+div_removeClass1).remove(); 
-                  $(".js-irs-0 .irs-single."+div_removeClass1).remove();
-                  $(".js-irs-0 .irs .irs-single."+div_removeClass1).remove();
+                  $(".js-irs-0 .irs ."+div_removeClass2).remove(); 
+                  $(".js-irs-0 .irs .irs ."+div_removeClass2).remove();
+                  $(".js-irs-0 .irs-slider."+div_removeClass2).remove(); 
+                  $(".js-irs-0 .irs-single."+div_removeClass2).remove();
+                  $(".js-irs-0 .irs .irs-single."+div_removeClass2).remove();
                   
-                    $(".js-irs-0").append("<span class='irs-single mybar1 "+ div_removeClass1 +"' style='left: "+ finalPercentage1 +"%;'>"+ secTotime(timeInMillisec) +"</span>");
+                    $(".js-irs-0").append("<span class='irs-single mybar1 "+ div_removeClass1 +"' style='left: "+ (finalPercentage1-1) +"%;'>"+ secTotime(timeInMillisec) +"</span>");
                     $(".irs-with-grid").append("<span class='irs-bar mybar1 "+ div_removeClass1 +"' style='left: 0%; width:"+ finalPercentage1 +"'></span>");
                     $(".irs-with-grid").append("<span class='irs-slider single mybar1 "+ div_removeClass1 +"' checkAttr = '"+cueName+"' style='left: "+ finalPercentage1 +"%;'></span>");
 
@@ -1290,7 +1294,7 @@ $("#add").click(function(){
                    // $(".js-irs-0 .irs-single"+removeDiv1).remove();
                     //$(".js-irs-0 .irs .irs-single"+removeDiv1).remove();
                     
-                }
+               // }
                 $("#percentage").val(finalPercentage1);
                $("#text").val(timeInMillisec);
                
@@ -1326,10 +1330,11 @@ setInterval(function(){
                   var secToTime = secTotime(subStr[1]);
                    var splitArr = secToTime.split(":");
                    //console.log(splitArr);
-                   $(".mm").val(splitArr[0]);
-                    $(".ss").val(splitArr[1]);
+                   $(".hh").val(splitArr[0]);
+                   $(".mm").val(splitArr[1]);
+                    $(".ss").val(splitArr[2]);
                     $("#cueName").val(cueName);
-                    var forChangeVal= parseInt(splitArr[0]*60)+parseInt(splitArr[1]);
+                    var forChangeVal= parseInt(splitArr[0]*60*60) + parseInt(splitArr[1]*60)+parseInt(splitArr[2]);
                     $("#forChangeVal").val(subStr[1]);
                     $("#forChangeVal").attr("checkAttr",cueName);
                                     var singleVideoFlag1 = $("#singleVideoFlag").val();
@@ -1355,22 +1360,28 @@ $("#update").click(function(){
      });
     
      var cuepointArr = {};
-     
+     $("#cue_err_msg").hide();
+     var hh =  $('.hh').val();
     var mm = $(".mm").val();
     var ss = $(".ss").val();
    var old_cueName =  $("#forChangeVal").attr("checkAttr");
      var cueName = $("#cueName").val();
-     var newVal= parseInt(mm*60)+parseInt(ss);
+     var newVal= parseInt(hh*60*60)+ parseInt(mm*60)+parseInt(ss);
+     if(newVal > 3600)
+     {
+         $("#cue_err_msg").show();
+         return false;
+     }
     var forChangeVal =$("#forChangeVal").val();
     var removeDiv2       = ".append_"+forChangeVal;
     var div_removeClass2 = "append_"+newVal;
-    var from_percentage1 = newVal *(0.027154205);
+    var from_percentage1 = newVal *(window.percents);
     var finalPercentage1 = from_percentage1.toFixed(5);
    // console.log(removeDiv2);
    // console.log(div_removeClass2);
     if(newVal!= forChangeVal)
                 {
-                    $(".irs").append("<span class='irs-single mybar1 "+ div_removeClass2 +"' style='left: "+ finalPercentage1 +"%;'>"+ secTotime(newVal)+"</span>");
+                    $(".irs").append("<span class='irs-single mybar1 "+ div_removeClass2 +"' style='left: "+ (finalPercentage1-1) +"%;'>"+ secTotime(newVal)+"</span>");
                     $(".irs-with-grid").append("<span class='irs-bar mybar1 "+ div_removeClass2 +"' style='left: 0.9009%; width:"+ finalPercentage1 +"'></span>");
                     $(".irs-with-grid").append("<span class='irs-slider single mybar1 "+ div_removeClass2 +"' checkAttr = '"+cueName+"' style='left: "+ finalPercentage1 +"%;'></span>");
 
@@ -1393,15 +1404,20 @@ $("#update").click(function(){
             var innerArray =[];
              //var time = $(this).text();
               var myStr = $(this).attr("class");
+              console.log(myStr);
               var subStr = myStr.match("append_(.*)");
+              console.log(subStr);
 
                   var secToTime = secTotime(subStr[1]);
+                  console.log(secToTime);
                    var SplitArray = secToTime.split(":");
+                   console.log(SplitArray);
 
              var cueName1 = $(this).attr("checkAttr");
              //console.log(cueName1);
              
-             var finalTime = parseInt(SplitArray[0]*60) + parseInt(SplitArray[1]);
+             //var finalTime = parseInt(SplitArray[0]*60) + parseInt(SplitArray[1]);
+             var finalTime = parseInt(SplitArray[0]*60*60) +parseInt(SplitArray[1]*60)+ parseInt(SplitArray[2]);
              
              //cuepointArr[i]['time']=time;
              //cuepointArr[i]['cuename']=cueName;
@@ -1463,7 +1479,7 @@ $("#delete").click(function(){
     var forChangeVal =$("#forChangeVal").val();
     var removeDiv2       = ".append_"+delVal;
     var div_removeClass2 = "append_"+delVal;
-    var from_percentage1 = newVal *(0.027154205);
+    var from_percentage1 = newVal *(window.percents);
     var finalPercentage1 = from_percentage1.toFixed(5);
        
         //--- get updated cuepoints list in array ---//        
@@ -1574,7 +1590,7 @@ function secTotime(num)
                     var date = new Date(1970,0,1);
                 date.setSeconds(num);
                 //return date.toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
-                return date.toTimeString().replace(/.*(\d{2}:\d{2}).*/, "$1");  
+                return date.toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");  
 }
 
 /* Advertising Slider Code End */

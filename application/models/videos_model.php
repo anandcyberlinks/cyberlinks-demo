@@ -1311,7 +1311,7 @@ class Videos_model extends CI_Model {
         
     }
    function updateCuePoints($post,$IDs) {
-    //print_r($post);
+     //echo '<pre>'; print_r($post);
        $this->db->where_in('content_id', $IDs);
        $this->db->delete('content_cuepoints');
         //print_r($post);

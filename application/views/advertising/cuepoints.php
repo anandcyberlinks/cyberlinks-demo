@@ -282,6 +282,9 @@
                                     <button class="btn btn-primary" type="submit" name="add" id="add">Add</button><button class="btn btn-primary" type="submit" name="update" id="update">Update</button>&nbsp;<a href="#" id="cancel" class="cancel">cancel</a>
                                 <span style="float:right;"><a href="#" id="delete" class="cancel">delete</a></span>
                                 </div>
+                                <div id="cue_err_msg" style="display:none;" class="form-group">
+                                    <span  style="color:red;">Maximum Cue Point is One hour.</span>
+                                </div>
                 </div>
             </div><!-- /.row - inside box -->
             </div><!-- /.box-body -->

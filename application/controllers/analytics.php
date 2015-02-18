@@ -240,8 +240,21 @@ class Analytics extends MY_Controller {
 		//--- search form content provider --//
 		$this->data['content_provider'] = $this->Analytics_model->getContentProvider();
 		//-----------------------//
+                
+                $this->load->library("pagination");
+                $config = array();
+                $config["base_url"] = base_url() . "analytics/content/$sort_i/$sort_by/?";
+                $config["total_rows"] = $this->Analytics_model->getReportCounts(array('type'=>'content','search'=>$search),$sort,$sort_by);
+                $config["per_page"] = 10;
+                $config["uri_segment"] = 3;
+                $config["page_query_string"] = true;
+                $this->pagination->initialize($config);
+                //$page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+                $page = ($_GET['per_page']) ? $_GET['per_page'] : 0;
 		
-		$this->data['content'] = $this->Analytics_model->getReport(array('type'=>'content','search'=>$search),$sort,$sort_by);
+		$this->data['content'] = $this->Analytics_model->getReport(array('type'=>'content','search'=>$search),$sort,$sort_by,PER_PAGE,$page);
+                $this->data["links"] = $this->pagination->create_links();
+                $this->data['total_rows'] = $config["total_rows"];
 				
 		$this->show_view('analytics/content_report',$this->data);
 	}
@@ -270,7 +283,21 @@ class Analytics extends MY_Controller {
 		$summary = $this->Analytics_model->getReport(array('type'=>'summary','search'=>$search),$sort,$sort_by);
 		$this->data['summary'] = $summary[0];		
 		//echo '<pre>';print_r($summary);die;
-		$this->data['user'] = $this->Analytics_model->getReport(array('type'=>'user','search'=>$search),$sort,$sort_by);
+                
+                $this->load->library("pagination");
+                $config = array();
+                $config["base_url"] = base_url() . "analytics/user/$sort_i/$sort_by/?";
+                $config["total_rows"] = $this->Analytics_model->getReportCounts(array('type'=>'user','search'=>$search),$sort,$sort_by);
+                $config["per_page"] = 10;
+                $config["uri_segment"] = 3;
+                $config["page_query_string"] = true;
+                $this->pagination->initialize($config);
+                //$page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+                $page = ($_GET['per_page']) ? $_GET['per_page'] : 0;
+                
+		$this->data['user'] = $this->Analytics_model->getReport(array('type'=>'user','search'=>$search),$sort,$sort_by,PER_PAGE,$page);
+                $this->data["links"] = $this->pagination->create_links();
+                $this->data['total_rows'] = $config["total_rows"];
 				
 		$this->show_view('analytics/user_report',$this->data);
 	}
@@ -311,7 +338,20 @@ class Analytics extends MY_Controller {
 		$this->data['content_provider'] = $this->Analytics_model->getContentProvider();
 		//-----------------------//
 		
-		$this->data['content'] = $this->Analytics_model->getReport(array('id'=>$id,'type'=>'content','search'=>$search),$sort,$sort_by);
+                $this->load->library("pagination");
+                $config = array();
+                $config["base_url"] = base_url() . "analytics/usercontent/$sort_i/$sort_by/?";
+                $config["total_rows"] = $this->Analytics_model->getReportCounts(array('id'=>$id,'type'=>'content','search'=>$search),$sort,$sort_by);
+                $config["per_page"] = 10;
+                $config["uri_segment"] = 3;
+                $config["page_query_string"] = true;
+                $this->pagination->initialize($config);
+                //$page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+                $page = ($_GET['per_page']) ? $_GET['per_page'] : 0;
+                
+		$this->data['content'] = $this->Analytics_model->getReport(array('id'=>$id,'type'=>'content','search'=>$search),$sort,$sort_by,PER_PAGE,$page);
+                $this->data["links"] = $this->pagination->create_links();
+                $this->data['total_rows'] = $config["total_rows"];
 				
 		$this->show_view('analytics/user_content_report',$this->data);
 	}
@@ -339,8 +379,23 @@ class Analytics extends MY_Controller {
 		//-- summary report --//
 		$summary = $this->Analytics_model->getReport(array('type'=>'summary','search'=>$search),$sort,$sort_by);
 		$this->data['summary'] = $summary[0];		
-		//echo '<pre>';print_r($summary);die;		
-		$this->data['useragent'] = $this->Analytics_model->getReport(array('type'=>'useragent','search'=>$search),$sort,$sort_by);
+		//echo '<pre>';print_r($summary);die;	
+                
+                $this->load->library("pagination");
+                $config = array();
+                $config["base_url"] = base_url() . "analytics/device/$sort_i/$sort_by/?";
+                $config["total_rows"] = $this->Analytics_model->getReportCounts(array('type'=>'useragent','search'=>$search),$sort,$sort_by);
+                $config["per_page"] = 10;
+                $config["uri_segment"] = 3;
+                $config["page_query_string"] = true;
+                $this->pagination->initialize($config);
+                //$page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+                $page = ($_GET['per_page']) ? $_GET['per_page'] : 0;
+                
+                
+		$this->data['useragent'] = $this->Analytics_model->getReport(array('type'=>'useragent','search'=>$search),$sort,$sort_by,PER_PAGE,$page);
+                $this->data["links"] = $this->pagination->create_links();
+                $this->data['total_rows'] = $config["total_rows"];
 				
 		$this->show_view('analytics/device_report',$this->data);
 	}

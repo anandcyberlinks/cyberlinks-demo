@@ -139,7 +139,9 @@ function  updateCuePoint()
           //print_r($data);
           //die();
           //$editFlag = $_POST['editFlag'];
-       $updateStatus = $this->videos_model->updateCuePoints($data,$_POST['IDs']);
+          if(count($data) > 0){
+            $updateStatus = $this->videos_model->updateCuePoints($data,$_POST['IDs']);
+          }
        
     }
         
