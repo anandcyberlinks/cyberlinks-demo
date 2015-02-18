@@ -54,6 +54,16 @@ class Webtv extends MY_Controller {
         $data["links"] = $this->pagination->create_links();
         $this->show_view('webtv', $data);
     }
+    
+    function publish(){
+        $id = $this->uri->segment('3');
+        $publish = ($this->uri->segment('4')==0)?'1':'0';
+        $this->db->where('id', $id);
+        $this->db->set('publish',$publish);
+        $this->db->update('playlists');
+        echo $publish;
+    }
+    
 
     function add() {
         $data['welcome'] = $this;
@@ -113,6 +123,7 @@ class Webtv extends MY_Controller {
 
     function delete() {
         $id = $_GET['id'];
+        //echo $id; die;
         $this->webtv_model->delete($id);
         $this->session->set_flashdata('message', $this->_successmsg($this->loadPo($this->config->item('success_record_delete'))));
         redirect($_GET['curl']);
@@ -120,6 +131,7 @@ class Webtv extends MY_Controller {
 
     function delete_channels() {
         $id = $_GET['id'];
+       // echo $id; die;
         $this->webtv_model->delete_channels($id);
         $this->session->set_flashdata('message', $this->_successmsg($this->loadPo($this->config->item('success_record_delete'))));
         redirect(base_url() . 'webtv');

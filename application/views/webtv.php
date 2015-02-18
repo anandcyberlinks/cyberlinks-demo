@@ -75,6 +75,7 @@
                                             <th><?php echo $welcome->loadPo('Name') ?></th>
                                             <th><?php echo $welcome->loadPo('Description') ?></th>
                                             <th><?php echo $welcome->loadPo('Status') ?></th>
+                                            <th><?php echo $welcome->loadPo('Punlish') ?></th>
                                             <th><?php echo $welcome->loadPo('URL') ?></th>
                                             <th><?php echo $welcome->loadPo('Start Date') ?></th>
                                             <th><?php echo $welcome->loadPo('End Date') ?></th>
@@ -89,11 +90,13 @@
                                             <tr id="<?php echo $value->id ?>">
                                                 <td><?php echo $value->name; ?></td>
                                                 <td><?php echo $value->description; ?></td>
-                                                <td><?php if ($value->status == 1) { ?>
-                                                        <img src="<?php echo base_url(); ?>assets/img/test-pass-icon.png" alt="Active" />
-                                                    <?php } else { ?>
-                                                        <img src="<?php echo base_url(); ?>assets/img/test-fail-icon.png" alt="Active" />
-                                                    <?php } ?></td>
+                                                <td align="center"><i class="<?=($value->status == 1)?'fa fa-fw fa-check-circle-o text-green lead':'fa fa-fw fa-circle-o text-red lead'?>"></i></td>
+
+                                                <td align="center"><a class="publish" publist_id="<?=$value->id?>" href="javascript:void(0)" link="<?=base_url().'webtv/publish/'.$value->id.'/'.$value->publish?>" ><i id="p<?=$value->id?>" class="<?=($value->publish == 1)?'fa fa-fw fa-check-circle-o text-green lead':'fa fa-fw fa-circle-o text-red lead'?>"></i></a></td>
+                                                
+                                                
+                                                
+                                                
                                                 <td style='text-align:center'>
                                                     <?php if ($value->url == '') { ?>
                                                         --
@@ -202,4 +205,26 @@
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal -->
-</div> 
+</div>
+<script>
+$(".publish").click(function(data){
+    var thisa = $(this);
+    var url = $(this).attr('link');
+    var publist_id = $(this).attr('publist_id');
+    $.ajax({
+       'url': url
+    }).done(function(response){
+        console.log(response);
+        if(response == 0 ){
+            //alert(thisa.attr('link'));
+            thisa.attr('link','http://localhost/multitvfinal/webtv/publish/92/0');
+            $("#p"+publist_id).removeClass('fa-check-circle-o text-green');
+            $("#p"+publist_id).addClass('fa-circle-o text-red');
+        } else {
+            thisa.attr('link','http://localhost/multitvfinal/webtv/publish/92/1');
+            $("#p"+publist_id).removeClass('fa-circle-o text-red');
+            $("#p"+publist_id).addClass('fa-check-circle-o text-green');
+        }
+    });
+});
+</script>
