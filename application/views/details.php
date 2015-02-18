@@ -239,15 +239,15 @@ $(window).on('beforeunload', function(){
 	var duration;  
 	var pos=0;
 	
-    
+    /*
     jwplayer().onBuffer(function(event){
 	//console.log(jwplayer().getState());
 	if (jwplayer().getState()=='BUFFERING') {		
 		//$( document ).trigger( "myCustomEvent" );
-		window.location.href="<?php echo $uri;?>#123"
+		//window.location.href="<?php //echo $uri;?>#123"
 	}
     });
-    
+    */
 
     jwplayer().onPause(function () {
             state = jwplayer().getState();
@@ -266,8 +266,8 @@ $(window).on('beforeunload', function(){
 
     jwplayer().onPlay(function () {
 	//var id = $('#analytics_id').val();
-	window.location.href="<?php echo $uri;?>#1234"
-	console.log(jwplayer().getControls());
+	//window.location.href="<?php echo $uri;?>#1234"
+	//console.log(jwplayer().getControls());
 	var is_complete = $('#is_complete').val();
 		//alert(is_complete);
 		if (is_complete == '1' && state != 'PAUSED') {		
