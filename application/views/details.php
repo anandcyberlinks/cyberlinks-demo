@@ -199,10 +199,10 @@ $(window).on('beforeunload', function(){
        //file: "http://localhost/multitvfinal-demo/assets/upload/video/53f709efce75f.mp4",
        //file: "rtmp://54.255.176.172:1935/live/newsnation_360p",
 	image: "<?php echo base_url().THUMB_LARGE_PATH. $thumbnail_path;?>",       
-        //skin: "<?php echo base_url()?>assets/myskinjw/custom.xml",
+        skin: "<?php echo base_url()?>assets/myskinjw/custom.xml",
 	width: "100%",
  aspectratio: "16:9",
- controls: false,
+ //controls: false,
  stretching: "exactfit",
 //autostart: 1,
         logo: {
@@ -239,18 +239,18 @@ $(window).on('beforeunload', function(){
 	var duration;  
 	var pos=0;
 	
-    
+    /*
     jwplayer().onBuffer(function(event){
 	//console.log(jwplayer().getState());
 	if (jwplayer().getState()=='BUFFERING') {				
 		window.location.href="<?php echo $uri;?>#123"
 		console.log('123start');
 	}
-    });
+    });*/
     jwplayer().onTime(function(event){
 	console.log(event.position);
 	var epos = event.position;
-	if (epos >= 0.1) {
+	if (epos >= 3.0 && epos < 4.0) {
 		console.log('123stop');
 		window.location.href="<?php echo $uri;?>#1234"
 	}	
@@ -286,6 +286,7 @@ $(window).on('beforeunload', function(){
         });
     
     jwplayer().onComplete(function () {
+	
 	state=''; //-- set reset state --//
         /*
     if(pos >0){
@@ -402,18 +403,24 @@ jwplayer().onAdError(function(event) {
 var ad_duration=0;
 //-- play ads ---//
 jwplayer().onAdImpression(function (event) {
+	console.log('123start');
 	var tag = event.tag;
 	playAds(tag);
 });
 
 jwplayer().onAdTime(function(event) {
   ad_duration = Math.round(event.position);
+  if (ad_duration >= 1.0 && ad_duration < 2 ) {
+	console.log('123stop');
+  }
+  
  //console.log(ad_duration);
   //console.log("progress","The ad completes in "+remaining+" seconds.");
 });
 	
 //--- advertising analytics ---//
 jwplayer().onAdComplete(function(event){
+	console.log('123start');
 	completeAds(ad_duration);
 }); 
    
