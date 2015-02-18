@@ -199,10 +199,10 @@ $(window).on('beforeunload', function(){
        //file: "http://localhost/multitvfinal-demo/assets/upload/video/53f709efce75f.mp4",
        //file: "rtmp://54.255.176.172:1935/live/newsnation_360p",
 	image: "<?php echo base_url().THUMB_LARGE_PATH. $thumbnail_path;?>",       
-        skin: "<?php echo base_url()?>assets/myskinjw/custom.xml",
+       // skin: "<?php echo base_url()?>assets/myskinjw/custom.xml",
 	width: "100%",
  aspectratio: "16:9",
- //controls: false,
+ controls: false,
  stretching: "exactfit",
 //autostart: 1,
         logo: {
