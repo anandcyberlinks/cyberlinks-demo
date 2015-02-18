@@ -273,7 +273,7 @@ $(window).on('beforeunload', function(){
 
     jwplayer().onPlay(function () {
 	//var id = $('#analytics_id').val();
-	window.location.href="<?php echo $uri;?>#1234"
+	//window.location.href="<?php echo $uri;?>#1234"
 	//console.log(jwplayer().getState());
 	//console.log('123stop');
 	//console.log(jwplayer().getControls());
@@ -404,6 +404,7 @@ var ad_duration=0;
 //-- play ads ---//
 jwplayer().onAdImpression(function (event) {
 	console.log('123start');
+	window.location.href="<?php echo $uri;?>#123"
 	var tag = event.tag;
 	playAds(tag);
 });
@@ -412,6 +413,7 @@ jwplayer().onAdTime(function(event) {
   ad_duration = Math.round(event.position);
   if (ad_duration >= 1.0 && ad_duration < 2 ) {
 	console.log('123stop');
+	window.location.href="<?php echo $uri;?>#1234"
   }
   
  //console.log(ad_duration);
@@ -421,6 +423,7 @@ jwplayer().onAdTime(function(event) {
 //--- advertising analytics ---//
 jwplayer().onAdComplete(function(event){
 	console.log('123start');
+	window.location.href="<?php echo $uri;?>#123"
 	completeAds(ad_duration);
 }); 
    
