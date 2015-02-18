@@ -24,7 +24,7 @@
 <script type="text/javascript" src="<?php echo base_url(); ?>./assets/js/jwplayer.js" ></script>
 <script type="text/javascript">jwplayer.key = "BC9ahgShNRQbE4HRU9gujKmpZItJYh5j/+ltVg==";</script>
 <script src="<?php echo base_url() ?>assets/js/jquery-1.10.2.js"></script>
-<script src="<?php echo base_url() ?>assets/js/aa.js"></script>
+
 <?php if(count($result)>0){
 	$content_id = $result->content_id;
 	$content_provider = $result->content_provider;
@@ -197,7 +197,8 @@ $(window).on('beforeunload', function(){
         file: "<?php echo $video_path;?>",
 	//file: "http://54.179.170.143:1935/live/370/playlist.m3u8",
        //file: "http://localhost/multitvfinal-demo/assets/upload/video/53f709efce75f.mp4",
-        image: "<?php echo base_url().THUMB_LARGE_PATH. $thumbnail_path;?>",       
+       //file: "rtmp://54.255.176.172:1935/live/newsnation_360p",
+	image: "<?php echo base_url().THUMB_LARGE_PATH. $thumbnail_path;?>",       
         //skin: "<?php echo base_url()?>assets/myskinjw/custom.xml",
 	width: "100%",
  aspectratio: "16:9",
@@ -243,7 +244,7 @@ $(window).on('beforeunload', function(){
 	//console.log(jwplayer().getState());
 	if (jwplayer().getState()=='BUFFERING') {		
 		//$( document ).trigger( "myCustomEvent" );
-		window.location.href="<?php echo $uri;?>#123"
+		//window.location.href="<?php echo $uri;?>#123"
 	}
     });
     
@@ -265,7 +266,7 @@ $(window).on('beforeunload', function(){
 
     jwplayer().onPlay(function () {
 	//var id = $('#analytics_id').val();
-	window.location.href="<?php echo $uri;?>#1234"
+	//window.location.href="<?php echo $uri;?>#1234"
 	console.log(jwplayer().getControls());
 	var is_complete = $('#is_complete').val();
 		//alert(is_complete);
