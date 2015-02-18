@@ -85,9 +85,11 @@
                     <div class="col-xs-12">
                         <div class="box">
                             <div class="box-body table-responsive">
+                                <?php if ($this->pagination->total_rows != '0') { ?>
                                 <div><a id="linkClicklive"   data-toggle="modal" data-backdrop="static" href="#tester" data-toggle="modal" value='Edit'>Edit</a>
 
                                     </div>
+                                <?php } ?>
                                 <table id="example2" class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
