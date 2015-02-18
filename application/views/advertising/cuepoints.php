@@ -83,6 +83,9 @@
                     <div class="col-xs-12">
                         <div class="box">
                             <div class="box-body table-responsive">
+                                <div><a id="linkClick"   data-toggle="modal" data-backdrop="static" href="#tester" data-toggle="modal" value='Edit'>Edit</a>
+
+                                    </div>
                                 <table id="example2" class="table table-bordered table-striped">
                                     <thead>
                                         <tr>

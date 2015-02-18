@@ -85,6 +85,9 @@
                     <div class="col-xs-12">
                         <div class="box">
                             <div class="box-body table-responsive">
+                                <div><a id="linkClicklive"   data-toggle="modal" data-backdrop="static" href="#tester" data-toggle="modal" value='Edit'>Edit</a>
+
+                                    </div>
                                 <table id="example2" class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
@@ -263,9 +266,9 @@
                     <div class="form-group">                        
                      <label style="display:block;" for="exampleInputEmail1">Timecode(hh:mm:ss)</label>
                     <div class="input_fields_wrap">
-                    <input maxlength=3 style='width:35px;display:inline' type="text" name="hh[]" id="hh_1" placeholder="hh" class="form-control input-sm hh">:
-                    <input maxlength=2 style='width:35px;display:inline;' type="text" name="mm[]" id="mm_1" placeholder="mm" class="form-control input-sm mm">:                                    
-                    <input maxlength=2 style='width:35px;display:inline' type="text" name="ss[]" id="ss_1" placeholder="ss" class="form-control input-sm ss">
+                        <input maxlength=3 style='width:35px;display:inline' type="text" name="hh[]" id="hh_1" placeholder="hh" value="00" class="form-control input-sm hh">:
+                    <input maxlength=2 style='width:35px;display:inline;' type="text" name="mm[]" id="mm_1" placeholder="mm" value="00" class="form-control input-sm mm">:                                    
+                    <input maxlength=2 style='width:35px;display:inline' type="text" name="ss[]" id="ss_1" placeholder="ss" value="00" class="form-control input-sm ss">
                     <button class="add_field_button">Add More</button>
                     <span id="errTime_1" style="color:red; display: none;">Please fill valid time format.</span>
                     </div>
@@ -349,9 +352,9 @@
             x++; //text box increment
             
             //$(wrapper).append('<div>Timecode(hh:mm:ss) <input class="hh" name="hh[]"> :<input class="mm" name="mm[]"> : <input class="ss" name="ss[]"><a href="#" class="remove_field">Remove</a> <span id="errTime_'+x+'" style="color:red; display: none;">Please fill valid time format.</span></div>'); //add input box
-        var htm = '<div id="timecode_'+x+'"><input maxlength=3 style="width:35px;display:inline" type="text" name="hh[]" id="hh_'+x+'" placeholder="hh" class="form-control input-sm hh">: ';
-      htm +='<input maxlength=2 style="width:35px;display:inline;" type="text" name="mm[]" id="mm_'+x+'" placeholder="mm" class="form-control input-sm mm">: '; 
-      htm += '<input maxlength=2 style="width:35px;display:inline" type="text" name="ss[]" id="ss_'+x+'" placeholder="ss" class="form-control input-sm ss">';                    
+        var htm = '<div id="timecode_'+x+'"><input maxlength=3 style="width:35px;display:inline" type="text" name="hh[]" id="hh_'+x+'" placeholder="hh" value="00" class="form-control input-sm hh">: ';
+      htm +='<input maxlength=2 style="width:35px;display:inline;" type="text" name="mm[]" id="mm_'+x+'" placeholder="mm" value="00" class="form-control input-sm mm">: '; 
+      htm += '<input maxlength=2 style="width:35px;display:inline" type="text" name="ss[]" id="ss_'+x+'" placeholder="ss" value="00" class="form-control input-sm ss">';                    
     htm +='<a href="#" class="remove_field">Remove</a><span id="errTime_'+x+'" style="color:red; display: none;">Please fill valid time format.</span></div> ';
     //console.log(htm);
     $(wrapper).append(htm);
