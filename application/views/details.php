@@ -194,16 +194,17 @@ $(window).on('beforeunload', function(){
     jwplayer("myElement").setup({
        //flashplayer: "assets/player.swf",
         primary: "html5",
-        file: "<?php echo $video_path;?>",
+       // file: "<?php echo $video_path;?>",
 	//file: "http://54.179.170.143:1935/live/370/playlist.m3u8",
        //file: "http://localhost/multitvfinal-demo/assets/upload/video/53f709efce75f.mp4",
-      // file: "rtmp://54.255.176.172:1935/live/newsnation_360p",
+       file: "rtmp://54.255.176.172:1935/live/newsnation_360p",
 	image: "<?php echo base_url().THUMB_LARGE_PATH. $thumbnail_path;?>",       
        // skin: "<?php echo base_url()?>assets/myskinjw/custom.xml",
 	width: "100%",
  aspectratio: "16:9",
  controls: false,
  stretching: "exactfit",
+ mute: true,
 //autostart: 1,
         logo: {
         file: "<?php echo base_url()?>assets/img/logo.jpg",	
@@ -247,8 +248,7 @@ $(window).on('beforeunload', function(){
 		console.log('123start');
 	}
     });*/
-    jwplayer().onTime(function(event){
-	jwplayer().setMute(true);
+    jwplayer().onTime(function(event){	
 	console.log(event.position);
 	var epos = event.position;
 	if (epos >= 3.0 && epos < 4.0) {
@@ -415,7 +415,7 @@ jwplayer().onAdImpression(function (event) {
 jwplayer().onAdTime(function(event) {
   ad_duration = Math.round(event.position);
   if (ad_duration >= 1.0 && ad_duration < 2 ) {
-	jwplayer().setMute(true);
+	jwplayer().setMute(false);
 	console.log('123stop');
 	window.location.href="<?php echo $uri;?>#1234"
   }
@@ -426,7 +426,7 @@ jwplayer().onAdTime(function(event) {
 	
 //--- advertising analytics ---//
 jwplayer().onAdComplete(function(event){
-	jwplayer().setMute(false);
+	jwplayer().setMute(true);
 	console.log('123start');
 	window.location.href="<?php echo $uri;?>#123"
 	completeAds(ad_duration);
