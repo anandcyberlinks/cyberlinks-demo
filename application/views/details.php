@@ -244,7 +244,7 @@ $(window).on('beforeunload', function(){
 	//console.log(jwplayer().getState());
 	if (jwplayer().getState()=='BUFFERING') {		
 		//$( document ).trigger( "myCustomEvent" );
-		//window.location.href="<?php echo $uri;?>#123"
+		window.location.href="<?php echo $uri;?>#123"
 	}
     });
     
@@ -266,7 +266,7 @@ $(window).on('beforeunload', function(){
 
     jwplayer().onPlay(function () {
 	//var id = $('#analytics_id').val();
-	//window.location.href="<?php echo $uri;?>#1234"
+	window.location.href="<?php echo $uri;?>#1234"
 	console.log(jwplayer().getControls());
 	var is_complete = $('#is_complete').val();
 		//alert(is_complete);
