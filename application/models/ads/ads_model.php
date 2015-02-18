@@ -885,8 +885,10 @@ class Ads_model extends CI_Model {
     }
      
      if($lat !='' && $long!=''){
-      $distance = ',MIN(ROUND(((ACOS(SIN('.$lat.' * PI() / 180) * SIN(al.latitude * PI() / 180) + COS('.$lat.' * PI() / 180) * COS(al.latitude * PI() / 180) * COS(('.$long.' - al.longitude) * PI() / 180)) * 180 / PI()) * 60 * 1.1515))) AS distance';
+      $distance_query = 'MIN(ROUND(((ACOS(SIN('.$lat.' * PI() / 180) * SIN(al.latitude * PI() / 180) + COS('.$lat.' * PI() / 180) * COS(al.latitude * PI() / 180) * COS(('.$long.' - al.longitude) * PI() / 180)) * 180 / PI()) * 60 * 1.1515)))';
       $this->db->order_by('distance');
+      $distance = ",".$distance_query." AS distance";      
+//      $this->db->order_by("CASE WHEN $distance_query IS NULL THEN 1 ELSE 0 END");
      }
       $this->db->select('a.uid,a.ad_type,c.name as file_name,k.name as tags,c.relative_path as vast_file,a.id as ads_id'.$distance);     
       $this->db->from('ads a');
@@ -918,9 +920,9 @@ class Ads_model extends CI_Model {
       }
       $this->db->from('content_cuepoints');
       $this->db->where('content_id',$id);
-      
+      $this->db->order_by('cue_points');
       $query = $this->db->get();
-     // echo '<br>'.$this->db->last_query();die;
+      //echo '<br>'.$this->db->last_query();
       if($flag){
       $result = $query->row();
 	 return $result->tot;
