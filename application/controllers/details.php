@@ -62,8 +62,8 @@ class Details extends MY_Controller {
                 
                 $device = $_GET['device'];
 		$this->data['user_id'] = $_GET['user_id'];
-		
-		
+				//echo '<pre>';print_r($_SERVER);die;
+		$this->data['uri'] = "http://".$_SERVER[SERVER_NAME].$_SERVER[REQUEST_URI];
 		if($type=='live'){
 			$this->data['result'] =  $this->Video_model->livestream_play($id,$device);	
 		}else{

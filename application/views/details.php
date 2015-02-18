@@ -198,7 +198,7 @@ $(window).on('beforeunload', function(){
 	//file: "http://54.179.170.143:1935/live/370/playlist.m3u8",
        //file: "http://localhost/multitvfinal-demo/assets/upload/video/53f709efce75f.mp4",
         image: "<?php echo base_url().THUMB_LARGE_PATH. $thumbnail_path;?>",       
-        skin: "<?php echo base_url()?>assets/myskinjw/custom.xml",
+        //skin: "<?php echo base_url()?>assets/myskinjw/custom.xml",
 	width: "100%",
  aspectratio: "16:9",
  controls: false,
@@ -243,7 +243,7 @@ $(window).on('beforeunload', function(){
 	//console.log(jwplayer().getState());
 	if (jwplayer().getState()=='BUFFERING') {		
 		//$( document ).trigger( "myCustomEvent" );
-		window.location.href="http://localhost/multitvfinal-demo/index.php/details?user_id=1&id=37&device=3g&lat=28.472097&lng=77.072546&type=live&device=android#123"
+		window.location.href="<?php echo $uri;?>#123"
 	}
     });
     
@@ -265,7 +265,7 @@ $(window).on('beforeunload', function(){
 
     jwplayer().onPlay(function () {
 	//var id = $('#analytics_id').val();
-	window.location.href="http://localhost/multitvfinal-demo/index.php/details?user_id=1&id=37&device=3g&lat=28.472097&lng=77.072546&type=live&device=android#1234"
+	window.location.href="<?php echo $uri;?>#1234"
 	console.log(jwplayer().getControls());
 	var is_complete = $('#is_complete').val();
 		//alert(is_complete);
@@ -420,6 +420,7 @@ $(document).ready(function(){
     });
   // AndroidApp.startVideo();    
 });
+/*
 function test()
 {
 	console.log("gdfg");
@@ -427,7 +428,7 @@ function test()
 	//JsHandler.bufferingStart();
 	AndroidApp.startVideo();
 }
-
+*/
 
 
 </script>
