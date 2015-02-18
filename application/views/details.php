@@ -194,10 +194,10 @@ $(window).on('beforeunload', function(){
     jwplayer("myElement").setup({
        //flashplayer: "assets/player.swf",
         primary: "html5",
-        //file: "<?php echo $video_path;?>",
+        file: "<?php echo $video_path;?>",
 	//file: "http://54.179.170.143:1935/live/370/playlist.m3u8",
        //file: "http://localhost/multitvfinal-demo/assets/upload/video/53f709efce75f.mp4",
-       file: "rtmp://54.255.176.172:1935/live/newsnation_360p",
+       //file: "rtmp://54.255.176.172:1935/live/newsnation_360p",
 	image: "<?php echo base_url().THUMB_LARGE_PATH. $thumbnail_path;?>",       
         //skin: "<?php echo base_url()?>assets/myskinjw/custom.xml",
 	width: "100%",
