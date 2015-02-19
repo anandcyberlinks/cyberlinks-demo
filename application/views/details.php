@@ -198,17 +198,18 @@ $(window).on('beforeunload', function(){
         file: "<?php echo $video_path;?>",
 	//file: "http://54.179.170.143:1935/live/370/playlist.m3u8",
        //file: "http://localhost/multitvfinal-demo/assets/upload/video/53f709efce75f.mp4",
-      // file: "rtmp://54.255.176.172:1935/live/newsnation_360p",
+       //file: "rtmp://54.255.176.172:1935/live/newsnation_360p",
 	image: "<?php echo base_url().THUMB_LARGE_PATH. $thumbnail_path;?>",       
        // skin: "<?php echo base_url()?>assets/myskinjw/custom.xml",
 	width: "100%",
  aspectratio: "16:9",
  controls: false,
  stretching: "exactfit",
- mute: true,
+ //mute: true,
 autostart: 1,
         logo: {
-        file: "<?php echo base_url()?>assets/img/logo.png",	
+        file: "<?php echo base_url()?>assets/img/logo.png",
+	margin: 1,	
         },
         advertising: {
 	client: "vast",
@@ -224,6 +225,7 @@ autostart: 1,
 		offset: '<?php echo ($offset==0 ? 'pre': $offset); ?>',
 		//'skipoffset':5,
 		tag: "<?php echo ($row['ad_type'] != 'External' ? base_url():'') . $row['vast_file']; ?>?<?php echo $row['ads_id']?>/<?php echo $user_id?>/<?php echo $row['uid']?>"
+		//tag: "http://182.18.165.43/vast/getvast.php?banner=Rock%20Music"
 		},
 	   <?php $i++;
        } ?>                    
