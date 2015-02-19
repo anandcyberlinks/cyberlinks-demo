@@ -94,6 +94,7 @@ $(window).on('beforeunload', function(){
 		//ga('send', 'event', 'IOSVideo', 'Play', 'IOS video test' ,pos);
 		//-- send view count in database --//	     
 	}
+	//console.log(jwplayer().getState());
 	jwplayer().play(true); //-- auto play for mobile	
 	play();
     }
@@ -197,7 +198,7 @@ $(window).on('beforeunload', function(){
         file: "<?php echo $video_path;?>",
 	//file: "http://54.179.170.143:1935/live/370/playlist.m3u8",
        //file: "http://localhost/multitvfinal-demo/assets/upload/video/53f709efce75f.mp4",
-       //file: "rtmp://54.255.176.172:1935/live/newsnation_360p",
+      // file: "rtmp://54.255.176.172:1935/live/newsnation_360p",
 	image: "<?php echo base_url().THUMB_LARGE_PATH. $thumbnail_path;?>",       
        // skin: "<?php echo base_url()?>assets/myskinjw/custom.xml",
 	width: "100%",
@@ -205,24 +206,22 @@ $(window).on('beforeunload', function(){
  controls: false,
  stretching: "exactfit",
  mute: true,
-//autostart: 1,
+autostart: 1,
         logo: {
-        file: "<?php echo base_url()?>assets/img/logo.jpg",	
+        file: "<?php echo base_url()?>assets/img/logo.png",	
         },
         advertising: {
-	admessage: ' ',		
 	client: "vast",
 	//skipoffset: 5,
 	schedule: {
-       <?php
-       
+       <?php       
        $i = 1;
        foreach ($scheduleBreaks as $row) {
 	   //$offset = ($row->offset_hrs * 3600) + ($row->offset_minutes * 60) + ($row->offset_seconds);
-	   $offset = $row['cue_points'];
+	   $offset = $row['cue_points'];	   
 	   ?>
 		adbreak<?php echo $i; ?>: {
-		offset: "<?php echo $offset; ?>",
+		offset: '<?php echo ($offset==0 ? 'pre': $offset); ?>',
 		//'skipoffset':5,
 		tag: "<?php echo ($row['ad_type'] != 'External' ? base_url():'') . $row['vast_file']; ?>?<?php echo $row['ads_id']?>/<?php echo $user_id?>/<?php echo $row['uid']?>"
 		},
@@ -230,11 +229,24 @@ $(window).on('beforeunload', function(){
        } ?>                    
 	}
 	
+	
 }
 	
         //skin: "myCoolSkin/roundster.xml",       
     });
 
+
+    
+    jwplayer().onTime(function(event){	
+	//console.log(event.position);
+	var epos = event.position;
+	if (epos >= 2.0 && epos < 4.0) {
+		jwplayer().setMute(false);
+		console.log('123stop');
+		window.location.href="<?php echo $uri;?>#1234"
+	}	
+    });
+    
 	autoplay(); //--auto play jwplayer --//
 	
 	var duration;  
@@ -248,15 +260,7 @@ $(window).on('beforeunload', function(){
 		console.log('123start');
 	}
     });*/
-    jwplayer().onTime(function(event){	
-	console.log(event.position);
-	var epos = event.position;
-	if (epos >= 2.0 && epos < 4.0) {
-		jwplayer().setMute(false);
-		console.log('123stop');
-		window.location.href="<?php echo $uri;?>#1234"
-	}	
-    });
+
 
     jwplayer().onPause(function () {
             state = jwplayer().getState();
