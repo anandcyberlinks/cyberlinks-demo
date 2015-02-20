@@ -225,9 +225,9 @@ autostart: 1,
 		adbreak<?php echo $i; ?>: {
 		offset: '<?php echo ($offset==0 ? 'pre': $offset); ?>',
 		//'skipoffset':5,
-		//tag: "<?php echo ($row['ad_type'] != 'External' ? base_url():'') . $row['vast_file']; ?>?<?php echo $row['ads_id']?>/<?php echo $user_id?>/<?php echo $row['uid']?>"
+		tag: "<?php echo ($row['ad_type'] != 'External' ? base_url():'') . $row['vast_file']; ?>?<?php echo $row['ads_id']?>/<?php echo $user_id?>/<?php echo $row['uid']?>"
 		//tag: "http://182.18.165.43/vast/getvast.php?banner=Rock%20Music"
-		tag: "http://localhost/multitvfinal-demo/assets/upload/ads/vast/revive.xml"
+		//tag: "http://localhost/multitvfinal-demo/assets/upload/ads/vast/revive.xml"
 		},
 	   <?php $i++;
        } ?>                    
