@@ -338,7 +338,7 @@ autostart: 1,
 		postal_code: postal_code,
 		latitude: '<?php echo $lat;?>',
 		longitude: '<?php echo $long;?>',
-		//platform: '<?php echo $platform;?>'
+		platform: '<?php echo $platform;?>'
 		},
 		cache: false,
 		type: "post"
