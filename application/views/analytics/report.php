@@ -300,17 +300,18 @@
 			<h3 class="box-title">Country </h3>
 		    </div><!-- /.box-header -->
 		    <div class="box-body no-padding">
+			
 			     <div class="table-responsive">
                                         <!-- .table - Uses sparkline charts-->
                                         <table class="table table-striped">
                                             <tr>
-                                                <th>Country</th>
+                                                <th>Location</th>
                                                 <th>Hits</th>
                                                 <th>Time Watched</th>                                                
                                             </tr>
 					    <?php foreach($country as $row){?>
                                             <tr>
-                                                <td><a href="<?php echo base_url()?>analytics/geographic?country=<?php echo $row->code;?>"><?php echo $row->country;?></a></td>
+                                                <td><a href="<?php echo base_url()?>analytics/geographic?country=<?php echo $row->code;?>"><?php echo $row->city;?></a></td>
                                                 <td><?php echo $row->total_hits;?></td>
 						<td><?php echo time_from_seconds($row->total_watched_time);?></td>
                                             </tr>

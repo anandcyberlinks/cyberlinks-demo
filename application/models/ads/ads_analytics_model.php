@@ -154,7 +154,7 @@ class Ads_analytics_model extends CI_Model{
             $this->db->group_by('a.country_code');
             break;
         case 'country':
-            $select = 'a.country_code as code,a.country,count( a.id ) as total_hits , sum( a.watched_time ) as total_watched_time';
+            $select = 'a.country_code as code,a.country,a.city,count( a.id ) as total_hits , sum( a.watched_time ) as total_watched_time';
            // $group = 'a.country_code';
            
            if($param['top'] == 1){  //-- top video --//                

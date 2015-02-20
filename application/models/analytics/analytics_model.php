@@ -378,7 +378,7 @@ class Analytics_model extends CI_Model{
             $this->db->group_by('a.country_code');
             break;
         case 'country':
-            $select = 'a.country_code as code,a.country,count( a.id ) as total_hits , sum( a.watched_time ) as total_watched_time';
+            $select = 'a.country_code as code,a.country,a.city,count( a.id ) as total_hits , sum( a.watched_time ) as total_watched_time';
            // $group = 'a.country_code';
            
            if($param['top'] == 1){  //-- top video --//                
@@ -605,7 +605,7 @@ class Analytics_model extends CI_Model{
             $this->db->group_by('a.country_code');
             break;
         case 'country':
-            $select = 'a.country_code as code,a.country,count( a.id ) as total_hits , sum( a.watched_time ) as total_watched_time';
+            $select = 'a.country_code as code,a.country,a.city,count( a.id ) as total_hits , sum( a.watched_time ) as total_watched_time';
            // $group = 'a.country_code';
            
            if($param['top'] == 1){  //-- top video --//                
@@ -754,54 +754,60 @@ class Analytics_model extends CI_Model{
         return $str;
     }
     
-    function getContentKeywords($content_id){
-       $this->db->select('b.name');
-        $this->db->from('content_keywords a');
-        $this->db->join('keywords b','a.keyword_id = b.id','join');
-        $this->db->where('a.content_id',$content_id);
+    function getContentKeywords($channel_id){
+       $this->db->select('keywords as name');
+       // $this->db->from('content_keywords a');
+        //$this->db->join('keywords b','a.keyword_id = b.id','join');
+        $this->db->from('channels');
+        //$this->db->where('a.content_id',$content_id);
+        $this->db->where('id',$channel_id);
         
        // $sql = "select b.name from `content_keywords` a join keywords b on a.keyword_id = b.id where a.content_id = ".$content_id;
         $query = $this->db->get();
         if($query->num_rows() > 0){
-            return $query->result_array();
+            return $query->row_array();
         }
         return null;
     }
     
-    function saveUserContentKeywords($user_id, $content_ids = array()){      
+    function saveUserContentKeywords($user_id, $channel_ids = array()){      
         $contents = array();
        //-- convert array into element --//       
-        foreach ($content_ids AS $key => $value) {
-            $new_contentids[] = $value['name'];
-        }
+        /*foreach ($channel_ids AS $key => $value) {
+            //$new_contentids[] = $value['name'];
+        }*/
+        $new_contentids = explode(",",$channel_ids['name']);
+        
         //-----------------------------------//
-        $this->db->select('a.*');
-        $this->db->from('user_content_keywords a');
-      //  $this->db->join('customers b','a.user_id = b.id','left');
-        $this->db->where('a.user_id',$user_id);
+        $this->db->select('a.keywords');
+      //  $this->db->from('user_content_keywords a');
+        $this->db->from('customers a');   
+        $this->db->where('a.id',$user_id);
         
        // $sql = "SELECT * FROM `user_content_keywords` uk I WHERE `user_id` =".$user_id;
       //  $query = $this->db->query($sql);
         $query = $this->db->get();
         if($query->num_rows()==0){
             // Insert here the user content tage
-            $contents['user_id'] = $user_id;
-            $contents['keywords'] = serialize($new_contentids);
+           // $contents['user_id'] = $user_id;
+            //$contents['keywords'] = serialize($new_contentids);
+            $contents['keywords'] = $channel_ids['name'];
             $this->db->set($contents);
-            $this->db->set('created','NOW()',FALSE);
+            //$this->db->set('created','NOW()',FALSE);
             $this->db->set('modified','NOW()',FALSE);
-            $this->db->insert('user_content_keywords');            
+            $this->db->insert('customers');            
         }else{
             $update = 0;
             // Update the existing user tags
             $result = $query->row_array();
             
-            $user_keywords = unserialize($result['keywords']);
-                       
+            //$user_keywords = $result['keywords'];
+            $user_keywords = explode(',', $result['keywords']);          
         //-----------------------------------//
         //-- merge array--//
         
         $final_keywords = array_merge($new_contentids,$user_keywords);
+       // $final_keywords = $new_contentids.','.$user_keywords;
        // print_r($final_keywords);
            /* $user_keywords_new = array();
             foreach($user_keywords as $val){
@@ -820,10 +826,12 @@ class Analytics_model extends CI_Model{
             }
             */
            // if($update==1){
-                $this->db->set('keywords',serialize(array_unique($final_keywords)));
+                //$this->db->set('keywords',serialize(array_unique($final_keywords)));
+                $this->db->set('keywords',implode(',',array_unique($final_keywords)));
                 $this->db->set('modified','NOW()', FALSE);
-                $this->db->where('user_id', $user_id);
-                $this->db->update('user_content_keywords');
+                $this->db->where('id', $user_id);
+                //$this->db->update('user_content_keywords');
+                $this->db->update('customers');
             //}
         }
     }

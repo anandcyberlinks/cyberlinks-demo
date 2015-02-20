@@ -107,7 +107,7 @@
                                         <!-- .table - Uses sparkline charts-->
                                         <table class="table table-striped">
                                             <tr>
-                                                <th>Region</th>
+                                                <th>Location</th>
                                                 <th>Hits</th>
                                                 <th>Time Watched</th>                                                
                                             </tr>
@@ -115,7 +115,7 @@
                                              if($row->state !=''){
                                              ?>
                                             <tr>
-                                                <td><?php echo $row->state;?></td>
+                                                <td><?php echo $row->city;?></td>
                                                 <td><?php echo $row->total_hits;?></td>
 						<td><?php echo time_from_seconds($row->total_watched_time);?></td>
                                             </tr>
