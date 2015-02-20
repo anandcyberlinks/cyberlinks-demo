@@ -181,7 +181,7 @@ class Ads_analytics_model extends CI_Model{
             //$cond = "a.content_provider=u.id";          
             break;
         case 'user':
-            $select = 'cu.id,concat(cu.first_name," ",cu.last_name) as name,count( a.id ) as total_hits , sum( a.watched_time ) as total_watched_time';
+            $select = 'cu.id,cu.first_name as name,count( a.id ) as total_hits , sum( a.watched_time ) as total_watched_time';
             //$group = 'u.id';
             $this->db->group_by('cu.id');
             $this->db->join('customers cu','a.user_id=cu.id');
@@ -254,7 +254,7 @@ class Ads_analytics_model extends CI_Model{
              $this->db->limit($limit, $start);
         }
         $query = $this->db->get();
-    //echo '<br>'.$this->db->last_query();
+   // echo '<br>'.$this->db->last_query();
         return $query->result();
         
     }
