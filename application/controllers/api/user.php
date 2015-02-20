@@ -24,7 +24,8 @@ class User extends REST_Controller
        parent::__construct();
        $this->load->helper('url');
        $this->load->model('api/User_model');
-       $this->admin_token = $this->get('token');       
+      // $this->admin_token = $this->get('token');
+      $this->admin_token = '1234567890';
    }       
     
    function base64_to_jpeg($base64_string, $output_file,$extension) {
@@ -411,8 +412,8 @@ class User extends REST_Controller
         $userdetails = json_decode($this->post('social'));
     
        //-- check if Admin token is valid --//
-	  // $owner_id =  $this->User_model->checkAdminToken($this->admin_token);
-	   $owner_id =  $this->User_model->checkAdminToken('54d46a72bab49');
+	   $owner_id =  $this->User_model->checkAdminToken($this->admin_token);
+	  // $owner_id =  $this->User_model->checkAdminToken('54d46a72bab49');
 	    if($owner_id <= 0){
 		$this->response(array('code'=>0,'error' => "Invalid Token"), 404);
 	    }
