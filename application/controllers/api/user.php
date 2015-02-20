@@ -182,7 +182,7 @@ class User extends REST_Controller
     function edit_post()
     {
         //--- validate token ---//        
-            $this->validateToken();
+            //$this->validateToken();
         //------------------------//
         $id = $this->get('id');
          $ext = $this->post('ext');
