@@ -694,8 +694,7 @@ class Analytics extends MY_Controller {
         
         function ads_complete()
         {
-            $post = $_POST;
-	    print_r($post);
+            $post = $_POST;	    
 	    if($post){			
 			$where = array('id'=>$post['id']);
 			echo $this->Analytics_model->save_ads($post,$where);
