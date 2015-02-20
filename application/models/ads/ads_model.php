@@ -875,7 +875,7 @@ class Ads_model extends CI_Model {
       $this->db->where_in('k.name',$keywords);
    }
     
-    if(@$data['dob']){
+    if(@$data['dob'] && $data['dob'] !='0000-00-00'){
        $date1 = date_create(date('Y-m-d'));
        $date2 = date_create($data['dob']);
        $datediff =  date_diff($date1,$date2);
