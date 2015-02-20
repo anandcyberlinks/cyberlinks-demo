@@ -666,7 +666,7 @@ class Analytics extends MY_Controller {
 	   function playads()
 	   {
 		$post = $_POST;
-		
+		print_r($post);
 		$post['browser'] = $this->result['browser'];
 		$post['browser_version'] = $this->result['version'];
                 //$post['platform'] = $this->result['platform'];
