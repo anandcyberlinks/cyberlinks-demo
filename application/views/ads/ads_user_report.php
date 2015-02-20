@@ -140,7 +140,7 @@
                                     <tbody>
                                         <?php foreach ($user as $value) { ?>
                                         <tr id="<?php echo $value->id ?>">
-                                                <td  width="70%"><a href="<?php echo base_url(); ?>ads_analytics/usercontent?id=<?php echo $value->id; ?>"><?php echo $value->name; ?></td>                                                
+                                                <td  width="70%"><a href="<?php echo base_url(); ?>ads_analytics/usercontent?id=<?php echo $value->id; ?>"><?php echo ($value->name!='' ? $value->name:'guest'); ?></td>                                                
                                                 <td><?php echo $value->total_hits; ?></td>
                                                 <td><?php echo time_from_seconds($value->total_watched_time); ?></td>                                                                                        
                                             </tr>

@@ -170,7 +170,7 @@
 				</tr>
 			     <?php $i=0; foreach($customer as $row){ $i++;?>
 				<tr>
-				<td><?php echo $row->name;?></td>
+				<td><?php echo ($row->name !=''? $row->name:'guest');?></td>
 				<td><?php echo $row->total_hits;?></td>
 				<td><?php echo time_from_seconds($row->total_watched_time);?></td>				
 				</tr>
