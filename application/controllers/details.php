@@ -22,6 +22,7 @@ class Details extends MY_Controller {
 		//-- get geocoding google api --//
 		$this->data['lat'] = $lat = $_GET['lat'];
 		$this->data['long'] = $lng = $_GET['lng'];
+		$this->data['platform'] = $_GET['platform'];
 		$id = $_GET['id'];
 		$type= $_GET['type'];
 		

@@ -116,7 +116,8 @@ $(window).on('beforeunload', function(){
 		route: route,
 		postal_code: postal_code,
 		latitude: '<?php echo $lat;?>',
-		longitude: '<?php echo $long;?>'
+		longitude: '<?php echo $long;?>',
+		platform: '<?php echo $platform;?>'
 	       },
 	       cache: false,
 	       type: "POST",
@@ -224,8 +225,9 @@ autostart: 1,
 		adbreak<?php echo $i; ?>: {
 		offset: '<?php echo ($offset==0 ? 'pre': $offset); ?>',
 		//'skipoffset':5,
-		tag: "<?php echo ($row['ad_type'] != 'External' ? base_url():'') . $row['vast_file']; ?>?<?php echo $row['ads_id']?>/<?php echo $user_id?>/<?php echo $row['uid']?>"
+		//tag: "<?php echo ($row['ad_type'] != 'External' ? base_url():'') . $row['vast_file']; ?>?<?php echo $row['ads_id']?>/<?php echo $user_id?>/<?php echo $row['uid']?>"
 		//tag: "http://182.18.165.43/vast/getvast.php?banner=Rock%20Music"
+		tag: "http://localhost/multitvfinal-demo/assets/upload/ads/vast/revive.xml"
 		},
 	   <?php $i++;
        } ?>                    
@@ -335,7 +337,8 @@ autostart: 1,
 		route: route,
 		postal_code: postal_code,
 		latitude: '<?php echo $lat;?>',
-		longitude: '<?php echo $long;?>'
+		longitude: '<?php echo $long;?>',
+		//platform: '<?php echo $platform;?>'
 		},
 		cache: false,
 		type: "post"
