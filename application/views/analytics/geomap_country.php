@@ -9,7 +9,7 @@
 	  <?php foreach($geomap as $country){
 	    //if($country->country != ''){
 	    ?>
-		['<?php echo $country->country;?>', <?php echo $country->total_hits;?>],
+		['<?php echo $country->city;?>', <?php echo $country->total_hits;?>],
 	<?php  //}
 		  }?>          
         ]);
