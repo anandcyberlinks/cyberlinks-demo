@@ -67,7 +67,8 @@ class Analytics extends MY_Controller {
 		$post = $_POST;                
 		$post['browser'] = $this->result['browser'];
 		$post['browser_version'] = $this->result['version'];
-                $post['platform'] = $this->result['platform'];
+               // $post['platform'] = $this->result['platform'];
+	      // $post['platform'] = $this->post['device_type'];
                echo $this->Analytics_model->save($post);
 	}
         
@@ -656,9 +657,9 @@ class Analytics extends MY_Controller {
          */
         function user_content_tags(){
            
-           $content_ids = $this->Analytics_model->getContentKeywords($_POST['content_id']);
-           if($content_ids!=null){
-               $this->Analytics_model->saveUserContentKeywords($_POST['user_id'],$content_ids);
+           $channel_ids = $this->Analytics_model->getContentKeywords($_POST['content_id']);
+           if($channel_ids!=null){
+               $this->Analytics_model->saveUserContentKeywords($_POST['user_id'],$channel_ids);
            }           
         }
 	
@@ -668,7 +669,8 @@ class Analytics extends MY_Controller {
 		
 		$post['browser'] = $this->result['browser'];
 		$post['browser_version'] = $this->result['version'];
-                $post['platform'] = $this->result['platform'];
+                //$post['platform'] = $this->result['platform'];
+		//$post['platform'] = $this->post['device_type'];
 		
 		if($post){
 			$res = substr(strrchr($post['tag'],"?"),1);
