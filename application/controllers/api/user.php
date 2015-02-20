@@ -154,7 +154,7 @@ class User extends REST_Controller
     function detail_get()
     {
         //--- validate token ---//        
-            $this->validateToken();
+            //$this->validateToken();
         //------------------------//
         $id = $this->get('id');
                 if(!$id)
