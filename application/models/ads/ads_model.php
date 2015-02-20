@@ -881,14 +881,14 @@ class Ads_model extends CI_Model {
        $datediff =  date_diff($date1,$date2);
        $age = $datediff->y;
        $between = sprintf("%s BETWEEN a.age_group_from AND a.age_group_to",$age);
-      $this->db->or_where($between, null, false);      
+      $this->db->where($between, null, false);      
     }
      
      if($lat !='' && $long!=''){
       $distance_query = 'MIN(ROUND(((ACOS(SIN('.$lat.' * PI() / 180) * SIN(al.latitude * PI() / 180) + COS('.$lat.' * PI() / 180) * COS(al.latitude * PI() / 180) * COS(('.$long.' - al.longitude) * PI() / 180)) * 180 / PI()) * 60 * 1.1515)))';
-      $this->db->order_by('distance');
+    //  $this->db->order_by('distance');
       $distance = ",".$distance_query." AS distance";      
-//      $this->db->order_by("CASE WHEN $distance_query IS NULL THEN 1 ELSE 0 END");
+      $this->db->order_by("(CASE WHEN $distance_query IS NULL THEN 1 ELSE 0 END)",NULL,FALSE);
      }
       $this->db->select('a.uid,a.ad_type,c.name as file_name,k.name as tags,c.relative_path as vast_file,a.id as ads_id'.$distance);     
       $this->db->from('ads a');
@@ -903,7 +903,7 @@ class Ads_model extends CI_Model {
      
       $this->db->limit($limit);
       $query = $this->db->get();
-     // echo '<br>'.$this->db->last_query();die;
+      //echo '<br>'.$this->db->last_query();die;
       return $query->result();
     }
     
