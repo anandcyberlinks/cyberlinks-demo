@@ -25,7 +25,7 @@ class User extends REST_Controller
        $this->load->helper('url');
        $this->load->model('api/User_model');
       // $this->admin_token = $this->get('token');
-      $this->admin_token = '1234567890';
+      $this->admin_token = '54d46a72bab49';
    }       
     
    function base64_to_jpeg($base64_string, $output_file,$extension) {
