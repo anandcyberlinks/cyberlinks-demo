@@ -84,7 +84,7 @@
                         <div class="box">
                             <div class="box-body table-responsive">
                                 <?php if ($this->pagination->total_rows != '0') {?>
-                                <div><a id="linkClick"   data-toggle="modal" data-backdrop="static" href="#tester" data-toggle="modal" value='Edit'>Edit</a>
+                                <div><a class="linkClick"   data-toggle="modal" data-backdrop="static" href="#tester" data-toggle="modal" value='Edit'>Edit</a>
 
                                     </div>
                                 <?php } ?>
@@ -138,7 +138,7 @@
                                 } else {
                                     ?>
                                     </table>
-                                    <div><a id="linkClick"   data-toggle="modal" data-backdrop="static" href="#tester" data-toggle="modal" value='Edit'>Edit</a>
+                                    <div><a class="linkClick"   data-toggle="modal" data-backdrop="static" href="#tester" data-toggle="modal" value='Edit'>Edit</a>
 
                                     </div>
                                     <div class="row pull-left">

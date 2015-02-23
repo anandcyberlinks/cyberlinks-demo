@@ -966,7 +966,7 @@ function comment_approved_status(ID, PAGE, approve) {
     });
 }
 /* Advertising Slider Code Start */
-$("#linkClick").click(function(){
+$(".linkClick").click(function(){
     var IDs = [];
      $('.video:checked').each(function() {
         IDs.push($(this).val());
@@ -1526,7 +1526,7 @@ $("#delete").click(function(){
         });   
 });
 
-$("#linkClicklive").click(function(){
+$(".linkClicklive").click(function(){
     var len = $(".video:checked").length;
     if(len<=0){
         bootbox.alert('Please select at least one content.');
