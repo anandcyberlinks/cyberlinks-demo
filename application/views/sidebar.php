@@ -1,4 +1,129 @@
-<?php $s = $this->session->all_userdata(); ?>
+<?php $s = $this->session->all_userdata(); 
+
+$menu = array();
+switch ($s[0]->username){
+    case('superadmin') :
+        $menu = array(
+                    array('name'=>'Dashboard','url'=>base_url().'layout/dashboard',  'class'=>'fa-dashboard', 'li-class'=>($this->uri->segment(1) == 'layout') ? 'active' : ''),
+                    array('name'=>'User', 'url'=>'#', 'class'=>'fa-users', 'li-class'=>(($this->uri->segment(1) == 'user') || ($this->uri->segment(1) == 'role')) ? 'treeview active' : 'treeview', 'type'=>'parent','childs'=>array(
+                        array('name'=>'Users', 'li-class'=>($this->uri->segment(1) === 'user') ? 'active' : '', 'url'=>base_url().'user', 'type'=>'child'),
+                        //array('name'=>'User Role', 'li-class'=>($this->uri->segment(1) === 'role') ? 'active' : '', 'url'=>base_url().'role', 'type'=>'child'),
+                )));
+        break;
+    case('iampunjabi') :
+        $menu = array(
+                    array('name'=>'Dashboard','url'=>base_url().'layout/dashboard',  'class'=>'fa-dashboard', 'li-class'=>($this->uri->segment(1) == 'layout') ? 'active' : ''),
+                    array('name'=>'Analytics','url'=>base_url().'analytics/report', 'class'=>'fa-dashboard','li-class'=>($this->uri->segment(1) == 'analytics') ? 'active' : ''),
+                    array('name'=>'Video', 'url'=>'#', 'class'=>'fa-video-camera',
+                        'li-class'=>(($this->uri->segment(2) == 'live_streaming') ||
+                            ($this->uri->segment(2) == 'videoUploadSrc') || 
+                            ($this->uri->segment(2) == 'bulkupload') || 
+                            ($this->uri->segment(2) == 'video_status') || 
+                            ($this->uri->segment(2) == 'video_settings') || 
+                            ($this->uri->segment(2) == 'debug') || 
+                            ($this->uri->segment(1) . "/" . $this->uri->segment(2) == 'video/index') ) ? 'treeview active' : 'treeview',
+                        'type'=>'parent','childs'=>array(
+                        array('name'=>'Video List', 'li-class'=> (($this->uri->segment(1) == 'video') && ($this->uri->segment(2) == 'index')) ? 'active' : '', 'url'=>base_url().'video/index', 'type'=>'child'),
+                        array('name'=>'Video Upload', 'li-class'=>($this->uri->segment(2) == 'videoUploadSrc' || $this->uri->segment(2) == 'upload_other') ? 'active' : '', 'url'=>base_url().'video/videoUploadSrc/Upload', 'type'=>'child'),
+                        array('name'=>'Video Bulk upload', 'li-class'=>($this->uri->segment(2) == 'bulkupload' || $this->uri->segment(2) == 'ftp') ? 'active' : '' ,'url'=>base_url().'video/bulkupload/csv', 'type'=>'child'),
+                        array('name'=>'Video Status', 'li-class'=>($this->uri->segment(2) == 'video_status') ? 'active' : '', 'url'=>base_url().'video/video_status', 'type'=>'child'),
+                        array('name'=>'Live Stream', 'li-class'=> ($this->uri->segment(2) == 'live_streaming') ? 'active' : '' , 'url'=>base_url().'video/live_streaming', 'type'=>'child'),
+                        )),
+                    array('name'=>'Advertising','url'=>'#', 'class'=>'fa-film', 'li-class'=> ($this->uri->segment(1) == 'advertising') ? 'treeview active' : 'treeview', 'type'=>'parent','childs'=>array(
+                        array('name'=>'Video', 'li-class'=> ($this->uri->segment(1) == 'advertising' && $this->uri->segment(2) == '' ) ? 'active' : '', 'url'=>base_url().'advertising', 'type'=>'child'),
+                        array('name'=>'Live Stream', 'li-class'=> ($this->uri->segment(1) == 'advertising' && $this->uri->segment(2) == 'live_stream') ? 'active' : '','url'=>base_url().'advertising/live_stream', 'type'=>'child'),
+                        )),
+                    array('name'=>'WebTV','url'=>base_url().'webtv', 'class'=>'fa-film', 'li-class'=>($this->uri->segment(1) == 'webtv' || $this->uri->segment(1) == 'livestream') ? 'active' : ''),
+                    array('name'=>'Events','url'=>base_url().'event', 'class'=>'fa-laptop','li-class'=>($this->uri->segment(1) == 'event') ? 'active' : ''),
+                    array('name'=>'Utility', 'url'=>'#', 'class'=>'fa-laptop', 
+                        'li-class'=>(($this->uri->segment(1) == 'category') ||
+                            ($this->uri->segment(1) == 'ch_category') ||
+                            ($this->uri->segment(1) == 'transcode') ||
+                            ($this->uri->segment(1) == 'genre') ||
+                            ($this->uri->segment(1) == 'dform') ||
+                            ($this->uri->segment(1) == 'package') ||
+                            ($this->uri->segment(1) == 'subscription') ||
+                            ($this->uri->segment(1) == 'youtubevideo'))
+                         ? 'treeview active' : 'treeview' , 
+                        'type'=>'parent','childs'=>array(
+                        array('name'=>'Category', 'li-class'=> ($this->uri->segment(1) === 'category') ? 'active' : '', 'url'=>base_url().'category', 'type'=>'child'),
+                        array('name'=>'Channel Category', 'li-class'=> ($this->uri->segment(1) === 'ch_category') ? 'active' : '', 'url'=>base_url().'ch_category', 'type'=>'child'),
+                        array('name'=>'Package', 'li-class'=>($this->uri->segment(1) === 'genre') ? 'active' : '', 'url'=>base_url().'genre', 'type'=>'child'),
+                        array('name'=>'Adavnce Fields', 'li-class'=> ($this->uri->segment(1) === 'dform') ? 'active' : '', 'url'=>base_url().'dform', 'type'=>'child'),
+                        array('name'=>'Package', 'li-class'=>($this->uri->segment(1) === 'package') ? 'active' : '', 'url'=>base_url().'package', 'type'=>'child'),
+                        )),
+                    array('name'=>'Pages','url'=>base_url().'pages', 'class'=>'fa-file-text-o', 'li-class'=>($this->uri->segment(1) == 'pages') ? 'active' : ''),
+                    array('name'=>'User', 'url'=>'#', 'class'=>'fa-users', 'li-class'=>(($this->uri->segment(1) == 'user') || ($this->uri->segment(1) == 'role')) ? 'treeview active' : 'treeview', 'type'=>'parent','childs'=>array(
+                        array('name'=>'Users', 'li-class'=>($this->uri->segment(1) === 'user') ? 'active' : '', 'url'=>base_url().'user', 'type'=>'child'),
+                        array('name'=>'User Role', 'li-class'=>($this->uri->segment(1) === 'role') ? 'active' : '', 'url'=>base_url().'role', 'type'=>'child'),
+                        )),
+                    array('name'=>'Device','url'=>base_url().'device', 'class'=>'fa-mobile', 'li-class'=>($this->uri->segment(1) == 'device') ? 'active' : ''),
+                    array('name'=>'Api','url'=>base_url().'apilist', 'class'=>'fa-list-alt', 'li-class'=>($this->uri->segment(1) == 'apilist') ? 'active' : ''),
+                    array('name'=>'Comments','url'=>base_url().'comments', 'class'=>'fa-comment', 'li-class'=>($this->uri->segment(1) == 'comments') ? 'active' : ''),
+            );
+        break;
+        case ('veena'):
+            $menu = array(
+                    array('name'=>'Dashboard','url'=>base_url().'layout/dashboard',  'class'=>'fa-dashboard', 'li-class'=>($this->uri->segment(1) == 'layout') ? 'active' : ''),
+                    array('name'=>'Analytics','url'=>base_url().'analytics/report', 'class'=>'fa-dashboard','li-class'=>($this->uri->segment(1) == 'analytics') ? 'active' : ''),
+                    array('name'=>'Video', 'url'=>'#', 'class'=>'fa-video-camera',
+                        'li-class'=>(($this->uri->segment(2) == 'live_streaming') ||
+                            ($this->uri->segment(2) == 'videoUploadSrc') || 
+                            ($this->uri->segment(2) == 'bulkupload') || 
+                            ($this->uri->segment(2) == 'video_status') || 
+                            ($this->uri->segment(2) == 'video_settings') || 
+                            ($this->uri->segment(2) == 'debug') || 
+                            ($this->uri->segment(1) . "/" . $this->uri->segment(2) == 'video/index') ) ? 'treeview active' : 'treeview',
+                        'type'=>'parent','childs'=>array(
+                        array('name'=>'Video List', 'li-class'=> (($this->uri->segment(1) == 'video') && ($this->uri->segment(2) == 'index')) ? 'active' : '', 'url'=>base_url().'video/index', 'type'=>'child'),
+                        array('name'=>'Video Upload', 'li-class'=>($this->uri->segment(2) == 'videoUploadSrc' || $this->uri->segment(2) == 'upload_other') ? 'active' : '', 'url'=>base_url().'video/videoUploadSrc/Upload', 'type'=>'child'),
+                        array('name'=>'Video Bulk upload', 'li-class'=>($this->uri->segment(2) == 'bulkupload' || $this->uri->segment(2) == 'ftp') ? 'active' : '' ,'url'=>base_url().'video/bulkupload/csv', 'type'=>'child'),
+                        array('name'=>'Video Status', 'li-class'=>($this->uri->segment(2) == 'video_status') ? 'active' : '', 'url'=>base_url().'video/video_status', 'type'=>'child'),
+                        array('name'=>'Live Stream', 'li-class'=> ($this->uri->segment(2) == 'live_streaming') ? 'active' : '' , 'url'=>base_url().'video/live_streaming', 'type'=>'child'),
+                        )),
+                    array('name'=>'Audio', 'url'=>'#',   'class'=>'fa-bullhorn', 'li-class'=>($this->uri->segment(1) == 'audio') ? 'treeview active' : 'treeview', 'type'=>'parent','childs'=>array(
+                        array('name'=>'Audio List','li-class'=> ($this->uri->segment(1) == 'audio' && $this->uri->segment(2) == '' ) ? 'active' : '', 'url'=>base_url().'audio', 'type'=>'child'),
+                        array('name'=>'Audio Upload', 'li-class'=>($this->uri->segment(1) == 'audio' && $this->uri->segment(2) == 'upload') ? 'active' : '', 'url'=>base_url().'audio/upload', 'type'=>'child'),
+                        )),
+                    array('name'=>'Advertising','url'=>'#', 'class'=>'fa-film', 'li-class'=> ($this->uri->segment(1) == 'advertising') ? 'treeview active' : 'treeview', 'type'=>'parent','childs'=>array(
+                        array('name'=>'Video', 'li-class'=> ($this->uri->segment(1) == 'advertising' && $this->uri->segment(2) == '' ) ? 'active' : '', 'url'=>base_url().'advertising', 'type'=>'child'),
+                        array('name'=>'Live Stream', 'li-class'=> ($this->uri->segment(1) == 'advertising' && $this->uri->segment(2) == 'live_stream') ? 'active' : '','url'=>base_url().'advertising/live_stream', 'type'=>'child'),
+                        )),
+                    array('name'=>'WebTV','url'=>base_url().'webtv', 'class'=>'fa-film', 'li-class'=>($this->uri->segment(1) == 'webtv' || $this->uri->segment(1) == 'livestream') ? 'active' : ''),
+                    array('name'=>'Punchang','url'=>base_url().'punchang', 'class'=>'fa-film','li-class'=>($this->uri->segment(1) == 'punchang' || $this->uri->segment(1) == 'punchang') ? 'active' : ''),
+                    array('name'=>'Events','url'=>base_url().'event', 'class'=>'fa-laptop','li-class'=>($this->uri->segment(1) == 'event') ? 'active' : ''),
+                    array('name'=>'Utility', 'url'=>'#', 'class'=>'fa-laptop', 
+                        'li-class'=>(($this->uri->segment(1) == 'category') ||
+                            ($this->uri->segment(1) == 'ch_category') ||
+                            ($this->uri->segment(1) == 'transcode') ||
+                            ($this->uri->segment(1) == 'genre') ||
+                            ($this->uri->segment(1) == 'dform') ||
+                            ($this->uri->segment(1) == 'package') ||
+                            ($this->uri->segment(1) == 'subscription') ||
+                            ($this->uri->segment(1) == 'youtubevideo'))
+                         ? 'treeview active' : 'treeview' , 
+                        'type'=>'parent','childs'=>array(
+                        array('name'=>'Category', 'li-class'=> ($this->uri->segment(1) === 'category') ? 'active' : '', 'url'=>base_url().'category', 'type'=>'child'),
+                        array('name'=>'Channel Category', 'li-class'=> ($this->uri->segment(1) === 'ch_category') ? 'active' : '', 'url'=>base_url().'ch_category', 'type'=>'child'),
+                        array('name'=>'Package', 'li-class'=>($this->uri->segment(1) === 'genre') ? 'active' : '', 'url'=>base_url().'genre', 'type'=>'child'),
+                        array('name'=>'Adavnce Fields', 'li-class'=> ($this->uri->segment(1) === 'dform') ? 'active' : '', 'url'=>base_url().'dform', 'type'=>'child'),
+                        array('name'=>'Package', 'li-class'=>($this->uri->segment(1) === 'package') ? 'active' : '', 'url'=>base_url().'package', 'type'=>'child'),
+                        )),
+                    array('name'=>'Pages','url'=>base_url().'pages', 'class'=>'fa-file-text-o', 'li-class'=>($this->uri->segment(1) == 'pages') ? 'active' : ''),
+                    array('name'=>'User', 'url'=>'#', 'class'=>'fa-users', 'li-class'=>(($this->uri->segment(1) == 'user') || ($this->uri->segment(1) == 'role')) ? 'treeview active' : 'treeview', 'type'=>'parent','childs'=>array(
+                        array('name'=>'Users', 'li-class'=>($this->uri->segment(1) === 'user') ? 'active' : '', 'url'=>base_url().'user', 'type'=>'child'),
+                        array('name'=>'User Role', 'li-class'=>($this->uri->segment(1) === 'role') ? 'active' : '', 'url'=>base_url().'role', 'type'=>'child'),
+                        )),
+                    array('name'=>'Device','url'=>base_url().'device', 'class'=>'fa-mobile', 'li-class'=>($this->uri->segment(1) == 'device') ? 'active' : ''),
+                    array('name'=>'Api','url'=>base_url().'apilist', 'class'=>'fa-list-alt', 'li-class'=>($this->uri->segment(1) == 'apilist') ? 'active' : ''),
+                    array('name'=>'Comments','url'=>base_url().'comments', 'class'=>'fa-comment', 'li-class'=>($this->uri->segment(1) == 'comments') ? 'active' : ''),
+            );
+            break;
+}
+  //echo "<pre>";
+   //print_r($menu); die;
+
+?>
 <aside class="left-side sidebar-">                
     <section class="sidebar">
         <!-- Sidebar user panel -->
@@ -13,126 +138,26 @@
         <!-- /.search form -->
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu">
-            <li class="<?= ($this->uri->segment(1) == 'layout') ? 'active' : '' ?>">
-                <a href="<?php echo base_url() ?>layout/dashboard">
-                    <i class="fa fa-dashboard"></i> <span><?php echo $welcome->loadPo('Dashboard'); ?></span></a>
-            </li>
-             <li class="<?= ($this->uri->segment(1) == 'analytics') ? 'active' : '' ?>">
-                <a href="<?php echo base_url() ?>analytics/report">
-                    <i class="fa fa-dashboard"></i> <span><?php echo $welcome->loadPo('Analytics'); ?></span></a>
-            </li>
-            <li class="treeview <?= (($this->uri->segment(2) == 'live_streaming') ||($this->uri->segment(2) == 'videoUploadSrc') || ($this->uri->segment(2) == 'bulkupload') || ($this->uri->segment(2) == 'video_status') || ($this->uri->segment(2) == 'video_settings') || ($this->uri->segment(2) == 'debug') || ($this->uri->segment(1) . "/" . $this->uri->segment(2) == 'video/index') ) ? 'active' : '' ?>">
-                <a href="#">
-                    <i class="fa fa-video-camera"></i>
-                    <span><?php echo $welcome->loadPo('Video'); ?></span>
-                    <i class="fa fa-angle-left pull-right"></i>
+            <?php foreach ($menu as $val){?>
+            <li class="<?= $val['li-class']; ?>">
+                <a href="<?=$val['url']?>">
+                    <i class="fa <?=$val['class']?>"></i>
+                    <span><?php echo $welcome->loadPo($val['name']); ?></span>
+                    <?php if(isset($val['childs'])){ ?><i class="fa fa-angle-left pull-right"></i> <?php } ?>
                 </a>
+                <?php if(isset($val['childs'])){ ?>
                 <ul class="treeview-menu">
-                    <li class="<?= (($this->uri->segment(1) == 'video') && ($this->uri->segment(2) == 'index')) ? 'active' : '' ?>"><a href="<?php echo base_url() ?>video/index"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('Video') . " " . $welcome->loadPo('List'); ?></a></li>
-                    <li class="<?= ($this->uri->segment(2) == 'videoUploadSrc' || $this->uri->segment(2) == 'upload_other') ? 'active' : '' ?>"><a href="<?php echo base_url() ?>video/videoUploadSrc/Upload"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('Video') . " " . $welcome->loadPo('Upload'); ?> </a></li>
-                    <li class="<?= ($this->uri->segment(2) == 'bulkupload' || $this->uri->segment(2) == 'ftp') ? 'active' : '' ?>"><a href="<?php echo base_url() ?>video/bulkupload/csv"><i class="fa fa-angle-double-right"></i>  <?php echo $welcome->loadPo('Video') . " " . $welcome->loadPo('Bulk') . " " . $welcome->loadPo('Upload'); ?></a></li>
-                    <li class="<?= ($this->uri->segment(2) == 'video_status') ? 'active' : '' ?>"><a href="<?php echo base_url() ?>video/video_status"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('Video') . " " . $welcome->loadPo('Status'); ?></a></li>                   
-                    <?php /* <li class="<?=($this->uri->segment(2)=='setting')?'active':''?>"><a href="<?php echo base_url() ?>video/setting"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('Video')." ".$welcome->loadPo('Settings'); ?> </a></li>     
-                    <li class="<?= ($this->uri->segment(2) == 'debug') ? 'active' : '' ?>"><a href="<?php echo base_url() ?>video/debug"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('Debug'); ?></a></li> */ ?>
-                    <li class="<?= ($this->uri->segment(2) == 'live_streaming') ? 'active' : '' ?>"><a href="<?php echo base_url() ?>video/live_streaming"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('Live Stream'); ?></a></li>
-                </ul>
-            </li>
-            <li class="treeview <?= ($this->uri->segment(1) == 'audio') ? 'active' : '' ?>">
-                    <a href="#">
-                        <i class="fa fa-fw fa-bullhorn"></i>
-                        <span><?php echo $welcome->loadPo('Audio'); ?></span>
-                        <i class="fa fa-angle-left pull-right"></i>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li class="<?= ($this->uri->segment(1) == 'audio' && $this->uri->segment(2) == '' ) ? 'active' : '' ?>"><a href="<?php echo base_url() ?>audio"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('Audio List'); ?></a></li>
-                        <li class="<?= ($this->uri->segment(1) == 'audio' && $this->uri->segment(2) == 'upload') ? 'active' : '' ?>"><a href="<?php echo base_url() ?>audio/upload"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('Upload'); ?></a></li>
-                    </ul>
-                </li>
-          
-	  <li class="treeview <?= ($this->uri->segment(1) == 'advertising') ? 'active' : '' ?>">
-                    <a href="#">
-                        <i class="fa fa-fw fa-film"></i>
-                        <span><?php echo $welcome->loadPo('Advertising'); ?></span>
-                        <i class="fa fa-angle-left pull-right"></i>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li class="<?= ($this->uri->segment(1) == 'advertising' && $this->uri->segment(2) == '' ) ? 'active' : '' ?>"><a href="<?php echo base_url() ?>advertising"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('Video'); ?></a></li>
-                        <li class="<?= ($this->uri->segment(1) == 'advertising' && $this->uri->segment(2) == 'live_stream') ? 'active' : '' ?>"><a href="<?php echo base_url() ?>advertising/live_stream"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('Live stream'); ?></a></li>
-                    </ul>
-                </li>
-			 
-            <li class="<?= ($this->uri->segment(1) == 'webtv' || $this->uri->segment(1) == 'livestream') ? 'active' : '' ?>">
-                <a href="<?php echo base_url() ?>webtv" >
-                    <i class="fa fa-fw fa-film"></i> <span><?php echo $welcome->loadPo('WebTV'); ?></span>
-                </a>
-            </li>
-            <li class="<?= ($this->uri->segment(1) == 'punchang' || $this->uri->segment(1) == 'punchang') ? 'active' : '' ?>">
-                <a href="<?php echo base_url() ?>punchang" >
-                    <i class="fa fa-fw fa-film"></i> <span><?php echo $welcome->loadPo('Punchang'); ?></span>
-                </a>
-            </li>
-                      <li class="<?= ($this->uri->segment(1) == 'event') ? 'active' : '' ?>">
-                      <a href="<?php echo base_url() ?>event">
-                      <i class="fa fa-fw fa-laptop"></i> <span><?php echo $welcome->loadPo('Events'); ?></span>
-                      </a>
-                      </li>
+                   <?php foreach ($val['childs'] as $child){ ?>
+                       <li class="<?=$child['li-class']?>">
+                           <a href="<?=$child['url']?>">
+                               <i class="fa fa-angle-double-right"></i>
+                                   <?php echo $welcome->loadPo($child['name']) ?></a>
+                       </li>
                     
-            <li class="treeview <?= (($this->uri->segment(1) == 'category') || ($this->uri->segment(1) == 'ch_category') || ($this->uri->segment(1) == 'transcode') || ($this->uri->segment(1) == 'genre') || ($this->uri->segment(1) == 'dform') || ($this->uri->segment(1) == 'package') || ($this->uri->segment(1) == 'subscription') || ($this->uri->segment(1) == 'youtubevideo')) ? 'active' : '' ?>">
-                <a href="#">
-                    <i class="fa fa-laptop"></i>
-                    <span><?php echo $welcome->loadPo('Utility'); ?></span>
-                    <i class="fa fa-angle-left pull-right"></i>
-                </a>
-                <ul class="treeview-menu">
-                    <li class="<?= ($this->uri->segment(1) === 'category') ? 'active' : '' ?>"><a href="<?php echo base_url() ?>category"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('Category'); ?></a></li>
-                    <li class="<?= ($this->uri->segment(1) === 'ch_category') ? 'active' : '' ?>"><a href="<?php echo base_url() ?>ch_category"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('Channel Category'); ?></a></li>
-                    <!--<li class="<?= ($this->uri->segment(1) === 'transcode') ? 'active' : '' ?>"><a href="<?php echo base_url() ?>transcode"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('Transcode'); ?></a></li>         -->
-                    <?php if ($s[0]->role == 'Superadmin') { ?>
-                        <li class="<?= ($this->uri->segment(1) === 'genre') ? 'active' : '' ?>"><a href="<?php echo base_url() ?>genre"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('Genre'); ?></a></li>
-                    <?php } ?>
-                    <?php /* <li class="<?=($this->uri->segment(1)==='youtubevideo')?'active':''?>"><a href="<?php echo base_url() ?>youtubevideo"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('Youtube'); ?></a></li> */ ?>
-                    <li class="<?= ($this->uri->segment(1) === 'dform') ? 'active' : '' ?>"><a href="<?php echo base_url() ?>dform"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('Advance Fields'); ?></a></li>
-                    <?php /* <li class="<?= ($this->uri->segment(1) === 'subscription') ? 'active' : '' ?>"><a href="<?php echo base_url() ?>subscription"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('Subscription'); ?></a></li> */ ?>
-                    <li class="<?= ($this->uri->segment(1) === 'package') ? 'active' : '' ?>"><a href="<?php echo base_url() ?>package"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('Package'); ?></a></li>
-                </ul>
-            </li>
-            <li class="<?=($this->uri->segment(1) == 'pages') ? 'active' : '' ?>">
-                <a href="<?php echo base_url() ?>pages">
-                    <i class="fa fa-file-text-o"></i> <span><?php echo $welcome->loadPo('Pages'); ?></span>
-                </a>
-            </li>
-            <?php
-            $s = $this->session->all_userdata();
-            if ($s[0]->role == 'Admin' || $s[0]->role == 'Superadmin') {
-                ?>
-                <li class="treeview <?= (($this->uri->segment(1) == 'user') || ($this->uri->segment(1) == 'role')) ? 'active' : '' ?>">
-                    <a href="#">
-                        <i class="fa fa-users"></i>
-                        <span><?php echo $welcome->loadPo('User'); ?></span>
-                        <i class="fa fa-angle-left pull-right"></i>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li class="<?= ($this->uri->segment(1) === 'user') ? 'active' : '' ?>"><a href="<?php echo base_url() ?>user"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('User List'); ?></a></li>
-                        <li class="<?= ($this->uri->segment(1) === 'role') ? 'active' : '' ?>"><a href="<?php echo base_url() ?>role"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('User Role'); ?></a></li>
-                    </ul>
-                </li>
-                <li class="<?= ($this->uri->segment(1) == 'device') ? 'active' : '' ?>">
-                    <a href="<?php echo base_url() ?>device">
-                        <i class="fa fa-fw fa-mobile"></i> <span><?php echo $welcome->loadPo('Device'); ?></span>
-                    </a>
-                </li>
-            <?php } ?>
-            <li class="<?= ($this->uri->segment(1) == 'apilist') ? 'active' : '' ?>">
-                <a href="<?php echo base_url() ?>apilist">
-                    <i class="fa fa-fw fa-list-alt"></i> <span><?php echo $welcome->loadPo('API'); ?></span>
-                </a>
-            </li>
-            <li class="<?= ($this->uri->segment(1) == 'comments') ? 'active' : '' ?>">
-                <a href="<?php echo base_url() ?>comments">
-                    <i class="glyphicon glyphicon-comment"></i>
-                    <span><?php echo $welcome->loadPo('Comments'); ?></span>
-                </a>
-            </li>
+                    <?php } ?> 
+                        </ul>
+                        <?php } ?>
+            </li> <?php } ?>
         </ul>
     </section>
 </aside>
