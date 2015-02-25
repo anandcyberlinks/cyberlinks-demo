@@ -55,6 +55,17 @@ class Webtv extends MY_Controller {
         $this->show_view('webtv', $data);
     }
     
+    function resetplaylist(){
+        $id = $this->uri->segment('3');
+        $this->db->where('channel_id', $id);
+        $this->db->set('publish','0');
+        $this->db->set('status','0');
+        $this->db->set('url','');
+        $this->db->update('playlists');
+        redirect(base_url() . 'webtv/playlist/'.$id);
+        exit;
+    }
+    
     function publish(){
         $id = $this->uri->segment('3');
         $publish = ($this->uri->segment('4')==0)?'1':'0';

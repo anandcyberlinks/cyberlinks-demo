@@ -75,7 +75,7 @@
                                             <th><?php echo $welcome->loadPo('Name') ?></th>
                                             <th><?php echo $welcome->loadPo('Description') ?></th>
                                             <th><?php echo $welcome->loadPo('Status') ?></th>
-                                            <th><?php echo $welcome->loadPo('Punlish') ?></th>
+                                            <th><?php echo $welcome->loadPo('Publish') ?></th>
                                             <th><?php echo $welcome->loadPo('URL') ?></th>
                                             <th><?php echo $welcome->loadPo('Start Date') ?></th>
                                             <th><?php echo $welcome->loadPo('End Date') ?></th>
@@ -91,12 +91,9 @@
                                                 <td><?php echo $value->name; ?></td>
                                                 <td><?php echo $value->description; ?></td>
                                                 <td align="center"><i class="<?=($value->status == 1)?'fa fa-fw fa-check-circle-o text-green lead':'fa fa-fw fa-circle-o text-red lead'?>"></i></td>
-
-                                                <td align="center"><a class="publish" publist_id="<?=$value->id?>" href="javascript:void(0)" link="<?=base_url().'webtv/publish/'.$value->id.'/'.$value->publish?>" ><i id="p<?=$value->id?>" class="<?=($value->publish == 1)?'fa fa-fw fa-check-circle-o text-green lead':'fa fa-fw fa-circle-o text-red lead'?>"></i></a></td>
-                                                
-                                                
-                                                
-                                                
+                                                <td align="center">
+                                                    <a class="publish" publist_id="<?=$value->id?>" href="javascript:void(0)" link="<?=base_url().'webtv/publish/'.$value->id.'/'.$value->publish?>" ><i id="p<?=$value->id?>" class="<?=($value->publish == 1)?'fa fa-fw fa-check-circle-o text-green lead':'fa fa-fw fa-circle-o text-red lead'?>"></i></a>
+                                                </td>
                                                 <td style='text-align:center'>
                                                     <?php if ($value->url == '') { ?>
                                                         --
@@ -124,6 +121,7 @@
                                         <tr>
                                             <td colspan="9">
                                                 <a class="btn btn-warning" href="<?php echo base_url() . 'webtv' ?>"><i class="fa fa-mail-reply"></i>&nbsp; Back</a>
+                                                <a class="btn btn-danger confirm" href="<?php echo base_url() . 'webtv/resetplaylist/'.$this->uri->segment(3)?>">Reset Playlist</a>
                                             </td>
                                         </tr>
                                     </tfoot>
@@ -209,6 +207,7 @@
 <script>
 $(".publish").click(function(data){
     var thisa = $(this);
+    var link = "<?php echo base_url(); ?>" + "webtv/publish/";
     var url = $(this).attr('link');
     var publist_id = $(this).attr('publist_id');
     $.ajax({
@@ -216,12 +215,11 @@ $(".publish").click(function(data){
     }).done(function(response){
         console.log(response);
         if(response == 0 ){
-            //alert(thisa.attr('link'));
-            thisa.attr('link','http://localhost/multitvfinal/webtv/publish/92/0');
+            thisa.attr('link', link + publist_id + '/0');
             $("#p"+publist_id).removeClass('fa-check-circle-o text-green');
             $("#p"+publist_id).addClass('fa-circle-o text-red');
         } else {
-            thisa.attr('link','http://localhost/multitvfinal/webtv/publish/92/1');
+            thisa.attr('link', link + publist_id + '/1');
             $("#p"+publist_id).removeClass('fa-circle-o text-red');
             $("#p"+publist_id).addClass('fa-check-circle-o text-green');
         }
