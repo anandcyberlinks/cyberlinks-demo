@@ -911,8 +911,8 @@ class Ads_model extends CI_Model {
        $this->db->limit($limit);
       $query = $this->db->get();
       $this->db->flush_cache();
-      echo '<br>'.$this->db->last_query();
-      die;
+     // echo '<br>'.$this->db->last_query();
+     // die;
       return $query->result();
     }
     
