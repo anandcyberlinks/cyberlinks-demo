@@ -849,7 +849,7 @@ class Ads_model extends CI_Model {
       $this->db->where('id',$id);
       $this->db->limit(1);
       $query = $this->db->get();
-   //   echo $this->db->last_query();echo '<br>';
+    //  echo $this->db->last_query();echo '<br>';
      return $query->row_array();
       /*if($result){
 	 return unserialize($result->keywords);
@@ -860,7 +860,7 @@ class Ads_model extends CI_Model {
         
     /* function to get users location wise ads list */
     function getUserLocationWiseAds($lat,$long,$id,$data,$limit=0){
-      
+      $this->db->start_cache();
       $keywords = array();
       if(!empty($data['keywords']) ){	 
 	//$keywords = unserialize($data->keywords);
@@ -900,10 +900,18 @@ class Ads_model extends CI_Model {
     //  $this->db->where('a.content_id',$id);
      // $this->db->having('ROUND(distance) <= ' ,3);
      $this->db->group_by('a.id');
-     
-      $this->db->limit($limit);
+          
+      $this->db->stop_cache();
+      
+      //echo $this->db->count_all_results();
+      //$query = $this->db->get();
+      if($this->db->count_all_results()==0){	 
+	  $this->db->or_where('k.name IS NULL',null,false);	  
+      }
+       $this->db->limit($limit);
       $query = $this->db->get();
-      //echo '<br>'.$this->db->last_query();die;
+     // echo '<br>'.$this->db->last_query();
+     // die;
       return $query->result();
     }
     
