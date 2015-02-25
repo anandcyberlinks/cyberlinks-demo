@@ -906,13 +906,13 @@ class Ads_model extends CI_Model {
       //echo $this->db->count_all_results();
       //$query = $this->db->get();
       if($this->db->count_all_results()==0){	 
-	  $this->db->or_where('k.name IS NULL',null,false);	  
+	  $this->db->or_where('1=1',null,false);	  
       }
        $this->db->limit($limit);
       $query = $this->db->get();
       $this->db->flush_cache();
      // echo '<br>'.$this->db->last_query();
-     // die;
+    //  die;
       return $query->result();
     }
     
