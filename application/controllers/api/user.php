@@ -407,7 +407,7 @@ class User extends REST_Controller
     function social_post()
     {
         $provider = $this->post('provider');
-	echo 'at'.$access_key = $this->post('access_key');
+	$access_key = $this->post('access_key');
 	$uniqueId = $this->post('uniqueID');
         $userdetails = json_decode($this->post('social'));
     
