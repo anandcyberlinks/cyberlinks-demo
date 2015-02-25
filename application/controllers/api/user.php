@@ -24,8 +24,8 @@ class User extends REST_Controller
        parent::__construct();
        $this->load->helper('url');
        $this->load->model('api/User_model');
-      // $this->admin_token = $this->get('token');
-      $this->admin_token = '54d46a72bab49';
+       $this->admin_token = $this->get('token');
+      //$this->admin_token = '54d46a72bab49';
    }       
     
    function base64_to_jpeg($base64_string, $output_file,$extension) {
@@ -407,7 +407,7 @@ class User extends REST_Controller
     function social_post()
     {
         $provider = $this->post('provider');
-	$access_key = $this->post('access_key');
+	echo 'at'.$access_key = $this->post('access_key');
 	$uniqueId = $this->post('uniqueID');
         $userdetails = json_decode($this->post('social'));
     
