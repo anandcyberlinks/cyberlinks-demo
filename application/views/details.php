@@ -21,6 +21,9 @@
 	<input type='hidden' name='is_complete' id='is_complete'>
         <div id="myElement" style='width:100%;height:100%'></div>
        <pre id="log"></pre>
+       <div><a href="javascript:void()" onclick="play_video()">Play</a>
+       <a href="javascript:void()" onclick="pause_video()">Pause</a>
+       </div>
 <script type="text/javascript" src="<?php echo base_url(); ?>./assets/js/jwplayer.js" ></script>
 <script type="text/javascript">jwplayer.key = "BC9ahgShNRQbE4HRU9gujKmpZItJYh5j/+ltVg==";</script>
 <script src="<?php echo base_url() ?>assets/js/jquery-1.10.2.js"></script>
@@ -81,6 +84,15 @@ $(window).on('beforeunload', function(){
 			
 	<?php } }?>
 		//------------------------------//
+		
+		function play_video()
+		{
+			jwplayer().play(true);	
+		}
+		
+		function pause_video() {			
+			jwplayer().pause();	
+		}
 		
 	function playVideo(){    		
 		player.bind("finish", function() {
@@ -218,6 +230,7 @@ autostart: 1,
 	schedule: {
        <?php       
        $i = 1;
+       if($scheduleBreaks){
        foreach ($scheduleBreaks as $row) {
 	   //$offset = ($row->offset_hrs * 3600) + ($row->offset_minutes * 60) + ($row->offset_seconds);
 	   $offset = $row['cue_points'];	   
@@ -226,11 +239,12 @@ autostart: 1,
 		offset: '<?php echo ($offset==0 ? 'pre': $offset); ?>',
 		//'skipoffset':5,
 		tag: "<?php echo ($row['ad_type'] != 'External' ? base_url():'') . $row['vast_file']; ?>?<?php echo $row['ads_id']?>/<?php echo $user_id?>/<?php echo $row['uid']?>"
-		//tag: "http://182.18.165.43/vast/getvast.php?banner=Rock%20Music"
-		//tag: "http://localhost/multitvfinal-demo/assets/upload/ads/vast/revive.xml"
+		//tag: "<?php echo $row['vast_file']?>"
+		//tag: "http://localhost/multitvfinal-demo/assets/upload/ads/vast/revive_vast.xml"
 		},
 	   <?php $i++;
-       } ?>                    
+       }
+       }?>                    
 	}
 	
 	
