@@ -5,6 +5,7 @@
         <section class="content-header">
             <h1><?php echo $welcome->loadPo('Channels') ?><small><?php echo $welcome->loadPo('Control panel') ?></small>
                 <a class="btn btn-success" href="<?php echo base_url().'webtv/add_channels'; ?>">Add Channel</a>
+                <a class="btn btn-danger confirm" href="<?php echo base_url() . 'webtv/resetplaylist/all'; ?>">Reset Dynamic Playlist</a>
             </h1>
             <ol class="breadcrumb">
                 <li><a href="<?php echo base_url(); ?>"><i class="fa fa-dashboard"></i><?php echo $welcome->loadPo('Dashboard') ?></a></li>
