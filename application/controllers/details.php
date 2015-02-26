@@ -1,5 +1,5 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-
+<?php
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class Details extends MY_Controller {
 
 	function __construct()
@@ -39,10 +39,35 @@ class Details extends MY_Controller {
 		//----------------------------//
 		
 		$user_data = $this->Ads_model->getUserKeywords($_GET['user_id']);
+		
+		//--- Access Revive web service ---//
+		/*$gender = $user_data['gender'];
+		$dob = $user_data['dob'];
+		$from = new DateTime($dob);
+		$to   = new DateTime('today');
+		$age = $from->diff($to)->y;
+		$keywords = $user_data['keywords'];
+		*/
+		$adsAlloc = $this->getAdsRevive($lat,$lng,$age,$keywords,$gender,$limit);
+		//echo '<pre>';print_r($adsAlloc);
+		//--------------------------------//
+		
 		//echo '<pre>';print_r($user_data);die;
 		//-- get radius for user location --//
 		if($id !=38){  //- check if newsnation no ads display --//
-		$adsAlloc = $this->Ads_model->getUserLocationWiseAds($lat,$lng,$_GET['user_id'],$user_data,$limit);
+			
+		//-- Revive ad assing cue points array ---//
+		$i=0;
+		foreach($adsAlloc->url as $key=>$val)
+		{
+			$adsFinal[$i]['vast_file'] = $val;
+			$adsFinal[$i]['cue_points'] 	= @$cuePoints[$i];
+			$i++;
+		}
+		//echo '<pre>';print_r($adsFinal);die;
+		//---------------------------------------//
+		
+		/*$adsAlloc = $this->Ads_model->getUserLocationWiseAds($lat,$lng,$_GET['user_id'],$user_data,$limit);
 		//echo '<pre>';print_r($adsAlloc);die;
 		$i=0;
 		foreach($adsAlloc as $row){
@@ -54,7 +79,7 @@ class Details extends MY_Controller {
 			$adsFinal[$i]['cue_points'] 	= @$cuePoints[$i];
 			$adsFinal[$i]['ad_type'] 	= $row->ad_type;
 			$i++;
-		}
+		}*/
 		}
 		//----------------------------------//
 		//echo '<pre>';print_r($adsFinal);die;
@@ -63,7 +88,7 @@ class Details extends MY_Controller {
                 
                 $device = $_GET['device'];
 		$this->data['user_id'] = $_GET['user_id'];
-				//echo '<pre>';print_r($_SERVER);die;
+			//echo '<pre>';print_r($_SERVER);die;
 		$this->data['uri'] = "http://".$_SERVER[SERVER_NAME].$_SERVER[REQUEST_URI];
 		if($type=='live'){
 			$this->data['result'] =  $this->Video_model->livestream_play($id,$device);	
@@ -80,6 +105,26 @@ class Details extends MY_Controller {
 		$this->data['scheduleBreaks'] = $adsFinal;       
                 $this->load->view('details',$this->data);
 	}
+	
+	function getAdsRevive($lat,$lng,$age,$keywords,$gender,$l)
+	{
+		$this->load->helper('url');                
+                $url = "http://182.18.165.43/vast/getvast.php?keywords=$keywords&age=$age&gender=$gender&lat=$lat&lng=$lng&limit=$l";
+                // Get cURL resource
+                $curl = curl_init();
+                // Set some options - we are passing in a useragent too here
+                curl_setopt_array($curl, array(
+                    CURLOPT_RETURNTRANSFER => 1,
+                    CURLOPT_URL => $url,
+                ));  
+                // Send the request & save response to $resp
+               $resp = curl_exec($curl);
+               
+                // Close request to clear up some resources
+                curl_close($curl);
+                return json_decode($resp);
+	}
+	
         
         function addview()
         {
