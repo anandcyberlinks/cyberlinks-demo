@@ -57,12 +57,21 @@ class Webtv extends MY_Controller {
     
     function resetplaylist(){
         $id = $this->uri->segment('3');
-        $this->db->where('channel_id', $id);
-        $this->db->set('publish','0');
-        $this->db->set('status','0');
-        $this->db->set('url','');
-        $this->db->update('playlists');
-        redirect(base_url() . 'webtv/playlist/'.$id);
+        switch($id){
+            case 'all' :
+                $query = sprintf("update playlists set status = '0', url = '' where channel_id in (select id from channels where type = 'Linear')");
+                $dataset = $this->db->query($query)->result();
+                redirect(base_url() . 'webtv');
+                break;
+            default :
+                $this->db->where('channel_id', $id);
+                $this->db->set('publish','0');
+                $this->db->set('status','0');
+                $this->db->set('url','');
+                $this->db->update('playlists');
+                redirect(base_url() . 'webtv/playlist/'.$id);
+                break;
+        }
         exit;
     }
     

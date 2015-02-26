@@ -119,7 +119,7 @@
                                     </tbody>
                                     <tfoot>
                                         <tr>
-                                            <td colspan="9">
+                                            <td colspan="10">
                                                 <a class="btn btn-warning" href="<?php echo base_url() . 'webtv' ?>"><i class="fa fa-mail-reply"></i>&nbsp; Back</a>
                                                 <a class="btn btn-danger confirm" href="<?php echo base_url() . 'webtv/resetplaylist/'.$this->uri->segment(3)?>">Reset Playlist</a>
                                             </td>
