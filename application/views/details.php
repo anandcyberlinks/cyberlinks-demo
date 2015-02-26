@@ -202,7 +202,7 @@ $(window).on('beforeunload', function(){
 		$('#analytics_id').val(data);
 	});
     }
-      
+       
     jwplayer("myElement").setup({
        //flashplayer: "assets/player.swf",
         primary: "html5",
