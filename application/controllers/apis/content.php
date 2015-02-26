@@ -49,6 +49,7 @@ class Content extends Apis{
                             if(v.views > 0,v.views,0) as `views`,
                             c.feature_video as featured,
                             v.duration as `duration`,
+                            cfile.name as `video_filename`,
                             cfile.relative_path as `video_basepath`,
                             vtfile.relative_path as `video_basethumb`,
                             p.content_id as `price`,
@@ -560,7 +561,7 @@ class Content extends Apis{
     }
     
     function getPlaylistDetail($playlist_id,$type){
-        $dataset = false;
+        $dataset = array();
         switch($type){
             case 'loop' :
                     $query = sprintf('select
