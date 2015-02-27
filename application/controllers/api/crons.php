@@ -182,4 +182,74 @@ class Crons extends REST_Controller
             $this->response(array('error' => 'No record found'), 404);
         }
     }
+    
+    public function live_channel_epg_get(){
+
+            $result = $this->Video_model->get_allChannels();
+
+            if ($result!=null) {
+                $date = date('dmY');
+                // output data of each row
+                foreach($result as $row) {
+
+                    if($row["ch_alias"]!=""){
+
+                        // Now send a hit for the channel details
+                        $url = "http://indian-television-guide.appspot.com/indian_television_guide?channel=".$row["ch_alias"]."&date=".$date;
+
+                        // Get cURL resource
+                        $curl = curl_init();
+                        // Set some options - we are passing in a useragent too here
+                        curl_setopt_array($curl, array(
+                            CURLOPT_RETURNTRANSFER => 1,
+                            CURLOPT_URL => $url
+                        ));
+                        // Send the request & save response to $resp
+                        $resp = curl_exec($curl);
+
+                        $responce = json_decode($resp);
+
+                        if(count($responce->listOfShows) > 0)
+                        {
+                            $values=" ";
+                            $i=1;
+                            foreach($responce->listOfShows as $key => $val)
+                            {
+                                $values .= "(".$row['id'].", '".$row['name']."', '".date('Y-m-d')."',";
+
+                                $values .= "'".$val->showTitle."','".$val->showTime."','".$val->showThumb."','".$val->showDetails->{'Language:'}."',"
+                                        . "'".$val->showDetails->{'Show Description'}."','".$val->showDetails->{'Show Type:'}."'";
+                                $values .= ")";
+
+                                if(count($responce->listOfShows) != $i){
+                                    $values .= ",";
+                                }
+
+                                $i++;
+                            }
+
+                            // Delete that channel EPG first
+                            $this->Video_model->deleteChannelEpg($row['id']);
+                            
+                            // Insert channel EPG
+                            $this->Video_model->insertLiveChannelEpg($values);
+                            
+                            $final_result = array('message' => "Live channel EPG successully inserted.");
+                            
+                        }
+                        // Close request to clear up some resources
+                        curl_close($curl);
+
+                    }
+                }
+            }
+            
+            if($final_result)
+            {
+                $this->response($final_result, 200); // 200 being the HTTP response code
+            }else{
+                $this->response(array('error' => 'No record found'), 404);
+            }
+ 
+    }
 }

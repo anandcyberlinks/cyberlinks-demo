@@ -472,6 +472,7 @@ class Content extends Apis{
                     case 'live' :
                         if(isset($v2['chCtnt'])){
                             $v2['chCtnt']['ctntUrl'] = $this->getLiveUrl($v2['chId']);
+                            $v2['chCtnt']['chEpg'] = $this->getLivechannelEpg($v2['chId']);
                             $v2['chCtnt']['ctnAd'] = $ads[rand(0,count($ads)-1)];
                         }
                         break;
@@ -560,6 +561,13 @@ class Content extends Apis{
         //$tmp = array('ios'=> false,'android'=>false,'web'=>false,'windows'=>false,'youtube'=>false,'thumb'=>false);
         $tmp = array('ios'=> $cntUrl.'&device=ios','android'=>$cntUrl.'&device=android','web'=>$cntUrl.'&device=web','windows'=>$cntUrl.'&device=ios','youtube'=>$cntUrl.'&device=youtube','thumb'=>false);
         return array_merge($tmp,(Array)reset($dataset));        
+    }
+    
+    function getLivechannelEpg($channel_id){
+        $query = sprintf('select show_title,show_time,show_thumb,show_language,show_description,show_type
+                              from livechannel_epg where channel_id = %d ',$channel_id);
+        $dataset = $this->db->query($query)->result();
+        return $dataset;
     }
     
     function getPlaylistDetail($playlist_id,$type){

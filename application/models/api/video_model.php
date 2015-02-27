@@ -741,4 +741,25 @@ class Video_model extends CI_Model {
          //echo $this->db->last_query();
 	 return $query->result(); 
       }
+      
+    function get_allChannels(){
+        $query = $this->db->get('channels');
+        if($query->num_rows() > 0)        {
+            $data = $query->result_array();
+        }else{
+            $data = null;
+        }
+        return $data;
+    }
+    
+    function deleteChannelEpg($channel_id){
+        $sql = "DELETE FROM livechannel_epg WHERE channel_id = ".$channel_id;
+        $this->db->query($sql);
+    }
+    
+    function insertLiveChannelEpg($values){
+        $sql = "INSERT INTO livechannel_epg (channel_id, channel_name, date,show_title,show_time,show_thumb,show_language,show_description,show_type    )
+                            VALUES ".$values;
+        $this->db->query($sql);
+    }
 }
