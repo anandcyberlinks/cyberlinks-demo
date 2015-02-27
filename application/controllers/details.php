@@ -85,11 +85,7 @@ class Details extends MY_Controller {
 		//echo '<pre>';print_r($adsFinal);die;
 		//echo '<pre>';print_r($keywords);die;
 		$this->load->helper('url');
-               /* $json ='[{"android":{"3g":"http:\/\/54.179.170.143:1935\/live\/370_3g\/playlist.m3u8","wifi":"http:\/\/54.179.170.143:1935\/live\/370_wifi\/playlist.m3u8","2g":"http:\/\/54.179.170.143:1935\/live\/370_2g\/playlist.m3u8"},"ios":{"3g":"http:\/\/54.179.170.143:1935\/live\/370_3g\/playlist.m3u8","wifi":"http:\/\/54.179.170.143:1935\/live\/370_wifi\/playlist.m3u8","2g":"http:\/\/54.179.170.143:1935\/live\/370_2g\/playlist.m3u8"},"web":{"3g":"rtmp:\/\/54.179.170.143:1935\/live\/370_3g","wifi":"rtmp:\/\/54.179.170.143:1935\/live\/370_wifi","2g":"rtmp:\/\/54.179.170.143:1935\/live\/370_2g"},"windows":{"3g":"http:\/\/54.179.170.143:1935\/live\/370_3g\/Manifest","wifi":"http:\/\/54.179.170.143:1935\/live\/370_wifi\/Manifest","2g":"http:\/\/54.179.170.143:1935\/live\/370_2g\/Manifest"}}]';
-	    $urlArray = json_decode($json);
-	    echo '<pre>';print_r($urlArray);
-	   // die;
-               */
+              
 		 $device = $_GET['device'];
 		 $network = $_GET['network'];
 		 $platform =$_GET['platform'];
@@ -121,8 +117,8 @@ class Details extends MY_Controller {
 	
 	function getAdsRevive($lat,$lng,$age,$keywords,$gender,$l)
 	{
-		$this->load->helper('url');                
-                $url = "http://182.18.165.43/vast/getvast.php?keyword=$keywords&age=$age&gender=$gender&lat=$lat&lng=$lng&limit=$l";
+		$this->load->helper('url');		
+                $url = "http://54.179.170.143/vast/getvast.php?keyword=$keywords&age=$age&gender=$gender&lat=$lat&lng=$lng&limit=$l";
                 // Get cURL resource
                 $curl = curl_init();
                 // Set some options - we are passing in a useragent too here

@@ -206,10 +206,10 @@ $(window).on('beforeunload', function(){
     jwplayer("myElement").setup({
        //flashplayer: "assets/player.swf",
         primary: "html5",
-        file: "<?php echo $video_path;?>",
+        //file: "<?php echo $video_path;?>",
 	//file: "http://54.179.170.143:1935/live/370/playlist.m3u8",
        //file: "http://localhost/multitvfinal-demo/assets/upload/video/53f709efce75f.mp4",
-       //file: "rtmp://54.255.176.172:1935/live/newsnation_360p",
+       file: "rtmp://54.255.176.172:1935/live/newsnation_360p",
 	image: "<?php echo base_url().THUMB_LARGE_PATH. $thumbnail_path;?>",       
        // skin: "<?php echo base_url()?>assets/myskinjw/custom.xml",
 	width: "100%",
@@ -226,14 +226,14 @@ autostart: 1,
 	client: "vast",
 	//skipoffset: 5,
 	schedule: {
-		adbreak1: {
+		/*adbreak1: {
 			offset: 'pre',
 			tag: "http://54.179.170.143/multitvfinal/assets/upload/ads/vast/d53be859b9314be0885eda3794321e05.xml"
-		},
-       <?php      /* 
+		},*/
+       <?php       
        $i = 1;
        
-      // if($scheduleBreaks){	
+       if($scheduleBreaks){	
        foreach ($scheduleBreaks as $row) {	
 	   //$offset = ($row->offset_hrs * 3600) + ($row->offset_minutes * 60) + ($row->offset_seconds);
 	   $offset = $row['cue_points'];	   
@@ -242,13 +242,13 @@ autostart: 1,
 		offset: '<?php echo ($offset==0 ? 'pre': $offset); ?>',
 		//'skipoffset':5,
 		//tag: "<?php //echo ($row['ad_type'] != 'External' ? base_url():'') . $row['vast_file']; ?>?<?php //echo $row['ads_id']?>/<?php //echo $user_id?>/<?php //echo $row['uid']?>"
-		//tag: "<?php echo $row['vast_file']?>?<?php echo $row['ads_id']?>/<?php echo $user_id?>/<?php echo $row['uid']?>"
+		tag: "<?php echo $row['vast_file']?>?<?php echo $row['ads_id']?>/<?php echo $user_id?>/<?php echo $row['uid']?>"
 		//tag: "http://localhost/multitvfinal-demo/assets/upload/ads/vast/54e182705fa67.xml"
-		tag: "http://54.179.170.143/multitvfinal/assets/upload/ads/vast/d53be859b9314be0885eda3794321e05.xml"
+		//tag: "http://54.179.170.143/multitvfinal/assets/upload/ads/vast/d53be859b9314be0885eda3794321e05.xml"
 		},
 	   <?php $i++;
        }
-      //} */?>                    
+      } ?>                    
 	}
 	
 	
