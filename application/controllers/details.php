@@ -41,13 +41,13 @@ class Details extends MY_Controller {
 		$user_data = $this->Ads_model->getUserKeywords($_GET['user_id']);
 		
 		//--- Access Revive web service ---//
-		/*$gender = $user_data['gender'];
+		$gender = $user_data['gender'];
 		$dob = $user_data['dob'];
 		$from = new DateTime($dob);
 		$to   = new DateTime('today');
 		$age = $from->diff($to)->y;
 		$keywords = $user_data['keywords'];
-		*/
+		
 		$adsAlloc = $this->getAdsRevive($lat,$lng,$age,$keywords,$gender,$limit);
 		//echo '<pre>';print_r($adsAlloc);
 		//--------------------------------//
@@ -118,7 +118,7 @@ class Details extends MY_Controller {
 	function getAdsRevive($lat,$lng,$age,$keywords,$gender,$l)
 	{
 		$this->load->helper('url');		
-                $url = "http://54.179.170.143/vast/getvast.php?keyword=$keywords&age=$age&gender=$gender&lat=$lat&lng=$lng&limit=$l";
+                echo $url = "http://54.179.170.143/vast/getvast.php?keyword=$keywords&age=$age&gender=$gender&lat=$lat&lng=$lng&limit=$l";
                 // Get cURL resource
                 $curl = curl_init();
                 // Set some options - we are passing in a useragent too here
