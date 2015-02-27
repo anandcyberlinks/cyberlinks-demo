@@ -290,8 +290,9 @@ class User extends REST_Controller
     
     function logout_get()
     {
-        $token = $this->get('token');
-        $result = $this->User_model->logout($token);
+        //$token = $this->get('token');
+	$token = $this->get('uniqueID');
+        $result = $this->User_model->logout_social($token);
         $this->response(array('code'=>1,'result'=>'Logout successfully'), 200); // 200 being the HTTP response code
     }
     
@@ -410,7 +411,7 @@ class User extends REST_Controller
 	$access_key = $this->post('access_key');
 	$uniqueId = $this->post('uniqueID');
         $userdetails = json_decode($this->post('social'));
-    
+    //echo $this->post('social');
        //-- check if Admin token is valid --//
 	   $owner_id =  $this->User_model->checkAdminToken($this->admin_token);
 	  // $owner_id =  $this->User_model->checkAdminToken('54d46a72bab49');
@@ -419,7 +420,7 @@ class User extends REST_Controller
 	    }
        //-----------------------------------//
        
-        //print_r($userdetails);die;
+       //print_r($userdetails);die;
         if(strtolower($provider)=='facebook'){
             
             $imageUrl = $this->social_data_image($access_key);
@@ -437,7 +438,7 @@ class User extends REST_Controller
 	    //-- get user keywords --//
 	    $social_keywords = $this->social_data($id,$socialid,$access_key);
         }
-        
+       
         if(strtolower($provider)=='google')
         {
 	    $social_keywords='';
@@ -460,18 +461,38 @@ class User extends REST_Controller
 	    $age = $userdetails->dob;
             //echo '<pre>'; print_r($userdetails);die;
         }
-                	
+	//$deviceIdArr = array();
+                	//echo $email;;die;
         //-- check if social account is already exist --//
-            $uid = $this->User_model->loginuser($email, $password);
-            
-            if($uid>0){
-                $this->User_model->userDeviceID($uniqueId,$uid);
+           // $uid = $this->User_model->loginuser($email, $password);
+	   if($email !=''){
+            $userdata = $this->User_model->loginsocial($email, $provider,$uniqueId);
+	    
+	    $uid = $userdata->id;
+	    $deviceid = $userdata->device_unique_id;
+	    //$deviceIdArr = unserialize($userdata->device_unique_id);
+	    //print_r(unserialize($deviceIdArr));
+	   }	   
+	   
+            if($uid>0){		
+		//if(!in_array($uniqueId,$deviceIdArr)){
+		//    array_push($deviceIdArr,$uniqueId);
+		//}
+		//--- insert device unique id ---//
+		if($deviceid != $uniqueId){
+		 $uniqueData = array('device_unique_id'=>$uniqueId,'user_id'=>$uid);
+		 $this->User_model->userDeviceID($uniqueData);
+		}
+		//---------------------//
+		
+                //$this->User_model->userDeviceID($uniqueId,$uid);
+		//$this->User_model->userDeviceID(serialize($deviceIdArr),$uid);
               //-- api token --//
                $this->generateApiToken($uid,$email,$socialid);
                $result = $this->User_model->getuser($uid);	       
                $this->response(array('code'=>1,'result'=>$result), 200); 
             }else{
-		
+			    
             //-----------Register user-----------------//
             $userdata = array(
 	    'owner_id' => $owner_id,
@@ -482,7 +503,8 @@ class User extends REST_Controller
             'password' => $password,
 	    'image' => $image,
 	    'age' => $age,
-	    'device_unique_id' => $uniqueId,
+	    //'device_unique_id' => $uniqueId,
+	    'device_unique_id' => serialize($deviceIdArr),
 	    'keywords'=>$social_keywords,
             //'token' => $token,
             'status' => 'active'
@@ -491,7 +513,12 @@ class User extends REST_Controller
            
              $id = $this->User_model->adduser($userdata);
             
-             if($id){
+             if($id){		
+		//--- insert device unique id ---//
+		 $uniqueData = array('device_unique_id'=>$uniqueId,'user_id'=>$id);
+		 $this->User_model->userDeviceID($uniqueData);
+		//---------------------//
+		
 		/*
                  if($provider=='facebook'){
                  //-- social Data Keywords 

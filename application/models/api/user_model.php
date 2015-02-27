@@ -90,6 +90,23 @@ class User_model extends CI_Model {
             return 0;
    }
 
+   public function loginsocial($email,$provider,$uniqueid)
+   {
+        $this->db->select('a.id,c.device_unique_id');
+	$this->db->from('customers a');
+        $this->db->join('social_connects b', 'a.id = b.user_id', 'left');
+	$this->db->join('customer_device c','a.id=c.user_id AND c.device_unique_id='."'$uniqueid'",'left');
+        $this->db->where('a.email',$email);        
+        $this->db->where('b.from',$provider); 
+        $this->db->where('a.status',1); 
+        $query = $this->db->get();
+        //echo '<br>'.$this->db->last_query();die;
+        $result = $query->row();
+        if($result)
+            return $result;
+        else
+            return 0;
+   }
     public function confirmRegistration($token)
     {
         $this->db->select('a.id');
@@ -203,6 +220,13 @@ class User_model extends CI_Model {
         return true;
     }
     
+    public function logout_social($deviceid)
+    {
+      $this->db->where('device_unique_id', $deviceid);
+      $this->db->delete('customer_device');
+      return true;
+    }
+    
     function add_apikey($data)
     {
         $this->db->set($data);
@@ -253,7 +277,7 @@ function delete_user($id){
       $this->db->from('users a');              
       $this->db->where('a.token',$token);    
       $query = $this->db->get();
-        //echo '<br>'.$this->db->last_query();die;
+       // echo '<br>'.$this->db->last_query();die;
       $result = $query->row();
       if($result)
          return $result->id;
@@ -265,7 +289,8 @@ function delete_user($id){
   {
    $this->db->select('a.id');
    $this->db->from('customers a');
-   $this->db->where('a.device_unique_id',$id);
+   $this->db->join('customer_device b','a.id=b.user_id');
+   $this->db->where('b.device_unique_id',$id);
    $this->db->limit(1);
    $query = $this->db->get();
   // echo '<br>'.$this->db->last_query();die;
@@ -292,13 +317,15 @@ function delete_user($id){
           }else
               {
                 return 0;
-              }
-      
+              }      
   }
-  public function userDeviceID($uniqueId,$uid)
+  public function userDeviceID($data)
           {
-          $this->db->where('id',$uid);
-          $this->db->update('customers', array('device_unique_id'=>$uniqueId));
+          //$this->db->where('id',$uid);
+	  $this->db->set('created','NOW()',FALSE);
+	  $this->db->insert('customer_device',$data);
+	 // echo $query =sprintf("UPDATE customers SET device_unique_id = CONCAT(device_unique_id,',%d')",$uniqueId);die;
+         // $this->db->update('customers', array('device_unique_id'=>$uniqueId));	 	  
           return TRUE;
           }
 }
