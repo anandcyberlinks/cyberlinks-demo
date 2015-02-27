@@ -567,7 +567,11 @@ class Content extends Apis{
         $query = sprintf('select show_title,show_time,show_thumb,show_language,show_description,show_type
                               from livechannel_epg where channel_id = %d ',$channel_id);
         $dataset = $this->db->query($query)->result();
-        return $dataset;
+        if(count($dataset) > 0){
+            return $dataset;
+        }else{
+            return array();
+        }
     }
     
     function getPlaylistDetail($playlist_id,$type){
