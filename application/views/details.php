@@ -238,8 +238,9 @@ autostart: 1,
 		offset: '<?php echo ($offset==0 ? 'pre': $offset); ?>',
 		//'skipoffset':5,
 		//tag: "<?php //echo ($row['ad_type'] != 'External' ? base_url():'') . $row['vast_file']; ?>?<?php //echo $row['ads_id']?>/<?php //echo $user_id?>/<?php //echo $row['uid']?>"
-		tag: "<?php echo $row['vast_file']?>?<?php echo $row['ads_id']?>/<?php echo $user_id?>/<?php echo $row['uid']?>"
-		//tag: "http://localhost/multitvfinal-demo/assets/upload/ads/vast/revive_vast.xml"
+		//tag: "<?php echo $row['vast_file']?>?<?php echo $row['ads_id']?>/<?php echo $user_id?>/<?php echo $row['uid']?>"
+		//tag: "http://localhost/multitvfinal-demo/assets/upload/ads/vast/54e182705fa67.xml"
+		tag: "http://54.179.170.143/multitvfinal/assets/upload/ads/vast/d53be859b9314be0885eda3794321e05.xml"
 		},
 	   <?php $i++;
        }
