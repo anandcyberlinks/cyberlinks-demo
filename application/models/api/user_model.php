@@ -220,11 +220,13 @@ class User_model extends CI_Model {
         return true;
     }
     
-    public function logout_social($deviceid)
+    public function logout_social($deviceid,$id)
     {
       $this->db->where('device_unique_id', $deviceid);
+      $this->db->where('user_id', $id);
       $this->db->delete('customer_device');
-      return true;
+      //echo $this->db->last_query();
+      return $this->db->affected_rows();      
     }
     
     function add_apikey($data)

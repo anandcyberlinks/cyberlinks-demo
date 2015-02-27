@@ -292,8 +292,12 @@ class User extends REST_Controller
     {
         //$token = $this->get('token');
 	$token = $this->get('uniqueID');
-        $result = $this->User_model->logout_social($token);
-        $this->response(array('code'=>1,'result'=>'Logout successfully'), 200); // 200 being the HTTP response code
+	$id = $this->get('id');
+        $result = $this->User_model->logout_social($token,$id);
+	if($result>0)
+	    $this->response(array('code'=>1,'result'=>'Logout successfully'), 200); // 200 being the HTTP response code
+	else
+	    $this->response(array('code'=>0,'result'=>'Logout failed'), 404); // 200 being the HTTP response code
     }
     
     function forgot_post()
