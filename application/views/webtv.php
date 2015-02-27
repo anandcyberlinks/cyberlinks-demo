@@ -97,7 +97,10 @@
                                                 <td style='text-align:center'>
                                                     <?php if ($value->url == '') { ?>
                                                         --
-                                                    <?php } else { ?>
+                                                    <?php } else {
+                                                            $tmpUrl = json_decode($value->url);
+                                                            echo '<pre>';print_r($tmpUrl);echo '</pre>';
+                                                        ?>
                                                         <a class="prev_video" href="#myModal" data-backdrop="static" data-toggle="modal" data-img-url="<?php echo $value->url; ?>">Preview</a>
                                                     <?php } ?>
                                                 </td>
