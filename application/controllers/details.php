@@ -101,7 +101,7 @@ class Details extends MY_Controller {
 			$url =  $urlArray[0]->$platform->$network;
 			//print_r($result);
 			$result->video_path = $url;
-			//echo '<pre>';print_r($result);die;
+			echo '<pre>';print_r($result);die;
 			//$result = $this->Video_model->video_play($id,$device);			
 		/*	if($result){
 				$this->data['result'] =$result;	
