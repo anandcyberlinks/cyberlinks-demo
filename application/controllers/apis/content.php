@@ -358,7 +358,7 @@ class Content extends Apis{
                             left join files cfile on cfile.id = v.file_id
                             left join video_thumbnails vt on vt.content_id = c.id
                             left join files vtfile on vtfile.id = vt.file_id
-                            where pv.playlist_id = %d AND pv.status != 0 order by pv.index ',$qString['k']);
+                            where pv.playlist_id = %d AND pv.status != 0 AND cfile.absolute_path != "" order by pv.index ',$qString['k']);
         
         
             $dataset = $this->db->query($query)->result();
