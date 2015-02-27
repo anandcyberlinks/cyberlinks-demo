@@ -49,7 +49,7 @@ class Details extends MY_Controller {
 		$keywords = $user_data['keywords'];
 		
 		$adsAlloc = $this->getAdsRevive($lat,$lng,$age,$keywords,$gender,$limit);
-		echo '<pre>';print_r($adsAlloc);
+		//echo '<pre>';print_r($adsAlloc);
 		//--------------------------------//
 		
 		//echo '<pre>';print_r($user_data);die;
@@ -64,7 +64,7 @@ class Details extends MY_Controller {
 			$adsFinal[$i]['cue_points'] 	= @$cuePoints[$i];
 			$i++;
 		}
-		echo '<pre>';print_r($adsFinal);die;
+		//echo '<pre>';print_r($adsFinal);die;
 		//---------------------------------------//
 		
 		/*$adsAlloc = $this->Ads_model->getUserLocationWiseAds($lat,$lng,$_GET['user_id'],$user_data,$limit);
