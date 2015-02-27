@@ -99,9 +99,8 @@
                                                         --
                                                     <?php } else {
                                                             $tmpUrl = json_decode($value->url);
-                                                            echo '<pre>';print_r($tmpUrl);echo '</pre>';
                                                         ?>
-                                                        <a class="prev_video" href="#myModal" data-backdrop="static" data-toggle="modal" data-img-url="<?php echo $value->url; ?>">Preview</a>
+                                                        <a class="prev_video" href="#myModal" data-backdrop="static" data-toggle="modal" data-img-url="<?php echo $tmpUrl['0']->web->wifi; ?>">Preview</a>
                                                     <?php } ?>
                                                 </td>
                                                 <td><?php echo date('M d,Y', strtotime($value->start_date)); ?></td>
