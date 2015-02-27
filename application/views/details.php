@@ -229,7 +229,7 @@ autostart: 1,
        <?php       
        $i = 1;
        
-       if($scheduleBreaks){	
+      // if($scheduleBreaks){	
        foreach ($scheduleBreaks as $row) {	
 	   //$offset = ($row->offset_hrs * 3600) + ($row->offset_minutes * 60) + ($row->offset_seconds);
 	   $offset = $row['cue_points'];	   
@@ -244,7 +244,7 @@ autostart: 1,
 		},
 	   <?php $i++;
        }
-       }?>                    
+      //}?>                    
 	}
 	
 	
