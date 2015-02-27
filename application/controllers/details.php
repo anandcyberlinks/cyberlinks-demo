@@ -85,15 +85,26 @@ class Details extends MY_Controller {
 		//echo '<pre>';print_r($adsFinal);die;
 		//echo '<pre>';print_r($keywords);die;
 		$this->load->helper('url');
-                
-                $device = $_GET['device'];
+               /* $json ='[{"android":{"3g":"http:\/\/54.179.170.143:1935\/live\/370_3g\/playlist.m3u8","wifi":"http:\/\/54.179.170.143:1935\/live\/370_wifi\/playlist.m3u8","2g":"http:\/\/54.179.170.143:1935\/live\/370_2g\/playlist.m3u8"},"ios":{"3g":"http:\/\/54.179.170.143:1935\/live\/370_3g\/playlist.m3u8","wifi":"http:\/\/54.179.170.143:1935\/live\/370_wifi\/playlist.m3u8","2g":"http:\/\/54.179.170.143:1935\/live\/370_2g\/playlist.m3u8"},"web":{"3g":"rtmp:\/\/54.179.170.143:1935\/live\/370_3g","wifi":"rtmp:\/\/54.179.170.143:1935\/live\/370_wifi","2g":"rtmp:\/\/54.179.170.143:1935\/live\/370_2g"},"windows":{"3g":"http:\/\/54.179.170.143:1935\/live\/370_3g\/Manifest","wifi":"http:\/\/54.179.170.143:1935\/live\/370_wifi\/Manifest","2g":"http:\/\/54.179.170.143:1935\/live\/370_2g\/Manifest"}}]';
+	    $urlArray = json_decode($json);
+	    echo '<pre>';print_r($urlArray);
+	   // die;
+               */
+		 $device = $_GET['device'];
+		 $network = $_GET['network'];
+		 $platform =$_GET['platform'];
 		$this->data['user_id'] = $_GET['user_id'];
 			//echo '<pre>';print_r($_SERVER);die;
 		$this->data['uri'] = "http://".$_SERVER[SERVER_NAME].$_SERVER[REQUEST_URI];
 		if($type=='live'){
 			$this->data['result'] =  $this->Video_model->livestream_play($id,$device);	
 		}else{
-			$this->data['result'] = $result = $this->Video_model->channel_play($id);
+			$result = $this->Video_model->channel_play($id);
+			$urlArray = json_decode($result->url);			
+			$url =  $urlArray[0]->$platform->$network;
+			//print_r($result);
+			$result->video_path = $url;
+			//echo '<pre>';print_r($result);die;
 			//$result = $this->Video_model->video_play($id,$device);			
 		/*	if($result){
 				$this->data['result'] =$result;	
@@ -109,7 +120,7 @@ class Details extends MY_Controller {
 	function getAdsRevive($lat,$lng,$age,$keywords,$gender,$l)
 	{
 		$this->load->helper('url');                
-                $url = "http://182.18.165.43/vast/getvast.php?keyword=deo&age=$age&gender=$gender&lat=$lat&lng=$lng&limit=$l";
+                $url = "http://182.18.165.43/vast/getvast.php?keyword=$keywords&age=$age&gender=$gender&lat=$lat&lng=$lng&limit=$l";
                 // Get cURL resource
                 $curl = curl_init();
                 // Set some options - we are passing in a useragent too here
