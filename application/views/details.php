@@ -225,11 +225,7 @@ autostart: 1,
         advertising: {
 	client: "vast",
 	//skipoffset: 5,
-	schedule: {
-		/*adbreak1: {
-			offset: 'pre',
-			tag: "http://54.179.170.143/multitvfinal/assets/upload/ads/vast/d53be859b9314be0885eda3794321e05.xml"
-		},*/
+	schedule: {		
        <?php       
        $i = 1;
        
