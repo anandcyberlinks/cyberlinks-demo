@@ -49,7 +49,7 @@ class Details extends MY_Controller {
 		$keywords = $user_data['keywords'];
 		
 		$adsAlloc = $this->getAdsRevive($lat,$lng,$age,$keywords,$gender,$limit);
-		//echo '<pre>';print_r($adsAlloc);
+		echo '<pre>';print_r($adsAlloc);
 		//--------------------------------//
 		
 		//echo '<pre>';print_r($user_data);die;
