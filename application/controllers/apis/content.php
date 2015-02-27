@@ -364,6 +364,7 @@ class Content extends Apis{
             $dataset = $this->db->query($query)->result();
             
             foreach($dataset as $key=>$val){
+                /*
                 $bpath = explode('.',$val->video_basepath);
                 
                 $tmp = array('2g'=>$bpath[0].'_2g.'.$bpath[1],
@@ -373,6 +374,7 @@ class Content extends Apis{
                 $val->videos = array('2g'=>file_exists($tmp['2g']) ? $tmp['2g'] : '',
                                      '3g'=>file_exists($tmp['3g']) ? $tmp['3g'] : '',
                                      'wifi'=>file_exists($tmp['wifi']) ? $tmp['wifi'] : '');
+                */
                 $response[] = $val;
             }    
         }else{
