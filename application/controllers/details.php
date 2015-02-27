@@ -113,6 +113,7 @@ class Details extends MY_Controller {
 				$this->data['result'] = $this->Video_model->video_play_youtube($id,'youtube');
 			}
 			*/
+			$this->data['result'] = $result;
 		}
 		$this->data['scheduleBreaks'] = $adsFinal;       
                 $this->load->view('details',$this->data);
