@@ -100,12 +100,12 @@ class Details extends MY_Controller {
 			$this->data['result'] =  $this->Video_model->livestream_play($id,$device);	
 		}else{
 			$result = $this->Video_model->channel_play($id);
-			print_r($result);
+			//print_r($result);
 			$urlArray = json_decode($result->video_path);			
 			$url =  $urlArray[0]->$platform->$network;
 			//print_r($result);
 			$result->video_path = $url;
-			echo '<pre>';print_r($result);die;
+			//echo '<pre>';print_r($result);die;
 			//$result = $this->Video_model->video_play($id,$device);			
 		/*	if($result){
 				$this->data['result'] =$result;	
