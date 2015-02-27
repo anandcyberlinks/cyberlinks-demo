@@ -111,7 +111,7 @@ class Details extends MY_Controller {
 			*/
 			$this->data['result'] = $result;
 		}
-		print_r($result);
+		
 		$this->data['scheduleBreaks'] = $adsFinal;       
                 $this->load->view('details',$this->data);
 	}
