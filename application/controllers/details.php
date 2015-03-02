@@ -41,11 +41,12 @@ class Details extends MY_Controller {
 		$user_data = $this->Ads_model->getUserKeywords($_GET['user_id']);
 		//print_r($user_data);
 		//--- Access Revive web service ---//
-		$gender = $user_data['gender'];
+		/*$gender = $user_data['gender'];
 		$dob = $user_data['dob'];
 		$from = new DateTime($dob);
 		$to   = new DateTime('today');
 		$age = $from->diff($to)->y;
+		*/
 		$keywords = $user_data['keywords'];
 		
 		$adsAlloc = $this->getAdsRevive($lat,$lng,$age,$keywords,$gender,$limit);
