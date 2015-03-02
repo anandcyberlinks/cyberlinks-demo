@@ -592,7 +592,7 @@ class Content extends Apis{
                     $dataset = $this->db->query($query)->result();
                 break;
             case 'linear' :
-                    $query = sprintf('select * from playlists where playlists.status = "1" and playlists.id = %d',$playlist_id);
+                    $query = sprintf('select * from playlists where playlists.status = "1" and playlists.publish = "1" and playlists.id = %d',$playlist_id);
                     $tmp = $this->db->query($query)->result();
                     if(isset($tmp[0]->url)){
                         $cntUrl =  base_url().'index.php/details?id='.$playlist_id.'&type=linear';                        
