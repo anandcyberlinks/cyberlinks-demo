@@ -119,7 +119,7 @@ class Details extends MY_Controller {
 	function getAdsRevive($lat,$lng,$age,$keywords,$gender,$l)
 	{
 		$this->load->helper('url');		
-                $url = "http://54.179.170.143/vast/getvast.php?keyword=$keywords&age=$age&gender=$gender&lat=$lat&lng=$lng&limit=$l";
+              echo  $url = "http://54.179.170.143/vast/getvast.php?keyword=$keywords&age=$age&gender=$gender&lat=$lat&lng=$lng&limit=$l";
                 // Get cURL resource
                 $curl = curl_init();
                 // Set some options - we are passing in a useragent too here
