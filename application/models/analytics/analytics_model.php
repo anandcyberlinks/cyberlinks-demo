@@ -408,7 +408,7 @@ class Analytics_model extends CI_Model{
             $select = 'cu.id,concat(cu.first_name," ",cu.last_name) as name,count( a.id ) as total_hits , sum( a.watched_time ) as total_watched_time';
             //$group = 'u.id';
             $this->db->group_by('cu.id');
-            $this->db->join('customers cu','a.user_id=cu.id');
+            $this->db->join('customers cu','a.user_id=cu.id','left');
             //$join = "customers u";
             //$cond = "a.user_id=u.id";
             
