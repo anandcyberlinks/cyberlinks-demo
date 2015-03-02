@@ -221,7 +221,7 @@ class User extends REST_Controller
 	    'dob' => $this->post('dob'),
             'contact_no' => $this->post('contact_no'),
             'location'=>$this->post('location'),
-	    'keywords' => $keywordData
+	    'keywords' => trim($keywordData)
             );
                 
            if($pic !='' && $pic != 0){
