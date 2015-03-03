@@ -26,12 +26,12 @@ class Details extends MY_Controller {
 		$id = $_GET['id'];
 		$type= $_GET['type'];
 		
-		echo $url = "http://maps.googleapis.com/maps/api/geocode/json?latlng=".$lat.",".$lng."&sensor=true";
+		$url = "http://maps.googleapis.com/maps/api/geocode/json?latlng=".$lat.",".$lng."&sensor=true";
 		$data = @file_get_contents($url);
 		$result = json_decode($data,true);
 		//echo '<pre>';print_r($result);die;
 		$this->data['geodata'] = $result['results'][0]['address_components'];
-		echo '<pre>';print_r($this->data['geodata']);
+		//echo '<pre>';print_r($this->data['geodata']);
 		//------------------------------//
 		//-- get cue points for ads --//
 		
