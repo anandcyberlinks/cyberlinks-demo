@@ -19,6 +19,7 @@
 	<input type='hidden' name='analytics_id' id='analytics_id'>
 	<input type='hidden' name='ads_analytics_id' id='ads_analytics_id'>
 	<input type='hidden' name='is_complete' id='is_complete'>
+	<input type='hidden' name='totalTime' id='totalTime' value=0>
         <div id="myElement" style='width:100%;height:100%'></div>
        <pre id="log"></pre>
        
@@ -214,7 +215,7 @@ $(window).on('beforeunload', function(){
        // skin: "<?php echo base_url()?>assets/myskinjw/custom.xml",
 	width: "100%",
  aspectratio: "16:9",
- controls: false,
+ //controls: false,
  stretching: "exactfit",
  //mute: true,
 autostart: 1,
@@ -224,7 +225,7 @@ autostart: 1,
         },
         advertising: {
 	client: "vast",
-	//skipoffset: 5,
+	skipoffset: 5,
 	schedule: {		
        <?php       
        $i = 1;
@@ -253,16 +254,29 @@ autostart: 1,
         //skin: "myCoolSkin/roundster.xml",       
     });
 
-
-    
     jwplayer().onTime(function(event){	
 	//console.log(event.position);
-	var epos = event.position;
+	var epos = event.position;	
+	console.log(parseInt(epos));
+	
 	if (epos >= 2.0 && epos < 4.0) {
 		jwplayer().setMute(false);
 		console.log('123stop');
 		window.location.href="<?php echo $uri;?>#1234"
-	}	
+	}
+	var cuepoints = '<?php echo $cuePoints;?>';
+	//console.log($.parseJSON(cuepoints));
+	var json = $.parseJSON(cuepoints);
+	//var arr = $.map(cuepoints, function(el) { return el; });
+	//console.log(arr);
+	$(json).each(function(k,val){
+		var totalTime = parseInt(epos);
+		
+		console.log(totalTime);
+		if (totalTime==val) {
+			console.log('ad is coming in 5 sec');
+		}	
+	});	
     });
     
 	autoplay(); //--auto play jwplayer --//
@@ -428,6 +442,9 @@ jwplayer().onAdError(function(event) {
 var ad_duration=0;
 //-- play ads ---//
 jwplayer().onAdImpression(function (event) {
+	console.log(this.getPosition());
+	$('#totalTime').val(parseInt(this.getPosition()));
+	
 	jwplayer().setMute(true);
 	console.log('123start');
 	window.location.href="<?php echo $uri;?>#123"
