@@ -1,5 +1,5 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-error_reporting(1);
+
 class Analytics extends MY_Controller {
 
 	function __construct()
@@ -143,7 +143,7 @@ class Analytics extends MY_Controller {
 	{
 		switch ($sort_i) {
 		    case "v":
-			$sort = 'c.title';
+			$sort = 'c.name';
 			if ($sort_by == 'asc')
 			    $this->data['show_c'] = 'desc';
 			else
@@ -224,11 +224,12 @@ class Analytics extends MY_Controller {
 			$this->data['sort_by'] =  $sort_by;
 			$this->data['sort_i'] =  $sort_i;
 		}else{
-			$this->data['sort_by'] =  'asc';
+			$sort_by = $this->data['sort_by'] =  'desc';
 			$this->data['sort_i'] = 'i';
 		}
 		//-- sorting input --//
-		 $sort = $this->sort_input($sort_i,$sort_by);
+		  $sort = $this->sort_input($sort_i,$sort_by);
+		 
 		//-----//
 		
 		//-- get country list --//
@@ -272,7 +273,7 @@ class Analytics extends MY_Controller {
 			$this->data['sort_by'] =  $sort_by;
 			$this->data['sort_i'] =  $sort_i;
 		}else{
-			$this->data['sort_by'] =  'asc';
+			$sort_by = $this->data['sort_by'] =  'desc';
 			$this->data['sort_i'] = 'i';
 		}
 		
@@ -322,7 +323,7 @@ class Analytics extends MY_Controller {
 			$this->data['sort_by'] =  $sort_by;
 			$this->data['sort_i'] =  $sort_i;
 		}else{
-			$this->data['sort_by'] =  'asc';
+			$sort_by = $this->data['sort_by'] =  'desc';
 			$this->data['sort_i'] = 'i';
 		}
 		//-- sorting input --//
@@ -369,7 +370,7 @@ class Analytics extends MY_Controller {
 			$this->data['sort_by'] =  $sort_by;
 			$this->data['sort_i'] =  $sort_i;
 		}else{
-			$this->data['sort_by'] =  'asc';
+			$sort_by = $this->data['sort_by'] =  'desc';
 			$this->data['sort_i'] = 'i';
 		}
 		

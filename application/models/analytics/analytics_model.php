@@ -299,7 +299,8 @@ class Analytics_model extends CI_Model{
                 $this->db->group_by('a.content_id');
                 $this->db->order_by('count(content_id) desc');
            }else{
-                $this->db->group_by('a.id');
+                //$this->db->group_by('a.id');
+                $this->db->group_by('a.content_id');
            }
            
           //  $join = "users u";
@@ -325,6 +326,8 @@ class Analytics_model extends CI_Model{
             }
             if($sort){
             $this->db->order_by($sort,$sort_by);
+            }else{
+            $this->db->order_by('a.id desc');
             }
             break;
         case 'useragent':
@@ -338,6 +341,8 @@ class Analytics_model extends CI_Model{
             
             if($sort){
             $this->db->order_by($sort,$sort_by);
+            }else{
+                $this->db->order_by('a.id desc');
             }
             
             break;
@@ -402,7 +407,8 @@ class Analytics_model extends CI_Model{
            $this->db->group_by('a.content_provider');
            $this->db->join('users u','a.content_provider=u.id');
             //$join = "users u";
-            //$cond = "a.content_provider=u.id";          
+            //$cond = "a.content_provider=u.id";            
+                $this->db->order_by('a.id desc');            
             break;
         case 'user':
             $select = 'cu.id,concat(cu.first_name," ",cu.last_name) as name,count( a.id ) as total_hits , sum( a.watched_time ) as total_watched_time';
@@ -420,6 +426,8 @@ class Analytics_model extends CI_Model{
             }
             if($sort){
             $this->db->order_by($sort,$sort_by);
+            }else{
+            $this->db->order_by('cu.id desc');
             }
             break;
         
@@ -477,7 +485,7 @@ class Analytics_model extends CI_Model{
              $this->db->limit($limit, $start);
         }
         $query = $this->db->get();
-    //echo '<br>'.$this->db->last_query();
+    //echo '<br>'.$this->db->last_query();die;
         return $query->result();
         
     }
