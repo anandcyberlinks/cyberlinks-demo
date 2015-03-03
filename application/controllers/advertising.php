@@ -67,6 +67,10 @@ if (!defined('BASEPATH'))
                
           //}
         //echo $innerHtml;
+       foreach($data['result'] as $key => $val){
+           $new_val = json_decode($val->url);
+           $val->url = $new_val['0']->{'web'}->{'3g'};
+       }
        echo json_encode($data);
         /*$content = array();
 $content['popup_content'] = $this->load->view('advertising/cuepoints',array(), TRUE);
@@ -240,5 +244,38 @@ function  updateCuePoint()
             }
         }
         echo  json_encode($new_array); exit;
+    }
+    
+    /*
+     * Function for Advertising Configuration
+     */
+    function configuration(){
+        $data['welcome'] = $this;
+        $data['adSources'] = $this->videos_model->getAdSources();
+        if(isset($_POST['submit'])){
+            if(@$_POST['ad_config']!=""){
+                $this->videos_model->saveUserAdConfig($this->uid,$_POST);
+                $this->session->set_flashdata('message', '<section class="content"><div class="col-xs-12"><div class="alert alert-success alert-dismissable"><i class="fa fa-check"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Configuration successfully saved.</div></div></section>');
+                redirect('advertising/configuration');
+            }
+        }
+        $this->show_view('advertising/ad_configuration',$data);
+        
+    }
+    
+    /*
+     * function to add new source for the configuration.
+     */
+    function add_source(){
+        $data['welcome'] = $this;
+        if (isset($_POST['submit']) && $_POST['submit'] = 'Submit') {
+            $post['title'] = $_POST['title'];
+            $post['description'] = $_POST['description'];
+            $post['status'] = $_POST['status'];
+            $this->videos_model->insert_sources($post);
+            $this->session->set_flashdata('message', '<section class="content"><div class="col-xs-12"><div class="alert alert-success alert-dismissable"><i class="fa fa-check"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Source sucessfully added.</div></div></section>');
+            redirect('advertising/configuration');
+        }
+        $this->show_view('advertising/add_source',$data);
     }
  }

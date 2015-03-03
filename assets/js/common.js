@@ -1026,6 +1026,7 @@ function cuepoint()
             
             //console.log("===============>"+first.duration);
             $.each(videInfo['result'],function(key,val){
+                
             videoFile = val.url;
             type = val.type;
             var from_percentageSet = val.duration *(window.percents);
@@ -1037,7 +1038,7 @@ function cuepoint()
             {
                 /* Video Player Script */
                 if (type != 'youtube') {
-                   videoFile = baseurl+videoFile;
+                   //videoFile = baseurl+videoFile;
                 }
                
                     var file_path = videoFile;

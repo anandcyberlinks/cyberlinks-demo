@@ -119,7 +119,8 @@
                                                     <?php if(in_array(@$value->minetype,array('video/wmv','video/avi'))) { ?>
                                                     --
                                                     <?php } else { ?>
-                                                    <a class="prev_video" href="#myModal" data-backdrop="static" data-toggle="modal" data-img-url="<?php echo $value->url; ?>">Preview</a>
+                                                    <?php $new_val = json_decode($value->url); ?>
+                                                    <a class="prev_video" href="#myModal" data-backdrop="static" data-toggle="modal" data-img-url="<?php echo $new_val['0']->{'web'}->{'3g'}; ?>">Preview</a>
                                                     <?php } ?>
                                                 </td>
                                                 <td  width="120"><?php echo date('M d,Y', strtotime($value->created)); ?></td>
