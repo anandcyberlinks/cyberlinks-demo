@@ -31,7 +31,7 @@ class Details extends MY_Controller {
 		$result = json_decode($data,true);
 		//echo '<pre>';print_r($result);die;
 		$this->data['geodata'] = $result['results'][0]['address_components'];
-		print_r($this->data['geodata']);
+		echo '<pre>';print_r($this->data['geodata']);
 		//------------------------------//
 		//-- get cue points for ads --//
 		
