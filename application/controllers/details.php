@@ -64,6 +64,10 @@ class Details extends MY_Controller {
 			
 		//-- Revive ad assing cue points array ---//
 		$i=0;
+                if(@$cuePoints['0']!=0){
+                    array_unshift($cuePoints, 0);
+                }
+                //echo '<pre>';                print_r($cuePoints); exit;
 		foreach($adsAlloc->url as $key=>$val)
 		{
 			$adsFinal[$i]['vast_file'] = $val;
