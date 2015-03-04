@@ -38,6 +38,9 @@ class Details extends MY_Controller {
 		$limit = $this->Ads_model->getCuePoints($id,$type,1);
 		$cuePoints = $this->Ads_model->getCuePoints($id,$type);		
 		//----------------------------//
+                 if(count($cuePoints) <= 0){
+                     $limit = 1;
+                 }
 		
 		
 		$user_data = $this->Ads_model->getUserKeywords($_GET['user_id']);
@@ -64,7 +67,11 @@ class Details extends MY_Controller {
 		foreach($adsAlloc->url as $key=>$val)
 		{
 			$adsFinal[$i]['vast_file'] = $val;
-			$adsFinal[$i]['cue_points'] 	= @$cuePoints[$i];
+                        if(count($cuePoints) > 0){
+                            $adsFinal[$i]['cue_points'] 	= @$cuePoints[$i];
+                        }else{
+                            $adsFinal[$i]['cue_points'] 	= 0;
+                        }
 			$i++;
 		}
 		//echo '<pre>';print_r($adsFinal);die;
