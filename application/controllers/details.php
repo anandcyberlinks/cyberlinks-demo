@@ -38,6 +38,11 @@ class Details extends MY_Controller {
 		$limit = $this->Ads_model->getCuePoints($id,$type,1);
 		$cuePoints = $this->Ads_model->getCuePoints($id,$type);		
 		//----------------------------//
+                
+                if(@$cuePoints['0']!=0){
+                    array_unshift($cuePoints, 0);
+                }
+                
                  if(count($cuePoints) <= 0){
                      $limit = 1;
                  }
@@ -64,10 +69,7 @@ class Details extends MY_Controller {
 			
 		//-- Revive ad assing cue points array ---//
 		$i=0;
-                if(@$cuePoints['0']!=0){
-                    array_unshift($cuePoints, 0);
-                }
-                //echo '<pre>';                print_r($cuePoints); exit;
+                
 		foreach($adsAlloc->url as $key=>$val)
 		{
 			$adsFinal[$i]['vast_file'] = $val;
