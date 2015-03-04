@@ -9,7 +9,7 @@
 	  <?php foreach($geomap as $country){
 	    //if($country->country != ''){
 	    ?>
-		['<?php echo $country->city;?>', <?php echo $country->total_hits;?>],
+		['<?php echo ($country->city!='') ? $country->city : 'Unknown';?>', <?php echo $country->total_hits;?>],
 	<?php  //}
 		  }?>          
         ]);
@@ -130,7 +130,7 @@
                                              //if($row->country !=''){
                                              ?>
                                             <tr>
-                                                <td><a href="<?php echo base_url();?>analytics/geographic?country=<?php echo $row->code;?>"><?php echo $row->city;?></a></td>
+                                                <td><a href="<?php echo base_url();?>analytics/geographic?country=<?php echo $row->code;?>"><?php echo ($row->city!='') ? $row->city : 'Unknown';?></a></td>
                                                 <td><?php echo $row->total_hits;?></td>
 						<td><?php echo time_from_seconds($row->total_watched_time);?></td>
                                             </tr>

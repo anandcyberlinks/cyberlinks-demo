@@ -617,7 +617,7 @@ class Analytics extends MY_Controller {
 	function geographic()
 	{
 		if(@$_GET['country'] =='' && @$_GET['c'] ==''){
-			$this->data['country_code'] = 'IN';
+			//$this->data['country_code'] = 'IN';
 		}else{
 			$this->data['country_code'] = $_GET['country'];
 		}

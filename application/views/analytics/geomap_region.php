@@ -15,7 +15,7 @@
 
       var options = {
        width: '200px',
-        region: '<?php echo $country_code;?>',
+        region: '<?php echo ($country_code!="") ? $country_code : "IN";?>',
         displayMode: 'markers',
         colorAxis: {
          colors: ['green', 'blue'],
@@ -112,14 +112,16 @@
                                                 <th>Time Watched</th>                                                
                                             </tr>
 					    <?php foreach($geomap as $row){
-                                             if($row->state !=''){
+                                             //if($row->state !=''){
                                              ?>
                                             <tr>
-                                                <td><?php echo $row->city;?></td>
+                                                <td><?php echo ($row->city!='') ? $row->city : 'Unknown';?></td>
                                                 <td><?php echo $row->total_hits;?></td>
 						<td><?php echo time_from_seconds($row->total_watched_time);?></td>
                                             </tr>
-					    <?php } }?>
+					    <?php //} 
+                                            
+                                             }?>
                                             
                                         </table><!-- /.table -->
                                     </div>
