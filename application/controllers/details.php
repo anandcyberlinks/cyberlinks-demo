@@ -41,6 +41,7 @@ class Details extends MY_Controller {
                 
                 if(@$cuePoints['0']!=0){
                     array_unshift($cuePoints, 0);
+                    $limit += 1;
                 }
                 
                  if(count($cuePoints) <= 0){
