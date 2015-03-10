@@ -59,7 +59,7 @@ class Webtv extends MY_Controller {
         $id = $this->uri->segment('3');
         switch($id){
             case 'all' :
-                $query = sprintf("update playlists set status = '0', url = '' where channel_id in (select id from channels where type = 'Linear')");
+                $query = sprintf("update playlists set status = '0', publish = '0', url = '' where channel_id in (select id from channels where type = 'Linear')");
                 $dataset = $this->db->query($query);
                 redirect(base_url() . 'webtv');
                 break;
