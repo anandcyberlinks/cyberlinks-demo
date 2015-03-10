@@ -32,6 +32,7 @@ switch ($s[0]->username){
                     array('name'=>'Advertising','url'=>'#', 'class'=>'fa-film', 'li-class'=> ($this->uri->segment(1) == 'advertising') ? 'treeview active' : 'treeview', 'type'=>'parent','childs'=>array(
                         array('name'=>'Video', 'li-class'=> ($this->uri->segment(1) == 'advertising' && $this->uri->segment(2) == '' ) ? 'active' : '', 'url'=>base_url().'advertising', 'type'=>'child'),
                         array('name'=>'Live Stream', 'li-class'=> ($this->uri->segment(1) == 'advertising' && $this->uri->segment(2) == 'live_stream') ? 'active' : '','url'=>base_url().'advertising/live_stream', 'type'=>'child'),
+                        array('name'=>'Ad Configuration', 'li-class'=> ($this->uri->segment(1) == 'advertising' && $this->uri->segment(2) == 'configuration') ? 'active' : '','url'=>base_url().'advertising/configuration', 'type'=>'child'),
                         )),
                     array('name'=>'WebTV','url'=>base_url().'webtv', 'class'=>'fa-film', 'li-class'=>($this->uri->segment(1) == 'webtv' || $this->uri->segment(1) == 'livestream') ? 'active' : ''),
                     array('name'=>'Events','url'=>base_url().'event', 'class'=>'fa-laptop','li-class'=>($this->uri->segment(1) == 'event') ? 'active' : ''),

@@ -1485,4 +1485,42 @@ class Videos_model extends CI_Model {
         $data = $query->result();
         return $data;
     }
+    
+    function getAdSources(){
+        $query = $this->db->get('ad_source');
+        $data = $query->result();
+        return $data;
+    }
+    
+    function saveUserAdConfig($uid,$post_data){
+        
+      $value = array($post_data['ad_config'] => array('100'));
+      
+      $this->db->where('user_id',$uid);
+      $this->db->where('key','Ad_Config');
+      $query = $this->db->get('options');
+      if($query->num_rows() > 0){
+          $data = array(
+              'value'=>  json_encode($value)
+          );
+          $this->db->where('user_id', $uid);
+          $this->db->where('key', 'Ad_Config');
+          $this->db->set('modified','NOW()',FALSE);
+          $this->db->set($data);
+          $this->db->update('options');
+      }else{
+            $data = array(
+                    'user_id'=>$uid, 
+                    'key'=>'Ad_Config',
+                    'value'=>  json_encode($value)
+                    );
+            $this->db->set('created','NOW()',FALSE);
+            $this->db->insert('options', $data);
+      } 
+    }
+    
+    function insert_sources($post){
+        $this->db->set('created', 'NOW()', FALSE);
+        $this->db->insert('ad_source', $post);
+    }
 }
