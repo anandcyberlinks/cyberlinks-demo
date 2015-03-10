@@ -124,10 +124,26 @@ $(function () {
 
         });
     });
-    $('a.confirm_delete_subs').click(function (e) {
+    
+    $('a.confirm_delete').click(function (e) {
         e.preventDefault();
         var location = $(this).attr('href');
-        bootbox.confirm('Are you sure you want to Delete Subscription', function (confirmed)
+        bootbox.confirm('Are you sure you want to Delete', function (confirmed)
+        {
+            if (confirmed)
+            {
+                window.location.replace(location);
+            }
+
+        });
+    });
+    
+    
+    
+    $('a.confirm').click(function (e) {
+        e.preventDefault();
+        var location = $(this).attr('href');
+        bootbox.confirm('Are you sure?', function (confirmed)
         {
             if (confirmed)
             {
@@ -410,6 +426,89 @@ $(document).ready(function () {
 });
 
 
+
+/* bulk upload by CSV file only 
+
+// Variable to store your files
+var files;
+var csvFilesArr = [];
+var colLength = 5;
+// uplaod events
+$('#csv_file').on('change', prepareUpload);
+// Grab the files and set them to our variable
+*/
+function prepareUpload(event) {
+    $('#status_csv_file').html('');
+    $('#csvFileList').html('');
+    files = event.target.files;
+    var fileName = this.files[0].name;
+    var fileSize = this.files[0].size;
+    var fileType = this.files[0].type;
+    var size = fileSize / 1048576;
+    var fsize = size.toFixed(2);
+    if (this.files && this.files.length > 0) {
+        $('#displayfile').html('<img src="' + baseurl + 'assets/img/loader.gif"> loading...');
+        filesArray = this.files;
+        $.each(this.files, function (index, value) {
+            if (value.type == 'text/csv' || value.type=='application/csv') {
+                var reader = new FileReader();
+                var link_reg = /(http:\/\/|https:\/\/)/i;
+                reader.readAsText(value);
+                reader.onload = function (file) {
+                    var content = file.target.result;
+                    var rows = file.target.result.split(/\r\n|\n/);
+                    document.getElementById("csvFileList").innerHTML = "";
+                    var table = document.createElement('table');
+                    table.className = "table table-bordered";
+                    var tbody = document.createElement('tbody');
+                    for (var i = 0; i < rows.length; i++) {
+                        var tr = document.createElement('tr');
+                        tr.id = "tr_" + i;
+                        var arr = rows[i].split(',');
+                        if (arr.length == colLength) {
+                            var tmpArr = [];
+                            for (var j = 0; j < arr.length; j++) {
+                                if (i == 0) {
+                                    var td = document.createElement('th');
+                                } else {
+                                    var td = document.createElement('td');
+                                    tmpArr.push(arr[j]);
+                                }
+
+                                if (link_reg.test(arr[j])) {
+                                    var a = document.createElement('a');
+                                    a.href = arr[j];
+                                    a.target = "_blank";
+                                    a.innerHTML = arr[j];
+                                    td.appendChild(a);
+                                } else {
+                                    td.innerHTML = arr[j];
+                                }
+
+                                tr.appendChild(td);
+                            }
+                            if (i != 0) {
+                                csvFilesArr.push(tmpArr);
+                            }
+                            tbody.appendChild(tr);
+                        }
+                    }
+                    table.appendChild(tbody);
+                    document.getElementById('csvFileList').appendChild(table);
+                }
+            } else {
+                var row_data1 = "";
+                row_data1 += '<section class="content"><div class="col-xs-12"><div class="alert alert-danger alert-dismissable"><i class="fa fa-ban"></i>Only .csv file accepted</div><div></section>';
+                $('#msgftp').html(row_data1).fadeTo(3000, 500).slideUp(3000);
+                $('#displayfile').hide();
+                return false;
+            }
+        });
+    }
+    $('#displayfile').html('');
+
+}
+
 $('#uploadcsv').on('click', function () {
     $('#displayfile').html('<img src="' + baseurl + 'assets/img/loader.gif"> loading...');
     var csvFilesCount = csvFilesArr.length;
@@ -477,7 +576,7 @@ var colLength = 5;
 $('#csv_file').on('change', prepareUpload);
 // Grab the files and set them to our variable
 
-
+/*
 function prepareUpload(event) {
     $('#status_csv_file').html('');
     $('#csvFileList').html('');
@@ -550,7 +649,7 @@ function prepareUpload(event) {
     }
     $('#displayfile').html('');
 
-} 
+} */
 
 $('#uploadadscsv').on('click', function () {
     $('#displayfile').html('<img src="' + baseurl + 'assets/img/loader.gif"> loading...');

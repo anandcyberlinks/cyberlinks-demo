@@ -61,6 +61,7 @@ class Webtv extends MY_Controller {
             case 'all' :
                 $query = sprintf("update playlists set status = '0', publish = '0', url = '' where channel_id in (select id from channels where type = 'Linear')");
                 $dataset = $this->db->query($query);
+                //echo $this->db->last_query(); die;
                 redirect(base_url() . 'webtv');
                 break;
             default :
@@ -68,6 +69,24 @@ class Webtv extends MY_Controller {
                 $this->db->set('publish','0');
                 $this->db->set('status','0');
                 $this->db->set('url','');
+                $this->db->update('playlists');
+                redirect(base_url() . 'webtv/playlist/'.$id);
+                break;
+        }
+        exit;
+    }
+    function publishplaylist(){
+        $id = $this->uri->segment('3');
+        switch($id){
+            case 'all' :
+                $query = sprintf("update playlists set publish = '1' where channel_id in (select id from channels where type = 'Linear')");
+                $dataset = $this->db->query($query);
+                //echo $this->db->last_query(); die;
+                redirect(base_url() . 'webtv');
+                break;
+            default :
+                $this->db->where('channel_id', $id);
+                $this->db->set('publish','1');
                 $this->db->update('playlists');
                 redirect(base_url() . 'webtv/playlist/'.$id);
                 break;
@@ -376,10 +395,8 @@ class Webtv extends MY_Controller {
         switch ($type) {
             case 'pdf':
                 $content = $this->load->view('templates/epg_pdf', $this->data, true);
-                //-- create pdf --//
                 create_pdf($content, 'EPG Report');
                 break;
-
             case 'csv':
                 $heading = array('Sl.No.', 'Playlist Id', 'Title', 'Content Id', 'Start Time', 'End Time', 'Status');
                 //$content =  $this->load->view('templates/pdf_content',$this->data,true);				
@@ -398,9 +415,7 @@ class Webtv extends MY_Controller {
                     $num++;
                 }
                 query_to_csv($dataRpt, $heading, '');
-
                 break;
-
             case 'xml':
                 echo 'xml';
                 break;
