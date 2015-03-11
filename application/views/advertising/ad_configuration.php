@@ -42,8 +42,8 @@
 
                                                     <td  width="15px"><?php echo $sr; ?></td>
                                                     <td><?php echo $value->title; ?></td>
-<!--                                                    <td><input type="radio" name="ad_config" value="<?php //echo $value->title; ?>" ></td>-->
-                                                    <td><input type="checkbox" name="ad_config[]" value="<?php echo $value->title; ?>"></td>
+                                                    <td><input type="radio" name="ad_config" value="<?php echo $value->title; ?>" ></td>
+<!--                                                    <td><input type="checkbox" name="ad_config[]" value="<?php echo $value->title; ?>"></td>-->
                                                 </tr>
                                             <?php $sr++; } ?>
                                                 <tr>
