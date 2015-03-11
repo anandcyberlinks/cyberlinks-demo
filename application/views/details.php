@@ -38,7 +38,7 @@
 	$video_path = '';
 	$thumbnail_path = '';
 }
-
+//print_r($scheduleBreaks);die;
 ?>
 <script>	
 //-- execute when browser closed --//
@@ -55,7 +55,14 @@ $(window).on('beforeunload', function(){
  var country ='';
  var country_code = '';
  var postal_code = '';
- 
+
+ <?php foreach($scheduleBreaks as $row){
+	if($row['cue_points']==''){?>
+	var tag = "<?php echo $row['vast_file'];?>";
+<?php
+	}
+ }?>
+// var tag="http://localhost/multitvfinal-demo/assets/upload/video/53f709efce75f.mp4";
  	///--- location data ---//
 	<?php if($geodata){
 		foreach($geodata as $row){?>
@@ -204,24 +211,52 @@ $(window).on('beforeunload', function(){
 	});
     }
        
+       function switch_ad(id){
+	$.ajax({
+		url: "<?php echo base_url()?>/index.php/details/switch_ad",		
+		cache: false,
+		type: "GET"
+	})
+	.done(function(data){		
+		//console.log(tag);		
+		if (data=='1') {			
+		jwplayer().playAd(tag);
+		}
+	});
+    }
+    function switch_ad_skip(id){
+	$.ajax({
+		url: "<?php echo base_url()?>/index.php/details/switch_ad",		
+		cache: false,
+		type: "GET"
+	})
+	.done(function(data){		
+		//console.log(tag);		
+		if (data=='0') {
+			jwplayer().load([{file:"<?php echo $video_path;?>"}]);
+		}		
+
+	});
+    }
+    //switch_ad();
     jwplayer("myElement").setup({
        //flashplayer: "assets/player.swf",
         primary: "html5",
         file: "<?php echo $video_path;?>",
-	//file: "http://54.179.170.143:1935/live/370/playlist.m3u8",
+	//file: "http://54.179.170.143:1935/live/370_3g/playlist.m3u8",
        //file: "http://localhost/multitvfinal-demo/assets/upload/video/53f709efce75f.mp4",
        //file: "rtmp://54.255.176.172:1935/live/newsnation_360p",
 	image: "<?php echo base_url().THUMB_LARGE_PATH. $thumbnail_path;?>",       
        // skin: "<?php echo base_url()?>assets/myskinjw/custom.xml",
 	width: "100%",
  aspectratio: "16:9",
- controls: false,
+ //controls: false,
  stretching: "exactfit",
  //mute: true,
 autostart: 1,
         logo: {
         file: "<?php echo base_url()?>assets/img/logo.png",
-	margin: 1,	
+	margin: 1,
         },
         advertising: {
 	client: "vast",
@@ -231,7 +266,8 @@ autostart: 1,
        $i = 1;
        
        if($scheduleBreaks){	
-       foreach ($scheduleBreaks as $row) {	
+       foreach ($scheduleBreaks as $row) {
+	if(trim($row['nn'] !='1')){
 	   //$offset = ($row->offset_hrs * 3600) + ($row->offset_minutes * 60) + ($row->offset_seconds);
 	   $offset = $row['cue_points'];	   
 	   ?>
@@ -239,16 +275,14 @@ autostart: 1,
 		offset: '<?php echo ($offset==0 ? 'pre': $offset); ?>',
 		//'skipoffset':5,
 		//tag: "<?php //echo ($row['ad_type'] != 'External' ? base_url():'') . $row['vast_file']; ?>?<?php //echo $row['ads_id']?>/<?php //echo $user_id?>/<?php //echo $row['uid']?>"
-		tag: "<?php echo $row['vast_file']?>?<?php echo $row['ads_id']?>/<?php echo $user_id?>/<?php echo $row['uid']?>"
+		tag: "<?php echo $row['vast_file']?>?<?php echo $row['ads_id']?>/<?php echo $user_id?>/<?php echo $row['uid']?>/<?php echo ($offset==0 ? 'pre':'')?>"
 		//tag: "http://localhost/multitvfinal-demo/assets/upload/ads/vast/54e182705fa67.xml"
 		//tag: "http://54.179.170.143/multitvfinal/assets/upload/ads/vast/d53be859b9314be0885eda3794321e05.xml"
 		},
 	   <?php $i++;
-       }
+       } }
       } ?>                    
-	}
-	
-	
+	}	
 }
 	
         //skin: "myCoolSkin/roundster.xml",       
@@ -257,7 +291,7 @@ autostart: 1,
     jwplayer().onTime(function(event){	
 	//console.log(event.position);
 	var epos = event.position;	
-	console.log(parseInt(epos));
+	//console.log(parseInt(epos));
 	
 	if (epos >= 2.0 && epos < 4.0) {
 		jwplayer().setMute(false);
@@ -272,11 +306,18 @@ autostart: 1,
 	$(json).each(function(k,val){
 		var totalTime = parseInt(epos);
 		
-		console.log(totalTime);
+		//console.log(totalTime);
 		if (totalTime==val) {
-			console.log('ad is coming in 5 sec');
+			//console.log('ad is coming in 5 sec');
 		}	
 	});	
+	//console.log(this.getPosition());
+	//-- switch newsnation ad ---//
+	var id = "<?php echo $content_id;?>";
+	if (epos % 2 ==1 && id ==38) {	  	
+	    switch_ad();	    
+	}
+	//-------------------//
     });
     
 	autoplay(); //--auto play jwplayer --//
@@ -349,6 +390,15 @@ autostart: 1,
 */    
     
 });
+    
+    jwplayer().onBeforePlay(function () {
+	var id = "<?php echo $content_id;?>";
+	if (typeof flag==='undefined' && id==38) {
+		//console.log('before');
+		jwplayer().playAd(tag);
+		flag=1;
+	}	
+    });
    
    //--- advetising analytics ---//
    
@@ -442,7 +492,7 @@ jwplayer().onAdError(function(event) {
 var ad_duration=0;
 //-- play ads ---//
 jwplayer().onAdImpression(function (event) {
-	console.log(this.getPosition());
+	//console.log(this.getPosition());
 	$('#totalTime').val(parseInt(this.getPosition()));
 	
 	jwplayer().setMute(true);
@@ -454,12 +504,21 @@ jwplayer().onAdImpression(function (event) {
 
 jwplayer().onAdTime(function(event) {
   ad_duration = Math.round(event.position);
+  var id = "<?php echo $content_id;?>";
   if (ad_duration >= 1.0 && ad_duration < 2 ) {
 	jwplayer().setMute(false);
 	console.log('123stop');
 	window.location.href="<?php echo $uri;?>#1234"
   }
-  
+  //console.log(/pre/i.test(event.tag));
+  //console.log(event.tag);
+  var flag =/pre/i.test(event.tag);
+
+  console.log(ad_duration);
+  if (ad_duration % 2==1 && id==38 && flag==false) {
+//	console.log('midroll');
+	switch_ad_skip();
+  }
  //console.log(ad_duration);
   //console.log("progress","The ad completes in "+remaining+" seconds.");
 });
@@ -485,17 +544,6 @@ $(document).ready(function(){
     });*/
   // AndroidApp.startVideo();    
 });
-/*
-function test()
-{
-	console.log("gdfg");
-	//test1();
-	//JsHandler.bufferingStart();
-	AndroidApp.startVideo();
-}
-*/
-
-
 </script>
 
 </body>

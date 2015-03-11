@@ -18,7 +18,7 @@ class Details extends MY_Controller {
 	}
 
 	function index()
-	{
+	{		
 		//-- get geocoding google api --//
 		$this->data['lat'] = $lat = $_GET['lat'];
 		$this->data['long'] = $lng = $_GET['lng'];
@@ -59,28 +59,29 @@ class Details extends MY_Controller {
 		$age = $from->diff($to)->y;
 		*/
 		$keywords = $user_data['keywords'];
-		
+		if($id ==38 ){
+			$keywords ='newsnation';
+		}
 		$adsAlloc = $this->getAdsRevive($lat,$lng,$age,$keywords,$gender,$limit);
 		//echo '<pre>';print_r($adsAlloc);
 		//--------------------------------//
 		
 		//echo '<pre>';print_r($user_data);die;
 		//-- get radius for user location --//
-		if($id !=38){  //- check if newsnation no ads display --//
-			
-		//-- Revive ad assing cue points array ---//
-		$i=0;
-                
-		foreach($adsAlloc->url as $key=>$val)
-		{
-			$adsFinal[$i]['vast_file'] = $val;
-                        if(count($cuePoints) > 0){
-                            $adsFinal[$i]['cue_points'] 	= @$cuePoints[$i];
-                        }else{
-                            $adsFinal[$i]['cue_points'] 	= 0;
-                        }
-			$i++;
-		}
+		if($id ==38 && $type =='live'){  //- check if newsnation no ads display --//
+			//-- Revive ad assing cue points array newsnation---//
+			$i=0;
+			foreach($adsAlloc->url as $key=>$val)
+			{
+				$adsFinal[$i]['vast_file'] = $val;
+				if($i==0){
+				$adsFinal[$i]['cue_points'] 	= 0;
+				}else{
+				$adsFinal[$i]['cue_points'] 	= '';
+				}
+				$adsFinal[$i]['nn'] 	= 1;
+				$i++;
+			}					
 		//echo '<pre>';print_r($adsFinal);die;
 		//---------------------------------------//
 		
@@ -97,9 +98,24 @@ class Details extends MY_Controller {
 			$adsFinal[$i]['ad_type'] 	= $row->ad_type;
 			$i++;
 		}*/
+		}else{
+			//-- Revive ad assing cue points array ---//
+			$i=0;
+                
+			foreach($adsAlloc->url as $key=>$val)
+			{
+				$adsFinal[$i]['vast_file'] = $val;
+				if(count($cuePoints) > 0){
+				    $adsFinal[$i]['cue_points'] 	= @$cuePoints[$i];
+				}else{
+				    $adsFinal[$i]['cue_points'] 	= 0;
+				}
+				$i++;
+			}
+				
 		}
 		//----------------------------------//
-		//print_r($cuePoints);die;
+		//print_r($adsFinal);die;
 		//---Reset Cue point for tracking before ad play --//
 		if(in_array(0,$cuePoints)){
 			unset($cuePoints[0]);
@@ -125,7 +141,7 @@ class Details extends MY_Controller {
 			$this->data['result'] =  $this->Video_model->livestream_play($id,$device);	
 		}else{
 			$result = $this->Video_model->channel_play($id);
-			
+			//print_r($result);die;
 			$urlArray = json_decode($result->video_path);			
 			$url =  $urlArray[0]->$platform->$network;
 			//print_r($result);
@@ -148,7 +164,7 @@ class Details extends MY_Controller {
 	function getAdsRevive($lat,$lng,$age,$keywords,$gender,$l)
 	{
 		$this->load->helper('url');		
-                 $url = "http://54.179.170.143/vast/getvast.php?keyword=$keywords&age=$age&gender=$gender&lat=$lat&lng=$lng&limit=$l";
+                $url = "http://54.179.170.143/vast/getvast.php?keyword=$keywords&age=$age&gender=$gender&lat=$lat&lng=$lng&limit=$l";
                 // Get cURL resource
                 $curl = curl_init();
                 // Set some options - we are passing in a useragent too here
@@ -161,7 +177,7 @@ class Details extends MY_Controller {
                
                 // Close request to clear up some resources
                 curl_close($curl);
-                return json_decode($resp);
+                return json_decode('{"url":["http:\/\/54.179.170.143\/vast\/file\/21a36d48b0590d93c794e0590c1a66a8.xml","http:\/\/54.179.170.143\/vast\/file\/02515c4987758c2d2b2255e454b7771c.xml","http:\/\/54.179.170.143\/vast\/file\/796b2986fb87fb60e80c1d8c4795dcf0.xml","http:\/\/54.179.170.143\/vast\/file\/923c363fba1f3205440c05235ae9557a.xml"]}');
 	}
 	
         
@@ -171,6 +187,13 @@ class Details extends MY_Controller {
             $this->Video_model->updateView($id);   
             echo 1;
         }
+	
+	function switch_ad()
+	{
+		$result = $this->Ads_model->get_swtich();
+		echo $result->status;
+		die;
+	}
 	
 }
 

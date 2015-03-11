@@ -872,7 +872,7 @@ class Ads_model extends CI_Model {
       }
    if($keywords){      
      // $this->db->where_in('k.name',unserialize($data->keywords));
-      $this->db->where_in('k.name',$keywords);
+      $this->db->where_in('k.name',$keywords);      
    }
     
     if(@$data['dob'] && $data['dob'] !='0000-00-00'){
@@ -912,7 +912,7 @@ class Ads_model extends CI_Model {
       $query = $this->db->get();
       $this->db->flush_cache();
      // echo '<br>'.$this->db->last_query();
-    //  die;
+     // die;
       return $query->result();
     }
     
@@ -946,4 +946,13 @@ class Ads_model extends CI_Model {
       }
     }
     
+    function get_swtich()
+    {
+      $switch_db = $this->load->database('stitch_report', TRUE);
+      $switch_db->select('*');
+      $switch_db->from('restAPI');
+      $query = $switch_db->get();
+      //$switch_db->query();
+      return $query->row();
+    }
 }
