@@ -177,7 +177,7 @@ class Details extends MY_Controller {
                
                 // Close request to clear up some resources
                 curl_close($curl);
-                return json_decode('{"url":["http:\/\/54.179.170.143\/vast\/file\/21a36d48b0590d93c794e0590c1a66a8.xml","http:\/\/54.179.170.143\/vast\/file\/02515c4987758c2d2b2255e454b7771c.xml","http:\/\/54.179.170.143\/vast\/file\/796b2986fb87fb60e80c1d8c4795dcf0.xml","http:\/\/54.179.170.143\/vast\/file\/923c363fba1f3205440c05235ae9557a.xml"]}');
+                return json_decode($resp);
 	}
 	
         
