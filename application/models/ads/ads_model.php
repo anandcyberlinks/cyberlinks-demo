@@ -954,7 +954,8 @@ class Ads_model extends CI_Model {
       $query = $switch_db->get();*/
       $this->db->select('*');
       $this->db->from('restAPI');
-      $query = $this->db->get();    
+      $query = $this->db->get();
+      echo $this->db->last_query();die;
       return $query->row();
     }
 }
