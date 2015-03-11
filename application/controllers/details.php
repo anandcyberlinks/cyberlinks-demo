@@ -68,7 +68,7 @@ class Details extends MY_Controller {
 		
 		//echo '<pre>';print_r($user_data);die;
 		//-- get radius for user location --//
-		if($id ==38 && $type =='live'){  //- check if newsnation no ads display --//
+		if($id ==30 && $type =='live'){  //- check if newsnation no ads display --//
 			//-- Revive ad assing cue points array newsnation---//
 			$i=0;
 			foreach($adsAlloc->url as $key=>$val)
