@@ -121,6 +121,38 @@
 			<div class="pull-right box-tools">
 			    <button class="btn btn-danger btn-sm" data-widget='collapse' data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
 			</div><!-- /. tools -->
+			<h3 class="box-title"><a href=''>In Stream Stitching Report</a></h3>
+		    </div><!-- /.box-header -->
+		    <div class="box-body no-padding">
+			<div class="table-responsive">
+                            <!-- .table - Uses sparkline charts-->
+                            <table class="table table-striped">
+				<tbody><tr>
+				<th>Commercial</th>
+				<th>Duration</th>
+				<th>UserCount</th>				
+				<th>StartTime</th>				
+				</tr>
+			     <?php $i=0; foreach($stitchingReport as $row){ $i++;?>
+				<tr>
+				<td><?php echo $row->Commercial; ?></td>
+				<td><?php echo $row->Duration;?></td>
+				<td><?php echo $row->UserCount;?></td>				
+				<td><?php echo $row->StartTime;?></td>				
+				</tr>
+			    <?php }?>
+                            </tbody></table><!-- /.table -->
+                        </div>
+		    </div><!-- /.box-body -->
+		    <div><a href='<?php echo base_url()?>ads_analytics/allStitchingReports' style="float:right;">View All</a></div>
+		</div><!-- /.box -->
+                
+                <div class="box box-danger">
+		    <div class="box-header">
+			<!-- tools box -->
+			<div class="pull-right box-tools">
+			    <button class="btn btn-danger btn-sm" data-widget='collapse' data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+			</div><!-- /. tools -->
 			<h3 class="box-title"><a href=''>Ad Wise Report</a></h3>
 		    </div><!-- /.box-header -->
 		    <div class="box-body no-padding">

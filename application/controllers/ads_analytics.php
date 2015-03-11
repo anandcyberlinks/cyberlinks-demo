@@ -117,6 +117,7 @@ class Ads_analytics extends MY_Controller {
 		$this->data['content_provider'] = $this->Ads_analytics_model->getReport(array('type'=>'content_provider','l'=>$limit));
 		$this->data['customer'] = $this->Ads_analytics_model->getReport(array('type'=>'user','l'=>$limit));
 		$this->data['topcontent'] = $this->Ads_analytics_model->getReport(array('type'=>'content','l'=>$limit,'top'=>1,'search'=>$search));
+		$this->data['stitchingReport'] = $this->Ads_analytics_model->getstitchingReport($limit);
 		
 		$this->show_view('ads/ads_report',$this->data);		
 	}
@@ -259,6 +260,23 @@ class Ads_analytics extends MY_Controller {
         
 		$this->show_view('ads/ads_content_report',$this->data);
 	}
+        
+        function allStitchingReports(){
+            $this->load->library("pagination");
+            $config = array();
+            $config["base_url"] = base_url() . "ads_analytics/allStitchingReports/?";
+            $config["total_rows"] = $this->Ads_analytics_model->getStichingReportCounts();
+            $config["per_page"] = 10;
+            $config["uri_segment"] = 3;
+            $config["page_query_string"] = true;
+            $this->pagination->initialize($config);
+            //$page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+            $page = ($_GET['per_page']) ? $_GET['per_page'] : 0;
+            $this->data['content'] = $this->Ads_analytics_model->getAllStichingReports(PER_PAGE,$page);
+            $this->data["links"] = $this->pagination->create_links();
+            $this->data['total_rows'] = $config["total_rows"];
+            $this->show_view('ads/stitching_reports',$this->data);
+        }
 	
 	function user()
 	{
@@ -571,6 +589,33 @@ class Ads_analytics extends MY_Controller {
 			}
 		}
 	}
+        
+        function export_stitching(){
+            $this->data['result'] = $this->Ads_analytics_model->getAllStichingReports(0,0,true);
+            //echo '<pre>'; print_r($this->data['result']); exit;
+            if($this->uri->segment(3)=='pdf'){
+                        $content =  $this->load->view('templates/stitching_pdf_content',$this->data,true);
+                       //-- create pdf --//
+                       create_pdf($content, 'In Stream Stitching Report');
+            }elseif($this->uri->segment(3)=='csv'){
+                    $heading = array('Id','Commercial','Duration','UserCount','StartTime');
+                    //$content =  $this->load->view('templates/pdf_content',$this->data,true);				
+
+                    $dataRpt = array();
+                    $num=0;
+                    foreach($this->data['result'] as $p) {
+                        $dataRpt[$num]['id']       = $p->id;
+                        $dataRpt[$num]['Commercial']  = $p->Commercial;
+                        $dataRpt[$num]['Duration']  = $p->Duration;
+                        $dataRpt[$num]['UserCount']  = $p->UserCount;
+                        $dataRpt[$num]['StartTime']  = $p->StartTime;
+                        $num++;
+                   }
+                    query_to_csv($dataRpt,$heading);
+                    //echo query_to_csv($content);
+                    //exit;
+            }
+        }
 	
 	function top()
 	{

@@ -585,6 +585,40 @@ class Ads_analytics_model extends CI_Model{
             }
         }
     }
+    
+    function getstitchingReport($limit){
+        $switch_db = $this->load->database('stitch_report', TRUE);
+        $sql = "SELECT id ,SUBSTRING(adname,5,18) as Commercial,TIMESTAMPDIFF(SECOND,adstart,adend) AS Duration,adendadusercount As UserCount,adstart As StartTime
+        FROM adhistory LIMIT ".$limit;
+        $query = $switch_db->query($sql);
+        //$switch_db->query();
+        $result = $query->result();
+        $this->load->database('default', TRUE);
+        return $result;
+    }
+    
+    function getStichingReportCounts(){
+        $switch_db = $this->load->database('stitch_report', TRUE);
+        $sql = "SELECT count(id) as total_count  FROM adhistory";
+        $query = $switch_db->query($sql);
+        
+        $total_count = $query->row()->total_count;
+        $this->load->database('default', TRUE);
+        return $total_count;
+    }
+    
+    function getAllStichingReports($limit,$start,$export=false){
+        $switch_db = $this->load->database('stitch_report', TRUE);
+        $switch_db->select('id ,SUBSTRING(adname,5,18) as Commercial,TIMESTAMPDIFF(SECOND,adstart,adend) AS Duration,adendadusercount As UserCount,adstart As StartTime',false);
+        $switch_db->from('adhistory');
+        if($export==false){
+            $switch_db->limit($limit, $start);
+        }
+        $query = $switch_db->get();
+        $result = $query->result();
+        $this->load->database('default', TRUE);
+        return $result;
+    }
 }
 
 ?>
