@@ -125,22 +125,9 @@ $(function () {
         });
     });
     
-    $('a.confirm_delete').click(function (e) {
-        e.preventDefault();
-        var location = $(this).attr('href');
-        bootbox.confirm('Are you sure you want to Delete', function (confirmed)
-        {
-            if (confirmed)
-            {
-                window.location.replace(location);
-            }
-
-        });
-    });
     
     
-    
-    $('a.confirm').click(function (e) {
+    $('a.confirmc').click(function (e) {
         e.preventDefault();
         var location = $(this).attr('href');
         bootbox.confirm('Are you sure?', function (confirmed)
