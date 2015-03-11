@@ -128,14 +128,14 @@
                             <!-- .table - Uses sparkline charts-->
                             <table class="table table-striped">
 				<tbody><tr>
-				<th>Commercial</th>
+				<th>Creative</th>
 				<th>Duration</th>
 				<th>UserCount</th>				
-				<th>StartTime</th>				
+				<th>DateTime</th>				
 				</tr>
 			     <?php $i=0; foreach($stitchingReport as $row){ $i++;?>
 				<tr>
-				<td><?php echo $row->Commercial; ?></td>
+                                    <td><a href="#"><?php echo $row->Commercial; ?></a></td>
 				<td><?php echo $row->Duration;?></td>
 				<td><?php echo $row->UserCount;?></td>				
 				<td><?php echo $row->StartTime;?></td>				

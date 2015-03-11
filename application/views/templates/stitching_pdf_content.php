@@ -7,10 +7,10 @@
                                    
                                         <tr style="background-color:#428bca;color:#fff;">
                                            <th width="10%">Sr No.</th>
-                                           <th width="30%">Commercial</th>                                           
+                                           <th width="30%">Creative</th>                                           
                                            <th width="20%">Duration</th>
                                            <th width="20%">UserCount</th>
-                                           <th width="20%">StartTime</th>
+                                           <th width="20%">DateTime</th>
                                         </tr>
                                    
                                         <?php foreach ($result as $value) { $i++;?>

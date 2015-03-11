@@ -3,10 +3,10 @@
     <aside class="right-side"> 
         <!-- Content Header (Page header) -->
         <section class="content-header">
-            <h1><?php echo $welcome->loadPo('Stitching Report') ?><small><?php echo $welcome->loadPo('Control panel') ?></small></h1>
+            <h1><?php echo $welcome->loadPo('In Stream Stitching Report') ?><small><?php echo $welcome->loadPo('Control panel') ?></small></h1>
             <ol class="breadcrumb">
                 <li><a href="<?php echo base_url(); ?>ads_analytics/report"><i class="fa fa-dashboard"></i><?php echo $welcome->loadPo('Ads Analytics') ?></a></li>
-                <li class="active"><?php echo $welcome->loadPo('Stitching report') ?></li>
+                <li class="active"><?php echo $welcome->loadPo('In Stream Stitching Report') ?></li>
             </ol>
         </section>
         <div>
@@ -34,19 +34,19 @@
                                 <table id="example2" class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
-                                           <th>Id</th>
-                                           <th>Commercial</th>
+<!--                                           <th>Id</th>-->
+                                           <th>Creative</th>
                                            <th>Duration</th>
                                            <th>UserCount</th>
-                                           <th>StartTime</th>
+                                           <th>DateTime</th>
                                         </tr>
                                     </thead>
 
                                     <tbody>
                                         <?php foreach ($content as $value) { ?>
                                         <tr id="<?php echo $value->id ?>">
-                                                <td><?php echo $value->id; ?></td>                                                                                               
-                                                <td><?php echo $value->Commercial; ?></td>                                                
+<!--                                                <td><?php //echo $value->id; ?></td>                                                                                               -->
+                                            <td><a href="#"><?php echo $value->Commercial; ?></a></td>                                                
                                                 <td><?php echo $value->Duration; ?></td>
                                                 <td><?php echo $value->UserCount; ?></td>                                                
                                                 <td><?php echo $value->StartTime; ?></td>

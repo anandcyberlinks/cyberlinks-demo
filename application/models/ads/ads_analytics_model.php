@@ -589,7 +589,7 @@ class Ads_analytics_model extends CI_Model{
     function getstitchingReport($limit){
         $switch_db = $this->load->database('stitch_report', TRUE);
         $sql = "SELECT id ,SUBSTRING(adname,5,18) as Commercial,TIMESTAMPDIFF(SECOND,adstart,adend) AS Duration,adendadusercount As UserCount,adstart As StartTime
-        FROM adhistory LIMIT ".$limit;
+        FROM adhistory ORDER BY StartTime DESC LIMIT ".$limit;
         $query = $switch_db->query($sql);
         //$switch_db->query();
         $result = $query->result();
@@ -611,6 +611,7 @@ class Ads_analytics_model extends CI_Model{
         $switch_db = $this->load->database('stitch_report', TRUE);
         $switch_db->select('id ,SUBSTRING(adname,5,18) as Commercial,TIMESTAMPDIFF(SECOND,adstart,adend) AS Duration,adendadusercount As UserCount,adstart As StartTime',false);
         $switch_db->from('adhistory');
+        $switch_db->order_by("StartTime", "DESC");
         if($export==false){
             $switch_db->limit($limit, $start);
         }

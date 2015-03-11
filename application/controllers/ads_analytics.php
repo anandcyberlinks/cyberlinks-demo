@@ -598,13 +598,13 @@ class Ads_analytics extends MY_Controller {
                        //-- create pdf --//
                        create_pdf($content, 'In Stream Stitching Report');
             }elseif($this->uri->segment(3)=='csv'){
-                    $heading = array('Id','Commercial','Duration','UserCount','StartTime');
+                    $heading = array('Creative','Duration','UserCount','DateTime');
                     //$content =  $this->load->view('templates/pdf_content',$this->data,true);				
 
                     $dataRpt = array();
                     $num=0;
                     foreach($this->data['result'] as $p) {
-                        $dataRpt[$num]['id']       = $p->id;
+                        //$dataRpt[$num]['id']       = $p->id;
                         $dataRpt[$num]['Commercial']  = $p->Commercial;
                         $dataRpt[$num]['Duration']  = $p->Duration;
                         $dataRpt[$num]['UserCount']  = $p->UserCount;
