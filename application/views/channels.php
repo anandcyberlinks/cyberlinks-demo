@@ -23,47 +23,63 @@
         <section class="content">
             <?php $search = $this->session->userdata('search_form'); ?>
             <div id="content">
-               <?php /* <div class="row">
+
+                <div class="row">
                     <!-- left column -->
                     <div class="col-md-12">
                         <!-- general form elements -->
                         <div class="box box-primary">
                             <!-- form start -->
-                            <form  method="post" action="<?php echo base_url(); ?>waptv/index" onsubmit="return date_check();" id="searchIndexForm" name="searchIndexForm" accept-charset="utf-8">
+                            <form  method="post" action="<?php echo base_url(); ?>webtv/index" onsubmit="return date_check();" id="searchIndexForm" name="searchIndexForm" accept-charset="utf-8">
                                 <div style="display:none;"><input type="hidden" name="_method" value="POST"/></div>
                                 <div class="box-body">
                                     <div class="row">
-                                        <div class="form-group col-lg-8">
+                                        <div class="form-group col-lg-4">
                                             <div class="input text">
-                                                <label for=""><?php echo $welcome->loadPo('Title') ?></label>
-                                                <input type="text" name="name" class="form-control" value="<?php echo (isset($search['name'])) ? $search['name'] : ''; ?>" placeholder="<?php echo $welcome->loadPo('Playlists Name') ?>">
+                                                <label for=""><?php echo $welcome->loadPo('Name') ?></label>
+                                                <input type="text" name="name" class="form-control" value="<?php echo (isset($search['name'])) ? $search['name'] : ''; ?>" placeholder="<?php echo $welcome->loadPo('Channel Name') ?>">
                                             </div>
                                         </div>
-                                    </div>
+                                        <div class="form-group col-lg-4">
+                                            <div class="input text">
+                                                <label for="url"><?php echo $welcome->loadPo('Number') ?></label>
+                                                <input type="number" class="form-control" name="number" placeholder="<?php echo $welcome->loadPo('Channel Number') ?>" value="<?php echo (isset($search['number'])) ? $search['number'] : ''; ?>" >											
+                                            </div>
+                                        </div>
+                                    </div> 
                                     <div class="row">
                                         <div class="form-group col-lg-4">
                                             <div class="input text">
-                                                <label for="url"><?php echo $welcome->loadPo('Start Date') ?></label>
-                                                <input type="text" class="form-control"  id="eventDates" name="datepickerstart" placeholder="<?php echo $welcome->loadPo('Start Date') ?>" value="<?php echo (isset($search['datepickerstart'])) ? $search['datepickerstart'] : ''; ?>" >											
+                                                <label for="url"><?php echo $welcome->loadPo('Type') ?></label>
+                                                <select name="type" class="form-control">
+                                                    <option value="">Select Type</option>
+                                                    <option value="Linear" <?php if(isset($search['type'])&& $search['type']=='Linear'){echo 'selected';} ?>>Linear</option>
+                                                    <option value="Live" <?php if(isset($search['type'])&& $search['type']=='Live'){echo 'selected';} ?>>Live</option>
+                                                    <option value="Loop" <?php if(isset($search['type'])&& $search['type']=='Loop'){echo 'selected';} ?>>Loop</option>
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="form-group col-lg-4">
                                             <div class="input text">
-                                                <label for="url"><?php echo $welcome->loadPo('End Date') ?></label>
-                                                <input type="text" class="form-control"  id="eventDatee" name="datepickerend" placeholder="<?php echo $welcome->loadPo('End Date') ?>" value="<?php echo (isset($search['datepickerend'])) ? $search['datepickerend'] : ''; ?>">
+                                                <label for="url"><?php echo $welcome->loadPo('Category') ?></label>
+                                                <select name="category" class="form-control">
+                                                    <option value="">Select Category</option>
+                                                    <?php foreach ($category as $cate){ ?>
+                                                    <option value="<?=$cate->id?>" <?php if(isset($search['category'])&& $search['category']==$cate->id){echo 'selected';} ?>><?=$cate->category?></option>
+                                                    <?php } ?>
+                                                </select>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> 
                                 </div><!-- /.box-body -->
                                 <div class="box-footer">
                                     <button type="submit" name="submit" value="Search"class="btn btn-primary"><?php echo $welcome->loadPo('Search') ?></button>
                                     <button type="submit" name="reset" value="Reset"class="btn btn-primary"><?php echo $welcome->loadPo('Reset') ?></button>
-
                                 </div>
                             </form>
                         </div><!-- /.box -->
                     </div><!--/.col (left) -->
-                </div> -- */ ?>
+                </div> 
                 <div class="row">
                     <div class="col-xs-12">
                         <div class="box">
@@ -71,7 +87,7 @@
                                 <table id="example2" class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
-                                            <th><?php echo $welcome->loadPo('Name') ?></th>
+                                            <th> <a 2<?php echo $welcome->loadPo('Name') ?></th>
                                             <th><?php echo $welcome->loadPo('Number') ?></th>
                                             <th><?php echo $welcome->loadPo('Type') ?></th>
                                             <th><?php echo $welcome->loadPo('Category') ?></th>

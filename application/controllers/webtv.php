@@ -31,6 +31,7 @@ class Webtv extends MY_Controller {
         $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
         $data['res'] = $this->webtv_model->fetchchannels($this->uid, $config["per_page"], $page, $searchterm);
         $data["links"] = $this->pagination->create_links();
+        $data['category'] = $this->webtv_model->get_category($this->uid);
         $this->show_view('channels', $data);
     }
 

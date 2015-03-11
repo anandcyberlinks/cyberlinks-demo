@@ -54,6 +54,15 @@ class Webtv_model extends CI_Model {
         if (isset($data['name']) && $data['name'] != "") {
             $this->db->where('name', $data['name']);
         }
+        if (isset($data['number']) && $data['number'] != "") {
+            $this->db->where('number', $data['number']);
+        }
+        if (isset($data['type']) && $data['type'] != "") {
+            $this->db->where('type', $data['type']);
+        }
+        if (isset($data['category']) && $data['category'] != "") {
+            $this->db->where('category_id', $data['category']);
+        }
         $this->db->where('ch.uid', $uid);
         $this->db->from('channels ch');
         $this->db->join('channel_categories cc', 'ch.category_id = cc.id', 'left');
@@ -96,6 +105,15 @@ class Webtv_model extends CI_Model {
     function countAll_channels($uid, $data) {
         if (isset($data['name']) && $data['name'] != "") {
             $this->db->where('name', $data['name']);
+        }
+        if (isset($data['number']) && $data['number'] != "") {
+            $this->db->where('number', $data['number']);
+        }
+        if (isset($data['type']) && $data['type'] != "") {
+            $this->db->where('type', $data['type']);
+        }
+        if (isset($data['category']) && $data['category'] != "") {
+            $this->db->where('category_id', $data['category']);
         }
         $this->db->where('uid', $uid);
         $this->db->from('channels');
