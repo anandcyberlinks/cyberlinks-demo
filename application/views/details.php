@@ -320,7 +320,7 @@ autostart: 1,
 	//console.log(this.getPosition());
 	//-- switch newsnation ad ---//
 	var id = "<?php echo $content_id;?>";
-	if (epos % 2 ==1 && id ==38) {	  	
+	if (epos % 2 ==1 && id ==56) {	  	
 	    switch_ad();
 	}
 	//-------------------//
@@ -413,7 +413,7 @@ autostart: 1,
     
     jwplayer().onBeforePlay(function () {
 	var id = "<?php echo $content_id;?>";
-	if (typeof flag==='undefined' && id==38) {
+	if (typeof flag==='undefined' && id==56) {
 		//console.log('before');
 		jwplayer().playAd(tag+'?pre');
 		flag=1;
@@ -539,7 +539,7 @@ jwplayer().onAdTime(function(event) {
   var flag =/pre/i.test(event.tag);
 
   console.log(ad_duration);
-  if (ad_duration % 2==1 && id==38 && flag==false) {
+  if (ad_duration % 2==1 && id==56 && flag==false) {
 //	console.log('midroll');
 	switch_ad_skip();
   }
