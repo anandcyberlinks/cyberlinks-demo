@@ -59,7 +59,7 @@ class Details extends MY_Controller {
 		$age = $from->diff($to)->y;
 		*/
 		$keywords = $user_data['keywords'];
-		if($id ==38 ){
+		if($id ==56 ){
 			$keywords ='newsnation';
 		}
 		$adsAlloc = $this->getAdsRevive($lat,$lng,$age,$keywords,$gender,$limit);
@@ -68,7 +68,7 @@ class Details extends MY_Controller {
 		
 		//echo '<pre>';print_r($user_data);die;
 		//-- get radius for user location --//
-		if($id ==38 && $type =='live'){  //- check if newsnation no ads display --//
+		if($id ==56 && $type =='live'){  //- check if newsnation no ads display --//
 			//-- Revive ad assing cue points array newsnation---//
 			$i=0;
 			foreach($adsAlloc->url as $key=>$val)
