@@ -20,6 +20,8 @@
 	<input type='hidden' name='ads_analytics_id' id='ads_analytics_id'>
 	<input type='hidden' name='is_complete' id='is_complete'>
 	<input type='hidden' name='totalTime' id='totalTime' value=0>
+	<input type='hidden' name='flagad' id='flagad' value='0'>
+	<input type='hidden' name='tag' id='tag' value=0>
         <div id="myElement" style='width:100%;height:100%'></div>
        <pre id="log"></pre>
        
@@ -219,7 +221,8 @@ $(window).on('beforeunload', function(){
 	})
 	.done(function(data){		
 		//console.log(tag);		
-		if (data=='1') {			
+		if (data=='1') {
+		$('#flagad').val('1');
 		jwplayer().playAd(tag);
 		}
 	});
@@ -233,6 +236,7 @@ $(window).on('beforeunload', function(){
 	.done(function(data){		
 		//console.log(tag);		
 		if (data=='0') {
+			 $('#flagad').val('0');
 			jwplayer().load([{file:"<?php echo $video_path;?>"}]);
 		}		
 
@@ -289,7 +293,7 @@ autostart: 1,
     });
 
     jwplayer().onTime(function(event){	
-	//console.log(event.position);
+	console.log('hit');
 	var epos = event.position;	
 	//console.log(parseInt(epos));
 	
@@ -319,6 +323,20 @@ autostart: 1,
 	}
 	//-------------------//
     });
+    /*
+    var id ='<?php echo $content_id;?>';
+	setInterval(function(){
+		console.log('aa');
+		var tag = $('#tag').val();
+		var pre =/pre/i.test(tag);
+		console.log(pre);
+		var flagad = $('#flagad').val();
+		console.log(flagad);
+		if (id == 38 && flagad=='0' && pre==false) {		    
+		    //switch_ad();		    
+		}
+	}, 1000);
+    */
     
 	autoplay(); //--auto play jwplayer --//
 	
@@ -492,6 +510,7 @@ jwplayer().onAdError(function(event) {
 var ad_duration=0;
 //-- play ads ---//
 jwplayer().onAdImpression(function (event) {
+	console.log('impr');
 	//console.log(this.getPosition());
 	$('#totalTime').val(parseInt(this.getPosition()));
 	
@@ -499,6 +518,8 @@ jwplayer().onAdImpression(function (event) {
 	console.log('123start');
 	window.location.href="<?php echo $uri;?>#123"
 	var tag = event.tag;
+	console.log(tag);
+	$('#tag').val(tag);
 	playAds(tag);
 });
 
@@ -508,6 +529,7 @@ jwplayer().onAdTime(function(event) {
   if (ad_duration >= 1.0 && ad_duration < 2 ) {
 	jwplayer().setMute(false);
 	console.log('123stop');
+	console.log('ad play');
 	window.location.href="<?php echo $uri;?>#1234"
   }
   //console.log(/pre/i.test(event.tag));
@@ -525,6 +547,12 @@ jwplayer().onAdTime(function(event) {
 	
 //--- advertising analytics ---//
 jwplayer().onAdComplete(function(event){
+	
+	  var flag =/pre/i.test(event.tag);
+	  if (flag==true) {
+		 $('#flagad').val('0');
+		  $('#tag').val('');
+	  }
 	jwplayer().setMute(true);
 	console.log('123start');
 	window.location.href="<?php echo $uri;?>#123"
