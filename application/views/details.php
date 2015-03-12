@@ -416,7 +416,7 @@ autostart: 1,
 	var id = "<?php echo $content_id;?>";
 	if (typeof flag==='undefined' && id==56) {
 		//console.log('before');
-		jwplayer().playAd(tag+'?pre');
+		//jwplayer().playAd(tag+'?pre');
 		flag=1;
 	}	
     });
