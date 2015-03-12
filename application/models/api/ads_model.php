@@ -70,5 +70,15 @@ class Ads_model extends CI_Model{
 	//echo '<br>'.$this->db->last_query();die;
 	return $this->db->insert_id(); 
    }
+   
+   function getReviveAds()
+    {
+        $this->db->select('a.id as ads_id, a.ad_title as title,af.path');
+        $this->db->from('ads a');
+        $this->db->join('ads_flavored_video af','a.id=af.ads_id');
+        $this->db->where('af.type','desktop');
+        $query = $this->db->get();
+        return $query->result();
+    }
 }
     ?>
