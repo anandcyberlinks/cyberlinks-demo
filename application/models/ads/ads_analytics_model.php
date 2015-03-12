@@ -588,7 +588,7 @@ class Ads_analytics_model extends CI_Model{
     
     function getstitchingReport($limit){
         $switch_db = $this->load->database('stitch_report', TRUE);
-        $sql = "SELECT id ,SUBSTRING(adname,5,18) as Commercial,TIMESTAMPDIFF(SECOND,adstart,adend) AS Duration,adendadusercount As UserCount,adstart As StartTime
+        $sql = "SELECT id ,adname as Commercial,TIMESTAMPDIFF(SECOND,adstart,adend) AS Duration,adendadusercount As UserCount,adstart As StartTime
         FROM adhistory ORDER BY StartTime DESC LIMIT ".$limit;
         $query = $switch_db->query($sql);
         //$switch_db->query();
@@ -611,7 +611,7 @@ class Ads_analytics_model extends CI_Model{
     
     function getAllStichingReports($limit,$start,$export=false){
         $switch_db = $this->load->database('stitch_report', TRUE);
-        $switch_db->select('id ,SUBSTRING(adname,5,18) as Commercial,TIMESTAMPDIFF(SECOND,adstart,adend) AS Duration,adendadusercount As UserCount,adstart As StartTime',false);
+        $switch_db->select('id ,adname as Commercial,TIMESTAMPDIFF(SECOND,adstart,adend) AS Duration,adendadusercount As UserCount,adstart As StartTime',false);
         $switch_db->from('adhistory');
         $switch_db->order_by("StartTime", "DESC");
         if($export==false){
@@ -628,6 +628,9 @@ class Ads_analytics_model extends CI_Model{
     function getAttributesOfAds($result = array()){
         if(count($result) > 0){
             foreach($result as $key => $val){
+                
+                $val->Commercial = substr($val->Commercial,12);
+                
                 $sql1 = "SELECT a.`id` AS ads_id,a.`ad_title` FROM `files` b join `ads` a on b.id=a.file_id "
                         . "WHERE b.name = '".$val->Commercial."' LIMIT 1";
                 $query1 = $this->db->query($sql1);
