@@ -46,7 +46,11 @@
                                         <?php foreach ($content as $value) { ?>
                                         <tr id="<?php echo $value->id ?>">
 <!--                                                <td><?php //echo $value->id; ?></td>                                                                                               -->
-                                            <td><a href="#"><?php echo $value->Commercial; ?></a></td>                                                
+                                            <td>
+                                                <?php if(isset($value->ad_title)) { ?>
+                                                    <a href="<?php echo base_url();?>ads/detail/<?php echo $value->ads_id; ?>"><?php echo $value->ad_title; ?></a>
+                                                <?php } else { echo $value->Commercial; }?>
+                                            </td>                                                
                                                 <td><?php echo $value->Duration; ?></td>
                                                 <td><?php echo $value->UserCount; ?></td>                                                
                                                 <td><?php echo $value->StartTime; ?></td>

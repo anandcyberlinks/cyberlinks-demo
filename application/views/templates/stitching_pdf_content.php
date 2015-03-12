@@ -16,7 +16,11 @@
                                         <?php foreach ($result as $value) { $i++;?>
                                         <tr>
                                                 <td width="10%"><?php echo $i;?></td>
-                                                <td width="30%"><?php echo $value->Commercial; ?></td>
+                                                <td width="30%">
+                                                    <?php if(isset($value->ad_title)) { 
+                                                         echo $value->ad_title; 
+                                                     } else { echo $value->Commercial; }?>
+                                                </td>
                                                 <td width="20%"><?php echo $value->Duration; ?></td>
                                                 <td width="20%"><?php echo $value->UserCount; ?></td>
                                                 <td width="20%"><?php echo $value->StartTime; ?></td>

@@ -135,7 +135,11 @@
 				</tr>
 			     <?php $i=0; foreach($stitchingReport as $row){ $i++;?>
 				<tr>
-                                    <td><a href="#"><?php echo $row->Commercial; ?></a></td>
+                                    <td>
+                                        <?php if(isset($row->ad_title)) { ?>
+                                            <a href="<?php echo base_url();?>ads/detail/<?php echo $row->ads_id; ?>"><?php echo $row->ad_title; ?></a>
+                                        <?php } else { echo $row->Commercial; }?>    
+                                    </td>
 				<td><?php echo $row->Duration;?></td>
 				<td><?php echo $row->UserCount;?></td>				
 				<td><?php echo $row->StartTime;?></td>				

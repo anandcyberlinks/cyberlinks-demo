@@ -48,7 +48,8 @@
                         </tr>
                         <tr>
                             <td><a class="btn btn-warning" href="<?php echo base_url(); ?>ads/videoOpr/Basic?action=<?php echo base64_encode($result[0]->id) . '&'; ?>">Edit</a>       
-                                &nbsp; &nbsp; <a class="btn btn-default" href="<?php echo base_url(); ?>ads">Back</a></td>
+<!--                                &nbsp; &nbsp; <a class="btn btn-default" href="<?php echo base_url(); ?>ads">Back</a></td>-->
+                                &nbsp; &nbsp; <a class="btn btn-default" href="" onclick="window.history.go(-1); return false;" >Back</a></td>
                             <td></td>
                             <td></td>
                         </tr>

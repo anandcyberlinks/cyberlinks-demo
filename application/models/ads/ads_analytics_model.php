@@ -594,7 +594,9 @@ class Ads_analytics_model extends CI_Model{
         //$switch_db->query();
         $result = $query->result();
         $this->load->database('default', TRUE);
-        return $result;
+        
+        $modified_result = $this->getAttributesOfAds($result);
+        return $modified_result;
     }
     
     function getStichingReportCounts(){
@@ -618,6 +620,24 @@ class Ads_analytics_model extends CI_Model{
         $query = $switch_db->get();
         $result = $query->result();
         $this->load->database('default', TRUE);
+        
+        $modified_result = $this->getAttributesOfAds($result);
+        return $modified_result;
+    }
+    
+    function getAttributesOfAds($result = array()){
+        if(count($result) > 0){
+            foreach($result as $key => $val){
+                $sql1 = "SELECT a.`id` AS ads_id,a.`ad_title` FROM `files` b join `ads` a on b.id=a.file_id "
+                        . "WHERE b.name = '".$val->Commercial."' LIMIT 1";
+                $query1 = $this->db->query($sql1);
+                if($query1->num_rows() > 0){
+                    $row = $query1->row();
+                    $val->ads_id = $row->ads_id;
+                    $val->ad_title = $row->ad_title;
+                }
+            }
+        }
         return $result;
     }
 }

@@ -605,7 +605,7 @@ class Ads_analytics extends MY_Controller {
                     $num=0;
                     foreach($this->data['result'] as $p) {
                         //$dataRpt[$num]['id']       = $p->id;
-                        $dataRpt[$num]['Commercial']  = $p->Commercial;
+                        $dataRpt[$num]['Commercial']  = isset($p->ad_title) ? $p->ad_title : $p->Commercial;
                         $dataRpt[$num]['Duration']  = $p->Duration;
                         $dataRpt[$num]['UserCount']  = $p->UserCount;
                         $dataRpt[$num]['StartTime']  = $p->StartTime;
