@@ -631,8 +631,11 @@ class Ads_analytics_model extends CI_Model{
                 
                 $val->Commercial = substr($val->Commercial,12);
                 
+                $string = str_replace("_3g","",$val->Commercial);
+                
+                
                 $sql1 = "SELECT a.`id` AS ads_id,a.`ad_title` FROM `files` b join `ads` a on b.id=a.file_id "
-                        . "WHERE b.name = '".$val->Commercial."' LIMIT 1";
+                        . "WHERE b.name = '".$string."' LIMIT 1";
                 $query1 = $this->db->query($sql1);
                 if($query1->num_rows() > 0){
                     $row = $query1->row();
