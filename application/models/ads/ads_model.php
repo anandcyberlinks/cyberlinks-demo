@@ -948,14 +948,14 @@ class Ads_model extends CI_Model {
     
     function get_swtich()
     {
-      /*$switch_db = $this->load->database('stitch_report', TRUE);
+      $switch_db = $this->load->database('stitch_report', TRUE);
       $switch_db->select('*');
       $switch_db->from('restAPI');
-      $query = $switch_db->get();*/
-      $this->db->select('*');
+      $query = $switch_db->get();
+      /*$this->db->select('*');
       $this->db->from('restAPI');
       $query = $this->db->get();
-      //echo $this->db->last_query();die;
+      //echo $this->db->last_query();die;*/
       return $query->row();
     }
 }
