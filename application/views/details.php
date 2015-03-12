@@ -58,7 +58,7 @@ $(window).on('beforeunload', function(){
  var country_code = '';
  var postal_code = '';
 
- <?php foreach($scheduleBreaks as $row){
+ <?php print_r($scheduleBreaks);die; foreach($scheduleBreaks as $row){
 	if($row['cue_points']==''){?>
 	var tag = "<?php echo $row['vast_file'];?>";
 <?php
