@@ -58,11 +58,13 @@ $(window).on('beforeunload', function(){
  var country_code = '';
  var postal_code = '';
 
- <?php print_r($scheduleBreaks);die; foreach($scheduleBreaks as $row){
+ <?php
+ if($scheduleBreaks){
+ foreach($scheduleBreaks as $row){
 	if($row['cue_points']==''){?>
 	var tag = "<?php echo $row['vast_file'];?>";
 <?php
-	}
+	} }
  }?>
 // var tag="http://localhost/multitvfinal-demo/assets/upload/video/53f709efce75f.mp4";
  	///--- location data ---//
