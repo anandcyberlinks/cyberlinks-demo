@@ -320,7 +320,8 @@ autostart: 1,
 	//console.log(this.getPosition());
 	//-- switch newsnation ad ---//
 	var id = "<?php echo $content_id;?>";
-	if (epos % 2 ==1 && id ==56) {	  	
+	//if (epos % 2 ==1 && id ==56) {
+	if (id ==56) {
 	    switch_ad();
 	}
 	//-------------------//
@@ -539,7 +540,8 @@ jwplayer().onAdTime(function(event) {
   var flag =/pre/i.test(event.tag);
 
   console.log(ad_duration);
-  if (ad_duration % 2==1 && id==56 && flag==false) {
+ // if (ad_duration % 2==1 && id==56 && flag==false) {
+  if (id==56 && flag==false) {
 //	console.log('midroll');
 	switch_ad_skip();
   }
