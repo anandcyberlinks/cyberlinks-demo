@@ -601,12 +601,14 @@ class Ads_analytics_model extends CI_Model{
     
     function getStichingReportCounts(){
         $switch_db = $this->load->database('stitch_report', TRUE);
-        $sql = "SELECT count(id) as total_count  FROM adhistory";
+        $sql = "SELECT id ,adname as Commercial,TIMESTAMPDIFF(SECOND,adstart,adend) AS Duration,adendadusercount As UserCount,adstart As StartTime  FROM adhistory";
         $query = $switch_db->query($sql);
         
-        $total_count = $query->row()->total_count;
+        $result = $query->result();
         $this->load->database('default', TRUE);
-        return $total_count;
+        
+        $modified_result = $this->getAttributesOfAds($result);
+        return count($modified_result);
     }
     
     function getAllStichingReports($limit,$start,$export=false){
@@ -641,6 +643,8 @@ class Ads_analytics_model extends CI_Model{
                     $row = $query1->row();
                     $val->ads_id = $row->ads_id;
                     $val->ad_title = $row->ad_title;
+                }else{
+                    unset($result[$key]);
                 }
             }
         }
