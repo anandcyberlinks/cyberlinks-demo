@@ -730,7 +730,7 @@ class User extends REST_Controller
     {
         $data   =  array(
             "username" =>$this->post('username'),
-            "password"=>  md5($this->post('password')),
+            "password"=>  $this->post('password'),
             "adserver_user_id"=>$this->post('id'),
             'first_name'=>$this->post('contact_name'),
             'email'=>$this->post('email_address'),
