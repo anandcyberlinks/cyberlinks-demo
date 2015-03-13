@@ -736,7 +736,7 @@ class User extends REST_Controller
             'email'=>$this->post('email_address'),
         );
         
-        echo '<pre>';        print_r($data); exit;
+        echo '<pre>';        print_r($this->post); exit;
         $id = $this->User_model->addSwitchUser($data);
         if($id>0){
             $this->response(array('success' => "successfully added."), 200);
