@@ -248,10 +248,7 @@ $(window).on('beforeunload', function(){
     jwplayer("myElement").setup({
        //flashplayer: "assets/player.swf",
         primary: "html5",
-        file: "<?php echo $video_path;?>",	
-	//file: "http://54.255.176.172:1935/live/smil:mystream.smil/playlist.m3u8",
-       //file: "http://localhost/multitvfinal-demo/assets/upload/video/53f709efce75f.mp4",
-       //file: "rtmp://54.255.176.172:1935/live/newsnation_360p",
+        file: "<?php echo $video_path;?>",		       
 	image: "<?php echo base_url().THUMB_LARGE_PATH. $thumbnail_path;?>",       
        // skin: "<?php echo base_url()?>assets/myskinjw/custom.xml",
 	width: "100%",
@@ -416,7 +413,7 @@ autostart: 1,
 	var id = "<?php echo $content_id;?>";
 	if (typeof flag==='undefined' && id==56) {
 		//console.log('before');
-		//jwplayer().playAd(tag+'?pre');
+		jwplayer().playAd(tag+'?pre');
 		flag=1;
 	}	
     });
