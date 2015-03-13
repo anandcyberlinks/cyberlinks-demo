@@ -266,7 +266,7 @@ autostart: 1,
         },
         advertising: {
 	client: "vast",
-	skipoffset: 5,
+	//skipoffset: 5,
 	schedule: {		
        <?php       
        $i = 1;
