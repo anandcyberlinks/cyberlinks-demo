@@ -403,7 +403,7 @@ class Content extends Apis{
                          FROM `channels` c
                             left join `channel_categories` cc on cc.id = c.category_id
                             left join playlists p on p.channel_id = c.id 
-                            where c.category_id <> 0 and c.status = 1 and p.publish = 1 order by cc.range_from asc ');
+                            where c.category_id <> 0 and c.status = 1 order by cc.range_from asc ');
         
         $dataset = $this->db->query($query)->result();
         $response['data'] = $this->getFormatData($dataset,'category',0);
