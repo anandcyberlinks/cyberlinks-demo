@@ -248,8 +248,7 @@ $(window).on('beforeunload', function(){
     jwplayer("myElement").setup({
        //flashplayer: "assets/player.swf",
         primary: "html5",
-        //file: "<?php echo $video_path;?>",
-	file: "http://54.255.176.172:1935/live/newsnation_360p/manifest.mpd",
+        file: "<?php echo $video_path;?>",	
 	//file: "http://54.179.170.143:1935/live/370_3g/playlist.m3u8",
        //file: "http://localhost/multitvfinal-demo/assets/upload/video/53f709efce75f.mp4",
        //file: "rtmp://54.255.176.172:1935/live/newsnation_360p",
