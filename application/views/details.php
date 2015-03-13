@@ -25,9 +25,9 @@
         <div id="myElement" style='width:100%;height:100%'></div>
        <pre id="log"></pre>
        
-<script type="text/javascript" src="<?php echo base_url(); ?>./assets/js/jwplayer.js" ></script>
+<!--<script type="text/javascript" src="<?php echo base_url(); ?>./assets/js/jwplayer.js" ></script>-->
 
-<!--<script type="text/javascript" src="http://p.jwpcdn.com/6/12/jwplayer.js"></script>-->
+<script type="text/javascript" src="http://p.jwpcdn.com/6/12/jwplayer.js"></script>
 
 <script type="text/javascript">jwplayer.key = "BC9ahgShNRQbE4HRU9gujKmpZItJYh5j/+ltVg==";</script>
 <script src="<?php echo base_url() ?>assets/js/jquery-1.10.2.js"></script>
