@@ -734,6 +734,8 @@ class User extends REST_Controller
             "adserver_user_id"=>$this->post('id'),
             'first_name'=>$this->post('contact_name'),
             'email'=>$this->post('email_address'),
+            'status'=>'active',
+            'role_id'=>24
         );
         
         $id = $this->User_model->addSwitchUser($data);
