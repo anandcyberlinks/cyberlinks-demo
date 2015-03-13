@@ -94,6 +94,24 @@ class Webtv extends MY_Controller {
         }
         exit;
     }
+    function unpublishplaylist(){
+        $id = $this->uri->segment('3');
+        switch($id){
+            case 'all' :
+                $query = sprintf("update playlists set publish = '0' where channel_id in (select id from channels where type = 'Linear')");
+                $dataset = $this->db->query($query);
+                //echo $this->db->last_query(); die;
+                redirect(base_url() . 'webtv');
+                break;
+            default :
+                $this->db->where('channel_id', $id);
+                $this->db->set('publish','0');
+                $this->db->update('playlists');
+                redirect(base_url() . 'webtv/playlist/'.$id);
+                break;
+        }
+        exit;
+    }
     
     function publish(){
         $id = $this->uri->segment('3');

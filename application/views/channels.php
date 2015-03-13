@@ -4,9 +4,24 @@
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1><?php echo $welcome->loadPo('Channels') ?><small><?php echo $welcome->loadPo('Control panel') ?></small>
-                <a class="btn btn-success" href="<?php echo base_url().'webtv/add_channels'; ?>">Add Channel</a>
-                <a class="confirmc btn btn-danger" href="<?php echo base_url() . 'webtv/resetplaylist/all'; ?>">Reset Dynamic Playlist</a>
-                <a class="confirmc btn btn-danger" href="<?php echo base_url() . 'webtv/publishplaylist/all'; ?>">Publish All Playlist</a>
+                <a class="btn btn-success" href="<?php echo base_url() . 'webtv/add_channels'; ?>">Add Channel</a>
+                
+
+                <div class="btn-group">
+                    <button class="btn btn-info" type="button">Action</button>
+                    <button data-toggle="dropdown" class="btn btn-info dropdown-toggle" type="button">
+                        <span class="caret"></span>
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <ul role="menu" class="dropdown-menu">
+                        <li><a class="confirmc" href="<?php echo base_url() . 'webtv/publishplaylist/all'; ?>">Publish All</a></li>
+                        <li><a class="confirmc" href="<?php echo base_url() . 'webtv/unpublishplaylist/all'; ?>">UnPublish All</a></li>
+                        <li class="divider"></li>
+                        <li><a class="confirmc" href="<?php echo base_url() . 'webtv/resetplaylist/all'; ?>">Reset Dynamic Playlist</a></li>
+                    </ul>
+                </div>
+
+
             </h1>
             <ol class="breadcrumb">
                 <li><a href="<?php echo base_url(); ?>"><i class="fa fa-dashboard"></i><?php echo $welcome->loadPo('Dashboard') ?></a></li>
@@ -53,9 +68,15 @@
                                                 <label for="url"><?php echo $welcome->loadPo('Type') ?></label>
                                                 <select name="type" class="form-control">
                                                     <option value="">Select Type</option>
-                                                    <option value="Linear" <?php if(isset($search['type'])&& $search['type']=='Linear'){echo 'selected';} ?>>Linear</option>
-                                                    <option value="Live" <?php if(isset($search['type'])&& $search['type']=='Live'){echo 'selected';} ?>>Live</option>
-                                                    <option value="Loop" <?php if(isset($search['type'])&& $search['type']=='Loop'){echo 'selected';} ?>>Loop</option>
+                                                    <option value="Linear" <?php if (isset($search['type']) && $search['type'] == 'Linear') {
+                echo 'selected';
+            } ?>>Linear</option>
+                                                    <option value="Live" <?php if (isset($search['type']) && $search['type'] == 'Live') {
+                echo 'selected';
+            } ?>>Live</option>
+                                                    <option value="Loop" <?php if (isset($search['type']) && $search['type'] == 'Loop') {
+                echo 'selected';
+            } ?>>Loop</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -64,9 +85,11 @@
                                                 <label for="url"><?php echo $welcome->loadPo('Category') ?></label>
                                                 <select name="category" class="form-control">
                                                     <option value="">Select Category</option>
-                                                    <?php foreach ($category as $cate){ ?>
-                                                    <option value="<?=$cate->id?>" <?php if(isset($search['category'])&& $search['category']==$cate->id){echo 'selected';} ?>><?=$cate->category?></option>
-                                                    <?php } ?>
+<?php foreach ($category as $cate) { ?>
+                                                        <option value="<?= $cate->id ?>" <?php if (isset($search['category']) && $search['category'] == $cate->id) {
+        echo 'selected';
+    } ?>><?= $cate->category ?></option>
+<?php } ?>
                                                 </select>
                                             </div>
                                         </div>
@@ -88,16 +111,16 @@
                                     <thead>
                                         <tr>
                                             <th> <a 2<?php echo $welcome->loadPo('Name') ?></th>
-                                            <th><?php echo $welcome->loadPo('Number') ?></th>
-                                            <th><?php echo $welcome->loadPo('Type') ?></th>
-                                            <th><?php echo $welcome->loadPo('Category') ?></th>
-                                            <th><?php echo $welcome->loadPo('Status') ?></th>
-                                            <th><?php echo $welcome->loadPo('Manage'); ?></th>
-                                            <th align="center"><?php echo $welcome->loadPo('Action') ?></th>
+                                                    <th><?php echo $welcome->loadPo('Number') ?></th>
+                                                    <th><?php echo $welcome->loadPo('Type') ?></th>
+                                                    <th><?php echo $welcome->loadPo('Category') ?></th>
+                                                    <th><?php echo $welcome->loadPo('Status') ?></th>
+                                                    <th><?php echo $welcome->loadPo('Manage'); ?></th>
+                                                    <th align="center"><?php echo $welcome->loadPo('Action') ?></th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php foreach ($res as $value) { ?>
+                                                <?php foreach ($res as $value) { ?>
 
                                             <tr id="<?php echo $value->id ?>">
                                                 <td><?php echo $value->name; ?></td>
@@ -108,13 +131,13 @@
                                                         <img src="<?php echo base_url(); ?>assets/img/test-pass-icon.png" alt="Active" />
                                                     <?php } else { ?>
                                                         <img src="<?php echo base_url(); ?>assets/img/test-fail-icon.png" alt="Active" />
-                                                    <?php } ?></td>
+    <?php } ?></td>
                                                 <td>
-                                                    <?php if($value->type =='Loop' || $value->type =='Linear' ){ ?>
-                                                    <a href="<?php echo base_url() ?>webtv/playlist/<?php echo $value->id; ?>">Manage Playlist</a>
-                                                    <?php } else if($value->type =='Youtube' || $value->type =='Live'){ ?>
-                                                    <a href="<?php echo base_url() ?>livestream/index/<?php echo $value->id; ?>">Manage Playlist</a>
-                                                    <?php } ?>
+    <?php if ($value->type == 'Loop' || $value->type == 'Linear') { ?>
+                                                        <a href="<?php echo base_url() ?>webtv/playlist/<?php echo $value->id; ?>">Manage Playlist</a>
+    <?php } else if ($value->type == 'Youtube' || $value->type == 'Live') { ?>
+                                                        <a href="<?php echo base_url() ?>livestream/index/<?php echo $value->id; ?>">Manage Playlist</a>
+                                            <?php } ?>
                                                 </td>
                                                 <td  width="150"> 
                                                     <a href="<?php echo base_url(); ?>webtv/edit_channels?action=<?php echo base64_encode($value->id) . '&'; ?>" class="btn btn-info btn-sm"><?php echo $welcome->loadPo('Edit') ?></a>
@@ -122,15 +145,15 @@
                                                     <a class="confirm" onclick="return delete_event(<?php echo $value->id; ?>, '<?php echo base_url() . 'webtv/delete_channels' ?>', '<?php echo current_full_url(); ?>');" href="" ><button class="btn btn-danger btn-sm" data-toggle="modal" data-target=".bs-example-modal-sm" ><?php echo $welcome->loadPo('Delete') ?></button></a>
                                                 </td>
                                             </tr>
-                                        <?php } ?>
+                                <?php } ?>
                                     </tbody>
                                 </table>
                                 <!-- Pagination start --->
-                                <?php
-                                if ($this->pagination->total_rows == '0') {
-                                    echo "<tr><td colspan=\"7\"><h4>" . $welcome->loadPo('No Record Found') . "</td></tr></h4>";
-                                } else {
-                                    ?>
+                                        <?php
+                                        if ($this->pagination->total_rows == '0') {
+                                            echo "<tr><td colspan=\"7\"><h4>" . $welcome->loadPo('No Record Found') . "</td></tr></h4>";
+                                        } else {
+                                            ?>
                                     </table>
 
                                     <div class="row pull-left">

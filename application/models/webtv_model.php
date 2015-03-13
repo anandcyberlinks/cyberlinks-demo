@@ -63,7 +63,9 @@ class Webtv_model extends CI_Model {
         if (isset($data['category']) && $data['category'] != "") {
             $this->db->where('category_id', $data['category']);
         }
+        $this->db->where('cc.status', 1);
         $this->db->where('ch.uid', $uid);
+        
         $this->db->from('channels ch');
         $this->db->join('channel_categories cc', 'ch.category_id = cc.id', 'left');
         $this->db->limit($start, $limit);
@@ -115,8 +117,10 @@ class Webtv_model extends CI_Model {
         if (isset($data['category']) && $data['category'] != "") {
             $this->db->where('category_id', $data['category']);
         }
+        $this->db->where('cc.status', 1);
         $this->db->where('uid', $uid);
-        $this->db->from('channels');
+        $this->db->from('channels ch');
+        $this->db->join('channel_categories cc', 'ch.category_id = cc.id', 'left');
         return $this->db->count_all_results();
     }
 
@@ -134,6 +138,7 @@ class Webtv_model extends CI_Model {
     function get_category($uid) {
         $this->db->select('id, category');
         $this->db->where('u_id', $uid);
+        $this->db->where('status', 1);
         $this->db->from('channel_categories');
         $result = $this->db->get()->result();
         //print_r($result); die;
