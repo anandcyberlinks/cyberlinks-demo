@@ -725,4 +725,24 @@ class User extends REST_Controller
             //$this->User_model->update_user($token,$id);
         //-------------------//
     }
+    
+    function add_switch_user_post()
+    {
+        $data   =  array(
+            "username" =>$this->post('login'),
+            "password"=>  md5($this->post('passwd')),
+            "adserver_user_id"=>$this->post('userid'),
+            'first_name'=>$this->post('contact_name'),
+            'email'=>$this->post('email_address'),
+        );
+        
+        echo '<pre>';        print_r($data); exit;
+        $id = $this->User_model->addSwitchUser($data);
+        if($id>0){
+            $this->response(array('success' => "successfully added."), 200);
+        }  else {
+            $this->response(array('error' => "error."), 404);
+        }
+
+    }
 }

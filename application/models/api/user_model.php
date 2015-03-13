@@ -322,12 +322,19 @@ function delete_user($id){
               }      
   }
   public function userDeviceID($data)
-          {
-          //$this->db->where('id',$uid);
-	  $this->db->set('created','NOW()',FALSE);
-	  $this->db->insert('customer_device',$data);
-	 // echo $query =sprintf("UPDATE customers SET device_unique_id = CONCAT(device_unique_id,',%d')",$uniqueId);die;
-         // $this->db->update('customers', array('device_unique_id'=>$uniqueId));	 	  
-          return TRUE;
-          }
+    {
+    //$this->db->where('id',$uid);
+    $this->db->set('created','NOW()',FALSE);
+    $this->db->insert('customer_device',$data);
+    // echo $query =sprintf("UPDATE customers SET device_unique_id = CONCAT(device_unique_id,',%d')",$uniqueId);die;
+    // $this->db->update('customers', array('device_unique_id'=>$uniqueId));	 	  
+    return TRUE;
+    }
+          
+    public function addSwitchUser($data)
+    {
+        $this->db->set('created','NOW()',FALSE);
+        $this->db->insert('users',$data);
+        return $this->db->insert_id();
+    }
 }
