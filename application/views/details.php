@@ -444,13 +444,13 @@ autostart: 1,
 });
     
     jwplayer().onBeforePlay(function () {
+	//--- create log end---//
+		log('Ad load:'+tag,'Start');
+	//--------------//
 	var id = "<?php echo $content_id;?>";
 	if (typeof flag==='undefined' && id==56) {
 		//console.log('before');
-		jwplayer().playAd(tag+'?pre');
-		//--- create log end---//
-		log('Ad load:'+tag,'Start');
-		//--------------//
+		jwplayer().playAd(tag+'?pre');		
 		flag=1;
 	}	
     });
