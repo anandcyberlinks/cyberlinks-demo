@@ -125,6 +125,19 @@ $(window).on('beforeunload', function(){
 	play();
     }
     
+    function log(title,pos) {
+	$.ajax({
+		url: "<?php echo base_url() ?>index.php/details/log_load",
+	        data: {		
+                title:title,
+                pos:pos,               
+	       },
+	       cache: false,
+	       type: "POST",
+	       dataType: 'json'	
+	})	
+    }
+    
     function play() {
 	 
 
@@ -254,7 +267,7 @@ $(window).on('beforeunload', function(){
         primary: "html5",
         file: "<?php echo $video_path;?>",		       
 	image: "<?php echo base_url().THUMB_LARGE_PATH. $thumbnail_path;?>",       
-       // skin: "<?php echo base_url()?>assets/myskinjw/custom.xml",
+       // skin: "<?php echo base_url()?>assets/myskinjw/custom.xml",	
 	width: "100%",
  aspectratio: "16:9",
  controls: false,
@@ -296,7 +309,7 @@ autostart: 1,
     });
 
     jwplayer().onTime(function(event){	
-	console.log('hit');
+	//console.log('hit');
 	var epos = event.position;	
         var totalTimeElapsed = $( "#totalTimeElapsed" ).val();
 	console.log(parseInt(epos));
@@ -435,6 +448,9 @@ autostart: 1,
 	if (typeof flag==='undefined' && id==56) {
 		//console.log('before');
 		jwplayer().playAd(tag+'?pre');
+		//--- create log end---//
+		log('Ad load:'+tag,'Start');
+		//--------------//
 		flag=1;
 	}	
     });
@@ -529,9 +545,18 @@ jwplayer().onAdError(function(event) {
 */
 
 var ad_duration=0;
+
+
+//-- ad start play --//
+jwplayer().onAdPlay(function (event) {	
+	//--- create log end---//
+	console.log('ad play');
+	log('Ad load:'+event.tag,'End');
+	//--------------//
+});
+
 //-- play ads ---//
-jwplayer().onAdImpression(function (event) {
-	console.log('impr');
+jwplayer().onAdImpression(function (event) {	
 	//console.log(this.getPosition());
         //$("#totalTimeElapsed").val(parseInt(this.getPosition()));
 	$('#totalTime').val(parseInt(this.getPosition()));
@@ -540,7 +565,7 @@ jwplayer().onAdImpression(function (event) {
 	console.log('123start');
 	window.location.href="<?php echo $uri;?>#123"
 	var tag = event.tag;
-	console.log(tag);
+	//console.log(tag);
 	$('#tag').val(tag);
 	playAds(tag);
 });
@@ -550,15 +575,15 @@ jwplayer().onAdTime(function(event) {
   var id = "<?php echo $content_id;?>";
   if (ad_duration >= 1.0 && ad_duration < 2 ) {
 	jwplayer().setMute(false);
-	console.log('123stop');
-	console.log('ad play');
-	window.location.href="<?php echo $uri;?>#1234"
+	console.log('123stop_ad');
+	//console.log('ad play');
+	window.location.href="<?php echo $uri;?>#1234_ad"
   }
   //console.log(/pre/i.test(event.tag));
   //console.log(event.tag);
   var flag =/pre/i.test(event.tag);
 
-  console.log(ad_duration);
+ // console.log(ad_duration);
  // if (ad_duration % 2==1 && id==56 && flag==false) {
   if (id==56 && flag==false) {
 //	console.log('midroll');
@@ -569,16 +594,15 @@ jwplayer().onAdTime(function(event) {
 });
 	
 //--- advertising analytics ---//
-jwplayer().onAdComplete(function(event){
-	
+jwplayer().onAdComplete(function(event){	
 	  var flag =/pre/i.test(event.tag);
 	  if (flag==true) {
 		 $('#flagad').val('0');
 		  $('#tag').val('');
 	  }
 	jwplayer().setMute(true);
-	console.log('123start');
-	window.location.href="<?php echo $uri;?>#123"
+	console.log('123start_ad');
+	window.location.href="<?php echo $uri;?>#123_ad"
 	completeAds(ad_duration);
 }); 
    

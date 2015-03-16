@@ -5,6 +5,7 @@ class Details extends MY_Controller {
 	function __construct()
 	{
             parent::__construct();
+	   
             $this->load->model('/api/Video_model');
 	    $this->load->model('ads/Ads_model');
 	  //  $this->load->model('/analytics/Analytics_model');
@@ -19,6 +20,9 @@ class Details extends MY_Controller {
 
 	function index()
 	{		
+	    //-- log start --//
+	    $this->log_load('db load','start');
+	    //--------------//
 		//-- get geocoding google api --//
 		$this->data['lat'] = $lat = $_GET['lat'];
 		$this->data['long'] = $lng = $_GET['lng'];
@@ -158,15 +162,25 @@ class Details extends MY_Controller {
 			$this->data['result'] = $result;
 		}
 		
-		$this->data['scheduleBreaks'] = $adsFinal;       
+		$this->data['scheduleBreaks'] = $adsFinal;
+		//--- End db loading log ----//
+		$this->log_load('db load','End');
+		//----------------------------//
+		
+		//-----Start jwplayer loading log----//
+		$this->log_load('jwplayer load','Start');
+		//--------------------------------//
                 $this->load->view('details',$this->data);
+		//-----End jwplayer loading log----//
+		$this->log_load('jwplayer load','End');
+		//--------------------------------//
 	}
 	
 	function getAdsRevive($lat,$lng,$age,$keywords,$gender,$l)
 	{
 		$this->load->helper('url');		
-                $url = "http://54.179.170.143/vast/getvast.php?keyword=$keywords&age=$age&gender=$gender&lat=$lat&lng=$lng&limit=$l";
-                // Get cURL resource
+               $url = "http://54.179.170.143/vast/getvast.php?keyword=$keywords&age=$age&gender=$gender&lat=$lat&lng=$lng&limit=$l";
+               // Get cURL resource
                 $curl = curl_init();
                 // Set some options - we are passing in a useragent too here
                 curl_setopt_array($curl, array(
@@ -194,6 +208,28 @@ class Details extends MY_Controller {
 		$result = $this->Ads_model->get_swtich();
 		echo $result->status;
 		die;
+	}
+	
+	function log_load($title,$pos)
+	{		
+		$title = ($title==''? $_POST['title']:$title);
+		$pos = ($pos==''? $_POST['pos']:$pos);
+		//$time = date('Y-m-d h:i:s:u');
+		
+		$t = microtime(true);
+		$micro = sprintf("%06d",($t - floor($t)) * 1000000);
+		$d = new DateTime( date('Y-m-d H:i:s.'.$micro, $t) );
+		$time = $d->format("Y-m-d H:i:s.u"); // note at point on "u"
+
+		$file = "log/stream_log";
+		$fileHandle = fopen($file, 'a'); // Note that the mode has changed
+		$data = $title.' '.$pos.  ';' . $time.';'; // set data we will be writing
+		if($pos=='End')
+		{
+			$data .= "\n";
+		}
+		fwrite($fileHandle, $data); // write data to file 
+		fclose($fileHandle); // close the file since we're done
 	}
 	
 }
