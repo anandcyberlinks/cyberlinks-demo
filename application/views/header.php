@@ -112,11 +112,6 @@ $s = $this->session->all_userdata();
                                     <div class="pull-left">
                                         <a href="<?php echo base_url() ?>layout/profile" class="btn btn-default btn-flat">Profile</a>
                                     </div>
-                                    <?php if($s[0]->role=='Advertiser') { ?>
-                                    <div class="pull-left">
-                                        <a href="<?php echo base_url() ?>layout/adserver_login" class="btn btn-default btn-flat">Adserver</a>
-                                    </div>
-                                    <?php } ?>
                                     <div class="pull-right">
                                         <a href="<?php echo base_url() ?>layout/logout" class="btn btn-default btn-flat">Sign out</a>
                                     </div>

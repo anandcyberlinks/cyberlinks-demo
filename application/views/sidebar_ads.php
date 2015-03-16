@@ -41,6 +41,12 @@
                     <li class="<?= ($this->uri->segment(1) === 'category') ? 'active' : '' ?>"><a href="<?php echo base_url() ?>category"><i class="fa fa-angle-double-right"></i> <?php echo $welcome->loadPo('Category'); ?></a></li>                                    
                 </ul>
             </li>
+            <?php if($s[0]->role=='Advertiser') { ?>
+            <li class="<?= ($this->uri->segment(1) == 'layout') ? 'active' : '' ?>">
+                <a href="<?php echo base_url() ?>layout/adserver_login">
+                    <i class="fa fa-dashboard"></i> <span><?php echo $welcome->loadPo('Campaign Manager'); ?></span></a>
+            </li>
+            <?php } ?>
             
         </ul>
     </section>
