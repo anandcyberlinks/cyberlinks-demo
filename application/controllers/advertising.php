@@ -251,7 +251,10 @@ function  updateCuePoint()
      */
     function configuration(){
         $data['welcome'] = $this;
+        $this->load->model('ads/ads_model');
         $data['adSources'] = $this->videos_model->getAdSources();
+        $data['userAdsConfig']  = $this->ads_model->getAdsConfiguration($this->uid);
+        
         if(isset($_POST['submit'])){
             if(@$_POST['ad_config']!=""){
                 $this->videos_model->saveUserAdConfig($this->uid,$_POST);

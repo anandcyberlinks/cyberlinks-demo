@@ -857,6 +857,25 @@ class Ads_model extends CI_Model {
 	 return 0;
       }*/
     }
+    
+    function getAdsConfiguration($uid){
+        $this->db->select('value');
+        $this->db->from('options');
+        $this->db->where('user_id',$uid);
+        $this->db->where('key','Ad_Config');
+        $this->db->limit(1);
+        $query = $this->db->get();
+        if($query->num_rows() > 0){
+            $adconfig = json_decode($query->row()->value);
+            foreach($adconfig as $key => $val){
+                break;
+            }
+            $adconfig =  $key;
+        }else{
+            $adconfig = 'Local';
+        }
+        return $adconfig;
+    }
         
     /* function to get users location wise ads list */
     function getUserLocationWiseAds($lat,$long,$id,$data,$limit=0){
