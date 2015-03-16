@@ -20,6 +20,7 @@
 	<input type='hidden' name='ads_analytics_id' id='ads_analytics_id'>
 	<input type='hidden' name='is_complete' id='is_complete'>
 	<input type='hidden' name='totalTime' id='totalTime' value=0>
+	<input type='hidden' name='totalTimeElapsed' id='totalTimeElapsed' value=0>
 	<input type='hidden' name='flagad' id='flagad' value='0'>
 	<input type='hidden' name='tag' id='tag' value=0>
         <div id="myElement" style='width:100%;height:100%'></div>
@@ -297,24 +298,41 @@ autostart: 1,
     jwplayer().onTime(function(event){	
 	console.log('hit');
 	var epos = event.position;	
-	//console.log(parseInt(epos));
+        var totalTimeElapsed = $( "#totalTimeElapsed" ).val();
+	console.log(parseInt(epos));
 	
 	if (epos >= 2.0 && epos < 4.0) {
 		jwplayer().setMute(false);
 		console.log('123stop');
 		window.location.href="<?php echo $uri;?>#1234"
 	}
-	var cuepoints = '<?php echo $cuePoints;?>';
-	//console.log($.parseJSON(cuepoints));
-	var json = $.parseJSON(cuepoints);
+	
+	
+        
+        if(totalTimeElapsed!=0){
+            var json = $.parseJSON($('#totalTimeElapsed').val());
+        } else{
+            var cuepoints = '<?php echo $cuePoints;?>';
+            //console.log($.parseJSON(cuepoints));
+        
+            var json = $.parseJSON(cuepoints);
+        }
 	//var arr = $.map(cuepoints, function(el) { return el; });
 	//console.log(arr);
 	$(json).each(function(k,val){
 		var totalTime = parseInt(epos);
+		//totalTime = parseInt(totalTime) + parseInt(totalTimeElapsed);
 		
 		//console.log(totalTime);
 		if (totalTime==val) {
 			//console.log('ad is coming in 5 sec');
+                        
+                        var index = json.indexOf(val);
+                        if (index > -1) {
+                            json.splice(index, 1);
+                        }
+                        
+                        $('#totalTimeElapsed').val(JSON.stringify(json));
 		}	
 	});	
 	//console.log(this.getPosition());
@@ -515,6 +533,7 @@ var ad_duration=0;
 jwplayer().onAdImpression(function (event) {
 	console.log('impr');
 	//console.log(this.getPosition());
+        //$("#totalTimeElapsed").val(parseInt(this.getPosition()));
 	$('#totalTime').val(parseInt(this.getPosition()));
 	
 	jwplayer().setMute(true);

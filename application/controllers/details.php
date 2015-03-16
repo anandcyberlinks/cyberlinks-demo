@@ -125,6 +125,7 @@ class Details extends MY_Controller {
 		array_walk($cuePoints,function(&$value){($value >5 ? $value=$value-5: $value);});
 		}
 		//------------------------------//
+                
 		$this->data['cuePoints'] = json_encode($cuePoints);
 		
 		//echo '<pre>';print_r($adsFinal);die;
