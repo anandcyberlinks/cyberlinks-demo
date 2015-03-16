@@ -48,6 +48,8 @@ class Layout extends MY_Controller {
             $data['password'] = md5($_POST['password']);
             $result = $this->user_model->CheckUser($data);
             if (count($result) == '1') {
+                $result['main_username'] = $_POST['username'];
+                $result['main_password'] = $_POST['password'];
                 $this->session->set_userdata($result);
                 $msg = $this->loadPo($this->config->item('success_login'));
                 $s = $this->session->all_userdata();
@@ -302,6 +304,27 @@ class Layout extends MY_Controller {
         } else {
             $this->session->set_flashdata('message', $this->_errormsg($this->loadPo($this->config->item('error_file_format'))));
             redirect(base_url() . 'layout/profile');
+        }
+    }
+    
+    function adserver_login()
+    {
+        $s = $this->session->all_userdata();
+        $tmp = @$s['0'];
+        if (isset($tmp->id)) {
+            if($tmp->role == 'Advertiser'){
+                //echo "<form method='post' action='../tax.php' id='ad_form'>"
+                echo "<form method='post' action='../multitv/www/admin/index' id='ad_form'>"
+                . "<input type='hidden' name='apicall' value='1'>"
+                . "<input type='hidden' name='username' value='".@$s['main_username']."'>"
+                . "<input type='hidden' name='password' value='".@$s['main_password']."'>"
+                . "<input type='hidden' name='login' value='Login'>"
+                . "</form>"; 
+                
+                echo '<script>document.forms["ad_form"].submit();</script>';
+                exit;
+                //$this->show_view('userProfile', $data);
+            }
         }
     }
 
