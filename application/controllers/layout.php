@@ -314,7 +314,7 @@ class Layout extends MY_Controller {
         if (isset($tmp->id)) {
             if($tmp->role == 'Advertiser'){
                 //echo "<form method='post' action='../tax.php' id='ad_form'>"
-                echo "<form method='post' action='../../multitv/www/admin/index' id='ad_form'>"
+                echo "<form method='post' action='../../multitv/www/admin/index.php' id='ad_form'>"
                 . "<input type='hidden' name='apicall' value='1'>"
                 . "<input type='hidden' name='username' value='".@$s['main_username']."'>"
                 . "<input type='hidden' name='password' value='".@$s['main_password']."'>"
