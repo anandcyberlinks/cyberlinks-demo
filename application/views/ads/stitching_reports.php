@@ -36,6 +36,7 @@
                                         <tr>
 <!--                                           <th>Id</th>-->
                                            <th>Creative</th>
+                                           <th>Channel</th>
                                            <th>Duration</th>
                                            <th>UserCount</th>
                                            <th>DateTime</th>
@@ -51,9 +52,10 @@
                                                     <a href="<?php echo base_url();?>ads/detail/<?php echo $value->ads_id; ?>"><?php echo $value->ad_title; ?></a>
                                                 <?php } else { echo $value->Commercial; }?>
                                             </td>                                                
-                                                <td><?php echo $value->Duration; ?></td>
-                                                <td><?php echo $value->UserCount; ?></td>                                                
-                                                <td><?php echo $value->StartTime; ?></td>
+                                            <td><?php echo $value->channel; ?></td>
+                                            <td><?php echo $value->Duration; ?></td>
+                                            <td><?php echo $value->UserCount; ?></td>                                                
+                                            <td><?php echo $value->StartTime; ?></td>
                                             </tr>
                                         <?php } ?>
                                     </tbody>
