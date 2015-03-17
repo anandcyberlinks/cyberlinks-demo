@@ -21,9 +21,6 @@
 		<script src="<?php echo base_url() ?>assets/js/common.js"></script>
 		<script src="<?php echo base_url() ?>assets/js/jquery.validate.js" type="text/javascript"></script>
 		<script src="<?php echo base_url() ?>assets/js/register.jquery.js" type="text/javascript"></script>
-		<script>
-			$("#msg_div").fadeOut(3500);
-		</script>		
 		<script src="<?php echo base_url()?>assets/js/bootstrap-typeahead.js" type="text/javascript"></script>
 		<script src="http://code.jquery.com/jquery-migrate-1.0.0.js"></script>
                 <script src="<?php echo base_url() ?>assets/js/ion.rangeSlider.js"></script>
