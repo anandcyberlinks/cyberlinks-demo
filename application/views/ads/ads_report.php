@@ -131,7 +131,7 @@
 				<th>Creative</th>
 				<th>Channel</th>
 				<th>Duration</th>
-				<th>UserCount</th>				
+				<th>Impression</th>				
 				<th>DateTime</th>				
 				</tr>
 			     <?php $i=0; foreach($stitchingReport as $row){ $i++;?>

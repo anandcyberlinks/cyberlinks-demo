@@ -38,7 +38,7 @@
                                            <th>Creative</th>
                                            <th>Channel</th>
                                            <th>Duration</th>
-                                           <th>UserCount</th>
+                                           <th>Impression</th>
                                            <th>DateTime</th>
                                         </tr>
                                     </thead>
