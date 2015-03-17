@@ -286,7 +286,7 @@ class Ch_category extends MY_Controller {
                 }
             } else {
                 $this->session->set_flashdata('message', $this->_warningmsg($this->loadPo($this->config->item('warning_category_record'))));
-                redirect(base_url() . 'category');
+                redirect(base_url() . 'ch_category');
             }
         } else {
             $this->session->set_flashdata('message', $this->_errormsg($this->loadPo($this->config->item('error_permission'))));
