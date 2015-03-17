@@ -165,15 +165,8 @@ class Details extends MY_Controller {
 		$this->data['scheduleBreaks'] = $adsFinal;
 		//--- End db loading log ----//
 		$this->log_load('db load','End');
-		//----------------------------//
-		
-		//-----Start jwplayer loading log----//
-		$this->log_load('jwplayer load','Start');
-		//--------------------------------//
-                $this->load->view('details',$this->data);
-		//-----End jwplayer loading log----//
-		$this->log_load('jwplayer load','End');
-		//--------------------------------//
+		//----------------------------//				
+                $this->load->view('details',$this->data);		
 	}
 	
 	function getAdsRevive($lat,$lng,$age,$keywords,$gender,$l)
@@ -220,11 +213,13 @@ class Details extends MY_Controller {
 		$micro = sprintf("%06d",($t - floor($t)) * 1000000);
 		$d = new DateTime( date('Y-m-d H:i:s.'.$micro, $t) );
 		$time = $d->format("Y-m-d H:i:s.u"); // note at point on "u"
-
-		$file = "log/stream_log";
-		$fileHandle = fopen($file, 'a'); // Note that the mode has changed
-		$data = $title.' '.$pos.  ';' . $time.';'; // set data we will be writing
-		if($pos=='End')
+		$separator =",";
+		$file = "log/stream_log.csv";		
+		$fileHandle = fopen($file, 'a+'); // Note that the mode has changed		
+		fwrite($fileHandle, $data);
+		$data = $title.' '.$pos.  $separator.$time.$separator; // set data we will be writing
+		//$data = $time.';';
+		if($pos=='Stop')
 		{
 			$data .= "\n";
 		}

@@ -1,6 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+	<script>  
+  
+</script>
 <head>
+	
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+<script>
+
+   $(window).load(function () {
+      // var endTime = (new Date()).getTime();
+     //  var millisecondsLoading = endTime - startTime;
+       log('Page load','End');
+       // Put millisecondsLoading in a hidden form field
+       // or Ajax it back to the server or whatever.
+   });
+</script>
     <meta name='viewport' content="initial-scale=1, maximum-scale=1, user-scalable=0">
 	<meta charset="utf-8">
         <!-- jquery-1.10.2 -->
@@ -13,6 +28,19 @@
   ga('create', 'UA-53914177-1', 'auto');
   ga('send', 'pageview');
 */
+  
+  function log(title,pos) {
+	$.ajax({
+		url: "<?php echo base_url() ?>index.php/details/log_load",
+	        data: {		
+                title:title,
+                pos:pos,               
+	       },
+	       cache: false,
+	       type: "POST",
+	       dataType: 'json'	
+	})	
+    }
 </script>
 </head>
 <body style='background:#000'>
@@ -46,7 +74,10 @@
 }
 //print_r($scheduleBreaks);die;
 ?>
-<script>	
+<script>
+	//-- log start --//	
+	log('Page load','Start');
+	
 //-- execute when browser closed --//
 $(window).on('beforeunload', function(){
       jwplayer().pause();
@@ -123,19 +154,6 @@ $(window).on('beforeunload', function(){
 	//console.log(jwplayer().getState());
 	jwplayer().play(true); //-- auto play for mobile	
 	play();
-    }
-    
-    function log(title,pos) {
-	$.ajax({
-		url: "<?php echo base_url() ?>index.php/details/log_load",
-	        data: {		
-                title:title,
-                pos:pos,               
-	       },
-	       cache: false,
-	       type: "POST",
-	       dataType: 'json'	
-	})	
     }
     
     function play() {
@@ -295,13 +313,13 @@ autostart: 1,
 		offset: '<?php echo ($offset==0 ? 'pre': $offset); ?>',
 		//'skipoffset':5,
 		//tag: "<?php //echo ($row['ad_type'] != 'External' ? base_url():'') . $row['vast_file']; ?>?<?php //echo $row['ads_id']?>/<?php //echo $user_id?>/<?php //echo $row['uid']?>"
-		tag: "<?php echo $row['vast_file']?>?<?php echo $row['ads_id']?>/<?php echo $user_id?>/<?php echo $row['uid']?>/<?php echo ($offset==0 ? 'pre':'')?>"
+		tag: "<?php echo $row['vast_file']?>?<?php echo $row['ads_id']?>/<?php echo $user_id?>/<?php echo $row['uid']?>/<?php echo ($offset==0 ? 'pre':'mid')?>"
 		//tag: "http://localhost/multitvfinal-demo/assets/upload/ads/vast/54e182705fa67.xml"
 		//tag: "http://54.179.170.143/multitvfinal/assets/upload/ads/vast/d53be859b9314be0885eda3794321e05.xml"
 		},
 	   <?php $i++;
        } }
-      } ?>                    
+      } ?>    
 	}	
 }
 	
@@ -310,9 +328,17 @@ autostart: 1,
 
     jwplayer().onTime(function(event){	
 	//console.log('hit');
+	//--- log for stream load End--//
+	var tag = $('#tag').val();
+	
+	if(tag==''){
+	$('#tag').val('0');	
+		log('Stream load','Stop');
+	}
+	//-------------------------//
 	var epos = event.position;	
         var totalTimeElapsed = $( "#totalTimeElapsed" ).val();
-	console.log(parseInt(epos));
+	//console.log(parseInt(epos));
 	
 	if (epos >= 2.0 && epos < 4.0) {
 		jwplayer().setMute(false);
@@ -379,16 +405,14 @@ autostart: 1,
 	
     /*
     jwplayer().onBuffer(function(event){
-	//console.log(jwplayer().getState());
-	if (jwplayer().getState()=='BUFFERING') {				
-		window.location.href="<?php echo $uri;?>#123"
-		console.log('123start');
-	}
+	console.log(jwplayer().getState());
+	//-- log for stream play start---//
+		log('Stream load','Start');
+	//-----------------------------//
     });*/
 
 
-    jwplayer().onPause(function () {
-            state = jwplayer().getState();
+    jwplayer().onPause(function () {           
             if(pos >0){
                 pos = parseInt(this.getPosition())-pos1;
                 pos1 = pos1+pos;
@@ -402,7 +426,7 @@ autostart: 1,
             }
     );
 
-    jwplayer().onPlay(function () {
+    jwplayer().onPlay(function (){    
 	//var id = $('#analytics_id').val();
 	//window.location.href="<?php echo $uri;?>#1234"
 	//console.log(jwplayer().getState());
@@ -444,15 +468,17 @@ autostart: 1,
 });
     
     jwplayer().onBeforePlay(function () {
-	//--- create log end---//
+	//--- create log start---//	
+	if(jwplayer().getState() !='PAUSED'){
 		log('Ad load:'+tag,'Start');
+		}
 	//--------------//
 	var id = "<?php echo $content_id;?>";
 	if (typeof flag==='undefined' && id==56) {
 		//console.log('before');
 		jwplayer().playAd(tag+'?pre');		
 		flag=1;
-	}	
+	}
     });
    
    //--- advetising analytics ---//
@@ -548,15 +574,19 @@ var ad_duration=0;
 
 
 //-- ad start play --//
+/*
 jwplayer().onAdPlay(function (event) {	
+	 
+});
+*/
+//-- play ads ---//
+jwplayer().onAdImpression(function (event) {
 	//--- create log end---//
+	console.log('im'+this.getPosition());
+	if(this.getPosition() =='0')
 	console.log('ad play');
 	log('Ad load:'+event.tag,'End');
 	//--------------//
-});
-
-//-- play ads ---//
-jwplayer().onAdImpression(function (event) {	
 	//console.log(this.getPosition());
         //$("#totalTimeElapsed").val(parseInt(this.getPosition()));
 	$('#totalTime').val(parseInt(this.getPosition()));
@@ -594,7 +624,12 @@ jwplayer().onAdTime(function(event) {
 });
 	
 //--- advertising analytics ---//
-jwplayer().onAdComplete(function(event){	
+jwplayer().onAdComplete(function(event){
+	
+	//-- log for stream play start---//
+		log('Stream load','Start');
+	//-----------------------------//
+	
 	  var flag =/pre/i.test(event.tag);
 	  if (flag==true) {
 		 $('#flagad').val('0');
