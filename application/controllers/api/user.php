@@ -420,6 +420,7 @@ class User extends REST_Controller
 	$uniqueId = $this->post('uniqueID');
         $userdetails = json_decode($this->post('social'));
     //echo $this->post('social');
+    print_r($userdetails);
     print_r($this->post());die;
        //-- check if Admin token is valid --//
 	   $owner_id =  $this->User_model->checkAdminToken($this->admin_token);
