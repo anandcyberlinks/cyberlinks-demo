@@ -414,13 +414,11 @@ class User extends REST_Controller
     }
     
     function social_post()
-    {
-	print_r($this->post());
+    {	
         $provider = $this->post('provider');
 	$access_key = $this->post('access_key');
 	$uniqueId = $this->post('uniqueID');
-        $userdetails = json_decode($this->post('social'));
-    echo print_r($userdetails);
+        $userdetails = json_decode($this->post('social'));    
        //-- check if Admin token is valid --//
 	   $owner_id =  $this->User_model->checkAdminToken($this->admin_token);
 	  // $owner_id =  $this->User_model->checkAdminToken('54d46a72bab49');
