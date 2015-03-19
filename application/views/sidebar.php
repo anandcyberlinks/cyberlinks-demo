@@ -10,7 +10,7 @@ switch ($s[0]->username){
                         //array('name'=>'User Role', 'li-class'=>($this->uri->segment(1) === 'role') ? 'active' : '', 'url'=>base_url().'role', 'type'=>'child'),
                 )));
         break;
-    case('iampunjabi') :
+    default :
         $menu = array(
                     array('name'=>'Dashboard','url'=>base_url().'layout/dashboard',  'class'=>'fa-dashboard', 'li-class'=>($this->uri->segment(1) == 'layout') ? 'active' : ''),
                     array('name'=>'Analytics','url'=>base_url().'analytics/report', 'class'=>'fa-dashboard','li-class'=>($this->uri->segment(1) == 'analytics') ? 'active' : ''),
