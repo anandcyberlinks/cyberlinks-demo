@@ -553,13 +553,14 @@ class Content extends Apis{
                               thumbnail_url as thumb
                               from livestream where channel_id = %d ',$channel_id);
         */
-       $query = sprintf('select                              
+       $query = sprintf('select   web,                            
                               thumbnail_url as thumb
                               from livestream where channel_id = %d ',$channel_id);
         $dataset = $this->db->query($query)->result();
+        $webUrl = $dataset[0]->web;
         $cntUrl =  base_url().'index.php/details?id='.$channel_id.'&type=live';
         //$tmp = array('ios'=> false,'android'=>false,'web'=>false,'windows'=>false,'youtube'=>false,'thumb'=>false);
-        $tmp = array('ios'=> $cntUrl.'&device=ios','android'=>$cntUrl.'&device=android','web'=>$cntUrl.'&device=web','windows'=>$cntUrl.'&device=ios','youtube'=>$cntUrl.'&device=youtube','thumb'=>false);
+        $tmp = array('ios'=> $cntUrl.'&device=ios','android'=>$cntUrl.'&device=android','web'=>$webUrl.'&device=web','windows'=>$cntUrl.'&device=ios','youtube'=>$cntUrl.'&device=youtube','thumb'=>false);
         return array_merge($tmp,(Array)reset($dataset));        
     }
     
@@ -595,8 +596,10 @@ class Content extends Apis{
                     $query = sprintf('select * from playlists where playlists.status = "1" and playlists.publish = "1" and playlists.id = %d',$playlist_id);
                     $tmp = $this->db->query($query)->result();
                     if(isset($tmp[0]->url)){
+                        $webUrlArr = json_decode($tmp[0]->url);
+                        $webUrl = $webUrlArr[0]->web->wifi;
                         $cntUrl =  base_url().'index.php/details?id='.$playlist_id.'&type=linear';                        
-                        $dataset = array(array('ctntUrl'=>array($cntUrl),'chEpg'=>$this->getEpg($playlist_id)));
+                        $dataset = array(array('ctntUrl'=>array($cntUrl,$webUrl),'chEpg'=>$this->getEpg($playlist_id)));
                     }
                 break;
         }
