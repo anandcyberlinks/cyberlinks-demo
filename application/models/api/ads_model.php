@@ -80,5 +80,53 @@ class Ads_model extends CI_Model{
         $query = $this->db->get();
         return $query->result();
     }
+    
+    function getCuePoints($id,$type,$flag=0){
+      if($flag){
+	 $this->db->select('count(id) as tot');
+	 $this->db->limit(1);
+      }else{
+	 $this->db->select('cue_points');
+      }
+      
+      if($type=='live'){
+	 $this->db->where('type',$type);
+      }
+      $this->db->from('content_cuepoints');
+      $this->db->where('content_id',$id);
+      $this->db->order_by('cue_points');
+      $query = $this->db->get();
+      //echo '<br>'.$this->db->last_query();
+      if($flag){
+      $result = $query->row();
+	 return $result->tot;
+      }else{
+	 $result = $query->result_array();
+	 //-- convert array into element --//       
+        foreach ($result AS $key => $value) {
+            $cuepoints[] = $value['cue_points'];
+        }
+	return $cuepoints;
+        //-----------------------------------//
+      }
+    }
+    
+    function getUserKeywords($id)
+    {
+      $this->db->select('c.keywords,c.gender,c.dob');
+      //$this->db->from('user_content_keywords k');
+      $this->db->from('customers c');
+      //$this->db->join('customers c','c.id=k.user_id','left');
+      $this->db->where('id',$id);
+      $this->db->limit(1);
+      $query = $this->db->get();
+     // echo $this->db->last_query();echo '<br>';
+     return $query->row_array();
+      /*if($result){
+	 return unserialize($result->keywords);
+      }else{
+	 return 0;
+      }*/
+    }
 }
     ?>

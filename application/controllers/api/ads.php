@@ -23,7 +23,7 @@ class Ads extends REST_Controller
     {
        parent::__construct();
        $this->load->helper('url');
-       $this->load->model('api/Ads_model');
+       $this->load->model('api/Ads_model');       
         //-- validate token --//
       // $token = $this->get('token');
       // $this->owner_id = $this->validateToken($token);
@@ -53,6 +53,45 @@ class Ads extends REST_Controller
         }else{
             $this->response('No record found', 404);
         }
+    }
+    
+    function campaign_get()
+    {         
+        $id = $this->get('id');
+        $user_id = $this->get('user_id');
+        $type = $this->get('type');
+        //-- get content cuepoints ---//
+        $limit = $this->Ads_model->getCuePoints($id,$type,1);
+        $cuePoints = $this->Ads_model->getCuePoints($id,$type);
+        //----------------------------//        
+        $user_data = $this->Ads_model->getUserKeywords($user_id);        
+        
+        //--- Access Revive web service ---//
+	/*$gender = $user_data['gender'];
+	$dob = $user_data['dob'];
+	$from = new DateTime($dob);
+	$to   = new DateTime('today');
+	$age = $from->diff($to)->y;
+		*/
+	$keywords = $user_data['keywords'];
+                
+        $this->load->helper('url');	
+        $url = "http://54.179.170.143/vast/getvast.php?keyword=$keywords&age=$age&gender=$gender&lat=$lat&lng=$lng&limit=$l";
+        // Get cURL resource
+        $curl = curl_init();
+        // Set some options - we are passing in a useragent too here
+        curl_setopt_array($curl, array(
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_URL => $url,
+        ));  
+        // Send the request & save response to $resp
+        $result = curl_exec($curl);
+               
+        // Close request to clear up some resources
+        curl_close($curl);
+        //$this->response(json_decode($result), 200);
+       // return json_decode($resp);
+        echo $result;
     }
     
 }
