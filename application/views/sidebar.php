@@ -10,60 +10,7 @@ switch ($s[0]->username){
                         //array('name'=>'User Role', 'li-class'=>($this->uri->segment(1) === 'role') ? 'active' : '', 'url'=>base_url().'role', 'type'=>'child'),
                 )));
         break;
-    default :
-        $menu = array(
-                    array('name'=>'Dashboard','url'=>base_url().'layout/dashboard',  'class'=>'fa-dashboard', 'li-class'=>($this->uri->segment(1) == 'layout') ? 'active' : ''),
-                    array('name'=>'Analytics','url'=>base_url().'analytics/report', 'class'=>'fa-dashboard','li-class'=>($this->uri->segment(1) == 'analytics') ? 'active' : ''),
-                    array('name'=>'Video', 'url'=>'#', 'class'=>'fa-video-camera',
-                        'li-class'=>(($this->uri->segment(2) == 'live_streaming') ||
-                            ($this->uri->segment(2) == 'videoUploadSrc') || 
-                            ($this->uri->segment(2) == 'bulkupload') || 
-                            ($this->uri->segment(2) == 'video_status') || 
-                            ($this->uri->segment(2) == 'video_settings') || 
-                            ($this->uri->segment(2) == 'debug') || 
-                            ($this->uri->segment(1) . "/" . $this->uri->segment(2) == 'video/index') ) ? 'treeview active' : 'treeview',
-                        'type'=>'parent','childs'=>array(
-                        array('name'=>'Video List', 'li-class'=> (($this->uri->segment(1) == 'video') && ($this->uri->segment(2) == 'index')) ? 'active' : '', 'url'=>base_url().'video/index', 'type'=>'child'),
-                        array('name'=>'Video Upload', 'li-class'=>($this->uri->segment(2) == 'videoUploadSrc' || $this->uri->segment(2) == 'upload_other') ? 'active' : '', 'url'=>base_url().'video/videoUploadSrc/Upload', 'type'=>'child'),
-                        array('name'=>'Video Bulk upload', 'li-class'=>($this->uri->segment(2) == 'bulkupload' || $this->uri->segment(2) == 'ftp') ? 'active' : '' ,'url'=>base_url().'video/bulkupload/csv', 'type'=>'child'),
-                        array('name'=>'Video Status', 'li-class'=>($this->uri->segment(2) == 'video_status') ? 'active' : '', 'url'=>base_url().'video/video_status', 'type'=>'child'),
-                        array('name'=>'Live Stream', 'li-class'=> ($this->uri->segment(2) == 'live_streaming') ? 'active' : '' , 'url'=>base_url().'video/live_streaming', 'type'=>'child'),
-                        )),
-                    array('name'=>'Advertising','url'=>'#', 'class'=>'fa-film', 'li-class'=> ($this->uri->segment(1) == 'advertising') ? 'treeview active' : 'treeview', 'type'=>'parent','childs'=>array(
-                        array('name'=>'Video', 'li-class'=> ($this->uri->segment(1) == 'advertising' && $this->uri->segment(2) == '' ) ? 'active' : '', 'url'=>base_url().'advertising', 'type'=>'child'),
-                        array('name'=>'Live Stream', 'li-class'=> ($this->uri->segment(1) == 'advertising' && $this->uri->segment(2) == 'live_stream') ? 'active' : '','url'=>base_url().'advertising/live_stream', 'type'=>'child'),
-                        array('name'=>'Ad Configuration', 'li-class'=> ($this->uri->segment(1) == 'advertising' && $this->uri->segment(2) == 'configuration') ? 'active' : '','url'=>base_url().'advertising/configuration', 'type'=>'child'),
-                        )),
-                    array('name'=>'WebTV','url'=>base_url().'webtv', 'class'=>'fa-film', 'li-class'=>($this->uri->segment(1) == 'webtv' || $this->uri->segment(1) == 'livestream') ? 'active' : ''),
-                    array('name'=>'Events','url'=>base_url().'event', 'class'=>'fa-laptop','li-class'=>($this->uri->segment(1) == 'event') ? 'active' : ''),
-                    array('name'=>'Utility', 'url'=>'#', 'class'=>'fa-laptop', 
-                        'li-class'=>(($this->uri->segment(1) == 'category') ||
-                            ($this->uri->segment(1) == 'ch_category') ||
-                            ($this->uri->segment(1) == 'transcode') ||
-                            ($this->uri->segment(1) == 'genre') ||
-                            ($this->uri->segment(1) == 'dform') ||
-                            ($this->uri->segment(1) == 'package') ||
-                            ($this->uri->segment(1) == 'subscription') ||
-                            ($this->uri->segment(1) == 'youtubevideo'))
-                         ? 'treeview active' : 'treeview' , 
-                        'type'=>'parent','childs'=>array(
-                        array('name'=>'Category', 'li-class'=> ($this->uri->segment(1) === 'category') ? 'active' : '', 'url'=>base_url().'category', 'type'=>'child'),
-                        array('name'=>'Channel Category', 'li-class'=> ($this->uri->segment(1) === 'ch_category') ? 'active' : '', 'url'=>base_url().'ch_category', 'type'=>'child'),
-                        array('name'=>'Package', 'li-class'=>($this->uri->segment(1) === 'genre') ? 'active' : '', 'url'=>base_url().'genre', 'type'=>'child'),
-                        array('name'=>'Adavnce Fields', 'li-class'=> ($this->uri->segment(1) === 'dform') ? 'active' : '', 'url'=>base_url().'dform', 'type'=>'child'),
-                        array('name'=>'Package', 'li-class'=>($this->uri->segment(1) === 'package') ? 'active' : '', 'url'=>base_url().'package', 'type'=>'child'),
-                        )),
-                    array('name'=>'Pages','url'=>base_url().'pages', 'class'=>'fa-file-text-o', 'li-class'=>($this->uri->segment(1) == 'pages') ? 'active' : ''),
-                    array('name'=>'User', 'url'=>'#', 'class'=>'fa-users', 'li-class'=>(($this->uri->segment(1) == 'user') || ($this->uri->segment(1) == 'role')) ? 'treeview active' : 'treeview', 'type'=>'parent','childs'=>array(
-                        array('name'=>'Users', 'li-class'=>($this->uri->segment(1) === 'user') ? 'active' : '', 'url'=>base_url().'user', 'type'=>'child'),
-                        array('name'=>'User Role', 'li-class'=>($this->uri->segment(1) === 'role') ? 'active' : '', 'url'=>base_url().'role', 'type'=>'child'),
-                        )),
-                    array('name'=>'Device','url'=>base_url().'device', 'class'=>'fa-mobile', 'li-class'=>($this->uri->segment(1) == 'device') ? 'active' : ''),
-                    array('name'=>'Api','url'=>base_url().'apilist', 'class'=>'fa-list-alt', 'li-class'=>($this->uri->segment(1) == 'apilist') ? 'active' : ''),
-                    array('name'=>'Comments','url'=>base_url().'comments', 'class'=>'fa-comment', 'li-class'=>($this->uri->segment(1) == 'comments') ? 'active' : ''),
-            );
-        break;
-        case ('veena'):
+    case ('veena'):
             $menu = array(
                     array('name'=>'Dashboard','url'=>base_url().'layout/dashboard',  'class'=>'fa-dashboard', 'li-class'=>($this->uri->segment(1) == 'layout') ? 'active' : ''),
                     array('name'=>'Analytics','url'=>base_url().'analytics/report', 'class'=>'fa-dashboard','li-class'=>($this->uri->segment(1) == 'analytics') ? 'active' : ''),
@@ -120,6 +67,60 @@ switch ($s[0]->username){
                     array('name'=>'Comments','url'=>base_url().'comments', 'class'=>'fa-comment', 'li-class'=>($this->uri->segment(1) == 'comments') ? 'active' : ''),
             );
             break;
+    default :
+        $menu = array(
+                    array('name'=>'Dashboard','url'=>base_url().'layout/dashboard',  'class'=>'fa-dashboard', 'li-class'=>($this->uri->segment(1) == 'layout') ? 'active' : ''),
+                    array('name'=>'Analytics','url'=>base_url().'analytics/report', 'class'=>'fa-dashboard','li-class'=>($this->uri->segment(1) == 'analytics') ? 'active' : ''),
+                    array('name'=>'Video', 'url'=>'#', 'class'=>'fa-video-camera',
+                        'li-class'=>(($this->uri->segment(2) == 'live_streaming') ||
+                            ($this->uri->segment(2) == 'videoUploadSrc') || 
+                            ($this->uri->segment(2) == 'bulkupload') || 
+                            ($this->uri->segment(2) == 'video_status') || 
+                            ($this->uri->segment(2) == 'video_settings') || 
+                            ($this->uri->segment(2) == 'debug') || 
+                            ($this->uri->segment(1) . "/" . $this->uri->segment(2) == 'video/index') ) ? 'treeview active' : 'treeview',
+                        'type'=>'parent','childs'=>array(
+                        array('name'=>'Video List', 'li-class'=> (($this->uri->segment(1) == 'video') && ($this->uri->segment(2) == 'index')) ? 'active' : '', 'url'=>base_url().'video/index', 'type'=>'child'),
+                        array('name'=>'Video Upload', 'li-class'=>($this->uri->segment(2) == 'videoUploadSrc' || $this->uri->segment(2) == 'upload_other') ? 'active' : '', 'url'=>base_url().'video/videoUploadSrc/Upload', 'type'=>'child'),
+                        array('name'=>'Video Bulk upload', 'li-class'=>($this->uri->segment(2) == 'bulkupload' || $this->uri->segment(2) == 'ftp') ? 'active' : '' ,'url'=>base_url().'video/bulkupload/csv', 'type'=>'child'),
+                        array('name'=>'Video Status', 'li-class'=>($this->uri->segment(2) == 'video_status') ? 'active' : '', 'url'=>base_url().'video/video_status', 'type'=>'child'),
+                        array('name'=>'Live Stream', 'li-class'=> ($this->uri->segment(2) == 'live_streaming') ? 'active' : '' , 'url'=>base_url().'video/live_streaming', 'type'=>'child'),
+                        )),
+                    array('name'=>'Advertising','url'=>'#', 'class'=>'fa-film', 'li-class'=> ($this->uri->segment(1) == 'advertising') ? 'treeview active' : 'treeview', 'type'=>'parent','childs'=>array(
+                        array('name'=>'Video', 'li-class'=> ($this->uri->segment(1) == 'advertising' && $this->uri->segment(2) == '' ) ? 'active' : '', 'url'=>base_url().'advertising', 'type'=>'child'),
+                        array('name'=>'Live Stream', 'li-class'=> ($this->uri->segment(1) == 'advertising' && $this->uri->segment(2) == 'live_stream') ? 'active' : '','url'=>base_url().'advertising/live_stream', 'type'=>'child'),
+                        array('name'=>'Ad Configuration', 'li-class'=> ($this->uri->segment(1) == 'advertising' && $this->uri->segment(2) == 'configuration') ? 'active' : '','url'=>base_url().'advertising/configuration', 'type'=>'child'),
+                        )),
+                    array('name'=>'WebTV','url'=>base_url().'webtv', 'class'=>'fa-film', 'li-class'=>($this->uri->segment(1) == 'webtv' || $this->uri->segment(1) == 'livestream') ? 'active' : ''),
+                    array('name'=>'Events','url'=>base_url().'event', 'class'=>'fa-laptop','li-class'=>($this->uri->segment(1) == 'event') ? 'active' : ''),
+                    array('name'=>'Utility', 'url'=>'#', 'class'=>'fa-laptop', 
+                        'li-class'=>(($this->uri->segment(1) == 'category') ||
+                            ($this->uri->segment(1) == 'ch_category') ||
+                            ($this->uri->segment(1) == 'transcode') ||
+                            ($this->uri->segment(1) == 'genre') ||
+                            ($this->uri->segment(1) == 'dform') ||
+                            ($this->uri->segment(1) == 'package') ||
+                            ($this->uri->segment(1) == 'subscription') ||
+                            ($this->uri->segment(1) == 'youtubevideo'))
+                         ? 'treeview active' : 'treeview' , 
+                        'type'=>'parent','childs'=>array(
+                        array('name'=>'Category', 'li-class'=> ($this->uri->segment(1) === 'category') ? 'active' : '', 'url'=>base_url().'category', 'type'=>'child'),
+                        array('name'=>'Channel Category', 'li-class'=> ($this->uri->segment(1) === 'ch_category') ? 'active' : '', 'url'=>base_url().'ch_category', 'type'=>'child'),
+                        array('name'=>'Package', 'li-class'=>($this->uri->segment(1) === 'genre') ? 'active' : '', 'url'=>base_url().'genre', 'type'=>'child'),
+                        array('name'=>'Adavnce Fields', 'li-class'=> ($this->uri->segment(1) === 'dform') ? 'active' : '', 'url'=>base_url().'dform', 'type'=>'child'),
+                        array('name'=>'Package', 'li-class'=>($this->uri->segment(1) === 'package') ? 'active' : '', 'url'=>base_url().'package', 'type'=>'child'),
+                        )),
+                    array('name'=>'Pages','url'=>base_url().'pages', 'class'=>'fa-file-text-o', 'li-class'=>($this->uri->segment(1) == 'pages') ? 'active' : ''),
+                    array('name'=>'User', 'url'=>'#', 'class'=>'fa-users', 'li-class'=>(($this->uri->segment(1) == 'user') || ($this->uri->segment(1) == 'role')) ? 'treeview active' : 'treeview', 'type'=>'parent','childs'=>array(
+                        array('name'=>'Users', 'li-class'=>($this->uri->segment(1) === 'user') ? 'active' : '', 'url'=>base_url().'user', 'type'=>'child'),
+                        array('name'=>'User Role', 'li-class'=>($this->uri->segment(1) === 'role') ? 'active' : '', 'url'=>base_url().'role', 'type'=>'child'),
+                        )),
+                    array('name'=>'Device','url'=>base_url().'device', 'class'=>'fa-mobile', 'li-class'=>($this->uri->segment(1) == 'device') ? 'active' : ''),
+                    array('name'=>'Api','url'=>base_url().'apilist', 'class'=>'fa-list-alt', 'li-class'=>($this->uri->segment(1) == 'apilist') ? 'active' : ''),
+                    array('name'=>'Comments','url'=>base_url().'comments', 'class'=>'fa-comment', 'li-class'=>($this->uri->segment(1) == 'comments') ? 'active' : ''),
+            );
+        break;
+        
 }
   //echo "<pre>";
    //print_r($menu); die;
