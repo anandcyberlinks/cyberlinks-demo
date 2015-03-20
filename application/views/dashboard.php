@@ -67,7 +67,7 @@
                             <?php echo $videos[0]->total_jobs > 0 ? $videos[0]->total_jobs : 0 ?>
                         </h3>
                         <p>
-                           <?php echo $welcome->loadPo('Total Jobs'); ?> 
+                           <?php echo $welcome->loadPo('Transcoding Jobs'); ?> 
                         </p>
                     </div>
                     <div class="icon">
