@@ -61,7 +61,7 @@ class Ads extends REST_Controller
         $user_id = $this->get('user_id');
         $type = $this->get('type');
         //-- get content cuepoints ---//
-        $limit = $this->Ads_model->getCuePoints($id,$type,1);
+        echo $limit = $this->Ads_model->getCuePoints($id,$type,1);
         $cuePoints = $this->Ads_model->getCuePoints($id,$type);
         //----------------------------//        
         $user_data = $this->Ads_model->getUserKeywords($user_id);        
@@ -76,7 +76,7 @@ class Ads extends REST_Controller
 	$keywords = $user_data['keywords'];
                 
         $this->load->helper('url');	
-        $url = "http://54.179.170.143/vast/getvast.php?keyword=$keywords&age=$age&gender=$gender&lat=$lat&lng=$lng&limit=$l";
+       echo $url = "http://54.179.170.143/vast/getvast.php?keyword=$keywords&age=$age&gender=$gender&lat=$lat&lng=$lng&limit=$l";
         // Get cURL resource
         $curl = curl_init();
         // Set some options - we are passing in a useragent too here
@@ -90,8 +90,22 @@ class Ads extends REST_Controller
         // Close request to clear up some resources
         curl_close($curl);
         //$this->response(json_decode($result), 200);
-       // return json_decode($resp);
-        echo $result;
+        $adsAlloc = json_decode($result);
+       //print_r($adsAlloc);
+       //----Ad allocation with cuepoint array ---//
+       $i=0;                
+	    foreach($adsAlloc->url as $key=>$val)
+	    {
+                $adsFinal[$i]['vast_file'] = $val;
+                if(count($cuePoints) > 0){
+                $adsFinal[$i]['cue_points'] 	= @$cuePoints[$i];
+                }else{
+                $adsFinal[$i]['cue_points'] 	= 0;
+                }
+                $i++;
+            }
+    //----------------------------------------------//
+        $this->response($adsFinal);
     }
     
 }
