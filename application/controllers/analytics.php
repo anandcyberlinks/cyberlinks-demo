@@ -99,9 +99,9 @@ class Analytics extends MY_Controller {
 	function report()
 	{
 		$limit=5;
-		//$summary = $this->Analytics_model->getReport(array('type'=>'summary'));
+		$summary = $this->Analytics_model->getReport(array('type'=>'summary'));
 		//echo '<pre>';print_r($summary);die;
-		//$this->data['summary'] = $summary[0];
+		$this->data['summary'] = $summary[0];
 		/* $url = "http://localhost:8085/solr/collection1/select?q=content_provider:".$this->uid."&wt=json&indent=true";
 			$result = file_get_contents($url);
 			$summary = json_decode($result);
