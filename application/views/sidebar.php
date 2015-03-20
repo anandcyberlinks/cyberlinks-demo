@@ -110,7 +110,7 @@ switch ($s[0]->username){
                         array('name'=>'Adavnce Fields', 'li-class'=> ($this->uri->segment(1) === 'dform') ? 'active' : '', 'url'=>base_url().'dform', 'type'=>'child'),
                         array('name'=>'Package', 'li-class'=>($this->uri->segment(1) === 'package') ? 'active' : '', 'url'=>base_url().'package', 'type'=>'child'),
                         )),
-                    array('name'=>'Pages','url'=>base_url().'pages', 'class'=>'fa-file-text-o', 'li-class'=>($this->uri->segment(1) == 'pages') ? 'active' : ''),
+                    /* array('name'=>'Pages','url'=>base_url().'pages', 'class'=>'fa-file-text-o', 'li-class'=>($this->uri->segment(1) == 'pages') ? 'active' : ''),
                     array('name'=>'User', 'url'=>'#', 'class'=>'fa-users', 'li-class'=>(($this->uri->segment(1) == 'user') || ($this->uri->segment(1) == 'role')) ? 'treeview active' : 'treeview', 'type'=>'parent','childs'=>array(
                         array('name'=>'Users', 'li-class'=>($this->uri->segment(1) === 'user') ? 'active' : '', 'url'=>base_url().'user', 'type'=>'child'),
                         array('name'=>'User Role', 'li-class'=>($this->uri->segment(1) === 'role') ? 'active' : '', 'url'=>base_url().'role', 'type'=>'child'),
@@ -118,6 +118,8 @@ switch ($s[0]->username){
                     array('name'=>'Device','url'=>base_url().'device', 'class'=>'fa-mobile', 'li-class'=>($this->uri->segment(1) == 'device') ? 'active' : ''),
                     array('name'=>'Api','url'=>base_url().'apilist', 'class'=>'fa-list-alt', 'li-class'=>($this->uri->segment(1) == 'apilist') ? 'active' : ''),
                     array('name'=>'Comments','url'=>base_url().'comments', 'class'=>'fa-comment', 'li-class'=>($this->uri->segment(1) == 'comments') ? 'active' : ''),
+                     * 
+                     */
             );
         break;
         
