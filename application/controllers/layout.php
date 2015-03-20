@@ -34,11 +34,10 @@ class Layout extends MY_Controller {
         ###check user session #######
         $s = $this->session->all_userdata();
         $tmp = @$s['0'];
-       
         if (isset($tmp->id)) {
             if($tmp->role == 'advertiser'){
                 redirect(base_url().'ads');
-            }else{
+            } else {
                 redirect(base_url().'layout/dashboard');
             }
         }
@@ -51,13 +50,23 @@ class Layout extends MY_Controller {
                 $result['main_username'] = $_POST['username'];
                 $result['main_password'] = $_POST['password'];
                 $this->session->set_userdata($result);
+                //print_r($_POST); die;
+                if(isset($_POST['remember_me'])){
+                    //echo 'hello'; die;
+                    setcookie('user', $result['main_username'], time() + (86400 * 365), "/");
+                    setcookie('password', $result['main_password'], time() + (86400 * 365), "/");
+                    setcookie('remember', 'on', time() + (86400 * 365), "/");
+                } else {
+                    setcookie('user', $result['main_username'], time() - (86400 * 365), "/");
+                    setcookie('password', $result['main_password'], time() - (86400 * 365), "/");
+                    setcookie('remember', 'on', time() - (86400 * 365), "/");
+                }
                 $msg = $this->loadPo($this->config->item('success_login'));
                 $s = $this->session->all_userdata();
-                
                 $this->log($data['username'], $msg);
                 if($s['0']->role == 'Advertiser'){                    
                     redirect(base_url().'ads');
-                }else{
+                } else {
                     redirect(base_url().'layout/dashboard');
                 }
             } else { 
@@ -157,7 +166,7 @@ class Layout extends MY_Controller {
      * Function for forgot password
      */
 
-    function forgot() {
+    function forgot() { 
         if (isset($_POST['forgot'])) {
             //print_r($_POST);
             $data['email'] = $_POST['email'];

@@ -40,13 +40,13 @@
             <form action="" method="post">
                 <div class="body bg-gray">
                     <div class="form-group">
-                        <input type="text" name="username" class="form-control" placeholder="User Name"/>
+                        <input type="text" name="username" value="<?=(isset($_COOKIE['user']))? $_COOKIE['user'] : "" ;?>" class="form-control" placeholder="User Name"/>
                     </div>
                     <div class="form-group">
-                        <input type="password" name="password" class="form-control" placeholder="Password"/>
+                        <input type="password" name="password" value="<?=(isset($_COOKIE['password']))? $_COOKIE['password'] : "" ;?>" class="form-control" placeholder="Password"/>
                     </div>          
                     <div class="form-group">
-                        <input type="checkbox" name="remember_me"/> Remember me
+                        <input type="checkbox" name="remember_me" value="remember" <?=(isset($_COOKIE['remember']))? 'checked' : "" ;?> /> Remember me
                     </div>
                 </div>
                 <div class="footer">                                                               
