@@ -61,7 +61,7 @@ class Ads extends REST_Controller
         $user_id = $this->get('user_id');
         $type = $this->get('type');
         //-- get content cuepoints ---//
-        echo $limit = $this->Ads_model->getCuePoints($id,$type,1);
+        $limit = $this->Ads_model->getCuePoints($id,$type,1);
         $cuePoints = $this->Ads_model->getCuePoints($id,$type);
         //----------------------------//        
         $user_data = $this->Ads_model->getUserKeywords($user_id);        
@@ -76,7 +76,7 @@ class Ads extends REST_Controller
 	$keywords = $user_data['keywords'];
                 
         $this->load->helper('url');	
-       echo $url = "http://54.179.170.143/vast/getvast.php?keyword=$keywords&age=$age&gender=$gender&lat=$lat&lng=$lng&limit=$l";
+        $url = "http://54.179.170.143/vast/getvast.php?keyword=$keywords&age=$age&gender=$gender&lat=$lat&lng=$lng&limit=$limit";
         // Get cURL resource
         $curl = curl_init();
         // Set some options - we are passing in a useragent too here
