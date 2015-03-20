@@ -4,8 +4,8 @@ class Super_model extends CI_Model {
 
     function countuser($id) {
         $this->db->where('owner_id', $id);
-        //$query = $this->db->get('users');
-        $query = $this->db->get('customers');
+        $query = $this->db->get('users');
+        //$query = $this->db->get('customers');
 
         return count($query->result());
     }
@@ -21,15 +21,16 @@ class Super_model extends CI_Model {
      */
 
     public function fetchUser($id, $limit, $start, $sort = '', $sort_by = '') {
-        /*$this->db->select('users.*, roles.name as role');
+        $this->db->select('users.*, roles.name as role');
         $this->db->from('users');
         $this->db->join('roles', 'users.role_id = roles.id');
         $this->db->where('users.owner_id', $id);
         //$this->db->order_by($sort, $sort_by);*/
-        $this->db->select('customers.*');
+        /*$this->db->select('customers.*');
         $this->db->from('customers');
         //$this->db->join('roles', 'users.role_id = roles.id');
         $this->db->where('customers.owner_id', $id);
+        */
         $this->db->limit($limit, $start);
         $query = $this->db->get();
         //echo $this->db->last_query(); 
