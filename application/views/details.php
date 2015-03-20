@@ -11,7 +11,7 @@
    $(window).load(function () {
       // var endTime = (new Date()).getTime();
      //  var millisecondsLoading = endTime - startTime;
-       log('Page load','End');
+       log('Page load','End','<?php echo $user_id;?>','<?php echo $user_id;?>','<?php echo $platform;?>');
        // Put millisecondsLoading in a hidden form field
        // or Ajax it back to the server or whatever.
    });
@@ -76,7 +76,7 @@
 ?>
 <script>
 	//-- log start --//	
-	log('Page load','Start');
+	log('Page load','Start','<?php echo $user_id;?>','<?php echo $platform;?>');
 	
 //-- execute when browser closed --//
 $(window).on('beforeunload', function(){
@@ -139,7 +139,7 @@ $(window).on('beforeunload', function(){
 			jwplayer().pause();	
 		}
 		
-	function playVideo(){    		
+	function playVideo(){
 		player.bind("finish", function() {
 		    jwplayer().play(true);
 		});
@@ -313,8 +313,8 @@ autostart: 1,
 		offset: '<?php echo ($offset==0 ? 'pre': $offset); ?>',
 		//'skipoffset':5,
 		//tag: "<?php //echo ($row['ad_type'] != 'External' ? base_url():'') . $row['vast_file']; ?>?<?php //echo $row['ads_id']?>/<?php //echo $user_id?>/<?php //echo $row['uid']?>"
-		tag: "<?php echo $row['vast_file']?>?<?php echo $row['ads_id']?>/<?php echo $user_id?>/<?php echo $row['uid']?>/<?php echo ($offset==0 ? 'pre':'mid')?>"
-		//tag: "http://localhost/multitvfinal-demo/assets/upload/ads/vast/54e182705fa67.xml"
+		//tag: "<?php echo $row['vast_file']?>?<?php echo $row['ads_id']?>/<?php echo $user_id?>/<?php echo $row['uid']?>/<?php echo ($offset==0 ? 'pre':'mid')?>"
+		tag: "http://localhost/multitvfinal-demo/assets/upload/ads/vast/vast1.xml"
 		//tag: "http://54.179.170.143/multitvfinal/assets/upload/ads/vast/d53be859b9314be0885eda3794321e05.xml"
 		},
 	   <?php $i++;
@@ -333,7 +333,7 @@ autostart: 1,
 	
 	if(tag==''){
 	$('#tag').val('0');	
-		log('Stream load','Stop');
+		log('Stream load','Stop','<?php echo $user_id;?>','<?php echo $platform;?>');
 	}
 	//-------------------------//
 	var epos = event.position;	
@@ -470,7 +470,7 @@ autostart: 1,
     jwplayer().onBeforePlay(function () {
 	//--- create log start---//	
 	if(jwplayer().getState() !='PAUSED'){
-		log('Ad load:'+tag,'Start');
+		log('Ad load:'+tag,'Start','<?php echo $user_id;?>','<?php echo $platform;?>');
 		}
 	//--------------//
 	var id = "<?php echo $content_id;?>";
@@ -585,7 +585,7 @@ jwplayer().onAdImpression(function (event) {
 	console.log('im'+this.getPosition());
 	if(this.getPosition() =='0')
 	console.log('ad play');
-	log('Ad load:'+event.tag,'End');
+	log('Ad load:'+event.tag,'End','<?php echo $user_id;?>','<?php echo $platform;?>');
 	//--------------//
 	//console.log(this.getPosition());
         //$("#totalTimeElapsed").val(parseInt(this.getPosition()));
@@ -627,7 +627,7 @@ jwplayer().onAdTime(function(event) {
 jwplayer().onAdComplete(function(event){
 	
 	//-- log for stream play start---//
-		log('Stream load','Start');
+		log('Stream load','Start','<?php echo $user_id;?>','<?php echo $platform;?>');
 	//-----------------------------//
 	
 	  var flag =/pre/i.test(event.tag);
