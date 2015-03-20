@@ -110,7 +110,14 @@ class Ads_analytics_model extends CI_Model{
             if($param['top'] == 1){  //-- top video --//               
                 $this->db->order_by('count(a.id) desc');
             }
-            $this->db->group_by('a.platform, a.browser');
+            if($param['mode']=='os'){
+                $this->db->group_by('a.platform');
+            }else if($param['mode']=='browser')
+            {
+                $this->db->group_by('a.browser');
+            }else{
+                $this->db->group_by('a.platform, a.browser');
+            }
             
             if($sort){
             $this->db->order_by($sort,$sort_by);
@@ -246,6 +253,7 @@ class Ads_analytics_model extends CI_Model{
         
         $this->db->select($select,false);
         $this->db->from('ads_analytics a');
+        $this->db->where("a.content_provider",  $this->uid);
         $this->db->join('ads c','a.ads_id=c.id');
        
         //$this->db->group_by($group);
@@ -474,6 +482,7 @@ class Ads_analytics_model extends CI_Model{
         
         $this->db->select($select,false);
         $this->db->from('ads_analytics a');
+        $this->db->where("a.content_provider",  $this->uid);
         $this->db->join('ads c','a.ads_id=c.id');
        
         //$this->db->group_by($group);

@@ -337,7 +337,16 @@ class Analytics_model extends CI_Model{
             if($param['top'] == 1){  //-- top video --//               
                 $this->db->order_by('count(a.id) desc');
             }
-            $this->db->group_by('a.platform, a.browser');
+            
+            if($param['mode']=='os'){
+                $this->db->group_by('a.platform');
+            }else if($param['mode']=='browser')
+            {
+                $this->db->group_by('a.browser');
+            }else{
+                $this->db->group_by('a.platform, a.browser');
+            }
+            //$this->db->group_by('a.platform, a.browser');
             
             if($sort){
             $this->db->order_by($sort,$sort_by);
@@ -486,6 +495,7 @@ class Analytics_model extends CI_Model{
         
         $this->db->select($select,false);
         $this->db->from('analytics a');
+        $this->db->where("a.content_provider",  $this->uid);
         $this->db->join('channels c','a.content_id=c.id');
        
         //$this->db->group_by($group);
@@ -713,6 +723,7 @@ class Analytics_model extends CI_Model{
         
         $this->db->select($select,false);
         $this->db->from('analytics a');
+        $this->db->where("a.content_provider",  $this->uid);
         $this->db->join('channels c','a.content_id=c.id');
        
         //$this->db->group_by($group);
