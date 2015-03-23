@@ -39,8 +39,30 @@ class user extends MY_Controller {
         $data['result'] = $this->super_model->fetchUser($this->user_id, $config["per_page"], $page);
         $data["links"] = $this->pagination->create_links();
         $data['total_rows'] = $config["total_rows"];
+        
+        
         $this->show_view('users', $data);
     }
+    
+    function customers() {
+        $data['welcome'] = $this;
+        $this->load->library("pagination");
+        $config = array();
+        $config["base_url"] = base_url() . "user/customers/";
+        $config["total_rows"] = $this->super_model->countCuser($this->user_id);
+        $config["per_page"] = 10;
+        $config["uri_segment"] = 3;
+        $this->pagination->initialize($config);
+        $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        $data['result'] = $this->super_model->fetchcUser($this->user_id, $config["per_page"], $page);
+        $data["links"] = $this->pagination->create_links();
+        $data['total_rows'] = $config["total_rows"];
+        //echo "<pre>";        print_r($data['result']); die;
+        $this->show_view('cUser', $data);
+    }
+    
+    
+    
     
     public function DeleteUser() {
         $per = $this->checkpermission($this->role_id, 'delete');

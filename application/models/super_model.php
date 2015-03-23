@@ -9,10 +9,16 @@ class Super_model extends CI_Model {
 
         return count($query->result());
     }
+    
+    function countCuser($id) {
+        $this->db->where('owner_id', $id);
+        $query = $this->db->get('customers');
+        return count($query->result());
+    }
+
 
     function deleteuser($data) {
         $id = $data['id'];
-
         $this->db->delete('users', array('id' => $id));
     }
 
@@ -37,6 +43,19 @@ class Super_model extends CI_Model {
         // print_r($query->result()); die;
         return $query->result();
     }
+    public function fetchcUser($id, $limit, $start, $sort = '', $sort_by = '') {
+        $this->db->select('id, username, email, first_name, last_name, gender, dob, contact_no, image, status, created');
+        $this->db->from('customers');
+        $this->db->where('owner_id', $id);
+        $this->db->order_by('id', 'DESC');
+        $this->db->limit($limit, $start);
+        $query = $this->db->get();
+        //echo $this->db->last_query(); 
+        // print_r($query->result()); die;
+        return $query->result();
+    }
+    
+    
 
     function Fetchrole($id) {
         $this->db->select('id, name');
