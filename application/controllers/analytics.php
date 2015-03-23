@@ -242,7 +242,7 @@ class Analytics extends MY_Controller {
 		
 		//--------------------//
 		//-- summary report --//
-		//$summary = $this->Analytics_model->getReport(array('type'=>'summary','search'=>$search),$sort,$sort_by);
+		$summary = $this->Analytics_model->getReport(array('type'=>'summary','search'=>$search),$sort,$sort_by);
 		$this->data['summary'] = $summary[0];
 		//--- search form content provider --//
 		$this->data['content_provider'] = $this->Analytics_model->getContentProvider();
