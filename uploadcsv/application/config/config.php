@@ -14,7 +14,7 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'http://54.179.170.143/uploadcsv/';
+$config['base_url']	= 'http://54.179.170.143/multitvfinal/uploadcsv/';
 
 /*
 |--------------------------------------------------------------------------

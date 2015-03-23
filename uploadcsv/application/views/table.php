@@ -75,7 +75,7 @@ function myfun() {
                 data[i][ii] = $(this).text();
             });
     })
-    alert('<?= base_url() ?>csv/createXML');
+    //alert('<?= base_url() ?>csv/createXML');
     $.ajax({
         type: 'POST',
         async: true,
