@@ -1,0 +1,11 @@
+RewriteEngine on
+RewriteCond $1 !^(index\.php|resources|robots\.txt)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php/$0 [L,QSA]
+
+AddType video/x-flv flv
+AddType video/divx divx
+AddType video/mp4 mp4
+AddType video/webm webm
+AddType audio/midi rmi
