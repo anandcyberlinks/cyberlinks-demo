@@ -114,11 +114,15 @@ class Ads_analytics extends MY_Controller {
 		$this->data['location'] = $this->Ads_analytics_model->getReport(array('type'=>'location','l'=>$limit));
 		$this->data['map'] = $this->Ads_analytics_model->getReport(array('type'=>'map','l'=>$limit));
 		$this->data['country'] = $this->Ads_analytics_model->getReport(array('type'=>'country','l'=>$limit));
+                $this->data['city'] = $this->Ads_analytics_model->getReport(array('type'=>'city','l'=>$limit));
 		$this->data['content_provider'] = $this->Ads_analytics_model->getReport(array('type'=>'content_provider','l'=>$limit));
 		$this->data['customer'] = $this->Ads_analytics_model->getReport(array('type'=>'user','l'=>$limit));
 		$this->data['topcontent'] = $this->Ads_analytics_model->getReport(array('type'=>'content','l'=>$limit,'top'=>1,'search'=>$search));
 		$this->data['stitchingReport'] = $this->Ads_analytics_model->getstitchingReport($limit);
 		
+                $this->data['os'] = $this->Ads_analytics_model->getReport(array('type'=>'useragent','l'=>$limit,'mode'=>'os'));
+                $this->data['browser'] = $this->Ads_analytics_model->getReport(array('type'=>'useragent','l'=>$limit,'mode'=>'browser'));
+                
 		$this->show_view('ads/ads_report',$this->data);		
 	}
 	

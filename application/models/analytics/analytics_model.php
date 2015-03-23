@@ -416,6 +416,11 @@ class Analytics_model extends CI_Model{
            $this->db->group_by('a.city'); 
            $this->db->order_by('MAX(a.id) desc');
             break;
+         case 'city':            
+            $select = 'a.country_code as code,a.country, a.state,a.city,a.postal_code,count( a.id ) as total_hits , sum( a.watched_time ) as total_watched_time';
+           // $group = 'a.country_code';
+           $this->db->group_by('a.city');           
+            break;
         case 'content_provider':
             $select = 'concat(u.first_name," ",u.last_name) as name,count( a.id ) as total_hits , sum( a.watched_time ) as total_watched_time';
            // $group = 'a.content_provider';

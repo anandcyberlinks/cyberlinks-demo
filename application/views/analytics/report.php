@@ -1,4 +1,20 @@
 <link href="<?=base_url()?>assets/css/morris/morris.css" rel="stylesheet" type="text/css" />
+<!--[if lte IE 8]> <script src="<?=base_url()?>assets/js/plugins/flot/excanvas.min.js"></script><![endif]-->
+<script src="<?=base_url()?>assets/js/jquery.js"></script>
+<script src="<?=base_url()?>assets/js/plugins/flot/jquery.flot.js"></script>
+<script src="<?=base_url()?>assets/js/plugins/flot/jquery.flot.pie.js"></script>
+<style>
+    
+    .placeholder {
+            width: 250px;
+            height: 250px;
+    }
+    .map_placeholder {
+            width: 350px;
+            height: 325px;
+    }
+	
+</style>
 <aside class="right-side">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -211,7 +227,7 @@
 			   
 				<div class="table-responsive">
                             <!-- .table - Uses sparkline charts-->
-                            <table class="table table-striped">
+                            <!--table class="table table-striped">
 				<tbody><tr>
 				<th>OS</th>
 				<th>Browser</th>
@@ -226,10 +242,25 @@
 				<td><?php echo time_from_seconds($row->total_watched_time);?></td>				
 				</tr>
 			    <?php }?>
-                            </tbody></table><!-- /.table -->
-                        </div>			    
+                            </tbody></table--><!-- /.table -->
+                            <table class="table table-striped">
+                                <tbody>
+                                    <tr>
+                                        <td align="center"><strong>Platform</strong></td>
+                                        <td align="center"><strong>Browser</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td><div id="os_chart" class="placeholder"></div></td>
+                                        <td><div id="browser_chart" class="placeholder"></div></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            
+                                
+                            
 		    </div><!-- /.box-body -->
-		    <div><a href='<?php echo base_url()?>analytics/device'' style="float:right;">View All</a></div>
+                </div>
+                    <div><a href='<?php echo base_url()?>analytics/device' style="float:right;">View All</a></div>
 		</div><!-- /.box -->
 		<!--Content Provider -->
 		<div class="box box-danger">
@@ -282,7 +313,8 @@
 		    </div><!-- /.box-header -->
 		    
 		    <div class="box-body no-padding">
-			 <div id="regions_div" style="width: 500px;"></div>
+			 <!--div id="regions_div" style="width: 500px;"></div-->
+                         <div id="map_chart" class="map_placeholder"></div>
 		</div>
 			    
 			
@@ -326,7 +358,10 @@
 		
 		<div class="box box-primary">
                                 <div class="box-header">
-                                   
+                                    <!-- tools box -->
+                                    <div class="pull-right box-tools">
+                                        <button class="btn btn-danger btn-sm" data-widget='collapse' data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+                                    </div><!-- /. tools -->
                                     <h3 class="box-title">Top video viewed</h3>
                                 </div>
                                 <div class="box-body">                                    
@@ -449,7 +484,7 @@
 	 
     <script type="text/javascript">
       google.load("visualization", "1", {packages:["geomap"]});
-      google.setOnLoadCallback(drawMap);
+      //google.setOnLoadCallback(drawMap);
 
       function drawMap() {
         var data = google.visualization.arrayToDataTable([
@@ -501,6 +536,122 @@
         }
     });	    */
 	</script>
+        
+        <script>
+            
+            $(function() {
+
+                /*** PIE CHART FOR OS DATA ****/ 
+                
+		// OS Data
+                var os_data = [
+               <?php $i=1; foreach($os as $row){ $i++;?>
+                {label: "<?php echo ($row->platform!='') ? $row->platform.'<br/>'.$row->total_hits : 'Anonymus'.'<br/>'.$row->total_hits;?>", data: "<?php echo $row->total_hits;?>"},
+               <?php }?>
+            ];
+
+		var os_chart_placeholder = $("#os_chart");
+
+		os_chart_placeholder.unbind();
+
+		$.plot(os_chart_placeholder, os_data, {
+			series: {
+				pie: { 
+					show: true,
+					combine: {
+						color: "#999",
+						threshold: 0.05
+					},
+                                        label: {
+                                                show: "auto",
+                                                formatter: function(label, slice) {
+                                                        return "<div style='font-size:small;text-align:center;padding:2px;color:" + slice.color + ";'>" + label + "</div>";
+                                                },	// formatter function
+                                                radius: 1,	// radius at which to place the labels (based on full calculated radius if <=1, or hard pixel value)
+                                                threshold: 0	// percentage at which to hide the label (i.e. the slice is too narrow)
+                                        }
+				}
+			},
+			legend: {
+				show: false
+			}
+		});
+                
+            
+           /*** PIE CHART FOR BROWSER DATA ****/ 
+           
+           var browser_data = [
+               <?php $i=1; foreach($browser as $row){ $i++;?>
+                {label: "<?php echo ($row->browser!='') ? $row->browser.'<br/>'.$row->total_hits : 'Anonymus'.'<br/>'.$row->total_hits;?>", data: "<?php echo $row->total_hits;?>"},
+               <?php }?>
+            ];
+            
+            var browser_chart_placeholder = $("#browser_chart");
+
+		browser_chart_placeholder.unbind();
+
+		$.plot(browser_chart_placeholder, browser_data, {
+			series: {
+				pie: { 
+					show: true,
+					combine: {
+						color: "#999",
+						threshold: 0.05
+					},
+                                        label: {
+                                                show: "auto",
+                                                formatter: function(label, slice) {
+                                                        return "<div style='font-size:small;text-align:center;padding:2px;color:" + slice.color + ";'>" + label + "</div>";
+                                                },	// formatter function
+                                                radius: 1,	// radius at which to place the labels (based on full calculated radius if <=1, or hard pixel value)
+                                                threshold: 0	// percentage at which to hide the label (i.e. the slice is too narrow)
+                                        }
+				}
+			},
+			legend: {
+				show: false
+			}
+		});
+                
+               /*** PIE CHART FOR MAP ****/ 
+                
+                var map_data = [
+               <?php $i=1; foreach($city as $row){ $i++;?>
+                {label: "<?php echo ($row->city!='') ? $row->city.'<br/>'.$row->total_hits : 'Unknown'.'<br/>'.$row->total_hits;?>", data: "<?php echo $row->total_hits;?>"},
+               <?php }?>
+            ];
+            
+            var map_chart_placeholder = $("#map_chart");
+
+		map_chart_placeholder.unbind();
+
+		$.plot(map_chart_placeholder, map_data, {
+			series: {
+				pie: { 
+					show: true,
+					combine: {
+						color: "#999",
+						threshold: 0.05
+					},
+                                        label: {
+                                                show: "auto",
+                                                formatter: function(label, slice) {
+                                                        return "<div style='font-size:small;text-align:center;padding:2px;color:" + slice.color + ";'>" + label + "</div>";
+                                                },	// formatter function
+                                                radius: 1,	// radius at which to place the labels (based on full calculated radius if <=1, or hard pixel value)
+                                                threshold: 0	// percentage at which to hide the label (i.e. the slice is too narrow)
+                                        }
+				}
+			},
+			legend: {
+				show: false
+			}
+		});
+                
+		
+	});
+            
+        </script>
 
     </section><!-- /.content -->
 </aside><!-- /.right-side -->

@@ -66,9 +66,27 @@ class Details extends MY_Controller {
 		if($id ==56 ){
 			$keywords ='newsnation';
 		}
-		$adsAlloc = $this->getAdsRevive($lat,$lng,$age,$keywords,$gender,$limit);
-		//echo '<pre>';print_r($adsAlloc);
-		//--------------------------------//
+                
+                $adconfig = $this->Ads_model->getAdsConfiguration($_GET['user_id']);
+                
+                switch ($adconfig) {
+                    case "Local":
+                        /* Local Ads */
+                        $adsAlloc = $this->getAdsLocal($lat,$lng,$_GET['user_id'],$user_data,$limit);
+                        break;
+                    case "Revive":
+                        /* Revive Ads */
+                        $adsAlloc = $this->getAdsRevive($lat,$lng,$age,$keywords,$gender,$limit);
+                        break;
+                    default:
+                        /* Local Ads By Default */
+                        $adsAlloc = $this->getAdsLocal($lat,$lng,$_GET['user_id'],$user_data,$limit);
+                        
+                }
+
+                
+               
+                
 		
 		//echo '<pre>';print_r($user_data);die;
 		//-- get radius for user location --//
@@ -89,19 +107,7 @@ class Details extends MY_Controller {
 		//echo '<pre>';print_r($adsFinal);die;
 		//---------------------------------------//
 		
-		/*$adsAlloc = $this->Ads_model->getUserLocationWiseAds($lat,$lng,$_GET['user_id'],$user_data,$limit);
-		//echo '<pre>';print_r($adsAlloc);die;
-		$i=0;
-		foreach($adsAlloc as $row){
-			
-			$adsFinal[$i]['file_name'] 	= $row->file_name;
-			$adsFinal[$i]['vast_file'] 	= $row->vast_file;
-			$adsFinal[$i]['ads_id'] 	= $row->ads_id;
-			$adsFinal[$i]['uid'] 		= $row->uid;
-			$adsFinal[$i]['cue_points'] 	= @$cuePoints[$i];
-			$adsFinal[$i]['ad_type'] 	= $row->ad_type;
-			$i++;
-		}*/
+		
 		}else{
 			//-- Revive ad assing cue points array ---//
 			$i=0;
@@ -187,6 +193,25 @@ class Details extends MY_Controller {
                 curl_close($curl);
                 return json_decode($resp);
 	}
+        
+        function getAdsLocal($lat,$lng,$user_id,$user_data,$limit)
+        {
+            /* Local Ads */ 
+            $adsAlloc = $this->Ads_model->getUserLocationWiseAds($lat,$lng,$user_id,$user_data,$limit);
+            //echo '<pre>';print_r($adsAlloc);die;
+            $i=0;
+            foreach($adsAlloc as $row){
+
+                    $adsFinal[$i]['file_name'] 	= $row->file_name;
+                    $adsFinal[$i]['vast_file'] 	= $row->vast_file;
+                    $adsFinal[$i]['ads_id'] 	= $row->ads_id;
+                    $adsFinal[$i]['uid'] 		= $row->uid;
+                    $adsFinal[$i]['cue_points'] 	= @$cuePoints[$i];
+                    $adsFinal[$i]['ad_type'] 	= $row->ad_type;
+                    $i++;
+            }
+            return $adsAlloc;
+        }
 	
         
         function addview()

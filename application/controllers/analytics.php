@@ -115,10 +115,15 @@ class Analytics extends MY_Controller {
 		$this->data['location'] = $this->Analytics_model->getReport(array('type'=>'location','l'=>$limit));
 		$this->data['map'] = $this->Analytics_model->getReport(array('type'=>'map','l'=>$limit));
 		$this->data['country'] = $this->Analytics_model->getReport(array('type'=>'country','l'=>$limit));
+		$this->data['city'] = $this->Analytics_model->getReport(array('type'=>'city','l'=>$limit));
 		$this->data['content_provider'] = $this->Analytics_model->getReport(array('type'=>'content_provider','l'=>$limit));
 		$this->data['customer'] = $this->Analytics_model->getReport(array('type'=>'user','l'=>$limit));
 		$this->data['topcontent'] = $this->Analytics_model->getReport(array('type'=>'content','l'=>$limit,'top'=>1,'search'=>$search));
 		
+                $this->data['os'] = $this->Analytics_model->getReport(array('type'=>'useragent','l'=>$limit,'mode'=>'os'));
+                $this->data['browser'] = $this->Analytics_model->getReport(array('type'=>'useragent','l'=>$limit,'mode'=>'browser'));
+                
+                
 		$this->show_view('analytics/report',$this->data);		
 	}
 	
