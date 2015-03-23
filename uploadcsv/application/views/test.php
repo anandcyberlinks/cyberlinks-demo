@@ -22,7 +22,7 @@
                                 <form id="submitcsv" action="<?= base_url() ?>csv/readCSV" method="post" enctype="multipart/form-data" >
                                         <div class="form-group">
                                             <span>
-                                            <a href="<?= base_url() ?>assets/sample/samplefile.csv" target="_blank" class="btn btn-default">Download sample</a>
+                                                &nbsp;<a href="<?= base_url() ?>assets/sample/samplefile.csv" target="_blank">Download sample</a>
                                             </span><br/><br/>
                                             <span class="btn btn-default btn-file btn-sm"><i class="fa fa-fw fa-folder-open-o"></i>
                                                 Import CSV <input name="csv" id="fileUpload" atr="files" type="file">

@@ -55,7 +55,7 @@ class Csv extends CI_Controller {
 	    if($sampledata['csv']['0']==$data['csv']['-1']){
 		$this->load->view('table', $data);
 	    }else{
-		echo 'Select valid format';
+		echo 'Select valid CSV File';
 	    }
 	   
 	} else {
