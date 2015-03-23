@@ -116,11 +116,13 @@ class MY_Controller extends CI_Controller {
         $tmp = $s['0'];
         $id = $tmp->id;
         if ($id != '') {
-            $this->load->view('header', $data);
+            //$this->load->view('header', $data);
             if (strtolower($s[0]->role) == 'advertiser') {
-                $this->load->view('sidebar_ads', $data);
+              $this->load->view('header_ad', $data);
+              //  $this->load->view('sidebar_ads', $data);
             } else {
-                $this->load->view('sidebar', $data);
+              $this->load->view('header', $data);
+             //   $this->load->view('sidebar', $data);
             }
             $this->load->view($view, $data);
             $this->load->view('footer', $data);
@@ -167,11 +169,13 @@ class MY_Controller extends CI_Controller {
         $tmp = $s['0'];
         $id = $tmp->id;
         if ($id != '') {
-            $this->load->view('header', $data);
+            
             if (strtolower($s[0]->role) == 'advertiser') {
-                $this->load->view('sidebar_ads', $data);
+              //  $this->load->view('sidebar_ads', $data);
+              $this->load->view('header_ad', $data);
             } else {
-                $this->load->view('sidebar', $data);
+              $this->load->view('header', $data);
+              //  $this->load->view('sidebar', $data);
             }
             $this->load->view('ads/adsEditHeader', $data);
             $this->load->view($view, $data);
