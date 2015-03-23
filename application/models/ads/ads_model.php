@@ -858,6 +858,14 @@ class Ads_model extends CI_Model {
       }*/
     }
     
+    function getOwnerId($uid){
+        $this->db->select('owner_id');
+        $this->db->from('users');
+        $this->db->where('id',$uid);
+        $query = $this->db->get();
+        return $query->row()->owner_id;
+    }
+    
     function getAdsConfiguration($uid){
         $this->db->select('value');
         $this->db->from('options');
@@ -872,7 +880,7 @@ class Ads_model extends CI_Model {
             }
             $adconfig =  $key;
         }else{
-            $adconfig = 'Local';
+            $adconfig = 'Revive';
         }
         return $adconfig;
     }

@@ -67,7 +67,8 @@ class Details extends MY_Controller {
 			$keywords ='newsnation';
 		}
                 
-                $adconfig = $this->Ads_model->getAdsConfiguration($_GET['user_id']);
+                $owner_id = $this->Ads_model->getOwnerId($_GET['user_id']);
+                $adconfig = $this->Ads_model->getAdsConfiguration($owner_id);
                 
                 switch ($adconfig) {
                     case "Local":
@@ -80,7 +81,8 @@ class Details extends MY_Controller {
                         break;
                     default:
                         /* Local Ads By Default */
-                        $adsAlloc = $this->getAdsLocal($lat,$lng,$_GET['user_id'],$user_data,$limit);
+                        //$adsAlloc = $this->getAdsLocal($lat,$lng,$_GET['user_id'],$user_data,$limit);
+                        $adsAlloc = $this->getAdsRevive($lat,$lng,$age,$keywords,$gender,$limit);
                         
                 }
 
