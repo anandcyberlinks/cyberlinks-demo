@@ -25,11 +25,18 @@
                     <!-- left column -->
                     <div class="col-md-12">
                         <!-- general form elements -->
-                        <div class="box box-primary">
+                        <div class="box box-primary collapsed-box">
+                        <div class="box-header">
+                            <!-- tools box -->
+                            <div class="pull-right box-tools">
+                                <button class="btn btn-danger btn-sm" data-widget='collapse' data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+                            </div><!-- /. tools -->
+                            <h3 class="box-title">Search</h3>
+                        </div>    
                             <!-- form start -->
                             <form  method="post" action="" onsubmit="return date_check();" id="searchIndexForm" name="searchIndexForm" accept-charset="utf-8">
                                 <div style="display:none;"><input type="hidden" name="_method" value="POST"/></div>
-                                <div class="box-body">
+                                <div class="box-body" style="display:none;">
                                     <div class="row">
                                         <div class="form-group col-lg-4">
                                             <div class="input text">
@@ -54,6 +61,12 @@
                                                 </select>
                                             </div>
                                         </div>
+                                        <div class="form-group col-lg-4">
+                                            <div class="input text">
+                                                <label for=""><?php echo $welcome->loadPo('Location') ?></label>
+                                                <input type="text"  placeholder="Search location..." autocomplete="off" name="country" id="country" class="form-control span4" value="<?php echo (isset($search['country'])) ? $search['country'] : ''; ?>" placeholder="<?php echo $welcome->loadPo('Location') ?>">
+                                            </div>
+                                        </div>
                                     </div>
                                                                         
                                     <div class="row">
@@ -70,13 +83,6 @@
                                             </div>
                                         </div>                                     
                                     </div>
-                                    <div class="row"> <div class="form-group col-lg-4">
-                                            <div class="input text">
-                                                <label for=""><?php echo $welcome->loadPo('Location') ?></label>
-                                                <input type="text"  placeholder="Search location..." autocomplete="off" name="country" id="country" class="form-control span4" value="<?php echo (isset($search['country'])) ? $search['country'] : ''; ?>" placeholder="<?php echo $welcome->loadPo('Location') ?>">
-                                            </div>
-                                        </div>
-                                    </div>
                                     <div class="row">
                                         <div class="form-group col-lg-4">
                                             <div class="input text">
@@ -92,7 +98,7 @@
                                         </div>
                                     </div>
                                 </div><!-- /.box-body -->
-                                <div class="box-footer">
+                                <div class="box-footer" style="display:none;">
                                         <!--	<input type="text" id="hddstarddt" name="hddstarddt" value="<?php echo @$_POST['hddstarddt'] ?>"> -->
                                     <button type="submit" name="search" value="Search"class="btn btn-primary"><?php echo $welcome->loadPo('Search') ?></button>
                                     <button type="submit" name="reset" value="Reset"class="btn btn-primary"><?php echo $welcome->loadPo('Reset') ?></button>

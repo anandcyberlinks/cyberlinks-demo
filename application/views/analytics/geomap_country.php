@@ -45,10 +45,17 @@
 	<?php $search = $this->session->userdata('search_form');?>
     <!-- Main content -->
     <section class="content">
-     
+     <div class="box box-primary collapsed-box">
+            <div class="box-header">
+                <!-- tools box -->
+                <div class="pull-right box-tools">
+                    <button class="btn btn-danger btn-sm" data-widget='collapse' data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+                </div><!-- /. tools -->
+                <h3 class="box-title">Search</h3>
+            </div>
      <form  method="post" action="" id="searchIndexForm" name="searchIndexForm" accept-charset="utf-8">
 	    <div class="row">
-		 <div class="box-body">
+		 <div class="box-body" style="display:none;">
 		<!-- form start -->                
                 <div class="form-group col-lg-4">
 		    <div class="input text">
@@ -65,16 +72,17 @@
 		 
             </div>
 	 </div>
-	<div class="row">
-		 <div class="form-group col-lg-4">
+	
+		 <div class="box-footer" style="display:none;">
 		    <div class="input text">		   
                         <button type="submit" id="submit" name="search" value="Search"class="btn btn-primary"><?php echo $welcome->loadPo('Search') ?></button>
                         <button type="submit" name="reset" value="Reset"class="btn btn-primary"><?php echo $welcome->loadPo('Reset') ?></button>
                         <span id="error_msg" style="color: red"></span>
                     </div>
                 </div>
-	</div>
+	
 	</form>
+     </div>
         <script>
                 $("#submit").click(function(data){
                     var startdate = $.trim($("#startdate").val());
