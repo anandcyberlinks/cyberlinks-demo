@@ -77,6 +77,7 @@ switch ($s[0]->username) {
             array('name' => 'Video', 'url' => base_url().'video/index', 'class' => 'fa-video-camera',
                 'li-class' => (
                 ($this->uri->segment(2) == 'videoUploadSrc') ||
+                ($this->uri->segment(2) == 'videoOpr') ||
                 ($this->uri->segment(2) == 'bulkupload') ||
                 ($this->uri->segment(2) == 'video_status') ||
                 ($this->uri->segment(2) == 'video_settings') ||
@@ -85,16 +86,16 @@ switch ($s[0]->username) {
                 ($this->uri->segment(1) == 'category') ) ? 'treeview active' : '',
                 'type' => 'parent', 'childs' => array(
                     array('name' => 'Video List', 'li-class' => (($this->uri->segment(1) == 'video') && ($this->uri->segment(2) == 'index')) ? 'active' : '', 'url' => base_url() . 'video/index', 'type' => 'child'),
-                    array('name' => 'Video Upload', 'li-class' => ($this->uri->segment(2) == 'videoUploadSrc' || $this->uri->segment(2) == 'upload_other') ? 'active' : '', 'url' => base_url() . 'video/videoUploadSrc/Upload', 'type' => 'child'),
+                    array('name' => 'Video Upload', 'li-class' => ($this->uri->segment(2) == 'videoUploadSrc' || $this->uri->segment(2) == 'upload_other' || $this->uri->segment(2) == 'videoOpr') ? 'active' : '', 'url' => base_url() . 'video/videoUploadSrc/Upload', 'type' => 'child'),
                     array('name' => 'Video Bulk upload', 'li-class' => ($this->uri->segment(2) == 'bulkupload' || $this->uri->segment(2) == 'ftp') ? 'active' : '', 'url' => base_url() . 'video/bulkupload/csv', 'type' => 'child'),
                     array('name' => 'Video Status', 'li-class' => ($this->uri->segment(2) == 'video_status') ? 'active' : '', 'url' => base_url() . 'video/video_status', 'type' => 'child'),
                     array('name' => 'Category', 'li-class' => ($this->uri->segment(1) === 'category') ? 'active' : '', 'url' => base_url() . 'category', 'type' => 'child'),
                 )),
-            array('name' => 'Live Stream', 'url' => base_url() . 'video/live_streaming', 'class' => 'fa-video-camera', 'li-class' => ($this->uri->segment(2) == 'live_streaming') ? 'active' : ''),
+            //array('name' => 'Live Stream', 'url' => base_url() . 'video/live_streaming', 'class' => 'fa-video-camera', 'li-class' => ($this->uri->segment(2) == 'live_streaming') ? 'active' : ''),
             array('name' => 'Advertising', 'url' => base_url().'advertising', 'class' => 'fa-film', 'li-class' => ($this->uri->segment(1) == 'advertising') ? 'treeview active' : '', 'type' => 'parent', 'childs' => array(
                     array('name' => 'Video', 'li-class' => ($this->uri->segment(1) == 'advertising' && $this->uri->segment(2) == '' ) ? 'active' : '', 'url' => base_url() . 'advertising', 'type' => 'child'),
-                    array('name' => 'Live Stream', 'li-class' => ($this->uri->segment(1) == 'advertising' && $this->uri->segment(2) == 'live_stream') ? 'active' : '', 'url' => base_url() . 'advertising/live_stream', 'type' => 'child'),
-                    array('name' => 'Ad Configuration', 'li-class' => ($this->uri->segment(1) == 'advertising' && $this->uri->segment(2) == 'configuration') ? 'active' : '', 'url' => base_url() . 'advertising/configuration', 'type' => 'child'),
+                    array('name' => 'Live Stream', 'li-class' => ($this->uri->segment(2) == 'live_stream') ? 'active' : '', 'url' => base_url() . 'advertising/live_stream', 'type' => 'child'),
+                    array('name' => 'Ad Configuration', 'li-class' => ($this->uri->segment(1) == 'advertising') ? 'active' : '', 'url' => base_url() . 'advertising/configuration', 'type' => 'child'),
                 )),
             array('name' => 'WebTV', 'url' => base_url() . 'webtv', 'class' => 'fa-film', 'li-class' => ($this->uri->segment(1) == 'webtv' || $this->uri->segment(1) == 'ch_category') ? 'treeview active' : '', 'type' => 'parent', 'childs' => array(
                     array('name' => 'WebTV', 'li-class' => ($this->uri->segment(1) == 'webtv') ? 'active' : '', 'url' => base_url() . 'webtv', 'type' => 'child'),
