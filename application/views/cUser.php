@@ -24,7 +24,7 @@
                         <table id="example2" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th><?php echo $welcome->loadPo('User Name'); ?></th>
+                                    <?php /* <th><?php echo $welcome->loadPo('User Name'); ?></th> */ ?>
                                     <th><?php echo $welcome->loadPo('Name'); ?></th>
                                     <th><?php echo $welcome->loadPo('Email'); ?></th>
                                     <th><?php echo $welcome->loadPo('Gender'); ?></th>
@@ -38,7 +38,7 @@
                             <tbody>
                                 <?php foreach ($result as $value) { ?>
                                     <tr>
-                                        <td><?php echo $value->username; ?></td>
+                                        <?php /* <td><?php echo $value->username; ?></td> */ ?>
                                         <td><?php echo ucfirst($value->first_name) . " " . ucfirst($value->last_name); ?></td>
                                         <td><?php echo $value->email; ?></td>
                                         <td><?php echo ucfirst($value->gender); ?></td>
