@@ -99,10 +99,80 @@ class Video extends MY_Controller {
      */
 
     function test() {
-        echo $this->validate(21, 2);
+        $data['welcome'] = $this;
+        $this->show_view('test', $data);
+        }
+        
+    function data(){
+        
+        
+        $searchterm = '';
+        if ($this->uri->segment(2) == '') {
+            $this->session->unset_userdata('search_form');
+        }
+        $sort = $this->uri->segment(3);
+        $sort_by = $this->uri->segment(4);
+        $data['welcome'] = $this;
+        switch ($sort) {
+            case "category":
+                $sort = 'b.category';
+                if ($sort_by == 'asc')
+                    $data['show_c'] = 'desc';
+                else
+                    $data['show_c'] = 'asc';
+                break;
+            case "user":
+                $sort = 'a.uid';
+                if ($sort_by == 'asc')
+                    $data['show_u'] = 'desc';
+                else
+                    $data['show_u'] = 'asc';
+                break;
+            case "status":
+                $sort = 'a.status';
+                if ($sort_by == 'asc')
+                    $data['show_s'] = 'desc';
+                else
+                    $data['show_s'] = 'asc';
+                break;
+            case "created":
+                $sort = 'a.created';
+                if ($sort_by == 'asc')
+                    $data['show_ca'] = 'desc';
+                else
+                    $data['show_ca'] = 'asc';
+                break;
+            case "title":
+                $sort = 'a.title';
+                if ($sort_by == 'asc')
+                    $data['show_t'] = 'desc';
+                else
+                    $data['show_t'] = 'asc';
+                break;
+            default:
+                $sort_by = 'desc';
+                $sort = 'a.id';
+        }
+        if (isset($_GET)) {
+            $this->session->set_userdata('search_form', $_GET);
+        } else if (isset($_GET['reset'])) {
+            $this->session->unset_userdata('search_form');
+        }
+        
+        $searchterm = $this->session->userdata('search_form');
+        $data['count'] = $this->videos_model->get_videocount($this->uid, $searchterm);
+        $data['result'] = $this->videos_model->get_video($this->uid, 10, 1, $sort, $sort_by, $searchterm);
+        
+        $this->load->view('test', $data);
+        
+        
+        
+        
+        
+        //$count = $this->videos_model->get_videocount($this->uid, $searchterm);
+        //$video = $this->videos_model->get_video($this->uid, 10, 1, $sort, $sort_by, $searchterm);
     }
-
-    
+                    
 
     function index() {
         $searchterm = '';
@@ -463,7 +533,7 @@ class Video extends MY_Controller {
                     $videoresult = $this->_upload($tmpFilePath, $fileUniqueName, 'video');
                     if ($videoresult) {
                         $data = array();
-                        $data['content_title'] = $fileUniqueName;
+                        $data['content_title'] = $originalFileName;
                         $data['uid'] = $this->uid;
                         $data['filename'] = $fileUniqueName;
                         $data['relative_path'] = serverVideoRelPath . $fileUniqueName;
@@ -477,11 +547,13 @@ class Video extends MY_Controller {
                         $this->log($this->user, $msg);
                         $temp['id'] = base64_encode($last_id);
                         $temp['message'] = $this->_successmsg($msg);
-                        echo json_encode($temp);
+                        echo $last_id;
+                        //echo json_encode($temp);
                     } else {
                         $msg = $this->loadPo($this->config->item('error_file_upload'));
                         $temp['message'] = $this->_errormsg($msg);
                         echo json_encode($temp);
+                        
                     }
                 }
             } else {

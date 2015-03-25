@@ -38,28 +38,49 @@
                                                 <h3 class="box-title"><?php echo $welcome->loadPo('Upload') . " " . $welcome->loadPo('Video') ?></h3>
                                                 <div class="box-tools pull-right"></div>
                                             </div>
-                                            <!-- form start -->
-                                            <form action="<?php echo base_url() ?>video/Upload" id="videoUploadForm" class="filse" enctype="multipart/form-data" method="post" accept-charset="utf-8">
-                                                <div style="display:none;">
-                                                    <input type="hidden" id="redirect_url" name="redirect_url" value="<?php echo current_full_url(); ?>" />	
-                                                    <input type="hidden" name="_method" value="POST"/></div>
-                                                <div class="box-body">
-                                                    <div class="form-group">
-                                                        <span class="btn btn-default btn-file btn-sm">
-                                                            <?php echo $welcome->loadPo('Choose Media') ?> <input name="video_file"  id="video_file"  atr="files"type="file"/>
-                                                        </span>
-                                                    </div>
-                                                    <div id="status_video_file" style="color:red;"  class="callout-danger" ></div>
-                                                    <div class="box-body" id="displayfile" >
-                                                    </div>
-                                                </div>
-                                                <div class="box-footer">
-                                                    <a class="confirm"  href=""  ><button id="load" class="btn btn-primary btn-sm" data-toggle="modal" data-target=".bs-example-modal-sm" ><?php echo $welcome->loadPo('Upload') ?></button></a>
-                                                    <a href="<?php echo base_url(); ?>video" class="btn btn-default btn-sm"><?php echo $welcome->loadPo('Cancel') ?></a>                
-                                                </div>
-                                            </form>
+                                            <div class="box-body">
+                                                <div id="fileuploader">Select File(s)</div>
+                                            </div>
+                                            <div class="box-footer">
+                                                <button id="startUpload" class="btn btn-primary btn-sm">Start Upload</button>
+                                            </div>
                                         </div>
                                     </div>
+
+                                    <?php /*
+                                      <div class="tab-pane active" id="tab_upload">
+                                      <div class="box box-solid">
+                                      <div class="box-header">
+                                      <h3 class="box-title"><?php echo $welcome->loadPo('Upload') . " " . $welcome->loadPo('Video') ?></h3>
+                                      <div class="box-tools pull-right"></div>
+                                      </div>
+                                      <!-- form start -->
+                                      <form action="<?php echo base_url() ?>video/Upload" id="videoUploadForm" class="filse" enctype="multipart/form-data" method="post" accept-charset="utf-8">
+                                      <div style="display:none;">
+                                      <input type="hidden" id="redirect_url" name="redirect_url" value="<?php echo current_full_url(); ?>" />
+                                      <input type="hidden" name="_method" value="POST"/></div>
+                                      <div class="box-body">
+                                      <div class="form-group">
+                                      <span class="btn btn-default btn-file btn-sm">
+                                      <?php echo $welcome->loadPo('Choose Media') ?> <input name="video_file"  id="video_file"  atr="files"type="file"/>
+                                      </span>
+                                      </div>
+                                      <div id="status_video_file" style="color:red;"  class="callout-danger" ></div>
+                                      <div class="box-body" id="displayfile" >
+                                      </div>
+                                      </div>
+                                      <div class="box-footer">
+                                      <a class="confirm"  href=""  ><button id="load" class="btn btn-primary btn-sm" data-toggle="modal" data-target=".bs-example-modal-sm" ><?php echo $welcome->loadPo('Upload') ?></button></a>
+                                      <a href="<?php echo base_url(); ?>video" class="btn btn-default btn-sm"><?php echo $welcome->loadPo('Cancel') ?></a>
+                                      </div>
+                                      </form>
+                                      </div>
+                                      </div>
+                                     */ ?>
+
+
+
+
                                 <?php } ?>								
                                 <!-- simple upload section ends -->
 
@@ -77,15 +98,15 @@
                                             <span id="error_msg" style="color: red"></span>
                                         </form>
                                     </div>
-                                <script>
-                                    $("#submit").click(function(data){
-                                        var url = $.trim($("#url").val());
-                                        if(url === ""){
-                                            $("#error_msg").html("Please provide Youtube URL");
-                                            return false;
-                                        }
-                                    })
-                                </script>
+                                    <script>
+                                        $("#submit").click(function (data) {
+                                            var url = $.trim($("#url").val());
+                                            if (url === "") {
+                                                $("#error_msg").html("Please provide Youtube URL");
+                                                return false;
+                                            }
+                                        })
+                                    </script>
                                 <?php } ?>
                                 <!-- youtube upload section ends -->
 
@@ -119,11 +140,13 @@
                                                                 <label for=""><?php echo $welcome->loadPo('Content') . " " . $welcome->loadPo('Provider'); ?></label>
                                                                 <select name="content_provider" id="content_provider" class="form-control">
                                                                     <option value=""  <?php echo set_select('parent', '', TRUE); ?>>--<?php echo $welcome->loadPo('Select'); ?>--</option>
-                                                                    <option value="Youtube" <?php if (set_value('content_provider') == 'Youtube') {
-                                                                echo 'selected="selected"';
-                                                            } ?>><?php echo $welcome->loadPo('Youtube'); ?></option>
+                                                                    <option value="Youtube" <?php
+                                                                    if (set_value('content_provider') == 'Youtube') {
+                                                                        echo 'selected="selected"';
+                                                                    }
+                                                                    ?>><?php echo $welcome->loadPo('Youtube'); ?></option>
                                                                 </select>	
-    <?php echo form_error('content_provider', '<span class="text-danger">', '</span>'); ?>
+                                                                <?php echo form_error('content_provider', '<span class="text-danger">', '</span>'); ?>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -132,7 +155,7 @@
                                                             <div class="input text">
                                                                 <label for=""><?php echo $welcome->loadPo('Title'); ?></label>
                                                                 <input type="text" name="title" id="title" class="form-control" value="<?php echo set_value('title'); ?>" placeholder="<?php echo $welcome->loadPo('Title'); ?>">
-    <?php echo form_error('title', '<span class="text-danger">', '</span>'); ?>
+                                                                <?php echo form_error('title', '<span class="text-danger">', '</span>'); ?>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -151,12 +174,14 @@
                                                                 <select name="category" id="category" class="form-control">
                                                                     <option value=""  <?php echo set_select('parent', '', TRUE); ?>>--<?php echo $welcome->loadPo('Select'); ?>--</option>
                                                                     <?php foreach ($allCategory as $cat) { ?>
-                                                                        <option value="<?php echo $cat->id; ?>" <?php if (set_value('category') == $cat->id) {
-                                                                    echo 'selected="selected"';
-                                                                } ?>><?php echo $cat->category; ?></option>
-    <?php } ?>
+                                                                        <option value="<?php echo $cat->id; ?>" <?php
+                                                                        if (set_value('category') == $cat->id) {
+                                                                            echo 'selected="selected"';
+                                                                        }
+                                                                        ?>><?php echo $cat->category; ?></option>
+                                                                            <?php } ?>
                                                                 </select>
-    <?php echo form_error('category', '<span class="text-danger">', '</span>'); ?>
+                                                                <?php echo form_error('category', '<span class="text-danger">', '</span>'); ?>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -170,7 +195,7 @@
                                             </form>
                                         </div>
                                     </div>
-<?php } ?>
+                                <?php } ?>
                                 <!-- upload from other source section ends -->
                             </div>
                             <!-- Custom Tabs Ends -->
@@ -194,6 +219,31 @@
     </div>
 </div>
 <script type="text/javascript">
+    var uploadObj = $("#fileuploader").uploadFile({
+        autoSubmit: false,
+        url: "<?= base_url() . 'video/upload' ?>",
+        fileName: "0",
+        allowedTypes: "mp4, mpg, mpeg, flv, wmv, avi",
+        acceptFiles: "mp4, mpg, mpeg, flv, wmv, avi",
+        showProgress: true,
+        maxFileCount: 10,
+        onSuccess: function (files, data, xhr)
+        {
+            //alert(data);
+            //files: list of files
+            //data: response from server
+            //xhr : jquer xhr object
+        },
+        afterUploadAll: function ()
+        {
+            window.location.href = '<?=  base_url().'video'?>';
+        }
+    });
+    $("#startUpload").click(function ()
+    {
+        uploadObj.startUpload();
+    });
+
 // Variable to store your files
     var files;
 // uplaod events
