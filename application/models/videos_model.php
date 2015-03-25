@@ -241,7 +241,7 @@ class Videos_model extends CI_Model {
         $timeEnd = " 23:59:59";
         $id = $this->get_ownerid($uid);
         array_push($id, $uid);
-        $this->db->select('a.*, b.category , c.username, e.name as file,e.minetype,d.duration');        
+        $this->db->select('a.*, b.category , c.username, e.relative_path as file,e.minetype,d.duration');        
         $this->db->from('contents a');
         $this->db->where_in('a.uid', $id); 
         $this->db->join('categories b', 'a.category = b.id', 'left');
