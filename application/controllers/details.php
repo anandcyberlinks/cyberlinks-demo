@@ -147,7 +147,7 @@ class Details extends MY_Controller {
               
 	      //-- get content token Wrench---//
 		$authToken = $this->getContentToken();
-		print_r($authToken);$authToken->token;die;
+		print_r($authToken);echo $authToken->token;
 	    //--------------------------//
 	    
 		 $device = $_GET['device'];
