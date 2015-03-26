@@ -146,8 +146,7 @@ class Details extends MY_Controller {
 		$this->load->helper('url');
               
 	      //-- get content token Wrench---//
-		$authToken = $this->getContentToken();
-		print_r($authToken);echo $authToken->token;
+		$authToken = $this->getContentToken();		
 	    //--------------------------//
 	    
 		 $device = $_GET['device'];
@@ -158,7 +157,7 @@ class Details extends MY_Controller {
 		$this->data['uri'] = "http://".$_SERVER[SERVER_NAME].$_SERVER[REQUEST_URI];
 		if($type=='live'){
 			$result =  $this->Video_model->livestream_play($id,$device);
-			$result->video_path = $result->video_path."?token=$authToken->token";
+			$result->video_path = $result->video_path."?token=".$authToken->token;
 			$this->data['result'] = $result;
 		}else{
 			$result = $this->Video_model->channel_play($id);
@@ -166,7 +165,7 @@ class Details extends MY_Controller {
 			$urlArray = json_decode($result->video_path);			
 			$url =  $urlArray[0]->$platform->$network;
 			//print_r($result);
-			$result->video_path = $url."?token=$authToken";
+			$result->video_path = $url."?token=".$authToken->token;
 			//echo '<pre>';print_r($result);die;
 			//$result = $this->Video_model->video_play($id,$device);			
 		/*	if($result){
