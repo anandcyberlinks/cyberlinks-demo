@@ -176,7 +176,7 @@ class Details extends MY_Controller {
 			*/
 			$this->data['result'] = $result;
 		}
-		print_r($result);die;
+		//print_r($result);die;
 		$this->data['scheduleBreaks'] = $adsFinal;
 		//--- End db loading log ----//
 		$this->log_load('db load','End',$id,$platform);
