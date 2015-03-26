@@ -19,17 +19,18 @@ class Details extends MY_Controller {
 	}
 
 	function index()
-	{		
-	    //-- log start --//
-	    $this->log_load('db load','start');
-	    //--------------//
+	{			   
 		//-- get geocoding google api --//
 		$this->data['lat'] = $lat = $_GET['lat'];
 		$this->data['long'] = $lng = $_GET['lng'];
-		$this->data['platform'] = $_GET['platform'];
+		$platform = $this->data['platform'] = ($_GET['platform'] !='' ? $_GET['platform']:$_GET['device']);
 		$id = $_GET['id'];
 		$type= $_GET['type'];
 		
+		//-- log start --//
+			$this->log_load('db load','start',$id,$platform);
+		//--------------//
+	    	    
 		$url = "http://maps.googleapis.com/maps/api/geocode/json?latlng=".$lat.",".$lng."&sensor=true";
 		$data = @file_get_contents($url);
 		$result = json_decode($data,true);
@@ -144,6 +145,10 @@ class Details extends MY_Controller {
 		//echo '<pre>';print_r($keywords);die;
 		$this->load->helper('url');
               
+	      //-- get content token Wrench---//
+		$authToken = $this->getContentToken();		
+	    //--------------------------//
+	    
 		 $device = $_GET['device'];
 		 $network = $_GET['network'];
 		 $platform =$_GET['platform'];
@@ -151,14 +156,16 @@ class Details extends MY_Controller {
 			//echo '<pre>';print_r($_SERVER);die;
 		$this->data['uri'] = "http://".$_SERVER[SERVER_NAME].$_SERVER[REQUEST_URI];
 		if($type=='live'){
-			$this->data['result'] =  $this->Video_model->livestream_play($id,$device);	
+			$result =  $this->Video_model->livestream_play($id,$device);
+			$result->video_path = $result->video_path."?token=$authToken->token";
+			$this->data['result'] = $result;
 		}else{
 			$result = $this->Video_model->channel_play($id);
 			//print_r($result);die;
 			$urlArray = json_decode($result->video_path);			
 			$url =  $urlArray[0]->$platform->$network;
 			//print_r($result);
-			$result->video_path = $url;
+			$result->video_path = $url."?token=$authToken";
 			//echo '<pre>';print_r($result);die;
 			//$result = $this->Video_model->video_play($id,$device);			
 		/*	if($result){
@@ -169,10 +176,10 @@ class Details extends MY_Controller {
 			*/
 			$this->data['result'] = $result;
 		}
-		
+		//print_r($result);die;
 		$this->data['scheduleBreaks'] = $adsFinal;
 		//--- End db loading log ----//
-		$this->log_load('db load','End');
+		$this->log_load('db load','End',$id,$platform);
 		//----------------------------//				
                 $this->load->view('details',$this->data);		
 	}
@@ -180,7 +187,7 @@ class Details extends MY_Controller {
 	function getAdsRevive($lat,$lng,$age,$keywords,$gender,$l)
 	{
 		$this->load->helper('url');		
-               $url = "http://54.179.170.143/vast/getvast.php?keyword=$keywords&age=$age&gender=$gender&lat=$lat&lng=$lng&limit=$l";
+                $url = "http://54.179.170.143/vast/getvast.php?keyword=$keywords&age=$age&gender=$gender&lat=$lat&lng=$lng&limit=$l";
                // Get cURL resource
                 $curl = curl_init();
                 // Set some options - we are passing in a useragent too here
@@ -230,8 +237,9 @@ class Details extends MY_Controller {
 		die;
 	}
 	
-	function log_load($title,$pos)
-	{		
+	function log_load($title,$pos,$user,$device)
+	{
+		if($device =='web'){
 		$title = ($title==''? $_POST['title']:$title);
 		$pos = ($pos==''? $_POST['pos']:$pos);
 		//$time = date('Y-m-d h:i:s:u');
@@ -241,7 +249,7 @@ class Details extends MY_Controller {
 		$d = new DateTime( date('Y-m-d H:i:s.'.$micro, $t) );
 		$time = $d->format("Y-m-d H:i:s.u"); // note at point on "u"
 		$separator =",";
-		$file = "log/stream_log.csv";		
+		$file = "log/".$_GET['user_id']."_stream_log.csv";		
 		$fileHandle = fopen($file, 'a+'); // Note that the mode has changed		
 		fwrite($fileHandle, $data);
 		$data = $title.' '.$pos.  $separator.$time.$separator; // set data we will be writing
@@ -252,6 +260,46 @@ class Details extends MY_Controller {
 		}
 		fwrite($fileHandle, $data); // write data to file 
 		fclose($fileHandle); // close the file since we're done
+		}
+		
+	}
+	
+	function getCampaign()
+	{
+		$this->load->helper('url');		
+                $url = base_url()."api/ads/campaign/id/$id/user_id/$user_id/type/$type";
+               // Get cURL resource
+                $curl = curl_init();
+                // Set some options - we are passing in a useragent too here
+                curl_setopt_array($curl, array(
+                    CURLOPT_RETURNTRANSFER => 1,
+                    CURLOPT_URL => $url,
+                ));  
+                // Send the request & save response to $resp
+               $resp = curl_exec($curl);
+               
+                // Close request to clear up some resources
+                curl_close($curl);
+                return json_decode($resp);
+	}
+	
+	function getContentToken()
+	{
+		$this->load->helper('url');		
+                $url = base_url()."api/auth/generatecontenttoken";
+               // Get cURL resource
+                $curl = curl_init();
+                // Set some options - we are passing in a useragent too here
+                curl_setopt_array($curl, array(
+                    CURLOPT_RETURNTRANSFER => 1,
+                    CURLOPT_URL => $url,
+                ));  
+                // Send the request & save response to $resp
+               $resp = curl_exec($curl);
+               
+                // Close request to clear up some resources
+                curl_close($curl);
+                return json_decode($resp);
 	}
 	
 }
