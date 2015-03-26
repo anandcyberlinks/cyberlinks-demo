@@ -146,7 +146,8 @@ class Details extends MY_Controller {
 		$this->load->helper('url');
               
 	      //-- get content token Wrench---//
-		$authToken = $this->getContentToken();		
+		$authToken = $this->getContentToken();
+		print_r($authToken);die;
 	    //--------------------------//
 	    
 		 $device = $_GET['device'];
