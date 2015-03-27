@@ -4,7 +4,9 @@
     <aside class="right-side">                
 		<!-- Content Header (Page header) -->
 		<section class="content-header">
-            <h1><?php echo $welcome->loadPo('Channel Category'); ?><small><?php echo $welcome->loadPo('Control panel'); ?></small> </h1>
+            <h1><?php echo $welcome->loadPo('Channel Category'); ?><small><?php echo $welcome->loadPo('Control panel'); ?></small>
+	    <a href="<?php echo base_url().$uri; ?>/addCategory" class="btn btn-success btn-sm"><?php echo $welcome->loadPo('Category').' '.$welcome->loadPo('Add'); ?></a>
+	    </h1>
             <ol class="breadcrumb">
             <li><a href="<?php echo base_url(); ?>"><i class="fa fa-dashboard"></i><?php echo $welcome->loadPo('Dashboard') ?></a></li>
             <li class="active"><?php echo $welcome->loadPo($this->uri->segment(1)) ?></li>
@@ -22,17 +24,18 @@
 					<!-- left column -->
 					<div class="col-md-12">
 						<!-- general form elements -->
-						<div class="box box-primary">
-							<div class="box-header">
-								<h3 class="box-title"><?php echo $welcome->loadPo('Search'); ?></h3>
-								<div class="box-tools pull-right">
-									<a href="<?php echo base_url().$uri; ?>/addCategory" class="btn btn-success btn-sm"><?php echo $welcome->loadPo('Category').' '.$welcome->loadPo('Add'); ?></a>
-								</div>
-							</div><!-- /.box-header -->
+						<div class="box box-primary collapsed-box">
+					<div class="box-header">
+					<!-- tools box -->
+					<div class="pull-right box-tools">
+					    <button title="Collapse" data-toggle="tooltip" data-widget="collapse" class="btn btn-danger btn-sm"><i class="fa fa-minus"></i></button>
+					</div><!-- /. tools -->
+					<h3 class="box-title">Search</h3>
+				    </div><!-- /.box-header -->
 							<!-- form start -->
 							<form action="<?php echo base_url().$uri; ?>/index" id="searchCategoryForm" method="post" accept-charset="utf-8">
 								<div style="display:none;"><input type="hidden" name="_method" value="POST"/></div>                
-								<div class="box-body">
+								<div class="box-body" style='display:none;'>
 									<div class="row">
 										<div class="form-group col-lg-3">
 											<div class="input text">
@@ -54,7 +57,7 @@
 										</div>
 									</div>
 								</div><!-- /.box-body -->
-								<div class="box-footer">
+								<div class="box-footer" style='display:none;'>
 									<button type="submit" name="submit" value="Search" class="btn btn-primary"><?php echo $welcome->loadPo('Search'); ?></button>
 								</div>
 							</form>        
