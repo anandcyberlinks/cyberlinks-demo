@@ -227,16 +227,9 @@
         acceptFiles: "mp4, mpg, mpeg, flv, wmv, avi",
         showProgress: true,
         maxFileCount: 10,
-        onSuccess: function (files, data, xhr)
-        {
-            //alert(data);
-            //files: list of files
-            //data: response from server
-            //xhr : jquer xhr object
-        },
         afterUploadAll: function ()
         {
-            window.location.href = '<?=  base_url().'video'?>';
+            window.location.href = '<?= base_url() . 'video/EditAllInvalid' ?>';
         }
     });
     $("#startUpload").click(function ()

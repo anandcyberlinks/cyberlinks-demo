@@ -46,13 +46,11 @@ class Videos_model extends CI_Model {
      */
     
     function _saveVideo($data){
-
         $contents['title'] = $data['content_title'];
         if(isset($data['description'])){
             $contents['description'] = $data['description'];
-            $contents['status'] = $data['status'];
         }
-	
+        $contents['status'] = $data['status'];
 	if(isset($data['content_token'])){
             $contents['content_token'] = $data['content_token'];
         }	
@@ -68,11 +66,13 @@ class Videos_model extends CI_Model {
         if(isset($data['content_id'])){
             $cid = $data['content_id'];
             $contents['category'] = $data['content_category'];
-            $contents['feature_video'] = $data['feature_video'];
-            
+            if(isset($data['feature_video'])){
+                $contents['feature_video'] = $data['feature_video'];
+            }
             $this->db->where('id', $cid);
             $this->db->set($contents);
             $this->db->update('contents');
+            //echo $this->db->last_query();
             
         }else{
             ###inserting data in contents table and return id###
@@ -454,6 +454,7 @@ class Videos_model extends CI_Model {
         $this->db->from('categories child');
         $this->db->join('categories parent', 'child.parent_id = parent.id', 'left');
         $this->db->where('child.u_id', $uid);
+        $this->db->where('child.status', 1);
         $this->db->order_by('child.category', 'asc');
         $query = $this->db->get();
         $result = $query->result();

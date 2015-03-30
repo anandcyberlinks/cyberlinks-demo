@@ -1,5 +1,4 @@
 <?php
-
 ini_set('display_errors', 1);
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
@@ -553,7 +552,6 @@ class Video extends MY_Controller {
                         $msg = $this->loadPo($this->config->item('error_file_upload'));
                         $temp['message'] = $this->_errormsg($msg);
                         echo json_encode($temp);
-                        
                     }
                 }
             } else {
@@ -564,6 +562,37 @@ class Video extends MY_Controller {
             redirect(base_url() . 'video');
         }
     }
+    
+    
+    /*
+     * Function for edit multiple uploaded video
+     */
+    
+    function EditAllInvalid(){
+        $query = "select id, title from contents where category = '' and uid = $this->uid ORDER BY id DESC";
+        $res = $this->db->query($query)->result();
+        if(count($res)==0){
+            redirect(base_url().'video');
+        }
+        $data['record'] = $res;
+        $data['category'] = $this->videos_model->get_category($this->uid);
+        //echo "<pre>";
+        $data['welcome'] = $this;
+        $this->show_view('editall',$data);
+        //print_r($res);
+    }
+    
+    function submitAll(){
+        //print_r($_POST);die;
+        $id =  $this->videos_model->_saveVideo($_POST);
+        if($id){
+            echo $id;
+        }else{
+            echo "Try Again";
+        }   
+    }
+
+
 
     /*
       /-------------------------------------------------------------
