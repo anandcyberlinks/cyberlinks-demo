@@ -109,4 +109,14 @@ class Ads extends REST_Controller
         $this->response($adsFinal);
     }
     
+    function channels_get(){
+        $result = $this->Ads_model->getChannels();
+        if(isset($result))
+        {
+            $this->response($result, 200); // 200 being the HTTP response code
+        }else{
+            $this->response('No record found', 404);
+        }
+    }
+    
 }

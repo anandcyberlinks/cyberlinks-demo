@@ -128,5 +128,13 @@ class Ads_model extends CI_Model{
 	 return 0;
       }*/
     }
+    
+    function getChannels()
+    {
+        $this->db->select('id as channel_id,name,type');
+        $this->db->from('channels');
+        $query = $this->db->get();
+        return $query->result();
+    }
 }
     ?>
