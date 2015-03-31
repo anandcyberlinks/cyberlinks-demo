@@ -103,8 +103,6 @@ class Video extends MY_Controller {
         }
         
     function data(){
-        
-        
         $searchterm = '';
         if ($this->uri->segment(2) == '') {
             $this->session->unset_userdata('search_form');
@@ -313,7 +311,7 @@ class Video extends MY_Controller {
                     $this->log($this->user, $msg);
                     $this->session->set_flashdata('message', $this->_successmsg($msg));
                     redirect('video');
-                } else {
+                } else {    
                     $this->data['result'] = (array) $this->videos_model->edit_profile($vid);
                     $this->data['result']['keywords'] = $this->videos_model->_getKeyword($vid);
                     $this->data['thumbnails_info'] = $this->videos_model->get_thumbs($vid);
@@ -735,7 +733,7 @@ class Video extends MY_Controller {
             $content_title = $_POST['content_title'];
             $category = $_POST['category'];
             $keywords = $_POST['keyword'];
-            $url = $_POST['url'];
+            $url = str_replace(" ", "%20", $_POST['url']);
             $description = $_POST['description'];
             $rowID = $_POST['rowId'];
             if ($this->remoteFileExists($url)) {
