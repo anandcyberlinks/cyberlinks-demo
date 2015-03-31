@@ -34,11 +34,6 @@ class Category extends MY_Controller {
                 'label' => 'Category name',
                 'rules' => 'trim|required'
             ),
-            array(
-                'field' => 'description',
-                'label' => 'Description',
-                'rules' => 'trim|required'
-            )
         ),
         'update_Category' => array(
             array(
@@ -46,11 +41,6 @@ class Category extends MY_Controller {
                 'label' => 'Category name',
                 'rules' => 'trim|required'
             ),
-            array(
-                'field' => 'description',
-                'label' => 'Description',
-                'rules' => 'trim|required'
-            )
         )
     );
 

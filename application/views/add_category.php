@@ -3,7 +3,7 @@
         color: red;
     }
 </style>
-<?php echo $uri = $this->uri->segment(1); ?>
+<?php $uri = $this->uri->segment(1); ?>
 <div class="wrapper row-offcanvas row-offcanvas-left">
     <!-- Right side column. Contains the navbar and content of the page -->
     <aside class="right-side">                
