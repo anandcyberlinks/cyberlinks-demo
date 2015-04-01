@@ -77,6 +77,23 @@ $content['popup_content'] = $this->load->view('advertising/cuepoints',array(), T
 $this->show_view("advertising/cuepoints", $content);*/
         
     }
+    
+    function getVdoListDetail()
+    {
+        $sort_by = '';
+        $sort = '';
+        $data['result'] = $this->videos_model->get_cuepoint_video($_REQUEST['IDs'],$sort, $sort_by);
+        //echo 'm'; echo '<pre>'; print_r($data['result']); exit;
+        $innerHtml = '';
+        $json_Ids = json_encode($_REQUEST['IDs']); 
+        $i=1;
+        
+        foreach($data['result'] as $key => $val){
+           $new_val = json_decode($val->url);
+           $val->url = $new_val['0']->{'web'}->{'3g'};
+        }
+        echo json_encode($data);
+    }
     function setcuepoint()
     {
          $sort_by = 'asc';
@@ -96,7 +113,11 @@ $this->show_view("advertising/cuepoints", $content);*/
        foreach($_POST['IDs'] as $key=>$id)
        {
            //-- check if cue point is greater than video duration --//
-            $result = $this->videos_model->validate_cuepoint_duration($id,$_POST['timeInMillisec']);
+            $result = $this->videos_model->validate_cuepoint_duration($id,$_POST['timeInMillisec'],$_POST['vdo_cuepoint']);
+            /*if($_POST['vdo_cuepoint']==1)
+            {
+                $result=1;
+            }*/
                
           $innerArray = array();
            if($result ==1){
@@ -104,6 +125,9 @@ $this->show_view("advertising/cuepoints", $content);*/
                $data[$i]["cue_points"]=$_POST['timeInMillisec'];
                $data[$i]["title"] =$_POST['cueName'];
                $data[$i]["created"] = $created;
+               if($_POST['vdo_cuepoint']==1){
+                    $data[$i]["type"] = "vdo";
+               }
                $i++;
             }
           }
@@ -280,5 +304,75 @@ function  updateCuePoint()
             redirect('advertising/configuration');
         }
         $this->show_view('advertising/add_source',$data);
+    }
+    
+    
+    function vdo() {
+        $searchterm = '';
+        if ($this->uri->segment(2) == '') {
+            $this->session->unset_userdata('search_form');
+        }
+        $sort = $this->uri->segment(3);
+        $sort_by = $this->uri->segment(4);
+        $data['welcome'] = $this;
+        switch ($sort) {
+            case "category":
+                $sort = 'b.category';
+                if ($sort_by == 'asc')
+                    $data['show_c'] = 'desc';
+                else
+                    $data['show_c'] = 'asc';
+                break;
+            case "user":
+                $sort = 'a.uid';
+                if ($sort_by == 'asc')
+                    $data['show_u'] = 'desc';
+                else
+                    $data['show_u'] = 'asc';
+                break;
+            case "status":
+                $sort = 'a.status';
+                if ($sort_by == 'asc')
+                    $data['show_s'] = 'desc';
+                else
+                    $data['show_s'] = 'asc';
+                break;
+            case "created":
+                $sort = 'a.created';
+                if ($sort_by == 'asc')
+                    $data['show_ca'] = 'desc';
+                else
+                    $data['show_ca'] = 'asc';
+                break;
+            case "title":
+                $sort = 'a.title';
+                if ($sort_by == 'asc')
+                    $data['show_t'] = 'desc';
+                else
+                    $data['show_t'] = 'asc';
+                break;
+            default:
+                $sort_by = 'desc';
+                $sort = 'a.id';
+        }
+        if (isset($_POST['submit']) && $_POST['submit'] == 'Search') {
+            $this->session->set_userdata('search_form', $_POST);
+        } else if (isset($_POST['reset']) && $_POST['reset'] == 'Reset') {
+            $this->session->unset_userdata('search_form');
+        }
+        $searchterm = $this->session->userdata('search_form');
+        $this->load->library("pagination");
+        $config = array();
+        $config["base_url"] = base_url() . "advertising/vdo/";
+        $config["total_rows"] = $this->videos_model->get_videocount($this->uid, $searchterm);
+        $config["per_page"] = 10;
+        $config["uri_segment"] = 3;
+        $this->pagination->initialize($config);
+        $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        $data['result'] = $this->videos_model->get_video($this->uid, PER_PAGE, $page, $sort, $sort_by, $searchterm);
+        $data["links"] = $this->pagination->create_links();
+        $data['category'] = $this->videos_model->get_category($this->uid);
+        $data['total_rows'] = $config["total_rows"];
+        $this->show_view('vdo', $data);
     }
  }

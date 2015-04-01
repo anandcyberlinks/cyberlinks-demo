@@ -1259,7 +1259,9 @@ class Videos_model extends CI_Model {
         $this->db->join('files c3', 'h.file_id = c3.id', 'left');        
         $this->db->where_in('a.id',$IDs);    
         $this->db->group_by('a.id');
-        $this->db->order_by($sort, $sort_by);
+        if($sort!=''){
+            $this->db->order_by($sort, $sort_by);
+        }
         //$this->db->limit($limit, $start);
         $query = $this->db->get();
         //echo $this->db->last_query();
@@ -1346,12 +1348,19 @@ class Videos_model extends CI_Model {
 	return 0;
     }
     
-    function validate_cuepoint_duration($id,$v)
+    function validate_cuepoint_duration($id,$v,$vdo=0)
     {
-      $this->db->select('id');
-      $this->db->from('playlists v');      
-      $this->db->where('v.id',$id);
-      $this->db->where('3600 >=',$v,FALSE);
+        if($vdo ==1){
+            $this->db->select('id');
+            $this->db->from('videos v');      
+            $this->db->where('v.content_id',$id);
+            $this->db->where('v.duration >=',$v);
+        }else{
+            $this->db->select('id');
+            $this->db->from('playlists v');      
+            $this->db->where('v.id',$id);
+            $this->db->where('3600 >=',$v,FALSE);
+        }
       $this->db->limit('1');
       $query = $this->db->get();
       $result = $query->row();
