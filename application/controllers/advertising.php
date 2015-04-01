@@ -127,6 +127,8 @@ $this->show_view("advertising/cuepoints", $content);*/
                $data[$i]["created"] = $created;
                if($_POST['vdo_cuepoint']==1){
                     $data[$i]["type"] = "vdo";
+               }else{
+                   $data[$i]["type"] = "linear";
                }
                $i++;
             }
