@@ -57,7 +57,7 @@ class Ads extends REST_Controller
     }
     
     function campaign_get()
-    {         
+    {
         $id = $this->get('id');
         $user_id = $this->get('user_id');
         $type = $this->get('type');
@@ -67,6 +67,14 @@ class Ads extends REST_Controller
         //----------------------------//        
         $user_data = $this->Ads_model->getUserKeywords($user_id);        
         
+        if(@$cuePoints['0']!=0){
+            array_unshift($cuePoints, 0);
+            $limit += 1;
+        }                
+        if(count($cuePoints) <= 0){
+            $limit = 1;
+        }
+                 
         //--- Access Revive web service ---//
 	/*$gender = $user_data['gender'];
 	$dob = $user_data['dob'];
@@ -106,8 +114,12 @@ class Ads extends REST_Controller
                 $i++;
             }
     //----------------------------------------------//
+    if($adsFinal){
         $this->response($adsFinal);
+    }else{
+        $this->response('No record found', 404);
     }
+}
     
     function channels_get(){
         $result = $this->Ads_model->getChannels();
