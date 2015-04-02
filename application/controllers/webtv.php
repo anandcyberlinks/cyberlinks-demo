@@ -60,7 +60,7 @@ class Webtv extends MY_Controller {
         $id = $this->uri->segment('3');
         switch($id){
             case 'all' :
-                $query = sprintf("update playlists set status = '0', publish = '0', url = '' where channel_id in (select id from channels where type = 'Linear' and uid = %s)", $this->uid);
+                $query = sprintf("update playlists set status = '0', publish = '0', url = '' where channel_id in (select id from channels where type = 'Linear' and uid = %d)", $this->uid);
                 $dataset = $this->db->query($query);
                 //echo $this->db->last_query(); die;
                 redirect(base_url() . 'webtv');
@@ -80,7 +80,7 @@ class Webtv extends MY_Controller {
         $id = $this->uri->segment('3');
         switch($id){
             case 'all' :
-                $query = sprintf("update playlists set publish = '1' where channel_id in (select id from channels where type = 'Linear' and uid = %s)", $this->uid);
+                $query = sprintf("update playlists set publish = '1' where channel_id in (select id from channels where type = 'Linear' and uid = %d)", $this->uid);
                 $dataset = $this->db->query($query);
                 //echo $this->db->last_query(); die;
                 redirect(base_url() . 'webtv');
@@ -98,7 +98,7 @@ class Webtv extends MY_Controller {
         $id = $this->uri->segment('3');
         switch($id){
             case 'all' :
-                $query = sprintf("update playlists set publish = '0' where channel_id in (select id from channels where type = 'Linear' and uid = %s)", $this->uid);
+                $query = sprintf("update playlists set publish = '0' where channel_id in (select id from channels where type = 'Linear' and uid = %d)", $this->uid);
                 $dataset = $this->db->query($query);
                 //echo $this->db->last_query(); die;
                 redirect(base_url() . 'webtv');
