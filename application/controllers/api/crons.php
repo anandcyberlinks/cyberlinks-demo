@@ -248,7 +248,7 @@ class Crons extends REST_Controller {
                         $temp['channel_id'] = $val[0];
                         $temp['channel_name'] = $val[1];
                         //$temp['date'] = date('Y-m-d');
-                        $temp['date'] = '2015-04-03 00:00:00';
+                        $temp['date'] = '2015-04-04 00:00:00';
                         $temp['show_title'] = $val[3];
                         $temp['show_time'] = date("H:i", strtotime($val[2]));
                         $temp['show_thumb'] = "";
