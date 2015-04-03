@@ -566,7 +566,7 @@ class Content extends Apis{
     
     function getLivechannelEpg($channel_id){
         $query = sprintf('select show_title,show_time,show_thumb,show_language,show_description,show_type
-                              from livechannel_epg where channel_id = %d ',$channel_id);
+                              from livechannel_epg where channel_id = %d order by show_time ',$channel_id);
         $dataset = $this->db->query($query)->result();
         if(count($dataset) > 0){
             return $dataset;
