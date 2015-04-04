@@ -9,7 +9,7 @@ var f = "multitvfinal/";
 function play() {
 	if(id ==0){
 		$.ajax({
-			url: h+bb+f+"/api/analytics/play",
+			url: h+bb+f+"api/analytics/play",
 			data: {		
 		       // user_id:'',
 		        content_id:'92',
@@ -33,7 +33,7 @@ function play() {
 	if(id >0){
 		//alert(analytics_id);
 		$.ajax({
-		    url: h+bb+f+"/api/analytics/pause",
+		    url: h+bb+f+"api/analytics/pause",
 		    data: {
 			id: id,
 		        watched_time: duration,
@@ -50,7 +50,7 @@ function play() {
 
 	function playAds(tag) {
 	$.ajax({
-		url: h+bb+f+"/api/analytics/playads",
+		url: h+bb+f+"api/analytics/playads",
 		data:{
 		tag:tag,
 		broadcaster:'59',		
@@ -67,7 +67,7 @@ function play() {
 //-- ads completed --//
    function completeAds(ad_duration) {
         $.ajax({
-            url: h+bb+f+"/api/analytics/ads_complete",
+            url: h+bb+f+"api/analytics/ads_complete",
             data: {
                 id: ad_id,
                 watched_time: ad_duration,
