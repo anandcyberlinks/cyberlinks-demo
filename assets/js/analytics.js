@@ -51,7 +51,7 @@ function play() {
 
 	function playAds(tag) {
 	$.ajax({
-		url: h+bb+f+"api/analytics/playads?callback=",
+		url: h+bb+f+"api/analytics/playads",
 		data:{
 		tag:tag,
 		broadcaster:'59',		
@@ -59,7 +59,7 @@ function play() {
 		},
 		jsonp: 'callback',
 		cache: false,
-		type: "post",
+		type: "get",
 		dataType: 'jsonp',
 		success: function(data,textStatus,jqXHR){
 		alert(data);
