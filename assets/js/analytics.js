@@ -59,12 +59,15 @@ function play() {
 		},
 		cache: false,
 		type: "post",
-		dataType: 'jsonp'
+		dataType: 'jsonp',
+		success: function(data,textStatus,jqXHR){
+		alert(ad_id);
+		}
 	})
-	.done(function(data){
+	/*.done(function(data){
 alert(ad_id);
 		ad_id = data;
-	});
+	});*/
    }
 
 //-- ads completed --//
