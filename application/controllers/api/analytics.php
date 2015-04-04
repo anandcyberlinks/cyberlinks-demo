@@ -60,9 +60,9 @@ class Analytics extends REST_Controller
 	}
     
     
-    function playads_post()
-	{		
-		$post = $this->post();		
+    function playads_get()
+	{		echo 'adsss';
+		$post = $this->post();
 		if($post){                        
             $post['browser'] = $this->useragent['browser'];
             $post['browser_version'] = $this->useragent['version'];
