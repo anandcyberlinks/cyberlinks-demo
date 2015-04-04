@@ -858,21 +858,35 @@ class Ads_model extends CI_Model {
       }*/
     }
     
-    function getOwnerId($uid){
-        $this->db->select('owner_id');
-        $this->db->from('users');
-        $this->db->where('id',$uid);
-        $query = $this->db->get();
-        return $query->row()->owner_id;
-    }
-    
-    function getAdsConfiguration($uid){
-        $this->db->select('value');
-        $this->db->from('options');
-        $this->db->where('user_id',$uid);
-        $this->db->where('key','Ad_Config');
-        $this->db->limit(1);
-        $query = $this->db->get();
+    function getAdsConfiguration($uid,$type){
+      
+       switch ($type) {
+            case "live":
+	       $this->db->select('o.value');
+	       $this->db->from('channels ch');
+	       $this->db->join('options o','ch.uid=o.user_id');	 	
+	       $this->db->where('ch.id',$id);
+	       $this->db->where('o.key','Ad_Config');
+	    break;	    
+	    case "linear":
+		  $this->db->select('o.value');
+		  $this->db->from('channels a');
+		  $this->db->join('playlists b', 'a.id = b.channel_id', 'inner');
+		  $this->db->join('options o','a.uid=o.user_id');
+		  $this->db->where('b.status','1');
+		  $this->db->where('b.id',$id);
+	    break;
+	    case "vod":
+		  $this->db->select('o.value');
+		  $this->db->from('contents a');
+		  $this->db->join('options o','a.uid=o.user_id');		  
+		  $this->db->where('a.status','1');
+		  $this->db->where('a.id',$id);
+	    break;
+	    }
+	    $this->db->limit(1);
+      
+       $query = $this->db->get();
         if($query->num_rows() > 0){
             $adconfig = json_decode($query->row()->value);
             foreach($adconfig as $key => $val){
@@ -882,9 +896,18 @@ class Ads_model extends CI_Model {
         }else{
             $adconfig = 'Revive';
         }
-        return $adconfig;
+        return $adconfig;      
     }
-        
+    
+    function getAdvertiser($id){
+      $this->db->select('a.uid');
+      $this->db->from('ads a');     	       
+      $this->db->where('a.id',$id);
+      $this->db->limit(1);      
+      $query = $this->db->get();
+      $result = $query->row();	 
+      return $result->uid;
+    }
     /* function to get users location wise ads list */
     function getUserLocationWiseAds($lat,$long,$id,$data,$limit=0){
       $this->db->start_cache();
@@ -951,9 +974,9 @@ class Ads_model extends CI_Model {
 	 $this->db->select('cue_points');
       }
       
-      if($type=='live'){
+      //if($type=='live'){
 	 $this->db->where('type',$type);
-      }
+      //}
       $this->db->from('content_cuepoints');
       $this->db->where('content_id',$id);
       $this->db->order_by('cue_points');
