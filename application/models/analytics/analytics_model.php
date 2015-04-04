@@ -431,7 +431,7 @@ class Analytics_model extends CI_Model{
                 $this->db->order_by('MAX(a.id) desc');            
             break;
         case 'user':
-            $select = 'cu.id,concat(cu.first_name," ",cu.last_name) as name,count( a.id ) as total_hits , sum( a.watched_time ) as total_watched_time';
+            $select = 'a.ip,a.browser,cu.id,concat(cu.first_name," ",cu.last_name) as name,count( a.id ) as total_hits , sum( a.watched_time ) as total_watched_time';
             //$group = 'u.id';
             $this->db->group_by('cu.id');
             $this->db->join('customers cu','a.user_id=cu.id','left');
