@@ -181,9 +181,9 @@ class Analytics_model extends CI_Model{
             //$cond = "a.content_provider=u.id";          
             break;
         case 'user':
-            $select = 'cu.id,concat(cu.first_name," ",cu.last_name) as name,count( a.id ) as total_hits , sum( a.watched_time ) as total_watched_time';
+            $select = 'a.ip,a.browser,cu.id,concat(cu.first_name," ",cu.last_name) as name,count( a.id ) as total_hits , sum( a.watched_time ) as total_watched_time';
             //$group = 'u.id';
-            $this->db->group_by('cu.id');
+            $this->db->group_by('cu.id,a.ip');
             $this->db->join('customers cu','a.user_id=cu.id');
             //$join = "customers u";
             //$cond = "a.user_id=u.id";
@@ -257,7 +257,7 @@ class Analytics_model extends CI_Model{
     
     public function getReport($param=array(),$sort,$sort_by,$limit,$start)
     {
-        
+        $select='';
         //--- search val --//
             if(@$param['search']){
                 if($param['search']['platform'] !=''){
@@ -494,10 +494,10 @@ class Analytics_model extends CI_Model{
             
             $this->db->join($join,$cond );
         }
-        if($type !='content_provider'){
+        /*if($type !='content_provider'){
             // $this->db->where('a.content_provider',$this->uid);
         }
-        
+        */
         $this->db->select($select,false);
         $this->db->from('analytics a');
         $this->db->where("a.content_provider",  $this->uid);
@@ -868,7 +868,7 @@ class Analytics_model extends CI_Model{
         }
     }
     
-    function save_ads($post,$where)
+    function save_ads($post,$where='')
     {
         $this->db->set($post);
         if(@$post['skip'] || @$post['complete']){

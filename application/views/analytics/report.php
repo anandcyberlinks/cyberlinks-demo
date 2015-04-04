@@ -142,10 +142,84 @@
                 </div>
             </div><!-- ./col -->
         </div><!-- /.row -->
-	
+	<div class='row'>
+		 <section class="col-lg-12">
+		<div class="box box-danger">
+		    <div class="box-header">
+				<div class="pull-right box-tools">
+			    <button title="Collapse" data-toggle="tooltip" data-widget="collapse" class="btn btn-danger btn-sm"><i class="fa fa-minus"></i></button>
+			</div>
+				<div class="pull-right box-tools">
+			    <button class="btn btn-success">Last Month</button>
+			</div>
+				<div class="pull-right box-tools">
+			   <button class="btn btn-success">Last Week</button>
+			</div>
+				<div class="pull-right box-tools">
+			   <button class="btn btn-success">Yesterday</button> 
+			</div>
+				<div class="pull-right box-tools">
+			   <button class="btn btn-success"> Today</button>
+			</div>				
+				
+			<!-- tools box -->
+			
+			<h3 class="box-title"><a href="">Revenue Report</a></h3>
+		    </div><!-- /.box-header -->
+		    <div class="box-body" style="display: block;">
+			<div class="table-responsive">
+				<div class="row">
+				<div class="col-lg-2 col-xs-6">
+				      <table class="table table-striped" style='width:150px;border:1px double #ccc;padding-left:20px'>
+                                        <tbody><tr>                                           
+                                            <th>Ad Requested</th>                                           
+                                        </tr>
+                                        <tr>
+                                            <td>100400</td>                                            
+                                        </tr>
+                                    </tbody></table>
+				</div>
+				
+				<div class="col-lg-2 col-xs-6">
+					  <table class="table table-striped" style='width:150px;border:1px double #ccc;padding-left:20px'>
+                                        <tbody><tr>                                           
+                                            <th>Ad Impression</th>                                           
+                                        </tr>
+                                        <tr>
+                                            <td>10000</td>                                            
+                                        </tr>
+                                    </tbody></table>
+				</div>
+				<div class="col-lg-2 col-xs-6">
+					  <table class="table table-striped" style='width:150px;border:1px double #ccc;padding-left:20px'>
+                                        <tbody><tr>                                           
+                                            <th>Ad Revenue</th>                                           
+                                        </tr>
+                                        <tr>
+                                            <td>100.00</td>                                            
+                                        </tr>
+                                    </tbody></table>
+				</div>
+				<div class="col-lg-2 col-xs-6">
+					  <table class="table table-striped" style='width:150px;border:1px double #ccc;padding-left:20px'>
+                                        <tbody><tr>                                           
+                                            <th>Avg. CPM</th>                                           
+                                        </tr>
+                                        <tr>
+                                            <td>120.00</td>                                            
+                                        </tr>
+                                    </tbody></table>
+				</div>
+				</div>
+            </div>
+		    </div><!-- /.box-body -->
+		    <div><a style="float:right;" href="http://localhost/multitvfinal-demo/analytics/content">View All</a></div>
+		</div>
+	</div>
+	</div>
         <div class="row">
 	    <section class="col-lg-6"> 
-		<!-- Box (with bar chart) -->
+		<!-- Box (with bar chart) -->		
 		<div class="box box-danger">
 		    <div class="box-header">
 			<!-- tools box -->
@@ -197,13 +271,17 @@
 				<tbody><tr>
 				<th>User</th>
 				<th>Total Hits</th>
-				<th>Total Time Watched</th>				
+				<th>Total Time Watched</th>
+				<th>Browser</th>
+				<th>IP</th>	
 				</tr>
 			     <?php $i=0; foreach($customer as $row){ $i++;?>
 				<tr>
 				<td><?php echo ($row->name !=''? $row->name:'guest');?></td>
 				<td><?php echo $row->total_hits;?></td>
-				<td><?php echo time_from_seconds($row->total_watched_time);?></td>				
+				<td><?php echo time_from_seconds($row->total_watched_time);?></td>
+				<td><?php echo $row->browser;?></td>
+				<td><?php echo $row->ip;?></td>
 				</tr>
 			    <?php }?>
                             </tbody></table><!-- /.table -->
@@ -309,7 +387,7 @@
 			<div class="pull-right box-tools">
 			    <button class="btn btn-danger btn-sm" data-widget='collapse' data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
 			</div><!-- /. tools -->
-			<h3 class="box-title">Map </h3>
+			<h3 class="box-title">Location </h3>
 		    </div><!-- /.box-header -->
 		    
 		    <div class="box-body no-padding">
