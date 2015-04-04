@@ -263,7 +263,11 @@ class Ads_analytics_model extends CI_Model{
         
         $this->db->select($select,false);
         $this->db->from('ads_analytics a');
-        $this->db->where("a.content_provider",  $this->uid);
+        if($param['type']=='revenue'){
+            $this->db->where("a.broadcaster",  $this->uid);
+        }else{
+            $this->db->where("a.content_provider",  $this->uid);
+        }
         $this->db->join('ads c','a.ads_id=c.id');
        
         //$this->db->group_by($group);
@@ -272,7 +276,7 @@ class Ads_analytics_model extends CI_Model{
              $this->db->limit($limit, $start);
         }
         $query = $this->db->get();
-    echo '<br>'.$this->db->last_query();
+    //echo '<br>'.$this->db->last_query();
         return $query->result();
         
     }
