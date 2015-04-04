@@ -111,6 +111,7 @@ class Analytics extends MY_Controller {
 			//  $this->data['summary'] = $summary->response->docs[0];            
 		//}
 	    //--- Ad revenue report ---//
+		$daterange = $_GET['range'];
 		switch($daterange){
 				case 'today': 
 				$date_from = date('Y-m-d');

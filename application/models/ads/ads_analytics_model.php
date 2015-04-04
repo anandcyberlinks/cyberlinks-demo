@@ -67,6 +67,12 @@ class Ads_analytics_model extends CI_Model{
             $select = 'SUM(a.revenue) AS revenue,             
             count(a.id) as impression';
             $this->db->group_by('a.broadcaster');
+            if($param['date_from'] && $param['date_to']){
+                $startdate = $param['date_from'];
+                $enddate = $param['date_to'];
+               $this->db->where("DATE_FORMAT(a.created,'%Y-%m-%d') BETWEEN '$startdate' AND '$enddate'"); 
+            }
+            
             break;
         case 'content':
             $select = 'c.ad_title,a.platform,a.browser,a.created,a.country,a.city,a.ads_id,concat(u.first_name," ",u.last_name) as content_provider,count(ads_id) as total_hits,sum(watched_time) as total_watched_time,           
@@ -276,7 +282,7 @@ class Ads_analytics_model extends CI_Model{
              $this->db->limit($limit, $start);
         }
         $query = $this->db->get();
-    //echo '<br>'.$this->db->last_query();
+   // echo '<br>'.$this->db->last_query();
         return $query->result();
         
     }

@@ -149,17 +149,18 @@
 				<div class="pull-right box-tools">
 			    <button title="Collapse" data-toggle="tooltip" data-widget="collapse" class="btn btn-danger btn-sm"><i class="fa fa-minus"></i></button>
 			</div>
+				<a href="?range=lastmonth">
 				<div class="pull-right box-tools">
-			    <button class="btn btn-success">Last Month</button>
+			    <a class="btn btn-info btn-md" href="?range=lastmonth">Last Month</a>
+			</div>				
+				<div class="pull-right box-tools">
+			   <a class="btn btn-info btn-md" href="?range=lastweek">Last Week</a>
+			</div>				
+				<div class="pull-right box-tools">
+			   <a class="btn btn-info btn-md" href="?range=yesterday">Yesterday</a>
 			</div>
 				<div class="pull-right box-tools">
-			   <button class="btn btn-success">Last Week</button>
-			</div>
-				<div class="pull-right box-tools">
-			   <button class="btn btn-success">Yesterday</button> 
-			</div>
-				<div class="pull-right box-tools">
-			   <button class="btn btn-success"> Today</button>
+			   <a class="btn btn-info btn-md" href="?range=today">Today</a>
 			</div>				
 				
 			<!-- tools box -->
