@@ -201,7 +201,7 @@
                                             <th>Ad Revenue Earned</th>                                           
                                         </tr>
                                         <tr>
-                                            <td><?php echo number_format($row->revenue,2,'.');?></td>                                            
+                                            <td><?php echo number_format($row->revenue,2,'.','');?></td>                                            
                                         </tr>
                                     </tbody></table>
 				</div>
