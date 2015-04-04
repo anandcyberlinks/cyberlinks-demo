@@ -60,6 +60,7 @@ function play() {
 		type: "post"
 	})
 	.done(function(data){
+alert(ad_id);
 		ad_id = data;
 	});
    }
