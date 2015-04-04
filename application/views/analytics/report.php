@@ -218,8 +218,7 @@
 				</div>
 				</div>
             </div>
-		    </div><!-- /.box-body -->
-		    <div><a style="float:right;" href="http://localhost/multitvfinal-demo/analytics/content">View All</a></div>
+		    </div><!-- /.box-body -->		   
 		</div>
 	</div>
 	</div>
@@ -422,13 +421,15 @@
                                         <table class="table table-striped">
                                             <tr>
                                                 <th>Location</th>
+												<th>Country</th>
                                                 <th>Hits</th>
                                                 <th>Time Watched</th>                                                
                                             </tr>
 					    <?php foreach($country as $row){?>
                                             <tr>
                                                 <td><!--<a href="<?php echo base_url()?>analytics/geographic?country=<?php echo $row->code;?>">--><?php echo ($row->city!='') ? $row->city : 'Unknown';?></a></td>
-                                                <td><?php echo $row->total_hits;?></td>
+                                                <td><?php echo $row->country;?></td>
+												<td><?php echo $row->total_hits;?></td>
 						<td><?php echo time_from_seconds($row->total_watched_time);?></td>
                                             </tr>
 					    <?php }?>
