@@ -57,7 +57,7 @@ function play() {
 		broadcaster:'59',		
                 play: '1',		
 		},
-		jsonp: 'callback",
+		jsonp: 'callback',
 		cache: false,
 		type: "post",
 		dataType: 'jsonp',
