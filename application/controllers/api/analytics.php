@@ -1,5 +1,7 @@
 <?php
-
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+header("Access-Control-Allow-Origin: *");
+defined('BASEPATH') OR exit('No direct script access allowed');
 /* 
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -60,9 +62,9 @@ class Analytics extends REST_Controller
 	}
     
     
-    function playads_get()
+    function playads_post()
 	{		echo 'adsss';
-		$post = $this->get();
+		$post = $this->post();
 		print_r($post);die;
 		if($post){                        
             $post['browser'] = $this->useragent['browser'];
