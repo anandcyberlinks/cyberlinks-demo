@@ -61,8 +61,7 @@ class Analytics extends REST_Controller
     
     
     function playads_post()
-	{
-		print_r($post);echo 'adsss';
+	{		
 		$post = $this->post();		
 		if($post){                        
             $post['browser'] = $this->useragent['browser'];
@@ -115,7 +114,7 @@ class Analytics extends REST_Controller
 				$advertiser_id = $this->Ads_model->getAdvertiser($post['ads_id']);
 				$post['content_provider'] = $advertiser_id;
 			}
-			print_r($post);
+			//print_r($post);
 			//-------------------//				
 			echo $this->Analytics_model->save_ads($post);
 		}
