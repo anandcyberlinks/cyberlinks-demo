@@ -94,7 +94,7 @@ class Ads extends REST_Controller
         }
      $location = file_get_contents('http://ip-api.com/json/'.$ip);
             $location = json_decode($location);
-            $country     = ($location->countryCode =='IN' ? 'OTR':'IN');
+            $country     = ($location->countryCode =='IN' ? 'IN':'OTR');
     //--------------------------//
 	$keywords = $user_data['keywords'];
                 
