@@ -6,6 +6,7 @@ class Analytics extends MY_Controller {
 	{
             parent::__construct();
             $this->load->model('/api/Video_model');
+			$this->load->model('ads/Ads_analytics_model');
 	    $this->load->model('/analytics/Analytics_model');
 	    $this->load->library('User_Agent');
 	    $this->load->helper('common');
@@ -109,7 +110,36 @@ class Analytics extends MY_Controller {
 			//if($summary) {
 			//  $this->data['summary'] = $summary->response->docs[0];            
 		//}
-	    
+	    //--- Ad revenue report ---//
+		switch($daterange){
+				case 'today': 
+				$date_from = date('Y-m-d');
+				$date_to = date('Y-m-d');
+				break;
+				case 'yesterday':
+				$date_to = $date_from = date('Y-m-d', strtotime("yesterday"));
+				break;
+				case 'lastweek':
+				$date_from = strtotime("last week"); 
+				$date_to = strtotime("+6 day",$start_past);
+				break;
+				case 'lastmonth':
+				$date_from = date('Y-m-d', strtotime('first day of last month'));echo "<br/>";
+				$date_to = date('Y-m-d',strtotime('last day of last month'));
+				break;
+		}
+		/*$start_past = strtotime("last week"); 
+		$end_past = strtotime("+6 day",$start_past);
+		echo 'last day : '.date('Y-m-d', strtotime("yesterday"));echo "<br/>";
+		echo 'last week first day : '.$start_past_qry = date("m/d/Y",$start_past);echo "<br/>";
+		echo 'last week last day : '.$end_past_qry = date("m/d/Y",$end_past);echo "<br/>";
+		
+		echo 'last month first day : '.date('Y-m-d', strtotime('first day of last month'));echo "<br/>";
+		echo 'last month last day : '.date('Y-m-d',strtotime('last day of last month'));
+		*/
+		$this->data['revenue'] = $this->Ads_analytics_model->getReport(array('type'=>'revenue','l'=>$limit,'search'=>$search,'date_from'=>$date_from,'date_to'=>$date_to));
+		//----------------------------------//
+		
 		$this->data['content'] = $this->Analytics_model->getReport(array('type'=>'content','l'=>$limit));
 		$this->data['useragent'] = $this->Analytics_model->getReport(array('type'=>'useragent','l'=>$limit));
 		$this->data['location'] = $this->Analytics_model->getReport(array('type'=>'location','l'=>$limit));
@@ -680,11 +710,29 @@ class Analytics extends MY_Controller {
 		
 		if($post){
 			$res = substr(strrchr($post['tag'],"?"),1);
-			$arr = explode("/",$res);
-			$post['ads_id'] = $arr[0];
-			$post['user_id'] = $arr[1];
-			$post['content_provider'] = $arr[2];
+			$arr = explode("/",$res);			
+			//$post['banner_id'] = $arr[0];
+			$post['campaign_id'] = $arr[1];
+			$post['ads_id'] = $arr[3];
+			$post['user_id'] = $arr[4];
+			$post['broadcaster'] = $arr[5]; 
+			$post['content_provider'] = $arr[6]; //-- advertiser --//
 			unset($post['tag']);
+			
+			//-- get campaign revenue ---//
+				$campaignRevenue = $this->getCampaignRevenue($arr[1]);
+				if($campaignRevenue){
+					$post['campaign_id'] = $campaignRevenue->result[0]->campaignid;
+					if($campaignRevenue->result[0]->revenue_type==1){
+						$revenue = $campaignRevenue->result[0]->revenue/100;
+						$post['revenue'] = $revenue;
+					}else{
+						$post['revenue'] = 0;
+					}					
+				}				
+				//$post['content_provider'] ='';
+			//---------------------------//
+			
 			echo $this->Analytics_model->save_ads($post);
 		}
 		//print_r($post);
@@ -707,6 +755,25 @@ class Analytics extends MY_Controller {
 		}
          die;   
         }
+	
+	function getCampaignRevenue($id)
+	{
+		$this->load->helper('url');		
+                $url = CAMPAIGN_REVENUE."&id=$id";
+               // Get cURL resource
+                $curl = curl_init();
+                // Set some options - we are passing in a useragent too here
+                curl_setopt_array($curl, array(
+                    CURLOPT_RETURNTRANSFER => 1,
+                    CURLOPT_URL => $url,
+                ));  
+                // Send the request & save response to $resp
+               $resp = curl_exec($curl);
+               
+                // Close request to clear up some resources
+                curl_close($curl);
+                return json_decode($resp);
+	}
 }
 
 /* End of file welcome.php */

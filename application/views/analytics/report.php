@@ -169,7 +169,7 @@
 		    <div class="box-body" style="display: block;">
 			<div class="table-responsive">
 				<div class="row">
-				<div class="col-lg-2 col-xs-6">
+				<!--<div class="col-lg-2 col-xs-6">
 				      <table class="table table-striped" style='width:150px;border:1px double #ccc;padding-left:20px'>
                                         <tbody><tr>                                           
                                             <th>Ad Requested</th>                                           
@@ -178,16 +178,20 @@
                                             <td>100400</td>                                            
                                         </tr>
                                     </tbody></table>
-				</div>
+				</div>-->
 				
 				<div class="col-lg-2 col-xs-6">
+					<?php $i=0; foreach($revenue as $row){?>
 					  <table class="table table-striped" style='width:150px;border:1px double #ccc;padding-left:20px'>
-                                        <tbody><tr>                                           
+                                        <tbody>
+								
+											<tr>                                           
                                             <th>Ad Impression</th>                                           
                                         </tr>
                                         <tr>
-                                            <td>10000</td>                                            
+                                            <td><?php echo $row->impression;?></td>                                            
                                         </tr>
+										
                                     </tbody></table>
 				</div>
 				<div class="col-lg-2 col-xs-6">
@@ -196,7 +200,7 @@
                                             <th>Ad Revenue</th>                                           
                                         </tr>
                                         <tr>
-                                            <td>100.00</td>                                            
+                                            <td><?php echo $row->revenue;?></td>                                            
                                         </tr>
                                     </tbody></table>
 				</div>
@@ -206,9 +210,10 @@
                                             <th>Avg. CPM</th>                                           
                                         </tr>
                                         <tr>
-                                            <td>120.00</td>                                            
+                                            <td><?php echo ($row->revenue/$row->impression);?></td>                                            
                                         </tr>
                                     </tbody></table>
+					  <?php }?>
 				</div>
 				</div>
             </div>

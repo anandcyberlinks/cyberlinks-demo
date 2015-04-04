@@ -62,7 +62,12 @@ class Ads_analytics_model extends CI_Model{
             
         $group='';
         switch($param['type']){
-
+        
+        case 'revenue':
+            $select = 'SUM(a.revenue) AS revenue,             
+            count(a.id) as impression';
+            $this->db->group_by('a.broadcaster');
+            break;
         case 'content':
             $select = 'c.ad_title,a.platform,a.browser,a.created,a.country,a.city,a.ads_id,concat(u.first_name," ",u.last_name) as content_provider,count(ads_id) as total_hits,sum(watched_time) as total_watched_time,           
             SUM(IF( a.complete =1, 1, 0 )) AS complete, 
@@ -73,7 +78,7 @@ class Ads_analytics_model extends CI_Model{
            
            if($param['top'] == 1){  //-- top video --//
                 $this->db->group_by('a.ads_id');
-                $this->db->order_by('count(ads_id) desc');
+                $this->db->order_by('a.id desc');
            }else{
                 $this->db->group_by('a.id');
            }
@@ -267,7 +272,7 @@ class Ads_analytics_model extends CI_Model{
              $this->db->limit($limit, $start);
         }
         $query = $this->db->get();
-   // echo '<br>'.$this->db->last_query();
+    //echo '<br>'.$this->db->last_query();
         return $query->result();
         
     }
