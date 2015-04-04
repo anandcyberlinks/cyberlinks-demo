@@ -141,5 +141,10 @@ define('VAST_PATH','./assets/upload/ads/vast/');
 define('IMG_PATH','./assets/img/');
 define('CSV_PATH','./assets/ads/csv/');
 define('MAX_CUEPOINTS_FIELDS',10);  // aDD NEW CUE POIND FIELD LIMIT
+
+//----------Campaign url -----------//
+define('CAMPAIGN_URL', 'http://54.179.170.143/vast/getvast.php');
+define('CAMPAIGN_REVENUE', 'http://54.179.170.143/vast/getDetail.php?akey=9eac320f70');
+///----------------------//
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */
