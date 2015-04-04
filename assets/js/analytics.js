@@ -58,8 +58,8 @@ function play() {
                 play: '1',		
 		},		
 		cache: false,
-		type: "get",
-		dataType: 'jsonp',
+		type: "post",
+		//dataType: 'jsonp',
 		success: function(data,textStatus,jqXHR){
 		alert(data);
 		}
