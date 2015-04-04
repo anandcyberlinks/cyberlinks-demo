@@ -1,13 +1,15 @@
 var id=0;
 var duration;  
 var pos=0;
+h = "http://";
 var ad_duration =0;
 var ad_id =0;
-
+bb="multitvsolution.com/";
+var f = "multitvfinal/";
 function play() {
 	if(id ==0){
 		$.ajax({
-			url: "http://localhost/multitvfinal-demo/api/analytics/play",
+			url: h+bb+f+"/api/analytics/play",
 			data: {		
 		       // user_id:'',
 		        content_id:'92',
@@ -31,7 +33,7 @@ function play() {
 	if(id >0){
 		//alert(analytics_id);
 		$.ajax({
-		    url: "http://localhost/multitvfinal-demo/api/analytics/pause",
+		    url: h+bb+f+"/api/analytics/pause",
 		    data: {
 			id: id,
 		        watched_time: duration,
@@ -48,7 +50,7 @@ function play() {
 
 	function playAds(tag) {
 	$.ajax({
-		url: "http://localhost/multitvfinal-demo/api/analytics/playads",
+		url: h+bb+f+"/api/analytics/playads",
 		data:{
 		tag:tag,
 		broadcaster:'59',		
@@ -65,7 +67,7 @@ function play() {
 //-- ads completed --//
    function completeAds(ad_duration) {
         $.ajax({
-            url: "http://localhost/multitvfinal-demo/api/analytics/ads_complete",
+            url: h+bb+f+"/api/analytics/ads_complete",
             data: {
                 id: ad_id,
                 watched_time: ad_duration,
