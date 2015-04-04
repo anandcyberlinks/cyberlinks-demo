@@ -198,10 +198,10 @@
 				<div class="col-lg-2 col-xs-6">
 					  <table class="table table-striped" style='width:150px;border:1px double #ccc;padding-left:20px'>
                                         <tbody><tr>                                           
-                                            <th>Ad Revenue</th>                                           
+                                            <th>Ad Revenue Earned</th>                                           
                                         </tr>
                                         <tr>
-                                            <td><?php echo $row->revenue;?></td>                                            
+                                            <td><?php echo number_format($row->revenue,2,'.');?></td>                                            
                                         </tr>
                                     </tbody></table>
 				</div>
