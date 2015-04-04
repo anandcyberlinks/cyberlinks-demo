@@ -38,16 +38,17 @@ class Analytics extends REST_Controller
         } else {
             $ip = $_SERVER['REMOTE_ADDR'];
         }
-        $location = file_get_contents('http://freegeoip.net/json/'.$ip);
-        $location = json_decode($location);
-        $post['city']     = $location->city;
-        $post['state']     = $location->region_name;
-        $post['country']     = $location->country_name;
-        $post['country_code']     = $location->country_code;
-        $post['postal_code']     = $location->zip_code;
-        $post['latitude']     = $location->latitude;
-        $post['longitude']     = $location->longitude;
-        $post['ip'] = $ip;        
+			//$location = file_get_contents('http://freegeoip.net/json/'.$ip);
+			$location = file_get_contents('http://ip-api.com/json/'.$ip);
+            $location = json_decode($location);
+            $post['city']     = $location->city;
+            $post['state']     = $location->regionName;
+            $post['country']     = $location->country;
+            $post['country_code']     = $location->countryCode;
+           // $post['postal_code']     = $location->zip_code;
+            $post['latitude']     = $location->lat;
+            $post['longitude']     = $location->lon;
+            $post['ip'] = $ip;       
         //--------------------------//        
                // $post['platform'] = $this->result['platform'];
 	      // $post['platform'] = $this->post['device_type'];         
@@ -78,15 +79,16 @@ class Analytics extends REST_Controller
             } else {
                 $ip = $_SERVER['REMOTE_ADDR'];
             }
-            $location = file_get_contents('http://freegeoip.net/json/'.$ip);
+           // $location = file_get_contents('http://freegeoip.net/json/'.$ip);
+		   $location = file_get_contents('http://ip-api.com/json/'.$ip);
             $location = json_decode($location);
             $post['city']     = $location->city;
-            $post['state']     = $location->region_name;
-            $post['country']     = $location->country_name;
-            $post['country_code']     = $location->country_code;
-            $post['postal_code']     = $location->zip_code;
-            $post['latitude']     = $location->latitude;
-            $post['longitude']     = $location->longitude;
+            $post['state']     = $location->regionName;
+            $post['country']     = $location->country;
+            $post['country_code']     = $location->countryCode;
+           // $post['postal_code']     = $location->zip_code;
+            $post['latitude']     = $location->lat;
+            $post['longitude']     = $location->lon;
             $post['ip'] = $ip;
             
             //-- get camaign details --//
