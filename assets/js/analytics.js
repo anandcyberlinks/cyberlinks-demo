@@ -57,11 +57,12 @@ function play() {
 		broadcaster:'59',		
                 play: '1',		
 		},
+		jsonp: 'callback",
 		cache: false,
 		type: "post",
-		dataType: 'json',
+		dataType: 'jsonp',
 		success: function(data,textStatus,jqXHR){
-		alert(ad_id);
+		alert(data);
 		}
 	})
 	/*.done(function(data){
