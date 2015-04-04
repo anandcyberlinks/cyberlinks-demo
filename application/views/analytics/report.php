@@ -211,7 +211,7 @@
                                             <th>Avg. CPM</th>                                           
                                         </tr>
                                         <tr>
-                                            <td><?php echo ($row->revenue/$row->impression);?></td>                                            
+                                            <td><?php echo number_format(($row->revenue/$row->impression),2,'.','');?></td>                                            
                                         </tr>
                                     </tbody></table>
 					  <?php }?>
