@@ -95,7 +95,7 @@ class Analytics extends REST_Controller
 			$post['ads_id'] = $arr[3];
 			$post['user_id'] = (@$arr[4] !='' ? @$arr[4]:0);					
 			unset($post['tag']);
-			
+			unset($post['keywords']);
 			//-- get campaign revenue ---//
 				$campaignRevenue = $this->getCampaignRevenue($post['campaign_id']);
 				if($campaignRevenue){
