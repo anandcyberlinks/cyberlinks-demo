@@ -272,7 +272,7 @@ class Ads_analytics_model extends CI_Model{
              $this->db->limit($limit, $start);
         }
         $query = $this->db->get();
-    //echo '<br>'.$this->db->last_query();
+    echo '<br>'.$this->db->last_query();
         return $query->result();
         
     }
