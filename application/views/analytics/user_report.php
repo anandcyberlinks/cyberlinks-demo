@@ -157,7 +157,9 @@
                                            <th><a href="<?php echo base_url(); ?>analytics/user/v/<?php echo (!empty($show_c)) ? $show_c : 'asc'; ?>">Name</a></th>                                           
                                             <th><a href="<?php echo base_url(); ?>analytics/user/h/<?php echo (!empty($show_h)) ? $show_h : 'asc'; ?>">Total Hits</a></th>
                                             <th><a href="<?php echo base_url(); ?>analytics/user/t/<?php echo (!empty($show_t)) ? $show_t : 'asc'; ?>">Total Time Watched</a></th>	
-                                        </tr>
+								             <th>Browser</th>
+											<th>IP</th>
+										</tr>
                                     </thead>
 
                                     <tbody>
@@ -166,7 +168,9 @@
                                                 <td  width="70%"><a href="<?php echo base_url(); ?>analytics/usercontent?id=<?php echo $value->id; ?>"><?php echo ($value->name !=''? $value->name:'guest'); ?></td>                                                
                                                 <td><?php echo $value->total_hits; ?></td>
                                                 <td><?php echo time_from_seconds($value->total_watched_time); ?></td>                                                                                        
-                                            </tr>
+                                            <td><?php echo $value->browser; ?></td>
+											<td><?php echo $value->ip; ?></td>
+											</tr>
                                         <?php } ?>
                                     </tbody>
 
