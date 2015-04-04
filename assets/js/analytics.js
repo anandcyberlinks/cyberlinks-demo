@@ -41,7 +41,7 @@ function play() {
 			},
 		        cache: false,
 		        type: "POST", 
-			dataType: "jsonp"           
+			dataType: 'jsonp'           
 		})
 		.done(function(data){
 		    
@@ -59,7 +59,7 @@ function play() {
 		},
 		cache: false,
 		type: "post",
-		dataType: "jsonp"
+		dataType: 'jsonp'
 	})
 	.done(function(data){
 alert(ad_id);
@@ -79,7 +79,7 @@ alert(ad_id);
                 },
                 cache: false,
                 type: "POST",
-		dataType: "jsonp"        
+		dataType: 'jsonp'        
         })
         .done(function(data){
           //  if (data > 0) {
