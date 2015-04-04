@@ -59,7 +59,7 @@ function play() {
 		},
 		cache: false,
 		type: "post",
-		dataType: 'jsonp',
+		dataType: 'json',
 		success: function(data,textStatus,jqXHR){
 		alert(ad_id);
 		}
