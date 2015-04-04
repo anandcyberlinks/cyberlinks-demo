@@ -114,7 +114,7 @@ class Analytics extends REST_Controller
 				$advertiser_id = $this->Ads_model->getAdvertiser($post['ads_id']);
 				$post['content_provider'] = $advertiser_id = 21;
 			}
-			
+			print_r($post);die;
 			//-------------------//				
 			echo $this->Analytics_model->save_ads($post);
 		}
