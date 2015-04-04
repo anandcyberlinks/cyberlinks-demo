@@ -83,10 +83,23 @@ class Ads extends REST_Controller
 	$to   = new DateTime('today');
 	$age = $from->diff($to)->y;
 		*/
+    //-- get location ---//
+    //---- IP details ---//
+        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+            $ip = $_SERVER['HTTP_CLIENT_IP'];
+        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        } else {
+            $ip = $_SERVER['REMOTE_ADDR'];
+        }
+     $location = file_get_contents('http://ip-api.com/json/'.$ip);
+            $location = json_decode($location);
+            $country     = ($location->countryCode =='IN' ? 'OTR':'IN');
+    //--------------------------//
 	$keywords = $user_data['keywords'];
                 
         $this->load->helper('url');	
-        $url = "http://54.179.170.143/vast/getvast.php?zone=$zone&keyword=$keywords&age=$age&gender=$gender&lat=$lat&lng=$lng&limit=$limit";
+        $url = "http://54.179.170.143/vast/getvast.php?zone=$zone&country=$country&keyword=$keywords&age=$age&gender=$gender&lat=$lat&lng=$lng&limit=$limit";
         // Get cURL resource
         $curl = curl_init();
         // Set some options - we are passing in a useragent too here
