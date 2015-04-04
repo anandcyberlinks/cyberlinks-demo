@@ -113,7 +113,7 @@ class Analytics extends REST_Controller
 			//--- get advertiser --//
 			if($post['ads_id']){				
 				$advertiser_id = $this->Ads_model->getAdvertiser($post['ads_id']);
-				$post['content_provider'] = $advertiser_id = 21;
+				$post['content_provider'] = $advertiser_id;
 			}
 			print_r($post);
 			//-------------------//				
