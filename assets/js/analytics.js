@@ -22,7 +22,6 @@ function play() {
 		})
 		.done(function(data){
 			//$('#analytics_id').val(data);	
-			//$.cookie("a_id", data);
 			id = data;
 		});
 	}
@@ -40,8 +39,7 @@ function play() {
 		        pause: '1'
 			},
 		        cache: false,
-		        type: "POST", 
-			dataType: 'jsonp'           
+		        type: "POST",          
 		})
 		.done(function(data){
 		    
@@ -59,9 +57,8 @@ function play() {
 		},		
 		cache: false,
 		type: "post",
-		//dataType: 'jsonp',
 		success: function(data,textStatus,jqXHR){
-		alert(data);
+		ad_id = data;
 		}
 	})
 	/*.done(function(data){
@@ -81,8 +78,7 @@ alert(ad_id);
 		pause: 0
                 },
                 cache: false,
-                type: "POST",
-		dataType: 'jsonp'        
+                type: "POST",      
         })
         .done(function(data){
           //  if (data > 0) {
