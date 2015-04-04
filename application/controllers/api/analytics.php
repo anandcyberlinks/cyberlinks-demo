@@ -102,7 +102,7 @@ class Analytics extends REST_Controller
 				if($campaignRevenue){
 					$post['campaign_id'] = $campaignRevenue->result[0]->campaignid;
 					if($campaignRevenue->result[0]->revenue_type==1){
-						$revenue = $campaignRevenue->result[0]->revenue/100;
+						$revenue = $campaignRevenue->result[0]->revenue/1000;
 						$post['revenue'] = $revenue;
 					}else{
 						$post['revenue'] = 0;
