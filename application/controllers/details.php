@@ -26,15 +26,7 @@ protected $zone_id = ''; //-- content provider id -- temporary use --//
 		$platform = $this->data['platform'] = ($_GET['platform'] !='' ? $_GET['platform']:$_GET['device']);
 		$id = $_GET['id'];
 		$type= $_GET['type'];
-		
-		 if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
-                $ip = $_SERVER['HTTP_CLIENT_IP'];
-            } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-                $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-            } else {
-                $ip = $_SERVER['REMOTE_ADDR'];
-            }
-			echo $ip;
+				 
 		//-- log start --//
 			//$this->log_load('db load','start',$id,$platform);
 		//--------------//
@@ -225,7 +217,7 @@ protected $zone_id = ''; //-- content provider id -- temporary use --//
 	function getAdsRevive($lat,$lng,$age,$keywords,$gender,$l)
 	{
 		$this->load->helper('url');		
-                $url = CAMPAIGN_URL."?zone=".$this->zone_id."&keyword=$keywords&age=$age&gender=$gender&lat=$lat&lng=$lng&limit=$l";
+              echo  $url = CAMPAIGN_URL."?zone=".$this->zone_id."&keyword=$keywords&age=$age&gender=$gender&lat=$lat&lng=$lng&limit=$l";
                // Get cURL resource
                 $curl = curl_init();
                 // Set some options - we are passing in a useragent too here
