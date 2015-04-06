@@ -538,7 +538,7 @@ class Video_model extends CI_Model {
       $this->db->where('ch.id',$id);
       $this->db->limit(1);
       $query = $this->db->get();
-      echo '<br>'.$this->db->last_query();die;
+     // echo '<br>'.$this->db->last_query();die;
       return $query->row();
    }
    
