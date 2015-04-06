@@ -206,7 +206,7 @@ protected $zone_id = ''; //-- content provider id -- temporary use --//
 		}
 		
 		$this->data['result'] = $result;
-		//print_r($result);die;
+		print_r($result);die;
 		$this->data['scheduleBreaks'] = $adsFinal;
 		//--- End db loading log ----//
 		//$this->log_load('db load','End',$id,$platform);
