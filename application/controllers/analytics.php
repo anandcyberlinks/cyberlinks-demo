@@ -141,18 +141,18 @@ class Analytics extends MY_Controller {
 		$this->data['revenue'] = $this->Ads_analytics_model->getReport(array('type'=>'revenue','l'=>$limit,'search'=>$search,'date_from'=>$date_from,'date_to'=>$date_to));
 		//----------------------------------//
 		
-		$this->data['content'] = $this->Analytics_model->getReport(array('type'=>'content','l'=>$limit));
-		$this->data['useragent'] = $this->Analytics_model->getReport(array('type'=>'useragent','l'=>$limit));
-		$this->data['location'] = $this->Analytics_model->getReport(array('type'=>'location','l'=>$limit));
-		$this->data['map'] = $this->Analytics_model->getReport(array('type'=>'map','l'=>$limit));
-		$this->data['country'] = $this->Analytics_model->getReport(array('type'=>'country','l'=>$limit));
-		$this->data['city'] = $this->Analytics_model->getReport(array('type'=>'city','l'=>$limit));
-		$this->data['content_provider'] = $this->Analytics_model->getReport(array('type'=>'content_provider','l'=>$limit));
-		$this->data['customer'] = $this->Analytics_model->getReport(array('type'=>'user','l'=>$limit));
-		$this->data['topcontent'] = $this->Analytics_model->getReport(array('type'=>'content','l'=>$limit,'top'=>1,'search'=>$search));
+		$this->data['content'] = $this->Analytics_model->getReport(array('type'=>'content','l'=>$limit,'date_from'=>$date_from,'date_to'=>$date_to));
+		$this->data['useragent'] = $this->Analytics_model->getReport(array('type'=>'useragent','l'=>$limit,'date_from'=>$date_from,'date_to'=>$date_to));
+		$this->data['location'] = $this->Analytics_model->getReport(array('type'=>'location','l'=>$limit,'date_from'=>$date_from,'date_to'=>$date_to));
+		$this->data['map'] = $this->Analytics_model->getReport(array('type'=>'map','l'=>$limit,'date_from'=>$date_from,'date_to'=>$date_to));
+		$this->data['country'] = $this->Analytics_model->getReport(array('type'=>'country','l'=>$limit,'date_from'=>$date_from,'date_to'=>$date_to));
+		$this->data['city'] = $this->Analytics_model->getReport(array('type'=>'city','l'=>$limit,'date_from'=>$date_from,'date_to'=>$date_to));
+		$this->data['content_provider'] = $this->Analytics_model->getReport(array('type'=>'content_provider','l'=>$limit,'date_from'=>$date_from,'date_to'=>$date_to));
+		$this->data['customer'] = $this->Analytics_model->getReport(array('type'=>'user','l'=>$limit,'date_from'=>$date_from,'date_to'=>$date_to));
+		$this->data['topcontent'] = $this->Analytics_model->getReport(array('type'=>'content','l'=>$limit,'top'=>1,'search'=>$search,'date_from'=>$date_from,'date_to'=>$date_to));
 		
-                $this->data['os'] = $this->Analytics_model->getReport(array('type'=>'useragent','l'=>$limit,'mode'=>'os'));
-                $this->data['browser'] = $this->Analytics_model->getReport(array('type'=>'useragent','l'=>$limit,'mode'=>'browser'));
+                $this->data['os'] = $this->Analytics_model->getReport(array('type'=>'useragent','l'=>$limit,'mode'=>'os','date_from'=>$date_from,'date_to'=>$date_to));
+                $this->data['browser'] = $this->Analytics_model->getReport(array('type'=>'useragent','l'=>$limit,'mode'=>'browser','date_from'=>$date_from,'date_to'=>$date_to));
                 
                 
 		$this->show_view('analytics/report',$this->data);		
@@ -593,11 +593,12 @@ class Analytics extends MY_Controller {
 				//-- create pdf --//
 				create_pdf($geomap,'Country Based Report');
 			}elseif($this->uri->segment(4)=='csv'){ 
-				$heading = array('Country','Total Hits','Total time watched');
+				$heading = array('Location','Country','Total Hits','Total time watched');
 				//$content =  $this->load->view('templates/pdf_content',$this->data,true);
 				$dataRpt = array();
 				$num=0;
 				foreach($this->data['result'] as $p) {
+				    $dataRpt[$num]['Location']          = ($p->city!='') ? $p->city : 'Unknown';				   
 				    $dataRpt[$num]['country']          = $p->country;				   
 				    $dataRpt[$num]['hits']        = $p->total_hits;
 				    $dataRpt[$num]['watched time'] = time_from_seconds($p->total_watched_time);                 
@@ -681,7 +682,23 @@ class Analytics extends MY_Controller {
 
 		$this->data['country'] = $this->Analytics_model->getReport(array('type'=>'country'));
 		$this->data['country_name'] = $this->Analytics_model->getReport(array('type'=>'country','code'=>$this->data['country_code']));
-		$this->data['geomap'] = $this->Analytics_model->getReport(array('type'=>$type,'code'=>$this->data['country_code'],'search'=>$search),$sort,$sort_by);			
+		//$this->data['geomap'] = $this->Analytics_model->getReport(array('type'=>$type,'code'=>$this->data['country_code'],'search'=>$search),$sort,$sort_by);			
+                
+                $this->load->library("pagination");
+                $config = array();
+                $config["base_url"] = base_url() . "analytics/geographic/?";
+                $config["total_rows"] = $this->Analytics_model->getReportCounts(array('type'=>$type,'code'=>$this->data['country_code'],'search'=>$search),$sort,$sort_by);
+                $config["per_page"] = 10;
+                $config["uri_segment"] = 3;
+                $config["page_query_string"] = true;
+                $this->pagination->initialize($config);
+                //$page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+                $page = ($_GET['per_page']) ? $_GET['per_page'] : 0;
+		
+		$this->data['geomap'] = $this->Analytics_model->getReport(array('type'=>$type,'code'=>$this->data['country_code'],'search'=>$search),$sort,$sort_by,PER_PAGE,$page);
+                $this->data["links"] = $this->pagination->create_links();
+                $this->data['total_rows'] = $config["total_rows"];
+                
 		if(@$_GET['c'] == 1){
 			$this->show_view('analytics/geomap_country',$this->data);
 		}else{

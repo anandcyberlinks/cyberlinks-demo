@@ -143,13 +143,9 @@
             </div><!-- ./col -->
         </div><!-- /.row -->
 	<div class='row'>
-		 <section class="col-lg-12">
-		<div class="box box-danger">
-		    <div class="box-header">
-				<div class="pull-right box-tools">
-			    <button title="Collapse" data-toggle="tooltip" data-widget="collapse" class="btn btn-danger btn-sm"><i class="fa fa-minus"></i></button>
-			</div>
-				<a href="?range=lastmonth">
+            <div class="box box-danger">
+                <div class="box-header">
+                    <a href="?range=lastmonth">
 				<div class="pull-right box-tools">
 			    <a class="btn btn-info btn-md" href="?range=lastmonth">Last Month</a>
 			</div>				
@@ -161,8 +157,17 @@
 			</div>
 				<div class="pull-right box-tools">
 			   <a class="btn btn-info btn-md" href="?range=today">Today</a>
-			</div>				
-				
+			</div>
+                </div>
+            </div>
+        </div>
+	<div class='row'>
+		 <section class="col-lg-12">
+		<div class="box box-danger">
+		    <div class="box-header">
+				<div class="pull-right box-tools">
+			    <button title="Collapse" data-toggle="tooltip" data-widget="collapse" class="btn btn-danger btn-sm"><i class="fa fa-minus"></i></button>
+			</div>
 			<!-- tools box -->
 			
 			<h3 class="box-title"><a href="">Revenue Report</a></h3>

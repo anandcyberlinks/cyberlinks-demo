@@ -295,6 +295,12 @@ class Analytics_model extends CI_Model{
            // $group = 'a.content_id';
            // $group = 'a.id';
            
+          if($param['date_from'] && $param['date_to']){
+              $startdate = $param['date_from'];
+              $enddate = $param['date_to'];
+              $this->db->where("DATE_FORMAT(a.created,'%Y-%m-%d') BETWEEN '$startdate' AND '$enddate'"); 
+          }
+            
            if($param['top'] == 1){  //-- top video --//
                 $this->db->group_by('a.content_id');
                 $this->db->order_by('count(content_id) desc');
@@ -334,6 +340,11 @@ class Analytics_model extends CI_Model{
             $select = 'a.platform, a.browser, count( a.id ) as total_hits , sum( a.watched_time ) as total_watched_time';
             //$group = 'a.platform, a.browser';            
              
+            if($param['date_from'] && $param['date_to']){
+              $startdate = $param['date_from'];
+              $enddate = $param['date_to'];
+              $this->db->where("DATE_FORMAT(a.created,'%Y-%m-%d') BETWEEN '$startdate' AND '$enddate'"); 
+            }
             if($param['top'] == 1){  //-- top video --//               
                 $this->db->order_by('count(a.id) desc');
             }
@@ -365,6 +376,11 @@ class Analytics_model extends CI_Model{
             if($param['id']>0){
                 $this->db->where('a.user_id',$param['id']);
             }
+            if($param['date_from'] && $param['date_to']){
+              $startdate = $param['date_from'];
+              $enddate = $param['date_to'];
+              $this->db->where("DATE_FORMAT(a.created,'%Y-%m-%d') BETWEEN '$startdate' AND '$enddate'"); 
+            }
             //--- search val --//
             if(@$param['search']){
                 if($param['search']['title'] !=''){
@@ -388,11 +404,21 @@ class Analytics_model extends CI_Model{
             break;
         case 'map':
              $select = 'a.country,a.country_code as code,a.city,count( a.id ) as total_hits , sum( a.watched_time ) as total_watched_time';
+            if($param['date_from'] && $param['date_to']){
+              $startdate = $param['date_from'];
+              $enddate = $param['date_to'];
+              $this->db->where("DATE_FORMAT(a.created,'%Y-%m-%d') BETWEEN '$startdate' AND '$enddate'"); 
+            }
             //$group = 'a.country_code';
             $this->db->group_by('a.city');
             break;
         case 'country':
             $select = 'a.country_code as code,a.country,a.city,count( a.id ) as total_hits , sum( a.watched_time ) as total_watched_time';
+            if($param['date_from'] && $param['date_to']){
+              $startdate = $param['date_from'];
+              $enddate = $param['date_to'];
+              $this->db->where("DATE_FORMAT(a.created,'%Y-%m-%d') BETWEEN '$startdate' AND '$enddate'"); 
+            }
            // $group = 'a.country_code';
            
            if($param['top'] == 1){  //-- top video --//                
@@ -413,16 +439,31 @@ class Analytics_model extends CI_Model{
             }else{
                 $this->db->where('country_code =',"");
             }
+            if($param['date_from'] && $param['date_to']){
+              $startdate = $param['date_from'];
+              $enddate = $param['date_to'];
+              $this->db->where("DATE_FORMAT(a.created,'%Y-%m-%d') BETWEEN '$startdate' AND '$enddate'"); 
+            }
            $this->db->group_by('a.city'); 
            $this->db->order_by('MAX(a.id) desc');
             break;
          case 'city':            
             $select = 'a.country_code as code,a.country, a.state,a.city,a.postal_code,count( a.id ) as total_hits , sum( a.watched_time ) as total_watched_time';
+             if($param['date_from'] && $param['date_to']){
+              $startdate = $param['date_from'];
+              $enddate = $param['date_to'];
+              $this->db->where("DATE_FORMAT(a.created,'%Y-%m-%d') BETWEEN '$startdate' AND '$enddate'"); 
+            }
            // $group = 'a.country_code';
            $this->db->group_by('a.city');           
             break;
         case 'content_provider':
             $select = 'concat(u.first_name," ",u.last_name) as name,count( a.id ) as total_hits , sum( a.watched_time ) as total_watched_time';
+            if($param['date_from'] && $param['date_to']){
+              $startdate = $param['date_from'];
+              $enddate = $param['date_to'];
+              $this->db->where("DATE_FORMAT(a.created,'%Y-%m-%d') BETWEEN '$startdate' AND '$enddate'"); 
+            }
            // $group = 'a.content_provider';
            $this->db->group_by('a.content_provider');
            $this->db->join('users u','a.content_provider=u.id');
@@ -432,6 +473,11 @@ class Analytics_model extends CI_Model{
             break;
         case 'user':
             $select = 'a.ip,a.browser,cu.id,concat(cu.first_name," ",cu.last_name) as name,count( a.id ) as total_hits , sum( a.watched_time ) as total_watched_time';
+            if($param['date_from'] && $param['date_to']){
+              $startdate = $param['date_from'];
+              $enddate = $param['date_to'];
+              $this->db->where("DATE_FORMAT(a.created,'%Y-%m-%d') BETWEEN '$startdate' AND '$enddate'"); 
+            }
             //$group = 'u.id';
             $this->db->group_by('cu.id, a.ip');
             $this->db->join('customers cu','a.user_id=cu.id','left');
@@ -457,6 +503,11 @@ class Analytics_model extends CI_Model{
             SUM(IF( a.complete =0 && a.pause =1, 1, 0 )) AS partial, 
             SUM(IF( a.replay =1, 1, 0) ) AS replay ';
            // $group = 'a.content_id';
+            if($param['date_from'] && $param['date_to']){
+              $startdate = $param['date_from'];
+              $enddate = $param['date_to'];
+              $this->db->where("DATE_FORMAT(a.created,'%Y-%m-%d') BETWEEN '$startdate' AND '$enddate'"); 
+            }
             $this->db->group_by('a.id');
             $this->db->join('users u','a.content_provider=u.id');
             

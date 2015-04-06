@@ -8,6 +8,7 @@
                                    
                                         <tr style="background-color:#428bca;color:#fff;">
                                            <th width="8%">Sl.No.</th>
+                                           <th width="30%">Location</th>
                                            <th width="30%">Country</th>
                                            <?php if($c!=1){?><th width="30%">Region</th><?php }?>
                                             <th width="10%">Total Hits</th>
@@ -17,6 +18,7 @@
                                         <?php foreach ($result as $row) { $i++;?>
                                         <tr>
                                           <td width="8%"><?php echo $i;?></td>
+                                          <td  width="30%"><?php echo ($row->city!='') ? $row->city : 'Unknown'; ?></td>
                                           <td  width="30%"><?php echo $row->country;?></td>
                                           <?php if($c!=1){?><td width="30%"><?php echo $row->state;?></td><?php }?>
                                           <td width="10%"><?php echo $row->total_hits;?></td>

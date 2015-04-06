@@ -130,9 +130,47 @@
 					    <?php //} 
                                             
                                              }?>
+                                            <tr><td>
+                                            <!-- Pagination start --->
+                                        <?php
+                                        if ($this->pagination->total_rows == '0') {
+                                            echo "<tr><td colspan=\"7\"><h4>" . $welcome->loadPo('No Record Found') . "</td></tr></h4>";
+                                        } else {
+                                            ?>
                                             
+
+                                            <div class="row pull-left">
+                                                <div class="dataTables_info" id="example2_info"><br>
+                                                    <?php
+                                                    $param = $this->pagination->cur_page * $this->pagination->per_page;
+                                                    if ($param > $this->pagination->total_rows) {
+                                                        $param = $this->pagination->total_rows;
+                                                    }
+                                                    if ($this->pagination->cur_page == '0') {
+                                                        $param = $this->pagination->total_rows;
+                                                    }
+                                                    $off = $this->pagination->cur_page;
+                                                    if ($this->pagination->cur_page > '1') {
+                                                        $off = (($this->pagination->cur_page * '10') - 9);
+                                                    }
+                                                    echo "&nbsp;&nbsp;Showing <b>" . $off . "-" . $param . "</b> of <b>" . $this->pagination->total_rows . "</b> total results";
+                                                }
+                                                ?>
+                                            </div>
+                                        </div>	
+                                        <div class="row pull-right">
+                                            <div class="col-xs-12">
+                                                <div class="dataTables_paginate paging_bootstrap">
+                                                    <ul class="pagination"><li><?php echo $welcome->loadPo($links); ?></li></ul> 
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>		
+                                    <!-- Pagination end -->
+                </td></tr>
                                         </table><!-- /.table -->
                                     </div>
+                    
                             </div><!-- /.box -->
 	    </section><!-- /.Left col -->
                    
