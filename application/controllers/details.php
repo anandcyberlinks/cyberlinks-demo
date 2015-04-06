@@ -212,7 +212,7 @@ class Details extends MY_Controller {
 	function getAdsRevive($lat,$lng,$age,$keywords,$gender,$l)
 	{
 		$this->load->helper('url');		
-                $url = CAMPAIGN_URL."?keyword=$keywords&age=$age&gender=$gender&lat=$lat&lng=$lng&limit=$l";
+                $url = CAMPAIGN_URL."?zone=7&keyword=$keywords&age=$age&gender=$gender&lat=$lat&lng=$lng&limit=$l";
                // Get cURL resource
                 $curl = curl_init();
                 // Set some options - we are passing in a useragent too here
