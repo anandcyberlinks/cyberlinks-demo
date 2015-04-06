@@ -260,8 +260,8 @@
                             <table class="table table-striped">
 				<tbody><tr>
 				<th>Content</th>
-				<th>Total Hits</th>
-				<th>Total Time Watched</th>				
+				<th>Hits</th>
+				<th>Time Watched</th>				
 				</tr>
 			     <?php $i=0; foreach($content as $row){ $i++;?>
 				<tr>
@@ -297,7 +297,7 @@
 				<tbody><tr>
 				<th>User</th>
 				<th>Hits</th>
-				<th>Total Time Watched</th>
+				<th>Time Watched</th>
 				<th>Platform</th>
 				<th>IP</th>	
 				</tr>
