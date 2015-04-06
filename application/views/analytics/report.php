@@ -47,7 +47,7 @@
                             <?php echo $summary->total_hits;?>	
                         </h3>
                         <p>
-                           <?php echo $welcome->loadPo('Total Hits'); ?> 
+                           <?php echo $welcome->loadPo('Content Hits'); ?> 
                         </p>
                     </div>
                    
@@ -296,9 +296,9 @@
                             <table class="table table-striped">
 				<tbody><tr>
 				<th>User</th>
-				<th>Total Hits</th>
+				<th>Hits</th>
 				<th>Total Time Watched</th>
-				<th>Browser</th>
+				<th>Platform</th>
 				<th>IP</th>	
 				</tr>
 			     <?php $i=0; foreach($customer as $row){ $i++;?>
@@ -306,7 +306,7 @@
 				<td><?php echo ($row->name !=''? $row->name:'guest');?></td>
 				<td><?php echo $row->total_hits;?></td>
 				<td><?php echo time_from_seconds($row->total_watched_time);?></td>
-				<td><?php echo $row->browser;?></td>
+				<td><?php echo $row->platform;?></td>
 				<td><?php echo $row->ip;?></td>
 				</tr>
 			    <?php }?>
