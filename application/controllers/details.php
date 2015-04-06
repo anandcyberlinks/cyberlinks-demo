@@ -200,7 +200,7 @@ protected $zone_id = ''; //-- content provider id -- temporary use --//
 			$result = $this->Video_model->video_play($id,$network);
 			//print_r($result);die;			
 		}
-		if($result->content_provider=='92')
+		if($result->content_provider=='59')
 		{
 				$this->zone_id =7; //--- temporary use --//		
 		}
