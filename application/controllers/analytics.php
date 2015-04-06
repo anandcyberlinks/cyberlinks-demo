@@ -745,7 +745,7 @@ class Analytics extends MY_Controller {
 				if($campaignRevenue){
 					$post['campaign_id'] = $campaignRevenue->result[0]->campaignid;
 					if($campaignRevenue->result[0]->revenue_type==1){
-						$revenue = $campaignRevenue->result[0]->revenue/100;
+						$revenue = $campaignRevenue->result[0]->revenue/1000;
 						$post['revenue'] = $revenue;
 					}else{
 						$post['revenue'] = 0;
@@ -753,7 +753,7 @@ class Analytics extends MY_Controller {
 				}				
 				//$post['content_provider'] ='';
 			//---------------------------//
-			
+			print_r($post);
 			echo $this->Analytics_model->save_ads($post);
 		}
 		//print_r($post);
