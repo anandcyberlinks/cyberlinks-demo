@@ -219,7 +219,7 @@ protected $zone_id = ''; //-- content provider id -- temporary use --//
 	{
 $this->zone_id=7;
 		$this->load->helper('url');		
-              echo  $url = CAMPAIGN_URL."?zone=".$this->zone_id."&keyword=$keywords&age=$age&gender=$gender&lat=$lat&lng=$lng&limit=$l";
+                $url = CAMPAIGN_URL."?zone=".$this->zone_id."&keyword=$keywords&age=$age&gender=$gender&lat=$lat&lng=$lng&limit=$l";
                // Get cURL resource
                 $curl = curl_init();
                 // Set some options - we are passing in a useragent too here
