@@ -200,14 +200,14 @@ protected $zone_id = ''; //-- content provider id -- temporary use --//
 			$result = $this->Video_model->video_play($id,$network);
 			//print_r($result);die;			
 		}
-		echo $result->content_provider;
+		//echo $result->content_provider;
 		if($result->content_provider=='59')
 		{
 				$this->zone_id =7; //--- temporary use --//		
 		}
-		
+		$this->zone_id=7;
 		$this->data['result'] = $result;
-		print_r($result);die;
+		//print_r($result);die;
 		$this->data['scheduleBreaks'] = $adsFinal;
 		//--- End db loading log ----//
 		//$this->log_load('db load','End',$id,$platform);
