@@ -78,8 +78,8 @@ class Analytics_model extends CI_Model{
             $group = 'a.country_code';
             break;
         case 'country':
-            $select = 'a.country_code as code,a.country,count( a.id ) as total_hits , sum( a.watched_time ) as total_watched_time';
-            $group = 'a.country_code';
+            $select = 'a.country_code as code,a.country,a.city,count( a.id ) as total_hits , sum( a.watched_time ) as total_watched_time';
+            $group = 'a.city';
             break;
         case 'content_provider':
             $select = 'concat(u.first_name," ",u.last_name) as name,count( a.id ) as total_hits , sum( a.watched_time ) as total_watched_time';
