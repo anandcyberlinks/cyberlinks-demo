@@ -1,7 +1,7 @@
 <?php
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class Details extends MY_Controller {
-
+protected $zone_id = ''; //-- content provider id -- temporary use --//
 	function __construct()
 	{
             parent::__construct();
@@ -15,7 +15,7 @@ class Details extends MY_Controller {
                 //   $this->result = get_browser(null, true);		
 		$this->result = User_Agent::getinfo();  //--regex class to get user agent --//
 		// print_r($_SERVER[HTTP_USER_AGENT]);die;
-        //---------------------//
+        //---------------------//		
 	}
 
 	function index()
@@ -34,7 +34,7 @@ class Details extends MY_Controller {
 		$url = "http://maps.googleapis.com/maps/api/geocode/json?latlng=".$lat.",".$lng."&sensor=true";
 		$data = @file_get_contents($url);
 		$result = json_decode($data,true);
-		//echo '<pre>';print_r($result);die;
+		echo '<pre>';print_r($result);die;
 		$this->data['geodata'] = $result['results'][0]['address_components'];
 		//echo '<pre>';print_r($this->data['geodata']);
 		//------------------------------//
@@ -200,6 +200,11 @@ class Details extends MY_Controller {
 			$result = $this->Video_model->video_play($id,$network);
 			//print_r($result);die;			
 		}
+		if($result->content_provider=='92')
+		{
+				$this->zone_id =7; //--- temporary use --//		
+		}
+		
 		$this->data['result'] = $result;
 		//print_r($result);die;
 		$this->data['scheduleBreaks'] = $adsFinal;
@@ -212,7 +217,7 @@ class Details extends MY_Controller {
 	function getAdsRevive($lat,$lng,$age,$keywords,$gender,$l)
 	{
 		$this->load->helper('url');		
-                $url = CAMPAIGN_URL."?zone=7&keyword=$keywords&age=$age&gender=$gender&lat=$lat&lng=$lng&limit=$l";
+                $url = CAMPAIGN_URL."?zone=".$this->zone_id."&keyword=$keywords&age=$age&gender=$gender&lat=$lat&lng=$lng&limit=$l";
                // Get cURL resource
                 $curl = curl_init();
                 // Set some options - we are passing in a useragent too here
