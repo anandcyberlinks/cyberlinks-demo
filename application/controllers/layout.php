@@ -38,7 +38,8 @@ class Layout extends MY_Controller {
             if($tmp->role == 'advertiser'){
                 redirect(base_url().'ads');
             } else {
-                redirect(base_url().'layout/dashboard');
+                //redirect(base_url().'layout/dashboard');
+                redirect(base_url().'analytics/report');   
             }
         }
         #################################
@@ -65,9 +66,10 @@ class Layout extends MY_Controller {
                 $s = $this->session->all_userdata();
                 $this->log($data['username'], $msg);
                 if($s['0']->role == 'Advertiser'){                    
-                    redirect(base_url().'ads');
+                    redirect(base_url().'ads_analytics/report');
                 } else {
-                    redirect(base_url().'layout/dashboard');
+                   // redirect(base_url().'layout/dashboard');
+                   redirect(base_url().'analytics/report');                   
                 }
             } else { 
                 $this->session->set_flashdata('msg', $this->config->item('warning_auth'));
