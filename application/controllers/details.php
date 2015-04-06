@@ -217,6 +217,7 @@ protected $zone_id = ''; //-- content provider id -- temporary use --//
 	
 	function getAdsRevive($lat,$lng,$age,$keywords,$gender,$l)
 	{
+$this->zone_id=7;
 		$this->load->helper('url');		
               echo  $url = CAMPAIGN_URL."?zone=".$this->zone_id."&keyword=$keywords&age=$age&gender=$gender&lat=$lat&lng=$lng&limit=$l";
                // Get cURL resource
