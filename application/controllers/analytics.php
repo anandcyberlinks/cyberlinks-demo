@@ -75,7 +75,7 @@ class Analytics extends MY_Controller {
             } else {
                 $ip = $_SERVER['REMOTE_ADDR'];
             }
-			echo $ip;
+			$post['ip'] = $ip;
                // $post['platform'] = $this->result['platform'];
 	      // $post['platform'] = $this->post['device_type'];
                echo $this->Analytics_model->save($post);
@@ -736,7 +736,14 @@ class Analytics extends MY_Controller {
 		$post['browser_version'] = $this->result['version'];
                 //$post['platform'] = $this->result['platform'];
 		//$post['platform'] = $this->post['device_type'];
-		
+		if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+                $ip = $_SERVER['HTTP_CLIENT_IP'];
+            } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+                $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+            } else {
+                $ip = $_SERVER['REMOTE_ADDR'];
+            }
+			$post['ip'] = $ip;
 		if($post){
 			$res = substr(strrchr($post['tag'],"?"),1);
 			$arr = explode("/",$res);			
