@@ -27,6 +27,14 @@ protected $zone_id = ''; //-- content provider id -- temporary use --//
 		$id = $_GET['id'];
 		$type= $_GET['type'];
 		
+		 if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+                $ip = $_SERVER['HTTP_CLIENT_IP'];
+            } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+                $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+            } else {
+                $ip = $_SERVER['REMOTE_ADDR'];
+            }
+			echo $ip;
 		//-- log start --//
 			//$this->log_load('db load','start',$id,$platform);
 		//--------------//
