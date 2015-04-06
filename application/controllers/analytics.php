@@ -100,18 +100,8 @@ class Analytics extends MY_Controller {
 	function report()
 	{
 		$limit=5;
-		$summary = $this->Analytics_model->getReport(array('type'=>'summary'));
-		//echo '<pre>';print_r($summary);die;
-		$this->data['summary'] = $summary[0];
-		/* $url = "http://localhost:8085/solr/collection1/select?q=content_provider:".$this->uid."&wt=json&indent=true";
-			$result = file_get_contents($url);
-			$summary = json_decode($result);
-		*/	
-			//if($summary) {
-			//  $this->data['summary'] = $summary->response->docs[0];            
-		//}
-	    //--- Ad revenue report ---//
-		$daterange = $_GET['range'];
+                
+                $daterange = $_GET['range'];
 		switch($daterange){
 				case 'today': 
 				$date_from = date('Y-m-d');
@@ -129,6 +119,19 @@ class Analytics extends MY_Controller {
 				$date_to = date('Y-m-d',strtotime('last day of last month'));
 				break;
 		}
+                
+		$summary = $this->Analytics_model->getReport(array('type'=>'summary','date_from'=>$date_from,'date_to'=>$date_to));
+		//echo '<pre>';print_r($summary);die;
+		$this->data['summary'] = $summary[0];
+		/* $url = "http://localhost:8085/solr/collection1/select?q=content_provider:".$this->uid."&wt=json&indent=true";
+			$result = file_get_contents($url);
+			$summary = json_decode($result);
+		*/	
+			//if($summary) {
+			//  $this->data['summary'] = $summary->response->docs[0];            
+		//}
+	    //--- Ad revenue report ---//
+		
 		/*$start_past = strtotime("last week"); 
 		$end_past = strtotime("+6 day",$start_past);
 		echo 'last day : '.date('Y-m-d', strtotime("yesterday"));echo "<br/>";
