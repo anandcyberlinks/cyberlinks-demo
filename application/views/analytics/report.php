@@ -145,18 +145,34 @@
 	<div class='row'>
             <div class="box box-danger">
                 <div class="box-header">
+                    <?php  
+                        $last_month_class  = "btn btn-info btn-md";
+                        $last_week_class  = "btn btn-info btn-md";
+                        $yesterday_class  = "btn btn-info btn-md";
+                        $today_class  = "btn btn-info btn-md";
+                        if($_GET['range']=='today'){
+                            $today_class  = "btn btn-danger btn-md";
+                        }else if($_GET['range']=='yesterday'){
+                            $yesterday_class  = "btn btn-danger btn-md";
+                        }else if($_GET['range']=='lastweek'){
+                            $last_week_class  = "btn btn-danger btn-md";
+                        }else if($_GET['range']=='lastmonth'){
+                            $last_month_class  = "btn btn-danger btn-md";
+                        }
+                    
+                    ?>
                     <a href="?range=lastmonth">
 				<div class="pull-right box-tools">
-			    <a class="btn btn-info btn-md" href="?range=lastmonth">Last Month</a>
+			    <a class='<?php echo $last_month_class?>' href="?range=lastmonth">Last Month</a>
 			</div>				
 				<div class="pull-right box-tools">
-			   <a class="btn btn-info btn-md" href="?range=lastweek">Last Week</a>
+			   <a class='<?php echo $last_week_class?>' href="?range=lastweek">Last Week</a>
 			</div>				
 				<div class="pull-right box-tools">
-			   <a class="btn btn-info btn-md" href="?range=yesterday">Yesterday</a>
+			   <a class='<?php echo $yesterday_class?>' href="?range=yesterday">Yesterday</a>
 			</div>
 				<div class="pull-right box-tools">
-			   <a class="btn btn-info btn-md" href="?range=today">Today</a>
+			   <a class='<?php echo $today_class?>' href="?range=today">Today</a>
 			</div>
                 </div>
             </div>
