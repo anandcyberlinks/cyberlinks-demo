@@ -71,14 +71,32 @@ class Ads_model extends CI_Model{
 	return $this->db->insert_id(); 
    }
    
-   function getReviveAds()
+   function getReviveAds($type='all',$id='')
     {
-        $this->db->select('a.id as ads_id, a.ad_title as title,af.path');
-        $this->db->from('ads a');
-        $this->db->join('ads_flavored_video af','a.id=af.ads_id');
-        $this->db->where('af.type','desktop');
-        $query = $this->db->get();
-        return $query->result();
+       if($type=='manager' && $id!=''){
+            $this->db->select('id');
+            $this->db->from('users');
+            $this->db->where('adserver_user_id',$id);
+            $query = $this->db->get();
+            $adserver_user_id = $query->row()->id;
+            
+            $this->db->select('a.id as ads_id, a.ad_title as title,af.path');
+            $this->db->from('ads a');
+            $this->db->join('ads_flavored_video af','a.id=af.ads_id');
+            $this->db->where('a.uid',$adserver_user_id);
+            $this->db->where('af.type','desktop');
+            $query = $this->db->get();
+            return $query->result();
+           
+       }else if($type=='all' && $id!=''){
+           
+            $this->db->select('a.id as ads_id, a.ad_title as title,af.path');
+            $this->db->from('ads a');
+            $this->db->join('ads_flavored_video af','a.id=af.ads_id');
+            $this->db->where('af.type','desktop');
+            $query = $this->db->get();
+            return $query->result();
+       }
     }
     
     function getCuePoints($id,$type,$flag=0){

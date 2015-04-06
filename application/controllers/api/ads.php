@@ -47,7 +47,7 @@ class Ads extends REST_Controller
     
     function revive_ads_get()
     {
-        $result = $this->Ads_model->getReviveAds();
+        $result = $this->Ads_model->getReviveAds($_GET['type'],$_GET['id']);
         if(isset($result))
         {
             $this->response($result, 200); // 200 being the HTTP response code
