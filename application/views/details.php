@@ -5,16 +5,16 @@
 </script>
 <head>
 	
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+
 <script>
 
-   $(window).load(function () {
+   /*$(window).load(function () {
       // var endTime = (new Date()).getTime();
      //  var millisecondsLoading = endTime - startTime;
-       log('Page load','End','<?php echo $user_id;?>','<?php echo $user_id;?>','<?php echo $platform;?>');
+       log('Page load','End','<?php //echo $user_id;?>','<?php //echo $user_id;?>','<?php //echo $platform;?>');
        // Put millisecondsLoading in a hidden form field
        // or Ajax it back to the server or whatever.
-   });
+   });*/
 </script>
     <meta name='viewport' content="initial-scale=1, maximum-scale=1, user-scalable=0">
 	<meta charset="utf-8">
@@ -28,7 +28,7 @@
   ga('create', 'UA-53914177-1', 'auto');
   ga('send', 'pageview');
 */
-  
+ 
   function log(title,pos) {
 	$.ajax({
 		url: "<?php echo base_url() ?>index.php/details/log_load",
@@ -75,15 +75,23 @@
 //print_r($scheduleBreaks);die;
 ?>
 <script>
+	
 	//-- log start --//	
-	log('Page load','Start','<?php echo $user_id;?>','<?php echo $platform;?>');
+	//log('Page load','Start','<?php echo $user_id;?>','<?php echo $platform;?>');
 	
 //-- execute when browser closed --//
-$(window).on('beforeunload', function(){
+//$(window).on('beforeunload', function(){
+
+function beforeUnload() {	
       jwplayer().pause();
       var pos = jwplayer().getPosition();
-      pause(pos);     
-});
+      if (pos >= 1) {
+	pause(pos);
+      }      
+}
+//});
+
+
 //------------------------//
 
  var route='';
@@ -283,7 +291,8 @@ $(window).on('beforeunload', function(){
     jwplayer("myElement").setup({
        //flashplayer: "assets/player.swf",
         primary: "html5",
-        file: "<?php echo $video_path;?>",		       
+      //  file: "<?php echo $video_path;?>",
+	  file: "rtmp://multitvsolution.com:1935/live/global",
 	image: "<?php echo base_url().THUMB_LARGE_PATH. $thumbnail_path;?>",       
        // skin: "<?php echo base_url()?>assets/myskinjw/custom.xml",	
 	width: "100%",
@@ -313,7 +322,7 @@ autostart: 1,
 		offset: '<?php echo ($offset==0 ? 'pre': $offset); ?>',
 		//'skipoffset':5,
 		//tag: "<?php //echo ($row['ad_type'] != 'External' ? base_url():'') . $row['vast_file']; ?>?<?php //echo $row['ads_id']?>/<?php //echo $user_id?>/<?php //echo $row['uid']?>"
-		tag: "<?php echo $row['vast_file']?>?<?php echo $row['ads_id']?>/<?php echo $user_id?>/<?php echo $row['uid']?>/<?php echo ($offset==0 ? 'pre':'mid')?>"
+		tag: "<?php echo $row['vast_file']?>/<?php echo $user_id?>/<?php echo $content_provider;?>/<?php echo $row['advertiser']?>/<?php echo ($offset==0 ? 'pre':'mid')?>"
 		//tag: "http://localhost/multitvfinal-demo/assets/upload/ads/vast/vast1.xml"
 		//tag: "http://54.179.170.143/multitvfinal/assets/upload/ads/vast/d53be859b9314be0885eda3794321e05.xml"
 		},
@@ -330,14 +339,14 @@ autostart: 1,
 	//console.log('hit');
 	//--- log for stream load End--//
 	var tag = $('#tag').val();
-	
+	/*
 	if(tag==''){
 	$('#tag').val('0');	
 		log('Stream load','Stop','<?php echo $user_id;?>','<?php echo $platform;?>');
-	}
+	}*/
 	//-------------------------//
 	var epos = event.position;	
-        var totalTimeElapsed = $( "#totalTimeElapsed" ).val();
+       // var totalTimeElapsed = $( "#totalTimeElapsed" ).val();
 	//console.log(parseInt(epos));
 	
 	if (epos >= 2.0 && epos < 4.0) {
@@ -347,7 +356,7 @@ autostart: 1,
 	}
 	
 	
-        
+        /*
         if(totalTimeElapsed!=0){
             var json = $.parseJSON($('#totalTimeElapsed').val());
         } else{
@@ -373,7 +382,7 @@ autostart: 1,
                         
                         $('#totalTimeElapsed').val(JSON.stringify(json));
 		}	
-	});	
+	});*/	
 	//console.log(this.getPosition());
 	//-- switch newsnation ad ---//
 	var id = "<?php echo $content_id;?>";
@@ -582,10 +591,10 @@ jwplayer().onAdPlay(function (event) {
 //-- play ads ---//
 jwplayer().onAdImpression(function (event) {
 	//--- create log end---//
-	console.log('im'+this.getPosition());
-	if(this.getPosition() =='0')
-	console.log('ad play');
-	log('Ad load:'+event.tag,'End','<?php echo $user_id;?>','<?php echo $platform;?>');
+	//console.log('im'+this.getPosition());
+	//if(this.getPosition() =='0')
+	//console.log('ad play');
+	//log('Ad load:'+event.tag,'End','<?php echo $user_id;?>','<?php echo $platform;?>');
 	//--------------//
 	//console.log(this.getPosition());
         //$("#totalTimeElapsed").val(parseInt(this.getPosition()));
