@@ -291,8 +291,7 @@ function beforeUnload() {
     jwplayer("myElement").setup({
        //flashplayer: "assets/player.swf",
         primary: "html5",
-      //  file: "<?php echo $video_path;?>",
-	  file: "rtmp://multitvsolution.com:1935/live/global",
+        file: "<?php echo $video_path;?>",	  
 	image: "<?php echo base_url().THUMB_LARGE_PATH. $thumbnail_path;?>",       
        // skin: "<?php echo base_url()?>assets/myskinjw/custom.xml",	
 	width: "100%",
