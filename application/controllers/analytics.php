@@ -68,6 +68,14 @@ class Analytics extends MY_Controller {
 		$post = $_POST;                
 		$post['browser'] = $this->result['browser'];
 		$post['browser_version'] = $this->result['version'];
+		if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+                $ip = $_SERVER['HTTP_CLIENT_IP'];
+            } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+                $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+            } else {
+                $ip = $_SERVER['REMOTE_ADDR'];
+            }
+			echo $ip;
                // $post['platform'] = $this->result['platform'];
 	      // $post['platform'] = $this->post['device_type'];
                echo $this->Analytics_model->save($post);
