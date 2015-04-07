@@ -301,7 +301,7 @@ function beforeUnload() {
  //mute: true,
 autostart: 1,
         logo: {
-        file: "<?php echo base_url()?>assets/img/logo.png",
+       // file: "<?php echo base_url()?>assets/img/logo.png",
 	margin: 1,
         },
         advertising: {
