@@ -93,7 +93,7 @@ class Analytics_model extends CI_Model{
                     $this->db->like('c.title',$param['search']['title']);
                 }
                 
-                if($param['search']['contentprovider'] != ''){
+                if(isset($param['search']['contentprovider']) && $param['search']['contentprovider'] != ''){
                     $this->db->where('u.id',$param['search']['contentprovider']);
                    // $join = "users u";
                    // $cond = "a.content_provider=u.id";
@@ -139,7 +139,7 @@ class Analytics_model extends CI_Model{
                     $cond = "a.user_id=cu.id";
                 }
                 
-                if($param['search']['contentprovider'] != ''){
+                if(isset($param['search']['contentprovider']) && $param['search']['contentprovider'] != ''){
                     $this->db->where('u.id',$param['search']['contentprovider']);
                     $join = "users u";
                     $cond = "a.content_provider=u.id";
@@ -221,7 +221,7 @@ class Analytics_model extends CI_Model{
                     $this->db->like('c.title',$param['search']['title']);
                 }
                 
-                if($param['search']['contentprovider'] != ''){
+                if(isset($param['search']['contentprovider']) && $param['search']['contentprovider'] != ''){
                     $this->db->where('u.id',$param['search']['contentprovider']);
                   //  $join = "users u";
                  //   $cond = "a.content_provider=u.id";
@@ -324,7 +324,7 @@ class Analytics_model extends CI_Model{
                     $this->db->like('c.name',$param['search']['title']);
                 }
                 
-                if($param['search']['contentprovider'] != ''){
+                if(isset($param['search']['contentprovider']) && isset($param['search']['contentprovider']) && $param['search']['contentprovider'] != ''){
                     $this->db->where('u.id',$param['search']['contentprovider']);
                    // $join = "users u";
                    // $cond = "a.content_provider=u.id";
@@ -393,7 +393,7 @@ class Analytics_model extends CI_Model{
                     $cond = "a.user_id=cu.id";
                 }
                 
-                if($param['search']['contentprovider'] != ''){
+                if(isset($param['search']['contentprovider']) && $param['search']['contentprovider'] != ''){
                     $this->db->where('u.id',$param['search']['contentprovider']);
                     $join = "users u";
                     $cond = "a.content_provider=u.id";
@@ -525,7 +525,7 @@ class Analytics_model extends CI_Model{
                     $this->db->like('c.name',$param['search']['title']);
                 }
                 
-                if($param['search']['contentprovider'] != ''){
+                if(isset($param['search']['contentprovider']) && $param['search']['contentprovider'] != ''){
                     $this->db->where('u.id',$param['search']['contentprovider']);
                   //  $join = "users u";
                  //   $cond = "a.content_provider=u.id";
@@ -627,7 +627,7 @@ class Analytics_model extends CI_Model{
                     $this->db->like('c.name',$param['search']['title']);
                 }
                 
-                if($param['search']['contentprovider'] != ''){
+                if(isset($param['search']['contentprovider']) && $param['search']['contentprovider'] != ''){
                     $this->db->where('u.id',$param['search']['contentprovider']);
                    // $join = "users u";
                    // $cond = "a.content_provider=u.id";
@@ -673,7 +673,7 @@ class Analytics_model extends CI_Model{
                     $cond = "a.user_id=cu.id";
                 }
                 
-                if($param['search']['contentprovider'] != ''){
+                if(isset($param['search']['contentprovider']) && $param['search']['contentprovider'] != ''){
                     $this->db->where('u.id',$param['search']['contentprovider']);
                     $join = "users u";
                     $cond = "a.content_provider=u.id";
@@ -766,7 +766,7 @@ class Analytics_model extends CI_Model{
                     $this->db->like('c.name',$param['search']['title']);
                 }
                 
-                if($param['search']['contentprovider'] != ''){
+                if(isset($param['search']['contentprovider']) && $param['search']['contentprovider'] != ''){
                     $this->db->where('u.id',$param['search']['contentprovider']);
                   //  $join = "users u";
                  //   $cond = "a.content_provider=u.id";

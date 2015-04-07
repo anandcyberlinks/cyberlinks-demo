@@ -44,7 +44,7 @@
                                                 <input type="text" name="title" id="title" class="form-control" value="<?php echo (isset($search['title'])) ? $search['title'] : ''; ?>" placeholder="<?php echo $welcome->loadPo('Title') ?>">
                                             </div>
                                         </div>
-                                        <div class="form-group col-lg-4">
+                                        <!--div class="form-group col-lg-4">
                                             <div class="input select">
                                                 <label for="searchCategory"><?php echo $welcome->loadPo('Content Provider') ?></label>
                                                 <select name="contentprovider" class="form-control" placeholder="<?php echo $welcome->loadPo('Content Provider') ?>" id="contentprovider">
@@ -60,7 +60,7 @@
                                                             <?php } ?>
                                                 </select>
                                             </div>
-                                        </div>
+                                        </div-->
                                         <div class="form-group col-lg-4">
                                             <div class="input text">
                                                 <label for=""><?php echo $welcome->loadPo('Location') ?></label>
