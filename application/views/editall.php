@@ -38,13 +38,13 @@
                                                                 <input name="content_id" type="tel" value="<?= $val->id ?>" readonly="true" class="form-control"/>
                                                         </td>
                                                         <td class="col-xs-7">
-                                                            <input name="content_title" type="text" value="<?= $val->title ?>" class="form-control" required="required"/>
+                                                            <input name="content_title" type="text" value="<?php if($this->uri->segment(1)== 'ads'){ echo $val->ad_title; } else{ echo $val->title; } ?>" class="form-control" required="required"/>
                                                         </td>
                                                         <td class="col-xs-2">
                                                             <select name="content_category" class="form-control" required="required">
                                                                 <option value="">--Select--</option>
                                                         <?php foreach ($category as $k => $v) { ?>
-                                                                            <option value="<?= $k ?>"><?= $v ?></option>
+                                                                <option value="<?= $k ?>"><?= $v ?></option>
                                                         <?php } ?>
                                                             </select>
                                                         </td>
@@ -62,7 +62,7 @@
                                         
                                     </tbody>
                                     <tfoot>
-                                    <th colspan="6"><a href="<?=  base_url().'video'?>" class="btn btn-warning">Go to list</a></th>
+                                    <th colspan="6"><a href="<?=  ($this->uri->segment(1)== 'ads')? base_url() . 'ads' : base_url() . 'video/index'?>" class="btn btn-warning">Go to list</a></th>
                                     </tfoot>
 
 
@@ -89,7 +89,7 @@
         //console.log(temp);
         $.ajax({
             type: "POST",
-            url: '<?= base_url() . 'video/submitAll' ?>',
+            url: '<?=($this->uri->segment(1)== 'ads')? base_url() . 'ads/submitAll' : base_url() . 'video/submitAll' ?>',
             data: temp,
         }).done(function (res) {
             console.log(res);
