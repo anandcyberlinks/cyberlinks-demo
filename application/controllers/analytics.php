@@ -109,7 +109,7 @@ class Analytics extends MY_Controller {
 	{
 		$limit=5;
                 
-                $daterange = $_GET['range'];
+                /*$daterange = $_GET['range'];
 		switch($daterange){
 				case 'today': 
 				$date_from = date('Y-m-d');
@@ -125,6 +125,21 @@ class Analytics extends MY_Controller {
 				case 'lastmonth':
 				$date_from = date('Y-m-d', strtotime('first day of last month'));echo "<br/>";
 				$date_to = date('Y-m-d',strtotime('last day of last month'));
+				break;
+		}*/
+                
+                $daterange = $_POST['searchby'];
+                switch($daterange){
+				case 'today': 
+				$date_from = date('Y-m-d');
+				$date_to = date('Y-m-d');
+				break;
+				case 'date':
+                                $date_from = str_replace('/', '-', $_POST['datepickerstart']);
+                                $date_from =  date('Y-m-d', strtotime($date_from));
+                                
+                                $date_to = str_replace('/', '-', $_POST['datepickerend']);
+                                $date_to =  date('Y-m-d', strtotime($date_to));
 				break;
 		}
                 
