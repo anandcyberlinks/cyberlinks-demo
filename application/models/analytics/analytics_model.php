@@ -30,7 +30,7 @@ class Analytics_model extends CI_Model{
         $query = $this->db->get();
         return $query->result();
     }
-    
+    /*
     public function getReportOld($param=array(),$sort,$sort_by)
     {
         
@@ -253,7 +253,7 @@ class Analytics_model extends CI_Model{
     //echo '<br>'.$this->db->last_query();
         return $query->result();
         
-    }
+    }*/
     
     public function getReport($param=array(),$sort,$sort_by,$limit,$start)
     {
@@ -473,7 +473,7 @@ class Analytics_model extends CI_Model{
                 $this->db->order_by('MAX(a.id) desc');            
             break;
         case 'user':
-            $select = 'a.ip,a.browser,a.platform,cu.id,concat(cu.first_name," ",cu.last_name) as name,count( a.id ) as total_hits , sum( a.watched_time ) as total_watched_time';
+            $select = 'aa.ip,a.browser,a.platform,cu.id,concat(cu.first_name," ",cu.last_name) as name,count( a.id ) as total_hits , sum( a.watched_time ) as total_watched_time';
             if($param['date_from'] && $param['date_to']){
               $startdate = $param['date_from'];
               $enddate = $param['date_to'];
@@ -652,7 +652,7 @@ class Analytics_model extends CI_Model{
             
             break;
         case 'summary':
-            $select = "count(distinct a.user_id,a.ip) unique_hits,count(a.id) as total_hits,
+            $select = "count(distinct a.ip) unique_hits,count(a.id) as total_hits,
             SUM(IF( a.complete =0 && a.pause =1, 1, 0 )) AS total_partial,
             SUM(IF(a.complete=1,1,0)) as total_complete,
             SUM(IF(a.replay=1,1,0)) as total_replay, sum( a.watched_time ) as total_watched_time";
