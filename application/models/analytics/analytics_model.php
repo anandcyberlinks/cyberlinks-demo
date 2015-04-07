@@ -473,7 +473,7 @@ class Analytics_model extends CI_Model{
                 $this->db->order_by('MAX(a.id) desc');            
             break;
         case 'user':
-            $select = 'aa.ip,a.browser,a.platform,cu.id,concat(cu.first_name," ",cu.last_name) as name,count( a.id ) as total_hits , sum( a.watched_time ) as total_watched_time';
+            $select = 'a.ip,a.browser,a.platform,cu.id,concat(cu.first_name," ",cu.last_name) as name,count( a.id ) as total_hits , sum( a.watched_time ) as total_watched_time';
             if($param['date_from'] && $param['date_to']){
               $startdate = $param['date_from'];
               $enddate = $param['date_to'];
