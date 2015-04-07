@@ -266,7 +266,7 @@
                                             <th>Avg. CPM</th>                                           
                                         </tr>
                                         <tr>
-                                            <td><?php echo number_format(($row->revenue/$row->impression),2,'.','');?></td>                                            
+                                            <td><?php echo number_format(($row->revenue/$row->impression)*1000,2,'.','');?></td>                                            
                                         </tr>
                                     </tbody></table>
 					  <?php }?>
@@ -340,7 +340,7 @@
 				<td><?php echo ($row->name !=''? $row->name:'guest');?></td>
 				<td><?php echo $row->total_hits;?></td>
 				<td><?php echo time_from_seconds($row->total_watched_time);?></td>
-				<td><?php echo $row->platform;?></td>
+				<td><?php echo $row->platform;?> (<?php echo ($row->platform=='android' || $row->platform=='ios'? 'mobile':'web')?>)</td>
 				<td><?php echo $row->ip;?></td>
 				</tr>
 			    <?php }?>
