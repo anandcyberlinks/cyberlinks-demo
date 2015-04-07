@@ -141,6 +141,10 @@ class Analytics extends MY_Controller {
                                 $date_to = str_replace('/', '-', $_POST['datepickerend']);
                                 $date_to =  date('Y-m-d', strtotime($date_to));
 				break;
+                                case 'default': 
+				$date_from = date('Y-m-d');
+				$date_to = date('Y-m-d');
+				break;
 		}
                 
 		$summary = $this->Analytics_model->getReport(array('type'=>'summary','date_from'=>$date_from,'date_to'=>$date_to));
