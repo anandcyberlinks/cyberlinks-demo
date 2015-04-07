@@ -128,7 +128,7 @@ class Analytics extends MY_Controller {
 				break;
 		}*/
                 
-                $daterange = $_POST['searchby'];
+                $daterange = isset($_POST['searchby']) ? $_POST['searchby'] : 'default';
                 switch($daterange){
 				case 'today': 
 				$date_from = date('Y-m-d');
@@ -141,7 +141,7 @@ class Analytics extends MY_Controller {
                                 $date_to = str_replace('/', '-', $_POST['datepickerend']);
                                 $date_to =  date('Y-m-d', strtotime($date_to));
 				break;
-                                case 'default': 
+                                case 'default':
 				$date_from = date('Y-m-d');
 				$date_to = date('Y-m-d');
 				break;
