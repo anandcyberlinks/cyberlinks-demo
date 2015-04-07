@@ -884,6 +884,11 @@ class Ads_model extends CI_Model {
 		  $this->db->where('a.status','1');
 		  $this->db->where('a.id',$id);
 	    break;
+            case "default":
+                $this->db->select('o.value');
+                $this->db->from('options o');
+                $this->db->where('o.user_id',$uid);
+            break;
 	    }
 	    $this->db->limit(1);
       
