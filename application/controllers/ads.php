@@ -338,7 +338,7 @@ class Ads extends MY_Controller {
                     $videoresult = $this->_upload($tmpFilePath, $fileUniqueName, 'ads');
                     if ($videoresult) {
                         $data = array();
-                        $data['content_title'] = $fileUniqueName;
+                        $data['content_title'] = $originalFileName;
                         $data['uid'] = $this->uid;
                         $data['filename'] = $fileUniqueName;
                         $data['relative_path'] = serverAdsRelPath . $fileUniqueName;
@@ -348,11 +348,10 @@ class Ads extends MY_Controller {
                         $data['status'] = '0';
                         $data['info'] = base64_encode($fileUniqueName);
                         $last_id = $this->Ads_model->_saveVideo($data);                                               
-            
                         $msg = $this->loadPo($this->config->item('success_file_upload'));
                         $this->log($this->user, $msg);
                         $data['id'] = base64_encode($last_id);
-                        $data['message'] = $this->_successmsg($msg);
+                        //$data['message'] = $this->_successmsg($msg);
                         echo json_encode($data);
                     } else {
                         $msg = $this->loadPo($this->config->item('error_file_upload'));
@@ -368,6 +367,33 @@ class Ads extends MY_Controller {
             redirect(base_url() . 'ads');
         }
     }
+    
+        function EditAllInvalid(){
+        $query = "select id, ad_title from ads where category = '' and uid = $this->uid ORDER BY id DESC";
+        $res = $this->db->query($query)->result();
+        if(count($res)==0){
+            redirect(base_url().'video');
+        }
+        $data['record'] = $res;
+        $data['category'] = $this->Ads_model->get_category($this->uid);
+        //echo "<pre>";
+        $data['welcome'] = $this;
+        $this->show_view('editall',$data);
+        //print_r($res);
+    }
+    
+    function submitAll(){
+        //print_r($_POST);die;
+        $id =  $this->Ads_model->_saveVideo($_POST);
+        if($id){
+            echo $id;
+        }else{
+            echo "Try Again";
+        }   
+    }
+    
+    
+    
 
     /*
       / ********************************************************************************
