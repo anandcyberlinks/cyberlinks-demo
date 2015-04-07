@@ -715,17 +715,28 @@ class Analytics_model extends CI_Model{
             //$cond = "a.content_provider=u.id";          
             break;
         case 'user':
-            $select = 'cu.id,concat(cu.first_name," ",cu.last_name) as name,count( a.id ) as total_hits , sum( a.watched_time ) as total_watched_time';
+            
+            $select = 'a.ip,a.browser,a.platform,cu.id,concat(cu.first_name," ",cu.last_name) as name,count( a.id ) as total_hits , sum( a.watched_time ) as total_watched_time';
+            if($param['date_from'] && $param['date_to']){
+              $startdate = $param['date_from'];
+              $enddate = $param['date_to'];
+              $this->db->where("DATE_FORMAT(a.created,'%Y-%m-%d') BETWEEN '$startdate' AND '$enddate'"); 
+            }
+            //$group = 'u.id';
+            $this->db->group_by('a.id,a.ip');
+            $this->db->join('customers cu','a.user_id=cu.id','left');
+            
+           /* $select = 'cu.id,concat(cu.first_name," ",cu.last_name) as name,count( a.id ) as total_hits , sum( a.watched_time ) as total_watched_time';
             //$group = 'u.id';
             $this->db->group_by('cu.id');
             $this->db->join('customers cu','a.user_id=cu.id');
             //$join = "customers u";
             //$cond = "a.user_id=u.id";
-            
+            */
             //--- search val --//
             if(@$param['search']){
                 if($param['search']['name'] !=''){
-                    $this->db->like('u.first_name',$param['search']['name']);
+                    $this->db->like('cu.first_name',$param['search']['name']);
                 }                                
             }
             if($sort){
