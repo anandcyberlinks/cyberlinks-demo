@@ -480,7 +480,7 @@ class Analytics_model extends CI_Model{
               $this->db->where("DATE_FORMAT(a.created,'%Y-%m-%d') BETWEEN '$startdate' AND '$enddate'"); 
             }
             //$group = 'u.id';
-            $this->db->group_by('cu.id, a.ip');
+            $this->db->group_by('a.ip');
             $this->db->join('customers cu','a.user_id=cu.id','left');
             //$join = "customers u";
             //$cond = "a.user_id=u.id";
