@@ -362,7 +362,6 @@ class Analytics extends MY_Controller {
                 $this->pagination->initialize($config);
                 //$page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
                 $page = ($_GET['per_page']) ? $_GET['per_page'] : 0;
-                
 		$this->data['user'] = $this->Analytics_model->getReport(array('type'=>'user','search'=>$search),$sort,$sort_by,PER_PAGE,$page);
                 $this->data["links"] = $this->pagination->create_links();
                 $this->data['total_rows'] = $config["total_rows"];
@@ -645,14 +644,11 @@ class Analytics extends MY_Controller {
 	{
 		$limit=5;
 		$search = $this->search_post($_POST);		
-		
 		$summary = $this->Analytics_model->getReport(array('type'=>'summary','search'=>$search));
 		$this->data['summary'] = $summary[0];
-		
 		$this->data['topcontent'] = $this->Analytics_model->getReport(array('type'=>'content','l'=>$limit,'top'=>1,'search'=>$search));
 		$this->data['topuseragent'] = $this->Analytics_model->getReport(array('type'=>'useragent','l'=>$limit,'top'=>1,'search'=>$search));
 		$this->data['topcountry'] = $this->Analytics_model->getReport(array('type'=>'country','l'=>$limit,'top'=>1,'search'=>$search));
-		
 		$this->show_view('analytics/top_report',$this->data);
 	}
 	
@@ -675,8 +671,9 @@ class Analytics extends MY_Controller {
 		
 		$dateRange = createDateRangeArray($startdate,$enddate);//-- helper to get date range
 		$dailyreport = $this->Analytics_model->getDailyReport($dateRange);
+                //print_r($dailyreport); die;
 		
-		echo json_encode($dailyreport);die;
+		echo json_encode($dailyreport);
 		
 		//-----------------------------//		
 	}

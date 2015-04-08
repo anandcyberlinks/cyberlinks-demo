@@ -821,20 +821,31 @@ class Analytics_model extends CI_Model{
     {
         $fieldsArr = array();
         for($i=0;$i < count($daterange);$i++){                                    
-           $between = sprintf("a.created between '%s' and '%s'",date('Y-m-d 00:00:00',strtotime($daterange[$i])),date('Y-m-d 23:59:59',strtotime($daterange[$i])));            
+          $between = sprintf("a.created between '%s' and '%s'",date('Y-m-d 00:00:00',strtotime($daterange[$i])),date('Y-m-d 23:59:59',strtotime($daterange[$i])));            
           $alias = date("M d",strtotime($daterange[$i]));
-           $fieldsArr[] = "SUM(IF($between,1,0)) as '$alias'";
+          //$fieldsArr[] = 'content_type';
+          $fieldsArr[] = "SUM(IF($between,1,0)) as '$alias'";
         }
        
         $fields = implode(',',$fieldsArr);
-        $this->db->select("$fields", false);
+        $this->db->select("$fields,content_type", false);
         $this->db->from('analytics a');
+        $this->db->group_by('content_type');
         $query =  $this->db->get();
-       // echo $this->db->last_query();
+       //echo $this->db->last_query();
         $result = $query->result();
-        $rst['color'] = $this->randColor(1);
+       // print_r($result); die;
+        //$rst['color'] = $this->randColor(1);
         foreach($result[0] as $key=>$val){
-            $rst['data'][] = array('y'=>$key,'value'=>$val);   
+            if($key != 'content_type'){
+            
+                $rst[] = array(
+                    'y'=>$key, 
+                    $result[0]->content_type =>$result[0]->$key, 
+                    $result[1]->content_type =>$result[1]->$key, 
+                    $result[2]->content_type =>$result[2]->$key,
+                    );
+            }
        }
        //print_r($rst);
        return $rst;

@@ -81,6 +81,26 @@ class Layout extends MY_Controller {
             $this->load->view('login');
         }
     }
+    function register(){
+        if(isset($_POST['submit'])){
+            $temp = array();
+            $temp['username'] = $_POST['email'];
+            $temp['email'] = $_POST['email'];
+            $temp['domain'] = $_POST['domain'];
+            $temp['owner_id'] = 17;
+            $temp['first_name'] = $_POST['first_name'];
+            $temp['last_name'] = $_POST['last_name'];
+            $temp['contact_no'] = $_POST['contact_no'];
+            $temp['password'] = $_POST['password'];
+            $temp['token'] = $_POST['token'];
+            $temp['role_id'] = 1;
+            $temp['created'] = date('Y-m-d h:m:i');
+            $this->db->insert('users', $temp);
+            $this->load->view('success');
+        } else {
+            $this->load->view('register');
+        }
+    }
 
     /*
      * Dashboard
@@ -273,6 +293,31 @@ class Layout extends MY_Controller {
         $data['welcome'] = $this;
         $data['data'] = $this->user_model->profile($this->user);
         $this->show_view('userProfile', $data);
+    }
+    function checkemail() {
+        $email = $_GET['email'];
+        $this->db->select('id');
+        $this->db->where('email', $email);
+        $query = $this->db->get('users');
+        $result = $query->result();
+        if (count($result) == '0') {
+            echo '1';
+        } else {
+            echo '0';
+        }
+    }
+    
+    function checkUser() {
+        $user = $_GET['username'];
+        $this->db->select('id');
+        $this->db->where('username', $user);
+        $query = $this->db->get('users');
+        $result = $query->result();
+        if (count($result) == '0') {
+            echo '1';
+        } else {
+            echo '0';
+        }
     }
 
     function do_upload() {

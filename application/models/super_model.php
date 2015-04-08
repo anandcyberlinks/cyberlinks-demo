@@ -37,6 +37,7 @@ class Super_model extends CI_Model {
         //$this->db->join('roles', 'users.role_id = roles.id');
         $this->db->where('customers.owner_id', $id);
         */
+        $this->db->order_by('id', 'DESC');
         $this->db->limit($limit, $start);
         $query = $this->db->get();
         //echo $this->db->last_query(); 
