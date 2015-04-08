@@ -773,7 +773,7 @@
 					show: true,
 					combine: {
 						color: "#999",
-						threshold: 0.05
+						threshold: 0
 					},
                                         label: {
                                                 show: "auto",
