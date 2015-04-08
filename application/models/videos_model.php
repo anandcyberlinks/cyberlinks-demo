@@ -1497,6 +1497,7 @@ class Videos_model extends CI_Model {
     }
     
     function getAdSources(){
+        $this->db->where('status', '1');
         $query = $this->db->get('ad_source');
         $data = $query->result();
         return $data;
