@@ -66,6 +66,7 @@
 	$content_provider = $result->content_provider;
 	$video_path = $result->video_path;
 	$thumbnail_path = $result->thumbnail_path;
+	$content_type = $result->content_type;
 }else{
 	$content_id = '';
 	$content_provider ='';
@@ -164,15 +165,14 @@ function beforeUnload() {
 	play();
     }
     
-    function play() {
-	 
-
+    function play() {	 
 	$.ajax({
 		url: "<?php echo base_url() ?>analytics/play",
 	        data: {		
                 user_id:'<?php echo $user_id;?>',
                 content_id:'<?php echo $content_id;?>',
                 content_provider:'<?php echo $content_provider;?>',
+				content_type: '<?php echo $content_type;?>',
                 play: '1',
 		city: city,
 		state: states,
@@ -240,6 +240,7 @@ function beforeUnload() {
 			user_id:'<?php echo $user_id;?>',
 			content_id:'<?php echo $content_id;?>',
 			content_provider:'<?php echo $content_provider;?>',
+			content_type: '<?php echo $content_type;?>',
 			replay: '1',
 			city: city,
 			state: states,

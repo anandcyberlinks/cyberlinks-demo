@@ -179,6 +179,7 @@ protected $zone_id = ''; //-- content provider id -- temporary use --//
 		if($type=='live'){
 			$result =  $this->Video_model->livestream_play($id,$device);
 			$result->video_path = $result->video_path."?token=".$authToken->token;
+			$result->content_type = 'live';
 			$this->data['result'] = $result;
 		}else if($type=='linear'){
 			$result = $this->Video_model->channel_play($id);
@@ -187,6 +188,7 @@ protected $zone_id = ''; //-- content provider id -- temporary use --//
 			$url =  $urlArray[0]->$platform->$network;
 			//print_r($result);
 			$result->video_path = $url."?token=".$authToken->token;
+			$result->content_type = 'linear';
 			//echo '<pre>';print_r($result);die;
 			//$result = $this->Video_model->video_play($id,$device);			
 		/*	if($result){
@@ -198,6 +200,7 @@ protected $zone_id = ''; //-- content provider id -- temporary use --//
 		}else{
 			//-- if Vod ---//
 			$result = $this->Video_model->video_play($id,$network);
+			$result->content_type = 'vod';
 			//print_r($result);die;			
 		}
 		//echo $result->content_provider;
