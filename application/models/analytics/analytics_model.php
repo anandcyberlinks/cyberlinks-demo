@@ -370,6 +370,9 @@ class Analytics_model extends CI_Model{
             $select = "count(distinct a.ip) unique_hits,count(a.id) as total_hits,
             SUM(IF( a.complete =0 && a.pause =1, 1, 0 )) AS total_partial,
             SUM(IF(a.complete=1,1,0)) as total_complete,
+            SUM(IF( a.content_type ='live', 1, 0 )) AS total_live,
+            SUM(IF( a.content_type ='linear', 1, 0 )) AS total_linear,
+            SUM(IF( a.content_type ='vod', 1, 0 )) AS total_vod,
             SUM(IF(a.replay=1,1,0)) as total_replay, sum( a.watched_time ) as total_watched_time";
             
              //-- user contents --//

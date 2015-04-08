@@ -78,10 +78,10 @@
                 <div class="small-box bg-fuchsia">
                     <div class="inner">
                         <h3>
-                            <?php echo $summary->total_partial;?>
+                            <?php echo $summary->total_live;?>
                         </h3>
                         <p>
-                           <?php echo $welcome->loadPo('Partial Play'); ?> 
+                           <?php echo $welcome->loadPo('Live Hits'); ?> 
                         </p>
                     </div>
                   
@@ -95,10 +95,10 @@
                 <div class="small-box bg-red">
                     <div class="inner">
                         <h3>
-                           <?php echo $summary->total_complete;?>
+                           <?php echo $summary->total_linear;?>
                         </h3>
                         <p>
-                            <?php echo $welcome->loadPo('Complete Play'); ?>
+                            <?php echo $welcome->loadPo('Linear Hits'); ?>
                         </p>
                     </div>
                    
@@ -112,10 +112,10 @@
                 <div class="small-box bg-yellow">
                     <div class="inner">
                         <h3>
-                            <?php echo $summary->total_replay;?>
+                            <?php echo $summary->total_vod;?>
                         </h3>
                         <p>
-                            <?php echo $welcome->loadPo('Replay Video'); ?>
+                            <?php echo $welcome->loadPo('VOD Hits'); ?>
                         </p>
                     </div>
                     
