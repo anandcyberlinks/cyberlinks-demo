@@ -759,7 +759,7 @@
                 
                 var map_data = [
                <?php $i=1; foreach($city as $row){ $i++;?>
-                {label: "<?php echo ($row->city!='') ? $row->city.'<br/>'.$row->total_hits : 'Unknown'.'<br/>'.$row->total_hits;?>", data: "<?php echo $row->total_hits;?>"},
+                {label: "<?php echo ($row->country!='') ? $row->country.'<br/>'.$row->total_hits : 'Unknown'.'<br/>'.$row->total_hits;?>", data: "<?php echo $row->total_hits;?>"},
                <?php }?>
             ];
             

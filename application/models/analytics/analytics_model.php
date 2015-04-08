@@ -427,7 +427,8 @@ class Analytics_model extends CI_Model{
             if($param['code'] !=''){
                 $this->db->where('a.country_code',$param['code']);
             }
-           $this->db->group_by('a.city');
+           //$this->db->group_by('a.city');
+           $this->db->group_by('a.state');
            $this->db->order_by('MAX(a.id) desc');
            
             break;
@@ -455,7 +456,8 @@ class Analytics_model extends CI_Model{
               $this->db->where("DATE_FORMAT(a.created,'%Y-%m-%d') BETWEEN '$startdate' AND '$enddate'"); 
             }
            // $group = 'a.country_code';
-           $this->db->group_by('a.city');
+           //$this->db->group_by('a.city');
+           $this->db->group_by('a.country');
            $this->db->order_by('MAX(a.id) desc'); 
             break;
         case 'content_provider':
@@ -560,7 +562,8 @@ class Analytics_model extends CI_Model{
              $this->db->limit($limit, $start);
         }
         $query = $this->db->get();
-    //echo '<br>'.$this->db->last_query();die;
+        if($param['type']=='country') { 
+        echo '<br>'.$this->db->last_query();die; }
         return $query->result();
         
     }

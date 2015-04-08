@@ -176,7 +176,7 @@ class Analytics extends MY_Controller {
 		$this->data['location'] = $this->Analytics_model->getReport(array('type'=>'location','l'=>$limit,'date_from'=>$date_from,'date_to'=>$date_to));
 		$this->data['map'] = $this->Analytics_model->getReport(array('type'=>'map','l'=>$limit,'date_from'=>$date_from,'date_to'=>$date_to));
 		$this->data['country'] = $this->Analytics_model->getReport(array('type'=>'country','l'=>$limit,'date_from'=>$date_from,'date_to'=>$date_to));
-		$this->data['city'] = $this->Analytics_model->getReport(array('type'=>'city','l'=>$limit,'date_from'=>$date_from,'date_to'=>$date_to));
+		$this->data['city'] = $this->Analytics_model->getReport(array('type'=>'city','date_from'=>$date_from,'date_to'=>$date_to));
 		$this->data['content_provider'] = $this->Analytics_model->getReport(array('type'=>'content_provider','l'=>$limit,'date_from'=>$date_from,'date_to'=>$date_to));
 		$this->data['customer'] = $this->Analytics_model->getReport(array('type'=>'user','l'=>$limit,'date_from'=>$date_from,'date_to'=>$date_to));
 		$this->data['topcontent'] = $this->Analytics_model->getReport(array('type'=>'content','l'=>$limit,'top'=>1,'search'=>$search,'date_from'=>$date_from,'date_to'=>$date_to));
