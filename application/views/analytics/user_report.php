@@ -158,8 +158,8 @@
                                             <th><a href="<?php echo base_url(); ?>analytics/user/h/<?php echo (!empty($show_h)) ? $show_h : 'asc'; ?>">Total Hits</a></th>
                                             <th><a href="<?php echo base_url(); ?>analytics/user/t/<?php echo (!empty($show_t)) ? $show_t : 'asc'; ?>">Total Time Watched</a></th>	
                                             <th>Browser</th>
-                                            <th>Date</th>
                                             <th>IP</th>
+                                            <th>Date</th>
 					</tr>
                                     </thead>
 
@@ -170,8 +170,8 @@
                                                 <td><?php echo $value->total_hits; ?></td>
                                                 <td><?php echo time_from_seconds($value->total_watched_time); ?></td>                                                                                        
                                                 <td><?php echo $value->browser; ?></td>
-                                                <td><?php echo date("d/m/Y H:i:s", strtotime($value->created)); ?></td>
                                                 <td><?php echo $value->ip; ?></td>
+                                                <td><?php echo date("d/m/Y H:i:s", strtotime($value->created)); ?></td>
                                         </tr>
                                         <?php } ?>
                                     </tbody>
