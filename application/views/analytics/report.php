@@ -477,6 +477,7 @@
                                             <tr>
                                                 <th>Location</th>
 												<th>Country</th>
+                                                <th>State</th>
                                                 <th>Hits</th>
                                                 <th>Time Watched</th>                                                
                                             </tr>
@@ -484,6 +485,7 @@
                                             <tr>
                                                 <td><!--<a href="<?php echo base_url()?>analytics/geographic?country=<?php echo $row->code;?>">--><?php echo ($row->city!='') ? $row->city : 'Unknown';?></a></td>
                                                 <td><?php echo $row->country;?></td>
+												<td><?php echo ($row->state!='') ? $row->state : 'Unknown';?></td>
 												<td><?php echo $row->total_hits;?></td>
 						<td><?php echo time_from_seconds($row->total_watched_time);?></td>
                                             </tr>

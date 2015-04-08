@@ -413,7 +413,7 @@ class Analytics_model extends CI_Model{
             $this->db->group_by('a.city');
             break;
         case 'country':
-            $select = 'a.country_code as code,a.country,a.city,count( a.id ) as total_hits , sum( a.watched_time ) as total_watched_time';
+            $select = 'a.country_code as code,a.country,a.city,a.state,count( a.id ) as total_hits , sum( a.watched_time ) as total_watched_time';
             if($param['date_from'] && $param['date_to']){
               $startdate = $param['date_from'];
               $enddate = $param['date_to'];
