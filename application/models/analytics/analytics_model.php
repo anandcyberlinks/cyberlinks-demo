@@ -562,8 +562,7 @@ class Analytics_model extends CI_Model{
              $this->db->limit($limit, $start);
         }
         $query = $this->db->get();
-        if($param['type']=='country') { 
-        echo '<br>'.$this->db->last_query();die; }
+    //echo '<br>'.$this->db->last_query();die;
         return $query->result();
         
     }
