@@ -579,6 +579,7 @@ class Analytics_model extends CI_Model{
         $this->db->select('id,username');
         $this->db->from('users');
         $this->db->where("username !=",  'superadmin');
+        $this->db->where("role_id",  '1');
         $query = $this->db->get();
         return $query->result();
     }
