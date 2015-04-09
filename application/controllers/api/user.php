@@ -28,7 +28,7 @@ class User extends REST_Controller
        parent::__construct();
        $this->load->helper('url');
        $this->load->model('api/User_model');
-       $this->admin_token = $this->get('token');
+      echo $this->admin_token = $this->get('token');
       //$this->admin_token = '54d46a72bab49';
    }       
     
@@ -748,7 +748,7 @@ class User extends REST_Controller
             $this->response(array('error' => "error."), 404);
         }
 
-    }
+    }    
     
     public function UserDetail_get() {
         if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
