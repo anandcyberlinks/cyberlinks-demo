@@ -80,7 +80,7 @@
                 <div class="small-box bg-fuchsia">
                     <div class="inner">
                         <h3>
-                            <?php echo $summary->total_partial;?>
+                            <?php echo ($summary->total_partial == '')? 0 : $summary->total_partial ;?>
                         </h3>
                         <p>
                            <?php echo $welcome->loadPo('Partial Play'); ?> 
@@ -97,7 +97,7 @@
                 <div class="small-box bg-red">
                     <div class="inner">
                         <h3>
-                           <?php echo $summary->total_complete;?>
+                           <?php echo ($summary->total_complete=='') ? 0 : $summary->total_complete ;?>
                         </h3>
                         <p>
                             <?php echo $welcome->loadPo('Complete Play'); ?>
@@ -128,12 +128,86 @@
                 </div>
             </div><!-- ./col -->
         </div><!-- /.row -->
-	
+		<div class='row'>
+            <div class="box box-danger">
+                <div class="box-header">
+                    <?php  
+                        $last_month_class  = "btn btn-info btn-md";
+                        $last_week_class  = "btn btn-info btn-md";
+                        $yesterday_class  = "btn btn-info btn-md";
+                        $today_class  = "btn btn-info btn-md";
+                        if($_GET['range']=='today'){
+                            $today_class  = "btn btn-danger btn-md";
+                        }else if($_GET['range']=='yesterday'){
+                            $yesterday_class  = "btn btn-danger btn-md";
+                        }else if($_GET['range']=='lastweek'){
+                            $last_week_class  = "btn btn-danger btn-md";
+                        }else if($_GET['range']=='lastmonth'){
+                            $last_month_class  = "btn btn-danger btn-md";
+                        }
+                    
+                    ?>
+				<!--div class="pull-right box-tools">
+			    <a class='<?php echo $last_month_class?>' href="?range=lastmonth">Last Month</a>
+			</div>				
+				<div class="pull-right box-tools">
+			   <a class='<?php echo $last_week_class?>' href="?range=lastweek">Last Week</a>
+			</div>				
+				<div class="pull-right box-tools">
+			   <a class='<?php echo $yesterday_class?>' href="?range=yesterday">Yesterday</a>
+			</div>
+				<div class="pull-right box-tools">
+			   <a class='<?php echo $today_class?>' href="?range=today">Today</a>
+			</div-->
+                        <form  method="post" action="<?php echo base_url(); ?>ads_analytics/report" onsubmit="return date_check();" id="searchIndexForm" name="searchIndexForm" accept-charset="utf-8">        
+                        <div class="form-group col-lg-3">
+                            <div class="input select">
+                                <label for="searchBy"><?php echo $welcome->loadPo('Search By') ?></label>
+                                <select name="searchby" class="form-control" placeholder="<?php echo $welcome->loadPo('Search By') ?>" id="searchby" onchange="toggle_searching();">
+                                    <!--option value=""><?php echo $welcome->loadPo('Select') ?></option-->
+                                    <option value="today" <?php if(isset($_POST['searchby']) && $_POST['searchby']=='today') { ?> selected="selected" <?php } ?>><?php echo $welcome->loadPo('Today') ?></option>
+                                    <option value="date" <?php if(isset($_POST['searchby']) && $_POST['searchby']=='date') { ?> selected="selected" <?php } ?>><?php echo $welcome->loadPo('Specific Date') ?></option>
+                                </select>
+                            </div>
+                        </div>
+                            
+                        <div class="form-group col-lg-3">
+                            <div class="input text">
+                                <label for="url"><?php echo $welcome->loadPo('Start Date') ?></label>
+                                <input type="text" class="form-control"  id="datepickerstart" name="datepickerstart" placeholder="<?php echo $welcome->loadPo('Start Date') ?>" value="<?php echo (isset($_POST['datepickerstart'])) ? $_POST['datepickerstart'] : ''; ?>" >											
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-3">
+                            <div class="input text">
+                                <label for="url"><?php echo $welcome->loadPo('End Date') ?></label>
+                                <input type="text" class="form-control"  id="datepickerend" name="datepickerend" placeholder="<?php echo $welcome->loadPo('End Date') ?>" value="<?php echo (isset($_POST['datepickerend'])) ? $_POST['datepickerend'] : ''; ?>">
+                            </div>
+                        </div>
+                        
+                            
+                              <div class="form-group col-lg-3">
+                                  <div class="input text" style="margin-top:25px;">
+                               <label for="url"></label>
+                            <button type="submit" name="submit" value="Search"class="btn btn-primary"><?php echo $welcome->loadPo('Search') ?></button>        
+                            </div>
+                        </div>
+                            
+                      
+                        </form>    
+                </div>
+            </div>
+        </div>
         <div class="row">
 	    <section class="col-lg-6"> 
 		<!-- Box (with bar chart) -->
 		<div class="box box-danger">
 		    <div class="box-header">
+                        
+                        
+                        
+                        
+                        
+                        
 			<!-- tools box -->
 			<div class="pull-right box-tools">
 			    <button class="btn btn-danger btn-sm" data-widget='collapse' data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
@@ -680,6 +754,42 @@
                 
 		
 	});
+        function toggle_searching()
+        {
+           /* var form_search_method = "<?php echo $_POST['searchby']; ?>"
+            if(form_search_method==''){
+                var searching_method = $('#searchby').val();
+            }else{
+                var searching_method = form_search_method;
+                 //$("#searchby").val(searching_method);
+            } */
+            var searching_method = $('#searchby').val();
+            
+           // alert(searching_method);
+            if(searching_method=='today'){
+                
+                var myDate = new Date();
+                var todayDate = myDate.getDate()+ '/' + (myDate.getMonth()+1) + '/' + myDate.getFullYear();
+                $("#datepickerstart").val(todayDate);
+                $('#datepickerstart').attr('readonly', true);
+                $('#datepickerstart').attr('disabled', 'disabled');
+                
+                $("#datepickerend").val(todayDate);
+                $('#datepickerend').attr('readonly', true);
+                $('#datepickerend').attr('disabled', 'disabled');
+            }else if(searching_method=='date'){
+                
+                $("#datepickerstart").val("<?php echo $_POST['datepickerstart']; ?>");
+                $('#datepickerstart').removeAttr('readonly');
+                $('#datepickerstart').removeAttr('disabled');
+                
+                $("#datepickerend").val("<?php echo $_POST['datepickerend']; ?>");
+                $('#datepickerend').removeAttr('readonly');
+                $('#datepickerend').removeAttr('disabled');
+                
+            }
+        }
+        toggle_searching();
             
         </script>
 

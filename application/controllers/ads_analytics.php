@@ -97,8 +97,27 @@ class Ads_analytics extends MY_Controller {
 	
 	function report()
 	{
+            $daterange = isset($_POST['searchby']) ? $_POST['searchby'] : 'default';
+                switch($daterange){
+				case 'today': 
+                                    $date_from = date('Y-m-d');
+                                    $date_to = date('Y-m-d');
+				break;
+				case 'date':
+                                    $date_from = str_replace('/', '-', $_POST['datepickerstart']);
+                                    $date_from =  date('Y-m-d', strtotime($date_from));
+
+                                    $date_to = str_replace('/', '-', $_POST['datepickerend']);
+                                    $date_to =  date('Y-m-d', strtotime($date_to));
+				break;
+                                case 'default':
+                                    $date_from = date('Y-m-d');
+                                    $date_to = date('Y-m-d');
+				break;
+		}
+                //echo $date_from;
 		$limit=5;
-		$summary = $this->Ads_analytics_model->getReport(array('type'=>'summary'));
+		$summary = $this->Ads_analytics_model->getReport(array('type'=>'summary','date_from'=>$date_from,'date_to'=>$date_to));
 		//echo '<pre>';print_r($summary);die;
 		$this->data['summary'] = $summary[0];
 		/* $url = "http://localhost:8085/solr/collection1/select?q=content_provider:".$this->uid."&wt=json&indent=true";
@@ -109,19 +128,19 @@ class Ads_analytics extends MY_Controller {
 			//  $this->data['summary'] = $summary->response->docs[0];            
 		//}
 	    
-		$this->data['content'] = $this->Ads_analytics_model->getReport(array('type'=>'content','l'=>$limit));
-		$this->data['useragent'] = $this->Ads_analytics_model->getReport(array('type'=>'useragent','l'=>$limit));
-		$this->data['location'] = $this->Ads_analytics_model->getReport(array('type'=>'location','l'=>$limit));
-		$this->data['map'] = $this->Ads_analytics_model->getReport(array('type'=>'map','l'=>$limit));
-		$this->data['country'] = $this->Ads_analytics_model->getReport(array('type'=>'country','l'=>$limit));
-                $this->data['city'] = $this->Ads_analytics_model->getReport(array('type'=>'city','l'=>$limit));
-		$this->data['content_provider'] = $this->Ads_analytics_model->getReport(array('type'=>'content_provider','l'=>$limit));
-		$this->data['customer'] = $this->Ads_analytics_model->getReport(array('type'=>'user','l'=>$limit));
-		$this->data['topcontent'] = $this->Ads_analytics_model->getReport(array('type'=>'content','l'=>$limit,'top'=>1,'search'=>$search));
-		$this->data['stitchingReport'] = $this->Ads_analytics_model->getstitchingReport($limit);
+		$this->data['content'] = $this->Ads_analytics_model->getReport(array('type'=>'content','l'=>$limit,'date_from'=>$date_from,'date_to'=>$date_to));
+		$this->data['useragent'] = $this->Ads_analytics_model->getReport(array('type'=>'useragent','l'=>$limit,'date_from'=>$date_from,'date_to'=>$date_to));
+		$this->data['location'] = $this->Ads_analytics_model->getReport(array('type'=>'location','l'=>$limit,'date_from'=>$date_from,'date_to'=>$date_to));
+		$this->data['map'] = $this->Ads_analytics_model->getReport(array('type'=>'map','l'=>$limit,'date_from'=>$date_from,'date_to'=>$date_to));
+		$this->data['country'] = $this->Ads_analytics_model->getReport(array('type'=>'country','l'=>$limit,'date_from'=>$date_from,'date_to'=>$date_to));
+                $this->data['city'] = $this->Ads_analytics_model->getReport(array('type'=>'city','l'=>$limit,'date_from'=>$date_from,'date_to'=>$date_to));
+		$this->data['content_provider'] = $this->Ads_analytics_model->getReport(array('type'=>'content_provider','l'=>$limit,'date_from'=>$date_from,'date_to'=>$date_to));
+		$this->data['customer'] = $this->Ads_analytics_model->getReport(array('type'=>'user','l'=>$limit,'date_from'=>$date_from,'date_to'=>$date_to));
+		$this->data['topcontent'] = $this->Ads_analytics_model->getReport(array('type'=>'content','l'=>$limit,'top'=>1,'search'=>$search,'date_from'=>$date_from,'date_to'=>$date_to));
+		$this->data['stitchingReport'] = $this->Ads_analytics_model->getstitchingReport($limit,array('date_from'=>$date_from,'date_to'=>$date_to));
 		
-                $this->data['os'] = $this->Ads_analytics_model->getReport(array('type'=>'useragent','l'=>$limit,'mode'=>'os'));
-                $this->data['browser'] = $this->Ads_analytics_model->getReport(array('type'=>'useragent','l'=>$limit,'mode'=>'browser'));
+                $this->data['os'] = $this->Ads_analytics_model->getReport(array('type'=>'useragent','l'=>$limit,'mode'=>'os','date_from'=>$date_from,'date_to'=>$date_to));
+                $this->data['browser'] = $this->Ads_analytics_model->getReport(array('type'=>'useragent','l'=>$limit,'mode'=>'browser','date_from'=>$date_from,'date_to'=>$date_to));
                 
 		$this->show_view('ads/ads_report',$this->data);		
 	}
