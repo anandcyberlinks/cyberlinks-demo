@@ -552,14 +552,17 @@ class Analytics extends MY_Controller {
 				//-- create pdf --//
 				create_pdf($user,'User Based Report');
 			}elseif($this->uri->segment(4)=='csv'){
-				$heading = array('Name','Total Hits','Total time watched');
+				$heading = array('Name','Total Hits','Total time watched','Browser','IP','Date');
 				//$content =  $this->load->view('templates/pdf_content',$this->data,true);
 				$dataRpt = array();
 				$num=0;
 				foreach($this->data['result'] as $p) {
-				    $dataRpt[$num]['name']          = $p->name;
+				    $dataRpt[$num]['name']          = ($p->name!='') ? $p->name : 'guest';
 				    $dataRpt[$num]['hits']        = $p->total_hits;
 				    $dataRpt[$num]['watched time'] = time_from_seconds($p->total_watched_time);                 
+				    $dataRpt[$num]['browser'] = $p->browser;
+				    $dataRpt[$num]['ip'] = $p->ip;
+				    $dataRpt[$num]['date'] = date("d/m/Y H:i:s", strtotime($p->created));
 				    $num++;
 			       }
 				query_to_csv($dataRpt,$heading);
