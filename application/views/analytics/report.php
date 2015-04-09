@@ -174,6 +174,18 @@
 			   <a class='<?php echo $today_class?>' href="?range=today">Today</a>
 			</div-->
                         <form  method="post" action="<?php echo base_url(); ?>analytics/report" onsubmit="return date_check();" id="searchIndexForm" name="searchIndexForm" accept-charset="utf-8">        
+                        <?php if($this->user=='superadmin') { ?>
+                        <div class="form-group col-lg-3">
+                            <div class="input select">
+                                <label for="all_content_provider"><?php echo $welcome->loadPo('Content Provider') ?></label>
+                                <select name="searchbyCP" class="form-control" placeholder="<?php echo $welcome->loadPo('Content Provider') ?>" id="searchbyCP">
+                                    <?php foreach($all_content_providers as $key => $val) { ?>
+                                    <option value="<?php echo $val->id?>" <?php if(isset($_POST['searchbyCP']) && $_POST['searchbyCP']==$val->id) { ?> selected="selected" <?php } ?>><?php echo $val->username; ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                        </div>
+                        <?php } ?>
                         <div class="form-group col-lg-3">
                             <div class="input select">
                                 <label for="searchBy"><?php echo $welcome->loadPo('Search By') ?></label>

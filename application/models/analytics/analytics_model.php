@@ -557,7 +557,12 @@ class Analytics_model extends CI_Model{
         */
         $this->db->select($select,false);
         $this->db->from('analytics a');
-        $this->db->where("a.content_provider",  $this->uid);
+        if($this->user=='superadmin'){
+            // Searching by content Provider.
+            $this->db->where("a.content_provider",  $_POST['searchbyCP']);
+        }else{
+            $this->db->where("a.content_provider",  $this->uid);
+        }
         $this->db->join('channels c','a.content_id=c.id');
        
         //$this->db->group_by($group);
@@ -565,9 +570,17 @@ class Analytics_model extends CI_Model{
              $this->db->limit($limit, $start);
         }
         $query = $this->db->get();
-    //echo '<br>'.$this->db->last_query();die;
+        //echo '<br>'.$this->db->last_query();die;
         return $query->result();
         
+    }
+    
+    function getContentProviders(){
+        $this->db->select('id,username');
+        $this->db->from('users');
+        $this->db->where("username !=",  'superadmin');
+        $query = $this->db->get();
+        return $query->result();
     }
     
     public function getReportCounts($param=array(),$sort,$sort_by)

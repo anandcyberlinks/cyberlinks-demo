@@ -322,8 +322,16 @@ class Ads_analytics_model extends CI_Model {
 
         $this->db->select($select, false);
         $this->db->from('ads_analytics a');
+        
+        
+        
         if ($param['type'] == 'revenue') {
-            $this->db->where("a.broadcaster", $this->uid);
+            if($this->user=='superadmin'){
+                // Searching by content Provider i.e broadcaster.
+                $this->db->where("a.broadcaster",  $_POST['searchbyCP']);
+            }else{
+                $this->db->where("a.broadcaster", $this->uid);
+            }
         } else {
             $this->db->where("a.content_provider", $this->uid);
         }

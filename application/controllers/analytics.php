@@ -168,6 +168,10 @@ class Analytics extends MY_Controller {
 		echo 'last month first day : '.date('Y-m-d', strtotime('first day of last month'));echo "<br/>";
 		echo 'last month last day : '.date('Y-m-d',strtotime('last day of last month'));
 		*/
+               if($this->user=='superadmin')
+               {
+                   $this->data['all_content_providers'] = $this->Analytics_model->getContentProviders();
+               }
 		$this->data['revenue'] = $this->Ads_analytics_model->getReport(array('type'=>'revenue','l'=>$limit,'search'=>$search,'date_from'=>$date_from,'date_to'=>$date_to));
 		//----------------------------------//
 		
