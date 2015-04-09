@@ -28,7 +28,7 @@ class User extends REST_Controller
        parent::__construct();
        $this->load->helper('url');
        $this->load->model('api/User_model');
-      echo $this->admin_token = $this->get('token');
+       $this->admin_token = $this->get('token');
       //$this->admin_token = '54d46a72bab49';
    }       
     
