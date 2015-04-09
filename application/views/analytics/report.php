@@ -78,7 +78,7 @@
                 <div class="small-box bg-fuchsia">
                     <div class="inner">
                         <h3>
-                            <?php echo $summary->total_live;?>
+                            <?php echo ($summary->total_live) ? $summary->total_live : 0;?>
                         </h3>
                         <p>
                            <?php echo $welcome->loadPo('Live Hits'); ?> 
@@ -95,7 +95,7 @@
                 <div class="small-box bg-red">
                     <div class="inner">
                         <h3>
-                           <?php echo $summary->total_linear;?>
+                           <?php echo ($summary->total_linear) ? $summary->total_linear : 0;?>
                         </h3>
                         <p>
                             <?php echo $welcome->loadPo('Linear Hits'); ?>
@@ -112,7 +112,7 @@
                 <div class="small-box bg-yellow">
                     <div class="inner">
                         <h3>
-                            <?php echo $summary->total_vod;?>
+                            <?php echo ($summary->total_vod) ? $summary->total_vod : 0;?>
                         </h3>
                         <p>
                             <?php echo $welcome->loadPo('VOD Hits'); ?>
