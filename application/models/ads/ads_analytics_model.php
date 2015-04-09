@@ -81,12 +81,12 @@ class Ads_analytics_model extends CI_Model{
             SUM(IF( a.replay =1, 1, 0) ) AS replay ';
            // $group = 'a.ads_id';
            // $group = 'a.id';
-           
+          
            if($param['top'] == 1){  //-- top video --//
                 $this->db->group_by('a.ads_id');
                 $this->db->order_by('a.id desc');
            }else{
-                $this->db->group_by('a.id');
+                $this->db->group_by('a.ads_id');
            }
            
           //  $join = "users u";
@@ -113,7 +113,7 @@ class Ads_analytics_model extends CI_Model{
             if($sort){
             $this->db->order_by($sort,$sort_by);
             }
-            break;
+
         case 'useragent':
             $select = 'a.platform, a.browser, count( a.id ) as total_hits , sum( a.watched_time ) as total_watched_time';
             //$group = 'a.platform, a.browser';            
