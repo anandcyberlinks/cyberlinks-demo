@@ -337,4 +337,21 @@ function delete_user($id){
         $this->db->insert('users',$data);
         return $this->db->insert_id();
     }
+    
+    function addcontent_token($data)
+    {
+        $this->db->set($data);       
+	$this->db->insert('content_tokens', $data);
+	//echo '<br>'.$this->db->last_query();die;
+	return $this->db->insert_id();
+    }
+    
+	function getskin()
+	{
+	  $this->db->select('a.*');
+	  $this->db->from('skin_templates a');
+	  $this->db->join('users u','u.skin_id=a.id');
+	  $query = $this->db->get();
+	  return $query->row();
+	}
 }
