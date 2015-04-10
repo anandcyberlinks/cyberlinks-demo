@@ -114,6 +114,7 @@ switch ($s[0]->username) {
                 'type' => 'parent', 'childs' => array(
                     array('name' => 'Genre', 'li-class' => ($this->uri->segment(1) === 'genre') ? 'active' : '', 'url' => base_url() . 'genre', 'type' => 'child'),
                 )), */
+            array('name' => 'Publishing', 'url' => base_url() . 'publishing', 'class' => 'fa-users', 'li-class' => ($this->uri->segment(1) == 'publishing') ? 'active' : ''),
             array('name' => 'Customers', 'url' => base_url() . 'user/customers', 'class' => 'fa-users', 'li-class' => ($this->uri->segment(2) == 'customers') ? 'active' : ''),
         );
         break;
