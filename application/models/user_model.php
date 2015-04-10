@@ -132,6 +132,12 @@ class User_Model extends CI_Model {
         //echo $this->db->last_query(); die;
     }
     
+    function saveskin($skin_id,$uid)
+	{
+	  $this->db->set('modified', 'NOW()', FALSE); 
+      $this->db->where('id', $uid);
+      $this->db->update('users', array('skin_id'=>$skin_id));;
+	}
 
 }
     /*
