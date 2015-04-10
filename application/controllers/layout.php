@@ -86,7 +86,7 @@ class Layout extends MY_Controller {
             $temp = array();
             $temp['username'] = $_POST['email'];
             $temp['email'] = $_POST['email'];
-            $temp['domain'] = $_POST['domain'];
+            //$temp['domain'] = $_POST['domain'];
             $temp['owner_id'] = 17;
             $temp['first_name'] = $_POST['first_name'];
             $temp['last_name'] = $_POST['last_name'];
@@ -291,7 +291,9 @@ class Layout extends MY_Controller {
 
     function profile() {
         $data['welcome'] = $this;
-        $data['data'] = $this->user_model->profile($this->user);
+        $this->user_id =  ($this->uri->segment(3))? $this->uri->segment(3) : $this->user_id;
+        $data['data'] = $this->user_model->profile($this->user_id);
+        //print_r($data['data']); die;
         $this->show_view('userProfile', $data);
     }
     function checkemail() {
@@ -321,6 +323,7 @@ class Layout extends MY_Controller {
     }
 
     function do_upload() {
+        $this->user_id =  ($this->uri->segment(3))? $this->uri->segment(3) : $this->user_id;
         //print_r($_FILES); DIE;
         $image_info = getimagesize($_FILES["image"]["tmp_name"]);
         $image_width = $image_info[0];
@@ -347,7 +350,7 @@ class Layout extends MY_Controller {
                     }
                     $this->user_model->do_upload($this->user_id, $dest, REAL_PATH.PROFILEPIC_PATH.$p_image);
                     $this->session->set_flashdata('message', $this->_successmsg($this->loadPo($this->config->item('success_file_update'))));
-                    redirect(base_url() . 'layout/profile');
+                    redirect(base_url() . 'layout/profile/'.$this->user_id);
                 } else {
                     $this->session->set_flashdata('message', $this->_errormsg($this->loadPo($this->config->item('error_file_upload'))));
                     redirect(base_url() . 'layout/profile');

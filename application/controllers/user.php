@@ -100,6 +100,7 @@ class user extends MY_Controller {
             unset($_POST['submit']);
             unset($_POST['cpassword']);
             $_POST['password'] = md5($_POST['password']);
+            $_POST['token'] = uniqid();
             $data = $_POST;
             $result = $this->super_model->Checkemail($data);
             if (count($result) == '0') {

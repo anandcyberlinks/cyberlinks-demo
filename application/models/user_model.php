@@ -3,7 +3,7 @@
 class User_Model extends CI_Model {
 
     function profile($data) {
-        $this->db->where('username', $data);
+        $this->db->where('id', $data);
         $query = $this->db->get('users');
         return $query->result();
     }

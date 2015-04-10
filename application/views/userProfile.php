@@ -22,25 +22,25 @@
                             <div class="panel-body">
                                 <div class="row">
                                     <?php
-        $image_info = getimagesize($welcome->getimage());
-        $image_width = $image_info[0];
-        if ($image_width <= 160) {
-        $width = "";
-        }else{
-            $width = '165';
-        }
-        $image_height = $image_info[1];
-        if ($image_height <= 25) {
-        $height = "";}else{
-            $height = "28";
-        }
+                                    $image_info = getimagesize($welcome->getimage());
+                                    $image_width = $image_info[0];
+                                    if ($image_width <= 160) {
+                                        $width = "";
+                                    } else {
+                                        $width = '165';
+                                    }
+                                    $image_height = $image_info[1];
+                                    if ($image_height <= 25) {
+                                        $height = "";
+                                    } else {
+                                        $height = "28";
+                                    }
                                     ?>
-                                    
-                                    
-                                    <div class="col-md-3 col-lg-3 " align="center"> <img alt="User Pic" src="<?php echo $welcome->getimage() ?>" width="<?php echo $width ?>" height="<?php $height ?>"><br><br>
-                                        <form action="<?php echo base_url() ?>layout/do_upload" method="post" enctype="multipart/form-data">
-                                            <input class="btn btn-primary btn-sm"  type="file" name="image" size="20" >
 
+
+                                    <div class="col-md-3 col-lg-3 " align="center"> <img alt="User Pic" src="<?php echo $welcome->getimage() ?>" width="<?php echo $width ?>" height="<?php $height ?>"><br><br>
+                                        <form action="<?php echo base_url() ?>layout/do_upload<?= ($this->uri->segment(3))? '/'.$this->uri->segment(3) : '';?>" method="post" enctype="multipart/form-data">
+                                            <input class="btn btn-primary btn-sm"  type="file" name="image" size="20" >
                                             <br />
                                             <input class="btn btn-primary btn-sm" type="submit"  name="submit" value="<?php echo $welcome->loadPo('Upload'); ?>">
                                         </form>
@@ -67,6 +67,10 @@
                                                 <tr>
                                                     <td><?php echo $welcome->loadPo('User Role') ?>:</td>
                                                     <td><?php echo $this->role; ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><?php echo $welcome->loadPo('API Token') ?>:</td>
+                                                    <td><?php echo $data->token; ?></td>
                                                 </tr>
                                                 <tr>
                                                     <td><?php echo $welcome->loadPo('Status') ?>:</td>

@@ -98,11 +98,12 @@ class MY_Controller extends CI_Controller {
     function getimage() {
         $s = $this->session->all_userdata();
         $tmp = $s['0'];
-        $id = $tmp->id;
+        $id =  ($this->uri->segment(3))? $this->uri->segment(3) :  $tmp->id;
         $this->db->select('relative_path');
         $this->db->where('uid', $id);
         $this->db->where('type', 'logo');
         $query = $this->db->get('files');
+        //echo $this->db->last_query();
         $result = $query->result();
         if (count($result) != '0') {
             return base_url() . $result[0]->relative_path;
