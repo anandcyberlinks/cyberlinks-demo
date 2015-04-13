@@ -223,7 +223,7 @@
         autoSubmit: false,
         url: "<?= base_url() . 'video/upload' ?>",
         fileName: "0",
-        allowedTypes: "mp4, mpg, mpeg, flv, wmv, avi",
+        allowedTypes: "mp4,mpg,mpeg,flv,wmv,avi",
         acceptFiles: "mp4, mpg, mpeg, flv, wmv, avi",
         showProgress: true,
         maxFileCount: 10,
