@@ -307,7 +307,7 @@ class Content extends Apis{
         $query = sprintf('select p.id,p.name,p.description,p.publish,p.status,p.start_date,p.end_date
                          from playlists p
                          left join channels c on c.id = p.channel_id
-                         where p.uid = %d and c.type = "Linear" ',$this->app->id);
+                         where c.type = "Linear" ');
         $dataset = $this->db->query($query)->result();
         foreach($dataset as $key=>$val){
             $response[] = $val;
