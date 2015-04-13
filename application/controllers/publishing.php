@@ -61,6 +61,7 @@ class Publishing extends My_Controller{
             $this->User_model->saveskin($skin_id,$this->uid);
             $msg = $this->loadPo($this->config->item('success_record_update'));
             $this->session->set_flashdata('message', $this->_successmsg($msg));
+            redirect('publishing');
         }
         $result = $data['result'] = $this->publishing_model->getSkins();
         

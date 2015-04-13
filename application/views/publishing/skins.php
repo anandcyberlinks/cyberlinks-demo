@@ -164,6 +164,7 @@
 		var url ="<?php echo $value->image;?>";
 		var title ="<?php echo $value->title;?>";
 		var dimen ="<?php echo $value->dimension;?>";
+		$('#'+id).css("background", "#ddd");
 		 $('#preview_skin').html('<img src="'+url+'" width="300" height="100">');
 		   $('#skin_title').html("Title<br>"+title);
 		    $('#skin_dimenstion').html("Dimension<br>"+dimen);
@@ -173,9 +174,12 @@
  <?php }?>
      $('#skin tr').click(function (event) {
 		var id = $(this).attr('id');
-		  var url =$(this).attr('alt');
-		   var title =$(this).attr('title');
-		    var dimen =$(this).attr('dimen');
+		var url =$(this).attr('alt');
+		var title =$(this).attr('title');
+		var dimen =$(this).attr('dimen');
+		$(this).prevAll().removeAttr('style');
+		$(this).nextAll().removeAttr('style');
+		$(this).css("background", "#ddd");
 		  $('#preview_skin').html('<img src="'+url+'" width="300" height="100">');
 		   $('#skin_title').html("Title<br>"+title);
 		    $('#skin_dimenstion').html("Dimension<br>"+dimen);

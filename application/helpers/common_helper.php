@@ -14,8 +14,8 @@
       // This function works best with YYYY-MM-DD
       // but other date formats will work thanks
       // to strtotime().
-     echo  $sStartDate = gmdate("Y-m-d", strtotime($sStartDate));
-      echo $sEndDate = gmdate("Y-m-d", strtotime($sEndDate));
+       $sStartDate = gmdate("Y-m-d", strtotime($sStartDate));
+       $sEndDate = gmdate("Y-m-d", strtotime($sEndDate));
   
       // Start the variable off with the start date
       $aDays[] = $sStartDate;
@@ -64,5 +64,40 @@ $strDateTo = date('Y-m-d',strtotime($strDateTo));
         }
         return $aryRange;
     }
+
+//---- Upload compressed (zip) folder and uncompress ----///
+function upload_compress_files($filename,$source,$target_folder,$type){
+if($filename) {		
+	$name = explode(".", $filename);
+	$accepted_types = array('application/zip', 'application/x-zip-compressed', 'multipart/x-zip', 'application/x-compressed');
+	foreach($accepted_types as $mime_type) {
+		if($mime_type == $type) {
+			$okay = true;
+			break;
+		} 
+	}	
+	$continue = (strtolower($name[1]) == 'zip' || strtolower($name[1]) == 'tar')  ? true : false;
+	if(!$continue) {
+		$message = "The file you are trying to upload is not a .zip, .tar file. Please try again.";
+	}
+
+	$target_path = $target_folder. '/'.$filename;  // change this to the correct site path
+	if(move_uploaded_file($source, $target_path)) {
+		$zip = new ZipArchive();
+		$x = $zip->open($target_path);
+		if ($x === true) {
+			$zip->extractTo($target_path); // change this to the correct site path
+			$zip->close();
+	
+			unlink($target_path);
+		}
+		return $target_path;
+		//$message = "Your .zip file was uploaded and unpacked.";
+	} else {
+	  return 0;
+		//$message = "There was a problem with the upload. Please try again.";
+	}
+}
+}
 
 ?>
