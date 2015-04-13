@@ -91,7 +91,7 @@ class Layout extends MY_Controller {
             $temp['first_name'] = $_POST['first_name'];
             $temp['last_name'] = $_POST['last_name'];
             $temp['contact_no'] = $_POST['contact_no'];
-            $temp['password'] = $_POST['password'];
+            $temp['password'] = md5($_POST['password']);
             $temp['token'] = $_POST['token'];
             $temp['role_id'] = 1;
             $temp['created'] = date('Y-m-d h:m:i');
