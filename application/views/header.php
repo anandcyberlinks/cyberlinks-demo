@@ -73,7 +73,7 @@ switch ($s[0]->username) {
     default :
         $menu = array(
             array('name' => 'Dashboard', 'url' => base_url() . 'layout/dashboard', 'class' => 'fa-dashboard', 'li-class' => ($this->uri->segment(1) == 'layout') ? 'active' : ''),
-            array('name' => 'Analytics', 'url' => base_url() . 'analytics/report', 'class' => 'fa-dashboard', 'li-class' => ($this->uri->segment(1) == 'analytics') ? 'active' : ''),
+            array('name' => 'Analytics', 'url' => base_url() . 'analytics/report', 'class' => 'fa fa-fw fa-bar-chart-o', 'li-class' => ($this->uri->segment(1) == 'analytics') ? 'active' : ''),
             array('name' => 'Video', 'url' => base_url().'video/index', 'class' => 'fa-video-camera',
                 'li-class' => (
                 ($this->uri->segment(2) == 'videoUploadSrc') ||
@@ -114,9 +114,10 @@ switch ($s[0]->username) {
                 'type' => 'parent', 'childs' => array(
                     array('name' => 'Genre', 'li-class' => ($this->uri->segment(1) === 'genre') ? 'active' : '', 'url' => base_url() . 'genre', 'type' => 'child'),
                 )), */
-             array('name' => 'Publishing', 'url' => base_url().'publishing', 'class' => 'fa-film', 'li-class' => ($this->uri->segment(1) == 'publishing') ? 'treeview active' : '', 'type' => 'parent', 'childs' => array(
-                   // array('name' => 'Add Skin', 'li-class' => ($this->uri->segment(1) == 'advertising' && $this->uri->segment(2) == 'add' ) ? 'active' : '', 'url' => base_url() . 'publishing/add', 'type' => 'child'),
-                )),
+            /* array('name' => 'Publishing', 'url' => base_url().'publishing', 'class' => 'fa-globe', 'li-class' => ($this->uri->segment(1) == 'publishing') ? 'treeview active' : '', 'type' => 'parent', 'childs' => array(
+                    array('name' => 'Templates', 'li-class' => ($this->uri->segment(1) == 'advertising') ? 'active' : '', 'url' => base_url() . 'publishing', 'type' => 'child'),
+                    array('name' => 'Add Skin', 'li-class' => ($this->uri->segment(1) == 'advertising' && $this->uri->segment(2) == 'add' ) ? 'active' : '', 'url' => base_url() . 'publishing/add', 'type' => 'child'),
+                )),*/
             //array('name' => 'Publishing', 'url' => base_url() . 'publishing', 'class' => 'fa-users', 'li-class' => ($this->uri->segment(1) == 'publishing') ? 'active' : ''),
             array('name' => 'Customers', 'url' => base_url() . 'user/customers', 'class' => 'fa-users', 'li-class' => ($this->uri->segment(2) == 'customers') ? 'active' : ''),
         );
