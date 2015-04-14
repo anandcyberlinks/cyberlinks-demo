@@ -480,7 +480,36 @@ class Content extends Apis{
                 $response['data'][$k1]['chList'][$k2] = $v2;
             }
         }
+        $response['data']['vod'] = $this->getnewvod_get();
         $this->response($response);
+    }
+    
+    function getnewvod_get(){
+        $response = array();
+        
+        $this->db->select('c.id as catid,c.category,c.color,a.id,a.title,a.description,a.created,c1.name as thumbnail_path');
+        $this->db->from('contents a');               
+        $this->db->join('categories c', 'a.category = c.id', 'left');    
+        $this->db->join('video_thumbnails h','h.content_id=a.id AND h.default_thumbnail = 1 ','left');
+        $this->db->join('files c1', 'h.file_id = c1.id', 'left');               
+        $this->db->where('a.status','1');
+        $this->db->where('a.uid',$this->app->id);
+        $this->db->order_by('c.id');
+        $this->db->limit($this->limit);
+        $query = $this->db->get();
+        $data =  $query->result();
+        
+        $tmp = array();
+        foreach($data as $key=>$val){
+            $tmp[$val->catid]['CatId'] = $val->catid;
+            $tmp[$val->catid]['CatName'] = $val->category;
+            $tmp[$val->catid]['Counter'] = $this->limit;
+            $tmp[$val->catid]['Cntnt'][] = array('title'=>$val->title,
+                                            'description'=>$val->description,
+                                            'thumbnail'=>$val->thumbnail_path,
+                                            'url'=> base_url().'index.php/details?id='.$val->id.'&type=vod');
+        }
+        return array_values($tmp);
     }
     
     function getFormatData($data = array(),$type,$id){
