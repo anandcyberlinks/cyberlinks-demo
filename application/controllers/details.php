@@ -1,7 +1,7 @@
 <?php
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class Details extends MY_Controller {
-protected $zone_id = ''; //-- content provider id -- temporary use --//
+
 	function __construct()
 	{
             parent::__construct();
@@ -15,7 +15,8 @@ protected $zone_id = ''; //-- content provider id -- temporary use --//
                 //   $this->result = get_browser(null, true);		
 		$this->result = User_Agent::getinfo();  //--regex class to get user agent --//
 		// print_r($_SERVER[HTTP_USER_AGENT]);die;
-        //---------------------//		
+        //---------------------//
+		$this->zone_id = ''; //-- content provider id -- temporary use --//
 	}
 
 	function index()
@@ -53,7 +54,11 @@ protected $zone_id = ''; //-- content provider id -- temporary use --//
                      $limit = 1;
                  }
 		
-		
+		if($result->content_provider=='59')
+		{
+				$this->zone_id =7; //--- temporary use --//		
+		}
+				
 		$user_data = $this->Ads_model->getUserKeywords($_GET['user_id']);
 		//print_r($user_data);
 		//--- Access Revive web service ---//
@@ -204,11 +209,7 @@ protected $zone_id = ''; //-- content provider id -- temporary use --//
 			//print_r($result);die;			
 		}
 		//echo $result->content_provider;
-		if($result->content_provider=='59')
-		{
-				$this->zone_id =7; //--- temporary use --//		
-		}
-		$this->zone_id=7;
+		
 		$this->data['result'] = $result;
 		//print_r($result);die;
 		$this->data['scheduleBreaks'] = $adsFinal;
@@ -220,7 +221,6 @@ protected $zone_id = ''; //-- content provider id -- temporary use --//
 	
 	function getAdsRevive($lat,$lng,$age,$keywords,$gender,$l)
 	{
-$this->zone_id=7;
 		$this->load->helper('url');		
                 $url = CAMPAIGN_URL."?zone=".$this->zone_id."&keyword=$keywords&age=$age&gender=$gender&lat=$lat&lng=$lng&limit=$l";
                // Get cURL resource
