@@ -791,7 +791,7 @@ class Analytics extends MY_Controller {
 				}				
 				//$post['content_provider'] ='';
 			//---------------------------//
-			print_r($post);
+			//print_r($post);
 			echo $this->Analytics_model->save_ads($post);
 		}
 		//print_r($post);
