@@ -437,7 +437,7 @@ autostart: 1,
 
     jwplayer().onPlay(function (){    
 	//var id = $('#analytics_id').val();
-	//window.location.href="<?php echo $uri;?>#1234"
+	window.location.href="<?php echo $uri;?>#1234"
 	//console.log(jwplayer().getState());
 	//console.log('123stop');
 	//console.log(jwplayer().getControls());
