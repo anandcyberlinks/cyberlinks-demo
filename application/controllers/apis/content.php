@@ -480,7 +480,7 @@ class Content extends Apis{
                 $response['data'][$k1]['chList'][$k2] = $v2;
             }
         }
-        $response['data']['vod'] = $this->getnewvod_get();
+        $response['vod'] = $this->getnewvod_get();
         $this->response($response);
     }
     
