@@ -63,7 +63,19 @@ class Publishing extends My_Controller{
             $this->session->set_flashdata('message', $this->_successmsg($msg));
             redirect('publishing');
         }
-        $result = $data['result'] = $this->publishing_model->getSkins();
+        $this->load->library("pagination");
+        $config = array();
+        $config["base_url"] = base_url() . "publishing/index/";
+        $config["total_rows"] = $this->publishing_model->getSkins($searchterm,1);
+        $config["per_page"] = 10;
+        $config["uri_segment"] = 3;
+        
+        $this->pagination->initialize($config);
+        $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        $data['result'] = $this->publishing_model->getSkins($searchterm,0,$config["per_page"],$page);
+        $data["links"] = $this->pagination->create_links();
+        $data['total_rows'] = $config["total_rows"];
+        //$result = $data['result'] = $this->publishing_model->getSkins();
         
         $this->show_view('publishing/skins',$data);
     }
@@ -139,76 +151,69 @@ class Publishing extends My_Controller{
         }
         
         function add() {
+        
         $data['welcome'] = $this;
         $per = $this->checkpermission($this->role_id, 'add');
         if ($per) {
-            if (isset($_GET['action'])) {               
-                $id = base64_decode($_GET['action']);
+            if (isset($_GET['id'])) {
+                $id = base64_decode($_GET['id']);
             }
             if (isset($id)) {
                 if (isset($_POST['submit']) && $_POST['submit'] == "Update") {
+                    
                     $this->form_validation->set_rules($this->validation_rules['update']);
-                    if ($this->form_validation->run()) {
-                        if($_FILES["skin_file"]["name"]) {
-                         $filename = $_FILES["skin_file"]["name"];
-                         $source = $_FILES["skin_file"]["tmp_name"];
-                         $type = $_FILES["skin_file"]["type"];
-                         $target_path = SKINS_FOLDER;
-                        $path = upload_compress_files($filename,$source,$target_path,$type);
-                        }
-                        if($_FILES["image_file"]["name"]) {
-                         $filename = $_FILES["image_file"]["name"];
-                         $source = $_FILES["image_file"]["tmp_name"];
-                         $type = $_FILES["image_file"]["type"];                        
-                        $target_path = SKINS_FOLDER.$folder_name.'/'.$name;
-                        if(move_uploaded_file($source, $target_folder)) {
-                            $_POST['image'] = $target_path;
-                        }
-                        }
-                         $_POST['id'] = $id;
+                   // if ($this->form_validation->run()) {
+                        $_POST['id'] = $id;
                         $this->publishing_model->_save($_POST);
                         $msg = $this->loadPo($this->config->item('success_record_update'));
                         $this->log($this->user, $msg);
                         $this->session->set_flashdata('message', $this->_successmsg($msg));
                         redirect('publishing');
-                    } else {
-                        $this->show_view('publishing/edit', $this->data);
-                    }
-                } else {                    
-                    $this->show_view('publishing/edit', $this->data);
+                  //  } else {
+                    //    $this->show_view('publishing/edit', $this->data);
+                    //}
+                } else {
+                    $editresult = $this->publishing_model->fetchskin($id);
+                    $result=$data['result']=(array)$editresult['0'];
+                    $this->show_view('publishing/add', $data);
+                  //  $this->show_view('add');
                 }
             } else {
-                if (isset($_POST['submit']) && $_POST['submit'] == 'Submit') {                    
+                $path= 'assets/upload/skins';
+                    if (isset($_POST['submit']) && $_POST['submit'] == 'Submit') {                    
                     if($_FILES["skin_file"]["name"]) {
                         $filename = $_FILES["skin_file"]["name"];
                         $source = $_FILES["skin_file"]["tmp_name"];
                         $type = $_FILES["skin_file"]["type"];
-                        $target_path = SKINS_FOLDER;
                         $folder_name = explode(".", $filename);
-                        $_POST['path'] = upload_compress_files($filename,$source,$target_path,$type);
+                        $xmlname=$folder_name['0'].'/'.$folder_name['0'].'.xml';
+                        $target_path = $path;
+                        $image_target=$path.'/'.$folder_name['0'];
+                        if(upload_compress_files($filename,$source,$target_path,$type)){
+                            $_POST['path'] = $target_path.'/'.$xmlname;
+                        }
                     }
 
                     if($_FILES["image_file"]["name"]) {
                          $filename = $_FILES["image_file"]["name"];
                          $source = $_FILES["image_file"]["tmp_name"];
                          $type = $_FILES["image_file"]["type"];
-                         $name = explode(".", $filename);
-                         $target_path = SKINS_FOLDER.$folder_name.'/'.$filename;
-                        if(move_uploaded_file($source, $target_folder)) {
+                         //$name = explode(".", $filename);
+                         $target_path = $image_target.'/'.$filename;
+                        if(move_uploaded_file($source, $target_path)){
                             $_POST['image'] = $target_path;
                         }
                     }
-                        
-                    $this->form_validation->set_rules($this->validation_rules['add']);
-                    if ($this->form_validation->run()) {                       
+                    //$this->form_validation->set_rules($this->validation_rules['add']);
+                   // if ($this->form_validation->run()) {                       
                             $this->publishing_model->_save($_POST);
                             $msg = $this->loadPo($this->config->item('success_record_add'));
                             $this->log($this->user, $msg);
                             $this->session->set_flashdata('message', $this->_successmsg($msg));
                             redirect('publishing');                        
-                    } else {                       
-                        $this->show_view('publishing/add', $data);
-                    }
+                    //} else {                       
+                    //    $this->show_view('publishing/add', $data);
+                    //}
                 } else {
                     $this->show_view('publishing/add', $data);
                 }
@@ -217,6 +222,16 @@ class Publishing extends My_Controller{
             $this->session->set_flashdata('message', $this->_errormsg($this->loadPo($this->config->item('error_permission'))));
             redirect(base_url() . 'category');
         }
+    }
+    function delete(){
+        $id = base64_decode($_GET['id']);
+        $editresult = $this->publishing_model->fetchskin($id);
+        $result=$data['result']=(array)$editresult['0'];
+        $path=substr($result['path'], 0, strrpos( $result['path'], '/') );
+        //unlink($result['image']);
+        $this->deleteDir($path);
+        $editresult = $this->publishing_model->deleteskin($id);
+        redirect('publishing');  
     }
 }
 

@@ -57,6 +57,14 @@
                 </div> */?>
                 <div class="row">
                     <div class="col-xs-8">
+			<div class="box-footer" >
+			    <form action='' method='post'>
+				   <input type='hidden' name='skin_id' id='skin_id'>											                                        
+				<button type="submit" name="save" value="Save"class="btn btn-primary"><?php echo $welcome->loadPo('Save') ?></button>
+				 <a id='edithref'><button type="button" id='editbutton' disabled name="edit" class="btn btn-primary"><?php echo $welcome->loadPo('Edit') ?></button></a>
+				 <a id='deletehref'><button type="button" id='deletebutton' disabled name="delete" class="btn btn-primary"><?php echo $welcome->loadPo('Delete') ?></button></a>
+									</form>
+                        </div><br/>
                         <div class="box">
                             <div class="box-body table-responsive">
                                 <table id="skin" class="table table-hover">
@@ -69,8 +77,8 @@
                                     </thead>
 
                                     <tbody>
-                                        <?php foreach ($result as $value) { ?>
-                                        <tr id="<?php echo $value->id ?>" alt="<?php echo $value->image;?>" title="<?php echo $value->title;?>" dimen="<?php echo $value->dimension;?>">
+                                        <?php  foreach ($result as $value) { ?>
+                                        <tr id="<?php echo $value->id ?>" onclick=changefunction('<?php echo base64_encode($value->id);?>'); alt="<?php echo $value->image;?>" title="<?php echo $value->title;?>" dimen="<?php echo $value->dimension;?>">
                                                 <td  width="350"><?php echo strlen($value->title) > 40 ?  substr($value->title,0,40).'...' : $value->title; ?><br>
                                                 (<?php echo $value->description; ?>)</td>
                                                 
@@ -106,16 +114,11 @@
                                             if ($this->pagination->cur_page > '1') {
                                                 $off = (($this->pagination->cur_page * '10') - 9);
                                             }
-                                            //echo "&nbsp;&nbsp;Showing <b>" . $off . "-" . $param . "</b> of <b>" . $this->pagination->total_rows . "</b> total results";
+                                            echo "&nbsp;&nbsp;Showing <b>" . $off . "-" . $param . "</b> of <b>" . $this->pagination->total_rows . "</b> total results";
                                         }
                                         ?>
                                     </div>
-									<div class="box-footer" >
-											<form action='' method='post'>
-												<input type='hidden' name='skin_id' id='skin_id'>											                                        
-                                    <button type="submit" name="save" value="Save"class="btn btn-primary"><?php echo $welcome->loadPo('Save') ?></button>
-									</form>
-                                </div>
+									
                                 </div>	
                                 <div class="row pull-right">
                                     <div class="col-xs-12">
@@ -157,7 +160,8 @@
 
 <script>
 	$(document).ready(function () {
-				
+	document.getElementById('deletebutton').disabled = true;
+	document.getElementById('editbutton').disabled = true;
  <?php foreach ($result as $value) {
 	if($value->skin_id>0){?>
 	var id="<?php echo $value->skin_id;?>";
@@ -186,5 +190,11 @@
 		$('#skin_id').val(id);
      });
  });
+	function changefunction(id){
+	document.getElementById('editbutton').disabled = false;
+	document.getElementById("edithref").href="<?=base_url()?>publishing/add?id="+id;
+	document.getElementById('deletebutton').disabled = false;
+	document.getElementById("deletehref").href="<?=base_url()?>publishing/delete?id="+id;
+	}
 </script>
 

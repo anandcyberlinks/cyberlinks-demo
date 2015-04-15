@@ -86,7 +86,7 @@ if($filename) {
 		$zip = new ZipArchive();
 		$x = $zip->open($target_path);
 		if ($x === true) {
-			$zip->extractTo($target_path); // change this to the correct site path
+			$zip->extractTo($target_folder); // change this to the correct site path
 			$zip->close();
 	
 			unlink($target_path);
