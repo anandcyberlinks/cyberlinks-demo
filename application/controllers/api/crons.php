@@ -266,5 +266,33 @@ class Crons extends REST_Controller {
         $final_result = array('message' => "Live channel EPG successully inserted.");
         $this->response($final_result, 200);
     }
+    
+    function livechannelepg_get()
+    {
+        $xml=simplexml_load_file("assets/upload/SUN.xml") or die("Error: Cannot create object");
+        
+        foreach ($xml->EVENT_SECTION as $listing)
+        {
+            $temp['channel_id'] = '100';
+            $temp['channel_name'] = 'Sun TV';
+            //$temp['date'] = date('Y-m-d');
+            $temp['date'] = (string)$listing->START->DATE;
+            $temp['show_title'] = (string)$listing->EPG_SECTION->EPG->NAME;
+            $temp['show_time'] = (string)$listing->START->TIME;
+            $temp['show_thumb'] = "";
+            $temp['show_language'] = (string)$listing->EPG_SECTION->EPG->attributes();
+            $temp['show_description'] = (string)$listing->EPG_SECTION->EPG->SYNOPSIS;
+            $temp['show_type'] = '';
+            $this->db->insert('livechannel_epg', $temp);
+            $insert_id = $this->db->insert_id();
+        }
+        if(isset($insert_id) && $insert_id!=''){
+            echo 'EPG inserted sucessfuly.';
+        }else{
+            echo 'No EPG found.';
+        }
+        rename("assets/upload/SUN.xml", "assets/upload/SUN_used.xml");
+        exit;
+    }
 
 }
