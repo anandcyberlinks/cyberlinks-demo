@@ -62,6 +62,10 @@ $(document).ready(function () {
                 'email': true,
                 'remote': 'checkemail'
             },
+            'domain': {
+                'required': true,
+                'url': true
+            },
             'password': {
                 'required': true,
                 'minlength': 6

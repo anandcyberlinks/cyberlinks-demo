@@ -87,6 +87,7 @@ class Layout extends MY_Controller {
             $temp = array();
             $temp['username'] = $_POST['email'];
             $temp['email'] = $_POST['email'];
+            $temp['domain'] = $_POST['domain'];
             $temp['owner_id'] = 17;
             $temp['first_name'] = $_POST['first_name'];
             $temp['last_name'] = $_POST['last_name'];

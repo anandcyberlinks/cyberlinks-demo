@@ -36,6 +36,9 @@
                         <input type="text" name="email" class="form-control" placeholder="Email"/>
                     </div>
                     <div class="form-group">
+                        <input type="text" name="domain" class="form-control" placeholder="www.example.com"/>
+                    </div>
+                    <div class="form-group">
                         <input type="tel" name="contact_no" class="form-control" placeholder="Contact number"/>
                     </div>
                     <div class="form-group">
