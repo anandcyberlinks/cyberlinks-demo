@@ -39,11 +39,11 @@ class user extends MY_Controller {
         $data['result'] = $this->super_model->fetchUser($this->user_id, $config["per_page"], $page);
         $data["links"] = $this->pagination->create_links();
         $data['total_rows'] = $config["total_rows"];
-        
-        
+
+
         $this->show_view('users', $data);
     }
-    
+
     function customers() {
         $data['welcome'] = $this;
         $this->load->library("pagination");
@@ -60,10 +60,7 @@ class user extends MY_Controller {
         //echo "<pre>";        print_r($data['result']); die;
         $this->show_view('cUser', $data);
     }
-    
-    
-    
-    
+
     public function DeleteUser() {
         $per = $this->checkpermission($this->role_id, 'delete');
         if ($per) {
@@ -80,16 +77,26 @@ class user extends MY_Controller {
         }
     }
 
-
-
     function changestatus() {
         $data['id'] = $_GET['id'];
         $data['status'] = $_GET['status'];
-        $this->super_model->updatestatus($data);
+
+        $token = $this->super_model->updatestatus($data);
         $this->log($this->user, 'Status Changed For user id-> ' . $data['id']);
-        $this->session->set_flashdata('message', $this->_successmsg($this->loadPo($this->config->item('success_update_user'))));
-        redirect(base_url() . 'user');
+        if($token != ''){
+            $email = $_GET['email'];
+            $body = file_get_contents(base_url() . 'layout/token_email?token=' . $token);
+            $subject = 'You Application Token';
+
+            $this->sendmail($email, $subject, $body); //mail to user
+        }
+        //$this->session->set_flashdata('message', $this->_successmsg($this->loadPo($this->config->item('success_update_user'))));
+        //redirect(base_url() . 'user');
+        $return = array('status' => $data['status'], 'token' => $token);
+        echo json_encode($return);
     }
+
+    
 
     public function register() {
         $data['owner_id'] = $this->user_id;

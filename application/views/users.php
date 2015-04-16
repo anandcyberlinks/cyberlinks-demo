@@ -100,6 +100,7 @@
                                     <th><?php echo $welcome->loadPo('Email'); ?></th>
                                     <th><?php echo $welcome->loadPo('Role'); ?></th>                                   
                                     <th width="12%"><?php echo $welcome->loadPo('Status'); ?></th>
+                                    <th><?php echo $welcome->loadPo('Token'); ?></th>
                                     <th><?php echo $welcome->loadPo('Created Date'); ?></th>
                                     <th width="12%"><?php echo $welcome->loadPo('Action'); ?></th>
                                 </tr>
@@ -110,11 +111,15 @@
                                         <td><a href="<?=  base_url().'layout/profile/'.$value->id?>" class="profile"><?php echo $value->username; ?></a></td>
                                         <td><?php echo $value->first_name . " " . $value->last_name; ?></td>
                                         <td><?php echo $value->email; ?></td>
-                                        <td><?php echo $value->role; ?></td>                                       
+                                        <td><?php echo $value->role; ?></td>        
                                         <td><?php if (($value->status) == 'active') { ?>
-                                                <a href="<?php echo base_url() ?>user/changestatus/?id=<?php echo $value->id; ?>&status=active" title="Click To Inactive"><i class="fa fa-fw fa-check-circle-o" style="color: green; font-size: 20px"></i>Active&nbsp;&nbsp;</a>
-                                            <?php } else { ?> 
-                                                <a href="<?php echo base_url() ?>user/changestatus/?id=<?php echo $value->id; ?>&status=inactive" title="Click To Active"><i class="fa fa-fw fa-circle-o" style="color: red; font-size: 20px"></i> InActive</a><?php } ?></td>
+                                            <a class="status" data="active" href="<?php echo base_url() ?>user/changestatus/?id=<?php echo $value->id; ?>&email=<?=$value->email?>&status=" title="Click To Inactive"><i class="fa fa-fw fa-check-circle-o"></i>Active&nbsp;&nbsp;</a>
+                                            <?php } else {
+                                                if(($value->status) == 'pending'){ echo "Pending"; } else { ?> 
+                                                <a class="status" data="inactive" href="<?php echo base_url() ?>user/changestatus/?id=<?php echo $value->id; ?>&email=<?=$value->email?>&status=" title="Click To Active"><i class="fa fa-fw fa-circle-o"></i> Inactive</a>
+                                                <?php } } ?>
+                                        </td>
+                                        <td><?=$value->token?></td>
                                         <td><?php echo $value->created; ?></td>
                                         <td>
                                             <a class="confirm" onclick="return delete_user(<?php echo $value->id; ?>);" href="" ><button class="btn btn-danger btn-sm" data-toggle="modal" data-target=".bs-example-modal-sm" ><?php echo $welcome->loadPo('Delete') ?></button></a>
@@ -145,7 +150,7 @@
                                 echo "Showing <b>" . $off . "-" . $param . "</b> of <b>" . $this->pagination->total_rows . "</b> total results";
                             }
                             ?>
-                        </div>
+                            </div>
 
                         <div class="row pull-right">
                             <div class="col-xs-12">
@@ -160,6 +165,31 @@
             </div><!-- /.box -->
         </div>
         </div>
-
     </section><!-- /.content -->
 </aside><!-- /.right-side -->
+<script>
+$(".status").click(function(){
+    var element = $(this);
+    var url = element.attr('href');
+    var status = element.attr('data');
+    element.html("<img src='<?=base_url()?>/assets/img/spinner.gif'>");
+    $.ajax({
+        url:url+status
+    }).done(function(res){
+        res = JSON.parse(res); 
+        //console.log(res.status);
+        if(res.status === 'active'){
+            element.html("<i class='fa fa-fw fa-circle-o'></i>Inactive");
+            element.attr('data','inactive');
+            element.closest('td').next('td').html('User disabled');
+            bootbox.alert('User Successfully Disabled');
+        }else{
+            element.html("<i class='fa fa-fw fa-check-circle-o'></i>Active");
+            element.attr('data','active');
+            element.closest('td').next('td').html(res.token);
+            bootbox.alert('User Successfully Activated and token send');
+        }
+    })
+    return false;
+})
+</script>

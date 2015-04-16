@@ -42,11 +42,13 @@ $(document).ready(function () {
         }
     });
     $('#register_form').validate({
+          submitHandler: function(form) {
+                $("#submit").addClass('disabled'); 
+                $("#submit").html("Ragistering Please Wait...");
+                form.submit();
+              },
         rules: {
             'first_name': {
-                'required': true,
-            },
-            'last_name': {
                 'required': true,
             },
             'contact_no': {
@@ -54,18 +56,6 @@ $(document).ready(function () {
                 'minlength': 10,
                 'maxlength': 10,
                 'number':true
-            },
-            'token': {
-                'required': true,
-                'minlength': 13
-            },
-            'domain': {
-                'required': true,
-                'url': true
-            },
-            'username': {
-                'required': true,
-                'remote':'checkUser'
             },
             'email': {
                 'required': true,
@@ -82,15 +72,20 @@ $(document).ready(function () {
             }
         },
         messages: {
-            'token': {
-                required: "Please ganrate token.",
-                minlength: "Please ganrate token."
+            'first_name': {
+                required: "First name required.",
             },
             'email':{
+                required: "Email required.",
                 remote:"This email already exist"
             },
-            'username':{
-                remote:"This username already exist"
+            'password':{
+                required:"Password required",
+                minlength:"password length 6digit required"
+            },
+            'password2':{
+                required:"Please re-inter your password",
+                equalTo:"Pasword donot match"
             }
         }
     });

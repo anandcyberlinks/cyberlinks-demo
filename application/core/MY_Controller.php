@@ -319,7 +319,7 @@ class MY_Controller extends CI_Controller {
         $mail->Host = 'smtp.gmail.com';                       // Specify main and backup SMTP servers
         $mail->SMTPAuth = true;                               // Enable SMTP authentication
         $mail->Username = 'cyberlinkslive@gmail.com';      // SMTP username
-        $mail->Password = 'Cyberlinks!@#';                         // SMTP password
+        $mail->Password = 'cYBERLINKS1!';                         // SMTP password
         $mail->SMTPSecure = 'tls';                            // Enable encryption, 'ssl' also accepted
         $mail->From = 'Admin@cyberlinks.co.in';
         $mail->FromName = 'Admin Cyberlinks';
@@ -335,7 +335,8 @@ class MY_Controller extends CI_Controller {
         $mail->Subject = $subject;
         $mail->Body = $body;
         $mail->AltBody = 'Success';
-        return $mail->send();
+        
+        $mail->send();
     }
 
     /*     * ******* function used to get video file size using getid3 ibrary ********* */

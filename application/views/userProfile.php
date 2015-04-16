@@ -16,6 +16,7 @@
                 <div class="box">
                     <div class="panel panel-info">
                         <div class="panel-heading">
+                           
                             <?php foreach ($data as $data) { ?>
                                 <h3 class="panel-title"><?php echo $data->username; ?></h3>
                             </div>
@@ -39,7 +40,7 @@
 
 
                                     <div class="col-md-3 col-lg-3 " align="center"> <img alt="User Pic" src="<?php echo $welcome->getimage() ?>" width="<?php echo $width ?>" height="<?php $height ?>"><br><br>
-                                        <form action="<?php echo base_url() ?>layout/do_upload<?= ($this->uri->segment(3))? '/'.$this->uri->segment(3) : '';?>" method="post" enctype="multipart/form-data">
+                                        <form action="<?php echo base_url() ?>layout/do_upload<?= ($this->uri->segment(3)) ? '/' . $this->uri->segment(3) : ''; ?>" method="post" enctype="multipart/form-data">
                                             <input class="btn btn-primary btn-sm"  type="file" name="image" size="20" >
                                             <br />
                                             <input class="btn btn-primary btn-sm" type="submit"  name="submit" value="<?php echo $welcome->loadPo('Upload'); ?>">
@@ -76,7 +77,12 @@
                                                     <td><?php echo $welcome->loadPo('Status') ?>:</td>
                                                     <td><?php echo $data->status; ?></td>
                                                 </tr>
+                                                <tr>
+                                                    <td><?php echo $welcome->loadPo('Token') ?>:</td>
+                                                    <td><button class="btn btn-warning" id="token">Re-Ganrate</button></td>
+                                                </tr>
                                             <?php } ?>
+                                                
                                         </tbody>
                                     </table>
                                     <!-----
@@ -91,5 +97,25 @@
             </div>
         </div>
     </div>
-</aside>    
+</aside>
+<script>
+    $("#token").click(function () {
+        bootbox.confirm("Your old token will be expired,<br> New token will be sent to you email<br>Are you sure?", function (result) {
+            if(result){
+                var url = 'http://localhost/multitvfinal/user/changestatus/?id=<?=$data->id ?>&email=<?=$data->email ?>&status=inactive';
+                $("#token").html("<img src='<?=base_url()?>/assets/img/spinner.gif'>");
+                $("#token").addClass('disabled');
+                $.ajax({
+                    url:url
+                }).done(function(){
+                    bootbox.alert('Your new token successfully sent to your email');
+                    $("#token").html('Token Ganrated');
+                })
+            }else{
+                console.log('not confirm');
+            }
+        });
+        return false;
+    })
+</script>
 

@@ -23,10 +23,6 @@
             <form action="" method="post" id="register_form">
                 <div class="body bg-gray">
                     <div class="form-group">
-                        <label><a id="token" href="">Generate Token</a></label>
-                        <input type="text" name="token" id="id_token" value="" class="form-control" placeholder="Generate Token" />
-                    </div>
-                    <div class="form-group">
                         <div class="row">
                             <div class="col-xs-6">
                                 <input type="text" name="first_name" class="form-control" placeholder="First Name"/>
@@ -50,7 +46,7 @@
                     </div>
                 </div>
                 <div class="footer">                    
-                    <button type="submit" name="submit" class="btn bg-olive btn-block">Sign me up</button>
+                    <button type="submit" name="submit" id="submit" class="btn bg-olive btn-block">Sign me up</button>
                     <a href="<?=  base_url()?>" class="text-center">I already have a membership</a>
                 </div>
             </form>
@@ -58,17 +54,13 @@
             <div class="margin text-center">
             </div>
         </div>
-        <script>
-            $("#token").click(function () {
-                $("#id_token").val('');
-                $("#id_token").val('<?= uniqid() ?>');
-                return false;
-            });
-        </script>
         <!-- jQuery 2.0.2 -->
+        
         <script src="<?php echo base_url() ?>assets/js/bootstrap.min.js" type="text/javascript"></script>
         <script src="<?php echo base_url() ?>assets/js/jquery.validate.js" type="text/javascript"></script>
+             
         <script src="<?php echo base_url() ?>assets/js/register.jquery.js" type="text/javascript"></script>
         <script src="<?php echo base_url()?>assets/js/jquery-migrate-1.0.0.js"></script>
+        
     </body>
 </html>

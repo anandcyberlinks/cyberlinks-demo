@@ -68,17 +68,22 @@ class Super_model extends CI_Model {
     }
 
     public function updatestatus($data) {
-
         $id = $data['id'];
         $status = $data['status'];
+        $token = '';
+        $this->db->where('id', $id);
         if ($status == 'active') {
             $data = array('status' => 'inactive',);
+            $this->db->update('users', array('token'=>$token));
         }
         if ($status == 'inactive') {
             $data = array('status' => 'active',);
+            $token = uniqid();
+            $this->db->update('users', array('token'=>$token));
         }
         $this->db->where('id', $id);
         $this->db->update('users', $data);
+        return $token;
     }
 
     public function Checkemail($data) {

@@ -50,14 +50,14 @@ class User_Model extends CI_Model {
     public function updateuser($data) {
         //print_r($data);
         $id = $data['id'];
-        $data = array('status' => '1',);
+        $data = array('status' => 'inactive',);
         $this->db->where('id', $id);
         $this->db->update('users', $data);
     }
 
-    public function genratetoken($data) {
+    public function genratetoken($data, $id='') {
         $action = $data['action'];
-        $id = $data[0]->id;
+        $id = ($id == '')? $data[0]->id : $id;
         $token = $data['token'];
         $t2 = time() + 120;
         $exp = date("Y-m-d h:i:s", $t2);
