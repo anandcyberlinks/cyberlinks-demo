@@ -48,18 +48,18 @@ class Ads_analytics_model extends CI_Model {
                 $this->db->where('DATE_FORMAT(a.created,"%Y-%m-%d") >', date('Y-m-d', strtotime($param['search']['startdate'])));
             }
 
-            if($param['date_from'] && $param['date_to']){
-              $startdate = $param['date_from'];
-              $enddate = $param['date_to'];
-              $this->db->where("DATE_FORMAT(a.created,'%Y-%m-%d') BETWEEN '$startdate' AND '$enddate'"); 
-            } 
+            if ($param['date_from'] && $param['date_to']) {
+                $startdate = $param['date_from'];
+                $enddate = $param['date_to'];
+                $this->db->where("DATE_FORMAT(a.created,'%Y-%m-%d') BETWEEN '$startdate' AND '$enddate'");
+            }
         }
-        if($param['date_from'] && $param['date_to']){
-              $startdate = $param['date_from'];
-              $enddate = $param['date_to'];
-              $this->db->where("DATE_FORMAT(a.created,'%Y-%m-%d') BETWEEN '$startdate' AND '$enddate'"); 
-            } 
-        
+        if ($param['date_from'] && $param['date_to']) {
+            $startdate = $param['date_from'];
+            $enddate = $param['date_to'];
+            $this->db->where("DATE_FORMAT(a.created,'%Y-%m-%d') BETWEEN '$startdate' AND '$enddate'");
+        }
+
         $group = '';
         switch ($param['type']) {
 
@@ -72,12 +72,12 @@ class Ads_analytics_model extends CI_Model {
                     $enddate = $param['date_to'];
                     $this->db->where("DATE_FORMAT(a.created,'%Y-%m-%d') BETWEEN '$startdate' AND '$enddate'");
                 }
-                if($param['date_from'] && $param['date_to']){
-              $startdate = $param['date_from'];
-              $enddate = $param['date_to'];
-              $this->db->where("DATE_FORMAT(a.created,'%Y-%m-%d') BETWEEN '$startdate' AND '$enddate'"); 
-            }
-              
+                if ($param['date_from'] && $param['date_to']) {
+                    $startdate = $param['date_from'];
+                    $enddate = $param['date_to'];
+                    $this->db->where("DATE_FORMAT(a.created,'%Y-%m-%d') BETWEEN '$startdate' AND '$enddate'");
+                }
+
 
                 break;
             case 'content':
@@ -115,13 +115,12 @@ class Ads_analytics_model extends CI_Model {
                         // $join = "users u";
                         // $cond = "a.content_provider=u.id";
                     }
-                    
                 }
-                if($param['date_from'] && $param['date_to']){
-              $startdate = $param['date_from'];
-              $enddate = $param['date_to'];
-              $this->db->where("DATE_FORMAT(a.created,'%Y-%m-%d') BETWEEN '$startdate' AND '$enddate'"); 
-            }
+                if ($param['date_from'] && $param['date_to']) {
+                    $startdate = $param['date_from'];
+                    $enddate = $param['date_to'];
+                    $this->db->where("DATE_FORMAT(a.created,'%Y-%m-%d') BETWEEN '$startdate' AND '$enddate'");
+                }
                 if ($sort) {
                     $this->db->order_by($sort, $sort_by);
                 }
@@ -144,11 +143,11 @@ class Ads_analytics_model extends CI_Model {
                 if ($sort) {
                     $this->db->order_by($sort, $sort_by);
                 }
-                if($param['date_from'] && $param['date_to']){
-              $startdate = $param['date_from'];
-              $enddate = $param['date_to'];
-              $this->db->where("DATE_FORMAT(a.created,'%Y-%m-%d') BETWEEN '$startdate' AND '$enddate'"); 
-            }
+                if ($param['date_from'] && $param['date_to']) {
+                    $startdate = $param['date_from'];
+                    $enddate = $param['date_to'];
+                    $this->db->where("DATE_FORMAT(a.created,'%Y-%m-%d') BETWEEN '$startdate' AND '$enddate'");
+                }
 
                 break;
             case 'summary':
@@ -179,25 +178,25 @@ class Ads_analytics_model extends CI_Model {
                         $cond = "a.content_provider=u.id";
                     }
                 }
-                if($param['date_from'] && $param['date_to']){
-              $startdate = $param['date_from'];
-              $enddate = $param['date_to'];
-              $this->db->where("DATE_FORMAT(a.created,'%Y-%m-%d') BETWEEN '$startdate' AND '$enddate'"); 
-            }
+                if ($param['date_from'] && $param['date_to']) {
+                    $startdate = $param['date_from'];
+                    $enddate = $param['date_to'];
+                    $this->db->where("DATE_FORMAT(a.created,'%Y-%m-%d') BETWEEN '$startdate' AND '$enddate'");
+                }
 
                 break;
             case 'map':
-                $select = 'a.country,a.country_code as code,count( a.id ) as total_hits , sum( a.watched_time ) as total_watched_time';
+                $select = 'a.country,a.country_code as code,a.city,count( a.id ) as total_hits , sum( a.watched_time ) as total_watched_time';
+                if ($param['date_from'] && $param['date_to']) {
+                    $startdate = $param['date_from'];
+                    $enddate = $param['date_to'];
+                    $this->db->where("DATE_FORMAT(a.created,'%Y-%m-%d') BETWEEN '$startdate' AND '$enddate'");
+                }
                 //$group = 'a.country_code';
-                $this->db->group_by('a.country_code');
-                if($param['date_from'] && $param['date_to']){
-              $startdate = $param['date_from'];
-              $enddate = $param['date_to'];
-              $this->db->where("DATE_FORMAT(a.created,'%Y-%m-%d') BETWEEN '$startdate' AND '$enddate'"); 
-            }
+                $this->db->group_by('a.city');
                 break;
             case 'country':
-                $select = 'a.country_code as code,a.country,a.city,count( a.id ) as total_hits , sum( a.watched_time ) as total_watched_time';
+                $select = 'a.country_code as code, a.state, a.country,a.city,count( a.id ) as total_hits , sum( a.watched_time ) as total_watched_time';
                 // $group = 'a.country_code';
 
                 if ($param['top'] == 1) {  //-- top video --//                
@@ -206,12 +205,12 @@ class Ads_analytics_model extends CI_Model {
                 if ($param['code'] != '') {
                     $this->db->where('a.country_code', $param['code']);
                 }
-                $this->db->group_by('a.city');
-                if($param['date_from'] && $param['date_to']){
-              $startdate = $param['date_from'];
-              $enddate = $param['date_to'];
-              $this->db->where("DATE_FORMAT(a.created,'%Y-%m-%d') BETWEEN '$startdate' AND '$enddate'"); 
-            }
+                $this->db->group_by('a.state');
+                if ($param['date_from'] && $param['date_to']) {
+                    $startdate = $param['date_from'];
+                    $enddate = $param['date_to'];
+                    $this->db->where("DATE_FORMAT(a.created,'%Y-%m-%d') BETWEEN '$startdate' AND '$enddate'");
+                }
 
                 break;
             case 'region':
@@ -219,21 +218,21 @@ class Ads_analytics_model extends CI_Model {
                 // $group = 'a.country_code';
                 $this->db->where('country_code', $param['code']);
                 $this->db->group_by('a.city');
-                if($param['date_from'] && $param['date_to']){
-              $startdate = $param['date_from'];
-              $enddate = $param['date_to'];
-              $this->db->where("DATE_FORMAT(a.created,'%Y-%m-%d') BETWEEN '$startdate' AND '$enddate'"); 
-            }
+                if ($param['date_from'] && $param['date_to']) {
+                    $startdate = $param['date_from'];
+                    $enddate = $param['date_to'];
+                    $this->db->where("DATE_FORMAT(a.created,'%Y-%m-%d') BETWEEN '$startdate' AND '$enddate'");
+                }
                 break;
             case 'city':
                 $select = 'a.country_code as code,a.country, a.state,a.city,a.postal_code,count( a.id ) as total_hits , sum( a.watched_time ) as total_watched_time';
                 // $group = 'a.country_code';
                 $this->db->group_by('a.city');
-                if($param['date_from'] && $param['date_to']){
-              $startdate = $param['date_from'];
-              $enddate = $param['date_to'];
-              $this->db->where("DATE_FORMAT(a.created,'%Y-%m-%d') BETWEEN '$startdate' AND '$enddate'"); 
-            }
+                if ($param['date_from'] && $param['date_to']) {
+                    $startdate = $param['date_from'];
+                    $enddate = $param['date_to'];
+                    $this->db->where("DATE_FORMAT(a.created,'%Y-%m-%d') BETWEEN '$startdate' AND '$enddate'");
+                }
                 break;
             case 'content_provider':
                 $select = 'concat(u.first_name," ",u.last_name) as name,count( a.id ) as total_hits , sum( a.watched_time ) as total_watched_time';
@@ -242,14 +241,14 @@ class Ads_analytics_model extends CI_Model {
                 $this->db->join('users u', 'a.content_provider=u.id');
                 //$join = "users u";
                 //$cond = "a.content_provider=u.id";    
-                if($param['date_from'] && $param['date_to']){
-              $startdate = $param['date_from'];
-              $enddate = $param['date_to'];
-              $this->db->where("DATE_FORMAT(a.created,'%Y-%m-%d') BETWEEN '$startdate' AND '$enddate'"); 
-            }
+                if ($param['date_from'] && $param['date_to']) {
+                    $startdate = $param['date_from'];
+                    $enddate = $param['date_to'];
+                    $this->db->where("DATE_FORMAT(a.created,'%Y-%m-%d') BETWEEN '$startdate' AND '$enddate'");
+                }
                 break;
             case 'user':
-                $select = 'cu.id,cu.first_name as name,count( a.id ) as total_hits , sum( a.watched_time ) as total_watched_time';
+                $select = 'a.ip,a.browser,a.platform,a.created,cu.id,cu.first_name as name,count( a.id ) as total_hits , sum( a.watched_time ) as total_watched_time';
                 //$group = 'u.id';
                 $this->db->group_by('cu.id');
                 $this->db->join('customers cu', 'a.user_id=cu.id');
@@ -264,11 +263,11 @@ class Ads_analytics_model extends CI_Model {
                 if ($sort) {
                     $this->db->order_by($sort, $sort_by);
                 }
-                if($param['date_from'] && $param['date_to']){
-              $startdate = $param['date_from'];
-              $enddate = $param['date_to'];
-              $this->db->where("DATE_FORMAT(a.created,'%Y-%m-%d') BETWEEN '$startdate' AND '$enddate'"); 
-            }
+                if ($param['date_from'] && $param['date_to']) {
+                    $startdate = $param['date_from'];
+                    $enddate = $param['date_to'];
+                    $this->db->where("DATE_FORMAT(a.created,'%Y-%m-%d') BETWEEN '$startdate' AND '$enddate'");
+                }
                 break;
 
             case 'usercontent':
@@ -298,11 +297,11 @@ class Ads_analytics_model extends CI_Model {
                         //   $cond = "a.content_provider=u.id";
                     }
                 }
-                if($param['date_from'] && $param['date_to']){
-              $startdate = $param['date_from'];
-              $enddate = $param['date_to'];
-              $this->db->where("DATE_FORMAT(a.created,'%Y-%m-%d') BETWEEN '$startdate' AND '$enddate'"); 
-            }
+                if ($param['date_from'] && $param['date_to']) {
+                    $startdate = $param['date_from'];
+                    $enddate = $param['date_to'];
+                    $this->db->where("DATE_FORMAT(a.created,'%Y-%m-%d') BETWEEN '$startdate' AND '$enddate'");
+                }
                 if ($sort) {
                     $this->db->order_by($sort, $sort_by);
                 }
@@ -322,14 +321,14 @@ class Ads_analytics_model extends CI_Model {
 
         $this->db->select($select, false);
         $this->db->from('ads_analytics a');
-        
-        
-        
+
+
+
         if ($param['type'] == 'revenue') {
-            if($this->user=='superadmin'){
+            if ($this->user == 'superadmin') {
                 // Searching by content Provider i.e broadcaster.
-                $this->db->where("a.broadcaster",  $_POST['searchbyCP']);
-            }else{
+                $this->db->where("a.broadcaster", $_POST['searchbyCP']);
+            } else {
                 $this->db->where("a.broadcaster", $this->uid);
             }
         } else {
@@ -348,7 +347,7 @@ class Ads_analytics_model extends CI_Model {
     }
 
     public function getReportCounts($param = array(), $sort, $sort_by) {
-        
+
         //--- search val --//
         if (@$param['search']) {
             if ($param['search']['platform'] != '') {
@@ -418,7 +417,8 @@ class Ads_analytics_model extends CI_Model {
                 }
                 break;
             case 'useragent':
-                $select = 'a.platform, a.browser, count( a.id ) as total_hits , sum( a.watched_time ) as total_watched_time';
+                die;
+                //$select = 'a.platform, a.browser, count( a.id ) as total_hits , sum( a.watched_time ) as total_watched_time';
                 //$group = 'a.platform, a.browser';            
 
                 if ($param['top'] == 1) {  //-- top video --//               
@@ -558,11 +558,11 @@ class Ads_analytics_model extends CI_Model {
         $this->db->select($select, false);
         $this->db->from('ads_analytics a');
         $this->db->where("a.content_provider", $this->uid);
-        if($param['date_from'] && $param['date_to']){
-              $startdate = $param['date_from'];
-              $enddate = $param['date_to'];
-              $this->db->where("DATE_FORMAT(a.created,'%Y-%m-%d') BETWEEN '$startdate' AND '$enddate'"); 
-            }
+        if ($param['date_from'] && $param['date_to']) {
+            $startdate = $param['date_from'];
+            $enddate = $param['date_to'];
+            $this->db->where("DATE_FORMAT(a.created,'%Y-%m-%d') BETWEEN '$startdate' AND '$enddate'");
+        }
         $this->db->join('ads c', 'a.ads_id=c.id');
 
         //$this->db->group_by($group);
@@ -670,16 +670,16 @@ class Ads_analytics_model extends CI_Model {
         }
     }
 
-    function getstitchingReport($limit,$param) {
+    function getstitchingReport($limit, $param) {
         //print_r($param); die;
         $switch_db = $this->load->database('stitch_report', TRUE);
         $sql = "SELECT id ,adname as Commercial,channel, TIMESTAMPDIFF(SECOND,adstart,adend) AS Duration,GREATEST(adstartusercount,adendadusercount) As UserCount,adstart As StartTime
         FROM adhistory ";
-        if($param['date_from'] && $param['date_to']){
-              $startdate = $param['date_from'];
-              $enddate = $param['date_to'];
-              $sql .= "where adstart BETWEEN '$startdate 00:00:00' AND '$enddate 23:59:59' "; 
-            }
+        if ($param['date_from'] && $param['date_to']) {
+            $startdate = $param['date_from'];
+            $enddate = $param['date_to'];
+            $sql .= "where adstart BETWEEN '$startdate 00:00:00' AND '$enddate 23:59:59' ";
+        }
         $sql .= "LIMIT " . $limit;
         $query = $switch_db->query($sql);
         //$switch_db->query();

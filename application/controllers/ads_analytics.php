@@ -130,9 +130,11 @@ class Ads_analytics extends MY_Controller {
 	    
 		$this->data['content'] = $this->Ads_analytics_model->getReport(array('type'=>'content','l'=>$limit,'date_from'=>$date_from,'date_to'=>$date_to));
 		$this->data['useragent'] = $this->Ads_analytics_model->getReport(array('type'=>'useragent','l'=>$limit,'date_from'=>$date_from,'date_to'=>$date_to));
+                //echo "<pre>"; print_r($this->data['useragent']); die;
 		$this->data['location'] = $this->Ads_analytics_model->getReport(array('type'=>'location','l'=>$limit,'date_from'=>$date_from,'date_to'=>$date_to));
 		$this->data['map'] = $this->Ads_analytics_model->getReport(array('type'=>'map','l'=>$limit,'date_from'=>$date_from,'date_to'=>$date_to));
 		$this->data['country'] = $this->Ads_analytics_model->getReport(array('type'=>'country','l'=>$limit,'date_from'=>$date_from,'date_to'=>$date_to));
+                //echo "<pre>";                print_r($this->data['country']);
                 $this->data['city'] = $this->Ads_analytics_model->getReport(array('type'=>'city','l'=>$limit,'date_from'=>$date_from,'date_to'=>$date_to));
 		$this->data['content_provider'] = $this->Ads_analytics_model->getReport(array('type'=>'content_provider','l'=>$limit,'date_from'=>$date_from,'date_to'=>$date_to));
 		$this->data['customer'] = $this->Ads_analytics_model->getReport(array('type'=>'user','l'=>$limit,'date_from'=>$date_from,'date_to'=>$date_to));
@@ -140,6 +142,14 @@ class Ads_analytics extends MY_Controller {
 		$this->data['stitchingReport'] = $this->Ads_analytics_model->getstitchingReport($limit,array('date_from'=>$date_from,'date_to'=>$date_to));
 		
                 $this->data['os'] = $this->Ads_analytics_model->getReport(array('type'=>'useragent','l'=>$limit,'mode'=>'os','date_from'=>$date_from,'date_to'=>$date_to));
+                //echo '<pre>'; //               print_r($this->data['os']); 
+                
+                foreach ($this->data['os'] as $val){
+                    
+                    $os[] = $val;
+                    
+                }
+                //print_r($os); die;
                 $this->data['browser'] = $this->Ads_analytics_model->getReport(array('type'=>'useragent','l'=>$limit,'mode'=>'browser','date_from'=>$date_from,'date_to'=>$date_to));
                 
 		$this->show_view('ads/ads_report',$this->data);		
@@ -147,7 +157,7 @@ class Ads_analytics extends MY_Controller {
 	
 	function ajax()
 	{
-		 $id = $_GET['user_id'];
+		$id = $_GET['user_id'];
 		$result = $this->Ads_analytics_model->getReport(array('id'=>$id,'type'=>'content'));
 		echo json_encode($result);
 	}

@@ -49,7 +49,7 @@
                             <?php echo $summary->total_hits;?>	
                         </h3>
                         <p>
-                           <?php echo $welcome->loadPo('Total Hits'); ?> 
+                           <?php echo $welcome->loadPo('Total Impresion'); ?> 
                         </p>
                     </div>
                    
@@ -258,19 +258,20 @@
                             <table class="table table-striped">
 				<tbody><tr>
 				<th>Content</th>
-				<th>Total Hits</th>
-				<th>Total Time Watched</th>				
+				<th>Total Impresion</th>
+				<!--th>Total Time Watched</th-->				
 				</tr>
 			     <?php $i=0; foreach($content as $row){ $i++;?>
 				<tr>
-				<td><a class='element' href="javascript:void()" onclick="if( $('#sub_table_<?php echo $i;?>').hasClass( 'hidden' ) ) $('#sub_table_<?php echo $i;?>').removeClass('hidden'); else $('#sub_table_<?php echo $i;?>').addClass('hidden');"><?php echo $row->ad_title;?></a>
+				<td><!--a class='element' href="javascript:void()" onclick="if( $('#sub_table_<?php echo $i;?>').hasClass( 'hidden' ) ) $('#sub_table_<?php echo $i;?>').removeClass('hidden'); else $('#sub_table_<?php echo $i;?>').addClass('hidden');"><?php echo $row->ad_title;?></a-->
+                                    <?php echo $row->ad_title;?>
 				<table class="table table-striped hidden" id='sub_table_<?php echo $i?>' >
 				    <tr><td>Completed</td><td>Partial</td><td>Replay</td></tr>
 				    <tr></td><td><?php echo $row->complete;?></td><td><?php echo $row->partial;?></td><td><?php echo $row->replay;?></td></tr>
 				</table>
 				</td>
 				<td><?php echo $row->total_hits;?></td>
-				<td><?php echo time_from_seconds($row->total_watched_time);?></td>				
+				<!--td><?php echo time_from_seconds($row->total_watched_time);?></td-->				
 				</tr>
 			    <?php }?>
                             </tbody></table><!-- /.table -->
@@ -294,14 +295,18 @@
                             <table class="table table-striped">
 				<tbody><tr>
 				<th>User</th>
-				<th>Total Hits</th>
-				<th>Total Time Watched</th>				
+				<th>Total Impresion</th>
+				<th>Platform</th>
+				<th>IP</th>
+				<!--th>Total Time Watched</th-->				
 				</tr>
 			     <?php $i=0; foreach($customer as $row){ $i++;?>
 				<tr>
 				<td><?php echo ($row->name !=''? $row->name:'guest');?></td>
 				<td><?php echo $row->total_hits;?></td>
-				<td><?php echo time_from_seconds($row->total_watched_time);?></td>				
+				<td><?php echo $row->platform;?> (<?php echo ($row->platform=='android' || $row->platform=='ios'? 'mobile':'web')?>)</td>
+				<td><?php echo $row->ip;?></td>
+				<!--td><?php echo time_from_seconds($row->total_watched_time);?></td-->				
 				</tr>
 			    <?php }?>
                             </tbody></table><!-- /.table -->
@@ -330,7 +335,7 @@
 				<tbody><tr>
 				<th>OS</th>
 				<th>Browser</th>
-				<th>Hits</th>
+				<th>Impresion</th>
 				<th>Time Watched</th>				
 				</tr>
 			     <?php $i=0; foreach($useragent as $row){ $i++;?>
@@ -378,14 +383,14 @@
                             <table class="table table-striped">
 				<tbody><tr>
 				<th>Content Provider</th>				
-				<th>Hits</th>
-				<th>Time Watched</th>				
+				<th>Impresion</th>
+				<!--th>Time Watched</th-->				
 				</tr>
 			     <?php $i=0; foreach($content_provider as $row){ $i++;?>
 				<tr>
 				<td><?php echo $row->name;?></td>				
 				<td><?php echo $row->total_hits;?></td>
-				<td><?php echo time_from_seconds($row->total_watched_time);?></td>				
+				<!--td><?php echo time_from_seconds($row->total_watched_time);?></td-->				
 				</tr>
 			    <?php }?>
                             </tbody></table><!-- /.table -->
@@ -435,15 +440,21 @@
                                         <!-- .table - Uses sparkline charts-->
                                         <table class="table table-striped">
                                             <tr>
-                                                <th>Location</th>
-                                                <th>Hits</th>
-                                                <th>Time Watched</th>                                                
+                                                <th>City</th>
+                                                <th>Country</th>
+                                                <th>State</th>
+                                                <th>Impresion</th>
+                                                <!--th>Watch time</th-->
+                                                
+                                                <!--th>Time Watched</th-->                                                
                                             </tr>
 					    <?php foreach($country as $row){?>
                                             <tr>
-                                                <td><!--<a href="<?php echo base_url()?>ads_analytics/geographic?country=<?php echo $row->code;?>">--><?php echo $row->city;?></a></td>
-                                                <td><?php echo $row->total_hits;?></td>
-						<td><?php echo time_from_seconds($row->total_watched_time);?></td>
+                                                <td><?=($row->city=='')?'Unknow':$row->city?></td>
+                                                <td><?=($row->country=='')?'Unknow':$row->country?></td>
+                                                <td><?=($row->state=='')?'Unknow':$row->state?></td>
+                                                <td><?=$row->total_hits?></td>
+                                                <!--td><?=time_from_seconds($row->total_watched_time)?></td-->
                                             </tr>
 					    <?php }?>
                                             
@@ -468,8 +479,7 @@
 				    <tr>
 					<th>Sl.</th>
 					<th>Title</th>
-					<th>Hits</th>
-					<th>Watched time</th>
+					<th>Impresion</th>
 				    </tr>				    
 				</thead>
 				    <tbody>
@@ -478,7 +488,6 @@
 					<td><?php echo $i; ?></td>  
                                                 <td  width="70%"><?php echo $value->ad_title; ?></td>                                               
                                                  <td><?php echo $value->total_hits; ?></td>
-                                                <td><?php echo time_from_seconds($value->total_watched_time); ?></td>                                                                                        
                                             </tr>
                                         <?php } ?>
                                     </tbody>
@@ -586,7 +595,7 @@
 
       function drawMap() {
         var data = google.visualization.arrayToDataTable([
-          ['Country', 'Hits'],
+          ['Country', 'Impresion'],
 	  <?php foreach($map as $country){
 	    if($country->country != ''){
 	    ?>
@@ -721,7 +730,7 @@
                 
                 var map_data = [
                <?php $i=1; foreach($city as $row){ $i++;?>
-                {label: "<?php echo ($row->city!='') ? $row->city.'<br/>'.$row->total_hits : 'Unknown'.'<br/>'.$row->total_hits;?>", data: "<?php echo $row->total_hits;?>"},
+                {label: "<?php echo ($row->country!='') ? $row->country.'<br/>'.$row->total_hits : 'Unknown'.'<br/>'.$row->total_hits;?>", data: "<?php echo $row->total_hits;?>"},
                <?php }?>
             ];
             
