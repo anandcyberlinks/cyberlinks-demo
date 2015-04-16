@@ -487,11 +487,12 @@ class Content extends Apis{
     function getnewvod_get(){
         $response = array();
         
-        $this->db->select('c.id as catid,c.category,c.color,a.id,a.title,a.description,a.created,c1.name as thumbnail_path');
+        $this->db->select('c.id as catid,c.category,c.color,a.id,a.title,a.description,a.created,g.genre_name,c1.name as thumbnail_path');
         $this->db->from('contents a');               
         $this->db->join('categories c', 'a.category = c.id', 'left');    
         $this->db->join('video_thumbnails h','h.content_id=a.id AND h.default_thumbnail = 1 ','left');
-        $this->db->join('files c1', 'h.file_id = c1.id', 'left');               
+        $this->db->join('files c1', 'h.file_id = c1.id', 'left');
+        $this->db->join('genres g', 'a.genre = g.id', 'left');
         $this->db->where('a.status','1');
         $this->db->where('a.uid',$this->app->id);
         $this->db->order_by('c.id');
@@ -506,7 +507,9 @@ class Content extends Apis{
             $tmp[$val->catid]['Counter'] = $this->limit;
             $tmp[$val->catid]['Cntnt'][] = array('title'=>$val->title,
                                             'description'=>$val->description,
+                                            'genre'=>$val->genre_name,
                                             'thumbnail'=>$val->thumbnail_path,
+                                            'created'=>$val->created,
                                             'url'=> base_url().'index.php/details?id='.$val->id.'&type=vod');
         }
         return array_values($tmp);
