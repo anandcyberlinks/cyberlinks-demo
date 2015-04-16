@@ -737,6 +737,7 @@ class User extends REST_Controller
             "adserver_user_id"=>$this->post('id'),
             'first_name'=>$this->post('contact_name'),
             'email'=>$this->post('email_address'),
+			'token'=>uniqid(),
             'status'=>'active',
             'role_id'=>24
         );
@@ -753,6 +754,7 @@ class User extends REST_Controller
   function skin_get()
   {
 	$token = $this->get('token');
+	$this->User_model->checkAdminToken($token); //-- check if token valid--//
 	$result = $this->User_model->getskin($token);
 	//$result->image = base_url().$result->image;
 	//$result->path = base_url().$result->path;
@@ -761,5 +763,12 @@ class User extends REST_Controller
 	}else{
 		$this->response(array('code'=>0,'result' => 'No record found'), 404); 
 	}
+  }
+  
+  function save_skin_post()
+  {
+	$token = $this->get('token');
+	$id = $this->User_model->checkAdminToken($token); //-- check if token valid--//
+	$result = $this->User_model->saveskin($id,$token);
   }
 }
