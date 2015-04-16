@@ -475,11 +475,12 @@ class Ads_analytics extends MY_Controller {
 		
 		if($type == 'content'){
 			if($this->uri->segment(4)=='pdf'){
+				
 				 $content =  $this->load->view('templates/ads_pdf_content',$this->data,true);
 				//-- create pdf --//
 				create_pdf($content, 'Content Base Report');
 			}elseif($this->uri->segment(4)=='csv'){
-				$heading = array('Name','Content Provider','Platform','Browser','Location','Date','Total Hits','Total time watched');
+				$heading = array('Name','Content Provider','Platform','Browser','Location','Date','Total Impressions','Total time watched');
 				//$content =  $this->load->view('templates/pdf_content',$this->data,true);				
 				
 				$dataRpt = array();
@@ -508,7 +509,7 @@ class Ads_analytics extends MY_Controller {
 				create_pdf($content, 'User Content Report');
 				
 			}elseif($this->uri->segment(4)=='csv'){
-				$heading = array('Name','Content Provider','Platform','Browser','Location','Date','Total Hits','Total time watched');
+				$heading = array('Name','Content Provider','Platform','Browser','Location','Date','Total Impressions','Total time watched');
 				//$content =  $this->load->view('templates/pdf_content',$this->data,true);				
 				//print_r($this->data['result']);die;
 				$dataRpt = array();
@@ -536,7 +537,7 @@ class Ads_analytics extends MY_Controller {
 				//-- create pdf --//
 				create_pdf($user,'User Based Report');
 			}elseif($this->uri->segment(4)=='csv'){
-				$heading = array('Name','Total Hits','Total time watched');
+				$heading = array('Name','Total Impressions','Total time watched');
 				//$content =  $this->load->view('templates/pdf_content',$this->data,true);
 				$dataRpt = array();
 				$num=0;
@@ -558,7 +559,7 @@ class Ads_analytics extends MY_Controller {
 				//-- create pdf --//
 				create_pdf($content, 'Device Base Report');
 			}elseif($this->uri->segment(4)=='csv'){
-				$heading = array('Platform','Browser','Total Hits','Total time watched');
+				$heading = array('Platform','Browser','Total Impressions','Total time watched');
 				//$content =  $this->load->view('templates/pdf_content',$this->data,true);				
 				
 				$dataRpt = array();
@@ -582,7 +583,7 @@ class Ads_analytics extends MY_Controller {
 				//-- create pdf --//
 				create_pdf($geomap,'Region Based Report');
 			}elseif($this->uri->segment(4)=='csv'){ 
-				$heading = array('Country','Region','Total Hits','Total time watched');
+				$heading = array('Country','Region','Total Impressions','Total time watched');
 				//$content =  $this->load->view('templates/pdf_content',$this->data,true);
 				$dataRpt = array();
 				$num=0;
@@ -606,7 +607,7 @@ class Ads_analytics extends MY_Controller {
 				//-- create pdf --//
 				create_pdf($geomap,'Country Based Report');
 			}elseif($this->uri->segment(4)=='csv'){ 
-				$heading = array('Country','Total Hits','Total time watched');
+				$heading = array('Country','Total Impressions','Total time watched');
 				//$content =  $this->load->view('templates/pdf_content',$this->data,true);
 				$dataRpt = array();
 				$num=0;

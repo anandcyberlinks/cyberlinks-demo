@@ -5,7 +5,7 @@
 
       function drawMarkersMap() {
       var data = google.visualization.arrayToDataTable([
-       ['Region', 'Hits'],
+       ['Region', 'Impressions'],
        <?php foreach($geomap as $row){
         if($row->state !=''){
         ?>
@@ -116,7 +116,7 @@
                                         <table class="table table-striped">
                                             <tr>
                                                 <th>Location</th>
-                                                <th>Hits</th>
+                                                <th>Impressions</th>
                                                 <th>Time Watched</th>                                                
                                             </tr>
 					    <?php foreach($geomap as $row){

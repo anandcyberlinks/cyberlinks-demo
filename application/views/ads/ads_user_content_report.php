@@ -120,7 +120,7 @@
                             <?php echo $summary->total_hits;?>	
                         </h3>
                         <p>
-                           <?php echo $welcome->loadPo('Total Hits'); ?> 
+                           <?php echo $welcome->loadPo('Total Impressions'); ?> 
                         </p>
                     </div>
                    
@@ -184,7 +184,7 @@
 					    <th><a href="<?php echo base_url(); ?>ads_analytics/usercontent/brw/<?php echo (!empty($show_brw)) ? $show_brw : 'asc'; ?>/id/<?php echo $userid;?>">Browser</a></th>
 					    <th><a href="<?php echo base_url(); ?>ads_analytics/usercontent/loc/<?php echo (!empty($show_loc)) ? $show_loc : 'asc'; ?>/id/<?php echo $userid;?>">Location</a></th>
 					    <th><a href="<?php echo base_url(); ?>ads_analytics/usercontent/dt/<?php echo (!empty($show_dt)) ? $show_dt : 'asc'; ?>/id/<?php echo $userid;?>">Date</a></th>
-					    <th><a href="<?php echo base_url(); ?>ads_analytics/usercontent/h/<?php echo (!empty($show_h)) ? $show_h : 'asc'; ?>/id/<?php echo $userid;?>">Total Hits</a></th>
+					    <th><a href="<?php echo base_url(); ?>ads_analytics/usercontent/h/<?php echo (!empty($show_h)) ? $show_h : 'asc'; ?>/id/<?php echo $userid;?>">Total Impressions</a></th>
                                             <th><a href="<?php echo base_url(); ?>ads_analytics/usercontent/t/<?php echo (!empty($show_t)) ? $show_t : 'asc'; ?>/id/<?php echo $userid;?>">Total Time Watched</a></th>	
                                         </tr>
                                     </thead>

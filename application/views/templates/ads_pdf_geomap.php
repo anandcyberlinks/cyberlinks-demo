@@ -10,7 +10,7 @@
                                            <th width="8%">Sl.No.</th>
                                            <th width="30%">Country</th>
                                            <?php if($c!=1){?><th width="30%">Region</th><?php }?>
-                                            <th width="10%">Total Hits</th>
+                                            <th width="10%">Total Impressions</th>
                                             <th width="20%">Total Time Watched</th>	
                                         </tr>
                                    

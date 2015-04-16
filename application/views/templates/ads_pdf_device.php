@@ -10,7 +10,7 @@
                                            <th width="8%">Sl.No.</th>
                                            <th width="30%">Platform</th>
                                            <th width="30%">Browser</th>
-                                            <th width="10%">Total Hits</th>
+                                            <th width="10%">Total Impressions</th>
                                             <th width="20%">Total Time Watched</th>	
                                         </tr>
                                    

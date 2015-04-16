@@ -13,7 +13,7 @@
                                            <th width="10%">Browser</th>
                                            <th width="10%">Location</th>
                                            <th width="10%">Date</th>
-                                            <th width="5%"> Hits</th>
+                                            <th width="5%">Impressions</th>
                                             <th width="10%">Total Time Watched</th>	
                                         </tr>
                                    

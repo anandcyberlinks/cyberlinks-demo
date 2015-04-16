@@ -1,4 +1,5 @@
 <?php
+ini_set('display_errors', 1);
 class Publishing_Model extends CI_Model
 {
     function __construct()
@@ -31,8 +32,10 @@ class Publishing_Model extends CI_Model
         $this->db->select('*');
         $this->db->where(array('id'=>$id));
         $this->db->from('skin_templates');
-        $result =  $this->db->get()->result();
-       return $result;
+        $query = $this->db->get();
+
+        $result =  $query->result();
+        return $result;
     }
     function _save($data)
     {

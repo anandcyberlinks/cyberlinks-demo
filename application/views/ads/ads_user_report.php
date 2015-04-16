@@ -78,7 +78,7 @@
                             <?php echo $summary->total_hits;?>	
                         </h3>
                         <p>
-                           <?php echo $welcome->loadPo('Total Hits'); ?> 
+                           <?php echo $welcome->loadPo('Total Impression'); ?> 
                         </p>
                     </div>
                    
@@ -137,7 +137,7 @@
                                     <thead>
                                         <tr>
                                            <th><a href="<?php echo base_url(); ?>ads_analytics/user/v/<?php echo (!empty($show_c)) ? $show_c : 'asc'; ?>">Name</a></th>                                           
-                                            <th><a href="<?php echo base_url(); ?>ads_analytics/user/h/<?php echo (!empty($show_h)) ? $show_h : 'asc'; ?>">Total Hits</a></th>
+                                            <th><a href="<?php echo base_url(); ?>ads_analytics/user/h/<?php echo (!empty($show_h)) ? $show_h : 'asc'; ?>">Total Impression</a></th>
                                             <th><a href="<?php echo base_url(); ?>ads_analytics/user/t/<?php echo (!empty($show_t)) ? $show_t : 'asc'; ?>">Total Time Watched</a></th>	
                                         </tr>
                                     </thead>

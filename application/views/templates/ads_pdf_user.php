@@ -8,7 +8,7 @@
                                         <tr style="background-color:#428bca;color:#fff;">
                                            <th width="8%">Sl.No.</th>
                                            <th width="45%">Name</th>                                          
-                                            <th width="10%">Total Hits</th>
+                                            <th width="10%">Total Impressions</th>
                                             <th width="20%">Total Time Watched</th>	
                                         </tr>
                                    

@@ -67,7 +67,7 @@
 			<div class="pull-right box-tools">
 			    <button class="btn btn-danger btn-sm" data-widget='collapse' data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
 			</div><!-- /. tools -->						
-		    <h3 class="box-title">Daily Ads Hits</h3>
+		    <h3 class="box-title">Daily Ads Impressions</h3>
 		    </div><!-- /.box-header -->
 		    <div class="box-body no-padding">
 			<div class="row">
@@ -104,7 +104,7 @@
 				    <tr>
 					<th width='5%'>Sl.</th>
 					<th>Title</th>
-					<th>Hits</th>
+					<th>Impressions</th>
 					<th>Watched time</th>
 				    </tr>				    
 				</thead>
@@ -131,7 +131,7 @@
 				    <tr>
 					<th width='5%'>Sl.</th>
 					<th>Title</th>
-					<th>Hits</th>
+					<th>Impressions</th>
 					<th>Watched time</th>
 				    </tr>				    
 				</thead>
@@ -160,7 +160,7 @@
 				    <tr>
 					<th>Sl.</th>
 					<th>Title</th>
-					<th>Hits</th>
+					<th>Impressions</th>
 					<th>Watched time</th>
 				    </tr>				    
 				</thead>
