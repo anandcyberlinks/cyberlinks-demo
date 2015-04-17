@@ -1,1 +1,80 @@
-var _0x6934=["\x64\x6F\x6E\x65","\x61\x70\x69\x2F\x61\x6E\x61\x6C\x79\x74\x69\x63\x73\x2F\x70\x6C\x61\x79","\x6C\x69\x76\x65","\x31","\x50\x4F\x53\x54","\x6A\x73\x6F\x6E","\x61\x6A\x61\x78","\x61\x70\x69\x2F\x61\x6E\x61\x6C\x79\x74\x69\x63\x73\x2F\x70\x61\x75\x73\x65","\x61\x70\x69\x2F\x61\x6E\x61\x6C\x79\x74\x69\x63\x73\x2F\x70\x6C\x61\x79\x61\x64\x73","\x70\x6F\x73\x74","\x61\x70\x69\x2F\x61\x6E\x61\x6C\x79\x74\x69\x63\x73\x2F\x61\x64\x73\x5F\x63\x6F\x6D\x70\x6C\x65\x74\x65","\x68\x74\x74\x70\x3A\x2F\x2F","\x6D\x75\x6C\x74\x69\x74\x76\x73\x6F\x6C\x75\x74\x69\x6F\x6E\x2E\x63\x6F\x6D\x2F","\x6D\x75\x6C\x74\x69\x74\x76\x66\x69\x6E\x61\x6C\x2F","\x6C\x6F\x67","\x6F\x6E\x41\x64\x43\x6F\x6D\x70\x6C\x65\x74\x65","\x70\x6F\x73\x69\x74\x69\x6F\x6E","\x72\x6F\x75\x6E\x64","\x6F\x6E\x41\x64\x54\x69\x6D\x65","\x6F\x6E\x41\x64\x50\x61\x75\x73\x65","\x74\x61\x67","\x6F\x6E\x41\x64\x50\x6C\x61\x79","\x6F\x6E\x50\x6C\x61\x79","\x67\x65\x74\x50\x6F\x73\x69\x74\x69\x6F\x6E","\x6F\x6E\x50\x61\x75\x73\x65"];function play(){$[_0x6934[6]]({url:h+bb+f+_0x6934[1],data:{content_id:content_id,content_provider:content_provider,content_type:_0x6934[2],play:_0x6934[3]},cache:1,type:_0x6934[4],dataType:_0x6934[5]})[_0x6934[0]](function(_0x514ax2){id=_0x514ax2})}function pause(_0x514ax2){id>0&&$[_0x6934[6]]({url:h+bb+f+_0x6934[7],data:{id:id,watched_time:_0x514ax2,pause:_0x6934[3]},cache:1,type:_0x6934[4]})[_0x6934[0]](function(){})}function playAds(_0x514ax2){$[_0x6934[6]]({url:h+bb+f+_0x6934[8],data:{tag:_0x514ax2,broadcaster:content_provider,play:_0x6934[3]},cache:1,type:_0x6934[9],success:function(_0x514ax2){ad_id=_0x514ax2}})}function completeAds(_0x514ax2){$[_0x6934[6]]({url:h+bb+f+_0x6934[10],data:{id:ad_id,watched_time:_0x514ax2,complete:_0x6934[3],pause:0},cache:1,type:_0x6934[4]})[_0x6934[0]](function(){})}var id=0,duration,pos=0;h=_0x6934[11];var ad_duration=0,ad_id=0;bb=_0x6934[12];var f=_0x6934[13];jwplayer()[_0x6934[24]](function(){pos>0?(pos=parseInt(this[_0x6934[23]]())-pos1,pos1+=pos):(pos=parseInt(this[_0x6934[23]]()),pos1=pos),pause(pos1)}),jwplayer()[_0x6934[22]](function(){play()}),jwplayer()[_0x6934[21]](function(_0x514ax2){var _0x514axc=_0x514ax2[_0x6934[20]];playAds(_0x514axc);}),jwplayer()[_0x6934[19]](function(){pauseAds(ad_duration)}),jwplayer()[_0x6934[18]](function(_0x514ax2){ad_duration=Math[_0x6934[17]](_0x514ax2[_0x6934[16]])}),jwplayer()[_0x6934[15]](function(){console[_0x6934[14]](ad_duration),completeAds(ad_duration)});
+function play() {
+    $.ajax({
+        url: h + bb + f + "api/analytics/play",
+        data: {
+            content_id: content_id,
+            content_provider: content_provider,
+			content_type: 'live',
+            play: "1"
+        },
+        cache: 1,
+        type: "POST",
+        dataType: "json"
+    }).done(function(a) {
+        id = a
+    })
+}
+
+function pause(a) {
+    id > 0 && $.ajax({
+        url: h + bb + f + "api/analytics/pause",
+        data: {
+            id: id,
+            watched_time: a,
+            pause: "1"
+        },
+        cache: 1,
+        type: "POST"
+    }).done(function() {})
+}
+
+function playAds(a) {
+    $.ajax({
+        url: h + bb + f + "api/analytics/playads",
+        data: {
+            tag: a,
+            broadcaster: content_provider,
+            play: "1"
+        },
+        cache: 1,
+        type: "post",
+        success: function(a) {
+            ad_id = a
+        }
+    })
+}
+
+function completeAds(a) {
+    $.ajax({
+        url: h + bb + f + "api/analytics/ads_complete",
+        data: {
+            id: ad_id,
+            watched_time: a,
+            complete: "1",
+            pause: 0
+        },
+        cache: 1,
+        type: "POST"
+    }).done(function() {})
+}
+var id = 0,
+    duration, pos = 0;
+h = "http://";
+var ad_duration = 0,
+    ad_id = 0;
+bb = "multitvsolution.com/";
+var f = "multitvfinal/";
+jwplayer().onPause(function() {
+    pos > 0 ? (pos = parseInt(this.getPosition()) - pos1, pos1 += pos) : (pos = parseInt(this.getPosition()), pos1 = pos), pause(pos1)
+}), jwplayer().onPlay(function() {
+    play()
+}), jwplayer().onAdPlay(function(a) {
+    var t = a.tag;
+    playAds(t)
+}), jwplayer().onAdPause(function() {
+    pauseAds(ad_duration)
+}), jwplayer().onAdTime(function(a) {
+    ad_duration = Math.round(a.position)
+}), jwplayer().onAdComplete(function() {
+    console.log(ad_duration), completeAds(ad_duration)
+});
