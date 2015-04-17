@@ -756,8 +756,8 @@ class User extends REST_Controller
 	$token = $this->get('token');
 	$this->User_model->checkAdminToken($token); //-- check if token valid--//
 	$result = $this->User_model->getskin($token);
-	//$result->image = base_url().$result->image;
-	//$result->path = base_url().$result->path;
+	$result->image = base_url().$result->image;
+	$result->path = base_url().$result->path;
 	if($result){
 		$this->response(array('code'=>1,'result' => $result), 200); 
 	}else{
