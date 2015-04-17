@@ -73,8 +73,8 @@
                                         <?php if(isset($result['id'])&&($result['id']!='')){ ?>
                                         <div class="form-group col-lg-5">
                                             <label for="Image"><?php echo $welcome->loadPo('Preview'); ?></label>&nbsp;&nbsp;
-                                            <img width="300" height="100" src='<?php if(isset($result['image'])&&($result['image']!='')){echo '../'.$result['image'];} ?>' >
-                                           
+                                            <img width="300" height="100" src='<?php if(isset($result['image'])&&($result['image']!='')){echo $result['image'];} ?>' >
+                                            
                                         </div>
                                         <?php }else{?>
                                         <div class="form-group col-lg-5">
