@@ -758,6 +758,24 @@ class User extends REST_Controller
 	$result = $this->User_model->getskin($token);
 	$result->image = base_url().$result->image;
 	$result->path = base_url().$result->path;
+	//echo '<pre>';print_r($result);
+	/*$xml=simplexml_load_file("http://www.multitvsolution.com/multitvfinal/assets/upload/skins/one/one.xml") or die("Error: Cannot create object");
+     echo '<pre>';print_r($xml);
+	 $config_data->skinType = (string) $xml->skinType;
+	 $config_data->skinOption = (array)$xml->skinOption;
+	 $config_data->cssResource = (array)$xml->cssResource;
+	// $config_data->jsResource = $xml->jsResource;	 
+	 //$config_data->cssResource = $xml->cssResource;
+	
+        foreach ($xml->jsResource as $listing)
+        {
+			$config_data->jsResource['jsLink'][] = (string) $listing->jsLink;
+			
+		}*/
+	//echo '<pre>';print_r($config_data);
+		//echo json_encode((object)$config_data);
+		//$result->config_data = json_encode((array)$config_data);
+		//print_r($result);
 	if($result){
 		$this->response(array('code'=>1,'result' => $result), 200); 
 	}else{
