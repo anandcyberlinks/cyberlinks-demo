@@ -27,7 +27,7 @@ $(document).ready(function() {
     }).error(function(){
           $('#player').css("color", "red").text('Your api key is invalid.');
 	});     
-    tt += "_p", tt += ".js", impd.src = h + bb + f + aa + "js/" + tt, document.head.appendChild(impd);
+    //tt += "_p", tt += ".js", impd.src = h + bb + f + aa + "js/" + tt, document.head.appendChild(impd);
     analytics.src = h + bb + f + aa + "js/" + anly + ".js", document.head.appendChild(analytics);
    function playstream(url){
     $.ajax({
