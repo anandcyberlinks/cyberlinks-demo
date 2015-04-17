@@ -766,7 +766,7 @@ class User extends REST_Controller
 	 $config_data->cssResource = (array)$xml->cssResource;
 	// $config_data->jsResource = $xml->jsResource;	 
 	 //$config_data->cssResource = $xml->cssResource;
-	
+	 
         foreach ($xml->jsResource as $listing)
         {
 			$config_data->jsResource['jsLink'][] = (string) $listing->jsLink;
