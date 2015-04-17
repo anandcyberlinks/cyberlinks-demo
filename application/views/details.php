@@ -352,7 +352,7 @@ autostart: 1,
 	if (epos >= 2.0 && epos < 4.0) {
 		jwplayer().setMute(false);
 		console.log('123stop');
-		window.location.href="<?php echo $uri;?>#1234"
+		//window.location.href="<?php echo $uri;?>#1234"
 	}
 	
 	
