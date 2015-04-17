@@ -7,13 +7,12 @@ var bb = "multitvsolution.com/",
     f = "multitvfinal/",
     aa = "assets/",
     h = "http://";
-    var url = $('#player').text();
+$(document).ready(function() {
+var url = $('#player').text();
 var width = $('#player').attr('width');
 var height = $('#player').attr('height');
 alert(width);
 alert(height);
-$(document).ready(function() {
-
 var domain = document.domain;
      $.ajax({
       url: h + bb + f+"api/web/cp/token/"+apikey,
