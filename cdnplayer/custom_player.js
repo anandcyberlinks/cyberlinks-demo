@@ -10,6 +10,8 @@ var bb = "multitvsolution.com/",
 var url = $('#player').text();
 var width = $('#player').attr('width');
 var height = $('#player').attr('height');
+alert(width);
+alert(height);
 var domain = document.domain;
 $(document).ready(function() {     
      $.ajax({
