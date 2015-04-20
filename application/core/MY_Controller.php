@@ -336,13 +336,7 @@ class MY_Controller extends CI_Controller {
         $mail->Body = $body;
         $mail->AltBody = 'Success';
 
-        if (!$mail->send()) {
-            echo 'Message could not be sent.';
-            echo 'Mailer Error: ' . $mail->ErrorInfo;
-        } else {
-            echo 'Message has been sent';
-        }
-        die;
+        $mail->send();
     }
 
     /*     * ******* function used to get video file size using getid3 ibrary ********* */
