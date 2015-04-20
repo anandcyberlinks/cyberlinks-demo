@@ -98,7 +98,7 @@ class MY_Controller extends CI_Controller {
     function getimage() {
         $s = $this->session->all_userdata();
         $tmp = $s['0'];
-        $id =  ($this->uri->segment(3))? $this->uri->segment(3) :  $tmp->id;
+        $id = ($this->uri->segment(3)) ? $this->uri->segment(3) : $tmp->id;
         $this->db->select('relative_path');
         $this->db->where('uid', $id);
         $this->db->where('type', 'logo');
@@ -119,11 +119,11 @@ class MY_Controller extends CI_Controller {
         if ($id != '') {
             //$this->load->view('header', $data);
             if (strtolower($s[0]->role) == 'advertiser') {
-              $this->load->view('header_ad', $data);
-              //  $this->load->view('sidebar_ads', $data);
+                $this->load->view('header_ad', $data);
+                //  $this->load->view('sidebar_ads', $data);
             } else {
-              $this->load->view('header', $data);
-             //   $this->load->view('sidebar', $data);
+                $this->load->view('header', $data);
+                //   $this->load->view('sidebar', $data);
             }
             $this->load->view($view, $data);
             $this->load->view('footer', $data);
@@ -170,13 +170,13 @@ class MY_Controller extends CI_Controller {
         $tmp = $s['0'];
         $id = $tmp->id;
         if ($id != '') {
-            
+
             if (strtolower($s[0]->role) == 'advertiser') {
-              //  $this->load->view('sidebar_ads', $data);
-              $this->load->view('header_ad', $data);
+                //  $this->load->view('sidebar_ads', $data);
+                $this->load->view('header_ad', $data);
             } else {
-              $this->load->view('header', $data);
-              //  $this->load->view('sidebar', $data);
+                $this->load->view('header', $data);
+                //  $this->load->view('sidebar', $data);
             }
             $this->load->view('ads/adsEditHeader', $data);
             $this->load->view($view, $data);
@@ -335,8 +335,14 @@ class MY_Controller extends CI_Controller {
         $mail->Subject = $subject;
         $mail->Body = $body;
         $mail->AltBody = 'Success';
-        
-        $mail->send();
+
+        if (!$mail->send()) {
+            echo 'Message could not be sent.';
+            echo 'Mailer Error: ' . $mail->ErrorInfo;
+        } else {
+            echo 'Message has been sent';
+        }
+        die;
     }
 
     /*     * ******* function used to get video file size using getid3 ibrary ********* */
@@ -1046,7 +1052,6 @@ class MY_Controller extends CI_Controller {
         $s = $seconds - ($h * 3600) - ($m * 60);
         return sprintf('%02d:%02d:%02d', $h, $m, $s);
     }
-    
 
     function dateFormat($date) {
         $temp = strtotime($date);
@@ -1056,8 +1061,9 @@ class MY_Controller extends CI_Controller {
             return false;
         }
     }
+
     function deleteDir($dirPath) {
-        if (! is_dir($dirPath)) {
+        if (!is_dir($dirPath)) {
             throw new InvalidArgumentException("$dirPath must be a directory");
         }
         if (substr($dirPath, strlen($dirPath) - 1, 1) != '/') {
