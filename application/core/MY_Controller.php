@@ -312,7 +312,7 @@ class MY_Controller extends CI_Controller {
         fclose($fileHandle); // close the file since we're done
     }
 
-    function aa($to, $subject, $body) {
+    function sendmail($to, $subject, $body) {
         $this->load->library('PHPMailer/phpmailer');
         $mail = new PHPMailer();
         $mail->isSMTP();                                      // Set mailer to use SMTP
