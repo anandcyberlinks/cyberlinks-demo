@@ -62,6 +62,7 @@ class Ads extends REST_Controller
         $user_id = $this->get('user_id');
         $type = $this->get('type');
         $zone = $this->get('zone');
+    
         //-- get content cuepoints ---//
         $limit = $this->Ads_model->getCuePoints($id,$type,1);
         $cuePoints = $this->Ads_model->getCuePoints($id,$type);
@@ -134,6 +135,102 @@ class Ads extends REST_Controller
         $this->response('No record found', 404);
     }
 }
+
+/*
+ Created by Hitender, dated 20/04/2015
+ Purpose: Used to serve ads to publishers
+*/
+    function serve_ad_get()
+    {
+        $token = $this->get('token');
+        $limit = $this->get('limit');
+        $mode = $this->get('mode');
+        //--- validate token ---//
+        $this->db->select('z.zone_id');
+        $this->db->from('users u');
+        $this->db->join('user_zone z','u.id=z.user_id','left');
+        $this->db->where('token',$token);
+        /*f($mode !='demo'){        
+            $this->db->where('domain',$domain);
+        }else{
+             $limit =2;
+        }*/
+        $query = $this->db->get();
+      //  echo $this->db->last_query();
+        $result = $query->row();
+       
+        if(!$result){
+        $this->response('Invalid Token', 404);      
+        }
+      //---------------------//
+       $zone = $result->zone_id;
+       
+       /*if($limit ==''){
+        //-- get content cuepoints ---//
+        $limit = $this->Ads_model->getCuePoints($id,$type,1);
+        $cuePoints = $this->Ads_model->getCuePoints($id,$type);
+        //----------------------------//        
+        $user_data = $this->Ads_model->getUserKeywords($user_id);        
+        
+        if(@$cuePoints['0']!=0){
+            array_unshift($cuePoints, 0);
+            $limit += 1;
+        }                
+        if(count($cuePoints) <= 0){
+            $limit = 1;
+        }
+       }*/
+        //---- IP details ---//
+       /* if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+            $ip = $_SERVER['HTTP_CLIENT_IP'];
+        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        } else {
+            $ip = $_SERVER['REMOTE_ADDR'];
+        }
+        $location = file_get_contents('http://ip-api.com/json/'.$ip);
+        $location = json_decode($location);
+        $country     = ($location->countryCode =='IN' ? 'IN':'OTR');
+        */
+        //--------------------------//
+       // $keywords = $user_data['keywords'];
+                
+        $this->load->helper('url');	
+        $url = "http://multitvsolution.com/vast/getvast.php?zone=$zone&country=$country&keyword=$keywords&age=$age&gender=$gender&lat=$lat&lng=$lng&limit=$limit";
+        // Get cURL resource
+        $curl = curl_init();
+        // Set some options - we are passing in a useragent too here
+        curl_setopt_array($curl, array(
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_URL => $url,
+        ));  
+        // Send the request & save response to $resp
+        $result = curl_exec($curl);
+               
+        // Close request to clear up some resources
+        curl_close($curl);
+        //$this->response(json_decode($result), 200);
+        $adsAlloc = json_decode($result);
+       //print_r($adsAlloc);
+       //----Ad allocation with cuepoint array ---//
+       $i=0;                
+	    foreach($adsAlloc->url as $key=>$val)
+	    {
+                $adsFinal[$i]['vast_file'] = $val;
+                if(count($cuePoints) > 0){
+                $adsFinal[$i]['cue_points'] 	= @$cuePoints[$i];
+                }else{
+                $adsFinal[$i]['cue_points'] 	= 0;
+                }
+                $i++;
+        }
+    //----------------------------------------------//
+    if($adsFinal){
+        $this->response($adsFinal);
+    }else{
+        $this->response('No record found', 404);
+    }
+    }
     
     function channels_get(){
         $result = $this->Ads_model->getChannels();
