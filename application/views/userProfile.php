@@ -102,7 +102,7 @@
     $("#token").click(function () {
         bootbox.confirm("Your old token will be expired,<br> New token will be sent to you email<br>Are you sure?", function (result) {
             if(result){
-                var url = 'http://localhost/multitvfinal/user/changestatus/?id=<?=$data->id ?>&email=<?=$data->email ?>&status=inactive';
+                var url = 'http://localhost/multitvfinal/user/changestatus/?id=<?=$data->id ?>&email=<?=$data->email ?>&domain=<?=$data->domain ?>&status=inactive';
                 $("#token").html("<img src='<?=base_url()?>/assets/img/spinner.gif'>");
                 $("#token").addClass('disabled');
                 $.ajax({

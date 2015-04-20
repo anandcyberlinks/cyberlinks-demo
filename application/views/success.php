@@ -12,7 +12,7 @@
         <div class="col-md-12">
             <div class="error-template">
                 <h1>Congrats !</h1>
-                <h2>You have success fully registered</h2>
+                <h2>You have successfully registered</h2>
                 <div class="error-details">
                     Contact admin for activate you account
                 </div>

@@ -85,7 +85,7 @@ class user extends MY_Controller {
         $this->log($this->user, 'Status Changed For user id-> ' . $data['id']);
         if($token != ''){
             $email = $_GET['email'];
-            $body = file_get_contents(base_url() . 'layout/token_email?token=' . $token);
+            $body = file_get_contents(base_url() . 'layout/token_email?token=' . $token.'&domain='.$_GET['domain']);
             $subject = 'You Application Token';
 
             $this->sendmail($email, $subject, $body); //mail to user

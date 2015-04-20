@@ -92,9 +92,7 @@
                                           <tr>
                                              <td width="169" height="45" align="center">
                                                 <div class="imgpop">
-                                                   <a target="_blank" href="#">
                                                        <img src="<?=  base_url().'assets/img/multitv.png'?>" alt="" border="0" width="169" height="45" style="display:block; border:none; outline:none; text-decoration:none;">
-                                                   </a>
                                                 </div>
                                              </td>
                                           </tr>
@@ -158,8 +156,14 @@
                                        <tbody>
                                           <!-- Title -->
                                           <tr>
+                                              <td>Congrates You account is acivated</td>
+                                          </tr>
+                                          <tr>
+                                              <td>Token for Domain:- <?=$_GET['domain']?></td>
+                                          </tr>
+                                          <tr>
                                              <td style="font-family: Helvetica, arial, sans-serif; font-size: 30px; color: #333333; text-align:center; line-height: 30px;" st-title="fulltext-heading">
-                                                You Application Token
+                                                Your Application Token
                                              </td>
                                           </tr>
                                           <!-- End of Title -->

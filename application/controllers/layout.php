@@ -281,7 +281,7 @@ class Layout extends MY_Controller {
                     $this->log('log', 'User Sccesfull verified using Email link userid-> ' . $data['id']);
                     $this->user_model->deletetoken($data['id']);
                     $this->session->set_flashdata('message', $this->_successmsg($this->loadPo($this->config->item('success_email_verified'))));
-                    redirect(base_url());
+                    redirect(base_url()/'layout');
                 }
             } else {
                 echo 'Authentication Failed Token Expired or Invalid';

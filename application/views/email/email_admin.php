@@ -92,9 +92,7 @@
                                           <tr>
                                              <td width="169" height="45" align="center">
                                                 <div class="imgpop">
-                                                   <a target="_blank" href="#">
                                                        <img src="<?=  base_url().'assets/img/multitv.png'?>" alt="" border="0" width="169" height="45" style="display:block; border:none; outline:none; text-decoration:none;">
-                                                   </a>
                                                 </div>
                                              </td>
                                           </tr>

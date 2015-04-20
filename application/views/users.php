@@ -113,10 +113,10 @@
                                         <td><?php echo $value->email; ?></td>
                                         <td><?php echo $value->role; ?></td>        
                                         <td><?php if (($value->status) == 'active') { ?>
-                                            <a class="status" data="active" href="<?php echo base_url() ?>user/changestatus/?id=<?php echo $value->id; ?>&email=<?=$value->email?>&status=" title="Click To Inactive"><i class="fa fa-fw fa-check-circle-o"></i>Active&nbsp;&nbsp;</a>
+                                            <a class="status" data="active" href="<?php echo base_url() ?>user/changestatus/?id=<?php echo $value->id; ?>&email=<?=$value->email?>&domain=<?=$value->domain?>&status=" title="Click To Inactive"><i class="fa fa-fw fa-check-circle-o"></i>Active&nbsp;&nbsp;</a>
                                             <?php } else {
                                                 if(($value->status) == 'pending'){ echo "Pending"; } else { ?> 
-                                                <a class="status" data="inactive" href="<?php echo base_url() ?>user/changestatus/?id=<?php echo $value->id; ?>&email=<?=$value->email?>&status=" title="Click To Active"><i class="fa fa-fw fa-circle-o"></i> Inactive</a>
+                                                <a class="status" data="inactive" href="<?php echo base_url() ?>user/changestatus/?id=<?php echo $value->id; ?>&email=<?=$value->email?>&domain=<?=$value->domain?>&status=" title="Click To Active"><i class="fa fa-fw fa-circle-o"></i> Inactive</a>
                                                 <?php } } ?>
                                         </td>
                                         <td><?=$value->token?></td>
