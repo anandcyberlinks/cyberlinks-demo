@@ -320,10 +320,10 @@ class MY_Controller extends CI_Controller {
         //$mail->SMTPAuth = true;                               // Enable SMTP authentication
         //$mail->Username = 'cyberlinkslive@gmail.com';      // SMTP username
         //$mail->Password = 'cYBERLINKS1!';                         // SMTP password
-        ///$mail->SMTPSecure = 'tls';                            // Enable encryption, 'ssl' also accepted
+        //$mail->SMTPSecure = 'tls';                            // Enable encryption, 'ssl' also accepted
         $mail->From = 'Admin@cyberlinks.co.in';
         $mail->FromName = 'Admin Cyberlinks';
-        //$mail->addAddress($to);    // Add a recipient
+        $mail->addAddress($to);    // Add a recipient
         //$mail->addAddress('pavan.prajapati@cyberlinks.in', 'Pawan PAAAArjapti');     // Name is optional
         //$mail->addReplyTo('info@example.com', 'Information');                       // Reply To.........
         //$mail->addCC('cc@example.com');
