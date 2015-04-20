@@ -83,6 +83,10 @@ $(document).ready(function () {
                 required: "Email required.",
                 remote:"This email already exist"
             },
+            'domain':{
+                required: "http url required.",
+                remote:"http url required."
+            },
             'password':{
                 required:"Password required",
                 minlength:"password length 6digit required"
