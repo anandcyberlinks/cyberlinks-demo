@@ -64,7 +64,7 @@ class Webtv extends MY_Controller {
                         'channel_name' => $channel_name,
                         'date' => date('Y-m-d h:m:i'),
                         'show_title' => $csv_line[2],
-                        'show_time' => ($csv_line[1] == '') ? '' : date("H:i", strtotime($csv_line[0])),
+                        'show_time' => ($csv_line[1] == '') ? '' : date("H:i", strtotime($csv_line[1])),
                         'show_thumb' => $csv_line[5],
                         'show_language' => $csv_line[8],
                         'show_description' => $csv_line[13],
