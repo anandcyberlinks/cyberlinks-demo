@@ -346,12 +346,14 @@ function delete_user($id){
 	return $this->db->insert_id();
     }
     
-	function getskin()
+	function getskin($token)
 	{
 	  $this->db->select('a.*');
 	  $this->db->from('skin_templates a');
 	  $this->db->join('users u','u.skin_id=a.id');
+	  $this->db->where('u.token',$token);
 	  $query = $this->db->get();
+	 // echo $this->db->last_query();
 	  return $query->row();
-	}
+	}  
 }
