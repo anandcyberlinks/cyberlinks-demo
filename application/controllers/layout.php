@@ -67,7 +67,11 @@ class Layout extends MY_Controller {
                 $this->log($data['username'], $msg);
                 if ($s['0']->role == 'Advertiser') {
                     redirect(base_url() . 'ads_analytics/report');
-                } else {
+                }
+                if ($s['0']->role == 'Superadmin') {
+                    redirect(base_url() . 'user');
+                }
+                else {
                     // redirect(base_url().'layout/dashboard');
                     redirect(base_url() . 'analytics/report');
                 }
