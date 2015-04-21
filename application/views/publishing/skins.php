@@ -63,7 +63,7 @@
 				<button type="submit" name="save" value="Save"class="btn btn-primary"><?php echo $welcome->loadPo('Save') ?></button>
 				 <a id='addhref' href="<?=base_url()?>publishing/add"><button type="button" id='addbutton' name="add" class="btn btn-primary"><?php echo $welcome->loadPo('Add') ?></button></a>
 				 <a id='edithref'><button type="button" id='editbutton' disabled name="edit" class="btn btn-primary"><?php echo $welcome->loadPo('Edit') ?></button></a>
-				 <a id='deletehref' onclick="return confirm('Are you sure?')"><button type="button" id='deletebutton' disabled name="delete" class="btn btn-primary"><?php echo $welcome->loadPo('Delete') ?></button></a>
+				 <a id='deletehref'><button type="button" id='deletebutton' disabled name="delete" class="btn btn-primary"><?php echo $welcome->loadPo('Delete') ?></button></a>
 									</form>
                         </div><br/>
                         <div class="box">
@@ -195,7 +195,19 @@
 	document.getElementById('editbutton').disabled = false;
 	document.getElementById("edithref").href="<?=base_url()?>publishing/add?id="+id;
 	document.getElementById('deletebutton').disabled = false;
-	document.getElementById("deletehref").href="<?=base_url()?>publishing/delete?id="+id;
+	//document.getElementById("deletehref").href="<?=base_url()?>publishing/delete?id="+id;
+	document.getElementById("deletehref").setAttribute("onclick","return deletebox('"+id+"');");
 	}
+	function deletebox(id){
+		bootbox.confirm("Are you sure you want to Delete video", function (confirmed) {
+				if (confirmed) {
+					var url = "<?=base_url()?>publishing/delete?id="+id;
+					window.location.assign(url);
+				}
+		})
+		return false;
+	}
+
+	
 </script>
 

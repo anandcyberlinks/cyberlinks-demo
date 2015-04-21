@@ -175,7 +175,6 @@ class Publishing extends My_Controller{
                         $folder_name = explode(".", $filename);
                         $xmlname=$folder_name['0'].'/'.$folder_name['0'].'.xml';
                         $target_path = $path;
-                        //echopre($filename);
                         $image_target=$path.'/'.$folder_name['0'];
                         if(upload_compress_files($filename,$source,$target_path,$type)){
                             chmod($target_path, 0777);
@@ -188,10 +187,9 @@ class Publishing extends My_Controller{
                          $filename = $_FILES["image_file"]["name"];
                          $source = $_FILES["image_file"]["tmp_name"];
                          $type = $_FILES["image_file"]["type"];
-                         //$name = explode(".", $filename);
-                         
+                         $imageext= end(explode('.',$filename));
                          if($_FILES["skin_file"]["name"]) {
-                            $target_path = $image_target.'/'.$filename;
+                            $target_path = $image_target.'/'.$folder_name['0'].'.'.$imageext;
                          }else{
                            unlink($result['image']);
                            $target_path=$result['image'];
@@ -237,8 +235,9 @@ class Publishing extends My_Controller{
                          $filename = $_FILES["image_file"]["name"];
                          $source = $_FILES["image_file"]["tmp_name"];
                          $type = $_FILES["image_file"]["type"];
+                         $imageext= end(explode('.',$filename));
                          //$name = explode(".", $filename);
-                         $target_path = $image_target.'/'.$filename;
+                         $target_path = $image_target.'/'.$folder_name['0'].'.'.$imageext;
                         if(move_uploaded_file($source, $target_path)){
                             chmod($target_path, 0777);
                             $_POST['image'] = $target_path;
@@ -274,6 +273,15 @@ class Publishing extends My_Controller{
         }
         $editresult = $this->publishing_model->deleteskin($id);
         redirect('publishing');  
+    }
+    function validfile(){
+       $path='assets/upload/skins/'.$_REQUEST['fileName'];
+        if (file_exists($path)) {
+            echo 'exist';
+        }else{
+            echo 'success';
+        }
+        die;
     }
 }
 

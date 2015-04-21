@@ -167,11 +167,26 @@
     }
     function validateFileSelected(_obj,type) {
         //var id='<?php if(isset($result['id'])&&($result['id']!='')){echo $result['id'];}else{echo '0';} ?>';
+       
         document.getElementById("name_"+type).innerHTML = _obj.value;
         var errorimg = document.getElementById("errorimage");
         var errorzip = document.getElementById("errorzip");
         var fileSizeLimitInMB = 5;
         var sFileName = _obj.name;
+        var sFileCHK = _obj.value.split('.');
+        var fileName = sFileCHK['0'];
+        var file_exist = false;
+        $.ajax({
+            type: 'POST',
+            async: false,
+            url: '<?= base_url() ?>publishing/validfile',
+            data: {fileName:fileName},
+            success: function (responce) {
+                if (responce=='exist') {
+                    file_exist=true;
+                }
+            }
+        });
         var file_list = _obj.files;
         if (file_list.length > 0) {
             var sFileExtension = _obj.value.split('.').pop();
@@ -192,7 +207,7 @@
                             input.replaceWith(input.val('').clone(true));
                             //alert(txt);
                             return false;
-                    } else {
+                    }else {
                         errorimg.value='success';
                         document.getElementById("error_"+type).innerHTML = '';
                         document.getElementById("error_"+type).style.display = 'none';
@@ -200,17 +215,26 @@
                     }
                 }else{
                     if (!(sFileExtension === "zip" || sFileExtension === "z7" || sFileExtension === "rar")   || (iConvert > fileSizeLimitInMB )) {
-                            txt = "File type : " + sFileExtension + "\n\n";
-                            txt += "Size: " + iConvert + " MB " + "\n\n";
-                            txt += "<br>Please make sure your file is in zip, z7, rar file format and less than " + fileSizeLimitInMB + " MB. " + "\n\n";
-                            document.getElementById("name_"+type).innerHTML='';
-                            errorzip.value='error';
-                            document.getElementById("error_"+type).innerHTML = txt.replace("\n\n", "<br>");
-                            document.getElementById("error_"+type).style.display = 'block';
-                            var input = $(_obj);
-                            input.replaceWith(input.val('').clone(true));
-                            //alert(txt);
-                            return false;
+                                txt = "File type : " + sFileExtension + "\n\n";
+                                txt += "Size: " + iConvert + " MB " + "\n\n";
+                                txt += "<br>Please make sure your file is of UNIQUE NAME and is in zip, z7, rar file format and less than " + fileSizeLimitInMB + " MB. " + "\n\n";
+                                document.getElementById("name_"+type).innerHTML='';
+                                errorzip.value='error';
+                                document.getElementById("error_"+type).innerHTML = txt.replace("\n\n", "<br>");
+                                document.getElementById("error_"+type).style.display = 'block';
+                                var input = $(_obj);
+                                input.replaceWith(input.val('').clone(true));
+                                //alert(txt);
+                                return false;
+                         
+                    }else if(file_exist==true){
+                                txt = "<br>Skin already exist." + "\n\n";
+                                document.getElementById("name_"+type).innerHTML='';
+                                errorzip.value='error';
+                                document.getElementById("error_"+type).innerHTML = txt.replace("\n\n", "<br>");
+                                document.getElementById("error_"+type).style.display = 'block';
+                                var input = $(_obj);
+                                input.replaceWith(input.val('').clone(true));
                     } else {
                         errorzip.value='success';
                         document.getElementById("error_"+type).innerHTML = '';
