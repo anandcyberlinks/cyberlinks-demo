@@ -438,7 +438,7 @@ class Ads_analytics extends MY_Controller {
                 $config = array();
                 $config["base_url"] = base_url() . "ads_analytics/device/$sort_i/$sort_by/?";
                 $config["total_rows"] = $this->Ads_analytics_model->getReportCounts(array('type'=>'useragent','search'=>$search),$sort,$sort_by);
-                $config["per_page"] = 10;
+                $config["per_page"] = 10;echo 'here';
                 $config["uri_segment"] = 3;
                 $config["page_query_string"] = true;
                 $this->pagination->initialize($config);
@@ -478,9 +478,9 @@ class Ads_analytics extends MY_Controller {
 				
 				 $content =  $this->load->view('templates/ads_pdf_content',$this->data,true);
 				//-- create pdf --//
-				create_pdf($content, 'Content Base Report');
+				create_pdf($content, 'Campaign Base Report');
 			}elseif($this->uri->segment(4)=='csv'){
-				$heading = array('Name','Content Provider','Platform','Browser','Location','Date','Total Impressions','Total time watched');
+				$heading = array('Campaigns','Advertiser','Platform','Browser','Location','Date','Total Impressions');
 				//$content =  $this->load->view('templates/pdf_content',$this->data,true);				
 				
 				$dataRpt = array();
@@ -493,7 +493,7 @@ class Ads_analytics extends MY_Controller {
 				    $dataRpt[$num]['location']  = $p->country;
 				    $dataRpt[$num]['date']  = $p->created;
 				    $dataRpt[$num]['hits']        = $p->total_hits;
-				    $dataRpt[$num]['watched time'] = time_from_seconds($p->total_watched_time);                 
+				    //$dataRpt[$num]['watched time'] = time_from_seconds($p->total_watched_time);                 
 				    $num++;
 			       }
 				query_to_csv($dataRpt,$heading);
@@ -506,10 +506,10 @@ class Ads_analytics extends MY_Controller {
 			if($this->uri->segment(4)=='pdf'){
 				 $content =  $this->load->view('templates/ads_pdf_usercontent',$this->data,true);
 				//-- create pdf --//
-				create_pdf($content, 'User Content Report');
+				create_pdf($content, 'User campaign Report');
 				
 			}elseif($this->uri->segment(4)=='csv'){
-				$heading = array('Name','Content Provider','Platform','Browser','Location','Date','Total Impressions','Total time watched');
+				$heading = array('Campaigns','Advertiser','Platform','Browser','Location','Date','Total Impressions');
 				//$content =  $this->load->view('templates/pdf_content',$this->data,true);				
 				//print_r($this->data['result']);die;
 				$dataRpt = array();
@@ -522,7 +522,7 @@ class Ads_analytics extends MY_Controller {
 				    $dataRpt[$num]['location']  = $p->country;
 				    $dataRpt[$num]['date']  = $p->created;
 				    $dataRpt[$num]['hits']        = $p->total_hits;				    
-				    $dataRpt[$num]['watched time'] = time_from_seconds($p->total_watched_time);                 
+				   // $dataRpt[$num]['watched time'] = time_from_seconds($p->total_watched_time);                 
 				    $num++;
 			       }
 				query_to_csv($dataRpt,$heading);
@@ -537,14 +537,14 @@ class Ads_analytics extends MY_Controller {
 				//-- create pdf --//
 				create_pdf($user,'User Based Report');
 			}elseif($this->uri->segment(4)=='csv'){
-				$heading = array('Name','Total Impressions','Total time watched');
+				$heading = array('Name','Total Impressions');
 				//$content =  $this->load->view('templates/pdf_content',$this->data,true);
 				$dataRpt = array();
 				$num=0;
 				foreach($this->data['result'] as $p) {
 				    $dataRpt[$num]['name']          = $p->name;
 				    $dataRpt[$num]['hits']        = $p->total_hits;
-				    $dataRpt[$num]['watched time'] = time_from_seconds($p->total_watched_time);                 
+				    //$dataRpt[$num]['watched time'] = time_from_seconds($p->total_watched_time);                 
 				    $num++;
 			       }
 				query_to_csv($dataRpt,$heading);
@@ -559,7 +559,7 @@ class Ads_analytics extends MY_Controller {
 				//-- create pdf --//
 				create_pdf($content, 'Device Base Report');
 			}elseif($this->uri->segment(4)=='csv'){
-				$heading = array('Platform','Browser','Total Impressions','Total time watched');
+				$heading = array('Platform','Browser','Total Impressions');
 				//$content =  $this->load->view('templates/pdf_content',$this->data,true);				
 				
 				$dataRpt = array();
@@ -568,7 +568,7 @@ class Ads_analytics extends MY_Controller {
 				    $dataRpt[$num]['platform']       = $p->platform;
 				    $dataRpt[$num]['browser']  = $p->browser;
 				    $dataRpt[$num]['hits']        = $p->total_hits;
-				    $dataRpt[$num]['watched time'] = time_from_seconds($p->total_watched_time);                 
+				  //  $dataRpt[$num]['watched time'] = time_from_seconds($p->total_watched_time);                 
 				    $num++;
 			       }
 				query_to_csv($dataRpt,$heading);
@@ -583,7 +583,7 @@ class Ads_analytics extends MY_Controller {
 				//-- create pdf --//
 				create_pdf($geomap,'Region Based Report');
 			}elseif($this->uri->segment(4)=='csv'){ 
-				$heading = array('Country','Region','Total Impressions','Total time watched');
+				$heading = array('Country','Region','Total Impressions');
 				//$content =  $this->load->view('templates/pdf_content',$this->data,true);
 				$dataRpt = array();
 				$num=0;
@@ -591,7 +591,7 @@ class Ads_analytics extends MY_Controller {
 				    $dataRpt[$num]['country']          = $p->country;
 				    $dataRpt[$num]['state']          = $p->state;
 				    $dataRpt[$num]['hits']        = $p->total_hits;
-				    $dataRpt[$num]['watched time'] = time_from_seconds($p->total_watched_time);                 
+				  //  $dataRpt[$num]['watched time'] = time_from_seconds($p->total_watched_time);                 
 				    $num++;
 			       }
 				query_to_csv($dataRpt,$heading);
@@ -607,14 +607,14 @@ class Ads_analytics extends MY_Controller {
 				//-- create pdf --//
 				create_pdf($geomap,'Country Based Report');
 			}elseif($this->uri->segment(4)=='csv'){ 
-				$heading = array('Country','Total Impressions','Total time watched');
+				$heading = array('Country','Total Impressions');
 				//$content =  $this->load->view('templates/pdf_content',$this->data,true);
 				$dataRpt = array();
 				$num=0;
 				foreach($this->data['result'] as $p) {
 				    $dataRpt[$num]['country']          = $p->country;				   
 				    $dataRpt[$num]['hits']        = $p->total_hits;
-				    $dataRpt[$num]['watched time'] = time_from_seconds($p->total_watched_time);                 
+				  //  $dataRpt[$num]['watched time'] = time_from_seconds($p->total_watched_time);                 
 				    $num++;
 			       }
 				query_to_csv($dataRpt,$heading);
@@ -662,7 +662,7 @@ class Ads_analytics extends MY_Controller {
 		$this->data['topcontent'] = $this->Ads_analytics_model->getReport(array('type'=>'content','l'=>$limit,'top'=>1,'search'=>$search));
 		$this->data['topuseragent'] = $this->Ads_analytics_model->getReport(array('type'=>'useragent','l'=>$limit,'top'=>1,'search'=>$search));
 		$this->data['topcountry'] = $this->Ads_analytics_model->getReport(array('type'=>'country','l'=>$limit,'top'=>1,'search'=>$search));
-		
+		//echopre($this->data);
 		$this->show_view('ads/ads_top_report',$this->data);
 	}
 	

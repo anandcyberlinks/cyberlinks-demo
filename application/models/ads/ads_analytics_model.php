@@ -90,7 +90,7 @@ class Ads_analytics_model extends CI_Model {
 
                 if ($param['top'] == 1) {  //-- top video --//
                     $this->db->group_by('a.ads_id');
-                    $this->db->order_by('a.id desc');
+                    $this->db->order_by('count(a.id) desc');
                 } else {
                     $this->db->group_by('a.ads_id');
                 }
@@ -349,6 +349,7 @@ class Ads_analytics_model extends CI_Model {
     public function getReportCounts($param = array(), $sort, $sort_by) {
 
         //--- search val --//
+        
         if (@$param['search']) {
             if ($param['search']['platform'] != '') {
                 $this->db->like('a.platform', $param['search']['platform']);
@@ -374,6 +375,7 @@ class Ads_analytics_model extends CI_Model {
         }
 
         $group = '';
+        
         switch ($param['type']) {
 
             case 'content':
@@ -417,7 +419,7 @@ class Ads_analytics_model extends CI_Model {
                 }
                 break;
             case 'useragent':
-                die;
+                //die;
                 //$select = 'a.platform, a.browser, count( a.id ) as total_hits , sum( a.watched_time ) as total_watched_time';
                 //$group = 'a.platform, a.browser';            
 

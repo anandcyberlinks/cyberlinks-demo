@@ -117,7 +117,7 @@
                                             <tr>
                                                 <th>Location</th>
                                                 <th>Impressions</th>
-                                                <th>Time Watched</th>                                                
+                                            <?php /* ?>    <th>Time Watched</th>     <?php */?>                                           
                                             </tr>
 					    <?php foreach($geomap as $row){
                                              //if($row->country !=''){
@@ -125,7 +125,7 @@
                                             <tr>
                                                 <td><a href="<?php echo base_url();?>ads_analytics/geographic?country=<?php echo $row->code;?>"><?php echo $row->city;?></a></td>
                                                 <td><?php echo $row->total_hits;?></td>
-						<td><?php echo time_from_seconds($row->total_watched_time);?></td>
+						<?php /* ?><td><?php echo time_from_seconds($row->total_watched_time);?></td><?php */ ?>
                                             </tr>
 					    <?php  }?>
                                             

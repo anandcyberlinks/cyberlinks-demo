@@ -7,14 +7,14 @@
                                    
                                         <tr style="background-color:#428bca;color:#fff;">
                                            <th width="6%">Sl.No.</th>
-                                           <th width="25%">Name</th>                                           
-                                           <th width="10%">Content Provider</th>
+                                           <th width="25%">Campaigns</th>                                           
+                                           <th width="10%">Advertiser</th>
                                            <th width="10%">Platform</th>
                                            <th width="10%">Browser</th>
                                            <th width="10%">Location</th>
                                            <th width="10%">Date</th>
                                             <th width="5%">Impressions</th>
-                                            <th width="10%">Total Time Watched</th>	
+                                          <?php /*?>  <th width="10%">Total Time Watched</th>	<?php */?>
                                         </tr>
                                    
                                         <?php foreach ($result as $value) { $i++;?>
@@ -27,8 +27,8 @@
                                                 <td width="10%"><?php echo $value->country; ?></td>
                                                 <td width="10%"><?php echo $value->created; ?></td>
                                                 <td  width="5%"><?php echo $value->total_hits; ?></td>
-                                                <td width="10%"><?php echo time_from_seconds($value->total_watched_time); ?></td>                                                                                        
-                                            </tr>
+                                              <?php /*?>  <td width="10%"><?php echo time_from_seconds($value->total_watched_time); ?></td>                                                                                        
+                                           <?php */?> </tr>
                                         <?php } ?>                                    
                                 </table>                                                    
                            

@@ -3,10 +3,10 @@
     <aside class="right-side"> 
         <!-- Content Header (Page header) -->
         <section class="content-header">
-            <h1><?php echo $welcome->loadPo('Content Wise Report') ?><small><?php echo $welcome->loadPo('Control panel') ?></small></h1>
+            <h1><?php echo $welcome->loadPo('Campaign Wise Report') ?><small><?php echo $welcome->loadPo('Control panel') ?></small></h1>
             <ol class="breadcrumb">
                 <li><a href="<?php echo base_url(); ?>ads_analytics/report"><i class="fa fa-dashboard"></i><?php echo $welcome->loadPo('Ads Analytics') ?></a></li>
-                <li class="active"><?php echo $welcome->loadPo('Content wise report') ?></li>
+                <li class="active"><?php echo $welcome->loadPo('Campaign wise report') ?></li>
             </ol>
         </section>
         <div>
@@ -46,8 +46,8 @@
                                         </div>
                                         <div class="form-group col-lg-4">
                                             <div class="input select">
-                                                <label for="searchCategory"><?php echo $welcome->loadPo('Content Provider') ?></label>
-                                                <select name="contentprovider" class="form-control" placeholder="<?php echo $welcome->loadPo('Content Provider') ?>" id="contentprovider">
+                                                <label for="searchCategory"><?php echo $welcome->loadPo('Advertiser') ?></label>
+                                                <select name="contentprovider" class="form-control" placeholder="<?php echo $welcome->loadPo('Advertiser') ?>" id="contentprovider">
                                                     <option value=""><?php echo $welcome->loadPo('Select') ?></option>
                                                     <?php foreach ($content_provider as $row) { ?>
                                                         <option value="<?php echo $row->id; ?>" <?php
@@ -146,23 +146,23 @@
                     </a>-->
                 </div>
             </div>
-                                   
+              <!--                     
             <div class="col-lg-2 col-xs-6">
-                <!-- small box -->
+                 small box 
                 <div class="small-box bg-purple">
                     <div class="inner">
                         <h3>
-                            <?php echo time_from_seconds($summary->total_watched_time); //-- common helper ?>
+                            <?php //echo time_from_seconds($summary->total_watched_time); //-- common helper ?>
                        
                         </h3>
                         <p>
-                            <?php echo $welcome->loadPo('Total Time Watched'); ?>
+                            <?php// echo $welcome->loadPo('Total Timfasdfasdfde Watched'); ?>
                         </p>
                     </div>
                    
                     <!--a href="#" class="small-box-footer">
                         <?php //echo $welcome->loadPo('More info'); ?> <i class="fa fa-arrow-circle-right"></i>
-                    </a>-->
+                    </a>
                 </div>
             </div><!-- ./col -->
         </div><!-- /.row -->
@@ -178,14 +178,15 @@
                                 <table id="example2" class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
-                                           <th><a href="<?php echo base_url(); ?>ads_analytics/content/v/<?php echo (!empty($show_c)) ? $show_c : 'asc'; ?>">Content</a></th>
-                                           <th><a href="<?php echo base_url(); ?>ads_analytics/content/p/<?php echo (!empty($show_p)) ? $show_p : 'asc'; ?>">Content Provider</a></th>
+                                           <th><a href="<?php echo base_url(); ?>ads_analytics/content/v/<?php echo (!empty($show_c)) ? $show_c : 'asc'; ?>">Campaigns</a></th>
+                                           <th><a href="<?php echo base_url(); ?>ads_analytics/content/p/<?php echo (!empty($show_p)) ? $show_p : 'asc'; ?>">Advertiser</a></th>
                                            <th><a href="<?php echo base_url(); ?>ads_analytics/content/os/<?php echo (!empty($show_os)) ? $show_os : 'asc'; ?>/id/<?php echo $userid;?>">Platform</a></th>
                                            <th><a href="<?php echo base_url(); ?>ads_analytics/content/brw/<?php echo (!empty($show_brw)) ? $show_brw : 'asc'; ?>/id/<?php echo $userid;?>">Browser</a></th>
                                            <th><a href="<?php echo base_url(); ?>ads_analytics/content/loc/<?php echo (!empty($show_loc)) ? $show_loc : 'asc'; ?>/id/<?php echo $userid;?>">Location</a></th>
                                            <th><a href="<?php echo base_url(); ?>ads_analytics/content/dt/<?php echo (!empty($show_dt)) ? $show_dt : 'asc'; ?>/id/<?php echo $userid;?>">Date</a></th>
                                             <th><a href="<?php echo base_url(); ?>ads_analytics/content/h/<?php echo (!empty($show_h)) ? $show_h : 'asc'; ?>">Impressions</a></th>
-                                            <th><a href="<?php echo base_url(); ?>ads_analytics/content/t/<?php echo (!empty($show_t)) ? $show_t : 'asc'; ?>">Time Watched</a></th>	
+                                       <?php /* ?>     <th><a href="<?php echo base_url(); ?>ads_analytics/content/t/<?php echo (!empty($show_t)) ? $show_t : 'asc'; ?>">Time Watched</a></th>	
+                                        <?php */ ?>
                                         </tr>
                                     </thead>
 
@@ -199,7 +200,7 @@
                                                 <td><?php echo $value->country; ?></td>                                                
                                                 <td><?php echo $value->created; ?></td>
                                                  <td><?php echo $value->total_hits; ?></td>
-                                                <td><?php echo time_from_seconds($value->total_watched_time); ?></td>                                                                                        
+                                            <?php /* ?>    <td><?php echo time_from_seconds($value->total_watched_time); ?></td>   <?php */?>                                                                                     
                                             </tr>
                                         <?php } ?>
                                     </tbody>

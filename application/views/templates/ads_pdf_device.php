@@ -11,7 +11,7 @@
                                            <th width="30%">Platform</th>
                                            <th width="30%">Browser</th>
                                             <th width="10%">Total Impressions</th>
-                                            <th width="20%">Total Time Watched</th>	
+                                        <?php /*?>    <th width="20%">Total Time Watched</th>	<?php */?>
                                         </tr>
                                    
                                         <?php foreach ($result as $row) { $i++;?>
@@ -20,8 +20,8 @@
                                           <td  width="30%"><?php echo $row->platform;?></td>
                                           <td width="30%"><?php echo $row->browser;?></td>
                                           <td width="10%"><?php echo $row->total_hits;?></td>
-                                          <td width="20%"><?php echo time_from_seconds($row->total_watched_time);?></td>                                                                                        
-                                            </tr>
+                                        <?php /*?>  <td width="20%"><?php echo time_from_seconds($row->total_watched_time);?></td>                                                                                        
+                                         <?php */?>   </tr>
                                         <?php } ?>                                    
                                 </table>                                                    
                            

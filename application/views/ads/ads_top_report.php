@@ -90,7 +90,7 @@
                                 </div>
                                 <div class="box-body">
                                   <h4> Video Viewed : <strong><?php echo $summary->total_hits;?> </strong></h4>
-				  <h4> Total Time Watched : <strong><?php echo time_from_seconds($summary->total_watched_time);?> </strong> </h4>
+				  <?php /* ?><h4> Total Time Watched : <strong><?php echo time_from_seconds($summary->total_watched_time);?> </strong> </h4><?php */ ?>
                                 </div><!-- /.box-body-->
                             </div><!-- /.box -->
 			      <div class="box box-primary">
@@ -105,7 +105,7 @@
 					<th width='5%'>Sl.</th>
 					<th>Title</th>
 					<th>Impressions</th>
-					<th>Watched time</th>
+				<?php /* ?>	<th>Watched time</th><?php */ ?>
 				    </tr>				    
 				</thead>
 			     <?php $i=0; foreach($topcountry as $row){ $i++;?>
@@ -113,7 +113,7 @@
 				<td><?php echo $i; ?></td>
 				<td  width="30%"><?php echo $row->country;?></td>				
 				<td width="10%"><?php echo $row->total_hits;?></td>
-				<td width="20%"><?php echo time_from_seconds($row->total_watched_time);?></td>				
+			<?php /* ?>	<td width="20%"><?php echo time_from_seconds($row->total_watched_time);?></td>	<?php */ ?>			
 				</tr>
 			    <?php }?>
                             </tbody></table><!-- /.table -->
@@ -132,7 +132,7 @@
 					<th width='5%'>Sl.</th>
 					<th>Title</th>
 					<th>Impressions</th>
-					<th>Watched time</th>
+					<?php /* ?><th>Watched time</th><?php */ ?>
 				    </tr>				    
 				</thead>
 			     <?php $i=0; foreach($topuseragent as $row){ $i++;?>
@@ -140,7 +140,7 @@
 				<td><?php echo $i; ?></td>
 				<td  width="30%"><?php echo $row->platform;?> : <?php echo $row->browser;?></td>				
 				<td width="10%"><?php echo $row->total_hits;?></td>
-				<td width="20%"><?php echo time_from_seconds($row->total_watched_time);?></td>				
+				<?php /* ?><td width="20%"><?php echo time_from_seconds($row->total_watched_time);?></td>	<?php */?>			
 				</tr>
 			    <?php }?>
                             </tbody></table><!-- /.table -->
@@ -161,7 +161,7 @@
 					<th>Sl.</th>
 					<th>Title</th>
 					<th>Impressions</th>
-					<th>Watched time</th>
+					<?php /* ?><th>Watched time</th><?php */ ?>
 				    </tr>				    
 				</thead>
 				    <tbody>
@@ -170,7 +170,7 @@
 					<td><?php echo $i; ?></td>  
                                                 <td  width="70%"><?php echo $value->ad_title; ?></td>                                               
                                                  <td><?php echo $value->total_hits; ?></td>
-                                                <td><?php echo time_from_seconds($value->total_watched_time); ?></td>                                                                                        
+                                          <?php /* ?>      <td><?php echo time_from_seconds($value->total_watched_time); ?></td>  <?php */ ?>                                                                                      
                                             </tr>
                                         <?php } ?>
                                     </tbody>

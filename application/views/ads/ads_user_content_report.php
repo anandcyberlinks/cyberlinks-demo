@@ -3,7 +3,7 @@
     <aside class="right-side"> 
         <!-- Content Header (Page header) -->
         <section class="content-header">
-            <h1><?php echo $welcome->loadPo('User Content Report') ?><small><?php echo $welcome->loadPo('Control panel') ?></small></h1>
+            <h1><?php echo $welcome->loadPo('User campaign Report') ?><small><?php echo $welcome->loadPo('Control panel') ?></small></h1>
             <ol class="breadcrumb">
                 <li><a href="<?php echo base_url(); ?>ads_analytics/report"><i class="fa fa-dashboard"></i><?php echo $welcome->loadPo('Ads Analytics') ?></a></li>
                 <li><a href="<?php echo base_url(); ?>ads_analytics/user"><?php echo $welcome->loadPo('User wise report') ?></a></li>
@@ -47,8 +47,8 @@
                                         </div>
                                         <div class="form-group col-lg-4">
                                             <div class="input select">
-                                                <label for="searchCategory"><?php echo $welcome->loadPo('Content Provider') ?></label>
-                                                <select name="contentprovider" class="form-control" placeholder="<?php echo $welcome->loadPo('Content Provider') ?>" id="contentprovider">
+                                                <label for="searchCategory"><?php echo $welcome->loadPo('Advertiser') ?></label>
+                                                <select name="contentprovider" class="form-control" placeholder="<?php echo $welcome->loadPo('Advertiser') ?>" id="contentprovider">
                                                     <option value=""><?php echo $welcome->loadPo('Select') ?></option>
                                                     <?php foreach ($content_provider as $row) { ?>
                                                         <option value="<?php echo $row->id; ?>" <?php
@@ -178,8 +178,8 @@
                                 <table id="example2" class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
-					    <th><a href="<?php echo base_url(); ?>ads_analytics/usercontent/v/<?php echo (!empty($show_c)) ? $show_c : 'asc'; ?>/id/<?php echo $userid;?>">Content</a></th>
-					    <th><a href="<?php echo base_url(); ?>ads_analytics/usercontent/p/<?php echo (!empty($show_p)) ? $show_p : 'asc'; ?>/id/<?php echo $userid;?>">Content Provider</a></th>
+					    <th><a href="<?php echo base_url(); ?>ads_analytics/usercontent/v/<?php echo (!empty($show_c)) ? $show_c : 'asc'; ?>/id/<?php echo $userid;?>">Campaigns</a></th>
+					    <th><a href="<?php echo base_url(); ?>ads_analytics/usercontent/p/<?php echo (!empty($show_p)) ? $show_p : 'asc'; ?>/id/<?php echo $userid;?>">Advertiser</a></th>
 					    <th><a href="<?php echo base_url(); ?>ads_analytics/usercontent/os/<?php echo (!empty($show_os)) ? $show_os : 'asc'; ?>/id/<?php echo $userid;?>">Platform</a></th>
 					    <th><a href="<?php echo base_url(); ?>ads_analytics/usercontent/brw/<?php echo (!empty($show_brw)) ? $show_brw : 'asc'; ?>/id/<?php echo $userid;?>">Browser</a></th>
 					    <th><a href="<?php echo base_url(); ?>ads_analytics/usercontent/loc/<?php echo (!empty($show_loc)) ? $show_loc : 'asc'; ?>/id/<?php echo $userid;?>">Location</a></th>

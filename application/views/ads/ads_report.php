@@ -75,6 +75,7 @@
                     </a>-->
                 </div>
             </div>
+		<?php /* ?>
             <div class="col-lg-2 col-xs-6">
                 <!-- small box -->
                 <div class="small-box bg-fuchsia">
@@ -126,7 +127,7 @@
                         <?php //echo $welcome->loadPo('More info'); ?> <i class="fa fa-arrow-circle-right"></i>
                     </a>-->
                 </div>
-            </div><!-- ./col -->
+            </div><!-- ./col --><?php */?>
         </div><!-- /.row -->
 		<div class='row'>
             <div class="box box-danger">
@@ -257,7 +258,7 @@
                             <!-- .table - Uses sparkline charts-->
                             <table class="table table-striped">
 				<tbody><tr>
-				<th>Content</th>
+				<th>Campaign</th>
 				<th>Total Impresion</th>
 				<!--th>Total Time Watched</th-->				
 				</tr>
@@ -373,7 +374,7 @@
 			<div class="pull-right box-tools">
 			    <button class="btn btn-danger btn-sm" data-widget='collapse' data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
 			</div><!-- /. tools -->
-			<h3 class="box-title">Content Provider</h3>
+			<h3 class="box-title">Advertiser</h3>
 		    </div><!-- /.box-header -->
 		    <div class="box-body no-padding">
 			
@@ -382,7 +383,7 @@
                             <!-- .table - Uses sparkline charts-->
                             <table class="table table-striped">
 				<tbody><tr>
-				<th>Content Provider</th>				
+				<th>Advertiser</th>				
 				<th>Impresion</th>
 				<!--th>Time Watched</th-->				
 				</tr>
@@ -413,7 +414,7 @@
 			<div class="pull-right box-tools">
 			    <button class="btn btn-danger btn-sm" data-widget='collapse' data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
 			</div><!-- /. tools -->
-			<h3 class="box-title">Map </h3>
+			<h3 class="box-title">Location </h3>
 		    </div><!-- /.box-header -->
 		    
 		    <div class="box-body no-padding">

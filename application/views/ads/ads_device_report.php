@@ -6,7 +6,7 @@
             <h1><?php echo $welcome->loadPo('Device Report') ?><small><?php echo $welcome->loadPo('Control panel') ?></small></h1>
             <ol class="breadcrumb">
                 <li><a href="<?php echo base_url(); ?>ads_analytics/report"><i class="fa fa-dashboard"></i><?php echo $welcome->loadPo('Ads Analytics') ?></a></li>
-                <li class="active"><?php echo $welcome->loadPo('Content wise report') ?></li>
+                <li class="active"><?php echo $welcome->loadPo('Campaign wise report') ?></li>
             </ol>
         </section>
         <div>
@@ -115,7 +115,7 @@
                     </a>-->
                 </div>
             </div>
-                                   
+            <?php /* ?>                       
             <div class="col-lg-2 col-xs-6">
                 <!-- small box -->
                 <div class="small-box bg-purple">
@@ -133,7 +133,7 @@
                         <?php //echo $welcome->loadPo('More info'); ?> <i class="fa fa-arrow-circle-right"></i>
                     </a>-->
                 </div>
-            </div><!-- ./col -->
+            </div><!-- ./col --><?php */ ?>
         </div><!-- /.row -->
         <div class="col-md-3 col-sm-4">
             Export
@@ -151,14 +151,14 @@
 				<th><a href="<?php echo base_url(); ?>ads_analytics/device/os/<?php echo (!empty($show_os)) ? $show_os : 'asc'; ?>">OS</a></th>
 				<th><a href="<?php echo base_url(); ?>ads_analytics/device/brw/<?php echo (!empty($show_brw)) ? $show_brw : 'asc'; ?>">Browser</a></th>
 				<th><a href="<?php echo base_url(); ?>ads_analytics/device/h/<?php echo (!empty($show_h)) ? $show_h : 'asc'; ?>">Impressions</a></th>
-				<th><a href="<?php echo base_url(); ?>ads_analytics/device/t/<?php echo (!empty($show_t)) ? $show_t : 'asc'; ?>">Time Watched</a></th>
-				</tr>
+				<?php /* ?><th><a href="<?php echo base_url(); ?>ads_analytics/device/t/<?php echo (!empty($show_t)) ? $show_t : 'asc'; ?>">Time Watched</a></th>
+				<?ph  */?></tr>
 			     <?php $i=0; foreach($useragent as $row){ $i++;?>
 				<tr>
 				<td  width="30%"><?php echo $row->platform;?></td>
 				<td width="30%"><?php echo $row->browser;?></td>
 				<td width="10%"><?php echo $row->total_hits;?></td>
-				<td width="20%"><?php echo time_from_seconds($row->total_watched_time);?></td>				
+				<?php /* ?><td width="20%"><?php echo time_from_seconds($row->total_watched_time);?></td>	<?php */?>			
 				</tr>
 			    <?php }?>
                             </tbody></table><!-- /.table -->

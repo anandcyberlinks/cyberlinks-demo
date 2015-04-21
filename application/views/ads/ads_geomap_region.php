@@ -117,7 +117,7 @@
                                             <tr>
                                                 <th>Location</th>
                                                 <th>Impressions</th>
-                                                <th>Time Watched</th>                                                
+                                             <?php /* ?>   <th>Time Watched</th>   <?php */ ?>                                             
                                             </tr>
 					    <?php foreach($geomap as $row){
                                              if($row->state !=''){
@@ -125,7 +125,7 @@
                                             <tr>
                                                 <td><?php echo $row->city;?></td>
                                                 <td><?php echo $row->total_hits;?></td>
-						<td><?php echo time_from_seconds($row->total_watched_time);?></td>
+						<?php /* ?><td><?php echo time_from_seconds($row->total_watched_time);?></td><?php */ ?>
                                             </tr>
 					    <?php } }?>
                                             

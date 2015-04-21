@@ -105,7 +105,7 @@
                 </div>
             </div>
                                    
-            <div class="col-lg-2 col-xs-6">
+           <?php /* ?> <div class="col-lg-2 col-xs-6">
                 <!-- small box -->
                 <div class="small-box bg-purple">
                     <div class="inner">
@@ -122,7 +122,7 @@
                         <?php //echo $welcome->loadPo('More info'); ?> <i class="fa fa-arrow-circle-right"></i>
                     </a>-->
                 </div>
-            </div><!-- ./col -->
+            </div><!-- ./col --><?php */?>
         </div><!-- /.row -->
          <div class="col-md-3 col-sm-4">
             Export
@@ -138,8 +138,8 @@
                                         <tr>
                                            <th><a href="<?php echo base_url(); ?>ads_analytics/user/v/<?php echo (!empty($show_c)) ? $show_c : 'asc'; ?>">Name</a></th>                                           
                                             <th><a href="<?php echo base_url(); ?>ads_analytics/user/h/<?php echo (!empty($show_h)) ? $show_h : 'asc'; ?>">Total Impression</a></th>
-                                            <th><a href="<?php echo base_url(); ?>ads_analytics/user/t/<?php echo (!empty($show_t)) ? $show_t : 'asc'; ?>">Total Time Watched</a></th>	
-                                        </tr>
+                                            <?php /* ?><th><a href="<?php echo base_url(); ?>ads_analytics/user/t/<?php echo (!empty($show_t)) ? $show_t : 'asc'; ?>">Total Time Watched</a></th>	
+                                        <?php */ ?></tr>
                                     </thead>
 
                                     <tbody>
@@ -147,7 +147,7 @@
                                         <tr id="<?php echo $value->id ?>">
                                                 <td  width="70%"><a href="<?php echo base_url(); ?>ads_analytics/usercontent?id=<?php echo $value->id; ?>"><?php echo ($value->name!='' ? $value->name:'guest'); ?></td>                                                
                                                 <td><?php echo $value->total_hits; ?></td>
-                                                <td><?php echo time_from_seconds($value->total_watched_time); ?></td>                                                                                        
+                                              <?php /* ?>  <td><?php echo time_from_seconds($value->total_watched_time); ?></td><?php */ ?>                                                                                        
                                             </tr>
                                         <?php } ?>
                                     </tbody>
