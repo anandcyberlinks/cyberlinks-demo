@@ -35,6 +35,64 @@ class Webtv extends MY_Controller {
         $this->show_view('channels', $data);
     }
 
+    function Epg() {
+        $chanel_id = $this->uri->segment(3);
+        $this->db->select('name');
+        $this->db->where('id', $chanel_id);
+        $result = $this->db->get('channels')->result();
+        //print_r($result); die;
+        $channel_name = $result[0]->name;
+
+
+        $file = $_FILES['csv']['tmp_name'];
+        //print_r($_FILES); die;
+        $fp = fopen($file, 'r') or die(json_encode(array('result' => 'error')));
+        $num = 0;
+        while ($csv_line = fgetcsv($fp, 1024)) {
+            //print_r($csv_line);
+            for ($i = 0, $j = count($csv_line[$i]); $i < $j; $i++) {
+                if ($num == 0) {
+                    if (!isset($csv_line[2]) || !isset($csv_line[1]) || !isset($csv_line[5]) || !isset($csv_line[8]) || !isset($csv_line[12]) || !isset($csv_line[13])) {
+                        echo "invalid csv";
+                        die;
+                    }
+                    $title = $csv_line;
+                } else {
+                    $this->db->delete('livechannel_epg', ['channel_id' => $chanel_id]);
+                    $temp = array(
+                        'channel_id' => $chanel_id,
+                        'channel_name' => $channel_name,
+                        'date' => date('Y-m-d h:m:i'),
+                        'show_title' => $csv_line[2],
+                        'show_time' => ($csv_line[1] == '') ? '' : date("H:i", strtotime($csv_line[0])),
+                        'show_thumb' => $csv_line[5],
+                        'show_language' => $csv_line[8],
+                        'show_description' => $csv_line[13],
+                        'show_type' => $csv_line[12],
+                        'valid' => ($csv_line[2] == '' || $csv_line[1] == '') ? 'invalid' : 'valid'
+                    );
+                    $array[] = $temp;
+
+
+
+                    //$this->db->insert('livechannel_epg', $temp);
+                    //echo $this->db->last_query();
+                }
+                $num++;
+            }
+            //print_r($temp);
+        }
+        fclose($fp);
+        foreach ($array as $val) {
+            if ($val['valid'] == 'valid') {
+                unset($val['valid']);
+                $this->db->insert('livechannel_epg', $val);
+            }
+        }
+        $view_data['result'] = $array;
+        $this->load->view('epg_view', $view_data);
+    }
+
     function playlist() {
         $channel_id = $this->uri->segment(3);
         if (isset($_POST['submit']) && $_POST['submit'] == 'Search') {
@@ -55,10 +113,10 @@ class Webtv extends MY_Controller {
         $data["links"] = $this->pagination->create_links();
         $this->show_view('webtv', $data);
     }
-    
-    function resetplaylist(){
+
+    function resetplaylist() {
         $id = $this->uri->segment('3');
-        switch($id){
+        switch ($id) {
             case 'all' :
                 $query = sprintf("update playlists set status = '0', publish = '0', url = '' where channel_id in (select id from channels where type = 'Linear' and uid = %d)", $this->uid);
                 $dataset = $this->db->query($query);
@@ -67,18 +125,19 @@ class Webtv extends MY_Controller {
                 break;
             default :
                 $this->db->where('channel_id', $id);
-                $this->db->set('publish','0');
-                $this->db->set('status','0');
-                $this->db->set('url','');
+                $this->db->set('publish', '0');
+                $this->db->set('status', '0');
+                $this->db->set('url', '');
                 $this->db->update('playlists');
-                redirect(base_url() . 'webtv/playlist/'.$id);
+                redirect(base_url() . 'webtv/playlist/' . $id);
                 break;
         }
         exit;
     }
-    function publishplaylist(){
+
+    function publishplaylist() {
         $id = $this->uri->segment('3');
-        switch($id){
+        switch ($id) {
             case 'all' :
                 $query = sprintf("update playlists set publish = '1' where channel_id in (select id from channels where type = 'Linear' and uid = %d)", $this->uid);
                 $dataset = $this->db->query($query);
@@ -87,16 +146,17 @@ class Webtv extends MY_Controller {
                 break;
             default :
                 $this->db->where('channel_id', $id);
-                $this->db->set('publish','1');
+                $this->db->set('publish', '1');
                 $this->db->update('playlists');
-                redirect(base_url() . 'webtv/playlist/'.$id);
+                redirect(base_url() . 'webtv/playlist/' . $id);
                 break;
         }
         exit;
     }
-    function unpublishplaylist(){
+
+    function unpublishplaylist() {
         $id = $this->uri->segment('3');
-        switch($id){
+        switch ($id) {
             case 'all' :
                 $query = sprintf("update playlists set publish = '0' where channel_id in (select id from channels where type = 'Linear' and uid = %d)", $this->uid);
                 $dataset = $this->db->query($query);
@@ -105,23 +165,22 @@ class Webtv extends MY_Controller {
                 break;
             default :
                 $this->db->where('channel_id', $id);
-                $this->db->set('publish','0');
+                $this->db->set('publish', '0');
                 $this->db->update('playlists');
-                redirect(base_url() . 'webtv/playlist/'.$id);
+                redirect(base_url() . 'webtv/playlist/' . $id);
                 break;
         }
         exit;
     }
-    
-    function publish(){
+
+    function publish() {
         $id = $this->uri->segment('3');
-        $publish = ($this->uri->segment('4')==0)?'1':'0';
+        $publish = ($this->uri->segment('4') == 0) ? '1' : '0';
         $this->db->where('id', $id);
-        $this->db->set('publish',$publish);
+        $this->db->set('publish', $publish);
         $this->db->update('playlists');
         echo $publish;
     }
-    
 
     function add() {
         $data['welcome'] = $this;
@@ -189,7 +248,7 @@ class Webtv extends MY_Controller {
 
     function delete_channels() {
         $id = $_GET['id'];
-       // echo $id; die;
+        // echo $id; die;
         $this->webtv_model->delete_channels($id);
         $this->session->set_flashdata('message', $this->_successmsg($this->loadPo($this->config->item('success_record_delete'))));
         redirect(base_url() . 'webtv');
@@ -281,7 +340,7 @@ class Webtv extends MY_Controller {
         $type = $result[0]->type;
         //echo $type;
         $searchterm = '';
-        if(isset($_POST['reset'])) {
+        if (isset($_POST['reset'])) {
             $this->session->unset_userdata('search_form');
         }
         $sort = $this->uri->segment(3);
@@ -305,7 +364,7 @@ class Webtv extends MY_Controller {
         $config["base_url"] = base_url() . "webtv/addVideo/" . $pid . '/' . $chid;
         $config["total_rows"] = $this->webtv_model->get_videocount($this->uid, $ids, $searchterm, $type);
         //echo $config["total_rows"];
-        
+
         $config["per_page"] = 10;
         $config["uri_segment"] = 5;
         $this->pagination->initialize($config);
@@ -313,9 +372,9 @@ class Webtv extends MY_Controller {
         $data['result'] = $this->webtv_model->get_allvideo($ids, $this->uid, PER_PAGE, $page, $searchterm, $type);
         $data["links"] = $this->pagination->create_links();
         $data['category'] = $this->webtv_model->get_Vidcategory($this->uid);
-        
+
         //print_r($data['category']);
-        
+
         $data['total_rows'] = $config["total_rows"];
         $this->show_view('video_playlist', $data);
     }
@@ -342,7 +401,7 @@ class Webtv extends MY_Controller {
         foreach ($dataset as $key => $val) {
             $data[] = array('id' => $val->content_id,
                 'title' => $val->playlist_id,
-                'title' => strlen($val->title) > 15 ? substr($val->title,0,12).'...' : $val->title ,
+                'title' => strlen($val->title) > 15 ? substr($val->title, 0, 12) . '...' : $val->title,
                 'start' => date('Y-m-d H:i:s', strtotime($val->start_date)),
                 'end' => date('Y-m-d H:i:s', strtotime($val->end_date)),
                 'backgroundColor' => $val->color,

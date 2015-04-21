@@ -117,7 +117,7 @@
                                 <table id="example2" class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
-                                            <th> <a 2<?php echo $welcome->loadPo('Name') ?></th>
+                                                    <th><?php echo $welcome->loadPo('Channel Name') ?></th>
                                                     <th><?php echo $welcome->loadPo('Number') ?></th>
                                                     <th><?php echo $welcome->loadPo('Type') ?></th>
                                                     <th><?php echo $welcome->loadPo('Category') ?></th>
@@ -138,12 +138,12 @@
                                                         <img src="<?php echo base_url(); ?>assets/img/test-pass-icon.png" alt="Active" />
                                                     <?php } else { ?>
                                                         <img src="<?php echo base_url(); ?>assets/img/test-fail-icon.png" alt="Active" />
-    <?php } ?></td>
-                                                <td>
-    <?php if ($value->type == 'Loop' || $value->type == 'Linear') { ?>
-                                                        <a href="<?php echo base_url() ?>webtv/playlist/<?php echo $value->id; ?>">Manage Playlist</a>
-    <?php } else if ($value->type == 'Youtube' || $value->type == 'Live') { ?>
-                                                        <a href="<?php echo base_url() ?>livestream/index/<?php echo $value->id; ?>">Manage Playlist</a>
+                                                        <?php } ?></td>
+                                                                                                    <td>
+                                                        <?php if ($value->type == 'Loop' || $value->type == 'Linear') { ?>
+                                                                                                            <a href="<?php echo base_url() ?>webtv/playlist/<?php echo $value->id; ?>">Manage Playlist</a>
+                                                        <?php } else if ($value->type == 'Youtube' || $value->type == 'Live') { ?>
+                                                        <a href="<?php echo base_url() ?>livestream/index/<?php echo $value->id; ?>">Manage</a>
                                             <?php } ?>
                                                 </td>
                                                 <td  width="150"> 

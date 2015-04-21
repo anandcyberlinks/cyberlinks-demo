@@ -62,6 +62,9 @@
                                             </select>
                                         </div>
                                         <div id="load" class="col-md-4"></div>
+                                        
+                                        <?php /*
+                                        
                                         <div class="form-group col-md-10">
                                             <label><?php echo $welcome->loadPo('Channels Number'); ?></label>
                                             <?php if(isset($value)){ ?>
@@ -72,6 +75,8 @@
                                             </select>
                                                 <?php } ?>
                                         </div>
+                                         * 
+                                         */?>
                                         <?php if (!isset($value)) { ?>
                                             <div class="form-group col-md-10">
                                                 <label><?php echo $welcome->loadPo('Channels Type'); ?></label>
