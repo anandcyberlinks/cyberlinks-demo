@@ -43,6 +43,8 @@ class Publishing_Model extends CI_Model
             $Id = $data['id'];
             $data = array(
                 'title' => $data['title'],
+                'image' => $data['image'],
+                'path' => $data['path'],
                 'description' => $data['description'],
                 'dimension' => $data['dimension'],
                 'status' => $data['status']

@@ -74,7 +74,12 @@
                                         <div class="form-group col-lg-5">
                                             <label for="Image"><?php echo $welcome->loadPo('Preview'); ?></label>&nbsp;&nbsp;
                                             <img width="300" height="100" src='<?php if(isset($result['image'])&&($result['image']!='')){echo $result['image'];} ?>' >
-                                            
+                                           <br/> <br/> <label for="Image"><?php echo $welcome->loadPo('Image'); ?></label>&nbsp;&nbsp;
+                                            <span class="btn btn-default btn-file btn-sm">
+                                             <?php echo $welcome->loadPo('Choose Media') ?> <input name="image_file"  id="image_file"  atr="files" type="file" onchange="return validateFileSelected(this,'image_file');"/>
+                                            </span>
+                                            <span id="name_image_file" class="text-success"></span>
+                                            <span id="error_image_file" class="text-danger"></span>
                                         </div>
                                         <?php }else{?>
                                         <div class="form-group col-lg-5">
@@ -89,7 +94,7 @@
                                     </div>
                                     
                                      <div class="row">
-                                        <?php if(isset($result['id'])&&($result['id']!='')){}else{?>
+                                       
                                         <div class="form-group col-lg-5">
                                             <label for="Skin"><?php echo $welcome->loadPo('Skin'); ?></label>&nbsp;&nbsp;
                                             <span class="btn btn-default btn-file btn-sm">
@@ -98,7 +103,7 @@
                                             <span id="name_skin_file" class="text-success"></span>
                                             <span id="error_skin_file" class="text-danger"></span>
                                         </div>
-                                        <?php }?>
+                                        
                                     </div>
                                      
                                     <div class="row">    
@@ -115,8 +120,8 @@
                                     <a href="<?php echo base_url() . $uri; ?>" class="btn btn-default"><?php echo $welcome->loadPo('Cancel'); ?></a>
                                 </div>
                                 
-                                <input type='hidden' name='errorimage' id='errorimage' value='<?php if(isset($result['id'])&&($result['id']!='')){echo '';}else{echo 'error';}?>'/>
-                                <input type='hidden' name='errorzip' id='errorzip' value='<?php if(isset($result['id'])&&($result['id']!='')){echo '';}else{echo 'error';}?>'/>
+                                <input type='hidden' name='errorimage' id='errorimage' value='error'/>
+                                <input type='hidden' name='errorzip' id='errorzip' value='error'/>
                             </form>                            
                         </div><!-- /.box -->
                     </div><!--/.col (left) -->
@@ -127,6 +132,7 @@
 </div><!-- ./wrapper -->
 <script>
     function validate(){
+        var id='<?php if(isset($result['id'])&&($result['id']!='')){echo $result['id'];}else{echo '0';} ?>';
         var valerr=0;
         var title=$("#title").val();
         var Description=$("#Description").val();
@@ -136,15 +142,22 @@
         var status=$("#status").val();
         var errorimage=$("#errorimage").val();
         var errorzip=$("#errorzip").val();
-        if(errorzip == 'error'){
-           document.getElementById("error_skin_file").innerHTML = "Please select file";
-           valerr++;
+        if (id=='0'){
+            if(errorzip == 'error'){
+               document.getElementById("error_skin_file").innerHTML = "Please select file";
+               valerr++;
+            }
+            if (errorimage == 'error' ) {
+               document.getElementById("error_image_file").innerHTML = "Please select file";
+               valerr++;
+            }
         }
-        if (errorimage == 'error' ) {
-           document.getElementById("error_image_file").innerHTML = "Please select file";
-           valerr++;
+        if(errorzip == 'success'){
+            if (errorimage == 'error' ) {
+               document.getElementById("error_image_file").innerHTML = "Please select file";
+               valerr++;
+            }
         }
-        
         if (valerr > 0) {
            return false;
         }else{
@@ -180,7 +193,7 @@
                             //alert(txt);
                             return false;
                     } else {
-                        errorimg.value='';
+                        errorimg.value='success';
                         document.getElementById("error_"+type).innerHTML = '';
                         document.getElementById("error_"+type).style.display = 'none';
                         return true;
@@ -199,7 +212,7 @@
                             //alert(txt);
                             return false;
                     } else {
-                        errorzip.value='';
+                        errorzip.value='success';
                         document.getElementById("error_"+type).innerHTML = '';
                         document.getElementById("error_"+type).style.display = 'none';
                         return true;

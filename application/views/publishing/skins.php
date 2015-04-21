@@ -61,8 +61,9 @@
 			    <form action='' method='post'>
 				   <input type='hidden' name='skin_id' id='skin_id'>											                                        
 				<button type="submit" name="save" value="Save"class="btn btn-primary"><?php echo $welcome->loadPo('Save') ?></button>
+				 <a id='addhref' href="<?=base_url()?>publishing/add"><button type="button" id='addbutton' name="add" class="btn btn-primary"><?php echo $welcome->loadPo('Add') ?></button></a>
 				 <a id='edithref'><button type="button" id='editbutton' disabled name="edit" class="btn btn-primary"><?php echo $welcome->loadPo('Edit') ?></button></a>
-				 <a id='deletehref'><button type="button" id='deletebutton' disabled name="delete" class="btn btn-primary"><?php echo $welcome->loadPo('Delete') ?></button></a>
+				 <a id='deletehref' onclick="return confirm('Are you sure?')"><button type="button" id='deletebutton' disabled name="delete" class="btn btn-primary"><?php echo $welcome->loadPo('Delete') ?></button></a>
 									</form>
                         </div><br/>
                         <div class="box">

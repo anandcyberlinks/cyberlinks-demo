@@ -302,6 +302,16 @@ function delete_video(id, url, curl)
         }
     })
 }
+function deletebox()
+{
+    bootbox.confirm("Are you sure you want to Delete video", function (confirmed) {
+        if (confirmed) {
+            
+        }else{
+	return false;}
+    })
+return false;
+}
 
 function delete_adsLocation(id, url, curl)
 {

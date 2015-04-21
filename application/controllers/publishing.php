@@ -159,9 +159,48 @@ class Publishing extends My_Controller{
                 $id = base64_decode($_GET['id']);
             }
             if (isset($id)) {
+                $editresult = $this->publishing_model->fetchskin($id);
+                $result=$data['result']=(array)$editresult['0'];//echopre($result);
                 if (isset($_POST['submit']) && $_POST['submit'] == "Update") {
                     
-                    $this->form_validation->set_rules($this->validation_rules['update']);
+                     if($_FILES["skin_file"]["name"]) {
+                        $fpath=substr($result['path'], 0, strrpos( $result['path'], '/') );
+                        if (file_exists($fpath)) {
+                            $this->deleteDir($fpath);
+                        }
+                        $path= 'assets/upload/skins';
+                        $filename = $_FILES["skin_file"]["name"];
+                        $source = $_FILES["skin_file"]["tmp_name"];
+                        $type = $_FILES["skin_file"]["type"];
+                        $folder_name = explode(".", $filename);
+                        $xmlname=$folder_name['0'].'/'.$folder_name['0'].'.xml';
+                        $target_path = $path;
+                        //echopre($filename);
+                        $image_target=$path.'/'.$folder_name['0'];
+                        if(upload_compress_files($filename,$source,$target_path,$type)){
+                            chmod($target_path, 0777);
+                            $_POST['path'] = $target_path.'/'.$xmlname;
+                           
+                        }
+                    }
+                    //echopre($_POST);
+                    if($_FILES["image_file"]["name"]) {
+                         $filename = $_FILES["image_file"]["name"];
+                         $source = $_FILES["image_file"]["tmp_name"];
+                         $type = $_FILES["image_file"]["type"];
+                         //$name = explode(".", $filename);
+                         
+                         if($_FILES["skin_file"]["name"]) {
+                            $target_path = $image_target.'/'.$filename;
+                         }else{
+                           unlink($result['image']);
+                           $target_path=$result['image'];
+                         }
+                        if(move_uploaded_file($source, $target_path)){
+                            chmod($target_path, 0777);
+                            $_POST['image'] = $target_path;
+                        }
+                    }
                    // if ($this->form_validation->run()) {
                         $_POST['id'] = $id;
                         $this->publishing_model->_save($_POST);
@@ -173,8 +212,7 @@ class Publishing extends My_Controller{
                     //    $this->show_view('publishing/edit', $this->data);
                     //}
                 } else {
-                    $editresult = $this->publishing_model->fetchskin($id);
-                    $result=$data['result']=(array)$editresult['0'];
+                    
                     $this->show_view('publishing/add', $data);
                   //  $this->show_view('add');
                 }
@@ -190,6 +228,7 @@ class Publishing extends My_Controller{
                         $target_path = $path;
                         $image_target=$path.'/'.$folder_name['0'];
                         if(upload_compress_files($filename,$source,$target_path,$type)){
+                            chmod($target_path, 0777);
                             $_POST['path'] = $target_path.'/'.$xmlname;
                         }
                     }
@@ -201,6 +240,7 @@ class Publishing extends My_Controller{
                          //$name = explode(".", $filename);
                          $target_path = $image_target.'/'.$filename;
                         if(move_uploaded_file($source, $target_path)){
+                            chmod($target_path, 0777);
                             $_POST['image'] = $target_path;
                         }
                     }
@@ -229,7 +269,9 @@ class Publishing extends My_Controller{
         $result=$data['result']=(array)$editresult['0'];
         $path=substr($result['path'], 0, strrpos( $result['path'], '/') );
         //unlink($result['image']);
-        $this->deleteDir($path);
+        if (file_exists($path)) {
+            $this->deleteDir($path);
+        }
         $editresult = $this->publishing_model->deleteskin($id);
         redirect('publishing');  
     }
