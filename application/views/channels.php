@@ -118,7 +118,7 @@
                                     <thead>
                                         <tr>
                                                     <th><?php echo $welcome->loadPo('Channel Name') ?></th>
-                                                    <th><?php echo $welcome->loadPo('Number') ?></th>
+                                                    
                                                     <th><?php echo $welcome->loadPo('Type') ?></th>
                                                     <th><?php echo $welcome->loadPo('Category') ?></th>
                                                     <th><?php echo $welcome->loadPo('Status') ?></th>
@@ -131,7 +131,7 @@
 
                                             <tr id="<?php echo $value->id ?>">
                                                 <td><?php echo $value->name; ?></td>
-                                                <td><?php echo $value->number; ?></td>
+                                                
                                                 <td><?php echo $value->type; ?></td> 
                                                 <td><?php echo $value->category; ?></td>
                                                 <td><?php if ($value->status == 1) { ?>
