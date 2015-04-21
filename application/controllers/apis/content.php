@@ -597,7 +597,7 @@ class Content extends Apis{
     }
     
     function getLivechannelEpg($channel_id){
-        $query = sprintf('select show_title,show_time,show_thumb,show_language,show_description,show_type
+        $query = sprintf('select id,show_title,show_time,show_thumb,show_language,show_description,show_type
                               from livechannel_epg where channel_id = %d order by show_time ',$channel_id);
         $dataset = $this->db->query($query)->result();
         if(count($dataset) > 0){
@@ -644,7 +644,8 @@ class Content extends Apis{
         $tmp = $this->db->query($query)->result();
         $response = array();
         foreach($tmp as $key=>$val){
-            $response[] = array('Plst'=>$val->playlist_id,
+            $response[] = array('id'=>$val->id,
+                                'Plst'=>$val->playlist_id,
                                 'ttl'=>$val->title,
                                 'EStTym'=>$val->start_date,
                                 'EEdTym'=>$val->end_date,
