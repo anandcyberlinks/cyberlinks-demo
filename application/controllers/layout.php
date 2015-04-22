@@ -116,7 +116,7 @@ class Layout extends MY_Controller {
             $body = file_get_contents(base_url().'layout/email_admin?email='.$email);
             $subject = 'Multitv Notification';
             
-            $this->sendmail('arshad.faiyaz@cyberlinks.co.in', $subject, $body); //mail to user
+            //$this->sendmail('arshad.faiyaz@cyberlinks.co.in', $subject, $body); //mail to user
             redirect('layout/succ_register');
         } else {
             $this->load->view('register');
