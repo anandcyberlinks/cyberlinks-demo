@@ -42,8 +42,6 @@ class Webtv extends MY_Controller {
         $result = $this->db->get('channels')->result();
         //print_r($result); die;
         $channel_name = $result[0]->name;
-
-
         $file = $_FILES['csv']['tmp_name'];
         //print_r($_FILES); die;
         $fp = fopen($file, 'r') or die(json_encode(array('result' => 'error')));
@@ -72,9 +70,6 @@ class Webtv extends MY_Controller {
                         'valid' => ($csv_line[2] == '' || $csv_line[1] == '') ? 'invalid' : 'valid'
                     );
                     $array[] = $temp;
-
-
-
                     //$this->db->insert('livechannel_epg', $temp);
                     //echo $this->db->last_query();
                 }
@@ -83,12 +78,7 @@ class Webtv extends MY_Controller {
             //print_r($temp);
         }
         fclose($fp);
-        foreach ($array as $val) {
-            if ($val['valid'] == 'valid') {
-                unset($val['valid']);
-                $this->db->insert('livechannel_epg', $val);
-            }
-        }
+        
         $view_data['result'] = $array;
         $this->load->view('epg_view', $view_data);
     }

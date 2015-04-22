@@ -155,9 +155,10 @@
             }
             else
             {   
+                $("#csv_epg").val("");
                 $("#csv_file").html('Choose CSV');
                 bootbox.alert('Invalid File, Please choose valid csv file');
-                $("#csv_file").attr('val', '');
+                
             }
             return false;
         });
