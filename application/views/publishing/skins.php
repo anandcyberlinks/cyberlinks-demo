@@ -1,3 +1,4 @@
+
 <div class="wrapper row-offcanvas row-offcanvas-left">
     <!-- Right side column. Contains the navbar and content of the page -->
     <aside class="right-side"> 
@@ -60,11 +61,15 @@
 			<div class="box-footer" >
 			    <form action='' method='post'>
 				   <input type='hidden' name='skin_id' id='skin_id'>											                                        
-				<button type="submit" name="save" value="Save"class="btn btn-primary"><?php echo $welcome->loadPo('Save') ?></button>
+				<?php if(isset($role_id)&&($role_id!='2')){?>
+					<button type="submit" name="save" value="Save"class="btn btn-primary"><?php echo $welcome->loadPo('Publish Now') ?></button>
+				 <?php
+				 }
+				 if(isset($role_id)&&($role_id=='2')){?>
 				 <a id='addhref' href="<?=base_url()?>publishing/add"><button type="button" id='addbutton' name="add" class="btn btn-primary"><?php echo $welcome->loadPo('Add') ?></button></a>
 				 <a id='edithref'><button type="button" id='editbutton' disabled name="edit" class="btn btn-primary"><?php echo $welcome->loadPo('Edit') ?></button></a>
 				 <a id='deletehref'><button type="button" id='deletebutton' disabled name="delete" class="btn btn-primary"><?php echo $welcome->loadPo('Delete') ?></button></a>
-									</form>
+				<?php }?></form>
                         </div><br/>
                         <div class="box">
                             <div class="box-body table-responsive">
@@ -161,8 +166,12 @@
 
 <script>
 	$(document).ready(function () {
-	document.getElementById('deletebutton').disabled = true;
-	document.getElementById('editbutton').disabled = true;
+		var roleid='<?php echo $role_id;?>';
+		
+		if(roleid=='2'){
+			document.getElementById('deletebutton').disabled = true;
+			document.getElementById('editbutton').disabled = true;
+		}
  <?php foreach ($result as $value) {
 	if($value->skin_id>0){?>
 	var id="<?php echo $value->skin_id;?>";
@@ -170,7 +179,7 @@
 		var title ="<?php echo $value->title;?>";
 		var dimen ="<?php echo $value->dimension;?>";
 		$('#'+id).css("background", "#ddd");
-		 $('#preview_skin').html('<img src="'+url+'" width="380" height="250">');
+		 $('#preview_skin').html('<img src="'+url+'" width="380" height="">');
 		   $('#skin_title').html("Title<br>"+title);
 		    $('#skin_dimenstion').html("Dimension<br>"+dimen);
 		$('#skin_id').val(id);
@@ -192,11 +201,14 @@
      });
  });
 	function changefunction(id){
-	document.getElementById('editbutton').disabled = false;
-	document.getElementById("edithref").href="<?=base_url()?>publishing/add?id="+id;
-	document.getElementById('deletebutton').disabled = false;
-	//document.getElementById("deletehref").href="<?=base_url()?>publishing/delete?id="+id;
-	document.getElementById("deletehref").setAttribute("onclick","return deletebox('"+id+"');");
+		var role='<?php echo $role_id;?>';
+		
+		if(role=='2'){
+			document.getElementById('editbutton').disabled = false;
+			document.getElementById("edithref").href="<?=base_url()?>publishing/add?id="+id;
+			document.getElementById('deletebutton').disabled = false;
+			document.getElementById("deletehref").setAttribute("onclick","return deletebox('"+id+"');");
+		}
 	}
 	function deletebox(id){
 		bootbox.confirm("Are you sure you want to Delete video", function (confirmed) {

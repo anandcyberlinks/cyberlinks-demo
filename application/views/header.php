@@ -12,7 +12,12 @@ switch ($s[0]->username) {
             array('name' => 'User', 'url' => base_url().'user', 'class' => 'fa-users', 'li-class' => (($this->uri->segment(1) == 'user') || ($this->uri->segment(1) == 'role')) ? 'treeview active' : '', 'type' => 'parent', 'childs' => array(
                     array('name' => 'Users', 'li-class' => ($this->uri->segment(1) === 'user') ? 'active' : '', 'url' => base_url() . 'user', 'type' => 'child'),
                 //array('name'=>'User Role', 'li-class'=>($this->uri->segment(1) === 'role') ? 'active' : '', 'url'=>base_url().'role', 'type'=>'child'),
-        )));
+        )),
+            array('name' => 'Publishing', 'url' => base_url().'publishing', 'class' => 'fa-globe', 'li-class' => ($this->uri->segment(1) == 'publishing') ? 'treeview active' : '', 'type' => 'parent', 'childs' => array(
+                    array('name' => 'Templates', 'li-class' => ($this->uri->segment(1) == 'advertising') ? 'active' : '', 'url' => base_url() . 'publishing', 'type' => 'child'),
+                    array('name' => 'Add Skin', 'li-class' => ($this->uri->segment(1) == 'advertising' && $this->uri->segment(2) == 'add' ) ? 'active' : '', 'url' => base_url() . 'publishing/add', 'type' => 'child'),
+                )),
+            );
         break;
     case ('veena'):
         $menu = array(
@@ -179,6 +184,7 @@ switch ($s[0]->username) {
                 <!-- Sidebar toggle button-->
                 <div style="float:left;"><section class="sidebar">
                     <ul class="sidebar-menu">
+                        
             <?php foreach ($menu as $val){?>
             <li class="<?= $val['li-class']; ?>">
                 <a href="<?=$val['url']?>">

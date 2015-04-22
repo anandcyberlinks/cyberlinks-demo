@@ -13,6 +13,7 @@ class Publishing extends My_Controller{
         $this->load->library('form_validation');
         $data['welcome'] = $this;
         $s = $this->session->all_userdata();
+        $this->userdetail=(array)$s[0];
         $this->user = $s[0]->username;
         $this->uid = $s[0]->id;
         $this->role_id = $s[0]->role_id;
@@ -56,8 +57,12 @@ class Publishing extends My_Controller{
     function index()
     {        
         $data['welcome'] = $this;
+        //echopre($this->userdetail);
         if (isset($_POST['save'])) {           
             $skin_id = $_POST['skin_id'];
+           // $emaildata['userdetail']=$this->userdetail;
+            //$emailview=$this->load->view('email.php',$emaildata,true);
+            //$this->sendmail($emaildata['userdetail']['email'],'Publish skin',$emailview);
             $this->User_model->saveskin($skin_id,$this->uid);
             $msg = $this->loadPo($this->config->item('success_record_update'));
             $this->session->set_flashdata('message', $this->_successmsg($msg));
@@ -69,12 +74,12 @@ class Publishing extends My_Controller{
         $config["total_rows"] = $this->publishing_model->getSkins($searchterm,1);
         $config["per_page"] = 10;
         $config["uri_segment"] = 3;
-        
         $this->pagination->initialize($config);
         $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
         $data['result'] = $this->publishing_model->getSkins($searchterm,0,$config["per_page"],$page);
         $data["links"] = $this->pagination->create_links();
         $data['total_rows'] = $config["total_rows"];
+        $data['role_id']=$this->role_id;
         //$result = $data['result'] = $this->publishing_model->getSkins();
         
         $this->show_view('publishing/skins',$data);
