@@ -17,7 +17,7 @@ class Youtubevideo extends MY_Controller
     function __construct(){
         parent::__construct();
 	$this->load->config('messages');
-        $this->load->model('Youtubevideo_model');
+    $this->load->model('videos_model');
 	$this->load->library('session');
 	$this->load->library('form_validation');
         $data['welcome'] = $this;
@@ -29,14 +29,146 @@ class Youtubevideo extends MY_Controller
 
     }
     function index() {
-        $this->data['welcome'] = $this;
+	 // echo '<pre>';print_r($_SERVER);
+
+    $this->data['welcome'] = $this;
 	if (isset($_POST['submit']) && ($_POST['submit']=='Search')) {
 	  $user = $_POST['title'];
 	  $videotype = $_POST['videotype'];
-	  $api = file_get_contents("http://gdata.youtube.com/feeds/api/users/" . $user . "/uploads?v=2&alt=jsonc&start-index=1&max-results=12");
-	  $datayoutube = json_decode($api);
-	  //echo '<pre>';print_r($datayoutube->data->items);echo '</pre>'; exit;
-	  $this->data['result'] = $datayoutube->data->items;
+	  $total = 5;
+	  $index=10;
+	  
+	  $search = array('vNEE1qJlZ8o',
+'PlmBW6RPX5A',
+'4W9ct_VMdsE',
+'f3iAZyg51OE',
+'BNQ9XsJSMU4',
+'2Nx78kU__0s',
+'IpYevCHWqqM',
+'LMfUrDDAIw8',
+'ZN4d_KIferU',
+'Enn21JwN6jA',
+'5uEw_cm8aOE',
+'HLYOSa5fmu4',
+'b_O5n1pLpi0',
+'ykrPTarT6fE',
+'nQXgc4wfwcQ',
+'ITwyOXSu_1s',
+'cOHqQa-UYaU',
+'_QKiWqcxtZo',
+'FBzCpvTNTM4',
+'oQF32zozENw',
+'EbFtYbCJUj0',
+'d2EEjxv1y2M',
+'gusBnc48RkA',
+'AQbWiSi_ClM'
+);
+	  
+	   
+	  //-- get data using id ---//
+	  for($i=0;$i<count($search);$i++){
+		$youtube = sprintf('http://gdata.youtube.com/feeds/api/videos/%s?v=2&alt=json', $search[$i]);
+		//-- save data ---//
+		   $path = "http://globalpunjab.s3.amazonaws.com/videos/"; 			 
+			$post = array();
+            
+			//-- hit youtube api url ---//
+			$curl = curl_init($youtube);
+			curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+			$return = curl_exec($curl);
+			curl_close($curl);
+			$data['id'] = $id;
+			$tmp['detail'] = (array) json_decode($return);			
+			///-------------------------//
+			
+            $content_title = $tmp['detail']['entry']->{'title'}->{'$t'};				  
+			//$filename = str_replace(array(',', '-', '%','"',':','|'), '', $content_title);
+			//$filename = preg_replace('/\s+/', ' ',$filename);	
+			//$filename = str_replace(" ",'_',$filename);
+			$filename = $search[$i];
+			
+			$path .= $filename.'.mp4';
+			 
+            $youtubeData = $tmp['detail']['entry']->{'media$group'};
+            $post['content_token'] = $tmp['id'];
+            $post['content_title'] = $tmp['detail']['entry']->{'title'}->{'$t'};
+            $post['description'] = $youtubeData->{'media$description'}->{'$t'};
+            $post['duration'] = $youtubeData->{'media$content'}[0]->duration; 
+            $post['uid'] = $this->uid;
+            $post['created'] = date('Y-m-d');
+            $post['filename'] = $filename.'.mp4';
+            $post['uid'] = $this->uid;
+            $post['created'] = date('Y-m-d');
+            $post['relative_path'] = $path;
+            $post['absolute_path'] = $path;
+            $post['status'] = '0';
+            $post['type'] = 'mp4';
+            $post['minetype'] = "video/mp4";
+            $post['info'] = base64_encode($path);
+           // echo "<pre>";            print_r($post); exit;
+            $last_id = $this->videos_model->_saveVideo($post);
+			
+			
+			//---save thumbnail --//
+			$image_path = "http://globalpunjab.s3.amazonaws.com/images/".$filename.".jpg";
+			$type = 'thumbnail';
+			$fileData = array();
+			$fileData['content_id'] = $last_id;
+			$fileData['filename'] = $filename.'jpg';
+			$fileData['type'] = 'jpg';
+			$fileData['minetype'] = "image/jpg";
+			$fileData['width'] = "480";
+			$fileData['height'] = "360";
+			$fileData['relative_path'] = $image_path;
+			$fileData['absolute_path'] = $image_path;
+			$fileData['status'] = '0';
+			$fileData['uid'] = $this->uid;
+			$data_postFile = @serialize($fileData);
+			$dataFile = base64_encode($data_postFile);
+			$fileData['info'] = $dataFile;
+			$last_id = $this->videos_model->_saveThumb($fileData);
+	  }
+	  echo "upload successfully";
+	  die;
+	  
+	 
+	  //------------------------//
+	  
+	 // for($index=1;$index <= $total;){
+			$api = file_get_contents("http://gdata.youtube.com/feeds/api/users/" . $user . "/uploads?v=2&alt=jsonc&start-index=".$index."&max-results=50");
+			$datayoutube = json_decode($api);
+			//echo '<pre>';print_r($datayoutube->data->items);echo '</pre>'; exit;
+			$this->data['result'] = $result = $datayoutube->data->items;
+			 $path = "http://globalpunjab.s3.amazonaws.com/videos/";
+			$reccount = count($result);
+			for($i=0; $i < $reccount; $i++) {			  
+			 $filename = str_replace(array(',', '-', '%', ' '), '_', $result[$i]->title);			  
+			  
+			//  $filename = str_replace(" ","_",$result[$i]->title);
+			 // $filename = str_replace(",",'',$filename);
+			  $path .= $filename.'.mp4';
+			  $post['uid'] = $this->uid;
+			  $post['content_title'] = $result[$i]->title;
+			  $post['duration'] = $result[$i]->duration;
+			  $post['description'] = $result[$i]->description;		
+			  $post['filename'] = $filename;
+			  $post['type'] = 'mp4';
+			  $post['created'] = date('Y-m-d');
+			  $post['relative_path'] = $path;
+			  $post['absolute_path'] = $path;
+			  $post['status'] = '0';
+			  $post['minetype'] = "video/mp4";
+			  $last_id = $this->videos_model->_saveVideo($post);
+			  
+			$source_path = $result[$i]->thumbnail->hqDefault;
+			$ext = strrchr($source_path,".");
+			  //-- upload thumbnail --//
+			  $this->uploadThumb($last_id,$source_path,$filename.$ext);
+			}
+			$index += $total;
+			$total += 50;
+	 // }								  
+	    			
 	  $this->show_view('youtubevideo', $this->data);
 
 	} else {
@@ -44,4 +176,48 @@ class Youtubevideo extends MY_Controller
 	}
     }
     
+	function uploadThumb($id,$source_path,$filename)
+	{	  
+	  //--- download file from youtube url ----//	  
+	/*  $url  = $source_path;	  
+	  $image_path = "http://globalpunjab.s3.amazonaws.com/images/";
+	  $path = REAL_PATH . serverImageRelPath.$filename.'.jpg';	  
+	  $ch = curl_init($url);
+	  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);	  
+	  $data = curl_exec($ch);	  
+	  curl_close($ch);	  
+	  file_put_contents($path, $data);
+	  */
+	  //---------------------------------------//
+	  $image_path = "http://globalpunjab.s3.amazonaws.com/images/$filename";
+	   
+	  list($width, $height, $type, $attr) = getimagesize($path);
+      switch ($type) {
+      case "1":
+      $imageType = 'image/gif';
+        break;
+      case "2":
+      $imageType = 'image/jpg';
+       break;
+      case "3":
+      $imageType = 'image/png';
+        break;
+     }
+      $type = 'thumbnail';
+      $fileData = array();
+      $fileData['content_id'] = $content_id;
+      $fileData['filename'] = $fileUniqueName;
+      $fileData['type'] = $type;
+      $fileData['minetype'] = $imageType;
+      $fileData['width'] = $width;
+      $fileData['height'] = $height;
+      $fileData['relative_path'] = serverImageRelPath . $fileUniqueName;
+      $fileData['absolute_path'] = REAL_PATH . serverImageRelPath . $fileUniqueName;
+      $fileData['status'] = '0';
+      $fileData['uid'] = $this->uid;
+      $data_postFile = @serialize($fileData);
+      $dataFile = base64_encode($data_postFile);
+      $fileData['info'] = $dataFile;
+      $last_id = $this->videos_model->_saveThumb($fileData);
+	}
 }
