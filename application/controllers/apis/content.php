@@ -496,8 +496,9 @@ class Content extends Apis{
         $this->db->where('a.status','1');
         $this->db->where('a.uid',$this->app->id);
         $this->db->order_by('c.id');
-        $this->db->limit($this->limit);
+        //$this->db->limit($this->limit);
         $query = $this->db->get();
+        //echo $this->db->last_query();
         $data =  $query->result();
         
         $tmp = array();
@@ -597,7 +598,7 @@ class Content extends Apis{
     }
     
     function getLivechannelEpg($channel_id){        
-        $query = sprintf('select id,show_title,show_time,show_thumb,show_language,show_description,show_type
+        echo $query = sprintf('select id,show_title,show_time,show_thumb,show_language,show_description,show_type
                               from livechannel_epg where channel_id = %d AND date(date) = "'.date("Y-m-d").'"  order by show_time ',$channel_id);
         $dataset = $this->db->query($query)->result();
         if(count($dataset) > 0){
