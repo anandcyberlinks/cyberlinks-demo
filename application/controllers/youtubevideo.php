@@ -87,7 +87,7 @@ class Youtubevideo extends MY_Controller
 			//$filename = str_replace(" ",'_',$filename);
 			$filename = $search[$i];
 			
-			$path .= $filename.'.mp4';
+		echo '<br>'.	$path .= $filename.'.mp4';
 			 
             $youtubeData = $tmp['detail']['entry']->{'media$group'};
             $post['content_token'] = $tmp['id'];
