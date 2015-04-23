@@ -498,7 +498,7 @@ class Content extends Apis{
         $this->db->order_by('c.id');
         //$this->db->limit($this->limit);
         $query = $this->db->get();
-        echo $this->db->last_query();
+        //echo $this->db->last_query();
         $data =  $query->result();
         
         $tmp = array();
