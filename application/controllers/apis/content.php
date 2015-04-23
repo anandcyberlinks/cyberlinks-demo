@@ -487,7 +487,7 @@ class Content extends Apis{
     function getnewvod_get(){
         $response = array();
         
-        $this->db->select('c.id as catid,c.category,c.color,a.id,a.title,a.description,a.created,g.genre_name,c1.relative_path as thumbnail_path');
+        $this->db->select('c.id as catid,c.category,c.color,a.id,a.title,a.description,a.created,g.genre_name,c1.type,c1.relative_path as thumbnail_path');
         $this->db->from('contents a');               
         $this->db->join('categories c', 'a.category = c.id', 'left');    
         $this->db->join('video_thumbnails h','h.content_id=a.id AND h.default_thumbnail = 1 ','left');
@@ -498,7 +498,7 @@ class Content extends Apis{
         $this->db->order_by('c.id');
         //$this->db->limit($this->limit);
         $query = $this->db->get();
-        //echo $this->db->last_query();
+        echo $this->db->last_query();
         $data =  $query->result();
         
         $tmp = array();
@@ -509,7 +509,7 @@ class Content extends Apis{
             $tmp[$val->catid]['Cntnt'][] = array('title'=>$val->title,
                                             'description'=>$val->description,
                                             'genre'=>$val->genre_name,
-                                            'thumbnail'=>($val->thumbnail_path != '' ? base_url():null).$val->thumbnail_path,
+                                            'thumbnail'=>($val->thumbnail_path != '' && $val->type !='S3'? base_url():null).$val->thumbnail_path,
                                             'created'=>$val->created,
                                             'url'=> base_url().'index.php/details?id='.$val->id.'&type=vod');
         }
