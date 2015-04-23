@@ -503,7 +503,6 @@ class Content extends Apis{
         
         $tmp = array();
         foreach($data as $key=>$val){
-            echo $val->type;
             $tmp[$val->catid]['CatId'] = $val->catid;
             $tmp[$val->catid]['CatName'] = $val->category;
             $tmp[$val->catid]['Counter'] = $this->limit;
