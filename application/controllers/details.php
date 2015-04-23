@@ -221,7 +221,9 @@ class Details extends MY_Controller {
 	
 	function getAdsRevive($lat,$lng,$age,$keywords,$gender,$l)
 	{
-		//$this->zone_id =7;
+		if($id ==87){
+		$this->zone_id =11;
+		}
 		$this->load->helper('url');		
                 $url = CAMPAIGN_URL."?zone=".$this->zone_id."&keyword=$keywords&age=$age&gender=$gender&lat=$lat&lng=$lng&limit=$l";
                // Get cURL resource
