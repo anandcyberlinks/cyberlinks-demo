@@ -145,7 +145,14 @@ class Layout extends MY_Controller {
         $data['result'] = $this->session->all_userdata();
         $data['welcome'] = $this;
         $data['videos'] = $this->videos_model->get_videocountstatus($this->user_id);
-        $data['years'] = array(2013 => 2013, 2014 => 2014, 2015 => 2015);
+        
+        $date = $this->getMonths("August 2012");
+        //echo "<pre>"; print_r($date);
+        foreach ($date as $key=>$val){
+            $data['years'][] = $key;
+        }
+       //echo "<pre>"; print_r($data['years']); die;
+        //$data['years'] = array(2013 => 2013, 2014 => 2014, 2015 => 2015);
         $data['months'] = array(1 => "Jan", 2 => "Feb", 3 => 'Mar', 4 => 'Apr', 5 => 'May', 6 => 'Jun', 7 => 'Jul', 8 => 'Aug', 9 => 'Sep', 10 => 'Oct', 11 => 'Nov', 12 => 'Dec');
         $this->show_view('dashboard', $data);
     }
@@ -189,6 +196,7 @@ class Layout extends MY_Controller {
                     $fields[] = sprintf("SUM(if(c.created between '%s' AND '%s',1,0)) as '%s' ", date('Y-m-d G:i:s', mktime(0, 0, 0, $month, $i, $year)), date('Y-m-d G:i:s', mktime(23, 59, 59, $month, $i, $year)), date('M d', mktime(23, 59, 59, $month, $i, $year)));
                 }
                 $query = sprintf('select %s from contents c where uid = %d', implode(',', $fields), $this->user_id);
+                
                 $dataset = $this->db->query($query)->result();
                 $result['color'] = $this->randColor(1);
                 foreach ($dataset[0] as $key => $val) {

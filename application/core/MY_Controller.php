@@ -52,6 +52,20 @@ class MY_Controller extends CI_Controller {
         return $res;
     }
 
+    function getMonths($month, $count = 1) {
+        $now = new DateTime();
+        $start = DateTime::createFromFormat("F Y", $month);
+        $list = array();
+        $interval = new DateInterval(sprintf("P%dM", $count));
+        while ($start <= $now) {
+            $list[$start->format("Y")][] = $start->format("F");
+            $start->add($interval);
+        }
+        return $list;
+    }
+
+//print_r(getMonths("August 2012"));
+
     function get_youtube($url) {
         $id = $this->getYoutubeIdFromUrl($url);
         $html = $this->get_data($url);

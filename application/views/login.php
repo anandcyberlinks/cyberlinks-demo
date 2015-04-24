@@ -16,6 +16,7 @@
             <?php
             $msg = $this->session->flashdata('msg');
             $succ = $this->session->flashdata('succ');
+            echo $success = $this->session->flashdata('message');
             if ($msg != '') {
                 ?>
                 <div class="alert alert-danger alert-dismissable">

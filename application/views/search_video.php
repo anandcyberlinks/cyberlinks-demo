@@ -116,7 +116,7 @@
                                                     <?php } ?></td>
                                                 <td><?php echo ucfirst($value->content_type); ?></td>
                                                 <td><a href="javascript:void(0)" link="<?php echo base_url()?>package/price/<?php echo $value->id; ?>?type=video" class="price">Price</a></td>
-                                                <td style='text-align:center'>
+                                                <td>
                                                     <?php if(in_array($value->minetype,array('video/wmv','video/avi'))) { ?>
                                                     --
                                                     <?php } else { ?>

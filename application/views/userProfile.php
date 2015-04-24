@@ -79,7 +79,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td><?php echo $welcome->loadPo('Token') ?>:</td>
-                                                    <td><button class="btn btn-warning" id="token">Re-Ganrate</button></td>
+                                                    <td><button class="btn btn-warning" id="token">Re-Generate</button></td>
                                                 </tr>
                                             <?php } ?>
                                                 
@@ -102,7 +102,7 @@
     $("#token").click(function () {
         bootbox.confirm("Your old token will be expired,<br> New token will be sent to you email<br>Are you sure?", function (result) {
             if(result){
-                var url = 'http://localhost/multitvfinal/user/changestatus/?id=<?=$data->id ?>&email=<?=$data->email ?>&domain=<?=$data->domain ?>&status=inactive';
+                var url = '<?=  base_url()?>user/changestatus/?id=<?=$data->id ?>&email=<?=$data->email ?>&domain=<?=$data->domain ?>&status=inactive';
                 $("#token").html("<img src='<?=base_url()?>/assets/img/spinner.gif'>");
                 $("#token").addClass('disabled');
                 $.ajax({

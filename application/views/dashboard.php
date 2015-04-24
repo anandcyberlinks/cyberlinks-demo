@@ -36,7 +36,7 @@
                         <i class="fa fa-video-camera"></i>
                     </div>
                     <a href="<?php echo base_url() ?>video" class="small-box-footer">
-                        <?php echo $welcome->loadPo('More info'); ?> <i class="fa fa-arrow-circle-right"></i>
+                        <?php echo $welcome->loadPo('All Video List'); ?> <i class="fa fa-arrow-circle-right"></i>
                     </a>
                 </div>
             </div><!-- ./col -->
@@ -55,7 +55,7 @@
                         <i class="fa fa-youtube-play"></i>
                     </div>
                     <a href="<?php echo base_url() ?>video" class="small-box-footer">
-                        <?php echo $welcome->loadPo('More info'); ?> <i class="fa fa-arrow-circle-right"></i>
+                        <?php echo $welcome->loadPo('All Video List'); ?> <i class="fa fa-arrow-circle-right"></i>
                     </a>
                 </div>
             </div>
@@ -74,7 +74,7 @@
                         <i class="fa fa-forward"></i>
                     </div>
                     <a href="<?php echo base_url() ?>video" class="small-box-footer">
-                        <?php echo $welcome->loadPo('More info'); ?> <i class="fa fa-arrow-circle-right"></i>
+                        <?php echo $welcome->loadPo('All Jobs'); ?> <i class="fa fa-arrow-circle-right"></i>
                     </a>
                 </div>
             </div>
@@ -93,7 +93,7 @@
                         <i class="fa fa-thumbs-up"></i>
                     </div>
                     <a href="<?php echo base_url() ?>video/video_status" class="small-box-footer">
-                        <?php echo $welcome->loadPo('More info'); ?> <i class="fa fa-arrow-circle-right"></i>
+                        <?php echo $welcome->loadPo('All Jobs'); ?> <i class="fa fa-arrow-circle-right"></i>
                     </a>
                 </div>
             </div><!-- ./col -->
@@ -112,7 +112,7 @@
                         <i class="fa fa-clock-o"></i>
                     </div>
                     <a href="<?php echo base_url() ?>video/video_status" class="small-box-footer">
-                        <?php echo $welcome->loadPo('More info'); ?> <i class="fa fa-arrow-circle-right"></i>
+                        <?php echo $welcome->loadPo('All Jobs'); ?> <i class="fa fa-arrow-circle-right"></i>
                     </a>
                 </div>
             </div><!-- ./col -->
@@ -131,7 +131,7 @@
                         <i class="fa fa-thumbs-down"></i>
                     </div>
                     <a href="#" class="small-box-footer">
-                        <?php echo $welcome->loadPo('More info'); ?> <i class="fa fa-arrow-circle-right"></i>
+                        <?php echo $welcome->loadPo('All Jobs'); ?> <i class="fa fa-arrow-circle-right"></i>
                     </a>
                 </div>
             </div><!-- ./col -->
@@ -193,9 +193,9 @@
 				<?php
 				    foreach($years as $key=>$val){
 					if($key == date('Y'))
-					echo sprintf('<option value="%s" selected="selected">%s</option>',$key,$val);
+					echo sprintf('<option value="%s" selected="selected">%s</option>',$val,$val);
 					else
-					echo sprintf('<option value="%s">%s</option>',$key,$val);
+					echo sprintf('<option value="%s">%s</option>',$val,$val);
 				    }
 				?>
 			    </select>
