@@ -300,6 +300,7 @@ function beforeUnload() {
  aspectratio: "16:9",
   androidhls: true,
    fallback: true,
+   rtmp: { bufferlength: 1 }, 
  controls: false,
  stretching: "exactfit",
  //mute: true,
