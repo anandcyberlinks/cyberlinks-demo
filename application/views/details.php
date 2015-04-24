@@ -294,7 +294,7 @@ function beforeUnload() {
         primary: "html5",
 		type: "mp4",        
        // file: "<?php echo $video_path;?>",
-	   file: "http://globalpunjab.s3.amazonaws.com/videos/vNEE1qJlZ8o_3g.mp4",
+	   file: "http://54.179.170.143/multitvfinal/assets/upload/ads/5507d62cc59c2_3g.mp4",
 	image: "<?php echo base_url().THUMB_LARGE_PATH. $thumbnail_path;?>",       
        // skin: "<?php echo base_url()?>assets/myskinjw/custom.xml",	
 	width: "100%",
