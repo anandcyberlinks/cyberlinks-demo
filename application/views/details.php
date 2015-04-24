@@ -298,6 +298,8 @@ function beforeUnload() {
        // skin: "<?php echo base_url()?>assets/myskinjw/custom.xml",	
 	width: "100%",
  aspectratio: "16:9",
+  androidhls: true,
+   fallback: true,
  controls: false,
  stretching: "exactfit",
  //mute: true,
