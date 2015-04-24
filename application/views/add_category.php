@@ -26,9 +26,7 @@
                         <div class="box box-primary">
                             <div class="box-header">
                                 <h3 class="box-title"><?php echo $welcome->loadPo('Category') . ' ' . $welcome->loadPo('Add'); ?></h3>
-                                <div class="box-tools pull-right">
-                                    <a href="<?php echo base_url() . $uri; ?>" class="btn btn-default btn-sm"><?php echo $welcome->loadPo('Back'); ?></a>
-                                </div>
+                               
                             </div><!-- /.box-header -->
                             <link href="<?php echo base_url(); ?>assets/css/colorpicker/bootstrap-colorpicker.min.css" rel="stylesheet" type="text/css" />
                             <!-- form start -->

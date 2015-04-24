@@ -1,4 +1,4 @@
-<?php echo $uri = $this->uri->segment(1); ?>
+<?php $uri = $this->uri->segment(1); ?>
 <div class="wrapper row-offcanvas row-offcanvas-left">
     <!-- Right side column. Contains the navbar and content of the page -->
     <aside class="right-side">                
@@ -21,9 +21,6 @@
                         <div class="box box-primary">
                             <div class="box-header">
                                 <h3 class="box-title"><?php echo $welcome->loadPo('Category') . ' ' . $welcome->loadPo('Edit'); ?></h3>
-                                <div class="box-tools pull-right">
-                                    <a href="<?php echo base_url() . $uri; ?>" class="btn btn-default btn-sm"><?php echo $welcome->loadPo('Back'); ?></a>
-                                </div>
                             </div><!-- /.box-header -->
                             <link href="<?php echo base_url(); ?>assets/css/colorpicker/bootstrap-colorpicker.min.css" rel="stylesheet" type="text/css" />
                             <!-- form start -->
