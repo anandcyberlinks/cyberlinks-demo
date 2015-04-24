@@ -292,6 +292,7 @@ function beforeUnload() {
     jwplayer("myElement").setup({
        //flashplayer: "assets/player.swf",
         primary: "html5",
+		type: "mp4",        
         file: "<?php echo $video_path;?>",	  
 	image: "<?php echo base_url().THUMB_LARGE_PATH. $thumbnail_path;?>",       
        // skin: "<?php echo base_url()?>assets/myskinjw/custom.xml",	
