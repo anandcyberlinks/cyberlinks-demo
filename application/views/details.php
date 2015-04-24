@@ -294,7 +294,7 @@ function beforeUnload() {
         primary: "html5",
 		type: "mp4",        
        // file: "<?php echo $video_path;?>",
-	   file: "http://54.179.170.143/multitvfinal/assets/upload/video/54db53213d8aa_2g.mp4",
+	   file: "http://54.179.170.143/multitvfinal/assets/upload/video/54db5322d3372_3g.mp4",
 	image: "<?php echo base_url().THUMB_LARGE_PATH. $thumbnail_path;?>",       
        // skin: "<?php echo base_url()?>assets/myskinjw/custom.xml",	
 	width: "100%",
