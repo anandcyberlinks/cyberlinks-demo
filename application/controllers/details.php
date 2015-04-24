@@ -16,7 +16,7 @@ class Details extends MY_Controller {
 		$this->result = User_Agent::getinfo();  //--regex class to get user agent --//
 		// print_r($_SERVER[HTTP_USER_AGENT]);die;
         //---------------------//
-		$this->zone_id = ''; //-- content provider id -- temporary use --//
+		$this->zone_id = '11'; //-- content provider id -- temporary use --//
 	}
 
 	function index()
