@@ -60,9 +60,13 @@ class Publishing extends My_Controller{
         //echopre($this->userdetail);
         if (isset($_POST['save'])) {           
             $skin_id = $_POST['skin_id'];
-           // $emaildata['userdetail']=$this->userdetail;
-            //$emailview=$this->load->view('email.php',$emaildata,true);
-            //$this->sendmail($emaildata['userdetail']['email'],'Publish skin',$emailview);
+            $emaildata['userdetail']=$this->userdetail;
+            $emailview=$this->load->view('email.php',$emaildata,true);
+            //$path='assets/js/custom_test.js';
+            //$file_data = "var key='".$emaildata['userdetail']['token']."';";
+            //$file_data .= file_get_contents('assets/js/custom_test.js');
+            //file_put_contents('assets/js/kunal.js', $file_data);
+            $this->sendmail($emaildata['userdetail']['email'],'Publish skin',$emailview);
             $this->User_model->saveskin($skin_id,$this->uid);
             $msg = $this->loadPo($this->config->item('success_record_update'));
             $this->session->set_flashdata('message', $this->_successmsg($msg));
