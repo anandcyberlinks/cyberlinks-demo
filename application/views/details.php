@@ -319,13 +319,10 @@ autostart: 1,
 	   $offset = $row['cue_points'];	   
 	   ?>
 		adbreak<?php echo $i; ?>: {
-		offset: '<?php echo ($offset==0 ? 'pre': $offset); ?>',
-		tag: "http://multitvsolution.com/vast/file/5721439b45131761c1e6b09afc12735e.xml"
+		offset: '<?php echo ($offset==0 ? 'pre': $offset); ?>',		
 		//'skipoffset':5,
 		//tag: "<?php //echo ($row['ad_type'] != 'External' ? base_url():'') . $row['vast_file']; ?>?<?php //echo $row['ads_id']?>/<?php //echo $user_id?>/<?php //echo $row['uid']?>"
-		//tag: "<?php echo $row['vast_file']?>/<?php echo $user_id?>/<?php echo $content_provider;?>/<?php echo $row['advertiser']?>/<?php echo ($offset==0 ? 'pre':'mid')?>"
-		//tag: "http://localhost/multitvfinal-demo/assets/upload/ads/vast/vast1.xml"
-		//tag: "http://54.179.170.143/multitvfinal/assets/upload/ads/vast/d53be859b9314be0885eda3794321e05.xml"
+		tag: "<?php echo $row['vast_file']?>/<?php echo $user_id?>/<?php echo $content_provider;?>/<?php echo $row['advertiser']?>/<?php echo ($offset==0 ? 'pre':'mid')?>"		
 		},
 	   <?php $i++;
        } }
