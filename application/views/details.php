@@ -294,7 +294,7 @@ function beforeUnload() {
         primary: "html5",
 		type: "mp4",        
         file: "<?php echo $video_path;?>",
-	image: "<?php echo base_url().THUMB_LARGE_PATH. $thumbnail_path;?>",       
+	    //image: "<?php echo base_url().THUMB_LARGE_PATH. $thumbnail_path;?>",       
        // skin: "<?php echo base_url()?>assets/myskinjw/custom.xml",	
 	width: "100%",
  aspectratio: "16:9",   
@@ -654,16 +654,16 @@ jwplayer().onAdComplete(function(event){
   jwplayer().onAdSkipped(function(event) {
 	skipAds(ad_duration);
  });
-   
+/*   
 $(document).ready(function(){ 
     /* User Interest Video by adding tags into user interest .  */
     
-    /*$.post( "<?php echo base_url(); ?>analytics/user_content_tags", {user_id: "<?php echo $user_id; ?>", content_id: "<?php echo $content_id; ?>"},function( data ) {
+    /*$.post( "<?php //echo base_url(); ?>analytics/user_content_tags", {user_id: "<?php //echo $user_id; ?>", content_id: "<?php //echo $content_id; ?>"},function( data ) {
             //var foo = JSON.parse(data);
             //alert(data)
-    });*/
+    });
   // AndroidApp.startVideo();    
-});
+});*/
 </script>
 
 </body>
