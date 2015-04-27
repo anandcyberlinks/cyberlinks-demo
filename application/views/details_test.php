@@ -34,8 +34,7 @@
 		
     jwplayer("myElement").setup({
        //flashplayer: "assets/player.swf",
-        primary: "html5",
-		type: "mp4",
+        primary: "html5",		
 		file: "http://54.179.170.143:1935/vod/_definst_/video/54db58726e46f_3g.mp4/playlist.m3u8",
        // file: "<?php echo $video_path;?>",
 	    //image: "<?php echo base_url().THUMB_LARGE_PATH. $thumbnail_path;?>",       
@@ -52,7 +51,7 @@ autostart: 1,
         },
         advertising: {
 	client: "vast",
-	//skipoffset: 5,
+	skipoffset: 5,
 	schedule: {		
        <?php       
        $i = 1;
@@ -68,7 +67,7 @@ autostart: 1,
 		//'skipoffset':5,
 		//tag: "<?php //echo ($row['ad_type'] != 'External' ? base_url():'') . $row['vast_file']; ?>?<?php //echo $row['ads_id']?>/<?php //echo $user_id?>/<?php //echo $row['uid']?>"
 		//tag: "<?php echo $row['vast_file']?>/<?php echo $user_id?>/<?php echo $content_provider;?>/<?php echo $row['advertiser']?>/<?php echo ($offset==0 ? 'pre':'mid')?>"
-		tag: "http://multitvsolution.com/vast/file/7b3c1d70a56c25f462cf9ac4c29faab7.xml?27/15/11/44/0/87/60/pre"
+		//tag: "http://multitvsolution.com/vast/file/7b3c1d70a56c25f462cf9ac4c29faab7.xml?27/15/11/44/0/87/60/pre"
 		//tag: "http://54.179.170.143/multitvfinal/assets/upload/ads/vast/d53be859b9314be0885eda3794321e05.xml"
 		},
 	   <?php $i++;
