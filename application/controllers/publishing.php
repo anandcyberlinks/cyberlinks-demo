@@ -62,10 +62,16 @@ class Publishing extends My_Controller{
             $skin_id = $_POST['skin_id'];
             $emaildata['userdetail']=$this->userdetail;
             $emailview=$this->load->view('email.php',$emaildata,true);
-            //$path='assets/js/custom_test.js';
-            //$file_data = "var key='".$emaildata['userdetail']['token']."';";
-            //$file_data .= file_get_contents('assets/js/custom_test.js');
-            //file_put_contents('assets/js/kunal.js', $file_data);
+            $filename=$emaildata['userdetail']['username'].'/'.$emaildata['userdetail']['username'].$emaildata['userdetail']['id'].'.cloud.player.min.js';
+            $custom_file_path='cdnplayer/cloud.player.min.js';
+            $file_data = "var key='".$emaildata['userdetail']['token']."';";
+            $file_data .= file_get_contents($custom_file_path);
+            $existpath='assets/js/'.$emaildata['userdetail']['username'];
+            if (file_exists($existpath)) {
+                $this->deleteDir($existpath);
+            }
+            mkdir('assets/js/'.$emaildata['userdetail']['username']);  
+            file_put_contents('assets/js/'.$filename, $file_data);
             $this->sendmail($emaildata['userdetail']['email'],'Publish skin',$emailview);
             $this->User_model->saveskin($skin_id,$this->uid);
             $msg = $this->loadPo($this->config->item('success_record_update'));
