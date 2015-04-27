@@ -35,8 +35,8 @@
     jwplayer("myElement").setup({
        //flashplayer: "assets/player.swf",
         primary: "html5",		
-		file: "http://54.179.170.143:1935/vod/_definst_/video/54db58726e46f_3g.mp4/playlist.m3u8",
-       // file: "<?php echo $video_path;?>",
+		//file: "http://54.179.170.143:1935/vod/_definst_/video/54db58726e46f_3g.mp4/playlist.m3u8",
+        file: "<?php echo $video_path;?>",
 	    //image: "<?php echo base_url().THUMB_LARGE_PATH. $thumbnail_path;?>",       
        // skin: "<?php echo base_url()?>assets/myskinjw/custom.xml",	
 	width: "100%",
