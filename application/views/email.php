@@ -14,9 +14,9 @@
     </span>
     
     <p>Final Code is here:</p>
-    <span>&ltscript src="http://code.jquery.com/jquery-1.11.1.min.js">&lt/script>;
+    <span>&lt script src="http://code.jquery.com/jquery-1.11.1.min.js">&lt/script>;
     </span>
-    <span>&ltscript type="text/javascript" src="http://p.jwpcdn.com/6/10/jwplayer.js">&lt/script>; 
+    <span>&lt script type="text/javascript" src="http://p.jwpcdn.com/6/10/jwplayer.js">&lt/script>; 
     </span>
     <span>&ltscript type="text/javascript" src="<?php echo $path;?>">&lt/script> 
     </span>
