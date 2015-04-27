@@ -54,9 +54,9 @@
         <div id="myElement" style='width:100%;height:100%'></div>
        <pre id="log"></pre>
        
-<!--<script type="text/javascript" src="<?php echo base_url(); ?>./assets/js/jwplayer.js" ></script>-->
+<script type="text/javascript" src="<?php echo base_url(); ?>./assets/js/jwplayer.js" ></script>
 
-<script type="text/javascript" src="http://p.jwpcdn.com/6/12/jwplayer.js"></script>
+<!--<script type="text/javascript" src="http://p.jwpcdn.com/6/12/jwplayer.js"></script>-->
 
 <script type="text/javascript">jwplayer.key = "BC9ahgShNRQbE4HRU9gujKmpZItJYh5j/+ltVg==";</script>
 <script src="<?php echo base_url() ?>assets/js/jquery-1.10.2.js"></script>
@@ -321,9 +321,10 @@ autostart: 1,
 	   ?>
 		adbreak<?php echo $i; ?>: {
 		offset: '<?php echo ($offset==0 ? 'pre': $offset); ?>',
+		tag: "http://multitvsolution.com/vast/file/5721439b45131761c1e6b09afc12735e.xml"
 		//'skipoffset':5,
 		//tag: "<?php //echo ($row['ad_type'] != 'External' ? base_url():'') . $row['vast_file']; ?>?<?php //echo $row['ads_id']?>/<?php //echo $user_id?>/<?php //echo $row['uid']?>"
-		tag: "<?php echo $row['vast_file']?>/<?php echo $user_id?>/<?php echo $content_provider;?>/<?php echo $row['advertiser']?>/<?php echo ($offset==0 ? 'pre':'mid')?>"
+		//tag: "<?php echo $row['vast_file']?>/<?php echo $user_id?>/<?php echo $content_provider;?>/<?php echo $row['advertiser']?>/<?php echo ($offset==0 ? 'pre':'mid')?>"
 		//tag: "http://localhost/multitvfinal-demo/assets/upload/ads/vast/vast1.xml"
 		//tag: "http://54.179.170.143/multitvfinal/assets/upload/ads/vast/d53be859b9314be0885eda3794321e05.xml"
 		},
