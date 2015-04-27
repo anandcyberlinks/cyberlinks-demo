@@ -156,7 +156,7 @@ class Ads extends REST_Controller
              $limit =2;
         }*/
         $query = $this->db->get();
-      //  echo $this->db->last_query();
+      // echo $this->db->last_query();
         $result = $query->row();
        
         if(!$result){
@@ -206,9 +206,10 @@ class Ads extends REST_Controller
         ));  
         // Send the request & save response to $resp
         $result = curl_exec($curl);
-               
+          // $this->response($result);     
         // Close request to clear up some resources
         curl_close($curl);
+       
         //$this->response(json_decode($result), 200);
         $adsAlloc = json_decode($result);
        //print_r($adsAlloc);
@@ -231,6 +232,55 @@ class Ads extends REST_Controller
         $this->response('No record found', 404);
     }
     }
+    
+    
+    function vast_get()
+    {      
+        $token = $this->get('token');
+        $domain = $_SERVER[HTTP_HOST];
+        //--- validate token ---//
+        $this->db->select('z.zone_id');
+        $this->db->from('users u');
+        $this->db->join('user_zone z','u.id=z.user_id','left');
+        $this->db->where('token',$token);
+        $this->db->where('domain',$domain);
+        /*f($mode !='demo'){        
+            $this->db->where('domain',$domain);
+        }else{
+             $limit =2;
+        }*/
+        $query = $this->db->get();
+      // echo $this->db->last_query();
+        $result = $query->row();
+       
+        if(!$result){
+        $this->response('Invalid Token', 404);      
+        }
+      //---------------------//
+       $zone = $result->zone_id;
+       
+        $this->load->helper('url');	
+        $url = "http://multitvsolution.com/vast/getvast.php?zone=$zone&country=$country&keyword=$keywords&age=$age&gender=$gender&lat=$lat&lng=$lng&limit=$limit";
+        // Get cURL resource
+        $curl = curl_init();
+        // Set some options - we are passing in a useragent too here
+        curl_setopt_array($curl, array(
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_URL => $url,
+        ));  
+        // Send the request & save response to $resp
+         $result = curl_exec($curl);        
+         $out = json_decode($result);
+         if($out){
+            echo $out->url[0];
+         }else{        
+            $this->response('No record found', 404); 
+         }
+        // Close request to clear up some resources
+        curl_close($curl);
+        die;
+    //----------------------------------------------//
+    }    
     
     function channels_get(){
         $result = $this->Ads_model->getChannels();
