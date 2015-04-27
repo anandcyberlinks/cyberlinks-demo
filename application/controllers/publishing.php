@@ -61,17 +61,20 @@ class Publishing extends My_Controller{
         if (isset($_POST['save'])) {           
             $skin_id = $_POST['skin_id'];
             $emaildata['userdetail']=$this->userdetail;
-            $emailview=$this->load->view('email.php',$emaildata,true);
-            $filename=$emaildata['userdetail']['username'].'/'.$emaildata['userdetail']['username'].$emaildata['userdetail']['id'].'.cloud.player.min.js';
+            $filename=$emaildata['userdetail']['username'].'/'.'cloud.player.min.js';
+//$filename=$emaildata['userdetail']['username'].'/'.$emaildata['userdetail']['username'].$emaildata['userdetail']['id'].'.cloud.player.min.js';
             $custom_file_path='cdnplayer/cloud.player.min.js';
             $file_data = "var key='".$emaildata['userdetail']['token']."';";
             $file_data .= file_get_contents($custom_file_path);
-            $existpath='assets/js/'.$emaildata['userdetail']['username'];
+            $existpath='cdnplayer/'.$emaildata['userdetail']['username'];
             if (file_exists($existpath)) {
                 $this->deleteDir($existpath);
             }
-            mkdir('assets/js/'.$emaildata['userdetail']['username']);  
-            file_put_contents('assets/js/'.$filename, $file_data);
+            mkdir('cdnplayer/'.$emaildata['userdetail']['username']);  
+            file_put_contents('cdnplayer/'.$filename, $file_data);
+            $emaildata['path']=base_url().'cdnplayer/'.$filename;
+            $emailview=$this->load->view('email.php',$emaildata,true);
+           // echopre($emailview);
             $this->sendmail($emaildata['userdetail']['email'],'Publish skin',$emailview);
             $this->User_model->saveskin($skin_id,$this->uid);
             $msg = $this->loadPo($this->config->item('success_record_update'));
