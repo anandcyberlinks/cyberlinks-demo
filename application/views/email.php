@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<body>
+<body> 
 <h2>Congratulations! Your player is published.</h2>
 <h2>Please follow following steps:</h2>
     <p>1.First step,  include the jquery CDN script in head section.</p>
