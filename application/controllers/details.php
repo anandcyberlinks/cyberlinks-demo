@@ -223,7 +223,8 @@ class Details extends MY_Controller {
 	{		
 		$this->load->helper('url');		
                 //$url = CAMPAIGN_URL."?zone=".$this->zone_id."&keyword=$keywords&age=$age&gender=$gender&lat=$lat&lng=$lng&limit=$l";
-				$url ="http://multitvsolution.com/multitv/Api/public/index.php/ads/getvast?zone=$this->zone_id&country=$country&keyword=$keywords&age=$age&gender=$gender&lat=$lat&lng=$lng&limit=$limit&apikey=b3639adf52880e2d1ba1accb5d8875fdfb0a536b2b657a4c0c3d361061ca017b";
+			//	$url ="http://multitvsolution.com/multitv/Api/public/index.php/ads/getvast?zone=$this->zone_id&country=$country&keyword=$keywords&age=$age&gender=$gender&lat=$lat&lng=$lng&limit=$limit&apikey=b3639adf52880e2d1ba1accb5d8875fdfb0a536b2b657a4c0c3d361061ca017b";
+			$url ="http://multitvsolution.com/multitv/Api/public/index.php/ads/getvast?zone=$this->zone_id&keyword=$keywords&lat=$lat&lng=$lng&limit=$limit&apikey=b3639adf52880e2d1ba1accb5d8875fdfb0a536b2b657a4c0c3d361061ca017b";
                // Get cURL resource
                 $curl = curl_init();
                 // Set some options - we are passing in a useragent too here
