@@ -1,4 +1,8 @@
 $(document).ready(function () {
+    
+    $.validator.addMethod("noSpecialChars", function(value, element) {
+      return this.optional(element) || /^[a-z0-9\_]+$/i.test(value);
+  }, "Special Characters not allowed");
 
     /*if($('#age_group_from').val()!="")
      {
@@ -37,7 +41,8 @@ $(document).ready(function () {
         rules: {
             'category': {
                 'required': true,
-                'minlength': 2
+                'minlength': 2,
+                'noSpecialChars' : true
             },
         }
     });
