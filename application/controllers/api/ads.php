@@ -100,7 +100,8 @@ class Ads extends REST_Controller
 	$keywords = $user_data['keywords'];
                 
         $this->load->helper('url');	
-        $url = "http://54.179.170.143/vast/getvast.php?zone=$zone&country=$country&keyword=$keywords&age=$age&gender=$gender&lat=$lat&lng=$lng&limit=$limit";
+        //$url = "http://54.179.170.143/vast/getvast.php?zone=$zone&country=$country&keyword=$keywords&age=$age&gender=$gender&lat=$lat&lng=$lng&limit=$limit";
+        $url ="http://multitvsolution.com/multitv/Api/public/index.php/ads/getvast?zone=$zone&country=$country&keyword=$keywords&age=$age&gender=$gender&lat=$lat&lng=$lng&limit=$limit&apikey=b3639adf52880e2d1ba1accb5d8875fdfb0a536b2b657a4c0c3d361061ca017b";
         // Get cURL resource
         $curl = curl_init();
         // Set some options - we are passing in a useragent too here
@@ -194,9 +195,10 @@ class Ads extends REST_Controller
         */
         //--------------------------//
        // $keywords = $user_data['keywords'];
-                
+       
         $this->load->helper('url');	
-        $url = "http://multitvsolution.com/vast/getvast.php?zone=$zone&country=$country&keyword=$keywords&age=$age&gender=$gender&lat=$lat&lng=$lng&limit=$limit";
+      //  $url = "http://multitvsolution.com/vast/getvast.php?zone=$zone&country=$country&keyword=$keywords&age=$age&gender=$gender&lat=$lat&lng=$lng&limit=$limit";
+        $url ="http://multitvsolution.com/multitv/Api/public/index.php/ads/getvast?zone=$zone&country=$country&keyword=$keywords&age=$age&gender=$gender&lat=$lat&lng=$lng&limit=$limit&apikey=b3639adf52880e2d1ba1accb5d8875fdfb0a536b2b657a4c0c3d361061ca017b";
         // Get cURL resource
         $curl = curl_init();
         // Set some options - we are passing in a useragent too here
