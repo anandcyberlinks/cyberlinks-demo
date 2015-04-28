@@ -487,18 +487,20 @@ class Content extends Apis{
     function getnewvod_get(){
         $response = array();
         
-        $this->db->select('c.id as catid,c.category,c.color,a.id,a.title,a.description,a.created,g.genre_name,c1.type,c1.relative_path as thumbnail_path');
+        $this->db->select('f.path,c.id as catid,c.category,c.color,a.id,a.title,a.description,a.created,g.genre_name,c1.type,c1.relative_path as thumbnail_path');
         $this->db->from('contents a');               
         $this->db->join('categories c', 'a.category = c.id', 'left');    
         $this->db->join('video_thumbnails h','h.content_id=a.id AND h.default_thumbnail = 1 ','left');
         $this->db->join('files c1', 'h.file_id = c1.id', 'left');
         $this->db->join('genres g', 'a.genre = g.id', 'left');
+        $this->db->join('flavored_video f','f.content_id=a.id');
+        $this->db->join('video_flavors vf','vf.id=f.flavor_id  AND vf.flavor_id=3');        
         $this->db->where('a.status','1');
         $this->db->where('a.uid',$this->app->id);
         $this->db->order_by('c.id');
         //$this->db->limit($this->limit);
         $query = $this->db->get();
-        //echo $this->db->last_query();
+       //echo $this->db->last_query();
         $data =  $query->result();
         
         $tmp = array();
@@ -511,6 +513,7 @@ class Content extends Apis{
                                             'genre'=>$val->genre_name,
                                             'thumbnail'=>($val->thumbnail_path != '' && $val->type !='S3'? base_url():null).$val->thumbnail_path,
                                             'created'=>$val->created,
+                                            'web'=>$val->path,
                                             'url'=> base_url().'index.php/details?id='.$val->id.'&type=vod');
         }
         return array_values($tmp);
