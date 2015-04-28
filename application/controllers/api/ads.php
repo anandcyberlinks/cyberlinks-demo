@@ -252,7 +252,7 @@ class Ads extends REST_Controller
              $limit =2;
         }*/
         $query = $this->db->get();
-       echo $this->db->last_query();
+       //echo $this->db->last_query();
         $result = $query->row();
        
         if(!$result){
