@@ -10,15 +10,15 @@
     <span>for example : &lt; script type="text/javascript" src="http://p.jwpcdn.com/6/10/jwplayer.js"> &lt; /script>
     </span>
     <p>3.Last step, include cloud.player.min.js.</p>
-    <span>for example : &lt; script type="text/javascript" src="<?php echo $path;?>"> &lt; /script> 
+    <span>for example : &lt;script type="text/javascript" src="<?php echo $path;?>"&gt; &lt;/script&gt;
     </span>
     
     <p>Final Code is here:</p>
     <span> &lt;script src="http://code.jquery.com/jquery-1.11.1.min.js"&gt;&lt;/script&gt;
     </span>
-    <span> &lt; script type="text/javascript" src="http://p.jwpcdn.com/6/10/jwplayer.js"> &lt; /script> 
+    <span> &lt;script type="text/javascript" src="http://p.jwpcdn.com/6/10/jwplayer.js"&gt; &lt;/script&gt; 
     </span>
-    <span> &lt; script type="text/javascript" src="<?php echo $path;?>"> &lt; /script> 
+    <span> &lt;script type="text/javascript" src="<?php echo $path;?>"&gt; &lt;/script&gt; 
     </span>
 <h5>Thanks<br/><br/>Cyberlinks Team</h5>
 </body>
