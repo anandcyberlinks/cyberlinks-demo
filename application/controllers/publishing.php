@@ -63,6 +63,7 @@ class Publishing extends My_Controller{
             $emaildata['userdetail']=$this->userdetail;
             $foldername=$emaildata['userdetail']['first_name'].$emaildata['userdetail']['id'];
             $foldername=trim(str_replace(' ','',$foldername));
+            $samplefile='cdnplayer/samplecode.html';
            // echopre($emaildata);
             $filename=$foldername.'/'.'cloud.player.min.js';
 //$filename=$emaildata['userdetail']['username'].'/'.$emaildata['userdetail']['username'].$emaildata['userdetail']['id'].'.cloud.player.min.js';
@@ -77,8 +78,12 @@ class Publishing extends My_Controller{
             file_put_contents('cdnplayer/'.$filename, $file_data);
             $emaildata['path']=base_url().'cdnplayer/'.$filename;
             $emailview=$this->load->view('email.php',$emaildata,true);
-           //echopre($emailview);
-            $this->sendmail($emaildata['userdetail']['email'],'Publish skin',htmlspecialchars_decode($emailview));
+            $sampleview=$this->load->view('generatesamplecode.php',$emaildata,true);
+            $fileopen = fopen($samplefile, 'w+');
+            fwrite($fileopen, $sampleview);
+            fclose($fileopen);
+            //echopre($sampleview);
+            $this->sendmail($emaildata['userdetail']['email'],'Publish skin',htmlspecialchars_decode($emailview),$samplefile);
             $this->User_model->saveskin($skin_id,$this->uid);
             //$msg = $this->loadPo($this->config->item('success_record_update'));
             $this->session->set_flashdata('message', $this->_successmsg('Your player is published. Please check your mail for more detail'));
