@@ -245,14 +245,14 @@ class Ads extends REST_Controller
         $this->db->from('users u');
         $this->db->join('user_zone z','u.id=z.user_id','left');
         $this->db->where('token',$token);
-      // $this->db->where('domain',$domain);
+        $this->db->where('domain',$domain);
         /*f($mode !='demo'){        
             $this->db->where('domain',$domain);
         }else{
              $limit =2;
         }*/
         $query = $this->db->get();
-      // echo $this->db->last_query();
+       echo $this->db->last_query();
         $result = $query->row();
        
         if(!$result){
