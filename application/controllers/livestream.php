@@ -96,7 +96,7 @@ class Livestream extends MY_Controller {
                     $temp = array(
                         'channel_id' => $chanel_id,
                         'channel_name' => $channel_name,
-                        'date' => date('Y-m-d h:m:i'),
+                        'date' => date('Y-m-d'),
                         'show_title' => $csv_line[4],
                         'show_time' => $csv_line[1], //($csv_line[1] == '') ? '' : date("H:i", strtotime($csv_line[1])),
                         'show_thumb' => "",
