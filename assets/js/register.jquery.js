@@ -42,8 +42,15 @@ $(document).ready(function () {
             'category': {
                 'required': true,
                 'minlength': 2,
-                 'alphanumeric': true
-            },
+                'noSpecialChars': true
+            }
+        }
+    });
+    $('#searchCategoryForm').validate({
+        rules: {
+            'category_name': {
+                'noSpecialChars': true
+            }
         }
     });
     $('#register_form').validate({
