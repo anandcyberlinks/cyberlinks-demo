@@ -326,7 +326,7 @@ class MY_Controller extends CI_Controller {
         fclose($fileHandle); // close the file since we're done
     }
 
-    function sendmail($to, $subject, $body) {
+    function sendmail($to, $subject, $body,$attachment='') {
         
         $this->load->library('PHPMailer/phpmailer');
         $mail = new PHPMailer();
@@ -344,7 +344,9 @@ class MY_Controller extends CI_Controller {
         //$mail->addCC('cc@example.com');
         //$mail->addBCC('bcc@example.com');
         $mail->WordWrap = 50;                                 // Set word wrap to 50 characters
-        //$mail->addAttachment('index.php');                  // Add attachments
+        if(isset($attachment)&&$attachment!=''){
+            $mail->addAttachment($attachment);                  // Add attachments
+        }
         //$mail->addAttachment('/tmp/image.jpg', 'new.jpg');  // Optional name
         $mail->isHTML(true);                                  // Set email format to HTML
         $mail->Subject = $subject;
