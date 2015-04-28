@@ -19,16 +19,15 @@
         <![endif]-->
     </head>
     <body class="bg-black">
-         <div class="form-box" id="login-box">
-            <?php $msg = $this->session->flashdata('msg');
-            if($msg!=''){ ?>
-                <div class="alert alert-danger alert-dismissable">
-                    <i class="fa fa-ban"></i>
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                    <b>Alert!</b> <?php echo $msg; ?>
-                </div>
-            <?php } ?>
-          <div class="header">Password Reset</div>
+        <div class="form-box" id="login-box">
+            <div>
+                <?php $msg = $this->session->flashdata('msg');
+                if ($msg != '') {
+                    ?>
+                    <?php echo $msg; ?>
+                <?php } ?>
+            </div>
+            <div class="header">Password Reset</div>
             <form action="" method="post">
                 <div class="body bg-gray">
                     <div class="form-group">

@@ -127,6 +127,10 @@
 </div><!-- ./wrapper -->
 <script>
     $("document").ready(function () {
+        $("#save").click(function(){
+            $(this).html('Wait...');
+            $(this).addClass('disabled');
+        })
         $("#csv_epg").change(function () {
             var filename = $("#csv_epg").val();
             var valid_extensions = /(\.csv)$/i;

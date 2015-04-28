@@ -42,6 +42,7 @@
                     </div>
                     <div class="form-group">
                         <input type="password" name="password" value="<?= (isset($_COOKIE['password'])) ? $_COOKIE['password'] : ""; ?>" class="form-control" placeholder="Password"/>
+                        <?php /* <a class="pull-right" href="<?=  base_url().'layout/forgot'?>">Forgot Password</a>*/?>
                     </div>          
                     <div class="form-group">
                         <input type="checkbox" name="remember_me" value="remember" <?= (isset($_COOKIE['remember'])) ? 'checked' : ""; ?> /> Remember me

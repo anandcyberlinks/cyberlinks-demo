@@ -54,8 +54,8 @@
                     <div class="icon">
                         <i class="fa fa-youtube-play"></i>
                     </div>
-                    <a href="<?php echo base_url() ?>video" class="small-box-footer">
-                        <?php echo $welcome->loadPo('All Video List'); ?> <i class="fa fa-arrow-circle-right"></i>
+                    <a href="<?php echo base_url() ?>video?filter=youtube" class="small-box-footer">
+                        <?php echo $welcome->loadPo('Video List'); ?> <i class="fa fa-arrow-circle-right"></i>
                     </a>
                 </div>
             </div>
@@ -73,7 +73,7 @@
                     <div class="icon">
                         <i class="fa fa-forward"></i>
                     </div>
-                    <a href="<?php echo base_url() ?>video" class="small-box-footer">
+                    <a href="<?php echo base_url() ?>video/video_status" class="small-box-footer">
                         <?php echo $welcome->loadPo('All Jobs'); ?> <i class="fa fa-arrow-circle-right"></i>
                     </a>
                 </div>
@@ -92,7 +92,7 @@
                     <div class="icon">
                         <i class="fa fa-thumbs-up"></i>
                     </div>
-                    <a href="<?php echo base_url() ?>video/video_status" class="small-box-footer">
+                    <a href="<?php echo base_url() ?>video/video_status?filter=completed" class="small-box-footer">
                         <?php echo $welcome->loadPo('All Jobs'); ?> <i class="fa fa-arrow-circle-right"></i>
                     </a>
                 </div>
@@ -111,7 +111,7 @@
                     <div class="icon">
                         <i class="fa fa-clock-o"></i>
                     </div>
-                    <a href="<?php echo base_url() ?>video/video_status" class="small-box-footer">
+                    <a href="<?php echo base_url() ?>video/video_status?filter=inprocess" class="small-box-footer">
                         <?php echo $welcome->loadPo('All Jobs'); ?> <i class="fa fa-arrow-circle-right"></i>
                     </a>
                 </div>
@@ -130,7 +130,7 @@
                     <div class="icon">
                         <i class="fa fa-thumbs-down"></i>
                     </div>
-                    <a href="#" class="small-box-footer">
+                    <a href="<?php echo base_url() ?>video/video_status?filter=pending" class="small-box-footer">
                         <?php echo $welcome->loadPo('All Jobs'); ?> <i class="fa fa-arrow-circle-right"></i>
                     </a>
                 </div>
@@ -297,8 +297,5 @@
 		dailyGraph();
 	    });
 	</script>
-                
-
-        
     </section><!-- /.content -->
 </aside><!-- /.right-side -->

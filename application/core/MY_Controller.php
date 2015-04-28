@@ -771,7 +771,7 @@ class MY_Controller extends CI_Controller {
      */
 
     function _errormsg($message) {
-        $errorMsg = sprintf('<section class="content"><div class="col-xs-12"><div class="alert alert-danger alert-dismissable"><i class="fa fa-ban"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>%s</div></div></section>', $message);
+        $errorMsg = sprintf('<div class="alert alert-danger alert-dismissable"><i class="fa fa-ban"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>%s</div>', $message);
         return $errorMsg;
     }
 

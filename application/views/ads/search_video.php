@@ -103,11 +103,11 @@
                                                 <td><?php echo $value->category; ?></td>
                                                 <td><?php echo $value->username; ?></td>
                                                 <td><?php if ($value->status == 1) { ?>
-                                                        <img src="<?php echo base_url(); ?>assets/img/test-pass-icon.png" alt="Active" />
+                                                        <img src="<?php echo base_url(); ?>assets/img/test-pass-icon.png" alt="Active" /> Active
                                                     <?php } else { ?>
-                                                        <img src="<?php echo base_url(); ?>assets/img/test-fail-icon.png" alt="Active" />
+                                                        <img src="<?php echo base_url(); ?>assets/img/test-fail-icon.png" alt="Active" /> Inactive
                                                     <?php } ?></td>
-                                                                                              <td style='text-align:center'>
+                                                <td>
                                                     <?php if(in_array($value->minetype,array('video/wmv','video/avi'))) { ?>
                                                     --
                                                     <?php } else { ?>

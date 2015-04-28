@@ -234,7 +234,6 @@ class Layout extends MY_Controller {
 
     function forgot() {
         if (isset($_POST['forgot'])) {
-            //print_r($_POST);
             $data['email'] = $_POST['email'];
             $email = $this->user_model->Checkemail($data);
             if (count($email) == '1') {
@@ -293,10 +292,10 @@ class Layout extends MY_Controller {
                     $this->log('log', 'User Sccesfull verified using Email link userid-> ' . $data['id']);
                     $this->user_model->deletetoken($data['id']);
                     $this->session->set_flashdata('message', $this->_successmsg($this->loadPo($this->config->item('success_email_verified'))));
-                    redirect(base_url()/'layout');
+                    redirect(base_url()/'layout/sucess');
                 }
             } else {
-                echo 'Authentication Failed Token Expired or Invalid';
+                redirect(base_url()/'layout/sucess');
             }
         } else {
             echo 'Authentication Failed';
@@ -306,7 +305,9 @@ class Layout extends MY_Controller {
     /*
      * Function For Send Mail
      */
-
+    function sucess(){
+        $this->load->view('reg_status');
+    }
     function profile() {
         $data['welcome'] = $this;
         $this->user_id = ($this->uri->segment(3)) ? $this->uri->segment(3) : $this->user_id;

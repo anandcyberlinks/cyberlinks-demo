@@ -26,7 +26,7 @@
                             <div class="box-header">
                                 <h3 class="box-title"><?php echo $welcome->loadPo('Search'); ?></h3>
                                 <div class="box-tools pull-right">
-                                    <a href="<?php echo base_url() . $uri; ?>/addCategory" class="btn btn-success btn-sm"><?php echo $welcome->loadPo('Category') . ' ' . $welcome->loadPo('Add'); ?></a>
+                                    <a href="<?php echo base_url() . $uri; ?>/addCategory" class="btn btn-success btn-sm"><?php echo $welcome->loadPo('Add').' '.$welcome->loadPo('Category'); ?></a>
                                 </div>
                             </div><!-- /.box-header -->
                             <!-- form start -->

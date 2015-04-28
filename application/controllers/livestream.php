@@ -83,36 +83,36 @@ class Livestream extends MY_Controller {
                     $fp = fopen($file, 'r') or die(json_encode(array('result' => 'error')));
                     $num = 0;
                     while ($csv_line = fgetcsv($fp, 1024)) {
-                        //print_r($csv_line);
-                        for ($i = 0, $j = count($csv_line[$i]); $i < $j; $i++) {
-                            if ($num == 0) {
-                                if (!isset($csv_line[2]) || !isset($csv_line[1]) || !isset($csv_line[5]) || !isset($csv_line[8]) || !isset($csv_line[12]) || !isset($csv_line[13])) {
-                                    echo "invalid csv";
-                                    die;
-                                }
-                                $title = $csv_line;
-                            } else {
-                                $this->db->delete('livechannel_epg', ['channel_id' => $chanel_id]);
-                                $temp = array(
-                                    'channel_id' => $chanel_id,
-                                    'channel_name' => $channel_name,
-                                    'date' => date('Y-m-d h:m:i'),
-                                    'show_title' => $csv_line[2],
-                                    'show_time' => ($csv_line[1] == '') ? '' : date("H:i", strtotime($csv_line[1])),
-                                    'show_thumb' => $csv_line[5],
-                                    'show_language' => $csv_line[8],
-                                    'show_description' => $csv_line[13],
-                                    'show_type' => $csv_line[12],
-                                    'valid' => ($csv_line[2] == '' || $csv_line[1] == '') ? 'invalid' : 'valid'
-                                );
-                                $array[] = $temp;
-                                //$this->db->insert('livechannel_epg', $temp);
-                                //echo $this->db->last_query();
-                            }
-                            $num++;
-                        }
-                        //print_r($temp);
+            //print_r($csv_line);
+            for ($i = 0, $j = count($csv_line[$i]); $i < $j; $i++) {
+                if ($num == 0) {
+                    if (!isset($csv_line[1]) || !isset($csv_line[3]) || !isset($csv_line[4])) {
+                        echo "invalid csv";
+                        die;
                     }
+                    $title = $csv_line;
+                } else {
+                    $this->db->delete('livechannel_epg', ['channel_id' => $chanel_id]);
+                    $temp = array(
+                        'channel_id' => $chanel_id,
+                        'channel_name' => $channel_name,
+                        'date' => date('Y-m-d h:m:i'),
+                        'show_title' => $csv_line[4],
+                        'show_time' => $csv_line[1], //($csv_line[1] == '') ? '' : date("H:i", strtotime($csv_line[1])),
+                        'show_thumb' => "",
+                        'show_language' => "",
+                        'show_description' => "",
+                        'show_type' => $csv_line[3],
+                        'valid' => ($csv_line[1] == '' || $csv_line[4] == '') ? 'invalid' : 'valid'
+                    );
+                    $array[] = $temp;
+                    //$this->db->insert('livechannel_epg', $temp);
+                    //echo $this->db->last_query();
+                }
+                $num++;
+            }
+            //print_r($temp);
+        }
                     fclose($fp);
                     foreach ($array as $val) {
                         if ($val['valid'] == 'valid') {

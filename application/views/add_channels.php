@@ -29,9 +29,6 @@
                                 <?php } else { ?>
                                     <h3 class="box-title"><?php echo $welcome->loadPo('Edit') . ' ' . $welcome->loadPo('Channels'); ?></h3>
                                 <?php } ?>
-                                <div class="box-tools pull-right">
-                                    <a href="<?php echo base_url(); ?>webtv" class="btn btn-default btn-sm"><?php echo $welcome->loadPo('Back'); ?></a>
-                                </div>
                             </div><!-- /.box-header -->
                             <div class="box-body">
                                 <form id="registerId" action="" method="post">

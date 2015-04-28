@@ -112,20 +112,23 @@
                                         </div>
                                     </div>
                                     <div class="row"> 
-                                        <div class="form-group col-lg-5">
-                                            <label for="categoryImage"><?php echo $welcome->loadPo('Image'); ?></label>&nbsp;&nbsp;
+                                        <div class="form-group col-lg-2">
+                                            <label for="categoryImage"><?php echo $welcome->loadPo('Image'); ?></label>&nbsp;&nbsp;<br>
                                             <span class="btn btn-default btn-file btn-sm">
                                              <?php echo $welcome->loadPo('Choose Media') ?> <input name="categoryImage"  id="categoryImage"  atr="files" type="file"/>
                                             </span>
                                         </div>
-                                    </div>
-                                    <div class="row">    
-                                        <div class="form-group col-lg-5">
-                                            <label for="Status"><?php echo $welcome->loadPo('Status'); ?>
-                                                <input type="hidden" name="status" id="CategoryStatus_" value="0"/>
-                                                <span align="left"><input type="checkbox" name="status" value="1"/></span></label>
+                                        <div class="form-group col-lg-3">
+                                            <label for="Status"><?php echo $welcome->loadPo('Status'); ?></label>
+                                                <select name="status" class="form-control">
+                                                    <option value="0">Inactive</option>
+                                                    <option value="1">Active</option>
+                                                </select>
 
                                         </div>
+                                    </div>
+                                    <div class="row">    
+                                        
                                     </div>
                                 </div><!-- /.box-body -->
                                 <div class="box-footer">

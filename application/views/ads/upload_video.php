@@ -42,14 +42,10 @@
                                                 <div id="fileuploader">Select File(s)</div>
                                             </div>
                                             <div class="box-footer">
-                                                <button id="startUpload" class="btn btn-primary btn-sm">Start Upload</button>
-                                            </div>
+                                                <button id="startUpload" class="btn btn-primary btn-sm bold">Start Upload</button>
+                                            </div>  
                                         </div>
                                     </div>
-                                
-                                
-                                
-                                
                                 <?php }  /* <div class="tab-pane active" id="tab_upload">
                                         <div class="box box-solid">
                                             <div class="box-header">
@@ -96,8 +92,6 @@
                                   </div> */ ?>
                                 <?php //} ?>
                                 <!-- youtube upload section ends -->
-
-
                                 <!-- upload from other source section starts -->
                                 <?php if ($tab == 'Other') { ?>
                                     <div class="tab-pane active" id="tab_other">
@@ -131,7 +125,7 @@
                                                                 echo 'selected="selected"';
                                                             } ?>><?php echo $welcome->loadPo('Youtube'); ?></option>
                                                                 </select>	
-    <?php echo form_error('content_provider', '<span class="text-danger">', '</span>'); ?>
+                                                                <?php echo form_error('content_provider', '<span class="text-danger">', '</span>'); ?>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -140,7 +134,7 @@
                                                             <div class="input text">
                                                                 <label for=""><?php echo $welcome->loadPo('Title'); ?></label>
                                                                 <input type="text" name="title" id="title" class="form-control" value="<?php echo set_value('title'); ?>" placeholder="<?php echo $welcome->loadPo('Title'); ?>">
-    <?php echo form_error('title', '<span class="text-danger">', '</span>'); ?>
+                                                                <?php echo form_error('title', '<span class="text-danger">', '</span>'); ?>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -207,8 +201,8 @@
         autoSubmit: false,
         url: "<?= base_url() . 'ads/upload' ?>",
         fileName: "0",
-        allowedTypes: "mp4, mpg, mpeg, flv, wmv, avi",
-        acceptFiles: "mp4, mpg, mpeg, flv, wmv, avi",
+        allowedTypes: "mp4,mpg,mpeg,flv,wmv,avi",
+        acceptFiles: "mp4,mpg,mpeg,flv,wmv,avi",
         showProgress: true,
         maxFileCount: 10,
         afterUploadAll: function ()

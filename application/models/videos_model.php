@@ -206,6 +206,9 @@ class Videos_model extends CI_Model {
         if (isset($data['category']) && $data['category'] != '') {
             $this->db->where('contents.category', $data['category']);
         }
+        if (isset($_GET['filter']) && $_GET['filter'] != '') {
+            $this->db->where('contents.type', $_GET['filter']);
+        }
         if ((isset($data['datepickerstart']) && $data['datepickerstart'] != '') && (isset($data['datepickerend']) && $data['datepickerend'] != '')) {
             $date = str_replace('/', '-', $data['datepickerstart']);
             $datestart = date('y-m-d', strtotime($date));
@@ -254,6 +257,9 @@ class Videos_model extends CI_Model {
         }
         if (isset($data['category']) && $data['category'] != '') {
             $this->db->where('a.category', $data['category']);
+        }
+        if (isset($_GET['filter']) && $_GET['filter'] != '') {
+            $this->db->where('a.type', $_GET['filter']);
         }
         if ((isset($data['datepickerstart']) && $data['datepickerstart'] != '') && (isset($data['datepickerend']) && $data['datepickerend'] != '')) {
             $date = str_replace('/', '-', $data['datepickerstart']);
@@ -807,6 +813,7 @@ class Videos_model extends CI_Model {
 	$id = $this->get_ownerid($uid);
         array_push($id, $uid);
         
+        
 	$this->db->select('c.id,c.title,categories.category,f.*,vf.created as assignedTime,vf.status,fv.path as previewPath,fv.created as completedTime');
 	$this->db->from('video_flavors vf');
 	$this->db->join('flavored_video fv', 'vf.id = fv.flavor_id', 'left');
@@ -814,12 +821,16 @@ class Videos_model extends CI_Model {
 	$this->db->join('contents c', 'vf.content_id = c.id', 'left');
 	$this->db->join('categories', 'categories.id = c.category', 'left'); 
 	$this->db->where('vf.content_id >', 0);
+        if(isset($_GET['filter'])&& $_GET['filter'] != ''){
+            $this->db->where('vf.status', $_GET['filter']);
+        }
         $this->db->where_in('c.uid', $id); 
 	$this->db->order_by('c.id', 'DESC');
 	$this->db->limit($limit, $start);
         $query = $this->db->get();
 	//echo $this->db->last_query();
 	$data = $query->result();
+        //echo "<pre>";        print_r($data); die;
         return $data;
     } 
 
@@ -833,6 +844,9 @@ class Videos_model extends CI_Model {
 	$this->db->join('flavors f', 'f.id = vf.flavor_id', 'left');
 	$this->db->join('contents c', 'vf.content_id = c.id', 'left');
 	$this->db->join('categories', 'categories.id = c.category', 'left'); 
+        if(isset($_GET['filter'])&& $_GET['filter'] != ''){
+            $this->db->where('vf.status', $_GET['filter']);
+        }
 	$this->db->where('vf.content_id >', 0);
         $this->db->where_in('c.uid', $id); 
 	$this->db->order_by('c.id', 'DESC');
