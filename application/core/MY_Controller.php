@@ -346,7 +346,7 @@ class MY_Controller extends CI_Controller {
         $mail->WordWrap = 50;                                 // Set word wrap to 50 characters
         //$mail->addAttachment('index.php');                  // Add attachments
         //$mail->addAttachment('/tmp/image.jpg', 'new.jpg');  // Optional name
-        $mail->isHTML(false);                                  // Set email format to HTML
+        $mail->isHTML(true);                                  // Set email format to HTML
         $mail->Subject = $subject;
         $mail->Body = $body;
         $mail->AltBody = 'Success';
