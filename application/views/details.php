@@ -324,7 +324,7 @@ autostart: 1,
 		//'skipoffset':5,
 		//tag: "<?php //echo ($row['ad_type'] != 'External' ? base_url():'') . $row['vast_file']; ?>?<?php //echo $row['ads_id']?>/<?php //echo $user_id?>/<?php //echo $row['uid']?>"
 		//tag: "<?php echo $row['vast_file']?>/<?php echo $user_id?>/<?php echo $content_provider;?>/<?php echo $row['advertiser']?>/<?php echo ($offset==0 ? 'pre':'mid')?>"
-		tag: "http://multitvsolution.com/vast/file/9ac0d4ad75afc122a6cefbe7f7c8928c.xml"
+		tag: "http://multitvsolution.com/vast/file/9ac0d4ad75afc122a6cefbe7f7c8928c.xml?30/15/11/47/0/87//pre"
 		},
 	   <?php $i++;
        } }
