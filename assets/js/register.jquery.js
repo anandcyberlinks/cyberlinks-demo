@@ -42,7 +42,7 @@ $(document).ready(function () {
             'category': {
                 'required': true,
                 'minlength': 2,
-                'noSpecialChars' : true
+                 'alphanumeric': true
             },
         }
     });
