@@ -77,11 +77,11 @@ class Publishing extends My_Controller{
             file_put_contents('cdnplayer/'.$filename, $file_data);
             $emaildata['path']=base_url().'cdnplayer/'.$filename;
             $emailview=$this->load->view('email.php',$emaildata,true);
-          //  echopre($emailview);
+           //echopre($emailview);
             $this->sendmail($emaildata['userdetail']['email'],'Publish skin',htmlspecialchars_decode($emailview));
             $this->User_model->saveskin($skin_id,$this->uid);
-            $msg = $this->loadPo($this->config->item('success_record_update'));
-            $this->session->set_flashdata('message', $this->_successmsg($msg));
+            //$msg = $this->loadPo($this->config->item('success_record_update'));
+            $this->session->set_flashdata('message', $this->_successmsg('Your player is published. Please check your mail for more detail'));
             redirect('publishing');
         }
         $this->load->library("pagination");
