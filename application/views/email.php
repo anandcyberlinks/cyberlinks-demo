@@ -18,7 +18,7 @@
     </span>
     <span> &lt; script type="text/javascript" src="http://p.jwpcdn.com/6/10/jwplayer.js"> &lt; /script> 
     </span>
-    <span> &lt; script type="text/javascript" src="<?php echo $path;?>"> &lt; /script> 
+    <span> <pre>'&lt;script type="text/javascript" src="<?php echo $path;?>"> &lt;/script>' </pre>
     </span>
 <h5>Thanks<br/><br/>Cyberlinks Team</h5>
 </body>
