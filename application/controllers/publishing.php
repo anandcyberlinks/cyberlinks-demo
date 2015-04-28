@@ -63,7 +63,7 @@ class Publishing extends My_Controller{
             $emaildata['userdetail']=$this->userdetail;
             $foldername=$emaildata['userdetail']['first_name'].$emaildata['userdetail']['id'];
             $foldername=trim(str_replace(' ','',$foldername));
-            $samplefile='cdnplayer/samplecode.html';
+            $samplefile='cdnplayer/samplecode.php';
            // echopre($emaildata);
             $filename=$foldername.'/'.'cloud.player.min.js';
 //$filename=$emaildata['userdetail']['username'].'/'.$emaildata['userdetail']['username'].$emaildata['userdetail']['id'].'.cloud.player.min.js';
