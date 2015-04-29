@@ -237,7 +237,7 @@ class Video extends MY_Controller {
         $data["links"] = $this->pagination->create_links();
         $data['category'] = $this->videos_model->get_category($this->uid);
         $data['total_rows'] = $config["total_rows"];
-        echo "<pre>"; print_r($data['result']); die;
+        //echo "<pre>"; print_r($data['result']); die;
         $this->show_view('search_video', $data);
     }
 
