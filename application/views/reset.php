@@ -49,7 +49,7 @@
                         <input type="hidden" name="id" value="<?php echo $id;?>">
                     </div>
                     <div class="form-group">
-                        <input type="password" name="password2" class="form-control" placeholder="Confirm Password"/>
+                        <input type="password" name="password2" id="password" class="form-control" placeholder="Confirm Password"/>
                     </div>          
                 </div>
                 <div class="footer">                                                               
