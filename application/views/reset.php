@@ -1,4 +1,9 @@
 <!DOCTYPE html>
+<style>
+    .error{
+        color: red;
+    }
+</style>
 <html class="bg-black">
     <head>
         <meta charset="UTF-8">
