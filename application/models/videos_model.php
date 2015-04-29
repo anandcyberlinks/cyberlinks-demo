@@ -420,7 +420,7 @@ class Videos_model extends CI_Model {
         $this->db->join('categories b', 'a.category = b.id', 'left');
         $this->db->join('users c', 'a.uid = c.id', 'left');
         $this->db->join('videos f', 'a.id = f.content_id');
-        $this->db->join('files g', 'f.file_id = g.id', 'right');
+        $this->db->join('files g', 'f.file_id = g.id', 'left');
         //$this->db->join('video_detail h', 'h.content_id = a.id', 'left');
         $this->db->where('a.id', $id);
         $query = $this->db->get();
