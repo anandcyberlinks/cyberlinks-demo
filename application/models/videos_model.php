@@ -424,6 +424,7 @@ class Videos_model extends CI_Model {
         //$this->db->join('video_detail h', 'h.content_id = a.id', 'left');
         $this->db->where('a.id', $id);
         $query = $this->db->get();
+        echo $this->db->last_query();
         return reset($query->result());
     }
     
