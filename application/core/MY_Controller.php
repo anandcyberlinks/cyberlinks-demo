@@ -757,7 +757,7 @@ class MY_Controller extends CI_Controller {
      */
 
     function _successmsg($message) {
-        $succMsg = sprintf('<section class="content"><div class="col-xs-12"><div class="alert alert-success alert-dismissable"><i class="fa fa-check"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>%s</div></div></section>', $message);
+        $succMsg = sprintf('<div class="alert alert-success alert-dismissable"><i class="fa fa-check"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>%s</div>', $message);
         return $succMsg;
     }
 
