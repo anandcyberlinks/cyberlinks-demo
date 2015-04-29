@@ -353,7 +353,7 @@ class MY_Controller extends CI_Controller {
         $mail->Body = $body;
         $mail->AltBody = 'Success';
 
-        $mail->send();
+        return $mail->send();
     }
 
     /*     * ******* function used to get video file size using getid3 ibrary ********* */
