@@ -45,11 +45,11 @@
           <form action="" method="post" id="reset_form">
                 <div class="body bg-gray">
                     <div class="form-group">
-                        <input type="password" name="password" class="form-control" placeholder="New Password"/>
+                        <input type="password" name="password" class="form-control" placeholder="New Password" required="true"/>
                         <input type="hidden" name="id" value="<?php echo $id;?>">
                     </div>
                     <div class="form-group">
-                        <input type="password" name="password2" id="password" class="form-control" placeholder="Confirm Password"/>
+                        <input type="password" name="password2" id="password" class="form-control" placeholder="Confirm Password" required="true"/>
                     </div>          
                 </div>
                 <div class="footer">                                                               
