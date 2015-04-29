@@ -257,7 +257,7 @@ class Layout extends MY_Controller {
                     redirect('layout/forgot');
                 } else {
                     $this->log('mail', 'Email Sent=> reset password link sent on email =>>' . $_POST['email']);
-                    echo 'Password reset link sent Check you mail box';
+                    redirect(base_url().'layout/forgot_success');
                 }
             } else {
                 $this->session->set_flashdata('msg', $this->_errormsg($this->loadPo($this->config->item('error_mail_invalid'))));
@@ -267,6 +267,10 @@ class Layout extends MY_Controller {
         } else {
             $this->load->view('forgot');
         }
+    }
+    
+    function forgot_success(){
+        $this->load->view('success_pass');
     }
 
     /*

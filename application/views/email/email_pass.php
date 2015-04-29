@@ -169,7 +169,7 @@
                                                             <!-- content -->
                                                             <tr>
                                                                 <td style="font-family: Helvetica, arial, sans-serif; font-size: 16px; color: #666666; text-align:center; line-height: 30px;" st-content="fulltext-content">
-                                                                    Create you new password <a href="<?= $_GET['link'] ?>">Click here</a> to verify your Email
+                                                                    Create you new password <a href="<?= $_GET['link'] ?>">Click here</a>
                                                                 </td>
                                                             </tr>
                                                             <!-- End of content -->
