@@ -37,7 +37,7 @@
                 </div>
              <?php } ?>
           <div class="header">Creat Your New Password</div>
-            <form action="" method="post">
+          <form action="" method="post" id="reset_form">
                 <div class="body bg-gray">
                     <div class="form-group">
                         <input type="password" name="password" class="form-control" placeholder="New Password"/>

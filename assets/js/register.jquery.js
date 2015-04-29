@@ -46,6 +46,20 @@ $(document).ready(function () {
             }
         }
     });
+    
+    $('#reset_form').validate({
+        rules: {
+            'password': {
+                'required': true,
+                'minlength': 6
+            },
+            'password2': {
+                'required': true,
+                'equalTo': '#password'
+            }
+        }
+    });
+    
     $('#searchCategoryForm').validate({
         rules: {
             'category_name': {
