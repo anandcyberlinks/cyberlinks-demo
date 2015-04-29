@@ -295,7 +295,7 @@ class Layout extends MY_Controller {
                     redirect(base_url()/'layout/sucess');
                 }
             } else {
-                redirect(base_url()/'layout/sucess');
+                echo "Invalid Access URL expired";
             }
         } else {
             echo 'Authentication Failed';
