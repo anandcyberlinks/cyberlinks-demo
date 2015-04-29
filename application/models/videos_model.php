@@ -250,7 +250,7 @@ class Videos_model extends CI_Model {
         $this->db->join('categories b', 'a.category = b.id', 'left');
         $this->db->join('users c', 'a.uid = c.id', 'left');
         $this->db->join('videos d', 'a.id = d.content_id', 'left');
-        $this->db->join('files e', 'd.file_id = e.id', 'left');
+        $this->db->join('files e', 'd.file_id = e.id');
         //$this->db->join('video_rating f', 'a.id = f.content_id', 'left');
         if (isset($data['content_title']) && $data['content_title'] != '') {
             $this->db->like('title', trim($data['content_title']));
@@ -293,6 +293,7 @@ class Videos_model extends CI_Model {
         //echo $this->db->last_query();
         
         $data = $query->result();
+        
         return $data;
     }
     
