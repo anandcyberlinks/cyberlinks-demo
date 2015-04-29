@@ -237,6 +237,7 @@ class Video extends MY_Controller {
         $data["links"] = $this->pagination->create_links();
         $data['category'] = $this->videos_model->get_category($this->uid);
         $data['total_rows'] = $config["total_rows"];
+        echo "<pre>"; print_r($data['result']); die;
         $this->show_view('search_video', $data);
     }
 
@@ -953,6 +954,7 @@ class Video extends MY_Controller {
                     $data['type'] = $fileExt;
                     $data['status'] = '0';
                     $data['info'] = base64_encode($fileNameUniq);
+                    //print_r($data); die;
                     $last_id = $this->videos_model->_saveVideo($data);
                     $msg = $this->loadPo($this->config->item('success_file_upload'));
                     $this->log($this->user, $msg);
