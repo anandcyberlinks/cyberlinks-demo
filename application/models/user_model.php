@@ -99,7 +99,7 @@ class User_Model extends CI_Model {
 
     public function password($data) {
         $id = $data['id'];
-        $data = array('password' => $data['password'],);
+        $data = array('password' => md5($data['password']),);
         $this->db->where('id', $id);
         $this->db->update('users', $data);
         //return $this->db->affected_rows();
