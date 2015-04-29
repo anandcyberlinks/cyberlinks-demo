@@ -238,12 +238,12 @@ class Layout extends MY_Controller {
             $email = $this->user_model->Checkemail($data);
             if (count($email) == '1') {
                 $email['action'] = 'password_reset';
-                $email['token'] = sha1(md5(uniqid()) . rand('1', '5000') . md5(time()));
+                $email['token'] = md5(uniqid());
                 $id = $this->user_model->genratetoken($email); // Generate new token and return id
-                $token = $this->user_model->fetchtoken($id);   //fetch generated token
+                //$token = $this->user_model->fetchtoken($id);   //fetch generated token
                 $to = $_POST['email'];
                 $subject = 'Reset Password';
-                $body = base_url() . 'layout/token/?token=' . $token[0]->token;
+                $body = base_url() . 'layout/token/?token=' . $email['token'];
                 $mail = $this->sendmail($to, $subject, $body);
                 if (!$mail) {
                     $this->session->set_flashdata('msg', $this->_errormsg($this->loadPo($this->config->item('error_mail_sent'))));
