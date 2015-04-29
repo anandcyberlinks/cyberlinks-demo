@@ -58,6 +58,7 @@
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
         <script src="<?php echo base_url() ?>assets/js/jquery.validate.js" type="text/javascript"></script>
 	<script src="<?php echo base_url() ?>assets/js/register.jquery.js" type="text/javascript"></script>
+        <script src="http://code.jquery.com/jquery-migrate-1.0.0.js"></script>
         <!-- Bootstrap -->
         <script src="<?php echo base_url() ?>assets/js/bootstrap.min.js" type="text/javascript"></script>        
 
