@@ -283,6 +283,7 @@ class Layout extends MY_Controller {
                             $this->log('log', 'Password changes Scces fully using email link userid-> ' . $_POST['id']);
                             $this->session->set_flashdata('message', $this->_successmsg($this->loadPo($this->config->item('success_password_changed'))));
                             redirect(base_url());
+                            die;
                         } else {
                             echo 'Password And confirm Password do not match ';
                         }
@@ -293,6 +294,7 @@ class Layout extends MY_Controller {
                     $this->user_model->deletetoken($data['id']);
                     $this->session->set_flashdata('message', $this->_successmsg($this->loadPo($this->config->item('success_email_verified'))));
                     redirect(base_url()/'layout/sucess');
+                    die;
                 }
             } else {
                 echo "Invalid Access URL expired";
