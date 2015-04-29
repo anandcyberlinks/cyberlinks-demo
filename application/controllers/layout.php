@@ -136,6 +136,11 @@ class Layout extends MY_Controller {
     function token_email() {
         $this->load->view('email/token_email');
     }
+    
+    
+    function email_pass(){
+        $this->load->view('email/email_user');
+    }
 
     /*
      * Dashboard
@@ -243,7 +248,8 @@ class Layout extends MY_Controller {
                 //$token = $this->user_model->fetchtoken($id);   //fetch generated token
                 $to = $_POST['email'];
                 $subject = 'Reset Password';
-                $body = base_url() . 'layout/token/?token=' . $email['token'];
+                $link = base_url() . 'layout/token/?token=' . $email['token'];
+                $body = file_get_contents(base_url().'layout/email_pass?link='.$link);
                 $mail = $this->sendmail($to, $subject, $body);
                 if (!$mail) {
                     $this->session->set_flashdata('msg', $this->_errormsg($this->loadPo($this->config->item('error_mail_sent'))));
