@@ -500,7 +500,7 @@ class Content extends Apis{
         $this->db->order_by('c.id');
         //$this->db->limit($this->limit);
         $query = $this->db->get();
-       //echo $this->db->last_query();
+       // $this->db->last_query();
         $data =  $query->result();
         
         $tmp = array();
@@ -601,7 +601,7 @@ class Content extends Apis{
     }
     
     function getLivechannelEpg($channel_id){        
-         $query = sprintf('select id,show_title,show_time,show_thumb,show_language,show_description,show_type
+         $query = sprintf('select id,show_title,show_time,show_duration,show_thumb,show_language,show_description,show_type,media_type
                               from livechannel_epg where channel_id = %d AND date(date) = "'.date("Y-m-d").'"  order by show_time ',$channel_id);
         $dataset = $this->db->query($query)->result();
         if(count($dataset) > 0){
@@ -891,15 +891,49 @@ class Content extends Apis{
         }
         $this->response($response);
         //--------------------------------//
+    }    
+    
+    function stichepg_get(){
+         $query = sprintf('SELECT                        
+                         c.id as channel_id,
+                         c.name as channel_name,                         
+                         c.number as channel_number,
+                         c.type as channel_type                        
+                         FROM `channels` c
+                            left join `channel_categories` cc on cc.id = c.category_id                            
+                            where c.type ="Live" AND c.category_id <> 0 and c.status = 1 and c.uid = %d ',$this->app->id);
+        
+        $dataset = $this->db->query($query)->result();
+        
+        foreach($dataset as $key=>$val){
+                    if($val->channel_cat_id == $id  && $val->channel_id > 0)                    
+                            $result[] = array('chNm'=>$val->channel_name,
+                                               'chId'=>$val->channel_id,
+                                               'chNmbr'=>$val->channel_number,
+                                               'chTyp'=>$val->channel_type,
+                                               'chSTym'=>date('Y-m-d h:i:s')
+                                               );                                            
+        }
+        $response['data'] = $result;             
+        $counter = 0;
+        foreach($response['data'] as $k1=>$v1){
+            $v1['chEpg'] = $this->getStichEpg($v1['chId']);                        
+            $response['data'][$k1] = $v1;
+        }        
+        $this->response($response);
     }
-    /****** APIs for Divya TV channels **************/
     
-    
-    
-    
-    
-    
-    
-    
-    
+    function getStichEpg($channel_id){        
+         $query = sprintf('select id,show_title,show_time,show_duration,show_language,show_description,show_type,media_type
+                              from livechannel_epg where channel_id = %d AND date(date) = "'.date("Y-m-d").'" ',$channel_id);
+       //echo $query .=' AND show_time BETWEEN if(MINUTE(CURTIME()) < 30, DATE_FORMAT(NOW(),"%H:00:00"), DATE_FORMAT(NOW(),"%H:30:00")) order by show_time';
+       
+       $dataset = $this->db->query($query)->result();
+        if(count($dataset) > 0){
+            return $dataset;
+        }else{
+            return array();
+        }
+    }
+    /****** APIs for  channels **************/    
 }
