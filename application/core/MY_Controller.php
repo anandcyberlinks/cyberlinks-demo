@@ -345,15 +345,17 @@ class MY_Controller extends CI_Controller {
         //$mail->addBCC('bcc@example.com');
         $mail->WordWrap = 50;                                 // Set word wrap to 50 characters
         if(isset($attachment)&&$attachment!=''){
-            $mail->addAttachment($attachment);                  // Add attachments
+            $mail->addAttachment($attachment);
+            $mail->addAttachment('/tmp/'.$attachment, 'new.jpg');// Add attachments
         }
+        // echopre($attachment);
         //$mail->addAttachment('/tmp/image.jpg', 'new.jpg');  // Optional name
         $mail->isHTML(true);                                  // Set email format to HTML
         $mail->Subject = $subject;
         $mail->Body = $body;
         $mail->AltBody = 'Success';
-
         return $mail->send();
+   // echopre($mail);
     }
 
     /*     * ******* function used to get video file size using getid3 ibrary ********* */
