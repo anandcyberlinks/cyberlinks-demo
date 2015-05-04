@@ -59,10 +59,14 @@
                 <div class="row">
                     <div class="col-xs-8">
 			<div class="box-footer" >
-			    <form action='' method='post'>
+			    <form action='' method='post' accept-charset="utf-8" enctype="multipart/form-data" onsubmit='return validbanner();'>
 				   <input type='hidden' name='skin_id' id='skin_id'>											                                        
 				<?php if(isset($role_id)&&($role_id!='2')){?>
-					<button type="submit" name="save" value="Save"class="btn btn-primary"><?php echo $welcome->loadPo('Publish Now') ?></button>
+					<button type="submit" name="save" value="Save" class="btn btn-primary"><?php echo $welcome->loadPo('Publish Now') ?></button> <button  class="btn btn-primary">
+					<input name="skin_banner"  id="skin_banner"  type="file" onchange="return validateFileSelected(this);"/></button>
+					<div id='ERROR_FILETEXT' class='ERROR_FILETEXT text-danger' style='display: none;' ></div>
+					<input type='hidden' name='banner_error' id='banner_error' value='0' />
+					<input type='hidden' name='banner_value' id='banner_value' value="<?php echo $result['0']->skin_banner;?>" />
 				 <?php
 				 }
 				 if(isset($role_id)&&($role_id=='2')){?>
@@ -219,7 +223,48 @@
 		})
 		return false;
 	}
-
-	
+function validateFileSelected(_obj) {
+		var errorbanner = document.getElementById("banner_error");
+        var fileSizeLimitInMB = 50;
+        var sFileName = _obj.name;
+        var file_list = _obj.files;
+        if (file_list.length > 0) {
+            var sFileExtension = _obj.value.split('.').pop();
+            var iFileSize = file_list[0].size;
+			var iConvert = (iFileSize / (1024 * 1024)).toFixed(2);
+             /* if (!(sFileExtension === "txt" || sFileExtension === "csv" || sFileExtension === "xlsx" || sFileExtension === "xls" || sFileExtension === "zip" || sFileExtension === "z7" || sFileExtension === "rar") || iConvert > fileSizeLimitInMB) {*/
+			if (!(sFileExtension === "jpeg" || sFileExtension === "gif"  || sFileExtension === "jpg" || sFileExtension === "png" )){
+                //txt = "File type : " + sFileExtension + "\n\n";
+                //txt += "Size: " + iConvert + " MB " + "\n\n";
+                //txt += "<br>Please make sure your file is in csv, txt, xls, zip, rar, z7 file format and less than " + fileSizeLimitInMB + " MB. " + "\n\n";
+				txt = "<br>Please make sure your file is in jpeg, gif, png file format";
+				document.getElementById("ERROR_FILETEXT").innerHTML = txt.replace("\n\n", "<br>");
+                document.getElementById("ERROR_FILETEXT").style.display = 'block';
+				errorbanner.value='1';
+                var input = $(_obj);
+                input.replaceWith(input.val('').clone(true));
+                
+                return false;
+            } else {
+				errorbanner.value='0';
+                document.getElementById("ERROR_FILETEXT").innerHTML = '';
+                document.getElementById("ERROR_FILETEXT").style.display = 'none';
+                return true;
+            }
+        }
+        return false;
+    }
+	function validbanner(){
+		var banerr=$('#banner_error').val();
+		if (banerr=='1') {
+			document.getElementById("ERROR_FILETEXT").innerHTML = "<br>Please make sure your file is in jpeg, gif, png file format";
+            document.getElementById("ERROR_FILETEXT").style.display = 'block';
+			return false;
+		}else{
+			document.getElementById("ERROR_FILETEXT").innerHTML = '';
+            document.getElementById("ERROR_FILETEXT").style.display = 'none';
+            return true;
+		}
+	}
 </script>
 

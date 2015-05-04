@@ -58,7 +58,42 @@ class Publishing extends My_Controller{
     {        
         $data['welcome'] = $this;
         //echopre($this->userdetail);
-        if (isset($_POST['save'])) {           
+        if (isset($_POST['save'])) {
+          
+            if($_FILES["skin_banner"]["name"]) {
+                $imageArr=array();
+                $relativepath= base_url().'assets/upload/skins/banner';
+                $absolutepath= 'assets/upload/skins/banner';
+                $filename = $_FILES["skin_banner"]["name"];
+                $source = $_FILES["skin_banner"]["tmp_name"];
+                $type = $_FILES["skin_banner"]["type"];
+                $imagename=uniqid($_POST['skin_id']);
+                $imageext= end(explode('.',$filename));
+                $target_relative_path = $relativepath.'/'.$imagename.'.'.$imageext;
+                $target_absolute_path = $absolutepath.'/'.$imagename.'.'.$imageext;
+                if($_POST['banner_value']!=''){
+                    $filedata = $this->publishing_model->selectfile($_POST['banner_value']);
+                    unlink($filedata['0']->absolute_path);
+                    if(move_uploaded_file($source, $target_absolute_path)){
+                        chmod($target_absolute_path, 0777);
+                        $imageArr['id']=$_POST['banner_value'];
+                        $imageArr['relative_path'] = $target_relative_path;
+                        $imageArr['absolute_path'] = $target_absolute_path;
+                    }
+                    //echopre($filedata);
+                }else{
+                    if(move_uploaded_file($source, $target_absolute_path)){
+                        chmod($target_absolute_path, 0777);
+                        //$imageArr['id']=$_POST['skin_id'];
+                        $imageArr['name']=$imagename.'.'.$imageext;
+                        $imageArr['relative_path'] = $target_relative_path;
+                        $imageArr['absolute_path'] = $target_absolute_path;
+                        $imageArr['status']='1';
+                    }
+                    
+                }
+                $fileid = $this->publishing_model->savefile($imageArr);
+            }
             $skin_id = $_POST['skin_id'];
             $emaildata['userdetail']=$this->userdetail;
             $foldername=$emaildata['userdetail']['first_name'].$emaildata['userdetail']['id'];
@@ -84,7 +119,7 @@ class Publishing extends My_Controller{
             fclose($fileopen);
             //echopre($sampleview);
             $this->sendmail($emaildata['userdetail']['email'],'Publish skin',htmlspecialchars_decode($emailview),$samplefile);
-            $this->User_model->saveskin($skin_id,$this->uid);
+            $this->User_model->saveskin($skin_id,$this->uid,$fileid);
             //$msg = $this->loadPo($this->config->item('success_record_update'));
             $this->session->set_flashdata('message', $this->_successmsg('Your player is published. Please check your mail for more detail'));
             redirect('publishing');
@@ -102,7 +137,7 @@ class Publishing extends My_Controller{
         $data['total_rows'] = $config["total_rows"];
         $data['role_id']=$this->role_id;
         //$result = $data['result'] = $this->publishing_model->getSkins();
-        
+        //echopre($data['result']);
         $this->show_view('publishing/skins',$data);
     }
         
