@@ -173,6 +173,8 @@ switch ($s[0]->username) {
         <script src="<?php echo base_url() ?>assets/js/jquery.uploadfile.min.js"></script>
         <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jwplayer.js" ></script>
         <script type="text/javascript">jwplayer.key = "BC9ahgShNRQbE4HRU9gujKmpZItJYh5j/+ltVg==";</script>
+        <script src="<?php echo base_url() ?>assets/js/ckeditor/ckeditor.js" type="text/javascript"></script>
+          
     </head>
     <body class="skin-blue">
         <!-- header logo: style can be found in header.less -->

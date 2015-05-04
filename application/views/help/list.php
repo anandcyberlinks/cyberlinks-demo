@@ -77,15 +77,15 @@
                                                 <td><?php echo $value->page_description; ?></td>
                                                 <td><?php if ($value->status == 1) { ?>
                                                         <img src="<?php echo base_url(); ?>assets/img/test-pass-icon.png" alt="Active" />
-                                                    <?php } else { ?>
+                                                    <?php }else { ?>
                                                         <img src="<?php echo base_url(); ?>assets/img/test-fail-icon.png" alt="Active" />
                                                     <?php } ?></td>                                            
                                                 
                                                 <td  width="150"> 
                                                     <a href="<?php echo base_url(); ?>help/add?id=<?php echo base64_encode($value->id) . '&'; ?>" class="btn btn-info btn-sm"><?php echo $welcome->loadPo('Edit') ?></a>
                                                     &nbsp;
-													<?php $delval=base64_encode($value->id);?>
-                                                    <a class="confirm" onclick="return delete_p('<?php echo $delval; ?>');" href="" ><button class="btn btn-danger btn-sm" data-toggle="modal" data-target=".bs-example-modal-sm" ><?php echo $welcome->loadPo('Delete') ?></button></a>                            </td>
+													<?php $delval=base64_encode($value->id); ?>
+                                                    <a class="confirm" onclick="return delete_p(<?php echo "'".$delval."'"; ?>);" href="" ><button class="btn btn-danger btn-sm" data-toggle="modal" data-target=".bs-example-modal-sm" ><?php echo $welcome->loadPo('Delete') ?></button></a>                            </td>
                                             </tr>
                                         <?php } ?>
                                     </tbody>
@@ -94,11 +94,11 @@
                                 </table>
                                 <!-- Pagination start --->
                                 <?php
-                                if ($this->pagination->total_rows == '0') {
+                                if($this->pagination->total_rows == '0'){
                                     echo "<tr><td colspan=\"7\"><h4>" . $welcome->loadPo('No Record Found') . "</td></tr></h4>";
-                                } else {
+                                }else{
                                     ?>
-                                    </table>
+                                    
 
                                     <div class="row pull-left">
                                         <div class="dataTables_info" id="example2_info"><br>
@@ -150,8 +150,6 @@
     </div>
 </div>
 
-<script>
-</script>
 <!--  this div for  jwplyer reponce -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" 
      aria-labelledby="myModalLabel" aria-hidden="true">

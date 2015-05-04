@@ -1,3 +1,4 @@
+
 		<script src="<?php echo base_url() ?>assets/js/AdminLTE/app.js" type="text/javascript"></script>
 		<!-- jcrop -->
 		<script src="<?php echo base_url()?>assets/js/jcrop/jquery.Jcrop.js"></script>			
@@ -25,5 +26,6 @@
 		<script src="http://code.jquery.com/jquery-migrate-1.0.0.js"></script>
                 <script src="<?php echo base_url() ?>assets/js/ion.rangeSlider.js"></script>
                 
+            
     </body>
 </html>

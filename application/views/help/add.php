@@ -3,6 +3,12 @@
         color: red;
     }
 </style>
+ <script>
+ $( document ).ready(function() {
+    CKEDITOR.replace('page_description');
+    $(".textarea").wysihtml5();
+ });
+</script> 
 <?php $uri = $this->uri->segment(1); ?>
 <div class="wrapper row-offcanvas row-offcanvas-left">
     <!-- Right side column. Contains the navbar and content of the page -->
@@ -51,7 +57,7 @@
                                     <div class="row">
                                         <div class="form-group col-lg-5">
                                             <label for="Description"><?php echo $welcome->loadPo('Description'); ?></label>
-                                            <textarea name="page_description" class="form-control" placeholder="<?php echo $welcome->loadPo('Description'); ?>" id="Description"><?php if (isset($_POST['page_description'])) {
+                                            <textarea name="page_description" class="form-control" placeholder="<?php echo $welcome->loadPo('Description'); ?>" id="page_description"><?php if (isset($_POST['page_description'])) {
                                                     echo $_POST['page_description'];
                                                 }else if(isset($result['page_description'])&&($result['page_description']!='')){echo $result['page_description'];} ?></textarea>
                                                 <span id="error_Description" class="text-danger"></span>
@@ -73,7 +79,7 @@
                                     <button type="submit" name="submit" value="<?php if(isset($result['id'])&&($result['id']!='')){echo 'Update';}else{echo 'Submit';}?>" class="btn btn-primary"><?php echo $welcome->loadPo('Submit'); ?></button>
                                     <a href="<?php echo base_url() . $uri; ?>" class="btn btn-default"><?php echo $welcome->loadPo('Cancel'); ?></a>
                                 </div>
-                                
+                              
                             </form>                            
                         </div><!-- /.box -->
                     </div><!--/.col (left) -->
