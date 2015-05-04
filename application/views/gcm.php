@@ -45,9 +45,9 @@
 	<body>
 		<div id="formdiv">
 		<h1>Google Cloud Messaging (GCM) in PHP</h1>	
-		<form method="post" action="push_notification/index/?push=true" onsubmit="return checkTextAreaLen()">					                                                      
+		<form method="post" action="<?php echo base_url();?>push_notification/index/?push=true" onsubmit="return checkTextAreaLen()">					                                                      
 				<textarea rows="5" name="message" cols="45" placeholder="Message to send via GCM"></textarea> <br/>
-				Registration Id:  <input type='text' value='APA91bEhseDdisO82zobPpvXbgplkSYd4PdH1dBpi2C-vX_PcdCIdSsCWZ26Ha3Whmb-uIRihFRaMhiGSsEg-PJTQ6CbTcRvsh88_Uhqm3JqM8xZdfHvWo7YD06LrnOlGH2BgTKpMbjJjV-c44X1BkizPukQo79GmA' name='regId'>
+				Registration Id:  <input type='text' value='APA91bEfsmtpPO6VJBN5gxTxXJvKiUlnEtJG0H56RHf_JpUE63t-YZ2VX1PiJIuFrJBYCDtP_5GwSoBRzUfc0UbWaUR9M04kORnOtqR-r_3hubylp0MqZNhSy03h2lPnUUJCxU7z97_7Wct-168uzwCRv7CAJO5t9Q' name='regId'>
                 <input type="submit"  value="Send Push Notification through GCM" />
 		</form>
 		</div>

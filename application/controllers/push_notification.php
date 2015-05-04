@@ -57,6 +57,13 @@ function index(){
             die('Curl failed: ' . curl_error($ch));
         }
         curl_close($ch);
-        echo $result;
+        $data = json_decode($result);
+        if($data->success)
+        {
+            echo "Notification send successfully";
+        }else{
+            echo "Error send notification";
+        }
+
    }
 }
