@@ -143,7 +143,7 @@
                                                         <?php if ($value->type == 'Loop' || $value->type == 'Linear') { ?>
                                                                                                             <a href="<?php echo base_url() ?>webtv/playlist/<?php echo $value->id; ?>">Manage Playlist</a>
                                                         <?php } else if ($value->type == 'Youtube' || $value->type == 'Live') { ?>
-                                                        <a href="<?php echo base_url() ?>livestream/index/<?php echo $value->id; ?>">Manage</a>
+                                                        <a href="<?php echo base_url() ?>livestream/index/<?php echo $value->id; ?>">Manage  </a>||<a href="<?php echo base_url() ?>livestream/epg/<?php echo $value->id; ?>">  EPG</a>
                                             <?php } ?>
                                                 </td>
                                                 <td  width="150"> 

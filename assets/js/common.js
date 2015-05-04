@@ -11,6 +11,8 @@ $(function () {
             $("#datepickerend").datepicker("option", "minDate", $('#datepickerstart').val());
         }
     });
+    
+    
     $("#eventDatee").datepicker({
         dateFormat: 'dd/mm/yy',
         numberOfMonths: 1,
@@ -18,6 +20,17 @@ $(function () {
             $("#datepickerstart").datepicker("option", "maxDate", $('#datepickerstart').val());
         }
     });
+    
+    
+    
+    
+   $('.show_time').datetimepicker({
+    format:'HH:mm:ss'
+});
+$('.duration').datetimepicker({
+    format:'HH:mm:ss:SS'
+});
+    
     $('#reservation').daterangepicker();
     //Date range picker with time picker
     $('#reservationtime').daterangepicker({timePicker: true, timePickerIncrement: 1, format: 'YYYY/MM/DD h:mm:00'});

@@ -184,6 +184,44 @@ class Livestream extends MY_Controller {
         $this->session->set_flashdata('message', $this->_successmsg($this->loadPo($this->config->item('success_record_update'))));
         redirect(base_url() . 'livestream/slist');
     }
+    
+    function epg(){
+        if(isset($_POST['id'])){
+            $id = $_POST['id'];
+            unset($_POST['id']);
+            $this->db->set($_POST);
+            $this->db->where(array('id'=>$id));
+            $this->db->update('livechannel_epg');
+        }
+        $data['welcome'] = $this;
+        $ch_id = $this->uri->segment(3);
+        
+        if (isset($_POST['search']) && $_POST['search'] == 'Search') {
+            unset($_POST['search']);
+            $this->session->set_userdata('search_epg', $_POST);
+        } else if (isset($_POST['reset']) && $_POST['reset'] == 'Reset') {
+            $this->session->unset_userdata('search_epg');
+        }
+        
+        
+        $searchterm = $this->session->userdata('search_epg');
+        $this->load->library("pagination");
+        $config = array();
+        $config["base_url"] = base_url() . "livestream/epg/".$ch_id.'/';
+        $config["total_rows"] = $this->Livestream_model->get_epg($searchterm, 'count', $ch_id);
+        $config["per_page"] = 10;
+        $config["uri_segment"] = 4;
+        $this->pagination->initialize($config);
+        $page = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+        $data['result'] = $this->Livestream_model->get_epg($searchterm, 'result' ,$ch_id, $config['per_page'], $page);
+        $data["links"] = $this->pagination->create_links();
+        
+        
+        
+        
+        $this->show_view('epg_list', $data);
+        
+    }
 
 }
 

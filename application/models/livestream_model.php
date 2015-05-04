@@ -88,5 +88,31 @@ class Livestream_model extends CI_Model{
     $this->db->where('id',$data['id']);
     $this->db->update('livestream',$data);
    }
+   
+   function get_epg($searchterm, $use_for, $ch_id, $limit=10, $start=0){
+        if($searchterm['show_title']!=''){
+            $this->db->like('show_title', $searchterm['show_title']);
+        }
+        if($searchterm['show_time']!=''){
+            $this->db->like('show_time', $searchterm['show_time']);
+        }
+        if($searchterm['show_description']!=''){
+            $this->db->like('show_description', $searchterm['show_description']);
+        }
+        $this->db->where('channel_id', $ch_id);
+        $this->db->from('livechannel_epg');
+        switch ($use_for){
+            case 'result':
+                $this->db->order_by('id', 'ASC');
+                $this->db->limit($limit, $start);
+                $query = $this->db->get();
+                return $query->result();
+            case 'count':
+                $query = $this->db->get();
+                return count($query->result());
+            
+       }
+        
+   }
 }
 ?>
