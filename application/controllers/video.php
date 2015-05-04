@@ -225,6 +225,7 @@ class Video extends MY_Controller {
             $this->session->unset_userdata('search_form');
         }
         $searchterm = $this->session->userdata('search_form');
+       // echopre($searchterm);
         $this->load->library("pagination");
         $config = array();
         $config["base_url"] = base_url() . "video/index/";

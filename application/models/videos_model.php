@@ -290,8 +290,6 @@ class Videos_model extends CI_Model {
         $this->db->order_by($sort, $sort_by);
         $this->db->limit($limit, $start);
         $query = $this->db->get();
-        //echo $this->db->last_query();
-        
         $data = $query->result();
         
         return $data;
