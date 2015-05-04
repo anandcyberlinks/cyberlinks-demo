@@ -570,8 +570,9 @@ class Video extends MY_Controller {
     
     function EditAllInvalid(){
         
-        echo $query = "select id, title from contents where category = '' and uid = $this->uid ORDER BY id DESC"; die;
+        echo $query = "select id, title from contents where category = '' and uid = $this->uid ORDER BY id DESC"; 
         $res = $this->db->query($query)->result();
+        print_r($res); die;
         if(count($res)==0){
             redirect(base_url().'video');
         }
