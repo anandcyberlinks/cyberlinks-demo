@@ -45,7 +45,7 @@ class Details extends MY_Controller {
 		$cuePoints = $this->Ads_model->getCuePoints($id,$type);		
 		//----------------------------//
                 
-                if(@$cuePoints['0']!=0 && $id != 70){
+                if(@$cuePoints['0']!=0){
                     array_unshift($cuePoints, 0);
                     $limit += 1;
                 }
@@ -147,10 +147,8 @@ class Details extends MY_Controller {
 				$adsFinal[$i]['vast_file'] = $val;
 				if(count($cuePoints) > 0){
 				    $adsFinal[$i]['cue_points'] 	= @$cuePoints[$i];
-				}else{
-				   if($id != 70){
-				    $adsFinal[$i]['cue_points'] 	= 0;
-				   }
+				}else{				   
+				    $adsFinal[$i]['cue_points'] 	= 0;				
 				}
 				$i++;
 			}
