@@ -4,11 +4,11 @@
     <aside class="right-side"> 
         <!-- Content Header (Page header) -->
         <section class="content-header">
-            <h1><?php echo $welcome->loadPo('All Templates') ?><small><?php echo $welcome->loadPo('Control panel') ?></small>            
+            <h1><?php echo $welcome->loadPo('CMS') ?><small><?php echo $welcome->loadPo('Control panel') ?></small>            
             </h1>
             <ol class="breadcrumb">
                 <li><a href="<?php echo base_url(); ?>"><i class="fa fa-dashboard"></i><?php echo $welcome->loadPo('Dashboard') ?></a></li>
-                <li class="active"><?php echo $welcome->loadPo('Templates') ?></li>
+                <li class="active"><?php echo $welcome->loadPo('CMS') ?></li>
             </ol>
         </section>
                 <?php echo $this->session->flashdata('message'); ?>
