@@ -101,7 +101,7 @@ class Pages extends My_Controller{
                 $msg = $this->loadPo($this->config->item('success_record_update'));
                 $this->log($this->user, $msg);
                 $this->session->set_flashdata('message', $this->_successmsg($msg));
-                redirect('help');
+                redirect('pages');
             }
             $editresult = $this->help_model->fetchpage($id);
             $result=$data['result']=(array)$editresult['0'];
@@ -114,7 +114,7 @@ class Pages extends My_Controller{
                 $msg = $this->loadPo($this->config->item('success_record_add'));
                 $this->log($this->user, $msg);
                 $this->session->set_flashdata('message', $this->_successmsg($msg));
-                redirect('help');  
+                redirect('pages');  
             }
             $this->show_view('help/add', $data);
         }
@@ -122,7 +122,7 @@ class Pages extends My_Controller{
     function delete(){
         $id = base64_decode($_GET['id']);
         $delresult = $this->help_model->deletepage($id);
-        redirect('help');  
+        redirect('pages');  
     }
     function validfile(){
        $path='assets/upload/skins/'.$_REQUEST['fileName'];
