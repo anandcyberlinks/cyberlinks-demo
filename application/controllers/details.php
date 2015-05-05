@@ -53,12 +53,7 @@ class Details extends MY_Controller {
                  if(count($cuePoints) <= 0){
                      $limit = 1;
                  }
-		
-		if($result->content_provider=='87')
-		{
-				//$this->zone_id =7; //--- temporary use --//		
-		}
-				
+								
 		$user_data = $this->Ads_model->getUserKeywords($_GET['user_id']);
 		//print_r($user_data);
 		//--- Access Revive web service ---//
