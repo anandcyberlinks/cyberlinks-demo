@@ -57,7 +57,7 @@
                     </div><!--/.col (left) -->
                 </div> */?>
                 <div class="row">
-                    <div class="col-xs-6">
+                    <div class="col-xs-4">
 			<div class="box-footer" >
 			            </div><br/>
                         <div class="box">
@@ -125,24 +125,21 @@
                         </div><!-- /.box-body -->
                     </div><!-- /.box -->
 					<br>
-                    <div class="col-xs-6">
+                    <div class="col-xs-8">
                         <div class="box">
                             <div class="box-body table-responsive">
                                 <table class="table table-bordered">  
                                     <tbody>
 										 <tr>
-                                            <td>Preview</td>
+                                            <td><b>Preview</b></td>
                                         </tr> 
-                                        <tr>
-                                            <td id="preview_skin"></td>
-                                        </tr>
-										
+                                       <tr>
+                                            <td id="skin_title"><b><?php echo $result['0']->page_title;?></b></td>
+                                        </tr>		
 										<tr>
-                                            <td id="skin_title"><?php echo $result['0']->page_description;?></td>
+                                            <td id="skin_dimenstion"><?php echo $result['0']->page_description;?></td>
                                         </tr>
-										<tr>
-                                            <td id="skin_dimenstion"><?php echo $result['0']->page_title;?></td>
-                                        </tr>										
+																		
                                     </tbody>
                                 </table>
                 </div>
@@ -166,12 +163,11 @@
 	
 function changefunction(id,title) {
 	var data=$('#'+id+'_id').val();
-	
 	$(this).prevAll().removeAttr('style');
 	$(this).nextAll().removeAttr('style');
 	$(this).css("background", "#ddd");
-	$('#preview_skin').html(data);
-	$('#skin_title').html("Title<br>"+title);
+	$('#skin_title').html("<b>"+title+"<b>");
+	$('#skin_dimenstion').html(data);
 	$('#skin_id').val(id);
 }
 </script>
