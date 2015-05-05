@@ -87,7 +87,28 @@ class Help extends My_Controller{
         //$result = $data['result'] = $this->publishing_model->getSkins();
         $this->show_view('help/list',$data);
     }
-        
+    function pages()
+    {
+        $search = array();
+        $search['term'] = '';
+        $data['welcome'] = $this;
+        $this->load->library("pagination");
+        $config = array();
+        $config["base_url"] = base_url() . "help/index/";
+        $search['user_id']=$this->userdetail['id'];
+        $config["total_rows"] = $this->help_model->getpages($search,1);
+        $config["per_page"] = 10;
+        $config["uri_segment"] = 3;
+        $this->pagination->initialize($config);
+        $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        $data['result'] = $this->help_model->getpages($search,0,$config["per_page"],$page);
+        $data["links"] = $this->pagination->create_links();
+        $data['total_rows'] = $config["total_rows"];
+        $data['role_id']=$this->role_id;
+        echopre($data['result']);
+        //$result = $data['result'] = $this->publishing_model->getSkins();
+        $this->show_view('help/list',$data);
+    }    
     function add(){
         $data['welcome'] = $this;
         if (isset($_GET['id'])) {
@@ -105,6 +126,7 @@ class Help extends My_Controller{
             }
             $editresult = $this->help_model->fetchpage($id);
             $result=$data['result']=(array)$editresult['0'];
+            
             $this->show_view('help/add', $data);
         }else{
             if (isset($_POST['submit']) && $_POST['submit'] == 'Submit') { 

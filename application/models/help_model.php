@@ -55,6 +55,7 @@ class Help_Model extends CI_Model
             unset($data['_method']);
             unset($data['data']);
             unset($data['submit']);
+            
             $this->db->set($data);
             $this->db->set('created', 'NOW()', FALSE);           
             $this->db->insert('pages');

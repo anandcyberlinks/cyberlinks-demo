@@ -62,8 +62,9 @@
 			    <form action='' method='post' accept-charset="utf-8" enctype="multipart/form-data" onsubmit='return validbanner();'>
 				   <input type='hidden' name='skin_id' id='skin_id'>											                                        
 				<?php if(isset($role_id)&&($role_id!='2')){?>
-					<button type="submit" name="save" value="Save" class="btn btn-primary"><?php echo $welcome->loadPo('Publish Now') ?></button> <button  class="btn btn-primary">
-					<input name="skin_banner"  id="skin_banner"  type="file" onchange="return validateFileSelected(this);"/></button>
+					<button type="submit" name="save" value="Save" class="btn btn-primary"><?php echo $welcome->loadPo('Publish Now') ?></button>
+					<div style='float: right;'><b>Upload Banner </b><button  class="btn btn-primary" >
+					<input name="skin_banner"  id="skin_banner"  type="file" onchange="return validateFileSelected(this);"/></button></div>
 					<div id='ERROR_FILETEXT' class='ERROR_FILETEXT text-danger' style='display: none;' ></div>
 					<input type='hidden' name='banner_error' id='banner_error' value='0' />
 					<input type='hidden' name='banner_value' id='banner_value' value="<?php echo $result['0']->skin_banner;?>" />
