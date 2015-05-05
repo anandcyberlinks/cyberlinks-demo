@@ -16,7 +16,7 @@ class Help_Model extends CI_Model
         }else{
         $this->db->select('a.*');
         }
-        $this->db->where(array('user_id'=>$search['user_id']));
+        //$this->db->where(array('user_id'=>$search['user_id']));
         $this->db->from('pages a');
         
         if($count==1){
