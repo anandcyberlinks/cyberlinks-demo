@@ -319,7 +319,7 @@ autostart: 1,
 	   $offset = $row['cue_points'];   
 	   ?>
 		adbreak<?php echo $i; ?>: {
-		offset: '<?php echo ($offset==0 && $content_provider !=29 ? 'pre': $offset); ?>',		
+		offset: '<?php echo ($offset==0 && $content_provider !=70 ? 'pre': $offset); ?>',		
 		//'skipoffset':5,
 		//tag: "<?php //echo ($row['ad_type'] != 'External' ? base_url():'') . $row['vast_file']; ?>?<?php //echo $row['ads_id']?>/<?php //echo $user_id?>/<?php //echo $row['uid']?>"
 		tag: "<?php echo $row['vast_file']?>/<?php echo $user_id?>/<?php echo $content_provider;?>/<?php echo $row['advertiser']?>/<?php echo ($offset==0 ? 'pre':'mid')?>"		
