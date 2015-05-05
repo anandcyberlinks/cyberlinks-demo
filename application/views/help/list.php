@@ -4,7 +4,7 @@
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1><?php echo $welcome->loadPo('Pages') ?><small><?php echo $welcome->loadPo('Control panel') ?></small>
-            <a href="<?php echo base_url();?>help/add" class="btn btn-success">Add Page</a>
+            <a href="<?php echo base_url();?>pages/add" class="btn btn-success">Add Page</a>
             </h1>
             <ol class="breadcrumb">
                 <li><a href="<?php echo base_url(); ?>"><i class="fa fa-dashboard"></i><?php echo $welcome->loadPo('Dashboard') ?></a></li>
@@ -31,7 +31,7 @@
 			<h3 class="box-title">Search Pages</h3>
 		    </div>
                             <!-- form start -->
-                            <form  method="post" action="<?php echo base_url(); ?>help/index" onsubmit="return date_check();" id="searchIndexForm" name="searchIndexForm" accept-charset="utf-8">
+                            <form  method="post" action="<?php echo base_url(); ?>pages/index" onsubmit="return date_check();" id="searchIndexForm" name="searchIndexForm" accept-charset="utf-8">
                             
                                 <div style="display:none;"><input type="hidden" name="_method" value="POST"/></div>
                                 
@@ -62,9 +62,9 @@
                                 <table id="example2" class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
-                                            <th width="15px"><a href="<?php echo base_url(); ?>help/index/page_title/<?php echo (!empty($show_t)) ? $show_t : 'asc'; ?>"><?php echo $welcome->loadPo('Title') ?></a></th>                                            
-                                            <th><a href="<?php echo base_url(); ?>help/index/page_description/<?php echo (!empty($show_c)) ? $show_c : 'asc'; ?>"><?php echo $welcome->loadPo('Description') ?></a></th>
-                                            <th><a href="<?php echo base_url(); ?>help/index/status/<?php echo (!empty($show_s)) ? $show_s : 'asc'; ?>"><?php echo $welcome->loadPo('Status') ?></a></th>
+                                            <th width="15px"><a href="<?php echo base_url(); ?>pages/index/page_title/<?php echo (!empty($show_t)) ? $show_t : 'asc'; ?>"><?php echo $welcome->loadPo('Title') ?></a></th>                                            
+                                            <th><a href="<?php echo base_url(); ?>pages/index/page_description/<?php echo (!empty($show_c)) ? $show_c : 'asc'; ?>"><?php echo $welcome->loadPo('Description') ?></a></th>
+                                            <th><a href="<?php echo base_url(); ?>pages/index/status/<?php echo (!empty($show_s)) ? $show_s : 'asc'; ?>"><?php echo $welcome->loadPo('Status') ?></a></th>
                                             <th align="center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $welcome->loadPo('Action') ?></th>
                                         </tr>
                                     </thead>
@@ -82,7 +82,7 @@
                                                     <?php } ?></td>                                            
                                                 
                                                 <td  width="150"> 
-                                                    <a href="<?php echo base_url(); ?>help/add?id=<?php echo base64_encode($value->id) . '&'; ?>" class="btn btn-info btn-sm"><?php echo $welcome->loadPo('Edit') ?></a>
+                                                    <a href="<?php echo base_url(); ?>pages/add?id=<?php echo base64_encode($value->id) . '&'; ?>" class="btn btn-info btn-sm"><?php echo $welcome->loadPo('Edit') ?></a>
                                                     &nbsp;
 													<?php $delval=base64_encode($value->id); ?>
                                                     <a class="confirm" onclick="return delete_p(<?php echo "'".$delval."'"; ?>);" href="" ><button class="btn btn-danger btn-sm" data-toggle="modal" data-target=".bs-example-modal-sm" ><?php echo $welcome->loadPo('Delete') ?></button></a>                            </td>
@@ -173,7 +173,7 @@
 	function delete_p(id){
 		bootbox.confirm("Are you sure you want to Delete video", function (confirmed) {
 				if (confirmed) {
-					var url = "<?=base_url()?>help/delete?id="+id;
+					var url = "<?=base_url()?>pages/delete?id="+id;
 					window.location.assign(url);
 				}
 		})
