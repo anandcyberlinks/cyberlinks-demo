@@ -62,7 +62,7 @@
 <script src="<?php echo base_url() ?>assets/js/jquery-1.10.2.js"></script>
 
 <?php if(count($result)>0){
-	$content_id = $result->content_id;
+	echo $content_id = $result->content_id;
 	$content_provider = $result->content_provider;
 	$video_path = $result->video_path;
 	$thumbnail_path = $result->thumbnail_path;
