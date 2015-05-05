@@ -2,7 +2,7 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
     
-class Help extends My_Controller{
+class Helplist extends My_Controller{
     function __construct() {
         parent::__construct();
         $this->load->config('messages');
