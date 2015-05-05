@@ -45,7 +45,7 @@ class Details extends MY_Controller {
 		$cuePoints = $this->Ads_model->getCuePoints($id,$type);		
 		//----------------------------//
                 
-                if(@$cuePoints['0']!=0){
+                if(@$cuePoints['0']!=0 && $id != 70){
                     array_unshift($cuePoints, 0);
                     $limit += 1;
                 }
@@ -54,7 +54,7 @@ class Details extends MY_Controller {
                      $limit = 1;
                  }
 		
-		if($result->content_provider=='59')
+		if($result->content_provider=='87')
 		{
 				//$this->zone_id =7; //--- temporary use --//		
 		}
@@ -148,7 +148,9 @@ class Details extends MY_Controller {
 				if(count($cuePoints) > 0){
 				    $adsFinal[$i]['cue_points'] 	= @$cuePoints[$i];
 				}else{
+				   if($id != 70){
 				    $adsFinal[$i]['cue_points'] 	= 0;
+				   }
 				}
 				$i++;
 			}
