@@ -5,8 +5,8 @@
 </style>
  <script>
  $( document ).ready(function() {
-    //CKEDITOR.replace('page_description');
-    //$(".textarea").wysihtml5();
+    CKEDITOR.replace('page_description');
+    $(".textarea").wysihtml5();
  });
 </script> 
 <?php $uri = $this->uri->segment(1); ?>

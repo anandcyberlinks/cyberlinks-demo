@@ -70,9 +70,11 @@
                                     </thead>
 
                                     <tbody>
-                                        <?php  foreach ($result as $value) { ?>
+                                        <?php
+										$i=1;
+										foreach ($result as $value) { ?>
                                         <tr id="<?php echo $value->id ?>" onclick='return changefunction(<?php echo '"'.$value->id.'"';?>,<?php echo '"'.$value->page_title.'"';?>)'; alt="<?php echo $value->image;?>" title="<?php echo $value->title;?>" dimen="<?php echo $value->dimension;?>">
-                                                <td  width="350"><a style='cursor: pointer;'><?php echo strlen($value->page_title) > 40 ?  substr($value->page_title,0,40).'...' : $value->page_title; ?><br>
+                                                <td  width="350"><?php echo $i.'. &nbsp'; $i++;?><a style='cursor: pointer;'><?php echo strlen($value->page_title) > 40 ?  substr($value->page_title,0,40).'...' : $value->page_title; ?><br>
                                                 </a></td>
 												<td style="display: none;"><input type="hidden" id="<?php echo $value->id.'_id';?>" value='<?php echo $value->page_description;?>' /></td>
 									
