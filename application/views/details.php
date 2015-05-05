@@ -318,7 +318,7 @@ autostart: 1,
 	   //$offset = ($row->offset_hrs * 3600) + ($row->offset_minutes * 60) + ($row->offset_seconds);
 	   $offset = $row['cue_points'];
 	   if($offset ==0 && $content_provider ==70){
-		$offset='';
+		$offset='no';
 	   }
 	   ?>
 		adbreak<?php echo $i; ?>: {
