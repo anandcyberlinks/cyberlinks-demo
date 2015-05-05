@@ -100,11 +100,11 @@ class Livestream extends MY_Controller {
                         'show_title' => $csv_line[4],
                         'show_time' => $csv_line[1], //($csv_line[1] == '') ? '' : date("H:i", strtotime($csv_line[1])),
                         'show_duration' => $csv_line[2],
-					    'show_thumb' => "",
+                        'show_thumb' => "",
                         'show_language' => "",
                         'show_description' => "",
                         'show_type' => $csv_line[3],
-						'media_type' => $csv_line[5],
+			'media_type' => $csv_line[5],
                         'valid' => ($csv_line[1] == '' || $csv_line[4] == '') ? 'invalid' : 'valid'
                     );
                     $array[] = $temp;

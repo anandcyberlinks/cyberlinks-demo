@@ -19,7 +19,7 @@ if (count($result) != '0') { ?>
                     <td><?=$value['show_thumb']?></td>
                     <td><?=$value['show_language']?></td>
                     
-                    <td><?=$value['show_type']?></td>
+                    <td><?=$value['media_type']?></td>
                 </tr>
     <?php } ?>
         </table>
