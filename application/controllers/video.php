@@ -570,7 +570,7 @@ class Video extends MY_Controller {
     
     function EditAllInvalid(){
         
-        $query = "select id, title from contents where category = '' and uid = $this->uid ORDER BY id DESC"; 
+        $query = "select id, title from contents where category is NULL and uid = $this->uid ORDER BY id DESC"; 
         $res = $this->db->query($query)->result();
         //print_r($res); die;
         if(count($res)==0){
