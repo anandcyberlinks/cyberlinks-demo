@@ -23,7 +23,8 @@ CKEDITOR.editorConfig = function( config ) {
 		{ name: 'paragraph',   groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ] },
 		{ name: 'styles' },
 		{ name: 'colors' },
-		{ name: 'about' }
+		{ name: 'about' },
+		{ name: 'video' }
 	];
 
 	// Remove some buttons, provided by the standard plugins, which we don't
@@ -35,4 +36,9 @@ CKEDITOR.editorConfig = function( config ) {
 
 	// Make dialogs simpler.
 	config.removeDialogTabs = 'image:advanced;link:advanced';
+
+	// video plugin
+	config.extraPlugins='video'; 
+	config.filebrowserVideoBrowseUrl='';
+	config.allowedContent = true;
 };
