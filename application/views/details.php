@@ -292,7 +292,7 @@ function beforeUnload() {
     jwplayer("myElement").setup({
        //flashplayer: "assets/player.swf",
         primary: "html5",      
-        file: "<?php echo $video_path;?>",		
+        file: "<?php echo trim($video_path);?>",		
 	    image: "<?php echo base_url().THUMB_LARGE_PATH. $thumbnail_path;?>",       
        // skin: "<?php echo base_url()?>assets/myskinjw/custom.xml",	
 	width: "100%",
@@ -318,7 +318,7 @@ autostart: 1,
 	   //$offset = ($row->offset_hrs * 3600) + ($row->offset_minutes * 60) + ($row->offset_seconds);
 	   $offset = $row['cue_points'];
 	   if($offset ==0 && $content_provider ==70){
-		$offset='no';
+		$offset='';
 	   }
 	   ?>
 		adbreak<?php echo $i; ?>: {
