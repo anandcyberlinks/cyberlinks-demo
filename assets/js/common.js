@@ -313,7 +313,8 @@ function delete_video(id, url, curl)
         if (confirmed) {
             location.href = url + '?id=' + id + '&curl=' + curl;
         }
-    })
+    });
+    return false;
 }
 function deletebox()
 {
@@ -958,6 +959,7 @@ function Download() {
                 }
             }
         });
+        return false;
     }
 
 }
