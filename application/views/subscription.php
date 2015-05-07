@@ -7,9 +7,9 @@
 		$icon = "<i class=\"fa fa-fw fa-sort-numeric-asc\"></i>";
 	}
 	?>
-	<div class="wrapper row-offcanvas row-offcanvas-left">
+	<!--div class="wrapper row-offcanvas row-offcanvas-left"-->
 	<!-- Right side column. Contains the navbar and content of the page -->
-    <aside class="right-side">                
+    <aside class="content-wrapper">                
 		<!-- Content Header (Page header) -->
 		<section class="content-header">
             <h1><?php echo $welcome->loadPo('Subscription Duration'); ?><small><?php echo $welcome->loadPo('Control panel'); ?></small> </h1>
@@ -107,4 +107,4 @@
 			</div>
 		</section><!-- /.content -->
     </aside><!-- /.right-side -->
-</div><!-- ./wrapper -->
+<!--/div--><!-- ./wrapper -->

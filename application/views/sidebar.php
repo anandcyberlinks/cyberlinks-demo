@@ -116,7 +116,7 @@ switch ($s[0]->username) {
 //echo "<pre>";
 //print_r($menu); die;
 ?>
-<aside class="left-side sidebar-">                
+<aside class="main-sidebar sidebar-">                
     <section class="sidebar">
         <!-- Sidebar user panel -->
         <div class="user-panel">

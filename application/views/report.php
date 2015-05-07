@@ -1,5 +1,5 @@
 <link href="<?=base_url()?>assets/css/morris/morris.css" rel="stylesheet" type="text/css" />
-<aside class="right-side">
+<aside class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1> 

@@ -31,7 +31,7 @@
         var loader = '<img class="loading" src="'+ baseurl +'assets/img/spinner.gif" />';
         var loaderCenter = '<div align="center"><img class="loading" src="'+ baseurl +'assets/img/spinner.gif" /></div>';
         </script>
-        <script src="<?php echo base_url() ?>assets/js/jquery-1.10.2.js"></script>
+        <script src="<?php echo base_url() ?>assets/js/jQuery-2.1.3.min.js"></script>
         <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jwplayer.js" ></script>
         <script type="text/javascript">jwplayer.key = "BC9ahgShNRQbE4HRU9gujKmpZItJYh5j/+ltVg==";</script>
         

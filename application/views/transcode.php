@@ -1,5 +1,5 @@
-<div class="wrapper row-offcanvas row-offcanvas-left">
-	<aside class="right-side">                
+<!--div class="wrapper row-offcanvas row-offcanvas-left"-->
+	<aside class="content-wrapper">                
 		<!-- Content Header (Page header) -->
 		<section class="content-header">
             <h1><?php echo $welcome->loadPo('Transcode'); ?><small><?php echo $welcome->loadPo('Control panel'); ?></small></h1>
@@ -125,7 +125,7 @@
 			</div>
 		</section><!-- /.content -->
     </aside><!-- /.right-side -->
-</div><!-- ./wrapper -->
+<!--/div--><!-- ./wrapper -->
 
 <!-- Modal -->
 <div class="modal fade" id="confirm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

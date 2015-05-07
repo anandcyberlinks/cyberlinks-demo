@@ -4,7 +4,7 @@
         color: red;
     }
 </style>
-<html class="bg-black">
+<html>
     <head>
         <meta charset="UTF-8">
         <title>MultiTV | Reset Password</title>
@@ -23,8 +23,8 @@
           <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
         <![endif]-->
     </head>
-    <body class="bg-black">
-         <div class="form-box" id="login-box">
+    <body class="login-page">
+         <div class="login-box" id="login-box">
             <?php $msg = $this->session->flashdata('msg');
                    $succ = $this->session->flashdata('succ');
             if($msg!=''){ ?>
@@ -41,21 +41,31 @@
                     <b>Alert!</b> <?php echo $msg; ?>
                 </div>
              <?php } ?>
-          <div class="header">Creat Your New Password</div>
-          <form action="" method="post" id="reset_form">
-                <div class="body bg-gray">
-                    <div class="form-group">
+             <div class="login-logo">
+                <b>Multi</b>TV
+            </div><!-- /.login-logo -->
+          
+          <div class="login-box-body">
+            <p class="login-box-msg">Create Your New Password</p>
+            <form action="" method="post" id="reset_form">
+                  
+                    <div class="form-group has-feedback">
                         <input type="password" name="password" class="form-control" placeholder="New Password" required="true"/>
+                        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
                         <input type="hidden" name="id" value="<?php echo $id;?>">
                     </div>
-                    <div class="form-group">
+                    <div class="form-group has-feedback">
                         <input type="password" name="password2" id="password" class="form-control" placeholder="Confirm Password" required="true"/>
-                    </div>          
-                </div>
-                <div class="footer">                                                               
-                    <button type="submit" class="btn bg-olive btn-block" name="login">Submit</button>  
-                </div>
-            </form>
+                        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                    </div>
+                  
+                    <div class="row">
+                        <div class="col-xs-4">
+                            <button type="submit" class="btn btn-primary btn-block btn-flat" name="login">Submit</button>
+                        </div><!-- /.col -->
+                    </div>
+              </form>
+          </div>
         </div>
 
 
