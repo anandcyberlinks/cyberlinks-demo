@@ -1,30 +1,12 @@
 /*
- * Social Buttons for Bootstrap
- *
- * Copyright 2013-2014 Panayiotis Lipiridis
- * Licensed under the MIT License
- *
- * https://github.com/lipis/bootstrap-social
- *
- * Note: this file has been altered to work correctly with AdminLTE
+ * Plugin: Social Buttons
+ * ----------------------
  */
-@font-size-base:          14px;
-//** Unit-less `line-height` for use in components like buttons.
-@line-height-base:        20/14; // 20/14
-//** Computed "line-height" (`font-size` * `line-height`) for use with `margin`, `padding`, etc.
-@line-height-computed:    floor((@font-size-base * @line-height-base)); // ~20px
 
-@font-size-large:         ceil((@font-size-base * 1.25)); // ~18px
-@font-size-small:         ceil((@font-size-base * 0.85)); // ~12px
-
-@padding-base-vertical:     6px;
-@padding-base-horizontal:   12px;
-
-@padding-large-vertical:    10px;
-@padding-large-horizontal:  15px;
-
-@padding-small-vertical:    5px;
-@padding-small-horizontal:  10px;
+// Copyright 2013-2014 Panayiotis Lipiridis
+// Licensed under the MIT License
+//
+// https://github.com/lipis/bootstrap-social
 
 @bs-height-base: (@line-height-computed + @padding-base-vertical * 2);
 @bs-height-lg:   (floor(@font-size-large * @line-height-base) + @padding-large-vertical * 2);
@@ -123,45 +105,3 @@
 .btn-tumblr        { .btn-social(#2c4762); }
 .btn-twitter       { .btn-social(#55acee); }
 .btn-vk            { .btn-social(#587ea3); }
-
-// Button variants
-// -------------------------
-// Easily pump out default styles, as well as :hover, :focus, :active,
-// and disabled options for all buttons
-.button-variant(@color; @background; @border) {
-  color: @color;
-  background-color: @background;
-  border-color: @border;
-
-  &:hover,
-  &:focus,
-  &:active,
-  &.active,
-  .open .dropdown-toggle& {
-    color: @color;
-    background-color: darken(@background, 8%);
-        border-color: darken(@border, 12%);
-  }
-  &:active,
-  &.active,
-  .open .dropdown-toggle& {
-    background-image: none;
-  }
-  &.disabled,
-  &[disabled],
-  fieldset[disabled] & {
-    &,
-    &:hover,
-    &:focus,
-    &:active,
-    &.active {
-      background-color: @background;
-          border-color: @border;
-    }
-  }
-
-  .badge {
-    color: @background;
-    background-color: @color;
-  }
-}
