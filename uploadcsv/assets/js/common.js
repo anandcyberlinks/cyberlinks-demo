@@ -911,6 +911,8 @@ function Download() {
     /* we join the array separated by the comma */
     var selected;
     selected = chkarr.join(',') + ",";
+    alert('hi');
+    alert(selected.length);
     if (selected.length > 1) {
         $.ajax({
             type: "POST",

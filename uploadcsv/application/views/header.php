@@ -12,7 +12,7 @@
     </head>
     <body class="skin-blue">
         <!-- header logo: style can be found in header.less -->
-        <header class="header">
+        <header class="main-header">
             <a href="" class="logo">
                 <!-- Add the class icon to your logo image or logo icon to add the margining -->
                 MultiTV
