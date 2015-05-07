@@ -169,7 +169,7 @@ class MY_Controller extends CI_Controller {
         $id = $tmp->id;
         if ($id != '') {
             $this->load->view('header', $data);
-            $this->load->view('sidebar', $data);
+            //$this->load->view('sidebar', $data);
             $this->load->view('videoEditHeader', $data);
             $this->load->view($view, $data);
             $this->load->view('footer', $data);

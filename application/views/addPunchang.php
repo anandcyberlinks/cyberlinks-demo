@@ -5,7 +5,7 @@
 </style>
 <div class="wrapper row-offcanvas row-offcanvas-left">
     <!-- Right side column. Contains the navbar and content of the page -->
-    <aside class="right-side"> 
+    <aside class="content-wrapper"> 
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1><?php echo $welcome->loadPo('Punchang') ?><small><?php echo $welcome->loadPo('List') ?></small>

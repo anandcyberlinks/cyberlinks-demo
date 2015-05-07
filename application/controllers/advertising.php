@@ -284,7 +284,7 @@ function  updateCuePoint()
         if(isset($_POST['submit'])){
             if(@$_POST['ad_config']!=""){
                 $this->videos_model->saveUserAdConfig($this->uid,$_POST);
-                $this->session->set_flashdata('message', '<section class="content"><div class="col-xs-12"><div class="alert alert-success alert-dismissable"><i class="fa fa-check"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Configuration successfully saved.</div></div></section>');
+                $this->session->set_flashdata('message', '<section style="margin-left:auto; margin-right:auto; padding:15px;"><div class="col-xs-12"><div class="alert alert-success alert-dismissable"><i class="fa fa-check"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Configuration successfully saved.</div></div></section>');
                 redirect('advertising/configuration');
             }
         }
