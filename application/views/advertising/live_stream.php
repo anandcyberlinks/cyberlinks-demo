@@ -1,9 +1,9 @@
 <script type="text/javascript">
     $(function () { $("[data-toggle='tooltip']").tooltip(); });
 </script>
-<div class="wrapper row-offcanvas row-offcanvas-left">
+<!--div class="wrapper row-offcanvas row-offcanvas-left"-->
     <!-- Right side column. Contains the navbar and content of the page -->
-    <aside class="right-side"> 
+    <aside class="content-wrapper"> 
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1><?php echo $welcome->loadPo('Live Stream') ?><small><?php echo $welcome->loadPo('Control panel') ?></small></h1>
@@ -23,71 +23,72 @@
             <?php $search = $this->session->userdata('search_form');
             ?></pre>
             <div id="content">
-                <div class="row">
-                    <!-- left column -->
-                    <div class="col-md-12">
-                        <!-- general form elements -->
-                        <div class="box box-primary collapsed-box">
-                        <div class="box-header">
-			<!-- tools box -->
-			<div class="pull-right box-tools">
-			    <button class="btn btn-danger btn-sm" data-widget='collapse' data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
-			</div><!-- /. tools -->
-			<h3 class="box-title">Search Stream</h3>
-		    </div>
-                            <!-- form start -->
-                            <form  method="post" action="<?php echo base_url(); ?>advertising/live_stream" onsubmit="return date_check();" id="searchIndexForm" name="searchIndexForm" accept-charset="utf-8">
-                                <div style="display:none;"><input type="hidden" name="_method" value="POST"/></div>
-                                <div class="box-body" style="display:none;">
-                                    <div class="row">
-                                        <div class="form-group col-lg-4">
-                                            <div class="input text">
-                                                <label for=""><?php echo $welcome->loadPo('Title') ?></label>
-                                                <input type="text" name="content_title_live" id="content_title" class="form-control" value="<?php echo (isset($search['content_title_live'])) ? $search['content_title_live'] : ''; ?>" placeholder="<?php echo $welcome->loadPo('Title') ?>">
+                <!-- form start -->
+                <form  method="post" action="<?php echo base_url(); ?>advertising/live_stream" onsubmit="return date_check();" id="searchIndexForm" name="searchIndexForm" accept-charset="utf-8">
+                    <div class="row">
+                        <!-- left column -->
+                        <div class="col-md-12">
+                            <!-- general form elements -->
+                            <div class="box box-primary collapsed-box">
+                            <div class="box-header">
+                            <!-- tools box -->
+                            <div class="pull-right box-tools">
+                                <button class="btn btn-danger btn-sm" data-widget='collapse' data-toggle="tooltip" title="Collapse"><i class="fa fa-plus"></i></button>
+                            </div><!-- /. tools -->
+                            <h3 class="box-title">Search Stream</h3>
+                        </div>
+
+                                    <div style="display:none;"><input type="hidden" name="_method" value="POST"/></div>
+                                    <div class="box-body" style="display:none;">
+                                        <div class="row">
+                                            <div class="form-group col-lg-4">
+                                                <div class="input text">
+                                                    <label for=""><?php echo $welcome->loadPo('Title') ?></label>
+                                                    <input type="text" name="content_title_live" id="content_title" class="form-control" value="<?php echo (isset($search['content_title_live'])) ? $search['content_title_live'] : ''; ?>" placeholder="<?php echo $welcome->loadPo('Title') ?>">
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="form-group col-lg-4">
-                                            <div class="input select">
-                                                <label for="searchCategory"><?php echo $welcome->loadPo('Category') ?></label>
-                                                <select name="category_live" class="form-control" placeholder="<?php echo $welcome->loadPo('Category') ?>" id="searchCategory">
-                                                    <option value=""><?php echo $welcome->loadPo('Select') ?></option>
-                                                    <?php foreach ($category as $key=>$val) { ?>
-                                                        <option value="<?php echo $val->category; ?>" <?php
-                                                        if (isset($search['category_live'])) {
-                                                            if ($val->category == $search['category_live']) {
-                                                                echo 'selected';
+                                            <div class="form-group col-lg-4">
+                                                <div class="input select">
+                                                    <label for="searchCategory"><?php echo $welcome->loadPo('Category') ?></label>
+                                                    <select name="category_live" class="form-control" placeholder="<?php echo $welcome->loadPo('Category') ?>" id="searchCategory">
+                                                        <option value=""><?php echo $welcome->loadPo('Select') ?></option>
+                                                        <?php foreach ($category as $key=>$val) { ?>
+                                                            <option value="<?php echo $val->category; ?>" <?php
+                                                            if (isset($search['category_live'])) {
+                                                                if ($val->category == $search['category_live']) {
+                                                                    echo 'selected';
+                                                                }
                                                             }
-                                                        }
-                                                        ?>  ><?php echo $val->category ?></option>
-                                                            <?php } ?>
-                                                </select>
+                                                            ?>  ><?php echo $val->category ?></option>
+                                                                <?php } ?>
+                                                    </select>
+                                                </div>
                                             </div>
                                         </div>
+                                        <div class="row">
+                                            <div class="form-group col-lg-4">
+                                                <div class="input text">
+                                                    <label for="url"><?php echo $welcome->loadPo('Start Date') ?></label>
+                                                    <input type="text" class="form-control"  id="datepickerstart" name="datepickerstart_live" placeholder="<?php echo $welcome->loadPo('Start Date') ?>" value="<?php echo (isset($search['datepickerstart_live'])) ? $search['datepickerstart_live'] : ''; ?>" >											
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-lg-4">
+                                                <div class="input text">
+                                                    <label for="url"><?php echo $welcome->loadPo('End Date') ?></label>
+                                                    <input type="text" class="form-control"  id="datepickerend" name="datepickerend_live" placeholder="<?php echo $welcome->loadPo('End Date') ?>" value="<?php echo (isset($search['datepickerend_live'])) ? $search['datepickerend_live'] : ''; ?>">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div><!-- /.box-body -->
+                                    <div class="box-footer" style="display:none;">
+                                            <!--	<input type="text" id="hddstarddt" name="hddstarddt" value="<?php echo @$_POST['hddstarddt'] ?>"> -->
+                                        <button type="submit" name="submit" value="Search"class="btn btn-primary"><?php echo $welcome->loadPo('Search') ?></button>
+                                        <button type="submit" name="reset" value="Reset"class="btn btn-primary"><?php echo $welcome->loadPo('Reset') ?></button>
                                     </div>
-                                    <div class="row">
-                                        <div class="form-group col-lg-4">
-                                            <div class="input text">
-                                                <label for="url"><?php echo $welcome->loadPo('Start Date') ?></label>
-                                                <input type="text" class="form-control"  id="datepickerstart" name="datepickerstart_live" placeholder="<?php echo $welcome->loadPo('Start Date') ?>" value="<?php echo (isset($search['datepickerstart_live'])) ? $search['datepickerstart_live'] : ''; ?>" >											
-                                            </div>
-                                        </div>
-                                        <div class="form-group col-lg-4">
-                                            <div class="input text">
-                                                <label for="url"><?php echo $welcome->loadPo('End Date') ?></label>
-                                                <input type="text" class="form-control"  id="datepickerend" name="datepickerend_live" placeholder="<?php echo $welcome->loadPo('End Date') ?>" value="<?php echo (isset($search['datepickerend_live'])) ? $search['datepickerend_live'] : ''; ?>">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div><!-- /.box-body -->
-                                <div class="box-footer" style="display:none;">
-                                        <!--	<input type="text" id="hddstarddt" name="hddstarddt" value="<?php echo @$_POST['hddstarddt'] ?>"> -->
-                                    <button type="submit" name="submit" value="Search"class="btn btn-primary"><?php echo $welcome->loadPo('Search') ?></button>
-                                    <button type="submit" name="reset" value="Reset"class="btn btn-primary"><?php echo $welcome->loadPo('Reset') ?></button>
-                                </div>
-                            </form>
-                        </div><!-- /.box -->
-                    </div><!--/.col (left) -->
-                </div>
+                            </div><!-- /.box -->
+                        </div><!--/.col (left) -->
+                    </div>
+                </form>
                 <div class="row">
                     <div class="col-xs-12">
                         <div class="box">
@@ -187,7 +188,7 @@
             </div>
         </section><!-- /.content -->
     </aside><!-- /.right-side -->
-</div><!-- ./wrapper -->
+<!--/div--><!-- ./wrapper -->
 
 <!-- Model player  -->
 <div class="modal fade" id="playerModel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

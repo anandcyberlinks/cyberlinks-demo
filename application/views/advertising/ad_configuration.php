@@ -1,6 +1,6 @@
-<div class="wrapper row-offcanvas row-offcanvas-left">
+
     <!-- Right side column. Contains the navbar and content of the page -->
-    <aside class="right-side"> 
+    <aside class="content-wrapper"> 
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1><?php echo $welcome->loadPo('Ad Configuration') ?><small><?php echo $welcome->loadPo('Control panel') ?></small>
@@ -11,12 +11,12 @@
                 <li class="active"><?php echo $welcome->loadPo('Advertising') ?></li>
             </ol>
         </section>
-        <div>
+        <!--div-->
             <div id="msg_div">
                 <?php echo $this->session->flashdata('message'); ?>
             </div>	
             <?php if (isset($error) && !empty($error)) { ?><div id="msg_div"><?php echo $error; ?></div><?php } ?>
-        </div>
+        <!--/div-->
         <!-- Main content -->
         <section class="content">
             <?php $search = $this->session->userdata('search_form');
@@ -100,4 +100,3 @@
             </div>
         </section><!-- /.content -->
     </aside><!-- /.right-side -->
-</div><!-- ./wrapper -->

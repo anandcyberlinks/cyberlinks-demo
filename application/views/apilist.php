@@ -6,9 +6,9 @@
 <script type="text/javascript" src="<?php echo base_url();?>assets/js/validatejson/jsl.parser.js"></script>
 <script type="text/javascript" src="<?php echo base_url();?>assets/js/validatejson/jsl.format.js"></script>
 <script type="text/javascript" src="<?php echo base_url();?>assets/js/validatejson/jsl.interactions.js"></script>
-<div class="wrapper row-offcanvas row-offcanvas-left">
+<!--div class="wrapper row-offcanvas row-offcanvas-left"-->
 	<!-- Right side column. Contains the navbar and content of the page -->
-    <aside class="right-side">                
+    <aside class="content-wrapper">                
 	
 		<div>
 			<div id="msg_div">
@@ -113,7 +113,7 @@
                 </section><!-- /.content -->
             
 	</aside><!-- /.right-side -->
-</div><!-- ./wrapper -->
+<!--/div--><!-- ./wrapper -->
 <script type="text/javascript">
 	var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
 	document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));

@@ -1,6 +1,6 @@
-<div class="wrapper row-offcanvas row-offcanvas-left">
+<!--div class="wrapper row-offcanvas row-offcanvas-left"-->
     <!-- Right side column. Contains the navbar and content of the page -->
-    <aside class="right-side"> 
+    <aside class="content-wrapper"> 
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1><?php echo $welcome->loadPo('Device Report') ?><small><?php echo $welcome->loadPo('Control panel') ?></small></h1>
@@ -21,62 +21,63 @@
            // $search = $_GET;
             ?></pre>
             <div id="content">
-                <div class="row">
-                    <!-- left column -->
-                    <div class="col-md-12">
-                        <!-- general form elements -->
-                        <div class="box box-primary collapsed-box">
-                        <div class="box-header">
-                            <!-- tools box -->
-                            <div class="pull-right box-tools">
-                                <button class="btn btn-danger btn-sm" data-widget='collapse' data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
-                            </div><!-- /. tools -->
-                            <h3 class="box-title">Search</h3>
-                        </div>
-                            <!-- form start -->
-                            <form  method="post" action="" onsubmit="return date_check();" id="searchIndexForm" name="searchIndexForm" accept-charset="utf-8">
-                                <div style="display:none;"><input type="hidden" name="_method" value="POST"/></div>
-                                <div class="box-body" style="display:none;">
-                                    <div class="row">
-                                        <div class="form-group col-lg-4">
-                                            <div class="input text">
-                                                <label for=""><?php echo $welcome->loadPo('Operating System') ?></label>
-                                                <input type="text" name="platform" id="platform" class="form-control" value="<?php echo (isset($search['platform'])) ? $search['platform'] : ''; ?>" placeholder="<?php echo $welcome->loadPo('Operating System') ?>">
+                <!-- form start -->
+                <form  method="post" action="" onsubmit="return date_check();" id="searchIndexForm" name="searchIndexForm" accept-charset="utf-8">
+                    <div class="row">
+                        <!-- left column -->
+                        <div class="col-md-12">
+                            <!-- general form elements -->
+                            <div class="box box-primary collapsed-box">
+                            <div class="box-header">
+                                <!-- tools box -->
+                                <div class="pull-right box-tools">
+                                    <button class="btn btn-danger btn-sm" data-widget='collapse' data-toggle="tooltip" title="Collapse"><i class="fa fa-plus"></i></button>
+                                </div><!-- /. tools -->
+                                <h3 class="box-title">Search</h3>
+                            </div>
+
+                                    <div style="display:none;"><input type="hidden" name="_method" value="POST"/></div>
+                                    <div class="box-body" style="display:none;">
+                                        <div class="row">
+                                            <div class="form-group col-lg-4">
+                                                <div class="input text">
+                                                    <label for=""><?php echo $welcome->loadPo('Operating System') ?></label>
+                                                    <input type="text" name="platform" id="platform" class="form-control" value="<?php echo (isset($search['platform'])) ? $search['platform'] : ''; ?>" placeholder="<?php echo $welcome->loadPo('Operating System') ?>">
+                                                </div>
+                                            </div>
+                                             <div class="form-group col-lg-4">
+                                                <div class="input text">
+                                                    <label for=""><?php echo $welcome->loadPo('Browser') ?></label>
+                                                    <input type="text" name="browser" id="browser" class="form-control" value="<?php echo (isset($search['browser'])) ? $search['browser'] : ''; ?>" placeholder="<?php echo $welcome->loadPo('Browser') ?>">
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-lg-4">
+                                                <div class="input text">
+                                                    <label for="url"><?php echo $welcome->loadPo('Start Date') ?></label>
+                                                    <input type="text" class="form-control datepicker"  id="startdate" name="startdate" placeholder="<?php echo $welcome->loadPo('Start Date') ?>" value="<?php echo (isset($search['startdate'])) ? $search['startdate'] : ''; ?>" >											
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-lg-4">
+                                                <div class="input text">
+                                                    <label for="url"><?php echo $welcome->loadPo('End Date') ?></label>
+                                                    <input type="text" class="form-control datepicker"  id="enddate" name="enddate" placeholder="<?php echo $welcome->loadPo('End Date') ?>" value="<?php echo (isset($search['enddate'])) ? $search['enddate'] : ''; ?>">
+                                                </div>
                                             </div>
                                         </div>
-					 <div class="form-group col-lg-4">
-                                            <div class="input text">
-                                                <label for=""><?php echo $welcome->loadPo('Browser') ?></label>
-                                                <input type="text" name="browser" id="browser" class="form-control" value="<?php echo (isset($search['browser'])) ? $search['browser'] : ''; ?>" placeholder="<?php echo $welcome->loadPo('Browser') ?>">
-                                            </div>
-                                        </div>
-                                     
+                                    </div><!-- /.box-body -->
+                                    <div class="box-footer"  style="display:none;">
+                                            <!--	<input type="text" id="hddstarddt" name="hddstarddt" value="<?php echo @$_POST['hddstarddt'] ?>"> -->
+                                        <button type="submit" id="submit" name="search" value="Search"class="btn btn-primary"><?php echo $welcome->loadPo('Search') ?></button>
+                                        <button type="submit" name="reset" value="Reset"class="btn btn-primary"><?php echo $welcome->loadPo('Reset') ?></button>
+                                        <span id="error_msg" style="color:red"></span>
                                     </div>
-                                    <div class="row">
-                                        <div class="form-group col-lg-4">
-                                            <div class="input text">
-                                                <label for="url"><?php echo $welcome->loadPo('Start Date') ?></label>
-                                                <input type="text" class="form-control datepicker"  id="startdate" name="startdate" placeholder="<?php echo $welcome->loadPo('Start Date') ?>" value="<?php echo (isset($search['startdate'])) ? $search['startdate'] : ''; ?>" >											
-                                            </div>
-                                        </div>
-                                        <div class="form-group col-lg-4">
-                                            <div class="input text">
-                                                <label for="url"><?php echo $welcome->loadPo('End Date') ?></label>
-                                                <input type="text" class="form-control datepicker"  id="enddate" name="enddate" placeholder="<?php echo $welcome->loadPo('End Date') ?>" value="<?php echo (isset($search['enddate'])) ? $search['enddate'] : ''; ?>">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div><!-- /.box-body -->
-                                <div class="box-footer"  style="display:none;">
-                                        <!--	<input type="text" id="hddstarddt" name="hddstarddt" value="<?php echo @$_POST['hddstarddt'] ?>"> -->
-                                    <button type="submit" id="submit" name="search" value="Search"class="btn btn-primary"><?php echo $welcome->loadPo('Search') ?></button>
-                                    <button type="submit" name="reset" value="Reset"class="btn btn-primary"><?php echo $welcome->loadPo('Reset') ?></button>
-                                    <span id="error_msg" style="color:red"></span>
-                                </div>
-                            </form>
-                        </div><!-- /.box -->
-                    </div><!--/.col (left) -->
-                </div>
+                            </div><!-- /.box -->
+                        </div><!--/.col (left) -->
+                    </div>
+                </form>    
               <script>
                 $("#submit").click(function(data){
                     var platform = $.trim($("#platform").val());
@@ -222,7 +223,7 @@
             </div>
         </section><!-- /.content -->
     </aside><!-- /.right-side -->
-</div><!-- ./wrapper -->
+<!--/div--><!-- ./wrapper -->
 
 
  <script>

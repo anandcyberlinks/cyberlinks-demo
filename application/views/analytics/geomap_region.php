@@ -26,7 +26,7 @@
       chart.draw(data, options);
     };
     </script>
-  <aside class="right-side">
+  <aside class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1> 
@@ -43,15 +43,16 @@
 	<?php $search = $this->session->userdata('search_form');?>
     <!-- Main content -->
     <section class="content">
+     <form  method="post" action="" id="searchIndexForm" name="searchIndexForm" accept-charset="utf-8">   
      <div class="box box-primary collapsed-box">
             <div class="box-header">
                 <!-- tools box -->
                 <div class="pull-right box-tools">
-                    <button class="btn btn-danger btn-sm" data-widget='collapse' data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+                    <button class="btn btn-danger btn-sm" data-widget='collapse' data-toggle="tooltip" title="Collapse"><i class="fa fa-plus"></i></button>
                 </div><!-- /. tools -->
                 <h3 class="box-title">Search</h3>
             </div>
-     <form  method="post" action="" id="searchIndexForm" name="searchIndexForm" accept-charset="utf-8">
+     
 	    <div class="row">
                 <div class="box-body" style="display:none;">
 		<!-- form start -->                
@@ -78,8 +79,8 @@
 		    </div>
                 </div>
 	
-	</form>
-     </div> 
+     </div>
+     </form>   
        
 	<div class="row">
          <div class="col-lg-8">

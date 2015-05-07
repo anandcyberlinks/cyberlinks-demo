@@ -1,6 +1,6 @@
-<div class="wrapper row-offcanvas row-offcanvas-left">
+<!--div class="wrapper row-offcanvas row-offcanvas-left"-->
     <!-- Right side column. Contains the navbar and content of the page -->
-    <aside class="right-side"> 
+    <aside class="content-wrapper"> 
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1><?php echo $welcome->loadPo('User Content Report') ?><small><?php echo $welcome->loadPo('Control panel') ?></small></h1>
@@ -22,6 +22,8 @@
            // $search = $_GET;
             ?></pre>
             <div id="content">
+                <!-- form start -->
+                <form  method="post" action="" onsubmit="return date_check();" id="searchIndexForm" name="searchIndexForm" accept-charset="utf-8">
                 <div class="row">
                     <!-- left column -->
                     <div class="col-md-12">
@@ -30,12 +32,11 @@
                         <div class="box-header">
                             <!-- tools box -->
                             <div class="pull-right box-tools">
-                                <button class="btn btn-danger btn-sm" data-widget='collapse' data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+                                <button class="btn btn-danger btn-sm" data-widget='collapse' data-toggle="tooltip" title="Collapse"><i class="fa fa-plus"></i></button>
                             </div><!-- /. tools -->
                             <h3 class="box-title">Search</h3>
                         </div>
-                            <!-- form start -->
-                            <form  method="post" action="" onsubmit="return date_check();" id="searchIndexForm" name="searchIndexForm" accept-charset="utf-8">
+                            
                                 <div style="display:none;"><input type="hidden" name="id" value="<?php echo $userid;?>"/></div>
                                 <div class="box-body" style="display:none;">
                                     <div class="row">
@@ -103,10 +104,10 @@
                                     <button type="submit" name="search" value="Search"class="btn btn-primary"><?php echo $welcome->loadPo('Search') ?></button>
                                     <button type="submit" name="reset" value="Reset"class="btn btn-primary"><?php echo $welcome->loadPo('Reset') ?></button>
                                 </div>
-                            </form>
                         </div><!-- /.box -->
                     </div><!--/.col (left) -->
                 </div>
+                </form>
               
         <!-- Small boxes (Stat box) -->
 	
@@ -247,7 +248,7 @@
             </div>
         </section><!-- /.content -->
     </aside><!-- /.right-side -->
-</div><!-- ./wrapper -->
+<!--/div--><!-- ./wrapper -->
  <script>
 
   $(function(){
