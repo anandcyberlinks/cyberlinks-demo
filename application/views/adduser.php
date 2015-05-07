@@ -5,7 +5,7 @@
     }
 </style>
 <!-- Right side column. Contains the navbar and content of the page -->
-<aside class="right-side">
+<aside class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
@@ -96,7 +96,7 @@
                                     <select name="language" class="form-control">
                                         <option value="">-<?php echo $welcome->loadPo('Select') ?>-</option>
                                         <option value="English">English</option>
-                                        <option value="Hindi">हिन�?दी</option>
+                                        <option value="Hindi">हिन�?दी</option>
                                     </select>
                                 </div>
                                 <div class="col-xs-4">

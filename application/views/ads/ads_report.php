@@ -1,6 +1,6 @@
 <link href="<?=base_url()?>assets/css/morris/morris.css" rel="stylesheet" type="text/css" />
 <!--[if lte IE 8]> <script src="<?=base_url()?>assets/js/plugins/flot/excanvas.min.js"></script><![endif]-->
-<script src="<?=base_url()?>assets/js/jquery.js"></script>
+<!--script src="<?=base_url()?>assets/js/jquery.js"></script-->
 <script src="<?=base_url()?>assets/js/plugins/flot/jquery.flot.js"></script>
 <script src="<?=base_url()?>assets/js/plugins/flot/jquery.flot.pie.js"></script>
 <style>
@@ -16,7 +16,7 @@
 	
 </style>
     
-<aside class="right-side">
+<aside class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1> 

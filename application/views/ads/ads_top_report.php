@@ -1,5 +1,5 @@
  <link href="<?=base_url()?>assets/css/morris/morris.css" rel="stylesheet" type="text/css" />
- <aside class="right-side">
+ <aside class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1> 
@@ -19,44 +19,46 @@
 	</div>
  <?php $search = $this->session->userdata('search_form');?>
     <!-- Main content -->
-    <section class="content">		
-	<div class="box box-primary collapsed-box">
-            <div class="box-header">
-                <!-- tools box -->
-                <div class="pull-right box-tools">
-                    <button class="btn btn-danger btn-sm" data-widget='collapse' data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
-                </div><!-- /. tools -->
-                <h3 class="box-title">Search</h3>
-            </div>
-	<form  method="post" action="" id="searchIndexForm" name="searchIndexForm" accept-charset="utf-8">
-	    <div class="row">
-                <div class="box-body" style="display:none;">
-		<!-- form start -->                
-                <div class="form-group col-lg-4">
-		    <div class="input text">
-		    <label for="url"><?php echo $welcome->loadPo('Start Date') ?></label>
-		    <input type="text" class="form-control datepicker"  id="startdate" name="startdate" placeholder="<?php echo $welcome->loadPo('Start Date') ?>" value="<?php echo (isset($search['startdate'])) ? $search['startdate'] : ''; ?>" >											
-		    </div>
+    <section class="content">
+        <form  method="post" action="" id="searchIndexForm" name="searchIndexForm" accept-charset="utf-8">
+            <div class="box box-primary collapsed-box">
+                <div class="box-header">
+                    <!-- tools box -->
+                    <div class="pull-right box-tools">
+                        <button class="btn btn-danger btn-sm" data-widget='collapse' data-toggle="tooltip" title="Collapse"><i class="fa fa-plus"></i></button>
+                    </div><!-- /. tools -->
+                    <h3 class="box-title">Search</h3>
                 </div>
-                <div class="form-group col-lg-4">
-                    <div class="input text">
-                    <label for="url"><?php echo $welcome->loadPo('End Date') ?></label>
-                    <input type="text" class="form-control datepicker"  id="enddate" name="enddate" placeholder="<?php echo $welcome->loadPo('End Date') ?>" value="<?php echo (isset($search['enddate'])) ? $search['enddate'] : ''; ?>">
+
+                <div class="row">
+                    <div class="box-body" style="display:none;">
+                    <!-- form start -->                
+                    <div class="form-group col-lg-4">
+                        <div class="input text">
+                        <label for="url"><?php echo $welcome->loadPo('Start Date') ?></label>
+                        <input type="text" class="form-control datepicker"  id="startdate" name="startdate" placeholder="<?php echo $welcome->loadPo('Start Date') ?>" value="<?php echo (isset($search['startdate'])) ? $search['startdate'] : ''; ?>" >											
+                        </div>
                     </div>
+                    <div class="form-group col-lg-4">
+                        <div class="input text">
+                        <label for="url"><?php echo $welcome->loadPo('End Date') ?></label>
+                        <input type="text" class="form-control datepicker"  id="enddate" name="enddate" placeholder="<?php echo $welcome->loadPo('End Date') ?>" value="<?php echo (isset($search['enddate'])) ? $search['enddate'] : ''; ?>">
+                        </div>
+                    </div>
+
                 </div>
-		 
+             </div>
+
+                     <div class="box-footer" style="display:none;">
+                        <div class="input text">		   
+                        <button type="submit" name="search" value="Search"class="btn btn-primary"><?php echo $welcome->loadPo('Search') ?></button>
+                        <button type="submit" name="reset" value="Reset"class="btn btn-primary"><?php echo $welcome->loadPo('Reset') ?></button>
+                        </div>
+                    </div>
+
+
             </div>
-	 </div>
-	
-		 <div class="box-footer" style="display:none;">
-		    <div class="input text">		   
-		    <button type="submit" name="search" value="Search"class="btn btn-primary"><?php echo $welcome->loadPo('Search') ?></button>
-                    <button type="submit" name="reset" value="Reset"class="btn btn-primary"><?php echo $welcome->loadPo('Reset') ?></button>
-		    </div>
-                </div>
-	
-	</form>
-        </div>
+        </form>
 	
 	<div class="row">
 	    <section class="col-lg-12"> 
