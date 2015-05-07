@@ -1,5 +1,5 @@
 <link href="<?=base_url()?>assets/css/morris/morris.css" rel="stylesheet" type="text/css" />
-<aside class="right-side">
+<aside class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1> 
@@ -185,10 +185,12 @@
 		<div class="box box-danger">
 		    <div class="box-header">
 			<!-- tools box -->
-			<div class="pull-right box-tools">
+			<!--div class="pull-right box-tools"-->
+                        <div style="padding: 5px 10px 5px 5px; float: right;">
 			    <button class="btn btn-danger btn-sm" data-widget='collapse' data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
 			</div><!-- /. tools -->
-			<div class="pull-right box-tools">
+			<!--div class="pull-right box-tools"-->
+                        <div style="padding: 5px 10px 5px 5px; float: right;">
 			    <select class="form-control onchange" id="year">
 				<?php
 				    foreach($years as $key=>$val){
@@ -200,7 +202,8 @@
 				?>
 			    </select>
 			</div>
-			<div class="pull-right box-tools">
+			<!--div class="pull-right box-tools"-->
+                        <div style="padding: 5px 10px 5px 5px; float: right;">
 			    <select class="form-control onchange" id="month">
 				<?php
 				    foreach($months as $key=>$val){

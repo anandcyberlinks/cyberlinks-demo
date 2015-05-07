@@ -6,7 +6,7 @@
 </style>
 
 <!-- Right side column. Contains the navbar and content of the page -->
-<aside class="right-side">
+<aside class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>

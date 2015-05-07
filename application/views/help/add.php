@@ -10,7 +10,7 @@
  });
 </script> 
 <?php $uri = $this->uri->segment(1); ?>
-<div class="wrapper row-offcanvas row-offcanvas-left">
+<!--div class="wrapper row-offcanvas row-offcanvas-left"-->
     <!-- Right side column. Contains the navbar and content of the page -->
     <aside class="right-side">                
         <!-- Content Header (Page header) -->
@@ -88,7 +88,7 @@
             </div>
         </section><!-- /.content -->
     </aside><!-- /.right-side -->
-</div><!-- ./wrapper -->
+<!--/div--><!-- ./wrapper -->
 <script>
     function validate(){
      return true;

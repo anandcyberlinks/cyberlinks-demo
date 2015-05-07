@@ -3,9 +3,9 @@
         color: red;
     }
 </style>
-<div class="wrapper row-offcanvas row-offcanvas-left">
+<!--div class="wrapper row-offcanvas row-offcanvas-left"-->
     <!-- Right side column. Contains the navbar and content of the page -->
-    <aside class="right-side">                
+    <aside class="content-wrapper">                
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1>Live Stream<small>Control panel</small></h1>
@@ -89,4 +89,4 @@
 <?php } ?>
         </section>
     </aside><!-- /.right-side -->
-</div><!-- ./wrapper -->
+<!--/div--><!-- ./wrapper -->

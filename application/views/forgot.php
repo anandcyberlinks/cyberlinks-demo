@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="bg-black">
+<html>
     <head>
         <meta charset="UTF-8">
         <title>AdminLTE | Log in</title>
@@ -18,8 +18,8 @@
           <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
         <![endif]-->
     </head>
-    <body class="bg-black">
-        <div class="form-box" id="login-box">
+    <body class="login-page">
+        <div class="login-box" id="login-box">
             <div>
                 <?php $msg = $this->session->flashdata('msg');
                 if ($msg != '') {
@@ -27,18 +27,34 @@
                     <?php echo $msg; ?>
                 <?php } ?>
             </div>
-            <div class="header">Password Reset</div>
-            <form action="" method="post">
-                <div class="body bg-gray">
-                    <div class="form-group">
-                        <input type="email" name="email" class="form-control" placeholder="Your Email" required/>
+            <div class="login-logo">
+                <b>Multi</b>TV
+            </div><!-- /.login-logo -->
+            <div class="login-box-body">
+            <p class="login-box-msg">Password Reset</p>
+                <form action="" method="post">
+                    <div class="form-group has-feedback">
+                        <div class="form-group">
+                            <input type="email" name="email" class="form-control" placeholder="Your Email" required/>
+                            <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+                        </div>
                     </div>
-                </div>
-                <div class="footer">                                                               
-                    <button type="submit" class="btn bg-olive btn-block" name="forgot">Submit</button>  
-                    <p><a href="<?php echo base_url() ?>">Try Login</a></p>
-                </div>
-            </form>
+                    
+                    <div class="row">
+                        <div class="col-xs-8">    
+                          <div class="checkbox icheck">
+                            <label>
+                              <p><a href="<?php echo base_url() ?>">Try Login</a></p>
+                            </label>
+                          </div>                        
+                        </div><!-- /.col -->
+                        <div class="col-xs-4">
+                            <button type="submit" class="btn btn-primary btn-block btn-flat" name="forgot">Submit</button>
+                        </div><!-- /.col -->
+                    </div>
+                    
+                </form>
+            </div>
         </div>
 
 

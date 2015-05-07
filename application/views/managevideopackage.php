@@ -5,9 +5,9 @@
         overflow: scroll;
     }
 </style>
-<div class="wrapper row-offcanvas row-offcanvas-left">
+<!--div class="wrapper row-offcanvas row-offcanvas-left"-->
     <!-- Right side column. Contains the navbar and content of the page -->
-    <aside class="right-side">                
+    <aside class="content-wrapper">                
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1><?php echo $welcome->loadPo('Packages'); ?><small><?php echo $welcome->loadPo('Control panel'); ?></small> <a href="<?php echo base_url() ?>package/creatpackage" class="btn btn-success btn-sm">Add New Package</a></h1>
@@ -56,4 +56,4 @@
             </div>
         </section>
     </aside>
-</div>
+<!--/div-->

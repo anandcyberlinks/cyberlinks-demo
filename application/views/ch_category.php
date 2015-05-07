@@ -1,7 +1,7 @@
 <?php $uri = $this->uri->segment(1); ?>
-<div class="wrapper row-offcanvas row-offcanvas-left">
+<!--div class="wrapper row-offcanvas row-offcanvas-left"-->
 	<!-- Right side column. Contains the navbar and content of the page -->
-    <aside class="right-side">                
+    <aside class="content-wrapper">                
 		<!-- Content Header (Page header) -->
 		<section class="content-header">
             <h1><?php echo $welcome->loadPo('Channel Category'); ?><small><?php echo $welcome->loadPo('Control panel'); ?></small>
@@ -20,7 +20,9 @@
 		<!-- Main content -->
 		<section class="content">                
 			<div id="content">
-				<div class="row">
+                            <!-- form start -->
+                            <form action="<?php echo base_url().$uri; ?>/index" id="searchCategoryForm" method="post" accept-charset="utf-8">
+                            <div class="row">
 					<!-- left column -->
 					<div class="col-md-12">
 						<!-- general form elements -->
@@ -28,12 +30,11 @@
 					<div class="box-header">
 					<!-- tools box -->
 					<div class="pull-right box-tools">
-					    <button title="Collapse" data-toggle="tooltip" data-widget="collapse" class="btn btn-danger btn-sm"><i class="fa fa-minus"></i></button>
+					    <button title="Collapse" data-toggle="tooltip" data-widget="collapse" class="btn btn-danger btn-sm"><i class="fa fa-plus"></i></button>
 					</div><!-- /. tools -->
 					<h3 class="box-title">Search</h3>
 				    </div><!-- /.box-header -->
-							<!-- form start -->
-							<form action="<?php echo base_url().$uri; ?>/index" id="searchCategoryForm" method="post" accept-charset="utf-8">
+							
 								<div style="display:none;"><input type="hidden" name="_method" value="POST"/></div>                
 								<div class="box-body" style='display:none;'>
 									<div class="row">
@@ -60,10 +61,10 @@
 								<div class="box-footer" style='display:none;'>
 									<button type="submit" name="submit" value="Search" class="btn btn-primary"><?php echo $welcome->loadPo('Search'); ?></button>
 								</div>
-							</form>        
 						</div><!-- /.box -->
 					</div><!--/.col (left) -->
 				</div>
+                            </form>
 
 				<div class="row">
 					<div class="col-xs-12">
@@ -143,7 +144,7 @@
 			</div>
 		</section><!-- /.content -->
     </aside><!-- /.right-side -->
-</div><!-- ./wrapper -->
+<!--/div--><!-- ./wrapper -->
 
 <script type="text/javascript">
         $(function(){

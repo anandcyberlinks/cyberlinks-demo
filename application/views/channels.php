@@ -1,6 +1,6 @@
-<div class="wrapper row-offcanvas row-offcanvas-left">
+<!--div class="wrapper row-offcanvas row-offcanvas-left"-->
     <!-- Right side column. Contains the navbar and content of the page -->
-    <aside class="right-side"> 
+    <aside class="content-wrapper"> 
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1><?php echo $welcome->loadPo('Channels') ?><small><?php echo $welcome->loadPo('Control panel') ?></small>
@@ -38,7 +38,9 @@
         <section class="content">
             <?php $search = $this->session->userdata('search_form'); ?>
             <div id="content">
-
+                
+                <!-- form start -->
+                <form  method="post" action="<?php echo base_url(); ?>webtv/index" onsubmit="return date_check();" id="searchIndexForm" name="searchIndexForm" accept-charset="utf-8">
                 <div class="row">
                     <!-- left column -->
                     <div class="col-md-12">
@@ -47,12 +49,11 @@
                             <div class="box-header">
 					<!-- tools box -->
 					<div class="pull-right box-tools">
-					    <button title="Collapse" data-toggle="tooltip" data-widget="collapse" class="btn btn-danger btn-sm"><i class="fa fa-minus"></i></button>
+					    <button title="Collapse" data-toggle="tooltip" data-widget="collapse" class="btn btn-danger btn-sm"><i class="fa fa-plus"></i></button>
 					</div><!-- /. tools -->
 					<h3 class="box-title">Search</h3>
 				    </div><!-- /.box-header -->
-                            <!-- form start -->
-                            <form  method="post" action="<?php echo base_url(); ?>webtv/index" onsubmit="return date_check();" id="searchIndexForm" name="searchIndexForm" accept-charset="utf-8">
+                            
                                 <div style="display:none;"><input type="hidden" name="_method" value="POST"/></div>
                                 <div class="box-body" style='display:none;'>
                                     <div class="row">
@@ -106,10 +107,10 @@
                                     <button type="submit" name="submit" value="Search"class="btn btn-primary"><?php echo $welcome->loadPo('Search') ?></button>
                                     <button type="submit" name="reset" value="Reset"class="btn btn-primary"><?php echo $welcome->loadPo('Reset') ?></button>
                                 </div>
-                            </form>
                         </div><!-- /.box -->
                     </div><!--/.col (left) -->
                 </div> 
+                </form>    
                 <div class="row">
                     <div class="col-xs-12">
                         <div class="box">
@@ -198,7 +199,7 @@
             </div>
         </section><!-- /.content -->
     </aside><!-- /.right-side -->
-</div><!-- ./wrapper -->
+<!--/div--><!-- ./wrapper -->
 
 <!-- Model player  -->
 <div class="modal fade" id="playerModel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

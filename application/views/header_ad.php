@@ -57,6 +57,11 @@ switch ($s[0]->username){
         <link href="<?php echo base_url() ?>assets/css/ionicons.min.css" rel="stylesheet" type="text/css" />
         <!-- Morris chart -->
         <link href="<?php echo base_url() ?>assets/css/AdminLTE.css" rel="stylesheet" type="text/css" />
+        
+        <!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+        <link href="<?php echo base_url() ?>assets/css/skins/_all-skins.min.css" rel="stylesheet" type="text/css" />
+        
         <!-- fullCalendar -->
         <link href="<?php echo base_url() ?>assets/css/fullcalendar/fullcalendar.css" rel="stylesheet" type="text/css" />
         <!-- bootstrap3-wysihtml5.min  -->
@@ -79,87 +84,97 @@ switch ($s[0]->username){
         var loader = '<img class="loading" src="'+ baseurl +'assets/img/spinner.gif" />';
         var loaderCenter = '<div align="center"><img class="loading" src="'+ baseurl +'assets/img/spinner.gif" /></div>';
         </script>
-        <script src="<?php echo base_url() ?>assets/js/jquery-1.10.2.js"></script>
+        <!--script src="<?php echo base_url() ?>assets/js/jquery-1.10.2.js"></script-->
+        <script src="<?php echo base_url() ?>assets/js/jQuery-2.1.3.min.js"></script>
         <script src="<?php echo base_url() ?>assets/js/jquery.uploadfile.min.js"></script>
         <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jwplayer.js" ></script>
         <script type="text/javascript">jwplayer.key = "BC9ahgShNRQbE4HRU9gujKmpZItJYh5j/+ltVg==";</script>
     </head>
-    <body class="skin-blue">
+    <body class="skin-blue layout-top-nav">
+        <div class="wrapper row-offcanvas row-offcanvas-left">
         <!-- header logo: style can be found in header.less -->
-        <header class="header">
-            <a href="<?php echo base_url(); ?>" class="logo">
-                <!-- Add the class icon to your logo image or logo icon to add the margining -->
-                <img alt="User Pic" src="<?php echo $welcome->getimage() ?>" width="<?php echo $width ?>" height="<?php echo $height ?>">
-            </a>
-            <!-- Header Navbar: style can be found in header.less -->
-            <nav class="navbar navbar-static-top" role="navigation">
-                <!-- Sidebar toggle button-->
-                <div style="float:left;"><section class="sidebar">
-                    <ul class="sidebar-menu">
-            <?php foreach ($menu as $val){?>
-            <li class="<?= $val['li-class']; ?>">
-                <a href="<?=$val['url']?>">
-                    <i class="fa <?=$val['class']?>"></i>
-                    <span><?php echo $welcome->loadPo($val['name']); ?></span>
-                    <?php if(isset($val['childs'])){ ?><i class="fa fa-angle-left pull-right"></i> <?php } ?>
+        <header class="main-header">               
+        <nav class="navbar navbar-static-top">
+          <div class="container">
+            <div class="navbar-header">
+                <a class="logo" href="<?php echo base_url(); ?>">
+                    <!-- Add the class icon to your logo image or logo icon to add the margining -->
+                    <img alt="User Pic" src="<?php echo $welcome->getimage() ?>" width="<?php echo $width ?>" height="<?php echo $height ?>">
                 </a>
-                <?php if(isset($val['childs'])){ ?>
-                <ul class="treeview-menu">
-                   <?php foreach ($val['childs'] as $child){ ?>
-                       <li class="<?=$child['li-class']?>">
+              <button data-target="#navbar-collapse" data-toggle="collapse" class="navbar-toggle collapsed" type="button">
+                <i class="fa fa-bars"></i>
+              </button>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div id="navbar-collapse" class="collapse navbar-collapse pull-left">
+              <ul class="nav navbar-nav">
+                  <?php foreach ($menu as $val){  ?>
+                <?php if(!isset($val['childs'])){ ?>
+                <li class="<?= $val['li-class']; ?>">
+                    <a href="<?=$val['url']?>">
+<!--                        <span class="sr-only">(current)</span>-->
+                        <i class="fa <?=$val['class']?>"></i>
+                        <span><?php echo $welcome->loadPo($val['name']); ?></span>
+                    </a>
+                </li>
+                <?php }else { ?>
+                
+                <li class="dropdown">
+                  <a data-toggle="dropdown" class="dropdown-toggle" href="javascript:void(0)">
+                      <i class="fa <?=$val['class']?>"></i>
+                      <span><?php echo $welcome->loadPo($val['name']); ?></span> <span class="caret"></span>
+                  </a>
+                  <ul role="menu" class="dropdown-menu">
+                      <?php foreach ($val['childs'] as $child){ ?>
+                        <li class="<?=$child['li-class']?>">
                            <a href="<?=$child['url']?>">
                                <i class="fa fa-angle-double-right"></i>
-                                   <?php echo $welcome->loadPo($child['name']) ?></a>
+                                   <?php echo $welcome->loadPo($child['name']) ?>
+                           </a>
                        </li>
-                    
-                    <?php } ?> 
-                        </ul>
-                        <?php } ?>
-            </li> <?php } ?>
-        </ul>
-        </section></div>
-                <div class="navbar-right">
-                
-                    <ul class="nav navbar-nav">
-                        <!-- Messages: style can be found in dropdown.less-->
-                        <?php
+                      <?php } ?>
+                  </ul>
+                  
+                </li>
+                  <?php } }?>
+              </ul>
+            </div><!-- /.navbar-collapse -->
+            
+            <!-- Navbar Right Menu -->
+              <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <?php
                         $sess = $this->session->all_userdata();
                         if (isset($sess['lan'])) {
                             $lang = $sess['lan'];
                         } else {
                             $lang = 'eng';
                         }
-                        ?>
-                        <!-- User Account: style can be found in dropdown.less -->
-                        <li class="dropdown user user-menu">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <i class="glyphicon glyphicon-user"></i>
-                                <span><?php echo $s[0]->first_name; ?><i class="caret"></i></span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <!-- User image -->
-                  <?php /*  <li class="user-header bg-light-blue">
-                                    <div><img alt="User Pic" src="<?php echo $welcome->getimage() ?>" width="<?php echo $width ?>" height="<?php echo $height ?>"></div>
-                                    <p>
-                                        <?php echo $s[0]->email; ?>
-                                        <small>Member since.  <?php echo $s[0]->created; ?></small>
-                                        <small>Role.  <?php echo $s[0]->role; ?></small>
-                                    </p>
-                                </li> 
-                   */ ?>
-                                <!-- Menu Footer-->
-                                <li class="user-footer">
-                                    <div class="pull-left">
-                                        <a href="<?php echo base_url() ?>layout/profile" class="btn btn-default btn-flat">Profile</a>
-                                    </div>
-                                    <div class="pull-right">
-                                        <a href="<?php echo base_url() ?>layout/logout" class="btn btn-default btn-flat">Sign out</a>
-                                    </div>
-                                </li>
-                            </ul>
-                        </li>
+                    ?>
+                  
+                  <!-- User Account Menu -->
+                  <li class="dropdown user user-menu">
+                    <!-- Menu Toggle Button -->
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#" aria-expanded="false">
+                      <!-- hidden-xs hides the username on small devices so only the image appears. -->
+                      <i class="glyphicon glyphicon-user"></i>
+                      <span class="hidden-xs"><?php echo $s[0]->first_name; ?><i class="caret"></i></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                      <!-- Menu Footer-->
+                      <li class="user-footer">
+                        <div class="pull-left">
+                          <a href="<?php echo base_url() ?>layout/profile" class="btn btn-default btn-flat">Profile</a>
+                        </div>
+                        <div class="pull-right">
+                          <a href="<?php echo base_url() ?>layout/logout" class="btn btn-default btn-flat">Sign out</a>
+                        </div>
+                      </li>
                     </ul>
-                     
-                </div>
-            </nav>
-        </header>
+                  </li>
+                </ul>
+              </div><!-- /.navbar-custom-menu -->
+          </div><!-- /.container-fluid -->
+        </nav>
+      </header>
