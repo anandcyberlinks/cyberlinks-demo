@@ -135,25 +135,26 @@
             var filename = $("#csv_epg").val();
             var valid_extensions = /(\.csv)$/i;
             if (valid_extensions.test(filename))
-            {
+            {				
+				
                 $("#csv_file").html(filename+"<img src='<?=base_url()?>/assets/img/spinner.gif'>");
                 $("#csv_epg").addClass('disabled');
                 var formData = new FormData($("#frmstream")[0]);
-               $("#save").addClass('disabled');
-               $("#save").html("<img src='<?=base_url()?>/assets/img/spinner.gif'>");
+               
                 $.ajax({
                     url: '<?=  base_url().'webtv/Epg/'.$this->uri->segment(3)?>',
                     type: 'POST',
                     data: formData,
                     async: false,
                     success: function (data) {
+						 $("#save").removeClass('disabled');
                         bootbox.alert(data);
                     },
                     cache: false,
                     contentType: false,
                     processData: false
                 });
-                $("#save").removeClass('disabled');
+               
                 $("#save").html('Save');
                 $("#csv_file").html(filename);
             }
@@ -166,5 +167,10 @@
             }
             return false;
         });
+		
+		$("#csv_epg").click(function () {
+			$("#save").addClass('disabled');
+               $("#save").html("<img src='<?=base_url()?>/assets/img/spinner.gif'>");
+		});
     });
 </script>
