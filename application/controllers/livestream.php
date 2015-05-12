@@ -104,10 +104,11 @@ class Livestream extends MY_Controller {
                         'show_language' => "",
                         'show_description' => "",
                         'show_type' => $csv_line[3],
-			'media_type' => $csv_line[5]
+			'media_type' => $csv_line[5],
+                        'valid' => ($csv_line[1] == '' || $csv_line[4] == '') ? 'invalid' : 'valid'
                     );
                     $array[] = $temp;
-                    $this->db->insert('livechannel_epg', $temp);
+                    //$this->db->insert('livechannel_epg', $temp);
                     //echo $this->db->last_query();
                 }
                 $num++;
