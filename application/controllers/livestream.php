@@ -70,6 +70,7 @@ class Livestream extends MY_Controller {
         $data['result'] = $result = $this->Livestream_model->getStream($cid);
         //print_r($result);die;
         if (isset($_POST['save'])) {
+            print_r($_FILES); die;
             if (isset($_FILES['csv']['tmp_name']) && $_FILES['csv']['tmp_name'] != "") {
                 if ($_FILES['csv']['type'] == 'text/csv' || $_FILES['csv']['type'] == 'application/csv') {
                     $chanel_id = $this->uri->segment(3);
