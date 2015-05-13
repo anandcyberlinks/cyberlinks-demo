@@ -58,6 +58,7 @@ class Push_notification extends My_Controller{
 					$this->session->set_flashdata('message', $this->_errormsg('Error scheduling notification'));
 				}
 			}
+			print_r($result);
 		//--------------------------//		
 		foreach($result as $key=>$value)
 		{
