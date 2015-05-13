@@ -7,7 +7,7 @@ class Push_notification extends My_Controller{
         $this->load->config('messages');
         //$this->load->model('help_model');
          $this->load->model('push_notification/Push_notification_model');
-         $this->load->helper('common');
+         $this->load->helper('push');
         $this->load->library('session');
       //  $this->load->library('form_validation');
         $data['welcome'] = $this;
@@ -32,8 +32,8 @@ class Push_notification extends My_Controller{
 		//$gcmRegID  = file_get_contents("GCMRegId.txt");
        // $gcmRegID = $_POST["regId"];
 	   $timestamp = strtotime("now");
-	   $uniquid = uniqid($timestamp);
-		
+	   $uniquid = uniqid($timestamp);			
+		$_POST['keywords'] = explode(',', $_POST['keywords']);
 		$pushMessage = $_POST["message"];		
 		$result = $this->Push_notification_model->push_notification_data($_POST);		
 		//-- schedule notification ---//
@@ -72,7 +72,25 @@ class Push_notification extends My_Controller{
 				$gcmRegIds = $value;
 				//  print_r($gcmRegIds);die;
 				$message = array("m" => $pushMessage);	
-				$pushStatus = $this->sendMessageThroughGCM($gcmRegIds, $message,$uniquid);
+				$pushStatus = sendMessageThroughGCM($gcmRegIds, $message,$uniquid);				
+				if($pushStatus->success)
+				{
+					//--- insert in history databse ---//
+					$data_history['push_id'] = $uniquid;
+					$data_history['type'] = 'Push';
+					$data_history['message'] = $_POST["message"];
+					$data_history['platform'] = 'android';
+					$data_history['audience'] = $_POST['notification_type'];
+					$data_history['sent_count'] = count($gcmRegIds);	
+					//------------------------//
+					//print_r($data_history);die;
+					//-- insert data --//
+					$this->Push_notification_model->save($data_history);
+					//----------------//
+				   // echo "Notification send successfully";
+				}else{
+					//echo "Error send notification";
+				}		
 			}
 		}
 			$this->session->set_flashdata('message', $this->_successmsg('Notification send successfully.'));
@@ -93,18 +111,8 @@ class Push_notification extends My_Controller{
     }
     
 	function apns($deviceToken,$message,$uniquid)
-	{
-		// Put your device token here (without spaces):
-		//$deviceToken = '0f744707bebcf74f9b7c25d48e3358945f6aa01da5ddb387462c7eaf61bbad78';
-		//$deviceToken = $_POST["regId"];
-		// Put your private key's passphrase here:
-		//$passphrase = APNS_PASSPHRASE;		
-		// Put your alert message here:
-		//$message = $_POST["message"];
-		// Put your device token here (without spaces):
-		
+	{		
 		////////////////////////////////////////////////////////////////////////////////		
-		
 		$ctx = stream_context_create();
 		stream_context_set_option($ctx, 'ssl', 'local_cert', APNS_CERT);
 		stream_context_set_option($ctx, 'ssl', 'passphrase', APNS_PASSPHRASE);
@@ -173,7 +181,7 @@ print_r($error_response);
 	}
 	
     //Generic php function to send GCM push notification
-   function sendMessageThroughGCM($deviceToken, $message,$uniquid) {
+   function sendMessageThroughGCM1($deviceToken, $message,$uniquid) {
 		//Google cloud messaging GCM-API url
 		//--- insert in history databse ---//
 		$data['push_id'] = $uniquid;

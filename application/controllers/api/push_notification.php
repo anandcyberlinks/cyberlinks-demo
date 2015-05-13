@@ -41,6 +41,5 @@ class Push_notification extends REST_Controller
         }else{
             $this->response('No record found', 404);
         }
-    }
-    
+    }    
 }
