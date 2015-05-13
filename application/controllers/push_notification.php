@@ -147,7 +147,7 @@ class Push_notification extends My_Controller{
 		$data['platform'] = 'ios';
 		$data['audience'] = $_POST['notification_type'];
 		$data['sent_count'] = count($deviceToken);		
-		$this->Push_notification_model->save($data);die;	
+		$this->Push_notification_model->save($data);	
 		//------------------------//
 	
 	
