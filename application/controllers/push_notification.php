@@ -28,8 +28,7 @@ class Push_notification extends My_Controller{
 	$pushStatus = "GCM Status Message will appear here";
 	//$regId = array('apns'=>'1461aa5ee0613a47a748deb1051c6b2d30378b634418ecf7729ac19f7d95d85e','gcm'=>'APA91bEfsmtpPO6VJBN5gxTxXJvKiUlnEtJG0H56RHf_JpUE63t-YZ2VX1PiJIuFrJBYCDtP_5GwSoBRzUfc0UbWaUR9M04kORnOtqR-r_3hubylp0MqZNhSy03h2lPnUUJCxU7z97_7Wct-168uzwCRv7CAJO5t9Q');
 	  
-	if($_POST) {
-		echo 'fdsfds';
+	if($_POST) {		
 		//$gcmRegID  = file_get_contents("GCMRegId.txt");
        // $gcmRegID = $_POST["regId"];
 	   $timestamp = strtotime("now");
@@ -58,8 +57,9 @@ class Push_notification extends My_Controller{
 					$this->session->set_flashdata('message', $this->_errormsg('Error scheduling notification'));
 				}
 			}
-			print_r($result);
-		//--------------------------//		
+			//print_r($result);
+		//--------------------------//
+		if($result){
 		foreach($result as $key=>$value)
 		{
 			if($key=='ios'){
@@ -74,9 +74,12 @@ class Push_notification extends My_Controller{
 				$message = array("m" => $pushMessage);	
 				$pushStatus = $this->sendMessageThroughGCM($gcmRegIds, $message,$uniquid);
 			}
+		}
+			$this->session->set_flashdata('message', $this->_successmsg('Notification send successfully.'));
+		}else{
+			$this->session->set_flashdata('message', $this->_errormsg('No record found.'));
 		}		
-		$this->session->set_flashdata('message', $this->_successmsg('Notification send successfully.'));
-		//redirect('push_notification');
+		redirect('push_notification');
 	}	
 	
 	//Get Reg ID sent from Android App and store it in text file
@@ -111,10 +114,12 @@ class Push_notification extends My_Controller{
 			'ssl://gateway.sandbox.push.apple.com:2195', $err,
 			$errstr, 60, STREAM_CLIENT_CONNECT|STREAM_CLIENT_PERSISTENT, $ctx);
 		
-		if (!$fp)
-			exit("Failed to connect: $err $errstr" . PHP_EOL);
-		
-		echo 'Connected to APNS' . PHP_EOL;
+		if (!$fp){
+			$this->session->set_flashdata('message', $this->_errormsg("Failed to connect APNS"));
+			//exit("Failed to connect: $err $errstr" . PHP_EOL);
+			redirect('push_notification');
+		}
+		//echo 'Connected to APNS' . PHP_EOL;
 		//print_r($deviceToken);die;
 		//- for loop to send multiple device --//
 		for($i=0;$i<count($deviceToken);$i++){
@@ -141,8 +146,7 @@ class Push_notification extends My_Controller{
 		$data['message'] = $_POST["message"];
 		$data['platform'] = 'ios';
 		$data['audience'] = $_POST['notification_type'];
-		$data['sent_count'] = count($deviceToken);
-		print_r($data);
+		$data['sent_count'] = count($deviceToken);		
 		$this->Push_notification_model->save($data);die;	
 		//------------------------//
 	
@@ -202,7 +206,10 @@ print_r($error_response);
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
         $result = curl_exec($ch);				
         if ($result === FALSE) {
-            die('Curl failed: ' . curl_error($ch));
+           // die('Curl failed: ' . curl_error($ch));
+		   $this->session->set_flashdata('message', $this->_errormsg("Failed to connect GCM"));
+			//exit("Failed to connect: $err $errstr" . PHP_EOL);
+			redirect('push_notification');
         }
         curl_close($ch);
         $result = json_decode($result);
