@@ -33,7 +33,7 @@ class Push_notification extends REST_Controller
         $this->db->set('push_id',$_GET['push_id']);
         $this->db->set('platform',$_GET['platform']);
         $this->db->set('open_datetime','NOW()',FALSE);
-        $this->db->insert('open_push_notification',$data);
+        $this->db->insert('push_notification_open',$data);
         $result = $this->db->insert_id();
         if(isset($result))
         {
