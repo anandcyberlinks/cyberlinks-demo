@@ -29,7 +29,7 @@ class Push_notification extends My_Controller{
 	//$regId = array('apns'=>'1461aa5ee0613a47a748deb1051c6b2d30378b634418ecf7729ac19f7d95d85e','gcm'=>'APA91bEfsmtpPO6VJBN5gxTxXJvKiUlnEtJG0H56RHf_JpUE63t-YZ2VX1PiJIuFrJBYCDtP_5GwSoBRzUfc0UbWaUR9M04kORnOtqR-r_3hubylp0MqZNhSy03h2lPnUUJCxU7z97_7Wct-168uzwCRv7CAJO5t9Q');
 	  
 	if($_POST) {
-		
+		echo 'fdsfds';
 		//$gcmRegID  = file_get_contents("GCMRegId.txt");
        // $gcmRegID = $_POST["regId"];
 	   $timestamp = strtotime("now");
