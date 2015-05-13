@@ -93,7 +93,8 @@ class Push_notification_model extends CI_Model {
                 break;
             default:
                 echo "Your favorite color is neither red, blue, or green!";
-        }        
+        }
+		echo $sql;
     }
 	
 	function schedule_notification($data)
@@ -109,6 +110,7 @@ class Push_notification_model extends CI_Model {
 	  $this->db->set($data);
 	  $this->db->set('date_sent', 'NOW()',false);
 	  $this->db->insert('pushnotification_history');
+	 // echo $this->db->last_query();
 	  return $this->db->insert_id();
 	}
 }
