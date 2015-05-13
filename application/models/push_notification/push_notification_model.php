@@ -25,7 +25,7 @@ class Push_notification_model extends CI_Model {
                     $sql = "SELECT b.device_unique_id,b.device_type FROM `customers` a JOIN `customer_device` b on a.id = b.user_id"
                             . " WHERE b.device_type ='".$post_data['device_type'][0]."' ";
                 }
-				
+				echo $sql;
                 $query = $this->db->query($sql);
                 foreach($query->result() as $key => $val){
                     if($val->device_type=='ios'){
@@ -94,7 +94,7 @@ class Push_notification_model extends CI_Model {
             default:
                 echo "Your favorite color is neither red, blue, or green!";
         }
-		echo $sql;
+		
     }
 	
 	function schedule_notification($data)
