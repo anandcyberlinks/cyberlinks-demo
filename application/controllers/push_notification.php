@@ -75,7 +75,7 @@ class Push_notification extends My_Controller{
 			}
 		}		
 		$this->session->set_flashdata('message', $this->_successmsg('Notification send successfully.'));
-		redirect('push_notification');
+		//redirect('push_notification');
 	}	
 	
 	//Get Reg ID sent from Android App and store it in text file
@@ -140,8 +140,9 @@ class Push_notification extends My_Controller{
 		$data['message'] = $_POST["message"];
 		$data['platform'] = 'ios';
 		$data['audience'] = $_POST['notification_type'];
-		$data['sent_count'] = count($deviceToken);		
-		$this->Push_notification_model->save($data);		
+		$data['sent_count'] = count($deviceToken);
+		print_r($data);
+		$this->Push_notification_model->save($data);die;	
 		//------------------------//
 	
 	
