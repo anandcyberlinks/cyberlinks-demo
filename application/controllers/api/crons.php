@@ -294,5 +294,17 @@ class Crons extends REST_Controller {
         rename("assets/upload/SUN.xml", "assets/upload/SUN_used.xml");
         exit;
     }
-
+    
+    function pushnotification_get()
+    {
+        $this->db->select('*');
+        $this->db->from('pushnotification_scheduler');
+        $this->db->where('schedule_time <=', 'NOW()',false);
+        $this->db->where('status','pending');
+        $query = $this->db->get();
+        echo $this->db->last_query();
+        $result = $query->result();
+      echo '<pre>';  print_r($result);die;
+        //SELECT * FROM `pushnotification_scheduler` WHERE `schedule_time` < NOW() and `status` = 'pending'
+    }
 }
