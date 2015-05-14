@@ -44,10 +44,11 @@ class Push_notification extends My_Controller{
 				$user_timezone = $_POST['timezone'];
 				$scheduleDate = $date.' '.$time;
 				//-- convert user time into server time ---//
-				$servertime = $this->convert_to_server_date($scheduleDate,'Y-m-d H:i:s',$user_timezone);
+				$servertime = convert_to_server_date($scheduleDate,'Y-m-d H:i:s',$user_timezone);
 				$schedule_data['device_ids'] = serialize($result);
 				$schedule_data['message'] = $pushMessage;
-				$schedule_data['schedule_time'] = $servertime;				
+				$schedule_data['schedule_time'] = $servertime;
+				$schedule_data['notification_type'] = $_POST['notification_type'];
 				$schedule_data['status'] = 'pending';				
 				$id = $this->Push_notification_model->schedule_notification($schedule_data);
 				if($id){
@@ -56,6 +57,7 @@ class Push_notification extends My_Controller{
 				}else{
 					$this->session->set_flashdata('message', $this->_errormsg('Error scheduling notification'));
 				}
+				redirect('push_notification');
 			}
 			//print_r($result);
 		//--------------------------//
@@ -65,7 +67,23 @@ class Push_notification extends My_Controller{
 			if($key=='ios'){
 				//for($i=0;$i<count($value);$i++){		
 					$deviceToken = $value;
-					$this->apns($deviceToken,$pushMessage,$uniquid);
+					
+					$result = apns($deviceToken,$pushMessage,$uniquid); //-- helper function --//
+					if (!$result)
+					{
+						$this->session->set_flashdata('message', $this->_errormsg("Failed to connect APNS"));			
+						redirect('push_notification');
+					}else{
+						//--- insert in history databse ---//
+						$data_history['push_id'] = $uniquid;
+						$data_history['type'] = 'Push';
+						$data_history['message'] = $_POST["message"];
+						$data_history['platform'] = 'ios';
+						$data_history['audience'] = $_POST['notification_type'];
+						$data_history['sent_count'] = count($deviceToken);		
+						$this->Push_notification_model->save($data_history);	
+						//------------------------//
+					}
 				//}
 			}
 			if($key=='android'){
@@ -73,8 +91,11 @@ class Push_notification extends My_Controller{
 				//  print_r($gcmRegIds);die;
 				$message = array("m" => $pushMessage);	
 				$pushStatus = sendMessageThroughGCM($gcmRegIds, $message,$uniquid);				
-				if($pushStatus->success)
+				if(!$pushStatus)
 				{
+					$this->session->set_flashdata('message', $this->_errormsg("Failed to connect GCM"));					
+					redirect('push_notification');									   
+				}else{
 					//--- insert in history databse ---//
 					$data_history['push_id'] = $uniquid;
 					$data_history['type'] = 'Push';
@@ -86,10 +107,6 @@ class Push_notification extends My_Controller{
 					//print_r($data_history);die;
 					//-- insert data --//
 					$this->Push_notification_model->save($data_history);
-					//----------------//
-				   // echo "Notification send successfully";
-				}else{
-					//echo "Error send notification";
 				}		
 			}
 		}
@@ -110,7 +127,7 @@ class Push_notification extends My_Controller{
 	$this->show_view('pushnotification/send',$data);
     }
     
-	function apns($deviceToken,$message,$uniquid)
+	/*function apns1($deviceToken,$message,$uniquid)
 	{		
 		////////////////////////////////////////////////////////////////////////////////		
 		$ctx = stream_context_create();
@@ -158,16 +175,6 @@ class Push_notification extends My_Controller{
 		$this->Push_notification_model->save($data);	
 		//------------------------//
 	
-	
-		/*$apple_error_response = fread($fp, 6); //byte1=always 8, byte2=StatusCode, bytes3,4,5,6=identifier(rowID). Should return nothing if OK.
-        //NOTE: Make sure you set stream_set_blocking($fp, 0) or else fread will pause your script and wait forever when there is no response to be sent.
-
-        if ($apple_error_response) {
-
-            $error_response = unpack('Ccommand/Cstatus_code/Nidentifier', $apple_error_response); //unpack the error response (first byte 'command" should always be 8)
-print_r($error_response);
-		}*/
-			
 		//print_r($result);die;
 		//if (!$result)
 		//	echo 'Message not delivered' . PHP_EOL;
@@ -178,10 +185,10 @@ print_r($error_response);
 		fclose($fp);
 		
 		//$this->load->view('apns');
-	}
+	}*/
 	
     //Generic php function to send GCM push notification
-   function sendMessageThroughGCM1($deviceToken, $message,$uniquid) {
+ /*  function sendMessageThroughGCM1($deviceToken, $message,$uniquid) {
 		//Google cloud messaging GCM-API url
 		//--- insert in history databse ---//
 		$data['push_id'] = $uniquid;
@@ -231,8 +238,8 @@ print_r($error_response);
             //echo "Error send notification";
         }
    }
-   
-   function convert_to_server_date($date, $format = 'Y-m-d H:i:s', $userTimeZone = SERVER_TIME_ZONE, $serverTimeZone = SERVER_TIME_ZONE)
+   */
+  /* function convert_to_server_date($date, $format = 'Y-m-d H:i:s', $userTimeZone = SERVER_TIME_ZONE, $serverTimeZone = SERVER_TIME_ZONE)
 	{		
 		try {
 			$dateTime = new DateTime ($date, new DateTimeZone($userTimeZone));
@@ -241,7 +248,7 @@ print_r($error_response);
 		} catch (Exception $e) {
 			return '';
 		}
-	}
+	}*/
         
         function push_analytics(){
 

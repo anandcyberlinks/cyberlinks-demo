@@ -297,14 +297,106 @@ class Crons extends REST_Controller {
     
     function pushnotification_get()
     {
+        $this->load->helper('push');
+        $timestamp = strtotime("now");
+	    $uniquid = uniqid($timestamp);
+       
         $this->db->select('*');
         $this->db->from('pushnotification_scheduler');
         $this->db->where('schedule_time <=', 'NOW()',false);
         $this->db->where('status','pending');
         $query = $this->db->get();
-        echo $this->db->last_query();
+       // echo $this->db->last_query();die;
         $result = $query->result();
-      echo '<pre>';  print_r($result);die;
+        foreach($result as $row){
+            $device_ids = unserialize($row->device_ids);
+            $message = $row->message;
+            $notification_type = $row->notification_type;
+            $id= $row->id;
+            
+            foreach($device_ids as $key=>$value)
+            {
+                if($key=='ios'){
+                    //for($i=0;$i<count($value);$i++){		
+                    $deviceToken = $value;
+                    $result = apns($deviceToken,$message,$uniquid);  //-- helper function
+                        
+                    if(!$result)
+					{
+						 $this->response('Failed to connet GCM', 404);
+					}else{
+						//--- insert in history databse ---//
+						$data_history['push_id'] = $uniquid;
+						$data_history['type'] = 'Push';
+						$data_history['message'] = $message;
+						$data_history['platform'] = 'ios';
+						$data_history['audience'] = $notification_type;
+						$data_history['sent_count'] = count($deviceToken);									
+						//------------------------//
+                         //-- insert data --//
+                        $this->save($data_history);
+                      $new_id = $this->db->insert_id();
+                      // $this->response("Message sent successfully", 200);                       
+                        //----------------//
+					}
+                    //}
+                }
+                if($key=='android'){
+                    $gcmRegIds = $value;
+                    //  print_r($gcmRegIds);die;
+                    $message = array("m" => $pushMessage);	
+                    $pushStatus = sendMessageThroughGCM($gcmRegIds, $message,$uniquid);	//-- helper function --//			
+                   if(!$pushStatus)
+                    {
+                        $this->response('Failed to connet GCM', 404);
+                    }else
+                    {
+                        //--- insert in history databse ---//
+                        $data_history['push_id'] = $uniquid;
+                        $data_history['type'] = 'Push';
+                        $data_history['message'] = $message;
+                        $data_history['platform'] = 'android';
+                        $data_history['audience'] = $notification_type;
+                        $data_history['sent_count'] = count($gcmRegIds);	
+                        //------------------------//
+                        //print_r($data_history);die;
+                        $this->save($data_history);
+                        $new_id = $this->db->insert_id();                                    
+                        //----------------//
+                       // echo "Notification send successfully";
+                    }	
+                }
+            }            
+            //-- update status --//
+            echo $new_id;
+            if($new_id){
+                $data['status'] ='completed';                      
+                $this->update($data,$id);
+                $this->response("Message sent successfully", 200); 
+            }
+            //-------------------//
+      
+      //echo '<pre>';  print_r($result);die;
         //SELECT * FROM `pushnotification_scheduler` WHERE `schedule_time` < NOW() and `status` = 'pending'
     }
+}
+
+    function save($data_history)
+    {
+        //-- insert data --//
+        $this->db->set($data_history);
+        $this->db->set('date_sent', 'NOW()',false);
+        $this->db->insert('pushnotification_history');        
+    }
+    
+    function update($data,$id)
+    {
+        //-- update status --//
+        $this->db->set($data);
+        $this->db->where('id',$id);
+        $this->db->update('pushnotification_scheduler');
+        echo $this->db->last_query();
+        //------------------//
+    }
+
 }
