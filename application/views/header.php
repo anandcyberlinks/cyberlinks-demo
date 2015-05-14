@@ -130,7 +130,7 @@ switch ($s[0]->username) {
             //array('name' => 'Publishing', 'url' => base_url() . 'publishing', 'class' => 'fa-users', 'li-class' => ($this->uri->segment(1) == 'publishing') ? 'active' : ''),
             array('name' => 'Customers', 'url' => base_url() . 'user/customers', 'class' => 'fa-users', 'li-class' => ($this->uri->segment(2) == 'customers') ? 'active' : ''),
             array('name' => 'Help', 'url' => base_url() . 'helplist', 'class' => 'fa-dashboard', 'li-class' => ($this->uri->segment(1) == 'help') ? 'active' : ''),
-            array('name' => 'Push notification', 'url' => base_url() . 'push_notification', 'class' => 'fa-dashboard', 'li-class' => ($this->uri->segment(1) == 'push_notification') ? 'active' : ''),
+            array('name' => 'Notification', 'url' => base_url() . 'push_notification', 'class' => 'fa-dashboard', 'li-class' => ($this->uri->segment(1) == 'push_notification') ? 'active' : ''),
             );
         
         break;
