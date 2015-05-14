@@ -269,8 +269,6 @@
       
       function Pushvalidate()
       {
-         var a = encodeURI($('.textareaCustom').val()).split(/%..|./).length - 1;
-         alert(a);
         var popUpStatus = true;
         var textareaCustom = $(".textareaCustom").val();
         $(".bysegment-error,.androidId-error,.devByTag-error,.iosId-error,.platform-error,.platformMethod-error,.textarea-error,.timepicker-error,.datepicker-error,.timepicker-error").addClass("hiddenClass");       
