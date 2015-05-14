@@ -242,4 +242,59 @@ print_r($error_response);
 			return '';
 		}
 	}
+        
+        function push_analytics(){
+
+            if(isset($_POST['searchby'])){
+                $record_time = $_POST['searchby'];
+            }else{
+                $record_time = 'today';
+            }
+            
+            $specific_date = '';
+            if(isset($_POST['datepickerstart']))
+            {
+                if($_POST['datepickerstart']=="")
+                {
+                    $specific_date =  date('Y-m-d'); 
+                }else{
+                    $str = $_POST['datepickerstart'];
+                    $date = DateTime::createFromFormat('d/m/Y', $str);
+                    $specific_date =  $date->format('Y-m-d'); 
+                }
+            }
+            
+            $data['welcome'] = $this;
+            $data['total_sent_notification'] = $this->Push_notification_model->get_total_push_notifications($record_time,$specific_date);
+            $data['total_open_notification'] = $this->Push_notification_model->get_direct_open_notifications($record_time,$specific_date);
+            $x = (($data['total_open_notification']/$data['total_sent_notification'])*100);
+            $data['direct_open_rate'] =  number_format($x, 2, '.', TRUE);
+            $data['open_over_time'] =  $this->Push_notification_model->total_open_over_time($record_time,$specific_date);
+            
+            $hourly_open_over_time = array();
+            foreach($data['open_over_time'] as $key => $val){
+                $hourly_open_over_time[$val->open_time] = $val->total_push_open;
+            }
+            for($i=0;$i<24;$i++){
+                $os = array(0,1,2,3,4,5,6,7,8,9);
+                if (in_array($i, $os)) {
+                    $i = '0'.$i;
+                }
+                if(!isset($hourly_open_over_time[$i])){
+                    $hourly_open_over_time[$i] = 0;
+                }
+            }
+            ksort($hourly_open_over_time);
+            $data['hourly_open_over_time'] = $hourly_open_over_time;
+            
+            if($record_time=='today'){
+                $data['date'] = date('Y-m-d');
+            }else if($record_time=='date'){
+                $data['date'] = $specific_date;
+            }else{
+                $data['date'] = 'all_dates';
+            }
+            //echo '<pre>'; print_r($data); exit;
+            $this->show_view('pushnotification/analytics',$data);		
+        }
 }

@@ -142,4 +142,52 @@ class Push_notification_model extends CI_Model {
 	 // echo $this->db->last_query();
 	  return $this->db->insert_id();
 	}
+        
+        function get_total_push_notifications($record_time,$specific_date){
+            $where = '';
+            if($record_time=='today'){
+                $where = " WHERE date(`date_sent`) = CURDATE()";
+            }else if($record_time=='date'){
+                $where = " WHERE date(`date_sent`) = '".$specific_date."' ";
+            }else if($record_time=='all'){
+                $where = '';
+            }
+            
+            $sql =  "SELECT sum(`sent_count`) as total_sent FROM `pushnotification_history` ".$where;
+            $query = $this->db->query($sql);
+            return $query->row()->total_sent;
+        }
+        
+        function get_direct_open_notifications($record_time,$specific_date){
+            $where = '';
+            if($record_time=='today'){
+                $where = " WHERE date(`open_datetime`) = CURDATE()";
+            }else if($record_time=='date'){
+                $where = " WHERE date(`open_datetime`) = '".$specific_date."' ";
+            }else if($record_time=='all'){
+                $where = '';
+            }
+            
+            $sql =  "SELECT count(`id`) as total_open FROM `push_notification_open` ".$where;
+            $query = $this->db->query($sql);
+            return $query->row()->total_open;
+        }
+        
+        function total_open_over_time($record_time,$specific_date){
+            $where = '';
+            if($record_time=='today'){
+                $where = " WHERE date(`open_datetime`) = CURDATE()";
+            }else if($record_time=='date'){
+                $where = " WHERE date(`open_datetime`) = '".$specific_date."' ";
+            }else if($record_time=='all'){
+                $where = '';
+            }
+            
+            $sql = "SELECT `open_datetime`,DATE_FORMAT(`open_datetime`,'%H') open_time, count(*) total_push_open FROM push_notification_open ";
+            $sql .= $where;
+            $sql .= " GROUP BY hour( `open_datetime` )";
+            
+            $query = $this->db->query($sql);
+            return $query->result();
+        }
 }
