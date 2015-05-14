@@ -165,7 +165,7 @@
                     </div>
                     <div class="row deliverTimeLater hiddenClass">
                      <div class="col-md-3">
-                        <input class="datepicker form-control" placeholder="Select Date" name="date">
+                        <input class="datepicker1 form-control" placeholder="Select Date" name="date">
                       <div class="errorValidate hiddenClass datepicker-error">Field is required.</div>
                     </div>
                     <div class="col-md-2">
@@ -257,7 +257,7 @@
                }      
             });
           
-          $('.datepicker').datepicker({
+          $('.datepicker1').datepicker({
             dateFormat: 'yy-mm-dd',
             defaultViewDate: "05/08/2015",
             startDate : "today",            
@@ -269,6 +269,8 @@
       
       function Pushvalidate()
       {
+         var a = encodeURI($('.textareaCustom').val()).split(/%..|./).length - 1;
+         alert(a);
         var popUpStatus = true;
         var textareaCustom = $(".textareaCustom").val();
         $(".bysegment-error,.androidId-error,.devByTag-error,.iosId-error,.platform-error,.platformMethod-error,.textarea-error,.timepicker-error,.datepicker-error,.timepicker-error").addClass("hiddenClass");       
@@ -289,7 +291,7 @@
         }
         
          if ($("#deliverTimeLater").prop('checked') == true) {
-          var laterDate = $('.datepicker').val();
+          var laterDate = $('.datepicker1').val();
           var timepicker = $('.timepicker').val();
           var timezone   = $('.timezone').val();
           if (laterDate=='') {
@@ -352,9 +354,9 @@
           
         if ($("#iosId").prop('checked') == true) {
           var characterLength = $('.textareaCustom').val().length;
-          if (characterLength > 326) {
+          if (characterLength > 256) {
             //alert(characterLength);
-           bootbox.confirm("IOS accept only 326 character only.", function(confirmCheck) {
+           bootbox.confirm("IOS accept only 256 character only.", function(confirmCheck) {
                    if (confirmCheck) {
                       popUpStatus= true;
                       $('#submitModal').modal('show');
