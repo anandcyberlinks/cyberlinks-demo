@@ -130,7 +130,11 @@ switch ($s[0]->username) {
             //array('name' => 'Publishing', 'url' => base_url() . 'publishing', 'class' => 'fa-users', 'li-class' => ($this->uri->segment(1) == 'publishing') ? 'active' : ''),
             array('name' => 'Customers', 'url' => base_url() . 'user/customers', 'class' => 'fa-users', 'li-class' => ($this->uri->segment(2) == 'customers') ? 'active' : ''),
             array('name' => 'Help', 'url' => base_url() . 'helplist', 'class' => 'fa-dashboard', 'li-class' => ($this->uri->segment(1) == 'help') ? 'active' : ''),
-            array('name' => 'Notification', 'url' => base_url() . 'push_notification', 'class' => 'fa-dashboard', 'li-class' => ($this->uri->segment(1) == 'push_notification') ? 'active' : ''),
+            //array('name' => 'Notification', 'url' => base_url() . 'push_notification', 'class' => 'fa-dashboard', 'li-class' => ($this->uri->segment(1) == 'push_notification') ? 'active' : ''),
+            array('name' => 'Notification', 'url' => base_url().'push_notification', 'class' => 'fa-dashboard', 'li-class' => ($this->uri->segment(1) == 'push_notification') ? 'treeview active' : '', 'type' => 'parent', 'childs' => array(
+                    array('name' => 'Notification', 'li-class' => (($this->uri->segment(1) == 'push_notification') && ($this->uri->segment(2) == 'index')) ? 'active' : '', 'url' => base_url() . 'push_notification', 'type' => 'child'),
+                    array('name' => 'Analytics', 'li-class' => (($this->uri->segment(1) == 'push_notification') && ($this->uri->segment(2) == 'push_analytics')) ? 'active' : '', 'url' => base_url() . 'push_notification/push_analytics', 'type' => 'child'),
+                )),
             );
         
         break;
