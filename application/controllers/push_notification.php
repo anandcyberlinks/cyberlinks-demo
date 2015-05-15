@@ -20,10 +20,12 @@ class Push_notification extends My_Controller{
         $this->allowedImageExt = array('gif', 'png', 'jpeg', 'jpg');
     }
 
-	function index(){
+	function index($push_id=''){
     $data['welcome'] = $this;
 	$data['time_zones'] = unserialize(TIME_ZONE_LIST);
-	
+	if($push_id!=''){
+            $data['push_detail'] = $this->Push_notification_model->get_push_history_detail($push_id);
+        }
     //Post message to GCM when submitted
 	$pushStatus = "GCM Status Message will appear here";
 	//$regId = array('apns'=>'1461aa5ee0613a47a748deb1051c6b2d30378b634418ecf7729ac19f7d95d85e','gcm'=>'APA91bEfsmtpPO6VJBN5gxTxXJvKiUlnEtJG0H56RHf_JpUE63t-YZ2VX1PiJIuFrJBYCDtP_5GwSoBRzUfc0UbWaUR9M04kORnOtqR-r_3hubylp0MqZNhSy03h2lPnUUJCxU7z97_7Wct-168uzwCRv7CAJO5t9Q');
@@ -304,4 +306,30 @@ class Push_notification extends My_Controller{
             //echo '<pre>'; print_r($data); exit;
             $this->show_view('pushnotification/analytics',$data);		
         }
+        
+        function push_history() {
+        
+        $data['welcome'] = $this;
+        
+        if (isset($_POST['submit']) && $_POST['submit'] == 'Search') {
+            $this->session->set_userdata('search_form', $_POST);
+        } else if (isset($_POST['reset']) && $_POST['reset'] == 'Reset') {
+            $this->session->unset_userdata('search_form');
+        }
+        $searchterm = $this->session->userdata('search_form');
+       // echopre($searchterm);
+        $this->load->library("pagination");
+        $config = array();
+        $config["base_url"] = base_url() . "push_notification/push_history/";
+        $config["total_rows"] = $this->Push_notification_model->get_push_count();
+        $config["per_page"] = 10;
+        $config["uri_segment"] = 3;
+        $this->pagination->initialize($config);
+        $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        $data['result'] = $this->Push_notification_model->get_push_history(PER_PAGE,$page);
+        $data["links"] = $this->pagination->create_links();
+        $data['total_rows'] = $config["total_rows"]; 
+        //echo "<pre>"; print_r($data['result']); die;
+        $this->show_view('pushnotification/push_history', $data);
+    }
 }

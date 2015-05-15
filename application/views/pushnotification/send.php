@@ -44,7 +44,7 @@
                   <div class="box-body">
                         <div class="form-group">
                       <label>Message</label>
-                      <textarea name="message" placeholder="Enter Text" rows="3" class="form-control textareaCustom" maxlength="1000"></textarea>
+                      <textarea name="message" id="message" placeholder="Enter Text" rows="3" class="form-control textareaCustom" maxlength="1000"></textarea>
                       <div class="errorValidate hiddenClass textarea-error">Message field is required.</div>
                       <div class="textarea_message"></div>                      
                     </div>                   
@@ -60,12 +60,12 @@
                   <div class="form-group">
                           <div class="row">
                           <div class="col-md-2"> 
-                                 <input type="checkbox" id="iosId" name="device_type[]" value='ios'>
+                              <input type="checkbox" id="iosId" name="device_type[]" value='ios' <?php if(isset($push_detail) && $push_detail->platform=='ios') { ?> checked <?php } ?>>
                                  &nbsp;&nbsp;&nbsp;<i class="fa fa-apple"></i>&nbsp;&nbsp;<label class="textHeading">Ios</label>
                            </div>
                           <div class="col-md-2"> 
 
-                                 <input type="checkbox" id="androidId" name="device_type[]" value='android'>
+                                 <input type="checkbox" id="androidId" name="device_type[]" value='android' <?php if(isset($push_detail) && $push_detail->platform=='android') { ?> checked <?php } ?>>
                                  &nbsp;&nbsp;&nbsp;<i class="fa fa-android"></i>&nbsp;&nbsp;<label class="textHeading">Android</label>
 
                           </div>
@@ -77,7 +77,7 @@
                          <div class="col-md-3"> 
                             <div class="radio">
                             <label>
-                              <input type="radio" value="broadcast" class="radioCheck" id="broadcast" name="notification_type" checked="checked">
+                                <input type="radio" value="broadcast" class="radioCheck" id="broadcast" name="notification_type" checked="checked">
                               <label class="textHeading">Broadcast</label>
                             </label>
                           </div>
@@ -214,9 +214,18 @@
 	  
 	   <script>
       $(document).ready(function(){
-         //--- check for character count --//         
-         var text_max = 1000; 
+         //--- check for character count --//  
+         var text_max = 1000;
+         
+         <?php if(isset($push_detail)) { ?>
+                 var msg = '<?php echo $push_detail->message;?>';
+                 $('#message').val(msg);
+                 //var text_max = 1000 - msg.length;
+                 $('.textarea_message').html((1000-msg.length) + ' characters remaining');     
+         <?php }else { ?>
+          
          $('.textarea_message').html(text_max + ' characters remaining');     
+         <?php } ?>
          $('.textareaCustom').keyup(function() {
              var text_length = $('.textareaCustom').val().length;
              var text_remaining = text_max - text_length;     

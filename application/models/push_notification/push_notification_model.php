@@ -190,4 +190,25 @@ class Push_notification_model extends CI_Model {
             $query = $this->db->query($sql);
             return $query->result();
         }
+        
+        function get_push_count()
+        {
+            $this->db->order_by('id', 'desc');
+            $query = $this->db->get('pushnotification_history');
+            return count($query->result());
+        }
+        
+        function get_push_history($limit,$start)
+        {
+            $this->db->order_by('id', 'desc');
+            $this->db->limit($limit, $start);
+            $query = $this->db->get('pushnotification_history');
+            return $query->result();
+        }
+        
+        function get_push_history_detail($push_id){
+            $this->db->where('id',$push_id);
+            $query = $this->db->get('pushnotification_history');
+            return $query->row();
+        }
 }

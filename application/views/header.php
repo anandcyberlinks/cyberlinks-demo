@@ -134,6 +134,7 @@ switch ($s[0]->username) {
             array('name' => 'Notification', 'url' => base_url().'push_notification', 'class' => 'fa-dashboard', 'li-class' => ($this->uri->segment(1) == 'push_notification') ? 'treeview active' : '', 'type' => 'parent', 'childs' => array(
                     array('name' => 'Notification', 'li-class' => (($this->uri->segment(1) == 'push_notification') && ($this->uri->segment(2) == 'index')) ? 'active' : '', 'url' => base_url() . 'push_notification', 'type' => 'child'),
                     array('name' => 'Analytics', 'li-class' => (($this->uri->segment(1) == 'push_notification') && ($this->uri->segment(2) == 'push_analytics')) ? 'active' : '', 'url' => base_url() . 'push_notification/push_analytics', 'type' => 'child'),
+                    array('name' => 'History', 'li-class' => (($this->uri->segment(1) == 'push_notification') && ($this->uri->segment(2) == 'push_history')) ? 'active' : '', 'url' => base_url() . 'push_notification/push_history', 'type' => 'child'),
                 )),
             );
         
