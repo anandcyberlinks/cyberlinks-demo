@@ -149,7 +149,14 @@ class Analytics extends MY_Controller {
                 
 		$summary = $this->Analytics_model->getReport(array('type'=>'summary','date_from'=>$date_from,'date_to'=>$date_to));
 		//echo '<pre>';print_r($summary);die;
-		$this->data['summary'] = $summary[0];
+                if(isset($summary[0]))
+                {
+                    $this->data['summary'] = $summary[0];
+                }
+                else
+                {
+                    $this->data['summary'] = '';
+                }
 		/* $url = "http://localhost:8085/solr/collection1/select?q=content_provider:".$this->uid."&wt=json&indent=true";
 			$result = file_get_contents($url);
 			$summary = json_decode($result);
@@ -172,6 +179,7 @@ class Analytics extends MY_Controller {
                {
                    $this->data['all_content_providers'] = $this->Analytics_model->getContentProviders();
                }
+               if(!isset($search)){ $search = '';}
 		$this->data['revenue'] = $this->Ads_analytics_model->getReport(array('type'=>'revenue','l'=>$limit,'search'=>$search,'date_from'=>$date_from,'date_to'=>$date_to));
 		//----------------------------------//
 		
