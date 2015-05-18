@@ -94,7 +94,7 @@
                 <div class="small-box bg-light-blue">
                     <div class="inner">
                         <h3>
-                            <?php echo $summary->total_hits;?>	
+                            <?php if(is_object($summary)){ echo $summary->total_hits;}?>	
                         </h3>
                         <p>
                            <?php echo $welcome->loadPo('Total Hits'); ?> 
@@ -111,7 +111,7 @@
                 <div class="small-box bg-green">
                     <div class="inner">
                         <h3>
-                            <?php echo $summary->unique_hits;?>	
+                            <?php if(is_object($summary)){ echo $summary->unique_hits;}?>	
                         </h3>
                         <p>
                            <?php echo $welcome->loadPo('Unique Users'); ?> 
@@ -129,7 +129,7 @@
                 <div class="small-box bg-purple">
                     <div class="inner">
                         <h3>
-                            <?php echo time_from_seconds($summary->total_watched_time); //-- common helper ?>
+                            <?php if(is_object($summary)){ echo time_from_seconds($summary->total_watched_time);} //-- common helper ?>
                        
                         </h3>
                         <p>
