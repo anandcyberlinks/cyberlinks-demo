@@ -365,4 +365,18 @@ function delete_user($id){
         $this->db->insert('app_session',$data);
         return $this->db->insert_id();
     }
+    
+    // check on skip for device id
+     public function checkdevice($uniqueid)
+   {
+        $this->db->select('a.id,c.device_unique_id');
+	$this->db->from('customer_device a');       
+        $this->db->where('a.device_unique_id',$uniqueid);        
+        $query = $this->db->get();       
+        $result = $query->row();
+        if($result)
+            return $result;
+        else
+            return 0;
+   }
 }
