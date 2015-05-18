@@ -29,6 +29,9 @@ class User extends REST_Controller
        $this->load->helper('url');
        $this->load->model('api/User_model');
        $this->admin_token = $this->get('token');
+        if($this->admin_token=='' || $this->admin_token=0){
+            $this->response(array('code'=>0,'error' => "Invalid Token"), 404);            
+        }
       //$this->admin_token = '54d46a72bab49';
    }       
     
@@ -817,8 +820,7 @@ class User extends REST_Controller
   // without Login 
   function withoutlogin_get()
     {	
-        //$provider = $this->post('provider');
-	//$access_key = $this->post('access_key');
+        
 	$deviceid = $uniqueId = $this->get('uniqueID');
        // $userdetails = json_decode($this->post('social'));    
        //-- check if Admin token is valid --//
