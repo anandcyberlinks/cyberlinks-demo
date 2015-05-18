@@ -21,15 +21,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 require APPPATH.'/libraries/REST_Controller.php';
 
 class User extends REST_Controller
-{   
-    
+{      
     function __construct()
    {
        parent::__construct();
        $this->load->helper('url');
        $this->load->model('api/User_model');
        $this->admin_token = $this->get('token');
-        if($this->admin_token=='' || $this->admin_token=0){
+        if($this->admin_token=='' || $this->admin_token==0){
             $this->response(array('code'=>0,'error' => "Invalid Token"), 404);            
         }
       //$this->admin_token = '54d46a72bab49';
