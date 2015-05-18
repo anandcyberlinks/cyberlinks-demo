@@ -28,7 +28,7 @@ class Ads_analytics_model extends CI_Model {
         return $query->result();
     }
 
-    public function getReport($param = array(), $sort, $sort_by, $limit, $start) {
+    public function getReport($param = array(), $sort='', $sort_by='', $limit='', $start='') {
         //print_r($param); die;
         //--- search val --//
         if (@$param['search']) {
@@ -311,11 +311,11 @@ class Ads_analytics_model extends CI_Model {
         if ($param['l'] > 0) {
             $this->db->limit($param['l']);
         }
-        if ($join != '') {
+        if (isset($join) && $join != '') {
 
             $this->db->join($join, $cond);
         }
-        if ($type != 'content_provider') {
+        if (isset($type) && $type != 'content_provider') {
             // $this->db->where('a.content_provider',$this->uid);
         }
 
