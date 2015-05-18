@@ -808,7 +808,7 @@ class User extends REST_Controller
 	$result = $this->User_model->saveskin($id,$token);
   }
   //save session
-  function appsession_post($data)
+  function appsession($data)
   {
       $session_id = $this->User_model->addsession($data); 
       return $session_id;
