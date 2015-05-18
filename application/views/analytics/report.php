@@ -44,7 +44,7 @@
                 <div class="small-box bg-light-blue">
                     <div class="inner">
                         <h3>
-                            <?php echo $summary->total_hits;?>	
+                            <?php if(is_object($summary)){ echo $summary->total_hits;}?>	
                         </h3>
                         <p>
                            <?php echo $welcome->loadPo('Content Hits'); ?> 
@@ -61,7 +61,7 @@
                 <div class="small-box bg-green">
                     <div class="inner">
                         <h3>
-                            <?php echo $summary->unique_hits;?>	
+                            <?php if(is_object($summary)){echo $summary->unique_hits;}?>	
                         </h3>
                         <p>
                            <?php echo $welcome->loadPo('Unique Users'); ?> 
@@ -78,7 +78,7 @@
                 <div class="small-box bg-fuchsia">
                     <div class="inner">
                         <h3>
-                            <?php echo ($summary->total_live) ? $summary->total_live : 0;?>
+                            <?php if(is_object($summary)){ echo ($summary->total_live) ? $summary->total_live : 0;}?>
                         </h3>
                         <p>
                            <?php echo $welcome->loadPo('Live Hits'); ?> 
@@ -95,7 +95,7 @@
                 <div class="small-box bg-red">
                     <div class="inner">
                         <h3>
-                           <?php echo ($summary->total_linear) ? $summary->total_linear : 0;?>
+                           <?php if(is_object($summary)){echo ($summary->total_linear) ? $summary->total_linear : 0;}?>
                         </h3>
                         <p>
                             <?php echo $welcome->loadPo('Linear Hits'); ?>
@@ -112,7 +112,7 @@
                 <div class="small-box bg-yellow">
                     <div class="inner">
                         <h3>
-                            <?php echo ($summary->total_vod) ? $summary->total_vod : 0;?>
+                            <?php if(is_object($summary)){ echo ($summary->total_vod) ? $summary->total_vod : 0;}?>
                         </h3>
                         <p>
                             <?php echo $welcome->loadPo('VOD Hits'); ?>
@@ -129,7 +129,7 @@
                 <div class="small-box bg-purple">
                     <div class="inner">
                         <h3>
-                            <?php echo time_from_seconds($summary->total_watched_time); //-- common helper ?>
+                            <?php if(is_object($summary)){ echo time_from_seconds($summary->total_watched_time);} //-- common helper ?>
                         </h3>
                         <p>
                             <?php echo $welcome->loadPo('Total Time Watched'); ?>
@@ -150,13 +150,13 @@
                         $last_week_class  = "btn btn-info btn-md";
                         $yesterday_class  = "btn btn-info btn-md";
                         $today_class  = "btn btn-info btn-md";
-                        if($_GET['range']=='today'){
+                        if(isset($_GET['range']) && $_GET['range']=='today'){
                             $today_class  = "btn btn-danger btn-md";
-                        }else if($_GET['range']=='yesterday'){
+                        }else if(isset($_GET['range']) && $_GET['range']=='yesterday'){
                             $yesterday_class  = "btn btn-danger btn-md";
-                        }else if($_GET['range']=='lastweek'){
+                        }else if(isset($_GET['range']) && $_GET['range']=='lastweek'){
                             $last_week_class  = "btn btn-danger btn-md";
-                        }else if($_GET['range']=='lastmonth'){
+                        }else if(isset($_GET['range']) && $_GET['range']=='lastmonth'){
                             $last_month_class  = "btn btn-danger btn-md";
                         }
                     
