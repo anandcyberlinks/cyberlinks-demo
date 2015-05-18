@@ -369,7 +369,7 @@ function delete_user($id){
     // check on skip for device id
      public function checkdevice($uniqueid)
    {
-        $this->db->select('a.id,c.device_unique_id');
+        $this->db->select('a.id,a.device_unique_id');
 	$this->db->from('customer_device a');       
         $this->db->where('a.device_unique_id',$uniqueid);        
         $query = $this->db->get();       
