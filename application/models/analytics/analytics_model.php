@@ -255,7 +255,7 @@ class Analytics_model extends CI_Model{
         
     }*/
     
-    public function getReport($param=array(),$sort,$sort_by,$limit,$start)
+    public function getReport($param=array(),$sort='',$sort_by='',$limit='',$start='')
     {
         $select='';
         //--- search val --//
@@ -301,7 +301,7 @@ class Analytics_model extends CI_Model{
               $this->db->where("DATE_FORMAT(a.created,'%Y-%m-%d') BETWEEN '$startdate' AND '$enddate'"); 
           }
             
-           if($param['top'] == 1){  //-- top video --//
+           if(isset($param['top']) && $param['top'] == 1){  //-- top video --//
                 $this->db->group_by('a.content_id');
                 $this->db->order_by('count(content_id) desc');
            }else{
@@ -313,7 +313,7 @@ class Analytics_model extends CI_Model{
            // $cond = "a.content_provider=u.id";
             $this->db->join('users u',"a.content_provider=u.id");
             //-- user contents --//
-            if($param['id']>0){
+            if(isset($param['id']) && $param['id']>0){
                 $this->db->select('CONCAT(cu.first_name," " ,cu.last_name) AS customer_name',false);
                 $this->db->where('a.user_id',$param['id']);
                 $this->db->join('customers cu','cu.id=a.user_id');
@@ -345,17 +345,20 @@ class Analytics_model extends CI_Model{
               $enddate = $param['date_to'];
               $this->db->where("DATE_FORMAT(a.created,'%Y-%m-%d') BETWEEN '$startdate' AND '$enddate'"); 
             }
-            if($param['top'] == 1){  //-- top video --//               
+            if(isset($param['top']) && $param['top'] == 1){  //-- top video --//               
                 $this->db->order_by('count(a.id) desc');
             }
             
-            if($param['mode']=='os'){
-                $this->db->group_by('a.platform');
-            }else if($param['mode']=='browser')
+            if(isset($param['mode']))
             {
-                $this->db->group_by('a.browser');
-            }else{
-                $this->db->group_by('a.platform, a.browser');
+                if( $param['mode']=='os'){
+                    $this->db->group_by('a.platform');
+                }else if($param['mode']=='browser')
+                {
+                    $this->db->group_by('a.browser');
+                }else{
+                    $this->db->group_by('a.platform, a.browser');
+                }
             }
             //$this->db->group_by('a.platform, a.browser');
             
@@ -376,7 +379,7 @@ class Analytics_model extends CI_Model{
             SUM(IF(a.replay=1,1,0)) as total_replay, sum( a.watched_time ) as total_watched_time";
             
              //-- user contents --//
-            if($param['id']>0){
+            if(isset($param['id']) && $param['id']>0){
                 $this->db->where('a.user_id',$param['id']);
             }
             if($param['date_from'] && $param['date_to']){
@@ -424,10 +427,10 @@ class Analytics_model extends CI_Model{
             }
            // $group = 'a.country_code';
            
-           if($param['top'] == 1){  //-- top video --//                
+           if(isset($param['top']) && $param['top'] == 1){  //-- top video --//                
                 $this->db->order_by('count(a.id) desc');
             }
-            if($param['code'] !=''){
+            if(isset($param['code']) && $param['code'] !=''){
                 $this->db->where('a.country_code',$param['code']);
             }
            //$this->db->group_by('a.city');
@@ -544,10 +547,10 @@ class Analytics_model extends CI_Model{
             break;
         }
         
-        if($param['l'] > 0){
+        if(isset($param['l']) && $param['l'] > 0){
             $this->db->limit($param['l']);            
         }
-        if($join !=''){
+        if(isset($join) && $join !=''){
             
             $this->db->join($join,$cond );
         }
