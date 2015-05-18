@@ -27,7 +27,7 @@ class User extends REST_Controller
        parent::__construct();
        $this->load->helper('url');
        $this->load->model('api/User_model');
-       $this->admin_token = $this->get('token');
+       echo $this->admin_token = $this->get('token');
         if($this->admin_token=='' || $this->admin_token==0){
             $this->response(array('code'=>0,'error' => "Invalid Token"), 404);            
         }
