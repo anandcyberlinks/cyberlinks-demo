@@ -425,7 +425,8 @@ class User extends REST_Controller
 	    if($owner_id <= 0){
 		//$this->response(array('code'=>0,'error' => "Invalid Token"), 404);
                 $response_arr = array('code'=>0,'error' => "Invalid Token");
-                $response_code = 404;
+               
+                $this->response($response_arr, 404);
 	    }
        //-----------------------------------//
        
@@ -563,8 +564,9 @@ class User extends REST_Controller
         $session_data['customer_device_id']=$customer_device_id;
         $session_data['status']=1;
         $session_data['session_use']=1;       
-        $this->appsession($session_data);
+        $session = $this->appsession($session_data);
         
+        $response_arr['result']['session']=$session;
         $this->response($response_arr, $response_code);
     }
     
@@ -805,10 +807,58 @@ class User extends REST_Controller
 	$id = $this->User_model->checkAdminToken($token); //-- check if token valid--//
 	$result = $this->User_model->saveskin($id,$token);
   }
-  
+  //save session
   function appsession_post($data)
   {
       $session_id = $this->User_model->addsession($data); 
       return $session_id;
   }
+  
+  // without Login 
+  function withoutlogin_get()
+    {	
+        //$provider = $this->post('provider');
+	//$access_key = $this->post('access_key');
+	$deviceid = $uniqueId = $this->get('uniqueID');
+       // $userdetails = json_decode($this->post('social'));    
+       //-- check if Admin token is valid --//
+        $owner_id =  $this->User_model->checkAdminToken($this->admin_token);   //application user id
+	  // $owner_id =  $this->User_model->checkAdminToken('54d46a72bab49');
+        if($owner_id <= 0){
+            //$this->response(array('code'=>0,'error' => "Invalid Token"), 404);
+            $response_arr = array('code'=>0,'error' => "Invalid Token");
+            $response_code = 404;
+        }
+        else
+        {
+	       $devicedata = $this->User_model->checkdevice($uniqueId);
+               if(is_array($devicedata))
+               {
+                   $customer_device_id= $devicedata['id'];
+                   $session_use=2;
+               }
+                else {
+                    $uniqueData['device_unique_id'] = $uniqueId;
+                    $uniqueData['user_id'] = 0;                          
+		    $customer_device_id= $this->User_model->userDeviceID($uniqueData);
+                    $session_use=1;
+                }
+            
+            $session_data['customer_id']=0;
+            $session_data['customer_device_id']=$customer_device_id;
+            $session_data['status']=1;
+            $session_data['session_use']=$session_use;
+            $session= $this->appsession($session_data); 
+            
+            $result['session']=$session;
+            $response_arr = array('code'=>1,'result'=>$result);
+            $response_code = 200;
+        }  
+           //  $id = $this->User_model->adduser($userdata);
+          
+        /* Insert into session table */
+            
+               
+        $this->response($response_arr, $response_code);
+    }
 }
