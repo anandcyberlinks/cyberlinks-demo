@@ -423,7 +423,9 @@ class User extends REST_Controller
 	   $owner_id =  $this->User_model->checkAdminToken($this->admin_token);
 	  // $owner_id =  $this->User_model->checkAdminToken('54d46a72bab49');
 	    if($owner_id <= 0){
-		$this->response(array('code'=>0,'error' => "Invalid Token"), 404);
+		//$this->response(array('code'=>0,'error' => "Invalid Token"), 404);
+                $response_arr = array('code'=>0,'error' => "Invalid Token");
+                $response_code = 404;
 	    }
        //-----------------------------------//
        
@@ -488,7 +490,7 @@ class User extends REST_Controller
 		//--- insert device unique id ---//
 		if($deviceid != $uniqueId){
 		 $uniqueData = array('device_unique_id'=>$uniqueId,'user_id'=>$uid);
-		 $this->User_model->userDeviceID($uniqueData);
+		$customer_device_id= $this->User_model->userDeviceID($uniqueData);
 		}
 		//---------------------//
 		
@@ -497,7 +499,10 @@ class User extends REST_Controller
               //-- api token --//
                $this->generateApiToken($uid,$email,$socialid);
                $result = $this->User_model->getuser($uid);	       
-               $this->response(array('code'=>1,'result'=>$result), 200); 
+               //$this->response(array('code'=>1,'result'=>$result), 200);                
+               $id=$uid;
+               $response_arr = array('code'=>1,'result'=>$result);
+                $response_code = 200;
             }else{
 			    
             //-----------Register user-----------------//
@@ -523,7 +528,7 @@ class User extends REST_Controller
              if($id){		
 		//--- insert device unique id ---//
 		 $uniqueData = array('device_unique_id'=>$uniqueId,'user_id'=>$id);
-		 $this->User_model->userDeviceID($uniqueData);
+		$customer_device_id= $this->User_model->userDeviceID($uniqueData);
 		//---------------------//
 		
 		/*
@@ -546,10 +551,21 @@ class User extends REST_Controller
             if($id){
                  //-- api token --//
                 $this->generateApiToken($id,$email,$socialid);
-                $result = $this->User_model->getuser($id);				    
-               $this->response(array('code'=>1,'result'=>$result), 200);
+                $result = $this->User_model->getuser($id);
+                $response_arr = array('code'=>1,'result'=>$result);
+                $response_code = 200;
+              // $this->response(array('code'=>1,'result'=>$result), 200);
             }
         }
+        
+        /* Insert into session table */
+        $session_data['customer_id']=$id;
+        $session_data['customer_device_id']=$customer_device_id;
+        $session_data['status']=1;
+        $session_data['session_use']=1;       
+        $this->appsession($session_data);
+        
+        $this->response($response_arr, $response_code);
     }
     
     function social_data($id,$userFacebookId,$access_key)
@@ -788,5 +804,11 @@ class User extends REST_Controller
 	$token = $this->get('token');
 	$id = $this->User_model->checkAdminToken($token); //-- check if token valid--//
 	$result = $this->User_model->saveskin($id,$token);
+  }
+  
+  function appsession_post($data)
+  {
+      $session_id = $this->User_model->addsession($data); 
+      return $session_id;
   }
 }
