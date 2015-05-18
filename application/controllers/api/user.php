@@ -822,7 +822,9 @@ class User extends REST_Controller
 	$deviceid = $uniqueId = $this->get('uniqueID');
        // $userdetails = json_decode($this->post('social'));    
        //-- check if Admin token is valid --//
-        $owner_id =  $this->User_model->checkAdminToken($this->admin_token);   //application user id
+        echo $this->admin_token;
+        echo '----';
+        echo $owner_id =  $this->User_model->checkAdminToken($this->admin_token);   //application user id
 	  // $owner_id =  $this->User_model->checkAdminToken('54d46a72bab49');
         if($owner_id <= 0){
             //$this->response(array('code'=>0,'error' => "Invalid Token"), 404);
