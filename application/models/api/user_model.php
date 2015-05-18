@@ -279,7 +279,7 @@ function delete_user($id){
       $this->db->from('users a');              
       $this->db->where('a.token',$token);    
       $query = $this->db->get();
-      echo '<br>'.$this->db->last_query();die;
+     // echo '<br>'.$this->db->last_query();die;
       $result = $query->row();
       if($result)
          return $result->id;
