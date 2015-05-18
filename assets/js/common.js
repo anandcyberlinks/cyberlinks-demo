@@ -323,8 +323,8 @@ function deletebox()
             
         }else{
 	return false;}
-    })
-return false;
+    });
+    return false;
 }
 
 function delete_adsLocation(id, url, curl)
@@ -333,7 +333,8 @@ function delete_adsLocation(id, url, curl)
         if (confirmed) {
             location.href = url + '?id=' + id + '&curl=' + curl;
         }
-    })
+    });
+    return false;
 }
 
 function delete_event(id, url, curl) {
@@ -341,7 +342,8 @@ function delete_event(id, url, curl) {
         if (confirmed) {
             location.href = url + '?id=' + id + '&curl=' + curl;
         }
-    })
+    });
+    return false;
 }
 
 function delete_url(url) {
@@ -349,7 +351,8 @@ function delete_url(url) {
         if (confirmed) {
             location.href = url;
         }
-    })
+    });
+    return false;
 }
 
 function delete_field(id, url, curl) {
@@ -357,42 +360,48 @@ function delete_field(id, url, curl) {
         if (confirmed) {
             location.href = url + '?id=' + id + '&curl=' + curl;
         }
-    })
+    });
+    return false;
 }
 function delete_pack(id) {
     bootbox.confirm("Are you sure you want to Package", function (confirmed) {
         if (confirmed) {
             location.href = 'package/deletePackage/' + id;
         }
-    })
+    });
+    return false;
 }
 function delete_form(id, url, curl) {
     bootbox.confirm("Are you sure you want to Delete Form", function (confirmed) {
         if (confirmed) {
             location.href = url + '?id=' + id + '&curl=' + curl;
         }
-    })
+    });
+    return false;
 }
 function delete_comment(id) {
     bootbox.confirm("Are you sure you want to Delete video", function (confirmed) {
         if (confirmed) {
             location.href = url + '?id=' + id;
         }
-    })
+    });
+    return false;
 }
 function delete_page(id, url) {
     bootbox.confirm("Are you sure you want to Delete Page", function (confirmed) {
         if (confirmed) {
             location.href = url + '?id=' + id;
         }
-    })
+    });
+    return false;
 }
 function delete_role(id) {
     bootbox.confirm("Are you sure you want to Delete video", function (confirmed) {
         if (confirmed) {
             location.href = 'role/deleterole?id=' + id;
         }
-    })
+    });
+    return false;
 }
 
 function delete_video1(id) {
@@ -400,7 +409,8 @@ function delete_video1(id) {
         if (confirmed) {
             location.href = '/mobiletv/video/deletevideo?id=' + id;
         }
-    })
+    });
+    return false;
 }
 
 function delete_user(id) {
@@ -408,7 +418,8 @@ function delete_user(id) {
         if (confirmed) {
             location.href = 'user/DeleteUser?id=' + id;
         }
-    })
+    });
+    return false;
 }
 
 /* start date and end date  search video page */
