@@ -30,7 +30,7 @@ class User_model extends CI_Model {
    public function adduser($data)
    {
 	$this->db->set($data);
-         $this->db->set('created', 'NOW()', FALSE); 
+        $this->db->set('created', 'NOW()', FALSE); 
 	$this->db->insert('customers', $data);
 	//echo '<br>'.$this->db->last_query();die;
 	return $this->db->insert_id();
@@ -328,7 +328,7 @@ function delete_user($id){
     $this->db->insert('customer_device',$data);
     // echo $query =sprintf("UPDATE customers SET device_unique_id = CONCAT(device_unique_id,',%d')",$uniqueId);die;
     // $this->db->update('customers', array('device_unique_id'=>$uniqueId));	 	  
-    return TRUE;
+     return $this->db->insert_id();
     }
           
     public function addSwitchUser($data)
@@ -356,4 +356,13 @@ function delete_user($id){
 	 // echo $this->db->last_query();
 	  return $query->row();
 	}  
+        
+    /* Add new Session */
+      public function addsession($data)
+    {
+        $this->db->set($data);
+        $this->db->set('active_time','NOW()',FALSE);
+        $this->db->insert('app_session',$data);
+        return $this->db->insert_id();
+    }
 }
