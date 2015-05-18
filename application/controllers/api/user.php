@@ -817,10 +817,10 @@ class User extends REST_Controller
   }
   
   // without Login 
-  function withoutlogin_get()
+  function withoutlogin_post()
     {	
         
-	$deviceid = $uniqueId = $this->get('uniqueID');
+	$deviceid = $uniqueId = $this->post('uniqueID');
        // $userdetails = json_decode($this->post('social'));    
        //-- check if Admin token is valid --//
        //.. echo $this->admin_token;
