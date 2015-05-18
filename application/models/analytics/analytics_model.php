@@ -382,7 +382,7 @@ class Analytics_model extends CI_Model{
             if(isset($param['id']) && $param['id']>0){
                 $this->db->where('a.user_id',$param['id']);
             }
-            if($param['date_from'] && $param['date_to']){
+            if(isset($param['date_from']) && $param['date_from'] && isset($param['date_to']) && $param['date_to']){
               $startdate = $param['date_from'];
               $enddate = $param['date_to'];
               $this->db->where("DATE_FORMAT(a.created,'%Y-%m-%d') BETWEEN '$startdate' AND '$enddate'"); 
@@ -482,7 +482,7 @@ class Analytics_model extends CI_Model{
             break;
         case 'user':
             $select = 'a.ip,a.browser,a.platform,a.created,cu.id,concat(cu.first_name," ",cu.last_name) as name,count( a.id ) as total_hits , sum( a.watched_time ) as total_watched_time';
-            if($param['date_from'] && $param['date_to']){
+            if(isset($param['date_from']) && $param['date_from'] && isset($param['date_to']) && $param['date_to']){
               $startdate = $param['date_from'];
               $enddate = $param['date_to'];
               $this->db->where("DATE_FORMAT(a.created,'%Y-%m-%d') BETWEEN '$startdate' AND '$enddate'"); 
@@ -739,7 +739,7 @@ class Analytics_model extends CI_Model{
         case 'user':
             
             $select = 'a.ip,a.browser,a.platform,cu.id,concat(cu.first_name," ",cu.last_name) as name,count( a.id ) as total_hits , sum( a.watched_time ) as total_watched_time';
-            if($param['date_from'] && $param['date_to']){
+            if(isset($param['date_from']) && $param['date_from'] && isset($param['date_to']) && $param['date_to']){
               $startdate = $param['date_from'];
               $enddate = $param['date_to'];
               $this->db->where("DATE_FORMAT(a.created,'%Y-%m-%d') BETWEEN '$startdate' AND '$enddate'"); 
@@ -800,14 +800,14 @@ class Analytics_model extends CI_Model{
             break;
         }
         
-        if($param['l'] > 0){
+        if(isset($param['l']) && $param['l'] > 0){
             $this->db->limit($param['l']);            
         }
-        if($join !=''){
+        if(isset($join) && $join !=''){
             
             $this->db->join($join,$cond );
         }
-        if($type !='content_provider'){
+        if(isset($type) && $type !='content_provider'){
             // $this->db->where('a.content_provider',$this->uid);
         }
         
