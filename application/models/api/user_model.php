@@ -366,6 +366,14 @@ function delete_user($id){
         return $this->db->insert_id();
     }
     
+     /* Add new Session */
+      public function addotherdeviceinfo($data)
+    {
+        $this->db->set($data);
+        $this->db->insert('device_other_information',$data);
+        return $this->db->insert_id();
+    }
+    
     // check on skip for device id
      public function checkdevice($uniqueid)
    {
