@@ -419,7 +419,14 @@ class User extends REST_Controller
     {	
         $provider = $this->post('provider');
 	$access_key = $this->post('access_key');
-	$uniqueId = $this->post('uniqueID');
+        $devicedetail = json_decode($this->post('devicedetail'));
+        $uniqueId = $devicedetail->device_unique_id;
+        
+        $device_other_detail = json_decode($this->post('device_other_detail'));
+        
+	//$uniqueId = $this->post('uniqueID');
+        
+        
         $userdetails = json_decode($this->post('social'));    
        //-- check if Admin token is valid --//
 	   $owner_id =  $this->User_model->checkAdminToken($this->admin_token);
@@ -492,8 +499,9 @@ class User extends REST_Controller
 		//}
 		//--- insert device unique id ---//
 		if($deviceid != $uniqueId){
-		 $uniqueData = array('device_unique_id'=>$uniqueId,'user_id'=>$uid);
-		$customer_device_id= $this->User_model->userDeviceID($uniqueData);
+		// $uniqueData = array('device_unique_id'=>$uniqueId,'user_id'=>$uid);
+                 $devicedetail['user_id']=$uid;
+		$customer_device_id= $this->User_model->userDeviceID($devicedetail);
 		}
 		//---------------------//
 		
@@ -530,7 +538,8 @@ class User extends REST_Controller
             
              if($id){		
 		//--- insert device unique id ---//
-		 $uniqueData = array('device_unique_id'=>$uniqueId,'user_id'=>$id);
+		// $uniqueData = array('device_unique_id'=>$uniqueId,'user_id'=>$id);
+                 $devicedetail['user_id']=$id;
 		$customer_device_id= $this->User_model->userDeviceID($uniqueData);
 		//---------------------//
 		
@@ -568,6 +577,10 @@ class User extends REST_Controller
         $session_data['session_use']=1;       
         $session = $this->appsession($session_data);
         
+        $device_other_detail['session_id']= $session;        
+        //insert into other information
+        $this->User_model->addotherdeviceinfo($device_other_detail);
+         
         $response_arr['result']['session']=$session;
         $this->response($response_arr, $response_code);
     }
@@ -815,16 +828,17 @@ class User extends REST_Controller
       $session_id = $this->User_model->addsession($data); 
       return $session_id;
   }
-  
+   
   // without Login 
   function withoutlogin_post()
     {	
-        
-	$deviceid = $uniqueId = $this->post('uniqueID');
-       // $userdetails = json_decode($this->post('social'));    
-       //-- check if Admin token is valid --//
-       //.. echo $this->admin_token;
-      //  echo '----';
+    // print_r($this->post());
+        $devicedetail = json_decode($this->post('devicedetail'));
+        $device_other_detail = json_decode($this->post('device_other_detail'));
+        //echo json_encode($devicedetail);
+       // die;
+        $deviceid = $uniqueId = $devicedetail->device_unique_id;
+       
         $owner_id =  $this->User_model->checkAdminToken($this->admin_token);   //application user id
 	  // $owner_id =  $this->User_model->checkAdminToken('54d46a72bab49');
         if($owner_id <= 0){
@@ -851,16 +865,17 @@ class User extends REST_Controller
             $session_data['customer_device_id']=$customer_device_id;
             $session_data['status']=1;
             $session_data['session_use']=$session_use;
+            
+            /* Insert into session table */
             $session= $this->appsession($session_data); 
             
+            $device_other_detail['session_id']= $session;        
+            //insert into other information
+            $this->User_model->addotherdeviceinfo($device_other_detail);
             $result['session']=$session;
             $response_arr = array('code'=>1,'result'=>$result);
             $response_code = 200;
-        }  
-           //  $id = $this->User_model->adduser($userdata);
-          
-        /* Insert into session table */
-            
+        }                  
                
         $this->response($response_arr, $response_code);
     }
