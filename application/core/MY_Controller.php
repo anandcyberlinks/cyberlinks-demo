@@ -457,6 +457,13 @@ class MY_Controller extends CI_Controller {
                 $pathMedium = REAL_PATH . CATEGORY_MEDIUM_PATH;
                 $pathLarge = REAL_PATH . CATEGORY_LARGE_PATH;
                 break;
+            case 'applications':
+                $fileUploadPath = REAL_PATH . APPLICATIONS_PATH;
+                $dimensions = unserialize(CATEGORY_DIMENSION);
+                $pathSmall = REAL_PATH . APPLICATIONS_SMALL_PATH;
+                $pathMedium = REAL_PATH . APPLICATIONS_MEDIUM_PATH;
+                $pathLarge = REAL_PATH . APPLICATIONS_LARGE_PATH;
+                break;
             case 'video':
                 $fileUploadPath = REAL_PATH . serverVideoRelPath;
                 $dimensions = '';

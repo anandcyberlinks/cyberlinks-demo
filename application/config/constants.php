@@ -88,6 +88,10 @@ if (isset($config['amazons3'])) {
     define('CATEGORY_SMALL_PATH', 'assets/upload/category/small/');
     define('CATEGORY_MEDIUM_PATH', 'assets/upload/category/medium/');
     define('CATEGORY_LARGE_PATH', 'assets/upload/category/large/');
+    define('APPLICATIONS_PATH', 'assets/upload/applications/');
+    define('APPLICATIONS_SMALL_PATH', 'assets/upload/applications/small/');
+    define('APPLICATIONS_MEDIUM_PATH', 'assets/upload/applications/medium/');
+    define('APPLICATIONS_LARGE_PATH', 'assets/upload/applications/large/');
 } else {
     define('serverurl', baseurl);
     define('serverDir', 'videos/');
@@ -104,6 +108,10 @@ if (isset($config['amazons3'])) {
     define('CATEGORY_SMALL_PATH', 'assets/upload/category/small/');
     define('CATEGORY_MEDIUM_PATH', 'assets/upload/category/medium/');
     define('CATEGORY_LARGE_PATH', 'assets/upload/category/large/');
+    define('APPLICATIONS_PATH', 'assets/upload/applications/');
+    define('APPLICATIONS_SMALL_PATH', 'assets/upload/applications/small/');
+    define('APPLICATIONS_MEDIUM_PATH', 'assets/upload/applications/medium/');
+    define('APPLICATIONS_LARGE_PATH', 'assets/upload/applications/large/');
     define('serverAdsRelPath', 'assets/upload/ads/');
 }
 

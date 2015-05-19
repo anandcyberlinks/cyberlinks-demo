@@ -269,6 +269,17 @@ switch ($s[0]->username) {
                       <span class="hidden-xs"><?php echo $s[0]->first_name; ?><i class="caret"></i></span>
                     </a>
                     <ul class="dropdown-menu">
+                        <li class="user-body">
+                            <div class="col-xs-4 text-center">
+                              <a href="<?php echo base_url() ?>applications/index">Applications</a>
+                            </div>
+                            <!--div class="col-xs-4 text-center">
+                              <a href="#">Sales</a>
+                            </div>
+                            <div class="col-xs-4 text-center">
+                              <a href="#">Friends</a>
+                            </div-->
+                        </li>
                       <!-- Menu Footer-->
                       <li class="user-footer">
                         <div class="pull-left">

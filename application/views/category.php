@@ -203,6 +203,7 @@
             {
                 location.href = '<?php echo base_url() . $uri; ?>/deleteCategory?id=' + id;
             }
-        })
+        });
+        return false;
     }
 </script> 
