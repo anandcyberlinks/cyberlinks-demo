@@ -874,7 +874,7 @@ class User extends REST_Controller
             /* Insert into session table */
             $session= $this->appsession($session_data); 
             
-            $device_other_detail['session_id']= $session;        
+            $device_other_detail->session_id= $session;        
             //insert into other information
             $this->User_model->addotherdeviceinfo($device_other_detail);
             $result['session']=$session;
