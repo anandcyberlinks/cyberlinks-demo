@@ -24,10 +24,16 @@ class Events extends REST_Controller
     {
        parent::__construct();
        $this->load->helper('url');
-       $this->load->model('api/Events_model');       
+       $this->load->model('api/Events_model');
+       $this->load->model('api/User_model');
         //-- validate token --//
-      // $token = $this->get('token');
-      // $this->owner_id = $this->validateToken($token);
+        $this->admin_token = $this->get('token');
+        $owner_id =  $this->User_model->checkAdminToken($this->admin_token);	                
+        if($owner_id <= 0)
+        {                
+            $response_arr = array('code'=>0,'error' => "Invalid Token");               
+            $this->response($response_arr, 404);
+        }        
     }
        
     function categories_get()
