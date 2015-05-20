@@ -78,6 +78,11 @@ class Analytics extends MY_Controller {
 			$post['ip'] = $ip;
                // $post['platform'] = $this->result['platform'];
 	      // $post['platform'] = $this->post['device_type'];
+                $device_other_info = $this->Analytics_model->get_device_info($post['app_session_id']);
+                $post['os_version'] = $device_other_info->os_version;
+                $post['app_version'] = $device_other_info->app_version;
+                $post['network_type'] = $device_other_info->network_type;
+                $post['network_provider'] = $device_other_info->network_provider;
                echo $this->Analytics_model->save($post);
 	}
         
@@ -806,6 +811,11 @@ class Analytics extends MY_Controller {
 				//$post['content_provider'] ='';
 			//---------------------------//
 			//print_r($post);
+                        $device_other_info = $this->Analytics_model->get_device_info($post['app_session_id']);
+                        $post['os_version'] = $device_other_info->os_version;
+                        $post['app_version'] = $device_other_info->app_version;
+                        $post['network_type'] = $device_other_info->network_type;
+                        $post['network_provider'] = $device_other_info->network_provider;
 			echo $this->Analytics_model->save_ads($post);
 		}
 		//print_r($post);

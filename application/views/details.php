@@ -165,7 +165,8 @@ function beforeUnload() {
 	play();
     }
     
-    function play() {	 
+    function play() {	
+        //alert('<?php echo $session_id; ?>');
 	$.ajax({
 		url: "<?php echo base_url() ?>analytics/play",
 	        data: {		
@@ -182,7 +183,8 @@ function beforeUnload() {
 		postal_code: postal_code,
 		latitude: '<?php echo $lat;?>',
 		longitude: '<?php echo $long;?>',
-		platform: '<?php echo $platform;?>'
+		platform: '<?php echo $platform;?>',
+                app_session_id: '<?php echo $session_id; ?>'
 	       },
 	       cache: false,
 	       type: "POST",
@@ -292,7 +294,7 @@ function beforeUnload() {
     jwplayer("myElement").setup({
        //flashplayer: "assets/player.swf",
         primary: "html5",      
-        file: "<?php echo trim($video_path);?>",		
+        file: "<?php echo trim($video_path);?>",
 	    image: "<?php echo base_url().THUMB_LARGE_PATH. $thumbnail_path;?>",       
        // skin: "<?php echo base_url()?>assets/myskinjw/custom.xml",	
 	width: "100%",
@@ -507,7 +509,8 @@ autostart: 1,
 		postal_code: postal_code,
 		latitude: '<?php echo $lat;?>',
 		longitude: '<?php echo $long;?>',
-		platform: '<?php echo $platform;?>'
+		platform: '<?php echo $platform;?>',
+                app_session_id: '<?php echo $session_id; ?>'
 		},
 		cache: false,
 		type: "post"

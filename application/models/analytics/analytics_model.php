@@ -22,6 +22,13 @@ class Analytics_model extends CI_Model{
         }
     }
     
+    function get_device_info($session_id){
+        $this->db->where('session_id',$session_id);
+        $query = $this->db->get('device_other_information');
+        return $query->row();
+    }
+
+
     public function getCountry()
     {
         $this->db->select('code,name')    ;
