@@ -876,4 +876,51 @@ class User extends REST_Controller
                
         $this->response($response_arr, $response_code);
     }
+    
+    function resumesession_get()
+    {	
+     //rint_r($this->get());
+        $user_id = 0;
+        $oldsession = $this->get('session');
+       
+       
+        $owner_id =  $this->User_model->checkAdminToken($this->admin_token);   //application user id
+	  // $owner_id =  $this->User_model->checkAdminToken('54d46a72bab49');
+        if($owner_id <= 0){
+            //$this->response(array('code'=>0,'error' => "Invalid Token"), 404);
+            $response_arr = array('code'=>0,'error' => "Invalid Token");
+            $response_code = 404;
+        }
+        else
+        {	                                
+	    $sessiondetail = $this->User_model->sessioninformation($oldsession);
+            $otherdetail   = $this->User_model->getotherdeviceinfo($oldsession);
+            
+            if(is_object($sessiondetail) && is_object($otherdetail))
+            {
+                $session_data['customer_id']=$sessiondetail->customer_id;
+                $session_data['customer_device_id']=$sessiondetail->customer_device_id;
+                $session_data['status']=1;
+                // $session_data['session_use']=$session_use;            
+                /* Insert into session table */
+                 $session= $this->appsession($session_data); 
+
+                 @$device_other_detail->os_version= $otherdetail->os_version;
+                 $device_other_detail->app_version= $otherdetail->app_version;
+                 $device_other_detail->network_type= $otherdetail->network_type;
+                 $device_other_detail->network_provider= $otherdetail->network_provider;
+                 $device_other_detail->session_id= $session;        
+                //insert into other information
+                $this->User_model->addotherdeviceinfo($device_other_detail);
+
+                $result['session']=$session;
+                $response_arr = array('code'=>1,'result'=>$result);
+                $response_code = 200;
+            }  else {
+                $response_arr = array('code'=>0,'error' => "invalid session");
+            $response_code = 404;
+            }  
+        }
+        $this->response($response_arr, $response_code);
+    }
 }
