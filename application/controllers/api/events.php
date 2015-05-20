@@ -33,26 +33,26 @@ class Events extends REST_Controller
     function categories_get()
     {
         $result = $this->Events_model->getCategories();
-        if(isset($result))
+        if(isset($result) && count($result) > 0)
         {
-            $this->response($result, 200); // 200 being the HTTP response code
+            $this->response(array('code'=>1,'result'=>$result), 200); // 200 being the HTTP response code
         }else{
-            $this->response('No record found', 404);
+            $this->response(array('code'=>0,'result'=>'No record found'), 404);
         }
     }
     
-    function event_categories_get()
+    function list_get()
     {
         $result = $this->Events_model->categoryEvents();
-        if(isset($result))
+        if(isset($result) && count($result) > 0)
         {
             $newresult = array();
             foreach($result as $key => $val){
                     $newresult[$val->category_name][] = $val;
             }
-            $this->response($newresult, 200); // 200 being the HTTP response code
+            $this->response(array('code'=>1,'result'=>$newresult), 200); // 200 being the HTTP response code
         }else{
-            $this->response('No record found', 404);
+            $this->response(array('code'=>0,'result'=>'No record found'), 404);
         }
     }
     
