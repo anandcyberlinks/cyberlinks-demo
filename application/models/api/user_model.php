@@ -376,6 +376,19 @@ function delete_user($id){
         $this->db->insert('device_other_information',$data);
         return $this->db->insert_id();
     }
+     public function getotherdeviceinfo($session)
+    {       
+        $this->db->select('*');
+	$this->db->from('device_other_information');
+        $this->db->where('session_id',$session);        
+        $query = $this->db->get();
+        //echo '<br>'.$this->db->last_query();die;
+        $result = $query->row();
+        if($result)
+            return $result;
+        else
+            return 0;
+    }
     
     // check on skip for device id
      public function checkdevice($uniqueid,$user_id)
@@ -385,6 +398,20 @@ function delete_user($id){
         $this->db->where('a.device_unique_id',$uniqueid);
         $this->db->where('a.user_id',$user_id);
         $query = $this->db->get();       
+        $result = $query->row();
+        if($result)
+            return $result;
+        else
+            return 0;
+   }
+   
+    public function sessioninformation($session)
+   {
+        $this->db->select('*');
+	$this->db->from('app_session');
+        $this->db->where('id',$session);        
+        $query = $this->db->get();
+        //echo '<br>'.$this->db->last_query();die;
         $result = $query->row();
         if($result)
             return $result;
