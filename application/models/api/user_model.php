@@ -92,7 +92,7 @@ class User_model extends CI_Model {
 
    public function loginsocial($email,$provider,$uniqueid)
    {
-        $this->db->select('a.id,c.device_unique_id');
+        $this->db->select('a.id,c.device_unique_id,c.id as customer_device_id');
 	$this->db->from('customers a');
         $this->db->join('social_connects b', 'a.id = b.user_id', 'left');
 	$this->db->join('customer_device c','a.id=c.user_id AND c.device_unique_id='."'$uniqueid'",'left');
@@ -360,9 +360,12 @@ function delete_user($id){
     /* Add new Session */
       public function addsession($data)
     {
-        $this->db->set($data);
-        $this->db->set('active_time','NOW()',FALSE);
-        $this->db->insert('app_session',$data);
+       
+        $query ="INSERT INTO `app_session` (`customer_id`, `customer_device_id`, `status`, `session_use`, "
+                . "`active_time`) SELECT '".$data['customer_id']."', '".$data['customer_device_id']."', 1,count(*)+1, NOW() "
+                . "FROM `app_session` WHERE customer_device_id=".$data['customer_device_id'];
+        
+        $this->db->query($query);       
         return $this->db->insert_id();
     }
     
@@ -375,11 +378,12 @@ function delete_user($id){
     }
     
     // check on skip for device id
-     public function checkdevice($uniqueid)
+     public function checkdevice($uniqueid,$user_id)
    {
         $this->db->select('a.id,a.device_unique_id');
 	$this->db->from('customer_device a');       
-        $this->db->where('a.device_unique_id',$uniqueid);        
+        $this->db->where('a.device_unique_id',$uniqueid);
+        $this->db->where('a.user_id',$user_id);
         $query = $this->db->get();       
         $result = $query->row();
         if($result)
