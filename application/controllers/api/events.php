@@ -43,7 +43,8 @@ class Events extends REST_Controller
     
     function list_get()
     {
-        $result = $this->Events_model->categoryEvents();
+        $cid = $this->get('id');
+        $result = $this->Events_model->categoryEvents($cid);
         if(isset($result) && count($result) > 0)
         {
             $newresult = array();
