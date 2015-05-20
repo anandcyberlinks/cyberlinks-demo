@@ -27,9 +27,9 @@ class Events extends REST_Controller
        $this->load->model('api/Events_model');
        $this->load->model('api/User_model');
         //-- validate token --//
-        $this->admin_token = $this->get('token');
-        $owner_id =  $this->User_model->checkAdminToken($this->admin_token);	                
-        if($owner_id <= 0)
+        $token = $this->get('token');
+        $owner_id =  $this->User_model->checkAdminToken($token);	                
+        if($owner_id <= 0 || $token=='')
         {                
             $response_arr = array('code'=>0,'error' => "Invalid Token");               
             $this->response($response_arr, 404);
