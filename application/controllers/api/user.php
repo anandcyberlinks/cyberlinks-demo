@@ -417,29 +417,28 @@ class User extends REST_Controller
     
     function social_post()
     {	
-        
+        $uid=0;
         $provider = $this->post('provider');
 	$access_key = $this->post('access_key');
-      //  print_r($this->post());die;
+       // print_r($this->post());die;
         $device_other_detail = json_decode($this->post('device_other_detail'));
+       
         $devicedetail = json_decode($this->post('devicedetail'));
-        $uniqueId = $devicedetail->device_unique_id;
-        
-        
-        
+        $uniqueId = $devicedetail->device_unique_id;                
 	//$uniqueId = $this->post('uniqueID');
+        $userdetails = json_decode($this->post('social'));  
+       // print_r(get_object_vars($device_other_detail));die;
+        //-- check if Admin token is valid --//
         
-        
-        $userdetails = json_decode($this->post('social'));    
-       //-- check if Admin token is valid --//
-	   $owner_id =  $this->User_model->checkAdminToken($this->admin_token);
-	  // $owner_id =  $this->User_model->checkAdminToken('54d46a72bab49');
-	    if($owner_id <= 0){
-		//$this->response(array('code'=>0,'error' => "Invalid Token"), 404);
-                $response_arr = array('code'=>0,'error' => "Invalid Token");
-               
+	$owner_id =  $this->User_model->checkAdminToken($this->admin_token);
+	// $owner_id =  $this->User_model->checkAdminToken('54d46a72bab49');
+           
+	if($owner_id <= 0)
+        {
+                //$this->response(array('code'=>0,'error' => "Invalid Token"), 404);
+                $response_arr = array('code'=>0,'error' => "Invalid Token");               
                 $this->response($response_arr, 404);
-	    }
+	}
        //-----------------------------------//
        
        //print_r($userdetails);die;
@@ -475,11 +474,13 @@ class User extends REST_Controller
 	    $age = $userdetails->dob;
             //echo '<pre>'; print_r($userdetails);die;
         }
-	if($email !=''){ 
+	if($email !='')
+           { 
             $userdata = $this->User_model->loginsocial($email, $provider,$uniqueId);
 	    
 	    $uid = $userdata->id;
 	    $deviceid = $userdata->device_unique_id;
+            $customer_device_id = $userdata->customer_device_id;
 	    //$deviceIdArr = unserialize($userdata->device_unique_id);
 	    //print_r(unserialize($deviceIdArr));
 	   }	   
@@ -489,10 +490,11 @@ class User extends REST_Controller
 		if($deviceid != $uniqueId)
                 {                    
 		  // $uniqueData = array('device_unique_id'=>$uniqueId,'user_id'=>$uid);
+                 // insert new device information of login user    
                  $devicedetail->user_id=$uid;
 		 $customer_device_id= $this->User_model->userDeviceID($devicedetail);
 		}  
-                else
+                /*else
                 {
                    
                     $devicedata = $this->User_model->checkdevice($uniqueId);
@@ -502,18 +504,16 @@ class User extends REST_Controller
                         $customer_device_id= $devicedata->id;
                         $session_use=2;
                     }
-                }		
+                }*/		
                $this->generateApiToken($uid,$email,$socialid);
                $result = $this->User_model->getuser($uid);	       
                //$this->response(array('code'=>1,'result'=>$result), 200);                
                $id=$uid;
                $response_arr = array('code'=>1,'result'=>$result);
-                $response_code = 200;
+               $response_code = 200;
             }
             else
-             {
-                
-			    
+             {	    
                 //-----------Register user-----------------//
                 $userdata = array(
                 'owner_id' => $owner_id,
@@ -532,51 +532,42 @@ class User extends REST_Controller
                 //'created'=>date('Y-m-d h:i:s')
                     );
            
-             $id = $this->User_model->adduser($userdata);
+                $id = $this->User_model->adduser($userdata);
             
-             if($id){		
+                if($id)
+                 {		
 		//--- insert device unique id ---//
 		// $uniqueData = array('device_unique_id'=>$uniqueId,'user_id'=>$id);
                  $devicedetail->user_id=$id;
-		echo $customer_device_id= $this->User_model->userDeviceID($uniqueData);
-                die;
-		//---------------------//
-		
-		/*
-                 if($provider=='facebook'){
-                 //-- social Data Keywords 
-                $social_keywords = $this->social_data($id,$socialid,$access_key);
-                 }else
-                     {
-                        $social_keywords = '';
-                     }*/
-               $socialdata = array('social_id' => $socialid, 
-               'from' => $provider,            
-               'user_id' => $id,  
-               'info' => serialize($userdetails),
-               'status' => 1,
-               // 'keywords'=>$social_keywords,
-               'created'=>date('Y-m-d h:i:s'));
-                $this->User_model->addsocial($socialdata);
-            }
-            if($id){
-                 //-- api token --//
-                $this->generateApiToken($id,$email,$socialid);
-                $result = $this->User_model->getuser($id);
-                
-              // $this->response(array('code'=>1,'result'=>$result), 200);
-            }
-        }
-        
+		 $customer_device_id= $this->User_model->userDeviceID($uniqueData);
+               
+                $socialdata = array('social_id' => $socialid, 
+                'from' => $provider,            
+                'user_id' => $id,  
+                'info' => serialize($userdetails),
+                'status' => 1,
+                // 'keywords'=>$social_keywords,
+                'created'=>date('Y-m-d h:i:s'));
+                 $this->User_model->addsocial($socialdata);
+                }
+                if($id)
+                {
+                     //-- api token --//
+                    $this->generateApiToken($id,$email,$socialid);
+                    $result = $this->User_model->getuser($id);
+
+                  // $this->response(array('code'=>1,'result'=>$result), 200);
+                }
+               }
+        //echo $customer_device_id;die;
         /* Insert into session table */
         $session_data['customer_id']=$id;
         $session_data['customer_device_id']=$customer_device_id;
         $session_data['status']=1;
-        $session_data['session_use']=1;       
         $session = $this->appsession($session_data);
         
-        $device_other_detail->session_id= $session;        
-        //insert into other information
+        $device_other_detail->session_id= $session;
+        
         $this->User_model->addotherdeviceinfo($device_other_detail);
          
         $result->session=$session;
@@ -838,9 +829,10 @@ class User extends REST_Controller
   function withoutlogin_post()
     {	
     // print_r($this->post());
+         $user_id = 0;
         $devicedetail = json_decode($this->post('devicedetail'));
         $device_other_detail = json_decode($this->post('device_other_detail'));
-        //echo json_encode($devicedetail);
+       //echo json_encode($devicedetail);
        // die;
         $deviceid = $uniqueId = $devicedetail->device_unique_id;
        
@@ -853,23 +845,23 @@ class User extends REST_Controller
         }
         else
         {
-	       $devicedata = $this->User_model->checkdevice($uniqueId);
+	       $devicedata = $this->User_model->checkdevice($uniqueId,$user_id);
                if(is_object($devicedata))
                {
-                   $customer_device_id= $devicedata->id;
-                   $session_use=2;
+                   $customer_device_id= $devicedata->id;                  
                }
                 else {
-                    $uniqueData['device_unique_id'] = $uniqueId;
-                    $uniqueData['user_id'] = 0;                          
-		    $customer_device_id= $this->User_model->userDeviceID($uniqueData);
-                    $session_use=1;
+                    $devicedetail->user_id = $user_id;
+                    // $uniqueData['device_unique_id'] = $uniqueId;
+                    // $uniqueData['user_id'] = $user_id;                          
+		    $customer_device_id= $this->User_model->userDeviceID($devicedetail);
+                    
                 }
             
-            $session_data['customer_id']=0;
+            $session_data['customer_id']=$user_id;
             $session_data['customer_device_id']=$customer_device_id;
             $session_data['status']=1;
-            $session_data['session_use']=$session_use;
+           // $session_data['session_use']=$session_use;
             
             /* Insert into session table */
             $session= $this->appsession($session_data); 
