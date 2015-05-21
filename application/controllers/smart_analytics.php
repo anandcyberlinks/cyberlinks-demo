@@ -6,49 +6,51 @@ class Smart_analytics extends MY_Controller {
 		$this->show_view('newdashboard',$data);
 	}
         
-        function Users(){
+         
+    function Users(){
+			
 		$data['welcome'] = $this;
-		$this->show_view('newdashboard',$data);
+		$this->show_view('analytics_user',$data);
 	}
         
-        function Loyalty(){
+    function Loyalty(){
 		$data['welcome'] = $this;
-		$this->show_view('newdashboard',$data);
+		$this->show_view('analytics_loyalty',$data);
 	}
         
-        function Sessions(){
+    function Sessions(){
 		$data['welcome'] = $this;
-		$this->show_view('newdashboard',$data);
+		$this->show_view('analytics_session',$data);
 	}
         
-        function Frequency(){
+    function Frequency(){
 		$data['welcome'] = $this;
-		$this->show_view('newdashboard',$data);
+		$this->show_view('analytics_frequency',$data);
 	}
         
-        function Countries(){
+    function Countries(){
 		$data['welcome'] = $this;
-		$this->show_view('newdashboard',$data);
+		$this->show_view('analytics_countries',$data);
 	}
         
-        function Devices(){
+    function Devices(){
 		$data['welcome'] = $this;
-		$this->show_view('newdashboard',$data);
+		$this->show_view('analytics_device',$data);
 	}
         
-        function Versions(){
+    function Versions(){
 		$data['welcome'] = $this;
-		$this->show_view('newdashboard',$data);
+		$this->show_view('analytics_version',$data);
 	}
         
-        function Carrier(){
+    function Carrier(){
 		$data['welcome'] = $this;
-		$this->show_view('newdashboard',$data);
+		$this->show_view('analytics_carrier',$data);
 	}
         
-        function Platforms(){
+    function Platforms(){
 		$data['welcome'] = $this;
-		$this->show_view('newdashboard',$data);
+		$this->show_view('analytics_platforms',$data);
 	}
 
 }
