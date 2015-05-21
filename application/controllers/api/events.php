@@ -85,7 +85,7 @@ class Events extends REST_Controller
         }
     }
     
-    function add_events_post(){
+    function add_post(){
         
         $ext = $this->post('ext');
         $my_base64_string = $this->post('pic');
@@ -125,11 +125,11 @@ class Events extends REST_Controller
 	    'name' => $this->post('name'), 
             'description' => $this->post('description'), 
             'category' => $this->post('category'),
-            'url' => "http://multitvsolutions.com/".$this->post('token').$random_key,
+            'url' => base_url().$this->post('u_token').$random_key,
             'start_date' => $this->post('start_date'), 
             'end_date' => $this->post('end_date'),
             'event_type' => $this->post('event_type'),                     
-            'uid' => $this->post('uid'),
+            'uid' => $this->post('userid'),
             'status' => '1'
             );
                 
