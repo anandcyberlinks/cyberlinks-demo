@@ -83,21 +83,21 @@ switch ($s[0]->username) {
         $menu = array(
             array('name' => 'Dashboard', 'url' => base_url() . 'layout/dashboard', 'class' => 'fa-dashboard', 'li-class' => ($this->uri->segment(1) == 'layout') ? 'active' : ''),
             array('name' => 'Analytics', 'url' => base_url() . 'analytics/report', 'class' => 'fa fa-fw fa-bar-chart-o', 'li-class' => ($this->uri->segment(1) == 'analytics') ? 'active' : ''),
-            //array('name' => 'Advanced Analytics', 'url' => base_url() . 'new_analytics', 'class' => 'fa fa-fw fa-bar-chart-o', 'li-class' => ($this->uri->segment(1) == 'analytics') ? 'active' : ''),
-            array('name' => 'Advanced Analytics', 'url' => base_url().'new_analytics', 'class' => 'fa-bar-chart-o',
+            //array('name' => 'Advanced Analytics', 'url' => base_url() . 'smart_analytics', 'class' => 'fa fa-fw fa-bar-chart-o', 'li-class' => ($this->uri->segment(1) == 'analytics') ? 'active' : ''),
+            array('name' => 'Smart Analytics', 'url' => base_url().'smart_analytics', 'class' => 'fa-bar-chart-o',
                 'li-class'=>'treeview',
                 'type' => 'parent', 
                 'childs' => array(
-                    array('name' => 'Dashboard', 'li-class' => ($this->uri->segment(1) == 'new_analytics') ? '' : '', 'url' => base_url() . 'new_analytics', 'type' => 'child'),
-                    array('name' => 'Users', 'li-class' => ($this->uri->segment(2) == 'new_analytics' ) ? '' : '', 'url' => base_url() . 'new_analytics/Users', 'type' => 'child'),
-                    array('name' => 'User Loyalty', 'li-class' => ($this->uri->segment(2) == 'new_analytics') ? '' : '', 'url' => base_url() . 'new_analytics/Loyalty', 'type' => 'child'),
-                    array('name' => 'Sessions', 'li-class' => ($this->uri->segment(2) == 'new_analytics') ? '' : '', 'url' => base_url() . 'new_analytics/Sessions', 'type' => 'child'),
-                    array('name' => 'Session Frequency', 'li-class' => ($this->uri->segment(2) == 'new_analytics') ? '' : '',  'url' => base_url() . 'new_analytics/Frequency', 'type' => 'child'),
-                    array('name' => 'Countries', 'li-class' => ($this->uri->segment(1) == 'new_analytics') ? '' : '',  'url' => base_url() . 'new_analytics/Countries', 'type' => 'child'),
-                    array('name' => 'Devices', 'li-class' => ($this->uri->segment(1) == 'new_analytics') ? '' : '',  'url' => base_url() . 'new_analytics/Devices', 'type' => 'child'),
-                    array('name' => 'App Versions', 'li-class' => ($this->uri->segment(1) == 'new_analytics') ? '' : '',  'url' => base_url() . 'new_analytics/Versions', 'type' => 'child'),
-                    array('name' => 'Carrier', 'li-class' => ($this->uri->segment(1) == 'new_analytics') ? '' : '',  'url' => base_url() . 'new_analytics/Carrier', 'type' => 'child'),
-                    array('name' => 'Platforms', 'li-class' => ($this->uri->segment(1) == 'new_analytics') ? '' : '',  'url' => base_url() . 'new_analytics/Platforms', 'type' => 'child')
+                    array('name' => 'Dashboard', 'li-class' => ($this->uri->segment(1) == 'smart_analytics') ? '' : '', 'url' => base_url() . 'smart_analytics', 'type' => 'child'),
+                    array('name' => 'Users', 'li-class' => ($this->uri->segment(2) == 'smart_analytics' ) ? '' : '', 'url' => base_url() . 'smart_analytics/Users', 'type' => 'child'),
+                    array('name' => 'User Loyalty', 'li-class' => ($this->uri->segment(2) == 'smart_analytics') ? '' : '', 'url' => base_url() . 'smart_analytics/Loyalty', 'type' => 'child'),
+                    array('name' => 'Sessions', 'li-class' => ($this->uri->segment(2) == 'smart_analytics') ? '' : '', 'url' => base_url() . 'smart_analytics/Sessions', 'type' => 'child'),
+                    array('name' => 'Session Frequency', 'li-class' => ($this->uri->segment(2) == 'smart_analytics') ? '' : '',  'url' => base_url() . 'smart_analytics/Frequency', 'type' => 'child'),
+                    array('name' => 'Countries', 'li-class' => ($this->uri->segment(1) == 'smart_analytics') ? '' : '',  'url' => base_url() . 'smart_analytics/Countries', 'type' => 'child'),
+                    array('name' => 'Devices', 'li-class' => ($this->uri->segment(1) == 'smart_analytics') ? '' : '',  'url' => base_url() . 'smart_analytics/Devices', 'type' => 'child'),
+                    array('name' => 'App Versions', 'li-class' => ($this->uri->segment(1) == 'smart_analytics') ? '' : '',  'url' => base_url() . 'smart_analytics/Versions', 'type' => 'child'),
+                    array('name' => 'Carrier', 'li-class' => ($this->uri->segment(1) == 'smart_analytics') ? '' : '',  'url' => base_url() . 'smart_analytics/Carrier', 'type' => 'child'),
+                    array('name' => 'Platforms', 'li-class' => ($this->uri->segment(1) == 'smart_analytics') ? '' : '',  'url' => base_url() . 'smart_analytics/Platforms', 'type' => 'child')
                 )),
             array('name' => 'Video', 'url' => base_url().'video/index', 'class' => 'fa-video-camera',
                 'li-class' => (
