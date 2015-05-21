@@ -37,6 +37,7 @@ class Events_model extends CI_Model{
         if($last_insert_id)
         {
             $data['id'] = $last_insert_id;
+            unset($data['event_id']);
             return $data;
         }
     }
