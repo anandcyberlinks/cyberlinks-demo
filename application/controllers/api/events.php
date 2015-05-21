@@ -132,7 +132,7 @@ class Events extends REST_Controller
             'uid' => $this->post('userid'),
             'status' => '1'
             );
-                
+        print_r($data);        
 	    if($pic !='' && $pic != 0){
                $data['thumbnail']=base_url().EVENTPIC_PATH.$pic;
            }
