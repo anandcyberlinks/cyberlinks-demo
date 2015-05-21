@@ -35,6 +35,27 @@ class Events extends REST_Controller
             $this->response($response_arr, 404);
         }        
     }
+    
+    function base64_to_jpeg($base64_string, $output_file,$extension) {
+        
+	$img = $base64_string;
+	//$img = str_replace('data:image/png;base64,', '', $img);
+	$img = str_replace(' ', '+', $img);        
+        $file = uniqid() . '.'.$extension;
+	$data = base64_decode($img);
+        $srctmp = $output_file.'.tmp'.'.'.$extension;
+	$output_file .= $file;
+	$success = file_put_contents($srctmp, $data);
+        
+        //-- create thumbnail --//
+        
+        if($success){
+            $this->create_thumbnail($file,$srctmp,$output_file,'100','100');
+            return $file;
+        }else{
+            return 0;	    
+        }
+    }
        
     function categories_get()
     {
@@ -64,7 +85,63 @@ class Events extends REST_Controller
     }
     
     function add_events_post(){
-        $data = $this->post();
+        
+        $ext = $this->post('ext');
+        $my_base64_string = $this->post('pic');
+        //---- Upload logo image for user --//
+        if($ext !=''){
+	    if($my_base64_string !=''){
+		$pic = $this->base64_to_jpeg( $my_base64_string, EVENTPIC_PATH,$ext );
+		if($pic == 0){
+		    $this->response(array('code'=>0,'error' => "Error uploading image."), 404);
+		}
+	    }
+        }else{
+                $incoming_tmp = @$_FILES['pic']['tmp_name'];
+                $incoming_original = @$_FILES["pic"]["name"];
+                if ($incoming_original != '') {                    
+                    $path = EVENTPIC_PATH;
+                    $allowed = array('jpg', 'jpeg', 'png', 'gif');
+                    $output = $this->uploadfile($incoming_tmp, $incoming_original, $path, $allowed);  //-- upload file --//
+
+                    if ($output['error']) {
+                        $this->response(array('code'=>0,'error' => $output['error']), 404);
+                    } else {
+                        $pic = $output['path'];
+                    }
+                } else {
+                    //$_POST['file'] = $_POST['logo'];
+                }
+        }
+        $characters = 'ab0c1d2ef3gh4i5jkl7mn8opqrs9tuvw6xyz';
+        $random_key = '';
+        for ($i = 0; $i < 4; $i++) {
+             $random_key .= $characters[rand(0, strlen($characters) - 1)];
+        }
+        
+        $data = array(
+            'event_id' =>$random_key,
+	    'name' => $this->post('name'), 
+            'description' => $this->post('description'), 
+            'category' => $this->post('category'),
+            'url' => "http://multitvsolutions.com/".$this->post('token').$random_key,
+            'start_date' => $this->post('start_date'), 
+            'end_date' => $this->post('end_date'),
+            'event_type' => $this->post('event_type'),                     
+            'uid' => $this->post('uid'),
+            'status' => '1'
+            );
+                
+	    if($pic !='' && $pic != 0){
+               $data['thumbnail']=base_url().EVENTPIC_PATH.$pic;
+           }
+           //echo '<pre>'; print_r($data); exit;
+           $result = $this->Events_model->saveEvents($data);
+           
+           if(isset($result) && $result!=''){
+               $this->response(array('code'=>1,'result'=>$result), 200); // 200 being the HTTP response code
+           }else{
+               $this->response(array('code'=>0,'result'=>'Error'), 404);
+           }
     }
-    
 }

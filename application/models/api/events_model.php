@@ -25,5 +25,15 @@ class Events_model extends CI_Model{
        // $query = $this->db->query($sql);
         return $query->result();
     }
+    
+    public function saveEvents($data)
+    {
+        $this->db->set($data);
+        $this->db->set('created', 'NOW()', FALSE); 
+        $this->db->insert('events', $data);
+        $last_insert_id =  $this->db->insert_id();
+        
+        return $last_insert_id;
+    }
 }
     ?>
