@@ -83,6 +83,7 @@ switch ($s[0]->username) {
         $menu = array(
             array('name' => 'Dashboard', 'url' => base_url() . 'layout/dashboard', 'class' => 'fa-dashboard', 'li-class' => ($this->uri->segment(1) == 'layout') ? 'active' : ''),
             array('name' => 'Analytics', 'url' => base_url() . 'analytics/report', 'class' => 'fa fa-fw fa-bar-chart-o', 'li-class' => ($this->uri->segment(1) == 'analytics') ? 'active' : ''),
+            array('name' => 'Advanced Analytics', 'url' => base_url() . 'new_analytics', 'class' => 'fa fa-fw fa-bar-chart-o', 'li-class' => ($this->uri->segment(1) == 'analytics') ? 'active' : ''),
             array('name' => 'Video', 'url' => base_url().'video/index', 'class' => 'fa-video-camera',
                 'li-class' => (
                 ($this->uri->segment(2) == 'videoUploadSrc') ||
