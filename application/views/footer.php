@@ -3,13 +3,12 @@
 		<!-- jcrop -->
 		<script src="<?php echo base_url()?>assets/js/jcrop/jquery.Jcrop.js"></script>			
 		<!-- Bootstrap -->
-		<script src="<?php echo base_url() ?>assets/js/bootstrap.min.js" type="text/javascript"></script>
-                <script src="<?php echo base_url() ?>assets/js/bootstrap-dialog.min.js"></script>
+		
 		<!-- Bootstrap time Picker -->
 		<script src="<?php echo base_url();?>assets/js/plugins/timepicker/bootstrap-timepicker.min.js" type="text/javascript"></script>
 		<link href="<?php echo base_url() ?>assets/css/jQueryUI/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" type="text/css" />
 		<!-- bootbox.min.js -->
-		<script src="<?php echo base_url(); ?>assets/js/bootbox.min.js" type="text/javascript"></script>
+		
 		<!-- bootstrap-colorpicker.min.js -->
 		<script src="<?php echo base_url();?>assets/js/plugins/colorpicker/bootstrap-colorpicker.min.js" type="text/javascript"></script>
 		<!-- jquery-ui.js -->

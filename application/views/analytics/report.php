@@ -833,12 +833,10 @@
                 $('#datepickerend').attr('readonly', true);
                 $('#datepickerend').attr('disabled', 'disabled');
             }else if(searching_method=='date'){
-                
-                $("#datepickerstart").val("<?php echo $_POST['datepickerstart']; ?>");
+                $("#datepickerstart").val("<?php echo (isset($_POST['datepickerstart']))? $_POST['datepickerstart']:''; ?>");
                 $('#datepickerstart').removeAttr('readonly');
                 $('#datepickerstart').removeAttr('disabled');
-                
-                $("#datepickerend").val("<?php echo $_POST['datepickerend']; ?>");
+                $("#datepickerend").val("<?php echo (isset($_POST['datepickerstart']))? $_POST['datepickerstart']:''; ?>");
                 $('#datepickerend').removeAttr('readonly');
                 $('#datepickerend').removeAttr('disabled');
                 

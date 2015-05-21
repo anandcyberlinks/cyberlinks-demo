@@ -204,6 +204,9 @@ switch ($s[0]->username) {
         var loaderCenter = '<div align="center"><img class="loading" src="'+ baseurl +'assets/img/spinner.gif" /></div>';
         </script>
         <script src="<?php echo base_url() ?>assets/js/jQuery-2.1.3.min.js"></script>
+        <script src="<?php echo base_url() ?>assets/js/bootstrap.min.js" type="text/javascript"></script>
+                <script src="<?php echo base_url() ?>assets/js/bootstrap-dialog.min.js"></script>
+        <script src="<?php echo base_url(); ?>assets/js/bootbox.min.js" type="text/javascript"></script>
         <script src="<?php echo base_url() ?>assets/js/moment.js"></script>
         <script src="<?php echo base_url() ?>assets/js/bootstrap-datetimepicker.min.js"></script>
         <script src="<?php echo base_url() ?>assets/js/jquery.uploadfile.min.js"></script>
@@ -215,7 +218,6 @@ switch ($s[0]->username) {
     <body class="skin-blue layout-top-nav">
         <div class="wrapper row-offcanvas row-offcanvas-left">
         <!-- header logo: style can be found in header.less -->
-        
         <header class="main-header">               
         <nav class="navbar navbar-static-top">
           <div class="container">
@@ -232,7 +234,6 @@ switch ($s[0]->username) {
                     </a>
                 </li>
                 <?php }else { ?>
-                
                 <li class="dropdown">
                   <a data-toggle="dropdown" class="dropdown-toggle" href="javascript:void(0)">
                       <i class="fa <?=$val['class']?>"></i>
@@ -248,12 +249,10 @@ switch ($s[0]->username) {
                        </li>
                       <?php } ?>
                   </ul>
-                  
                 </li>
                   <?php } }?>
               </ul>
             </div><!-- /.navbar-collapse -->
-            
             <!-- Navbar Right Menu -->
               <div class="navbar-custom-menu">
                 <ul class="nav navbar-nav">
