@@ -122,7 +122,7 @@ class Events extends REST_Controller
         
         $data = array(
             'event_id' =>$random_key,
-	    'name' => $this->post('name'), 
+            'name' => $this->post('name'), 
             'description' => $this->post('description'), 
             'category' => $this->post('category'),
             'url' => base_url().$this->post('u_token').$random_key,

@@ -34,8 +34,11 @@ class Events_model extends CI_Model{
         $this->db->set('created', 'NOW()', FALSE); 
         $this->db->insert('events', $data);
         $last_insert_id =  $this->db->insert_id();
-        
-        return $last_insert_id;
+        if($last_insert_id)
+        {
+            $data['id'] = $last_insert_id;
+            return $data;
+        }
     }
 }
     ?>
