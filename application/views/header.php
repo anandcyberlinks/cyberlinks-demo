@@ -204,16 +204,6 @@ switch ($s[0]->username) {
         <header class="main-header">               
         <nav class="navbar navbar-static-top">
           <div class="container">
-            <div class="navbar-header">
-                <a class="logo" href="<?php echo base_url(); ?>">
-                    <!-- Add the class icon to your logo image or logo icon to add the margining -->
-                    <img alt="User Pic" src="<?php echo $welcome->getimage() ?>" width="<?php echo $width ?>" height="<?php echo $height ?>">
-                </a>
-              <button data-target="#navbar-collapse" data-toggle="collapse" class="navbar-toggle collapsed" type="button">
-                <i class="fa fa-bars"></i>
-              </button>
-            </div>
-
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div id="navbar-collapse" class="collapse navbar-collapse pull-left">
               <ul class="nav navbar-nav">
