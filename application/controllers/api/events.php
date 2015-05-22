@@ -80,6 +80,7 @@ class Events extends REST_Controller
                 error_reporting(E_ALL);
                     $val->url_mobile = preg_replace("/^rtsp:/i", "http:", $val->url,1).'/playlist.m3u8';
                     $val->url_web = preg_replace("/^rtsp:/i", "rtmp:", $val->url,1);
+                    unset($val->event_id);
                     unset($val->url);
                     $newresult[$val->category_name][] = $val;
             }
