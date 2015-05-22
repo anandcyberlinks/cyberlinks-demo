@@ -409,7 +409,7 @@ function delete_user($id){
    {
 	  if(!$is_active){
 		 $this->db->set("duration"," TIMESTAMPDIFF(SECOND,session_start,active_time)",false);
-		 $this->db->set('session_end', $endtime);
+		 $this->db->set('session_end', "NOW()",false);
 	  }
 	  $this->db->set('active_time', "NOW()",false);	  
 	  $this->db->set('status',$is_active);
