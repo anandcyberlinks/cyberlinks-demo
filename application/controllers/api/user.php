@@ -876,7 +876,33 @@ class User extends REST_Controller
                
         $this->response($response_arr, $response_code);
     }
+	
+	function heart_beat_post()
+	{
+		//-- check if Admin token is valid --//
+	    $owner_id =  $this->User_model->checkAdminToken($this->admin_token);	  
+	    if($owner_id <= 0){
+		//$this->response(array('code'=>0,'error' => "Invalid Token"), 404);
+            $response_arr = array('code'=>0,'error' => "Invalid Token");               
+            $this->response($response_arr, 404);
+	    }
+       //-----------------------------------//	   
+		$sess_id = $this->post('sess_id');
+		$is_active = $this->post('status');
+		$endtime = $this->post('end_time');		
+		$this->User_model->checksession($sess_id,$is_active,$endtime);
+		$this->response(array('code'=>1), 200); 
+	}
     
+	function socket_post()
+	{		   
+		$sess_id = $this->post('sess_id');
+		$is_active = $this->post('status');
+		$endtime = $this->post('end_time');		
+		$this->User_model->checksession($sess_id,$is_active,$endtime);
+		$this->response(array('code'=>1), 200); 
+	}
+	
     function resumesession_get()
     {	
      //rint_r($this->get());
