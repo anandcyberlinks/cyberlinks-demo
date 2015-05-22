@@ -547,7 +547,7 @@ class User extends REST_Controller
 		//--- insert device unique id ---//
 		// $uniqueData = array('device_unique_id'=>$uniqueId,'user_id'=>$id);
                  $devicedetail->user_id=$id;
-		 $customer_device_id= $this->User_model->userDeviceID($uniqueData);
+		 $customer_device_id= $this->User_model->userDeviceID($devicedetail);
                
                 $socialdata = array('social_id' => $socialid, 
                 'from' => $provider,            
