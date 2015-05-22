@@ -907,7 +907,7 @@ class User extends REST_Controller
 		$this->response(array('code'=>1), 200); 
 	}
 	
-    function resumesession_get()
+    function resumesession_post()
     {	
      //rint_r($this->get());
         $user_id = 0;
