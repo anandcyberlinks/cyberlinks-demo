@@ -14,9 +14,10 @@ class Events_model extends CI_Model{
     }
     
     function categoryEvents($cid='', $userid=''){
-        $this->db->select('a.*,b.title as category_name');
+        $this->db->select("a.*,b.title as category_name,c.id as user_id,CONCAT(c.first_name,' ',c.last_name) AS user_name",FALSE);
         $this->db->from('events a');
         $this->db->join('event_category b','a.category=b.id');
+        $this->db->join('customers c','a.uid=c.id');
         if($cid!=''){
             $this->db->where('category',$cid);
         }
