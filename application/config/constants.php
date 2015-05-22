@@ -105,6 +105,9 @@ if (isset($config['amazons3'])) {
     define('THUMB_LARGE_PATH', 'assets/upload/thumbs/large/');
     define('PROFILEPIC_PATH', 'assets/upload/profilepic/');
     define('EVENTPIC_PATH', 'assets/upload/eventpic/');
+    define('EVENT_URL', 'rtsp://belive.mobi:1935/belive/');
+    define('EVENT_URL_WEB', 'rtmp://belive.mobi:1935/belive/');
+    define('EVENT_URL_MOBILE', 'http://belive.mobi:1935/belive/');
     define('CATEGORY_PATH', 'assets/upload/category/');
     define('CATEGORY_SMALL_PATH', 'assets/upload/category/small/');
     define('CATEGORY_MEDIUM_PATH', 'assets/upload/category/medium/');

@@ -33,7 +33,7 @@ class Events extends REST_Controller
         {                
             $response_arr = array('code'=>0,'error' => "Invalid Token");               
             $this->response($response_arr, 404);
-        }        
+        }
     }
     
     function base64_to_jpeg($base64_string, $output_file,$extension) {
@@ -77,6 +77,10 @@ class Events extends REST_Controller
         {
             $newresult = array();
             foreach($result as $key => $val){
+                error_reporting(E_ALL);
+                    $val->url_mobile = preg_replace("/^rtsp:/i", "http:", $val->url,1).'/playlist.m3u8';
+                    $val->url_web = preg_replace("/^rtsp:/i", "rtmp:", $val->url,1);
+                    unset($val->url);
                     $newresult[$val->category_name][] = $val;
             }
             $this->response(array('code'=>1,'result'=>$newresult), 200); // 200 being the HTTP response code
@@ -125,7 +129,7 @@ class Events extends REST_Controller
             'name' => $this->post('name'), 
             'description' => $this->post('description'), 
             'category' => $this->post('category'),
-            'url' => base_url().$this->post('u_token').$random_key,
+            'url' => EVENT_URL.$this->post('u_token').$random_key,
             'start_date' => $this->post('start_date'), 
             'end_date' => $this->post('end_date'),
             'event_type' => $this->post('event_type'),                     
@@ -137,6 +141,8 @@ class Events extends REST_Controller
            }
            //echo '<pre>'; print_r($data); exit;
            $result = $this->Events_model->saveEvents($data);
+           $result['url_mobile'] = EVENT_URL_MOBILE.$this->post('u_token').$random_key.'/playlist.m3u8';
+           $result['url_web'] = EVENT_URL_WEB.$this->post('u_token').$random_key;
            
            if(isset($result) && $result!=''){
                $this->response(array('code'=>1,'result'=>$result), 200); // 200 being the HTTP response code
