@@ -405,6 +405,18 @@ function delete_user($id){
             return 0;
    }
    
+   public function checksession($id,$is_active,$endtime)
+   {
+	  if(!$is_active){
+		 $this->db->set("duration"," TIMESTAMPDIFF(SECOND,session_start,active_time)",false);
+		 $this->db->set('session_end', $endtime);
+	  }
+	  $this->db->set('active_time', "NOW()",false);	  
+	  $this->db->set('status',$is_active);
+	  $this->db->where('id',$id);
+	  $this->db->update('app_session');	 
+   }
+   
     public function sessioninformation($session)
    {
         $this->db->select('*');
