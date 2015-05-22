@@ -27,9 +27,15 @@ class User extends REST_Controller
        parent::__construct();
        $this->load->helper('url');
        $this->load->model('api/User_model');
-       $this->admin_token = $this->get('token');
-        if($this->admin_token =='' || $this->admin_token==0){
-            $this->response(array('code'=>0,'error' => "Invalid Token"), 404);            
+       print_r($this->post());
+        //print_r($this->get());
+        die;
+       echo $this->admin_token = $this->get('token');
+        if($this->admin_token ==' ' || $this->admin_token==0){
+          echo  $this->admin_token = $this->post('token');
+            {
+            $this->response(array('code'=>0,'error' => "Must Pass Token"), 404);
+            }
         }
       //$this->admin_token = '54d46a72bab49';
    }       
@@ -907,7 +913,7 @@ class User extends REST_Controller
     {	
      //rint_r($this->get());
         $user_id = 0;
-        $oldsession = $this->get('session');
+        $oldsession = $this->post('session');
        
        
         $owner_id =  $this->User_model->checkAdminToken($this->admin_token);   //application user id
