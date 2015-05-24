@@ -152,10 +152,10 @@ class Events extends REST_Controller
            }
     }
 	
-	function publish_get()
+	function publish_post()
 	{		
-		$id = $this->get('id');
-		$status = $this->get('status');
+		$id = $this->post('id');
+		$status = $this->post('status');
 		$this->db->set('status',$status);
 		$this->db->set('modified', 'NOW()',false);
 		$this->db->where('id',$id);
