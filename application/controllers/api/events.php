@@ -159,7 +159,8 @@ class Events extends REST_Controller
 		$this->db->set('status',$status);
 		$this->db->set('modified', 'NOW()',false);
 		$this->db->where('id',$id);
-		$this->db->update('event');		
+		$this->db->update('event');
+		echo $this->db->last_query();
         $this->response(array('code'=>1), 200); // 200 being the HTTP response code        
 	}
 }
