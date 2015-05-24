@@ -44,7 +44,7 @@ class Events extends REST_Controller
         $file = uniqid() . '.'.$extension;
 	$data = base64_decode($img);
         $srctmp = $output_file.'.tmp'.'.'.$extension;
-	$output_file .= $file;
+	 $output_file .= $file;
 	$success = file_put_contents($srctmp, $data);
         
         //-- create thumbnail --//
@@ -151,4 +151,15 @@ class Events extends REST_Controller
                $this->response(array('code'=>0,'result'=>'Error'), 404);
            }
     }
+	
+	function publish_get()
+	{		
+		$id = $this->get('id');
+		$status = $this->get('status');
+		$this->db->set('status',$status);
+		$this->db->set('modified', 'NOW()',false);
+		$this->db->where('id',$id);
+		$this->db->update('event');		
+        $this->response(array('code'=>1), 200); // 200 being the HTTP response code        
+	}
 }
