@@ -86,7 +86,7 @@ class Events extends REST_Controller
 					if($val->id !=''){
                     $newresult[$val->category_name][] = $val;
 					}else{
-						$newresult[$val->category_name][] ='';
+						$newresult[$val->category_name] ='';
 					}
 			}
             $this->response(array('code'=>1,'result'=>$newresult), 200); // 200 being the HTTP response code
