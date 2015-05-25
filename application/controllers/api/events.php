@@ -78,6 +78,9 @@ class Events extends REST_Controller
             $newresult = array();
             foreach($result as $key => $val){
 				
+				if($val->thumbnail ==''){
+					$val->thumbnail = base_url().IMG_PATH.'no-image.jpg';	
+				}
                 //error_reporting(E_ALL);
                     $val->url_mobile = preg_replace("/^rtsp:/i", "http:", $val->url,1).'/playlist.m3u8';
                     $val->url_web = preg_replace("/^rtsp:/i", "rtmp:", $val->url,1);
@@ -87,7 +90,7 @@ class Events extends REST_Controller
                     $newresult[$val->category_name][] = $val;
 					}else{
 						$newresult[$val->category_name] =array();
-					}
+					}					
 			}
             $this->response(array('code'=>1,'result'=>$newresult), 200); // 200 being the HTTP response code
         }else{
@@ -140,7 +143,7 @@ class Events extends REST_Controller
             'end_date' => $this->post('end_date'),
             'event_type' => $this->post('event_type'),                     
             'uid' => $this->post('userid'),
-            'status' => '1'
+            'status' => '0'
             );              
 	    if($pic !='' && $pic != 0){
                $data['thumbnail']=base_url().EVENTPIC_PATH.$pic;
@@ -158,7 +161,7 @@ class Events extends REST_Controller
     }
 	
 	function publish_post()
-	{		
+	{
 		$id = $this->post('id');
 		$status = $this->post('status');
 		$this->db->set('status',$status);
