@@ -83,11 +83,11 @@ class Events extends REST_Controller
                     $val->url_web = preg_replace("/^rtsp:/i", "rtmp:", $val->url,1);
                     unset($val->event_id);
                     unset($val->url);
-					if($result->id !=''){
+					//if($result->id !=''){
                     $newresult[$val->category_name][] = $val;
-					}else{
-						$newresult[$val->category_name][] ='';
-					}
+					//}else{
+					//	$newresult[$val->category_name][] ='';
+					//}
 			}
             $this->response(array('code'=>1,'result'=>$newresult), 200); // 200 being the HTTP response code
         }else{
