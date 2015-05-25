@@ -23,7 +23,8 @@ class Events_model extends CI_Model{
         }
         if($userid !=''){
             $this->db->where('a.uid',$userid);
-        }       
+        }
+        $this->db->order_by('a.id','desc');
        $query = $this->db->get();       
       // echo $this->db->last_query();die;
         return $query->result();
