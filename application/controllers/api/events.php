@@ -77,13 +77,18 @@ class Events extends REST_Controller
         {
             $newresult = array();
             foreach($result as $key => $val){
-                error_reporting(E_ALL);
+				
+                //error_reporting(E_ALL);
                     $val->url_mobile = preg_replace("/^rtsp:/i", "http:", $val->url,1).'/playlist.m3u8';
                     $val->url_web = preg_replace("/^rtsp:/i", "rtmp:", $val->url,1);
                     unset($val->event_id);
                     unset($val->url);
+					if($result->id !=''){
                     $newresult[$val->category_name][] = $val;
-            }
+					}else{
+						$newresult[$val->category_name][] ='';
+					}
+			}
             $this->response(array('code'=>1,'result'=>$newresult), 200); // 200 being the HTTP response code
         }else{
             $this->response(array('code'=>0,'result'=>'No record found'), 404);
