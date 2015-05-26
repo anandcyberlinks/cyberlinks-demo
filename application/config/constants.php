@@ -1,5 +1,4 @@
 <?php
-
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
@@ -73,51 +72,6 @@ if (isset($_SERVER['HTTP_HOST'])) {
 $base_url .= str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']);
 define('baseurl', $base_url);
 
-if (isset($config['amazons3'])) {
-    define('serverurl', 'http://' . bucket . '.s3.amazonaws.com/');
-    define('serverDir', 'videos/');
-    define('serverVideoRelPath', 'http://' . bucket . '.s3.amazonaws.com/videos/');
-    define('serverLogoRelPath', 'http://' . bucket . '.s3.amazonaws.com/videos/');
-    define('serverImageRelPath', 'http://' . bucket . '.s3.amazonaws.com/videos/');
-    define('REAL_PATH', '');
-    define('THUMB_SMALL_PATH', 'http://' . bucket . '.s3.amazonaws.com/videos/');
-    define('THUMB_MEDIUM_PATH', 'http://' . bucket . '.s3.amazonaws.com/videos/');
-    define('THUMB_LARGE_PATH', 'http://' . bucket . '.s3.amazonaws.com/videos/');
-    define('PROFILEPIC_PATH', 'http://' . bucket . '.s3.amazonaws.com/videos/');
-    define('CATEGORY_PATH', 'assets/upload/category/');
-    define('CATEGORY_SMALL_PATH', 'assets/upload/category/small/');
-    define('CATEGORY_MEDIUM_PATH', 'assets/upload/category/medium/');
-    define('CATEGORY_LARGE_PATH', 'assets/upload/category/large/');
-    define('APPLICATIONS_PATH', 'assets/upload/applications/');
-    define('APPLICATIONS_SMALL_PATH', 'assets/upload/applications/small/');
-    define('APPLICATIONS_MEDIUM_PATH', 'assets/upload/applications/medium/');
-    define('APPLICATIONS_LARGE_PATH', 'assets/upload/applications/large/');
-} else {
-    define('serverurl', baseurl);
-    define('serverDir', 'videos/');
-    define('serverVideoRelPath', 'assets/upload/video/');
-    define('serverAudioRelPath', 'assets/upload/audio/');
-    define('serverLogoRelPath', 'assets/upload/logo/');
-    define('serverImageRelPath', 'assets/upload/thumbs/');
-    define('REAL_PATH', $path_nw . '/');
-    define('THUMB_SMALL_PATH', 'assets/upload/thumbs/small/');
-    define('THUMB_MEDIUM_PATH', 'assets/upload/thumbs/medium/');
-    define('THUMB_LARGE_PATH', 'assets/upload/thumbs/large/');
-    define('PROFILEPIC_PATH', 'assets/upload/profilepic/');
-    define('EVENTPIC_PATH', 'assets/upload/eventpic/');
-    define('EVENT_URL', 'rtsp://belive.mobi:1935/belive/');
-    define('EVENT_URL_WEB', 'rtmp://belive.mobi:1935/belive/');
-    define('EVENT_URL_MOBILE', 'http://belive.mobi:1935/belive/');
-    define('CATEGORY_PATH', 'assets/upload/category/');
-    define('CATEGORY_SMALL_PATH', 'assets/upload/category/small/');
-    define('CATEGORY_MEDIUM_PATH', 'assets/upload/category/medium/');
-    define('CATEGORY_LARGE_PATH', 'assets/upload/category/large/');
-    define('APPLICATIONS_PATH', 'assets/upload/applications/');
-    define('APPLICATIONS_SMALL_PATH', 'assets/upload/applications/small/');
-    define('APPLICATIONS_MEDIUM_PATH', 'assets/upload/applications/medium/');
-    define('APPLICATIONS_LARGE_PATH', 'assets/upload/applications/large/');
-    define('serverAdsRelPath', 'assets/upload/ads/');
-}
 
 define('PER_PAGE', 10);
 

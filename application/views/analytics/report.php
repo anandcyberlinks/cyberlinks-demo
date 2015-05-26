@@ -703,7 +703,7 @@
                 var os_data = [
                <?php $i=1; foreach($os as $row){ $i++;?>
                 {label: "<?php echo ($row->platform!='') ? $row->platform.'<br/>'.$row->total_hits : 'Anonymus'.'<br/>'.$row->total_hits;?>", data: "<?php echo $row->total_hits;?>"},
-               <?php }?>
+               <?php } ?>
             ];
 
 		var os_chart_placeholder = $("#os_chart");

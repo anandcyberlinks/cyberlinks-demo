@@ -1,4 +1,5 @@
 <?php
+
 ini_set('display_errors', 1);
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
@@ -42,16 +43,16 @@ class Video extends MY_Controller {
                 'label' => 'Content Category',
                 'rules' => 'trim|required'
             )
-            /* array(
-              'field' => 'content_channel',
-              'label' => 'Content Channel',
-              'rules' => 'trim|required'
-              ), 
-            array(
-                'field' => 'description',
-                'label' => 'Description',
-                'rules' => 'trim|required'
-            ) */
+        /* array(
+          'field' => 'content_channel',
+          'label' => 'Content Channel',
+          'rules' => 'trim|required'
+          ),
+          array(
+          'field' => 'description',
+          'label' => 'Description',
+          'rules' => 'trim|required'
+          ) */
         ),
         'video_schedule' => array(
             array(
@@ -95,14 +96,116 @@ class Video extends MY_Controller {
       /   function to show list of videos
       /--------------------------------------------------------------------------------
       /
-     */
+    */
+    function s3Files() {
+        if (!defined('awsAccessKey')) define('awsAccessKey', 'AKIAJ4KAM6S3JS3V3GQQ');
+        if (!defined('awsSecretKey')) define('awsSecretKey', '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');
+        $bucketName = bucket;
+        $this->load->library('S3', array('awsAccessKey'=>awsAccessKey, 'awsSecretKey'=>awsSecretKey));
+        $contents = $this->s3->getBucket($bucketName);
+        echo "<hr/>List of Files in bucket : {$bucketName} <hr/>";
+        $n = 1;
+        foreach ($contents as $p => $v):
+            echo $p."<br/>";
+            $n++;
+        endforeach;
+    }
+
+    function google($video_temp = '', $video_name = '', $video_desc = '') {
+        $OAUTH2_CLIENT_ID = '353001433162-42vrona3fi8msfve7akh857t6fk0di9v.apps.googleusercontent.com';
+        $OAUTH2_CLIENT_SECRET = 'cEcHT7CkTK5GYUDmC7dgYa8r';
+        $redirect = 'http://localhost/multitvfinal/index.php/video/google';
+        $client = new Google_Client();
+        $client->setClientId($OAUTH2_CLIENT_ID);
+        $client->setClientSecret($OAUTH2_CLIENT_SECRET);
+        $client->setScopes('https://www.googleapis.com/auth/youtube');
+        $redirect = filter_var('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'],FILTER_SANITIZE_URL);
+        $client->setRedirectUri($redirect);
+        $youtube = new Google_Service_YouTube($client);
+        if (isset($_GET['code'])) { 
+            if (strval($this->session->userdata('state')) !== strval($_GET['state'])) {
+                die('The session state did not match.');
+            }
+            $client->authenticate($_GET['code']);
+            $this->session->set_userdata('token', $client->getAccessToken());
+            header('Location: ' . $redirect);
+        }
+        $session_token = ($this->session->userdata('token'));
+        if ($session_token) {
+            $client->setAccessToken($this->session->userdata('token'));
+        }
+        if ($client->getAccessToken()) {
+            if (isset($video_temp) && $video_temp != '') {
+                // REPLACE this value with the path to the file you are uploading.
+                $videoPath = $video_temp;
+                // Create a snippet with title, description, tags and category ID
+                // Create an asset resource and set its snippet metadata and type.
+                // This example sets the video's title, description, keyword tags, and
+                // video category.
+                $snippet = new Google_Service_YouTube_VideoSnippet();
+                $snippet->setTitle($video_name);
+                $snippet->setDescription($video_desc);
+                $snippet->setTags(array("globalPunjab", "Video"));
+                // Numeric video category. See
+                // https://developers.google.com/youtube/v3/docs/videoCategories/list 
+                $snippet->setCategoryId("22");
+                $snippet->setChannelTitle("GlobalPunjab");
+                // Set the video's status to "public". Valid statuses are "public",
+                // "private" and "unlisted".
+                $status = new Google_Service_YouTube_VideoStatus();
+                $status->privacyStatus = "public";
+                // Associate the snippet and status objects with a new video resource.
+                $video = new Google_Service_YouTube_Video();
+                $video->setSnippet($snippet);
+                $video->setStatus($status);
+                // Specify the size of each chunk of data, in bytes. Set a higher value for
+                // reliable connection as fewer chunks lead to faster uploads. Set a lower
+                // value for better recovery on less reliable connections.
+                $chunkSizeBytes = 1 * 1024 * 1024;
+                // Setting the defer flag to true tells the client to return a request which can be called
+                // with ->execute(); instead of making the API call immediately.
+                $client->setDefer(true);
+                // Create a request for the API's videos.insert method to create and upload the video.
+                $insertRequest = $youtube->videos->insert("status,snippet", $video);
+                // Create a MediaFileUpload object for resumable uploads.
+                $media = new Google_Http_MediaFileUpload(
+                        $client, $insertRequest, 'video/*', null, true, $chunkSizeBytes
+                );
+                $media->setFileSize(filesize($videoPath));
+                // Read the media file and upload it chunk by chunk.
+                $status = false;
+                $handle = fopen($videoPath, "rb");
+                while (!$status && !feof($handle)) {
+                    $chunk = fread($handle, $chunkSizeBytes);
+                    $status = $media->nextChunk($chunk);
+                }
+                fclose($handle);
+                // If you want to make other calls after the file upload, set setDefer back to false
+                $client->setDefer(false);
+                $htmlBody = $status['id'];
+                //echo "<pre>"; print_r($status);
+            }
+            $htmlBody = false;
+        } else {
+            // If the user hasn't authorized the app, initiate the OAuth flow
+            $state = mt_rand();
+            $client->setState($state);
+            $this->session->set_userdata('state', $state);
+            //echo $this->session->userdata('state');
+            $authUrl = $client->createAuthUrl();
+            $htmlBody = $authUrl;
+        }
+        return $htmlBody;
+        //spl_autoload_register('google_api_php_client_autoload'); die;
+    }
 
     function test() {
         $data['welcome'] = $this;
         $this->show_view('test', $data);
-        }
-        
-    function data(){
+    }
+   
+
+    function data() {
         $searchterm = '';
         if ($this->uri->segment(2) == '') {
             $this->session->unset_userdata('search_form');
@@ -123,7 +226,7 @@ class Video extends MY_Controller {
                 if ($sort_by == 'asc')
                     $data['show_u'] = 'desc';
                 else
-                    $data['show_u'] = 'asc';
+                    $data['show_u'] = ' ';
                 break;
             case "status":
                 $sort = 'a.status';
@@ -155,21 +258,12 @@ class Video extends MY_Controller {
         } else if (isset($_GET['reset'])) {
             $this->session->unset_userdata('search_form');
         }
-        
+
         $searchterm = $this->session->userdata('search_form');
         $data['count'] = $this->videos_model->get_videocount($this->uid, $searchterm);
         $data['result'] = $this->videos_model->get_video($this->uid, 10, 1, $sort, $sort_by, $searchterm);
-        
         $this->load->view('test', $data);
-        
-        
-        
-        
-        
-        //$count = $this->videos_model->get_videocount($this->uid, $searchterm);
-        //$video = $this->videos_model->get_video($this->uid, 10, 1, $sort, $sort_by, $searchterm);
     }
-                    
 
     function index() {
         $searchterm = '';
@@ -225,7 +319,7 @@ class Video extends MY_Controller {
             $this->session->unset_userdata('search_form');
         }
         $searchterm = $this->session->userdata('search_form');
-       // echopre($searchterm);
+        // echopre($searchterm);
         $this->load->library("pagination");
         $config = array();
         $config["base_url"] = base_url() . "video/index/";
@@ -238,7 +332,6 @@ class Video extends MY_Controller {
         $data["links"] = $this->pagination->create_links();
         $data['category'] = $this->videos_model->get_category($this->uid);
         $data['total_rows'] = $config["total_rows"];
-        //echo "<pre>"; print_r($data['result']); die;
         $this->show_view('search_video', $data);
     }
 
@@ -292,7 +385,7 @@ class Video extends MY_Controller {
       /----------------------------------------------------------------
       /   function to show video information or update video details
       /----------------------------------------------------------------
-     */
+    */
 
     function videoprofile() {
         $this->data['welcome'] = $this;
@@ -313,7 +406,7 @@ class Video extends MY_Controller {
                     $this->log($this->user, $msg);
                     $this->session->set_flashdata('message', $this->_successmsg($msg));
                     redirect('video');
-                } else {    
+                } else {
                     $this->data['result'] = (array) $this->videos_model->edit_profile($vid);
                     $this->data['result']['keywords'] = $this->videos_model->_getKeyword($vid);
                     $this->data['thumbnails_info'] = $this->videos_model->get_thumbs($vid);
@@ -365,14 +458,11 @@ class Video extends MY_Controller {
             foreach ($_POST as $keyadvance => $values) {
                 //echo $keyadvance."==>".$values."<br>";
                 $value[$keyadvance] = $values;
-
                 $val = $this->videos_model->get_videofieldvalueadvance($keyadvance);
                 if (isset($val[0]->value)) {
                     $val1[$keyadvance] = $val[0]->value;
                 }
             }
-
-
             $this->videos_model->save_videofieldvalueadvance($value);
             $msg = $this->loadPo($this->config->item('success_record_update'));
             $this->log($this->user, $msg);
@@ -486,6 +576,7 @@ class Video extends MY_Controller {
                 case "Upload":
                     //$this->upload();
                     $this->data['tab'] = $tab;
+                    $this->data['youtube'] = $this->google();
                     $this->show_view('upload_video', $this->data);
                     break;
                 case "Other":
@@ -514,10 +605,33 @@ class Video extends MY_Controller {
       /--------------------------------------------------------------------------------
      */
 
+    function pre_upload() {
+        print_r($_POST);
+        if (isset($_POST['upload_on'])) {
+
+            if ($_POST['upload_on'] == 's3') {
+                $this->session->set_userdata('upload_on', true);
+            } else {
+                $this->session->set_userdata('upload_on', false);
+            }
+        }
+        if (isset($_POST['upload_youtube'])) {
+            if ($_POST['upload_youtube'] == 'youtube') {
+                $this->session->set_userdata('youtube_upload', true);
+            } else {
+                $this->session->set_userdata('youtube_upload', false);
+            }
+        }
+        //$ss = $this->session->userdata('upload_on');
+        //var_dump($ss);
+    }
+
     function upload() {
+        //print_r($_POST); die;
         $per = $this->checkpermission($this->role_id, 'add');
         if ($per) {
             $this->data['welcome'] = $this;
+
             if (isset($_FILES['0']['tmp_name']) && $_FILES['0']['tmp_name'] != "") {
                 $tmpFilePath = $_FILES['0']['tmp_name'];
                 $originalFileName = $_FILES["0"]["name"];
@@ -529,13 +643,15 @@ class Video extends MY_Controller {
                     $data['message'] = $this->_errormsg($message);
                     echo json_encode($data);
                 } else {
+                    $youtube_session = $this->session->userdata('youtube_upload');
+
                     $videoresult = $this->_upload($tmpFilePath, $fileUniqueName, 'video');
                     if ($videoresult) {
                         $data = array();
                         $data['content_title'] = $originalFileName;
                         $data['uid'] = $this->uid;
                         $data['filename'] = $fileUniqueName;
-                        $data['relative_path'] = serverVideoRelPath . $fileUniqueName;
+                        $data['relative_path'] = serverurl . $fileUniqueName;
                         $data['absolute_path'] = REAL_PATH . serverVideoRelPath . $fileUniqueName;
                         $data['minetype'] = "video/" . $fileExt;
                         $data['type'] = $fileExt;
@@ -546,6 +662,11 @@ class Video extends MY_Controller {
                         $this->log($this->user, $msg);
                         $temp['id'] = base64_encode($last_id);
                         $temp['message'] = $this->_successmsg($msg);
+
+                        if ($youtube_session) {
+                            $this->google($tmpFilePath, $originalFileName, $originalFileName);
+                        }
+
                         echo $last_id;
                         //echo json_encode($temp);
                     } else {
@@ -562,39 +683,40 @@ class Video extends MY_Controller {
             redirect(base_url() . 'video');
         }
     }
-    
-    
+
     /*
      * Function for edit multiple uploaded video
      */
+
+    function postfile(){
+        print_r($_FILES); die;
+    }
     
-    function EditAllInvalid(){
-        
-        $query = "select id, title from contents where category is NULL and uid = $this->uid ORDER BY id DESC"; 
+    function EditAllInvalid() {
+
+        $query = "select id, title from contents where category is NULL and uid = $this->uid ORDER BY id DESC";
         $res = $this->db->query($query)->result();
         //print_r($res); die;
-        if(count($res)==0){
-            redirect(base_url().'video');
+        if (count($res) == 0) {
+            redirect(base_url() . 'video');
         }
         $data['record'] = $res;
         $data['category'] = $this->videos_model->get_category($this->uid);
         //echo "<pre>";
         $data['welcome'] = $this;
-        $this->show_view('editall',$data);
+        $this->show_view('editall', $data);
         //print_r($res);
     }
-    
-    function submitAll(){
+
+    function submitAll() {
         //print_r($_POST);die;
-        $id =  $this->videos_model->_saveVideo($_POST);
-        if($id){
+        $id = $this->videos_model->_saveVideo($_POST);
+        if ($id) {
             echo $id;
-        }else{
+        } else {
             echo "Try Again";
-        }   
+        }
     }
-
-
 
     /*
       /-------------------------------------------------------------
@@ -608,12 +730,12 @@ class Video extends MY_Controller {
         if ($matches) {
             $post = array();
             $tmp = $this->get_youtube($videoUrl);
-            
+
             $youtubeData = $tmp['detail']['entry']->{'media$group'};
             $post['content_token'] = $tmp['id'];
             $post['content_title'] = $tmp['detail']['entry']->{'title'}->{'$t'};
             $post['description'] = $youtubeData->{'media$description'}->{'$t'};
-            $post['duration'] = $youtubeData->{'media$content'}[0]->duration; 
+            $post['duration'] = $youtubeData->{'media$content'}[0]->duration;
             $post['uid'] = $this->uid;
             $post['created'] = date('Y-m-d');
             $post['type'] = 'youtube';
@@ -731,6 +853,7 @@ class Video extends MY_Controller {
      */
 
     function csvupload() {
+        //print_r($_POST); die; 
         $this->data['welcome'] = $this;
         $per = $this->checkpermission($this->role_id, 'add');
         if ($per) {
@@ -760,7 +883,7 @@ class Video extends MY_Controller {
                         $contentData['category'] = $catId;
                         $contentData['uid'] = $this->uid;
                         $contentData['filename'] = $videoFileUniqName;
-                        $contentData['relative_path'] = serverVideoRelPath . $videoFileUniqName;
+                        $contentData['relative_path'] = serverurl . $videoFileUniqName;
                         $contentData['absolute_path'] = REAL_PATH . serverVideoRelPath . $videoFileUniqName;
                         $contentData['minetype'] = "video/" . $videoFileExt;
                         $contentData['type'] = $videoFileExt;
@@ -896,7 +1019,7 @@ class Video extends MY_Controller {
                     $message = $this->_warningmsg($this->loadPo($this->config->item('warning_username_password')));
                 }
             } else {
-                $result =  "erroe";
+                $result = "erroe";
                 $message = "Invalid login";
             }
         } else {
@@ -927,6 +1050,7 @@ class Video extends MY_Controller {
         $ftp_userpass = $_POST['password'];
         $ftp_conn = ftp_connect($ftp_server) or die("Could not connect to $ftp_server");
         $login = ftp_login($ftp_conn, $ftp_username, $ftp_userpass);
+        //print_r($login); 
         //$redirect_url = $_POST['redirect_url'];
         $fileNameArr = $_POST['chk'];
         $filesArr = explode(",", rtrim($fileNameArr, ','));
@@ -935,23 +1059,27 @@ class Video extends MY_Controller {
             $fileExt = $this->_getFileExtension($fileName);
             $fileNameUniq = uniqid() . "." . $fileExt;
             $fieSrcPath = $this->input->post('ftpPath') . $fileName;
-            $fieDestPath = REAL_PATH . serverVideoRelPath . $fileNameUniq;
+            $filepath = 'http://'.$ftp_server.$fieSrcPath; 
+            
+            $dir_path = getcwd();
+            $path_nw = str_replace('\\', '/', $dir_path);
+            $fieDestPath = $path_nw.'/' . 'assets/upload/video/' . $fileNameUniq;
             $msg = "";
             if (!in_array($fileExt, $this->allowedVideoExt)) {
                 $msg = $this->loadPo($this->config->item('error_file_format') . $fileName);
                 $this->log($this->user, $msg);
                 $data['message'] = $this->_errormsg($msg);
             } else {
-                $videoresult = $this->_downloadFileFtp($fieSrcPath, $fieDestPath, $ftp_conn);
+                $videoresult = $this->_uploadFileCurl($filepath, $fieDestPath, $fileNameUniq);
                 if ($videoresult) {
                     $fileInfo = $this->getFileInfo($fieDestPath);
-                    $mimeType = $fileInfo['mime_type'];
+                    $mimeType = 'test ';//$fileInfo['mime_type'];
                     $data = array();
                     $data['content_title'] = $fileNameUniq;
                     $data['uid'] = $this->uid;
                     $data['type'] = 'FTP';
                     $data['filename'] = $fileNameUniq;
-                    $data['relative_path'] = serverVideoRelPath . $fileNameUniq;
+                    $data['relative_path'] = serverurl . $fileNameUniq;
                     $data['absolute_path'] = REAL_PATH . serverVideoRelPath . $fileNameUniq;
                     $data['minetype'] = $mimeType;
                     $data['type'] = $fileExt;
@@ -1546,6 +1674,7 @@ class Video extends MY_Controller {
         }
         $result = $this->videos_model->video_detail($id);
         $data['result'] = $result;
+        //echo "<pre>";        print_r($result); die;
 
         $this->show_view('videodetail', $data);
     }

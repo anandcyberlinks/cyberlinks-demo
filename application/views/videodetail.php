@@ -62,7 +62,7 @@
 <script type="text/javascript">jwplayer.key = "BC9ahgShNRQbE4HRU9gujKmpZItJYh5j/+ltVg==";</script>
 <script>
     jwplayer("player").setup({
-        file: "<?php echo baseurl.serverVideoRelPath.$result[0]->file ?>",
+        file: "<?=$result[0]->file ?>",
         height: 270,
         width: 480
     });

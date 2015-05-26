@@ -35,6 +35,8 @@
                                 <?php if ($tab == 'csv') { ?>
                                     <div class="tab-pane active" id="tab_csv">
                                         <div class="box box-solid">
+                                            <label>Upload on S3 </label>
+                                            <input type="checkbox" name="upload_on" class="upload_on" value="local"<?= ($this->session->userdata('upload_on')) ? "checked='true'" : '' ?> /><br>
                                             <form action="" id="csvBulkuploadForm" name="csvBulkuploadForm" method="post" accept-charset="utf-8"  enctype="multipart/form-data">
                                                 <input type="hidden" name="redirect_url" id="redirect_url" value="<?php echo base_url(); ?>video" />											
                                                 <div class="box-body">
@@ -66,6 +68,9 @@
                                 <!-- ftp bulk upload section starts -->
                                 <?php if ($tab == 'ftp') { ?>
                                     <div class="tab-pane active" id="tab_ftp">
+                                        &nbsp; &nbsp;
+                                        <label>Upload on S3</label>
+                                        <input type="checkbox" name="upload_on" class="upload_on" value="local"<?= ($this->session->userdata('upload_on')) ? "checked='true'" : '' ?> /><br>
                                         <form action="" id="ftpBulkuploadForm" method="post" accept-charset="utf-8">
                                             <div style="display:none;"><input type="hidden" name="_method" value="POST"/></div>
                                             <div class="box box-solid">
@@ -185,3 +190,41 @@
         </div>
     </div>
 </div>
+<script>
+        $(".upload_on").click(function () {
+        // this function will get executed every time the #home element is clicked (or tab-spacebar changed)
+        if ($(this).is(":checked")) // "this" refers to the element that fired the event
+        {
+            var name = $(this).attr('name');
+            console.log(name);
+            if (name == 'upload_on') {
+
+                $(this).attr('value', 's3');
+                $.post('<?= base_url() . 'video/pre_upload' ?>', {'upload_on': $(this).val()}).done(function (data) {
+                    //alert( "Data Loaded: " + data );
+                });
+            } else {
+                $(this).attr('value', 'youtube');
+                $.post('<?= base_url() . 'video/pre_upload' ?>', {'upload_youtube': $(this).val()}).done(function (data) {
+                    //alert( "Data Loaded: " + data );
+                });
+            }
+        }else{
+            var name = $(this).attr('name');
+            console.log(name);
+            if (name == 'upload_on') {
+
+                $(this).attr('value', 'local');
+                $.post('<?= base_url() . 'video/pre_upload' ?>', {'upload_on': $(this).val()}).done(function (data) {
+                    //alert( "Data Loaded: " + data );
+                });
+            } else {
+                $(this).attr('value', 'local');
+                $.post('<?= base_url() . 'video/pre_upload' ?>', {'upload_youtube': $(this).val()}).done(function (data) {
+                    //alert( "Data Loaded: " + data );
+                });
+            }
+        
+        }
+    });
+</script>

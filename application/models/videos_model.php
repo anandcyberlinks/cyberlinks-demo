@@ -29,9 +29,9 @@ class Videos_model extends CI_Model {
     }
 
 
-    /**
-     *Function for Save and update video created by arshad
-     *$data = array();
+    /*
+     * Function for Save and update video created by arshad
+     * $data = array();
      * $data['title'] ='mandatory' for insert and update query
      * $data['uid'] ='mandatory' for insert and update query
      * $data['description'] ='optional'
@@ -43,7 +43,7 @@ class Videos_model extends CI_Model {
      * $data['feature_video'] = '0 or 1' mandatory for update
      * $data['status'] = '0 or 1' mandatory for update
      * $data['star_cast'], $data['director'], $data['music_director'], $data['producer']  = 'optional' for update
-     */
+    */
     
     function _saveVideo($data){
         $contents['title'] = $data['content_title'];
@@ -74,7 +74,7 @@ class Videos_model extends CI_Model {
             $this->db->update('contents');
             //echo $this->db->last_query();
             
-        }else{
+        } else {
             ###inserting data in contents table and return id###
             $contents['uid'] = $data['uid'];
             if(isset($data['category'])){
@@ -131,7 +131,7 @@ class Videos_model extends CI_Model {
     }
     ###saveVideo() function end #####
 
-        /*
+    /*
      *Function for keyword insert
      *$keydata is post keyword example 'computer,hello, hollywood, bollywood'
     */
@@ -999,7 +999,7 @@ class Videos_model extends CI_Model {
     }
 
     function video_detail($id) {
-        $this->db->select('a.*, b.category , c.username, e.name as file');
+        $this->db->select('a.*, b.category , c.username, e.relative_path as file');
         $this->db->from('contents a');
         $this->db->where('a.id', $id);
         $this->db->join('categories b', 'a.category = b.id', 'left');

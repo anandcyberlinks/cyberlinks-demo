@@ -279,7 +279,6 @@ switch ($s[0]->username) {
                             $lang = 'eng';
                         }
                     ?>
-                  
                   <!-- User Account Menu -->
                   <li class="dropdown user user-menu">
                     <!-- Menu Toggle Button -->

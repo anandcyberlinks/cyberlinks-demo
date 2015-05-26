@@ -1,5 +1,4 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-
 /*
 |--------------------------------------------------------------------------
 | Base Site URL
@@ -368,7 +367,8 @@ $config['proxy_ips'] = '';
 |
 */
 
-$config['amazons3'] = FALSE;
+
+    $config['amazons3'] = true;
 
 /* End of file config.php */
 /* Location: ./application/config/config.php */

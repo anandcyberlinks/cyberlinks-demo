@@ -245,7 +245,7 @@
         }
         return false;
     }
-    
+        
     function get_data($url) {
         $ch = curl_init();
         $timeout = 50;

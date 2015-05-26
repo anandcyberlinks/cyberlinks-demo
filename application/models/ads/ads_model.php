@@ -262,7 +262,6 @@ class Ads_model extends CI_Model {
     }
     
     function get_videoInfo($vid) {
-
         $this->db->select('f.name');
         $this->db->from('ads a');
         $this->db->where('a.id', $vid);        

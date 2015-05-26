@@ -20,11 +20,54 @@ class MY_Controller extends CI_Controller {
         $this->load->helper('url');
         $this->load->library('session');
         $this->load->library('image_lib');
-        $this->amazons3 = $this->config->item('amazons3');
+        $this->amazons3 = $this->session->userdata('upload_on');
         $sess = $this->session->all_userdata();
         if (!(isset($sess['lan']))) {
             $lang = 'eng';
             $this->session->set_userdata('lan', $lang);
+        }
+        $dir_path = getcwd();
+        $path_nw = str_replace('\\', '/', $dir_path);
+        if ($this->amazons3) {
+            define('serverurl', 'http://' . bucket . '.s3.amazonaws.com/');
+            define('serverDir', 'videos/');
+            define('serverVideoRelPath', 'http://' . bucket . '.s3.amazonaws.com/videos/');
+            define('serverLogoRelPath', 'http://' . bucket . '.s3.amazonaws.com/videos/');
+            define('serverImageRelPath', 'http://' . bucket . '.s3.amazonaws.com/videos/');
+            define('REAL_PATH', '');
+            define('THUMB_SMALL_PATH', 'http://' . bucket . '.s3.amazonaws.com/videos/');
+            define('THUMB_MEDIUM_PATH', 'http://' . bucket . '.s3.amazonaws.com/videos/');
+            define('THUMB_LARGE_PATH', 'http://' . bucket . '.s3.amazonaws.com/videos/');
+            define('PROFILEPIC_PATH', 'http://' . bucket . '.s3.amazonaws.com/videos/');
+            define('CATEGORY_PATH', 'assets/upload/category/');
+            define('CATEGORY_SMALL_PATH', 'assets/upload/category/small/');
+            define('CATEGORY_MEDIUM_PATH', 'assets/upload/category/medium/');
+            define('CATEGORY_LARGE_PATH', 'assets/upload/category/large/');
+        } else {
+            define('serverurl', baseurl);
+            define('serverDir', 'videos/');
+            define('serverVideoRelPath', 'assets/upload/video/');
+            define('serverAudioRelPath', 'assets/upload/audio/');
+            define('serverLogoRelPath', 'assets/upload/logo/');
+            define('serverImageRelPath', 'assets/upload/thumbs/');
+            define('REAL_PATH', $path_nw . '/');
+            define('THUMB_SMALL_PATH', 'assets/upload/thumbs/small/');
+            define('THUMB_MEDIUM_PATH', 'assets/upload/thumbs/medium/');
+            define('THUMB_LARGE_PATH', 'assets/upload/thumbs/large/');
+            define('PROFILEPIC_PATH', 'assets/upload/profilepic/');
+            define('EVENTPIC_PATH', 'assets/upload/eventpic/');
+            define('EVENT_URL', 'rtsp://belive.mobi:1935/belive/');
+            define('EVENT_URL_WEB', 'rtmp://belive.mobi:1935/belive/');
+            define('EVENT_URL_MOBILE', 'http://belive.mobi:1935/belive/');
+            define('CATEGORY_PATH', 'assets/upload/category/');
+            define('CATEGORY_SMALL_PATH', 'assets/upload/category/small/');
+            define('CATEGORY_MEDIUM_PATH', 'assets/upload/category/medium/');
+            define('CATEGORY_LARGE_PATH', 'assets/upload/category/large/');
+            define('APPLICATIONS_PATH', 'assets/upload/applications/');
+            define('APPLICATIONS_SMALL_PATH', 'assets/upload/applications/small/');
+            define('APPLICATIONS_MEDIUM_PATH', 'assets/upload/applications/medium/');
+            define('APPLICATIONS_LARGE_PATH', 'assets/upload/applications/large/');
+            define('serverAdsRelPath', 'assets/upload/ads/');
         }
     }
 
@@ -184,7 +227,6 @@ class MY_Controller extends CI_Controller {
         $tmp = $s['0'];
         $id = $tmp->id;
         if ($id != '') {
-
             if (strtolower($s[0]->role) == 'advertiser') {
                 //  $this->load->view('sidebar_ads', $data);
                 $this->load->view('header_ad', $data);
@@ -326,8 +368,8 @@ class MY_Controller extends CI_Controller {
         fclose($fileHandle); // close the file since we're done
     }
 
-    function sendmail($to, $subject, $body,$attachment='') {
-        
+    function sendmail($to, $subject, $body, $attachment = '') {
+
         $this->load->library('PHPMailer/phpmailer');
         $mail = new PHPMailer();
         //$mail->isSMTP();                                      // Set mailer to use SMTP
@@ -344,9 +386,9 @@ class MY_Controller extends CI_Controller {
         //$mail->addCC('cc@example.com');
         //$mail->addBCC('bcc@example.com');
         $mail->WordWrap = 50;                                 // Set word wrap to 50 characters
-        if(isset($attachment)&&$attachment!=''){
+        if (isset($attachment) && $attachment != '') {
             $mail->addAttachment($attachment);
-            $mail->addAttachment('/tmp/'.$attachment, 'new.jpg');// Add attachments
+            $mail->addAttachment('/tmp/' . $attachment, 'new.jpg'); // Add attachments
         }
         // echopre($attachment);
         //$mail->addAttachment('/tmp/image.jpg', 'new.jpg');  // Optional name
@@ -355,7 +397,7 @@ class MY_Controller extends CI_Controller {
         $mail->Body = $body;
         $mail->AltBody = 'Success';
         return $mail->send();
-   // echopre($mail);
+        // echopre($mail);
     }
 
     /*     * ******* function used to get video file size using getid3 ibrary ********* */
@@ -385,6 +427,7 @@ class MY_Controller extends CI_Controller {
         $fileInfo = $this->getFileInfo($tmpFilePath);
         $mimeType = $fileInfo['mime_type'];
         list($mimeTypeN, $binary) = explode("/", $mimeType);
+        //echo $this->amazons3; die;
         if ($this->amazons3) {
             $bucket = bucket;
             // Create a `Aws` object using a configuration file
@@ -557,6 +600,11 @@ class MY_Controller extends CI_Controller {
      * See http://www.faqs.org/rfcs/rfc2104.html
      */
 
+    /*
+     * Calculate HMAC-SHA1 according to RFC2104
+     * See http://www.faqs.org/rfcs/rfc2104.html
+     */
+
     function hmacsha1($key, $data) {
         $blocksize = 64;
         $hashfunc = 'sha1';
@@ -592,62 +640,54 @@ class MY_Controller extends CI_Controller {
 
     function _uploadFileCurl($fileSrcPath, $fieDestPath, $videoFileUniqName) {
 
+        $output_filename = 'assets/upload/video/' . $videoFileUniqName;
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $fileSrcPath);
+        curl_setopt($ch, CURLOPT_VERBOSE, 1);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_AUTOREFERER, false);
+        curl_setopt($ch, CURLOPT_REFERER, "http://www.xcontest.org");
+        curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        //print_r($result);
+
+
+        $fp = fopen($output_filename, 'w');
+        fwrite($fp, $result);
+        fclose($fp);
+
         if ($this->amazons3) {
+            $fileInfo = $this->getFileInfo($output_filename);
+            $mimeType = $fileInfo['mime_type'];
             $bucket = bucket;
-            $acl = 'public-read';
             // Create a `Aws` object using a configuration file
-            $aws = Aws::factory(APPPATH . 'config/amazoneS3.php'); //print_r($aws);
+            $aws = Aws::factory(APPPATH . 'config/amazoneS3.php');
             // Get the client from the service locator by namespace
             $client = $aws->get('s3');
-            $mimeType = 'Video/mp4';
-            //$key = bucket;
-            /* Create the Amazon S3 Policy that needs to be signed */
-            $policy = '{ "expiration": "2014-12-01T12:00:00.000Z",
-              "conditions": [
-                {"acl": "public-read" },
-                {"bucket": "newsnation1" },
-                ["starts-with", "$key",  "/video/"],
-                ["content-length-range", 2048, 20971520]
-              ]';
-
-            /*
-             * Base64 encode the Policy Document and then
-             * create HMAC SHA-1 signature of the base64 encoded policy
-             * using the secret key. Finally, encode it for Amazon Authentication.
-             */
-            $base64_policy = base64_encode($policy);
-            $signature = $this->hex2b64($this->hmacsha1('bavuLq6YmLYMmgU11M5wAjfz80tKEe42a74sP0L9', $base64_policy));
-            $params = array(
-                'key' => $videoFileUniqName,
-                'acl' => $acl,
-                'AWSAccessKeyId' => 'AKIAJ5YTAN5W5EZMA5JQ',
-                'Policy' => $policy,
-                'Signature' => $signature,
-                'Content-Type' => $mimeType,
-                'file' => $fileSrcPath
-            );
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_VERBOSE, 1);
-            curl_setopt($ch, CURLOPT_URL, serverurl);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
-            $response = curl_exec($ch);
-            curl_close($ch);
-            echo $response;
-        } else {
-            //File to save the contents to
-            $fp = fopen($fieDestPath, 'w+');
-            //Here is the file we are downloading, replace spaces with %20
-            $ch = curl_init(str_replace(" ", "%20", $fileSrcPath));
-            //give curl the file pointer so that it can write to it
-            curl_setopt($ch, CURLOPT_FILE, $fp);
-            curl_setopt($ch, CURLOPT_HEADER, 0);
-            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-            $data = curl_exec($ch); //get curl response	 
-            curl_close($ch);
-            fclose($fp);
-            if (filesize($fieDestPath) > 0)
+            if (!$client->doesBucketExist($bucket)) {
+                $client->createBucket(array('Bucket' => $bucket, 'ACL' => 'public-read'));
+            }
+            $uploader = UploadBuilder::newInstance()
+                    ->setClient($client)
+                    ->setSource($output_filename)
+                    ->setBucket($bucket)
+                    ->setKey($videoFileUniqName)
+                    ->setOption('ACL', 'public-read')
+                    ->setOption('ContentType', $mimeType)
+                    ->build();
+            try {
+                $uploader->upload();
+                unlink($output_filename);
                 return true;
+            } catch (MultipartUploadException $e) {
+                $uploader->abort();
+                unlink($output_filename);
+                return false;
+            }
+        } else {
+            return true;
         }
     }
 
@@ -661,12 +701,17 @@ class MY_Controller extends CI_Controller {
       /
      */
 
-    function _downloadFileFtp($fileSrcPath, $fieDestPath, $ftp_conn) {
+    function _downloadFileFtp($fileSrcPath, $fieDestPath, $ftp_conn, $fileNameUniq) {
+        //echo $fieDestPath; die;
+        ftp_pasv($ftp_conn, TRUE);
         $data = ftp_get($ftp_conn, $fieDestPath, $fileSrcPath, FTP_BINARY, 0);
         if ($data == 1) {
+            //echo 1; die;
             if ($this->amazons3) {
+                $fiePath = REAL_PATH . serverVideoRelPath . $fileNameUniq;
                 //Here is the file we are downloading, replace spaces with %20
-                $ch = curl_init(str_replace(" ", "%20", $fileSrcPath));
+                echo $ch = curl_init(str_replace(" ", "%20", $fiePath));
+                die;
                 //File to save the contents to
                 $fp = fopen($fieDestPath, 'wb');
                 //give curl the file pointer so that it can write to it
@@ -676,8 +721,10 @@ class MY_Controller extends CI_Controller {
                 $data = curl_exec($ch); //get curl response	
                 curl_close($ch);
                 fclose($fp);
-                if (filesize($fieDestPath) > 0)
+                if (filesize($fieDestPath) > 0) {
+                    //echo 1; die;
                     return true;
+                }
             } else {
                 return true;
             }
@@ -825,12 +872,13 @@ class MY_Controller extends CI_Controller {
      */
 
     function _deleteFile($fileName, $fileDir) {
+        //echo $fileName; die
         if ($this->amazons3) {
             $bucket = bucket;
             $aws = Aws::factory(APPPATH . 'config/amazoneS3.php');
             // Get the client from the service locator by namespace
             $client = $aws->get('s3');
-            $newFilePath = serverDir . $fileName;
+            $newFilePath = $fileName;
             $existFile = $client->doesObjectExist($bucket, $newFilePath);
             if ($existFile) {
                 $result = $client->deleteObject(array(
