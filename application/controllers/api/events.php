@@ -138,7 +138,7 @@ class Events extends REST_Controller
             'name' => $this->post('name'), 
             'description' => $this->post('description'), 
             'category' => $this->post('category'),
-            'url' => EVENT_URL.$this->post('u_token').$random_key,
+            'url' => "rtsp://belive.mobi:1935/belive/".$this->post('u_token').$random_key,
             'start_date' => $this->post('start_date'), 
             'end_date' => $this->post('end_date'),
             'event_type' => $this->post('event_type'),                     
