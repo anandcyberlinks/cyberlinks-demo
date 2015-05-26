@@ -14,7 +14,9 @@
 |
 */
 
-$config['base_url']	= 'http://localhost/multitvfinal/';
+$root = "http://".$_SERVER['HTTP_HOST'];
+$root .= str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME']);
+$config['base_url']    = "$root";
 /*
 |--------------------------------------------------------------------------
 | Index File
@@ -366,9 +368,6 @@ $config['proxy_ips'] = '';
 | setting this variable to TRUE (boolean).  
 |
 */
-
-
-    $config['amazons3'] = true;
 
 /* End of file config.php */
 /* Location: ./application/config/config.php */
