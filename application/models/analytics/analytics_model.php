@@ -576,7 +576,7 @@ class Analytics_model extends CI_Model{
         $this->db->join('channels c','a.content_id=c.id');
        
         //$this->db->group_by($group);
-        if(!isset($param['export']) && isset($limit) && isset($start)){
+        if(!isset($param['export']) && (isset($limit) && $limit>0) && (isset($start) && $start>=0)){
              $this->db->limit($limit, $start);
         }
         $query = $this->db->get();
@@ -638,7 +638,8 @@ class Analytics_model extends CI_Model{
                 $this->db->group_by('a.content_id');
                 $this->db->order_by('count(content_id) desc');
            }else{
-                $this->db->group_by('a.id');
+                //$this->db->group_by('a.id');
+                $this->db->group_by('a.content_id');
            }
            
           //  $join = "users u";
@@ -673,7 +674,18 @@ class Analytics_model extends CI_Model{
             if($param['top'] == 1){  //-- top video --//               
                 $this->db->order_by('count(a.id) desc');
             }
-            $this->db->group_by('a.platform, a.browser');
+            if(isset($param['mode']))
+            {
+                if( $param['mode']=='os'){
+                    $this->db->group_by('a.platform');
+                }else if($param['mode']=='browser')
+                {
+                    $this->db->group_by('a.browser');
+                }else{
+                    $this->db->group_by('a.platform, a.browser');
+                }
+            }
+            //$this->db->group_by('a.platform, a.browser');
             
             if($sort){
             $this->db->order_by($sort,$sort_by);
