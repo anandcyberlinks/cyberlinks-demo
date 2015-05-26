@@ -29,7 +29,7 @@ class MY_Controller extends CI_Controller {
         $dir_path = getcwd();
         $path_nw = str_replace('\\', '/', $dir_path);
         if ($this->amazons3) {
-            define('serverurl', 'http://' . bucket . '.s3.amazonaws.com/');
+            define('serverurl', 'http://' . bucket . '.s3.amazonaws.com/videos/');
             define('serverDir', 'videos/');
             define('serverVideoRelPath', 'http://' . bucket . '.s3.amazonaws.com/videos/');
             define('serverLogoRelPath', 'http://' . bucket . '.s3.amazonaws.com/videos/');
