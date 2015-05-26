@@ -440,8 +440,8 @@ class MY_Controller extends CI_Controller {
             $uploader = UploadBuilder::newInstance()
                     ->setClient($client)
                     ->setSource($tmpFilePath)
-                    ->setBucket('videos/'.$bucket)
-                    ->setKey($fileNameUnique)
+                    ->setBucket($bucket)
+                    ->setKey('videos/'.$fileNameUnique)
                     ->setOption('ACL', 'public-read')
                     ->setOption('ContentType', $mimeType)
                     ->build();
