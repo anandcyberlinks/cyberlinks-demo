@@ -16,7 +16,7 @@
 
 $root = "http://".$_SERVER['HTTP_HOST'];
 $root .= str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME']);
-echo $config['base_url']    = "$root";
+$config['base_url']    = 'http://54.179.170.143/multitvfinal/';
 /*
 |--------------------------------------------------------------------------
 | Index File
