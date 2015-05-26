@@ -116,7 +116,11 @@ define('CAMPAIGN_REVENUE', 'http://54.179.170.143/vast/getDetail.php?akey=9eac32
 //------ Skin Templates Path ---//
 define('SKINS_FOLDER', './assets/upload/skins/');
 //-----------------------------//
-
+    define('EVENT_URL', 'rtsp://belive.mobi:1935/belive/');
+    define('EVENT_URL_WEB', 'rtmp://belive.mobi:1935/belive/');
+    define('EVENT_URL_MOBILE', 'http://belive.mobi:1935/belive/');
+    define('EVENTPIC_PATH', 'assets/upload/eventpic/');
+    define('PROFILEPIC_PATH', 'assets/upload/profilepic/');
 
 //---- Push Notification ---//
 define('APNS_PASSPHRASE','9540105334');

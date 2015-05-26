@@ -38,7 +38,6 @@ class MY_Controller extends CI_Controller {
             define('THUMB_SMALL_PATH', 'http://' . bucket . '.s3.amazonaws.com/videos/');
             define('THUMB_MEDIUM_PATH', 'http://' . bucket . '.s3.amazonaws.com/videos/');
             define('THUMB_LARGE_PATH', 'http://' . bucket . '.s3.amazonaws.com/videos/');
-            define('PROFILEPIC_PATH', 'http://' . bucket . '.s3.amazonaws.com/videos/');
             define('CATEGORY_PATH', 'assets/upload/category/');
             define('CATEGORY_SMALL_PATH', 'assets/upload/category/small/');
             define('CATEGORY_MEDIUM_PATH', 'assets/upload/category/medium/');
@@ -54,11 +53,6 @@ class MY_Controller extends CI_Controller {
             define('THUMB_SMALL_PATH', 'assets/upload/thumbs/small/');
             define('THUMB_MEDIUM_PATH', 'assets/upload/thumbs/medium/');
             define('THUMB_LARGE_PATH', 'assets/upload/thumbs/large/');
-            define('PROFILEPIC_PATH', 'assets/upload/profilepic/');
-            define('EVENTPIC_PATH', 'assets/upload/eventpic/');
-            define('EVENT_URL', 'rtsp://belive.mobi:1935/belive/');
-            define('EVENT_URL_WEB', 'rtmp://belive.mobi:1935/belive/');
-            define('EVENT_URL_MOBILE', 'http://belive.mobi:1935/belive/');
             define('CATEGORY_PATH', 'assets/upload/category/');
             define('CATEGORY_SMALL_PATH', 'assets/upload/category/small/');
             define('CATEGORY_MEDIUM_PATH', 'assets/upload/category/medium/');
