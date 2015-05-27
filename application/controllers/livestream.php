@@ -97,16 +97,16 @@ class Livestream extends MY_Controller {
                     $temp = array(
                         'channel_id' => $chanel_id,
                         'channel_name' => $channel_name,
-                        'date' => date('Y-m-d'),
-                        'show_title' => $csv_line[4],
+                        'date' => ($csv_line[5]=='')? date('Y-m-d') : date('Y-m-d', strtotime($csv_line[4])),
+                        'show_title' => $csv_line[5],
                         'show_time' => $csv_line[1], //($csv_line[1] == '') ? '' : date("H:i", strtotime($csv_line[1])),
-                        'show_duration' => $csv_line[2],
+                        'show_duration' => $csv_line[3],
                         'show_thumb' => "",
                         'show_language' => "",
                         'show_description' => "",
-                        'show_type' => $csv_line[3],
-			'media_type' => $csv_line[5],
-                        'valid' => ($csv_line[1] == '' || $csv_line[4] == '') ? 'invalid' : 'valid'
+                        //'show_type' => $csv_line[3],
+                        'media_type' => $csv_line[6],
+                        'valid' => ($csv_line[1] == '' || $csv_line[5] == '') ? 'invalid' : 'valid'
                     );
                     $array[] = $temp;
                     //$this->db->insert('livechannel_epg', $temp);
