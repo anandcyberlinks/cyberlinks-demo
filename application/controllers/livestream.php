@@ -87,7 +87,7 @@ class Livestream extends MY_Controller {
             //print_r($csv_line);
             for ($i = 0, $j = count($csv_line[$i]); $i < $j; $i++) {
                 if ($num == 0) {
-                    if (!isset($csv_line[1]) || !isset($csv_line[3]) || !isset($csv_line[4])) {
+                    if (!isset($csv_line[1]) || !isset($csv_line[5])) {
                         echo "invalid csv";
                         die;
                     }
