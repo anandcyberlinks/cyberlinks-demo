@@ -136,7 +136,7 @@ class Events extends REST_Controller
         $data = array(
             'event_id' =>$random_key,
             'name' => $this->post('name'), 
-            'description' => $this->post('description'), 
+            'description' => ($this->post('description') !='' ? $this->post('description'):""), 
             'category' => $this->post('category'),
             'url' => EVENT_URL.$this->post('u_token').$random_key,
             'start_date' => $this->post('start_date'), 
@@ -144,7 +144,7 @@ class Events extends REST_Controller
             'event_type' => $this->post('event_type'),                     
             'uid' => $this->post('userid'),
             'status' => '0'
-            );              
+            );		
 	    if($pic !='' && $pic != 0){
                $data['thumbnail']=base_url().EVENTPIC_PATH.$pic;
            }
