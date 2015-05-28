@@ -243,6 +243,7 @@ $timezones = array(
 );
 define('TIME_ZONE_LIST',serialize($timezones));
 define('SERVER_TIME_ZONE', 'IST');
+define('NOTIFICATION_DEVICE_CHUNK', 1000);
 
 //-------------------------//
 

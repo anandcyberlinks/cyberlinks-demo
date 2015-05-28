@@ -90,9 +90,13 @@ class Push_notification extends My_Controller{
 			}
 			if($key=='android'){
 				$gcmRegIds = $value;
-				//  print_r($gcmRegIds);die;
-				$message = array("m" => $pushMessage);	
-				$pushStatus = sendMessageThroughGCM($gcmRegIds, $message,$uniquid);				
+				//echo '<pre>';  print_r($gcmRegIds); die;
+				$message = array("m" => $pushMessage);
+                                $new_gcmRegIds = array_chunk($gcmRegIds, NOTIFICATION_DEVICE_CHUNK);
+                                foreach($new_gcmRegIds as $gcmIdArray){
+                                    $pushStatus = sendMessageThroughGCM($gcmIdArray, $message,$uniquid);
+                                } 
+				//$pushStatus = sendMessageThroughGCM($gcmRegIds, $message,$uniquid);				
 				if(!$pushStatus)
 				{
 					$this->session->set_flashdata('message', $this->_errormsg("Failed to connect GCM"));					

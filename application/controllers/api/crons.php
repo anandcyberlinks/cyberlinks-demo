@@ -345,7 +345,11 @@ class Crons extends REST_Controller {
                     $gcmRegIds = $value;
                     //  print_r($gcmRegIds);die;
                     $message = array("m" => $pushMessage);	
-                    $pushStatus = sendMessageThroughGCM($gcmRegIds, $message,$uniquid);	//-- helper function --//			
+                    $new_gcmRegIds = array_chunk($gcmRegIds, NOTIFICATION_DEVICE_CHUNK);
+                    foreach($new_gcmRegIds as $gcmIdArray){
+                        $pushStatus = sendMessageThroughGCM($gcmIdArray, $message,$uniquid);
+                    } 
+                    //$pushStatus = sendMessageThroughGCM($gcmRegIds, $message,$uniquid);	//-- helper function --//			
                    if(!$pushStatus)
                     {
                         $this->response('Failed to connet GCM', 404);
