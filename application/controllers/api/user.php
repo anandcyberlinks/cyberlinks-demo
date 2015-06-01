@@ -441,11 +441,11 @@ class User extends REST_Controller
         {
                 //$this->response(array('code'=>0,'error' => "Invalid Token"), 404);
                 $response_arr = array('code'=>0,'error' => "Invalid Token");               
-                $this->response($response_arr, 100);
+                $this->response($response_arr, 404);
 	}
         if(!is_object($device_other_detail) && !is_object($devicedetail))
         {
-            $this->response(array('code'=>0,'error' => "Incomplete Information"), 110);
+            $this->response(array('code'=>0,'error' => "Incomplete Information"), 404);
         }
        //-----------------------------------//
        
