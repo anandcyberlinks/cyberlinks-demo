@@ -1,4 +1,5 @@
-      <div class="content-wrapper">
+
+	  <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <section class="content-header">
           
@@ -33,7 +34,8 @@
 					<div class="big-numbers six-column active">
 						<div class="inner">
 							<div class="logo"></div>
-							<div class="number">77K</div>
+							<div id="totalsession" class="number">77K</div>
+							
 							<div style="background-image:url('/images/dashboard/utrend.png');" class="trend">
 								<div class="change">16.6%</div>
 							</div>
@@ -47,7 +49,7 @@
 					<div class="big-numbers six-column">
 						<div class="inner">
 							<div class="logo"></div>
-							<div class="number">70K</div>
+							<div  id="totaluser" class="number">70K</div>
 							<div style="background-image:url('assets/img/dashboard/dtrend.png');" class="trend">
 								<div class="change">-4.4%</div>
 							</div>
@@ -60,7 +62,7 @@
 					<div class="big-numbers six-column">
 						<div class="inner">
 							<div class="logo"></div>
-							<div class="number">16.9K</div>
+							<div id="newuser" class="number">16.9K</div>
 							<div style="background-image:url('assets/img/dashboard/utrend.png');" class="trend">
 								<div class="change">27.3%</div>
 							</div>
@@ -263,10 +265,66 @@
                       <script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
                 <script src="<?php echo base_url() ?>assets/js/plugins/morris/morris.min.js"></script>
       <script>
-      $(document).ready(function(){
+	
+		  $(".select").click(function(){
+		  console.log('<?php echo $jsondata;?>');
+		  	//console.log(parsedData.graph);
+				
+		  });
+		  
+		  
+		  
+		  
+		var parsedData = JSON.parse('<?php echo $jsondata;?>');
+		 $('#totalsession').text(parsedData.totalsession); 
+		 $('#totaluser').text(parsedData.totaluser);
+		 $('#newuser').text(parsedData.newuser);
+		 var temp = [];
+		$i=0;
+		//console.log(parsedData.graph.totalsession);
+			 for (var key in parsedData.graph.totalsession)
+			   {
+				//console.log(parsedData.graph.totalsession[key]);
+				
+				temp[$i] =eval( '['+ parsedData.graph.totalsession[key].hr+','+parsedData.graph.totalsession[key].totaluser+']');
+				// temp += console.log(parsedData.graph.totalsession[key]);
+				// temp  ={time:parsedData.graph.totalsession[key].hr,item1:parsedData.graph.totalsession[key].totaluser};
+				$i++;
+			   }
+				//console.log(temp);
+			   
+			   
+		 function ajaxCall(){
+			str = $('.btn-group').find(".active-header-btn").text()
+			var num = +str.match(/-?\d+\.?\d*/);
+				$(function(){ // start of doc ready.
+						  $.ajax({ 	 	
+						  dataType:'json',
+							url: 'new_analytics',
+							data: {'daydiff': num}, // change this to send js object
+							type: "post",
+							
+							success: function(data){
+							
+							var parsedData = JSON.parse(data);
+							console.log(data.graph);
+							console.log(parsedData.graph.totalsession[1]);
+							//console.log(data.graph.totalsession);
+							}
+						  });
+					 
+					});
+			//console.log($('.btn-group').find(".active-header-btn").text());
+		//console.log($(".big-numbers.active").find(".select").text());
+	}
+
+
+			   $(document).ready(function(){
                 
-                var data_today = [
-                  {time:'0:00',item1:2666},
+					
+
+			   var data_today1 = [
+                  {time:'0:00',item1:26665555},
                   {time:'1:00',item1:2777},
                   {time:'2:00',item1:1000},
                   {time:'3:00',item1:2000},
@@ -278,25 +336,19 @@
                   {time:'9:00',item1:1478},
                   {time:'10:00',item1:2356},
                 ];  
-          var line = new Morris.Line({
-          element: 'line-chart',
-          resize: true,
-          data: data_today, 
-          xkey: 'hours',
-          ykeys: ['a'],
-          labels: ['Push Count'],
-          //gridIntegers: true,
-          parseTime: false,
-          lineColors: ['#3c8dbc'],
-          hideHover: 'auto'
-        });
+				
+
+				
         $('#big-numbers-container .inner').click(function () {
           $('#big-numbers-container > .big-numbers').removeClass('active');
-              $(this).parent().addClass('active'); 
+			  $(this).parent().addClass('active'); 
+			 // 	ajaxCall();
           });
           $('.mailbox-controls .btn-default').click(function () {
             $('.btn-default').removeClass('active-header-btn');
-            $(this).addClass('active-header-btn'); 
+			$(this).addClass('active-header-btn'); 
+			ajaxCall();
+			
           });
         $(".reservation").daterangepicker();
         var gdpData = {
@@ -317,16 +369,31 @@
                el.html(el.html()+' (GDP - '+gdpData[code]+')');
              }          
           });
- var sin = [], cos = [];
+		  
+		  
+		 
+			
+		
+		  
+/*  var sin = [], cos = [];
         for (var i = 0; i < 14; i += 0.5) {
           sin.push([i, Math.sin(i)]);
           cos.push([i, Math.cos(i)]);
         }
+		
+	//	console.log(sin);
+		
         var line_data1 = {
           data: sin,
           color: "#3c8dbc"
-        };
-        $.plot("#line-chart", [line_data1], {
+        }; */
+		
+		 console.log(temp);
+		var d1 = [[1,14], [2,15], [3,18], [4,16], [5,19], [6,17], [7,15], [8,16], 
+        [9,20], [10,16], [11,18]];
+
+		 label: "Data",
+        $.plot("#line-chart", [temp], {
           grid: {
             hoverable: true,
             borderColor: "#f3f3f3",
@@ -381,6 +448,9 @@ function calculateTimeInterVal(timeStr,timeVal) {
       
     }
 }
+
+
+	
       
     </script>
 <style>
@@ -618,15 +688,4 @@ element.style {
   background: #2b2b2b!important;
   border: 1px solid #2b2b2b!important;
   color: white!important;
-}   
- .daterangepicker .calendar th, .daterangepicker .calendar td
-{
-    min-width:0px
-}
-.table-condensed > tbody > tr > td, .table-condensed > tbody > tr > th, .table-condensed > tfoot > tr > td, .table-condensed > tfoot > tr > th, .table-condensed > thead > tr > td, .table-condensed > thead > tr > th
-{
-padding:3px!important;
-}
-.daterangepicker_start_input, .daterangepicker_end_input{
-display : none!important;
-}
+}    
