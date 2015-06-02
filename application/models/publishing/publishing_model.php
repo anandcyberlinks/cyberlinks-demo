@@ -8,7 +8,7 @@ class Publishing_Model extends CI_Model
        $this->load->database();
     }
     
-    function getSkins($search,$count=0,$limit,$page)
+    function getSkins($search,$count=0,$limit=0,$page=1)
     {
         if($count==1){
             $this->db->select('count(a.id) as total');
