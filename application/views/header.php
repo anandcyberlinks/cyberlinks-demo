@@ -1,9 +1,48 @@
 <!DOCTYPE html>
 <?php
-$s = $this->session->all_userdata();
+//$s = $this->session->userdata('menu');
     $width = '180';
     $height = "45";
+    //echopre($_SESSION);
+$s = $this->session->all_userdata();
+$menu =$s['menu'];
+$menuArr=array();
+foreach($menu as $key=>$val){
+    $array=array();
+    $val=(array) $val;
+    if(isset($val['is_action'])&&($val['is_action']=='0')){
+            $array['name']=$val['name'];
+            $array['id']=$val['id'];
+            $array['li-class']='';
+            $array['url']=base_url() . $val['controller'].'/'.$val['controller'];
+            if($val['parent_id']=='0'){
+                $array['class']=$val['icon-class'];
+                $array['type']='parent';
+                $array['childs'] = array();
+                array_push($menuArr,$array);
+            }else{
+                $array['type']='child';
+                foreach($menuArr as $k=>$v){
+                    if($v['id']==$val['parent_id']){
+                        array_push($menuArr[$k]['childs'],$array);
+                    }
+                }
+            }
+    }
+}
+foreach($menuArr as $k1=>$v1){
+    $count=count($v1['childs']);
+    if($count>1){
+        $menuArr[$k1]['li-class']='treeview';
+    }
+    if($count==0){
+        unset($menuArr[$k1]['childs']);
+    }
+}
 
+//echopre($menuArr);
+//echo '<pre>';
+//print_r($s['menu']);
 $menu = array();
 switch ($s[0]->username) {
     case('superadmin') :
@@ -38,7 +77,7 @@ switch ($s[0]->username) {
             );
         
         break;
-    case ('veena'):
+    /**case ('veena'):
         $menu = array(
             array('name' => 'Dashboard', 'url' => base_url() . 'layout/dashboard', 'class' => 'fa-dashboard', 'li-class' => ($this->uri->segment(1) == 'layout') ? 'active' : ''),
             array('name' => 'Analytics', 'url' => base_url() . 'analytics/report', 'class' => 'fa-dashboard', 'li-class' => ($this->uri->segment(1) == 'analytics') ? 'active' : ''),
@@ -93,9 +132,9 @@ switch ($s[0]->username) {
             array('name' => 'Api', 'url' => base_url() . 'apilist', 'class' => 'fa-list-alt', 'li-class' => ($this->uri->segment(1) == 'apilist') ? 'active' : ''),
             array('name' => 'Comments', 'url' => base_url() . 'comments', 'class' => 'fa-comment', 'li-class' => ($this->uri->segment(1) == 'comments') ? 'active' : ''),
         );
-        break;
+        break;**/
     default :
-        $menu = array(
+        $menu = $menuArr;/*array(
             array('name' => 'Dashboard', 'url' => base_url() . 'layout/dashboard', 'class' => 'fa-dashboard', 'li-class' => ($this->uri->segment(1) == 'layout') ? 'active' : ''),
             array('name' => 'Analytics', 'url' => base_url() . 'analytics/report', 'class' => 'fa fa-fw fa-bar-chart-o', 'li-class' => ($this->uri->segment(1) == 'analytics') ? 'active' : ''),
             //array('name' => 'Advanced Analytics', 'url' => base_url() . 'smart_analytics', 'class' => 'fa fa-fw fa-bar-chart-o', 'li-class' => ($this->uri->segment(1) == 'analytics') ? 'active' : ''),
@@ -132,7 +171,7 @@ switch ($s[0]->username) {
                     array('name' => 'Category', 'li-class' => ($this->uri->segment(1) === 'category') ? 'active' : '', 'url' => base_url() . 'category', 'type' => 'child'),
                 )),
             /*array('name' => 'Live Stream', 'url' => base_url() . 'video/live_streaming', 'class' => 'fa-video-camera', 'li-class' => ($this->uri->segment(2) == 'live_streaming') ? 'active' : ''),*/
-            array('name' => 'Advertising', 'url' => base_url().'advertising', 'class' => 'fa-film', 'li-class' => ($this->uri->segment(1) == 'advertising') ? 'treeview active' : '', 'type' => 'parent', 'childs' => array(
+           /* array('name' => 'Advertising', 'url' => base_url().'advertising', 'class' => 'fa-film', 'li-class' => ($this->uri->segment(1) == 'advertising') ? 'treeview active' : '', 'type' => 'parent', 'childs' => array(
                     array('name' => 'Linear', 'li-class' => ($this->uri->segment(1) == 'advertising' && $this->uri->segment(2) == '' ) ? 'active' : '', 'url' => base_url() . 'advertising', 'type' => 'child'),
                     array('name' => 'Live Stream', 'li-class' => ($this->uri->segment(2) == 'live_stream') ? 'active' : '', 'url' => base_url() . 'advertising/live_stream', 'type' => 'child'),
                     array('name' => 'VOD', 'li-class' => ($this->uri->segment(1) == 'advertising' && ($this->uri->segment(2) == 'vdo' || $this->uri->segment(2) == 'vdo')) ? 'active' : '', 'url' => base_url() . 'advertising/vdo', 'type' => 'child'),
@@ -154,7 +193,7 @@ switch ($s[0]->username) {
                 'type' => 'parent', 'childs' => array(
                     array('name' => 'Genre', 'li-class' => ($this->uri->segment(1) === 'genre') ? 'active' : '', 'url' => base_url() . 'genre', 'type' => 'child'),
                 )), */
-             array('name' => 'Publishing', 'url' => base_url().'publishing', 'class' => 'fa-globe', 'li-class' => ($this->uri->segment(1) == 'publishing') ? 'treeview active' : '', 'type' => 'parent', 'childs' => array(
+         /*    array('name' => 'Publishing', 'url' => base_url().'publishing', 'class' => 'fa-globe', 'li-class' => ($this->uri->segment(1) == 'publishing') ? 'treeview active' : '', 'type' => 'parent', 'childs' => array(
                     array('name' => 'Templates', 'li-class' => ($this->uri->segment(1) == 'advertising') ? 'active' : '', 'url' => base_url() . 'publishing', 'type' => 'child'),
                   //  array('name' => 'Add Skin', 'li-class' => ($this->uri->segment(1) == 'advertising' && $this->uri->segment(2) == 'add' ) ? 'active' : '', 'url' => base_url() . 'publishing/add', 'type' => 'child'),
                 )),
@@ -168,7 +207,7 @@ switch ($s[0]->username) {
                     array('name' => 'History', 'li-class' => (($this->uri->segment(1) == 'push_notification') && ($this->uri->segment(2) == 'push_history')) ? 'active' : '', 'url' => base_url() . 'push_notification/push_history', 'type' => 'child'),
                 )),
             );
-        
+        */
         break;
 }
 //echo "<pre>";
@@ -240,7 +279,7 @@ switch ($s[0]->username) {
             <div id="navbar-collapse" class="collapse navbar-collapse pull-left">
               <ul class="nav navbar-nav">
                   <?php foreach ($menu as $val){  ?>
-                <?php if(!isset($val['childs'])){ ?>
+                <?php if(!isset($val['childs'])||($val['childs']=='')){ ?>
                 <li class="<?= $val['li-class']; ?>">
                     <a href="<?=$val['url']?>">
 <!--                        <span class="sr-only">(current)</span>-->
@@ -248,7 +287,7 @@ switch ($s[0]->username) {
                         <span><?php echo $welcome->loadPo($val['name']); ?></span>
                     </a>
                 </li>
-                <?php }else { ?>
+                <?php }else{ ?>
                 <li class="dropdown">
                   <a data-toggle="dropdown" class="dropdown-toggle" href="javascript:void(0)">
                       <i class="fa <?=$val['class']?>"></i>

@@ -138,6 +138,16 @@ class User_Model extends CI_Model {
       $this->db->where('id', $uid);
       $this->db->update('users', array('skin_id'=>$skin_id,'skin_banner'=>$fileid));
 	}
+     function getmenu($id)
+	{echo 'in';
+	  $this->db->select('a.user,b.*');
+      $this->db->from('module_permission a');
+      $this->db->join('modules b','a.modules_id=b.id AND a.user='.$id.'','inner');
+      $this->db->order_by("parent_id", "asc");
+      $this->db->order_by("order", "asc");
+      $query = $this->db->get();
+      return $result = $query->result();
+    }
    
 
 }

@@ -65,6 +65,14 @@ class Layout extends MY_Controller {
                 $msg = $this->loadPo($this->config->item('success_login'));
                 $s = $this->session->all_userdata();
                 $this->log($data['username'], $msg);
+                //menu creation//
+                $userID=$s['0']->id;
+                $menu = $this->user_model->getmenu($userID);
+                $this->session->set_userdata('menu',$menu);
+                //$k = $this->session->all_userdata();
+                //echopre($k);
+                //--menu creation--//
+                
                 if ($s['0']->role == 'Advertiser') {
                     redirect(base_url() . 'ads_analytics/report');
                 }
@@ -123,21 +131,18 @@ class Layout extends MY_Controller {
         }
     }
 
-    function succ_register() {
+    function succ_register(){
         $this->load->view('success');
     }
-    
     function email_user(){
         $this->load->view('email/email_user');
     }
     function email_admin(){
         $this->load->view('email/email_admin');
     }
-    function token_email() {
+    function token_email(){
         $this->load->view('email/token_email');
     }
-    
-    
     function email_pass(){
         $this->load->view('email/email_user');
     }
