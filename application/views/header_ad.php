@@ -78,6 +78,9 @@ switch ($s[0]->username){
         <link href="<?php echo base_url(); ?>assets/css/ion.rangeSlider.css" rel="stylesheet"/>
         <link href="<?php echo base_url(); ?>assets/css/ion.rangeSlider.skinFlat.css" rel="stylesheet"/>
         <link href="<?php echo base_url(); ?>assets/css/uploadfile.min.css" rel="stylesheet">
+        
+        <link href="<?php echo base_url(); ?>assets/css/bootstrap-datetimepicker.min.css">
+        
         <!-- jquery-1.10.2 -->
         <script>
         var baseurl = '<?php echo base_url(); ?>' ;
@@ -86,6 +89,11 @@ switch ($s[0]->username){
         </script>
         <!--script src="<?php echo base_url() ?>assets/js/jquery-1.10.2.js"></script-->
         <script src="<?php echo base_url() ?>assets/js/jQuery-2.1.3.min.js"></script>
+        <script src="<?php echo base_url() ?>assets/js/bootstrap.min.js" type="text/javascript"></script>
+                <script src="<?php echo base_url() ?>assets/js/bootstrap-dialog.min.js"></script>
+        <script src="<?php echo base_url(); ?>assets/js/bootbox.min.js" type="text/javascript"></script>
+        <script src="<?php echo base_url() ?>assets/js/moment.js"></script>
+        <script src="<?php echo base_url() ?>assets/js/bootstrap-datetimepicker.min.js"></script>
         <script src="<?php echo base_url() ?>assets/js/jquery.uploadfile.min.js"></script>
         <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jwplayer.js" ></script>
         <script type="text/javascript">jwplayer.key = "BC9ahgShNRQbE4HRU9gujKmpZItJYh5j/+ltVg==";</script>
