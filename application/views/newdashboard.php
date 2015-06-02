@@ -688,4 +688,15 @@ element.style {
   background: #2b2b2b!important;
   border: 1px solid #2b2b2b!important;
   color: white!important;
-}    
+} .daterangepicker .calendar th, .daterangepicker .calendar td
+{
+    min-width:0px
+}
+.table-condensed > tbody > tr > td, .table-condensed > tbody > tr > th, .table-condensed > tfoot > tr > td, .table-condensed > tfoot > tr > th, .table-condensed > thead > tr > td, .table-condensed > thead > tr > th
+{
+padding:3px!important;
+}
+.daterangepicker_start_input, .daterangepicker_end_input{
+display : none!important;
+}
+</style>
