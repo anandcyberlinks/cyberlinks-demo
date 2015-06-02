@@ -377,4 +377,10 @@ function  updateCuePoint()
         $data['total_rows'] = $config["total_rows"];
         $this->show_view('vdo', $data);
     }
+    
+    public function adstudio() {
+       
+         $data['welcome'] = $this;
+       $this->show_view('advertising/adstudio', $data); 
+    }
  }
