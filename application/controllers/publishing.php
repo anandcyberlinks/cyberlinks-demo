@@ -57,6 +57,7 @@ class Publishing extends My_Controller{
     function index()
     {        
         $data['welcome'] = $this;
+        $searchterm='';
         //echopre($this->userdetail);
         if (isset($_POST['save'])) {
           
