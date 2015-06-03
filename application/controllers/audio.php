@@ -9,6 +9,11 @@ class Audio extends MY_Controller {
     function __construct() {
         parent::__construct();
         $this->load->model('audio_model');
+        $this->load->library('session');
+        $per = $this->check_per();
+        if(!$per){
+          redirect(base_url() . 'layout/permission_error');
+        }
         $s = $this->session->all_userdata();
         $this->uid = $s[0]->id;
         $this->role_id = $s[0]->role_id;

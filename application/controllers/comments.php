@@ -14,6 +14,10 @@ class Comments extends MY_Controller {
         $this->load->config('messages');
         $this->load->model('Comment_model');
         $this->load->library('session');
+        $per = $this->check_per();
+        if(!$per){
+          redirect(base_url() . 'layout/permission_error');
+        }
         $this->load->helper('url');
         $this->load->library('form_validation');
         $session = $this->session->all_userdata();

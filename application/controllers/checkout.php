@@ -5,8 +5,13 @@ class Checkout extends My_Controller
     {
         parent::__construct();
         $this->load->helper('url');        
-	$this->load->config('credentials');	   
+		$this->load->config('credentials');	   
         $this->load->library('paypal_class');
+		$this->load->library('Session');
+        $per = $this->check_per();
+        if(!$per){
+          redirect(base_url() . 'layout/permission_error');
+        }
     }
 
     function index()

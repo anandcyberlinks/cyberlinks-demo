@@ -17,6 +17,10 @@ class Category extends MY_Controller {
         $this->load->model('videos_model');
         $this->load->library('form_validation');
         $this->load->library('Session');
+        $per = $this->check_per();
+        if(!$per){
+          redirect(base_url() . 'layout/permission_error');
+        }
         $this->data['welcome'] = $this;
         $s = $this->session->all_userdata();
         $this->user = $s[0]->username;
@@ -238,7 +242,7 @@ class Category extends MY_Controller {
     function deleteCategory() {
         $per = $this->checkpermission($this->role_id, 'delete');
         //echo $this->role_id;
-        if ($per) {
+        if ($per){
             $id = $_GET['id'];
             $video = $this->Category_model->getCategoryVideo($id);
             if ($video == '0') {
@@ -251,11 +255,11 @@ class Category extends MY_Controller {
                     $this->session->set_flashdata('message', $this->_warningmsg($this->loadPo($this->config->item('warning_category_record'))));
                     redirect(base_url() . 'category');
                 }
-            } else {
+            }else{
                 $this->session->set_flashdata('message', $this->_warningmsg($this->loadPo($this->config->item('warning_category_record'))));
                 redirect(base_url() . 'category');
             }
-        } else {
+        }else{
             $this->session->set_flashdata('message', $this->_errormsg($this->loadPo($this->config->item('error_permission'))));
             redirect(base_url() . 'category');
         }

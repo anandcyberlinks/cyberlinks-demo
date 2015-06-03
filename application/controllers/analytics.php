@@ -2,18 +2,16 @@
 
 class Analytics extends MY_Controller {
 
-	function __construct()
-	{
-            parent::__construct();
-            $this->load->model('/api/Video_model');
-			$this->load->model('ads/Ads_analytics_model');
+	function __construct(){
+		parent::__construct();
+        $this->load->model('/api/Video_model');
+		$this->load->model('ads/Ads_analytics_model');
 	    $this->load->model('/analytics/Analytics_model');
 	    $this->load->library('User_Agent');
 	    $this->load->helper('common');
 	    $this->load->helper('pdf_helper');
 	    $this->load->helper('csv_helper');
-	    
-	     $this->load->config('messages');
+	    $this->load->config('messages');
 	    $this->data['welcome'] = $this;
 	    
 	    //$this->load->library('User_Agent');//--regex class to get user agent --//
@@ -25,6 +23,10 @@ class Analytics extends MY_Controller {
                 //---------------------//
 		
 		$this->load->library('session');
+		$per = $this->check_per();
+        if(!$per){
+          redirect(base_url() . 'layout/permission_error');
+        }
 		$s = $this->session->all_userdata();
 		$this->user = $s[0]->username;
 		$this->uid = $s[0]->id;

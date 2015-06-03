@@ -6,6 +6,11 @@ class Confirmation extends CI_Controller {
 	{
             parent::__construct();
             $this->load->model('User_model');
+			$this->load->library('session');
+			$per = $this->check_per();
+			if(!$per){
+			  redirect(base_url() . 'layout/permission_error');
+			}
 	}
 
 	function index()

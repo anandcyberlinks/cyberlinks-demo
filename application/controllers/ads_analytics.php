@@ -11,8 +11,11 @@ class Ads_analytics extends MY_Controller {
 	    $this->load->helper('common');
 	    $this->load->helper('pdf_helper');
 	    $this->load->helper('csv_helper');
-	    
-	     $this->load->config('messages');
+	    $this->load->config('messages');
+		$per = $this->check_per();
+        if(!$per){
+          redirect(base_url() . 'layout/permission_error');
+        }
 	    $this->data['welcome'] = $this;
 	    
 	    //$this->load->library('User_Agent');//--regex class to get user agent --//
