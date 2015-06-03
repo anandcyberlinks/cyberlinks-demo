@@ -423,5 +423,8 @@ class Layout extends MY_Controller {
             }
         }
     }
+    function permission_error() {
+        echo 'not valid'; die;
+    }
 
 }

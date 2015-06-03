@@ -6,6 +6,7 @@ class Language extends MY_Controller {
 		parent::__construct();
 		$this->load->config('messages');
 		$this->load->library('session');
+		
 	}
 	
 	function index(){

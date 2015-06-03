@@ -10,7 +10,11 @@ class Details_test extends MY_Controller {
 	    $this->load->model('ads/Ads_model');
 	  //  $this->load->model('/analytics/Analytics_model');
 	    $this->load->library('User_Agent');	    
-	    
+	    $this->load->library('session');
+        $per = $this->check_per();
+        if(!$per){
+          redirect(base_url() . 'layout/permission_error');
+        }
 	//-- get browser http_user_agent info in array --//
                 //   $this->result = get_browser(null, true);		
 		$this->result = User_Agent::getinfo();  //--regex class to get user agent --//

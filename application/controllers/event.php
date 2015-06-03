@@ -9,8 +9,12 @@ class Event extends MY_Controller {
         parent::__construct();
         $this->load->config('messages');
         $this->load->model('event_model');
-        $s = $this->session->all_userdata();
-        $this->uid = $s[0]->id;
+        $this->load->library('session');
+        $per = $this->check_per();
+        if(!$per){
+          redirect(base_url() . 'layout/permission_error');
+        }
+        $this->uid = $user[0]->id;
     }
 
     function index() {
