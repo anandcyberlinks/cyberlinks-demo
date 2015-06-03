@@ -424,7 +424,8 @@ class Layout extends MY_Controller {
         }
     }
     function permission_error() {
-        echo 'not valid'; die;
+        $data['welcome'] = $this;
+        $this->show_view('permissionerror',$data);
     }
 
 }
