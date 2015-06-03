@@ -18,6 +18,10 @@ class Super_admin extends MY_Controller {
         $this->load->model('super_admin_model');
         $this->load->library('session');
         $this->load->helper('url');
+       $per = $this->check_per();
+        if(!$per){
+          redirect(base_url() . 'layout/permission_error');
+        }
         $session = $this->session->all_userdata();
         if (isset($session[0])) {
             $this->user_id = $session[0]->id;

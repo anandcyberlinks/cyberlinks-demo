@@ -14,7 +14,7 @@ foreach($menu as $key=>$val){
             $array['name']=$val['name'];
             $array['id']=$val['id'];
             $array['li-class']='';
-            $array['url']=base_url() . $val['controller'].'/'.$val['controller'];
+            $array['url']=base_url() . $val['controller'].'/'.$val['action'];
             if($val['parent_id']=='0'){
                 $array['class']=$val['icon-class'];
                 $array['type']='parent';

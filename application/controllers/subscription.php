@@ -14,6 +14,11 @@ class Subscription extends MY_Controller {
         $this->load->model('subscription_model');
         $this->load->library('session');
         $this->load->library('form_validation');
+		$user = $this->session->all_userdata();
+        $per = $this->check_per();
+        if(!$per){
+          redirect(base_url() . 'layout/permission_error');
+        }
         $s = $this->session->all_userdata();
         $this->user = $s[0]->username;
         $this->uid = $s[0]->id;

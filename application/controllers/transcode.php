@@ -13,6 +13,10 @@ class Transcode extends MY_Controller {
         $this->load->model('Transcode_model');
         $this->load->library('form_validation');
         $this->load->library('Session');
+        $per = $this->check_per();
+        if(!$per){
+          redirect(base_url() . 'layout/permission_error');
+        }
         $this->data['welcome'] = $this;
         $s = $this->session->all_userdata();
         $this->user = $s[0]->username;

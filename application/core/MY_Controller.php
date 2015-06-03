@@ -17,11 +17,17 @@ class MY_Controller extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
+        $this->load->library('session');
         $this->load->helper('url');
         $this->load->library('session');
+        $k = $this->session->all_userdata();
         $this->load->library('image_lib');
         $this->amazons3 = $this->session->userdata('upload_on');
         $sess = $this->session->all_userdata();
+        if(isset($sess['0']) && !isset($_SERVER['HTTP_REFERER'])) {
+            $this->session->sess_destroy();
+            redirect(base_url());
+        }
         if (!(isset($sess['lan']))) {
             $lang = 'eng';
             $this->session->set_userdata('lan', $lang);
@@ -64,7 +70,7 @@ class MY_Controller extends CI_Controller {
             define('serverAdsRelPath', 'assets/upload/ads/');
         }
     }
-
+   
     function get_data($url) {
         $ch = curl_init();
         $timeout = 5;
@@ -80,7 +86,17 @@ class MY_Controller extends CI_Controller {
         curl_close($ch);
         return $data;
     }
-
+    function check_per(){
+        $user = $this->session->all_userdata();
+        $urlcontroler = $this->uri->segment(1);
+        foreach($user['menu'] as $p_key=>$p_value){
+            $p_value=(array) $p_value;
+            if(($p_value['controller']==$urlcontroler)&&($p_value['parent_id']==0)){
+                $per=true;
+            }
+        }
+        return $per;
+    }
     function get_meta_tags($html) {
         preg_match_all("/<title>(.*)<\/title>/", $html, $title);
         preg_match_all("/<meta name=\"description\" content=\"(.*)\">/i", $html, $description);
@@ -165,6 +181,7 @@ class MY_Controller extends CI_Controller {
 
     public function show_view($view, $data = '') {
         $s = $this->session->all_userdata();
+        //echopre($s);
         $tmp = $s['0'];
         $id = $tmp->id;
         if ($id != '') {

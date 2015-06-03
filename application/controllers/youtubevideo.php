@@ -19,6 +19,10 @@ class Youtubevideo extends MY_Controller
 	$this->load->config('messages');
     $this->load->model('videos_model');
 	$this->load->library('session');
+	$per = $this->check_per();
+        if(!$per){
+          redirect(base_url() . 'layout/permission_error');
+        }
 	$this->load->library('form_validation');
         $data['welcome'] = $this;
 	$s = $this->session->all_userdata();

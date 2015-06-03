@@ -10,6 +10,10 @@ class Webtv extends MY_Controller {
         $this->load->model('webtv_model');
         $this->load->helper('pdf_helper');
         $this->load->helper('csv_helper');
+        $per = $this->check_per();
+        if(!$per){
+          redirect(base_url() . 'layout/permission_error');
+        }
         $s = $this->session->all_userdata();
         $this->uid = $s[0]->id;
     }

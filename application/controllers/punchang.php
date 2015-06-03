@@ -8,6 +8,10 @@ class Punchang extends MY_Controller {
         parent::__construct();
         $this->load->config('messages');
         $this->load->model('panchang_model');
+        $per = $this->check_per();
+        if(!$per){
+          redirect(base_url() . 'layout/permission_error');
+        }
         $s = $this->session->all_userdata();
         $this->uid = $s[0]->id;
     }

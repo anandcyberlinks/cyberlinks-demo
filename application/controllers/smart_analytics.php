@@ -16,7 +16,10 @@ class Smart_analytics extends MY_Controller {
 
 		$this->load->config('messages');
 		$this->data['welcome'] = $this;
-
+		$per = $this->check_per();
+        if(!$per){
+          redirect(base_url() . 'layout/permission_error');
+        }
 		//$this->load->library('User_Agent');//--regex class to get user agent --//
 		//-- get browser http_user_agent info in array --//
 		//   $this->result = get_browser(null, true);

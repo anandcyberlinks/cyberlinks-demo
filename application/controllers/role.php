@@ -15,6 +15,10 @@ class Role extends MY_Controller {
         $this->load->model('role_model');
         $this->load->library('session');
         $this->load->helper('url');
+        $per = $this->check_per();
+        if(!$per){
+          redirect(base_url() . 'layout/permission_error');
+        }
         $session = $this->session->all_userdata();
         $this->user = $session[0]->username;
         $this->role_id = $session[0]->role_id;

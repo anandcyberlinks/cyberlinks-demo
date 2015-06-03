@@ -5,12 +5,18 @@ if (!defined('BASEPATH'))
 class Publishing extends My_Controller{
     function __construct() {
         parent::__construct();
+        
         $this->load->config('messages');
         $this->load->model('publishing/publishing_model');
          $this->load->model('User_model');
          $this->load->helper('common');
         $this->load->library('session');
         $this->load->library('form_validation');
+        
+        $per = $this->check_per();
+        if(!$per){
+          redirect(base_url() . 'layout/permission_error');
+        }
         $data['welcome'] = $this;
         $s = $this->session->all_userdata();
         $this->userdetail=(array)$s[0];

@@ -20,6 +20,10 @@ class user extends MY_Controller {
         if ($s[0]->role != 'Superadmin' && $s[0]->role != 'Admin') {
             redirect(base_url());
         }
+        $per = $this->check_per();
+        if(!$per){
+          redirect(base_url() . 'layout/permission_error');
+        }
         $this->role = $s[0]->role;
         $this->user_id = $s[0]->id;
         $this->user = $s[0]->username;
