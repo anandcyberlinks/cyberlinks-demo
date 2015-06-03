@@ -1,4 +1,5 @@
 
+
 	  <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <section class="content-header">
@@ -266,64 +267,44 @@
                 <script src="<?php echo base_url() ?>assets/js/plugins/morris/morris.min.js"></script>
       <script>
 	
-		  $(".select").click(function(){
+		 /*  $(".select").click(function(){
 		  console.log('<?php echo $jsondata;?>');
 		  	//console.log(parsedData.graph);
 				
 		  });
-		  
-		  
-		  
-		  
-		var parsedData = JSON.parse('<?php echo $jsondata;?>');
-		 $('#totalsession').text(parsedData.totalsession); 
-		 $('#totaluser').text(parsedData.totaluser);
-		 $('#newuser').text(parsedData.newuser);
-		 var temp = [];
-		$i=0;
-		//console.log(parsedData.graph.totalsession);
-			 for (var key in parsedData.graph.totalsession)
+		   */
+			var temp = [];
+		
+		   function parseJson(data){
+				$i=0;		
+				for (var key in data.graph.totalsession)
+				{
+					//console.log(parsedData.graph.totalsession[key]);
+					temp[$i] =eval('['+ data.graph.totalsession[key].hr+','+data.graph.totalsession[key].totaluser+']');
+					$i++;
+				}return temp;
+			}
+			
+		function atpageload(parsedData){
+			//var parsedData = JSON.parse('<?php echo $jsondata;?>');
+			$('#totalsession').text(parsedData.totalsession); 
+			$('#totaluser').text(parsedData.totaluser);
+			$('#newuser').text(parsedData.newuser);
+			//var temp = [];
+			$i=0;
+			for (var key in parsedData.graph.totalsession)
 			   {
-				//console.log(parsedData.graph.totalsession[key]);
-				
 				temp[$i] =eval( '['+ parsedData.graph.totalsession[key].hr+','+parsedData.graph.totalsession[key].totaluser+']');
-				// temp += console.log(parsedData.graph.totalsession[key]);
-				// temp  ={time:parsedData.graph.totalsession[key].hr,item1:parsedData.graph.totalsession[key].totaluser};
 				$i++;
 			   }
-				//console.log(temp);
-			   
-			   
-		 function ajaxCall(){
-			str = $('.btn-group').find(".active-header-btn").text()
-			var num = +str.match(/-?\d+\.?\d*/);
-				$(function(){ // start of doc ready.
-						  $.ajax({ 	 	
-						  dataType:'json',
-							url: 'new_analytics',
-							data: {'daydiff': num}, // change this to send js object
-							type: "post",
-							
-							success: function(data){
-							
-							var parsedData = JSON.parse(data);
-							console.log(data.graph);
-							console.log(parsedData.graph.totalsession[1]);
-							//console.log(data.graph.totalsession);
-							}
-						  });
-					 
-					});
-			//console.log($('.btn-group').find(".active-header-btn").text());
-		//console.log($(".big-numbers.active").find(".select").text());
-	}
-
-
-			   $(document).ready(function(){
-                
-					
-
-			   var data_today1 = [
+			    
+			   return temp;
+			}
+			
+			
+	
+	$(document).ready(function(){
+                /* var data_today1 = [
                   {time:'0:00',item1:26665555},
                   {time:'1:00',item1:2777},
                   {time:'2:00',item1:1000},
@@ -335,7 +316,7 @@
                   {time:'8:00',item1:5892},
                   {time:'9:00',item1:1478},
                   {time:'10:00',item1:2356},
-                ];  
+                ];   */
 				
 
 				
@@ -388,10 +369,43 @@
           color: "#3c8dbc"
         }; */
 		
-		 console.log(temp);
-		var d1 = [[1,14], [2,15], [3,18], [4,16], [5,19], [6,17], [7,15], [8,16], 
-        [9,20], [10,16], [11,18]];
-
+		
+        });
+		
+		
+		 function ajaxCall(){
+			str = $('.btn-group').find(".active-header-btn").text()
+			var num = +str.match(/-?\d+\.?\d*/);
+				$(function(){ 
+						  $.ajax({ 	 	
+						  dataType:'json',
+							url: 'smart_analytics',
+							data: {'daydiff': num}, // change this to send js object
+							type: "post",
+							success: function(data){
+							
+							
+							temp =	atpageload(parsedData);
+							temp1 = [[1,14], [2,15], [3,18], [4,16], [5,19], [6,17], [7,15], [8,16], 
+							[9,20], [10,16], [11,18]];
+							drawGraph(temp);
+							//parseJson(data);
+							}
+						  });
+					 
+					});
+			//console.log($('.btn-group').find(".active-header-btn").text());
+			//console.log($(".big-numbers.active").find(".select").text());
+		}
+		
+		
+		
+		function drawGraph(temp){
+		/* var d1 = [[1,14], [2,15], [3,18], [4,16], [5,19], [6,17], [7,15], [8,16], 
+        [9,20], [10,16], [11,18]] */;
+		console.log("------------------");
+				console.log(temp);
+				console.log("------------------");
 		 label: "Data",
         $.plot("#line-chart", [temp], {
           grid: {
@@ -420,7 +434,15 @@
             show: true
           }
         });
-        });
+		}
+		
+		
+		
+				var parsedData = JSON.parse('<?php echo $jsondata;?>');
+				temp =	atpageload(parsedData);
+				drawGraph(temp);
+		
+		
       
       function dateRange($divs) {
         $("#"+$divs+" .reservation").daterangepicker('show');
@@ -699,4 +721,4 @@ padding:3px!important;
 .daterangepicker_start_input, .daterangepicker_end_input{
 display : none!important;
 }
-</style>
+</style>>>>>>>> .r1611
