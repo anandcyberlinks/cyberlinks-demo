@@ -11,8 +11,8 @@ class Smart_analytics extends MY_Controller {
 	    $this->load->model('/analytics/newanalytics_model');
 	    $this->load->library('User_Agent');
 	    $this->load->helper('common');
-	    $this->load->helper('pdf_helper');
-	    $this->load->helper('csv_helper');
+	  //  $this->load->helper('pdf_helper');
+	  //  $this->load->helper('csv_helper');
 	    
 	    $this->load->config('messages');
 	    $this->data['welcome'] = $this;
@@ -36,10 +36,10 @@ class Smart_analytics extends MY_Controller {
 			if($dayDifference === 1){
 				$endDate = $startDate; 
 			}else{
-				$endDate =  date("Y-m-d",strtotime("+$dayDifference day", strtotime($startDate))) ;
+				$endDate =  date("Y-m-d",strtotime("-$dayDifference day", strtotime($startDate))) ;
 			}
-			$dayDiff['startdate'] = $startDate;
-			$dayDiff['enddate'] = $endDate;
+			$dayDiff['startdate'] = $endDate;
+			$dayDiff['enddate'] = $startDate;
 			return $dayDiff ;
 	}
         
@@ -50,7 +50,7 @@ class Smart_analytics extends MY_Controller {
 		
 		$dayDiff = $this->getDateIntervel($days);
 		$prepareData = array();
-	    $sqlData = array();
+	        $sqlData = array();
 		$sqlData['startdate'] = $dayDiff['startdate']." 00:00:00";
 		$sqlData['enddate']=   $dayDiff['enddate']." 23:59:59";
 		//print_r($sqlData);
@@ -122,8 +122,43 @@ class Smart_analytics extends MY_Controller {
 	}
         
     function Sessions(){
-		$data['welcome'] = $this;
-		$this->show_view('analytics_session',$data);
+        
+                $days = $this->input->post('daydiff');
+		if($days === 'Today')
+			 $days =1;
+		
+		$dayDiff = $this->getDateIntervel($days);
+		$prepareData = array();
+	        $sqlData = array();
+		$sqlData['startdate'] = $dayDiff['startdate']." 00:00:00";
+		$sqlData['enddate']=   $dayDiff['enddate']." 23:59:59";
+                
+                $TotalSession =	$this->newanalytics_model->getSessionDataGraph($sqlData);
+		$newSession =	$this->newanalytics_model->getNewSessionDataGraph($sqlData);                
+                
+                $resultData['graph'] = array();
+                $totalsession =array();
+                $newsession = array();
+                $uniquesession = array();
+                
+                foreach($TotalSession as $key => $value)
+                {                    
+                    $nkey=$value['date'];
+                    $value['newsession']= $newSession[$key]['newsession'];
+                    $resultData['graph'][$nkey] = $value;
+                    $totalsession
+                }              
+                
+                if (!empty($_POST)) 
+                {
+                   
+                    echo json_encode($resultData,true);
+                }
+                else 
+                {                
+                    $data['welcome'] = $this;
+                    $this->show_view('analytics_session',$data);
+                }
 	}
         
     function Frequency(){
