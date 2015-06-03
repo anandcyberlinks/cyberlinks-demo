@@ -9,6 +9,10 @@ class Package extends MY_Controller {
     function __construct(){
     parent:: __construct();
     $this->load->model('Package_model');
+    $per = $this->check_per();
+        if(!$per){
+          redirect(base_url() . 'layout/permission_error');
+        }
     $s = $this->session->all_userdata();
     $this->user = $s[0]->username;
     $this->uid = $s[0]->id;
