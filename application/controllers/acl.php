@@ -11,7 +11,9 @@ class Acl extends MY_Controller{
         $uid = $this->uri->segment(3);
         if(isset($_POST['save'])){
             $this->acl_model->addpermision($uid, (isset($_POST['module']))?$_POST['module']:'');
-            //echo "<pre>"; print_r($_POST); die;
+            $msg = $this->loadPo('Premission Succefully saved');
+            $this->session->set_flashdata('message', $this->_successmsg($msg));
+            //redirect(base_url().'acl')
         }
         ######## User name for specafic user
         $this->db->select('username');

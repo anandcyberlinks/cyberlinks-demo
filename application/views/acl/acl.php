@@ -1,7 +1,9 @@
 <div class="content-wrapper" style="min-height: 308px;">
     <!-- Main content -->
     <section>
+        
         <div class="content body">
+            <?php echo $this->session->flashdata('message'); ?>
             <h2 class="page-header">Manage Permission For User:-  <b><?php echo ucfirst($username) ?></b></h2>
             <form action="" method="post"><div class="pull-right"><input type="submit" name="save" value="Save" class="btn btn-success btn-sm"></div>
                 <p class="lead">
@@ -17,13 +19,11 @@
                                 </div><!-- /.box-header -->
                                 <ul>
                                     <li>
-                                        <input class="icheckbox_flat-green" type="checkbox" /> <?php echo $val->name ?>
+                                        <input class="icheckbox_flat-green" type="checkbox" <?php if ($val->permit == 1) { echo 'checked';} ?> /> <?php echo $val->name ?>
                                         <ul>
                                             <?php foreach ($val->child as $child) { ?>
                                                 <li>
-                                                    <input name="module[<?php echo $child->id ?>]" value="<?php echo $val->id ?>" type="checkbox" <?php if ($child->permit == 1) {
-                                            echo 'checked';
-                                        } ?> /><?php echo $child->name ?>
+                                                    <input name="module[<?php echo $child->id ?>]" value="<?php echo $val->id ?>" type="checkbox" <?php if ($child->permit == 1) { echo 'checked';} ?> /><?php echo $child->name ?>
                                                 </li>
                                         <?php } ?>
                                         </ul>

@@ -10,11 +10,12 @@ class Acl_model extends CI_Model {
         $module = $this->db->get()->result();
         $temp = array();
         foreach ($module as $val) {
-            
+            $val->permit = $this->check_permision($val->id, $uid);
             $val->child = $this->child($val->id, $uid);
             $temp[] = $val;
         }
         return $temp;
+        //echo "<pre>"; print_r($temp); die;
     }
 
     function child($parent_id, $uid) {
