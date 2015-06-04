@@ -77,13 +77,15 @@
                     <thead>
                       <tr role="row"><th style="width: 167px;">Date</th><th>Total Users</th><th>New Users</th><th>Returning Users</th></tr>
                     </thead>
-                    <tbody>
+                    <tbody id="example2">
+					<!--
                     <tr role="row" class="odd">
                         <td class="sorting_1">Apr 20th</td>
                         <td>1,562</td>
                         <td>359</td>
                         <td>90,924</td>  
                     </tr>
+					
                     <tr role="row" class="odd">
                         <td class="sorting_1">Apr 20th</td>
                         <td>1,562</td>
@@ -107,7 +109,7 @@
                         <td>1,562</td>
                         <td>359</td>
                         <td>90,924</td>  
-                      </tr>
+                      </tr> -->
                     </tbody>
                   </table></div></div></div>
                 </div><!-- /.box-body -->
@@ -136,12 +138,32 @@
           <script src="<?php echo base_url() ?>assets/js/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js" type="text/javascript"></script>
     <script src="<?php echo base_url() ?>assets/js/plugins/jvectormap/jquery-jvectormap-world-mill-en.js" type="text/javascript"></script>
       <script src="<?php echo base_url() ?>assets/js/plugins/daterangepicker/daterangepicker.js" type="text/javascript"></script>
-                      <script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+                 <script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
                 <script src="<?php echo base_url() ?>assets/js/plugins/morris/morris.min.js"></script>
                 <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.css">
     <script type="text/javascript" language="javascript" src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" language="javascript" src="//cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.js"></script>             
   <script>
+  
+			var parsedData = JSON.parse('<?php echo $jsondata;?>');
+			//console.log(parsedData);
+  
+			function parseJson(data){
+				for (var key in data)
+				{	
+				var $tr = '<tr role="row" class="odd">'
+                      +'<td class="sorting_1">'+data[key].hr+'</td>'
+                       + '<td>'+data[key].totaluser+'</td>'
+                       +' <td>'+data[key].totalnewuser+'</td>'
+                       +'<td>'+data[key].returninguser+'</td>'+
+					'</tr>';
+					$('#example1').append($tr);
+			}
+		}
+			parseJson(parsedData);
+		  
+  
+  
       $(document).ready(function(){
            $('#example1').dataTable({
               bFilter: false,

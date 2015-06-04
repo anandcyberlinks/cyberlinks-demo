@@ -287,6 +287,10 @@
 			
 		function atpageload(parsedData){
 			//var parsedData = JSON.parse('<?php echo $jsondata;?>');
+			/*console.log("------Start------");
+			console.log(parsedData.totalsession);
+			console.log("------End------"); */
+			
 			$('#totalsession').text(parsedData.totalsession); 
 			$('#totaluser').text(parsedData.totaluser);
 			$('#newuser').text(parsedData.newuser);
@@ -304,7 +308,7 @@
 			
 	
 	$(document).ready(function(){
-                /* var data_today1 = [
+                 var temp = [
                   {time:'0:00',item1:26665555},
                   {time:'1:00',item1:2777},
                   {time:'2:00',item1:1000},
@@ -316,7 +320,7 @@
                   {time:'8:00',item1:5892},
                   {time:'9:00',item1:1478},
                   {time:'10:00',item1:2356},
-                ];   */
+                ];   
 				
 
 				
@@ -383,12 +387,9 @@
 							data: {'daydiff': num}, // change this to send js object
 							type: "post",
 							success: function(data){
+							temp =	atpageload(data);
 							
-							
-							temp =	atpageload(parsedData);
-							temp1 = [[1,14], [2,15], [3,18], [4,16], [5,19], [6,17], [7,15], [8,16], 
-							[9,20], [10,16], [11,18]];
-							drawGraph(temp);
+							//drawGraph(temp);
 							//parseJson(data);
 							}
 						  });
@@ -403,9 +404,9 @@
 		function drawGraph(temp){
 		/* var d1 = [[1,14], [2,15], [3,18], [4,16], [5,19], [6,17], [7,15], [8,16], 
         [9,20], [10,16], [11,18]] */;
-		console.log("------------------");
-				console.log(temp);
-				console.log("------------------");
+				//console.log("------------------");
+				//console.log(temp);
+				//console.log("------------------");
 		 label: "Data",
         $.plot("#line-chart", [temp], {
           grid: {
@@ -439,8 +440,8 @@
 		
 		
 				var parsedData = JSON.parse('<?php echo $jsondata;?>');
-				temp =	atpageload(parsedData);
-				drawGraph(temp);
+				//temp =	atpageload(parsedData);
+				//drawGraph(temp);
 		
 		
       
