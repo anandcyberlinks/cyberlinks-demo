@@ -37,7 +37,7 @@
                                                 <div id="draw-events-served" class="select">Total Session</div>
 						<div style="width: 100%;background: #88BBC8;height: 4px;   height: 4px;position: relative;top: 28px;"></div>
                                                 <div class="inner">
-							<div class="number">65,097</div>
+							<div class="number" id="total">00,000</div>
                                                         <div style="background-image:url('bootstrap/img/dtrend.png');" class="trend"></div>
 						</div>
 					</div>
@@ -46,7 +46,7 @@
                                           <div id="draw-events-served" class="select">New Session</div>
                                           <div style="width: 100%;background: #ED8662;height: 4px;   height: 4px;position: relative;top: 28px;"></div>
 						<div class="inner">
-							<div class="number">15,194</div>
+							<div class="number" id='new'>00,000</div>
                                                         <div style="background-image:url('bootstrap/img/utrend.png');" class="trend"></div>
 						</div>
 					</div>
@@ -55,7 +55,7 @@
 						<div id="draw-events-served" class="select">Unique Session</div>
                                                 <div style="width: 100%;background: #BEEB9F;height: 4px;   height: 4px;position: relative;top: 28px;"></div>
                                                 <div class="inner">
-							<div class="number">50,326</div>
+							<div class="number" id='unique'>00,000</div>
                                                         <div style="background-image:url('bootstrap/img/dtrend.png');" class="trend"></div>
 						</div>
 					</div>
@@ -234,6 +234,10 @@
                                   success: function(data){                                    
                                     
                                     //Draw Grid
+                                   // console.log(data.total[0]);
+                                    $('#total').html(data.total[0]);
+                                    $('#new').html(data.total[1]);
+                                    $('#unique').html(data.total[2]);
                                     $("#example1").dataTable().fnDestroy();
                                     drawDataGrid(data.grid);                                  
                                   }
