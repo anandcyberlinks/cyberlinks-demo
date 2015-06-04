@@ -19,15 +19,18 @@ class Newanalytics_model extends CI_Model{
 		//echo date("Y-m-d",strtotime($data['startdate']);
 		if(date("Y-m-d",strtotime($data['startdate'])) === date("Y-m-d",strtotime($data['enddate']))){
 			$this->db->select('count(app_session.session_start) as totaluser,HOUR(app_session.session_start) as hr');
-			$this->db->group_by('HOUR(app_session.session_start)'); 
+			$this->timeInterval($data,"app_session.session_start");
+                        $this->db->group_by('HOUR(app_session.session_start)'); 
 			$this->db->order_by('hr', 'ASC'); 
 			$query = $this->db->get('app_session');
 			$result = $query->result_array();
+                        
 			return $this->perHourData($result,$data,'totaluser');
 			
 		}else{
 			$this->db->select("count(session_start) as totaluser,DATE_FORMAT(app_session.session_start,'%Y-%m-%d') as date",false);
-			$this->db->group_by('Day(app_session.session_start)');
+			$this->timeInterval($data,"app_session.session_start");
+                        $this->db->group_by('Day(app_session.session_start)');
 			$this->db->order_by('totaluser', 'desc'); 
 			$query = $this->db->get('app_session');
 			$result = $query->result_array();
@@ -216,6 +219,9 @@ class Newanalytics_model extends CI_Model{
 	}	
 	
 	public function dayWiseData($queryData= array(),$dateInterval=array(),$columName){
+            //echo "<pre>";
+           // print_r($queryData);
+            //die;
 		$startDate = $dateInterval['startdate'];
 		$endDate =  $dateInterval['enddate'];
 		$date 	=	'date';
@@ -254,7 +260,60 @@ class Newanalytics_model extends CI_Model{
 		  }
 		}
 		return date('F',$startDate).' '.$num.'th';
-	}	
+	}
+        
+    public function getSessionDataGraph($data= array()){
+                         
+		//echo date("Y-m-d",strtotime($data['startdate']);
+		if(date("Y-m-d",strtotime($data['startdate'])) === date("Y-m-d",strtotime($data['enddate']))){
+			$this->db->select('count(app_session.id) as totalsession,count(distinct app_session.customer_device_id) as uniquesession, HOUR(app_session.session_start) as hr');
+			$this->timeInterval($data,"app_session.session_start");
+                        $this->db->group_by('HOUR(app_session.session_start)'); 
+			$this->db->order_by('hr', 'ASC'); 
+			$query = $this->db->get('app_session');
+			$result = $query->result_array();
+			return $result;
+			
+		}else{
+			$this->db->select("count(id) as totalsession,count(distinct app_session.customer_device_id) as uniquesession,DATE_FORMAT(app_session.session_start,'%d %M') as date",false);
+			$this->timeInterval($data,"app_session.session_start");
+                        $this->db->group_by('Day(app_session.session_start)');
+			$this->db->order_by('date', 'ASC'); 
+			$query = $this->db->get('app_session');
+			return $result = $query->result_array();
+                        //echo "dfdf";
+                        // echo $this->db->last_query();
+                        //print_r($result);die;
+			//return $this->dayWiseData($result,$data,'totaluser');
+		}
+	 }    
+         public function getNewSessionDataGraph($data= array()){
+		//echo date("Y-m-d",strtotime($data['startdate']);
+		if(date("Y-m-d",strtotime($data['startdate'])) === date("Y-m-d",strtotime($data['enddate']))){
+			$this->db->select('count(app_session.id) as newsession, HOUR(app_session.session_start) as hr');
+			$this->db->where('session_use',1);
+                        $this->timeInterval($data,"app_session.session_start");
+                        $this->db->group_by('HOUR(app_session.session_start)'); 
+			$this->db->order_by('hr', 'ASC'); 
+			$query = $this->db->get('app_session');
+			return $result = $query->result_array();
+			//return $this->perHourData($result,$data,'totaluser');
+			
+		}else{
+			$this->db->select("count(id) as newsession,DATE_FORMAT(app_session.session_start,'%d %M') as date",false);
+			$this->timeInterval($data,"app_session.session_start");
+                        $this->db->where('session_use',1);
+                        $this->db->group_by('Day(app_session.session_start)');
+			$this->db->order_by('date', 'ASC'); 
+			$query = $this->db->get('app_session');
+			return $result = $query->result_array();
+			//return $this->dayWiseData($result,$data,'totaluser');
+		}
+	 } 
 }
+
+
+
+
 
 ?>
