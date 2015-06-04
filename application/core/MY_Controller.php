@@ -95,7 +95,7 @@ class MY_Controller extends CI_Controller {
                 $per=true;
             }
         }
-        return $per;
+        return true;
     }
     function get_meta_tags($html) {
         preg_match_all("/<title>(.*)<\/title>/", $html, $title);
