@@ -21,12 +21,12 @@
                     <!-- Check all button -->
                     <a class="btn btn-default btn-sm reservation" onclick="dateRange()"><i class="fa fa-calendar"></i></a>
                     <div class="btn-group ">
-                      <a class="btn btn-default btn-sm year-class">2015</a>
-                      <a class="btn btn-default btn-sm active-header-btn today-class">Today</a>
-                      <a class="btn btn-default btn-sm week-class">7 Days</a>
-                      <a class="btn btn-default btn-sm month-class">30 Days</a>
-                      <a class="btn btn-default btn-sm months2-class">60 Days</a>
-                      <a class="btn btn-default btn-sm months3-class">90 Days</a>
+                      <a class="btn btn-default btn-sm year-class" value="365">2015</a>
+                      <a class="btn btn-default btn-sm active-header-btn today-class" value="1">Today</a>
+                      <a class="btn btn-default btn-sm week-class" value="7">7 Days</a>
+                      <a class="btn btn-default btn-sm month-class" value="30">30 Days</a>
+                      <a class="btn btn-default btn-sm months2-class" value="60">60 Days</a>
+                      <a class="btn btn-default btn-sm months3-class" value="90">90 Days</a>
                     </div><!-- /.btn-group -->
                   </div>
                 </div>
@@ -78,36 +78,7 @@
                       <tr role="row"><th style="width: 167px;">Date</th><th>Total Session</th><th>New Session</th><th>Unique Session</th></tr>
                     </thead>
                     <tbody>
-                    <tr role="row" class="odd">
-                        <td class="sorting_1">Apr 20th</td>
-                        <td>1,562</td>
-                        <td>359</td>
-                        <td>90,924</td>  
-                    </tr>
-                    <tr role="row" class="odd">
-                        <td class="sorting_1">Apr 20th</td>
-                        <td>1,562</td>
-                        <td>359</td>
-                        <td>90,924</td>  
-                      </tr>
-                    <tr role="row" class="odd">
-                        <td class="sorting_1">Apr 20th</td>
-                        <td>1,562</td>
-                        <td>359</td>
-                        <td>90,924</td>  
-                      </tr>
-                    <tr role="row" class="odd">
-                        <td class="sorting_1">Apr 20th</td>
-                        <td>1,562</td>
-                        <td>359</td>
-                        <td>90,924</td>  
-                      </tr>
-                    <tr role="row" class="odd">
-                        <td class="sorting_1">Apr 20th</td>
-                        <td>1,562</td>
-                        <td>359</td>
-                        <td>90,924</td>  
-                      </tr>
+                    
                     </tbody>
                   </table></div></div></div>
                 </div><!-- /.box-body -->
@@ -143,49 +114,82 @@
     <script type="text/javascript" language="javascript" src="//cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.js"></script>             
  
    <script>
-      $(document).ready(function(){
-           $('#example1').dataTable({
+       // var data = [    ["Edinburgh","5421","2011/04/25","$3,120"],["Edinburgh","8422","2011/07/25","$5,300"    ]]
+        
+        function drawDataGrid(data)
+         {            
+            $('#example1').dataTable({
+              data: data,
               bFilter: false,
               bLengthChange: false,
-                 });
-               
+                 }); 
+          }
+         
+      $(document).ready(function(){
+         
+         ajaxCall();   //  Bydefault Load Today Data 
+         //drawDataGrid(data);
+                
                 var data_today = [
-                  ['0',2666],
-                  ['1',2777],
-                  ['2',1000],
-                  ['3',2000],
-                  ['4',2500],
-                  ['5',8900],
-                  ['6',15000],
-                  ['7',5600],
-                  ['8',5892],
-                  ['9',1478],
-                  ['10',2356],
+                  ['21May',2666],
+                  ['22May',2777],
+                  ['23May',1000],
+                  ['24May',2000],
+                  ['25May',2500],
+                  ['26May',8900],
+                  ['27May',15000],
+                  ['28May',5600],
+                  ['29May',5892],
+                  ['30May',1478],
+                  ['31May',2356],
+                  ['1Jun',500],
                 ];
                 var data_today1 = [
-                  ['0',100],
-                  ['1',27],
-                  ['2',14500],
-                  ['3',20060],
-                  ['4',250],
-                  ['5',800],
-                  ['6',5000],
-                  ['7',600],
-                  ['8',592],
-                  ['9',14780],
-                  ['10',23561],
+                  ['21 May',100],
+                  ['22 May',27],
+                  ['23 May',14500],
+                  ['24 May',20060],
+                  ['25 May',250],
+                  ['26 May',800],
+                  ['27 May',5000],
+                  ['28 May',600],
+                  ['29 May',592],
+                  ['30 May',14780],
+                  ['31 May',14780],
+                  ['1 Jun',23561],
+                ];
+                var data_today2 = [
+                  ['21 May',266],
+                  ['22 May',2007],
+                  ['23 May',1550],
+                  ['24 May',1000],
+                  ['25 May',2030],
+                  ['26 May',7600],
+                  ['27 May',7000],
+                  ['28 May',8600],
+                  ['29 May',5002],
+                  ['30 May',1508],
+                  ['31 May',2006],
+                  ['1 Jun',3400],
                 ];
           $('.mailbox-controls .btn-default').click(function () {
             $('.btn-default').removeClass('active-header-btn');
             $(this).addClass('active-header-btn'); 
+            ajaxCall();
           });
         $(".reservation").daterangepicker();
         var gdpData = {
             "AF": 16.63,
             "AL": 11.58,
             "DZ": 158.97,
-        };
-        $.plot("#line-chart", [data_today,data_today1], {
+        };       
+    
+        drawGraph(data_today);
+        });
+      
+        function drawGraph(data_today)
+        {
+            $.plot("#line-chart", [data_today], {
           grid: {
             hoverable: true,
             borderColor: "#f3f3f3",
@@ -209,15 +213,38 @@
             show: true,
           },
           xaxis: {
-            show: true
+             show: true
           }
         });
-        });
-      
+    }    
+    
       function dateRange($divs) {
         $("#"+$divs+" .reservation").daterangepicker('show');
-      }
-    </script>
+      }  
+		 function ajaxCall(){
+			var num = $('.btn-group').find(".active-header-btn").attr('value')
+                      	$(function()
+                        { // start of doc ready.
+                            $.ajax({ 	 	
+                            dataType:'json',
+                                  url: 'Sessions',
+                                  data: {'daydiff': num}, // change this to send js object
+                                  type: "post",
+
+                                  success: function(data){                                    
+                                    
+                                    //Draw Grid
+                                    $("#example1").dataTable().fnDestroy();
+                                    drawDataGrid(data.grid);                                  
+                                  }
+                            });
+					 
+			});
+			//console.log($('.btn-group').find(".active-header-btn").text());
+		//console.log($(".big-numbers.active").find(".select").text());
+	       }
+
+ </script>
 <style>
   h3.timeHeading
   {
@@ -473,6 +500,22 @@ element.style {
     right: 20px;
     top: 62px;
     width: 12px;
+}
+ .daterangepicker .calendar th, .daterangepicker .calendar td
+{
+    min-width:0px!important;
+    font-size: 12px!important;
+}
+.table-condensed > tbody > tr > td, .table-condensed > tbody > tr > th, .table-condensed > tfoot > tr > td, .table-condensed > tfoot > tr > th, .table-condensed > thead > tr > td, .table-condensed > thead > tr > th
+{
+padding:3px!important;
+}
+.daterangepicker_start_input, .daterangepicker_end_input{
+display : none!important;
+}
+.daterangepicker .calendar-date
+{
+    padding: 0px!important;
 }
 </style>    
   
