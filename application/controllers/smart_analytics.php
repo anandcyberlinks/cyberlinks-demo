@@ -136,28 +136,43 @@ class Smart_analytics extends MY_Controller {
 		$days = $this->input->post('daydiff');
 		if($days === 'Today')
 		$days =1;
-		$dayDiff = $this->getDateIntervel($days);
-		$prepareData = array();
-		$sqlData = array();
-		$sqlData['startdate'] = $dayDiff['startdate']." 00:00:00";
-		$sqlData['enddate']=   $dayDiff['enddate']." 23:59:59";
+                if (!empty($_POST)) 
+		{
+                    $dayDiff = $this->getDateIntervel($days);
 
-		$TotalSession =	$this->newanalytics_model->getSessionDataGraph($sqlData);
-		$newSession =	$this->newanalytics_model->getNewSessionDataGraph($sqlData);                
+                    $prepareData = array();
+                    $sqlData = array();
+                    $sqlData['startdate'] = $dayDiff['startdate']." 00:00:00";
+                    $sqlData['enddate']=   $dayDiff['enddate']." 23:59:59";
 
-		$resultData['graph'] = array();
-		$totalsession =array();
-		$newsession = array();
-		$uniquesession = array();
-		foreach($TotalSession as $key => $value)
-		{                    
-			$nkey=$value['date'];
-			$value['newsession']= $newSession[$key]['newsession'];
-			$resultData['graph'][$nkey] = $value;
-			$totalsession;
-		}              
-		if (!empty($_POST)) 
-		{echo json_encode($resultData,true);
+                    $TotalSession =	$this->newanalytics_model->getSessionDataGraph($sqlData);
+                    $newSession =	$this->newanalytics_model->getNewSessionDataGraph($sqlData);                
+
+                    $resultData['graph'] = array();
+                    $resultData['grid'] = array();
+                    $totalsession =array();
+                    $newsession = array();
+                    $uniquesession = array();
+                    foreach($TotalSession as $key => $value)
+                    {            
+                            $nkey=$value['date'];
+                            if(is_array($newsession)>0 && is_array($newSession[$key]))
+                            {  
+                             $value['newsession']= $newSession[$key]['newsession'];
+                            }
+                            else
+                            {
+                                $value['newsession']=0;
+                            }
+
+                            $resultData['graph'][$nkey] = $value;
+
+                            $gridArray = array($nkey,$value['totalsession'],$value['newsession'],$value['uniquesession']);
+                            $resultData['grid'][] = $gridArray;
+                           // $totalsession;
+                    }              
+
+                        echo json_encode($resultData,true);
 		}
 		else 
 		{                
