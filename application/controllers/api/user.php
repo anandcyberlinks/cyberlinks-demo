@@ -27,8 +27,8 @@ class User extends REST_Controller
        parent::__construct();
        $this->load->helper('url');
        $this->load->model('api/User_model');
-     
        $this->admin_token = $this->get('token');
+	   
         if($this->admin_token ==' ' || $this->admin_token==0){
           echo  $this->admin_token = $this->post('token');
             {
@@ -79,8 +79,9 @@ class User extends REST_Controller
 	    if($owner_id <= 0){
 		$this->response(array('code'=>0,'error' => "Invalid Token"), 404);
 	    }
+		$device_other_detail = json_decode($this->post('device_other_detail'));
+        $devicedetail = json_decode($this->post('devicedetail'));
        //-----------------------------------//
-       
        $ext = $this->post('ext');
        $my_base64_string = $this->post('pic');
         //---- Upload logo image for user --//
@@ -116,8 +117,9 @@ class User extends REST_Controller
             'gender' => $this->post('gender'),
             'email' => $this->post('email'), 
             'password' => $this->post('password'),
-            'contact_no' => $this->post('phone'),                     
-            'status' => 'inactive'           
+            'age' => $this->post('age'),
+			'about_me' => $this->post('about_me'),
+			'status' => 'inactive'           
             );
                 
 	    if($pic !='' && $pic != 0){
@@ -135,16 +137,30 @@ class User extends REST_Controller
             $id = $this->User_model->adduser($data);
             if($id){
                 
-                //-- inser in user password --//
+                //-- insert in user password --//
                     $datapass = array('user_id'=>$id,'u_password'=>$this->post('password'));
                     $this->User_model->addpassword($datapass);
                 //----------------------------//
-                
-                //-- generate activation token --//
+				//--add device detail--//
+                	$devicedetail->user_id=$id;
+					$customer_device_id= $this->User_model->userDeviceID($devicedetail);
+				   
+				//--add device detail ends--//
+				//--add other device detail--//
+                	$session_data['customer_id']=$id;
+					$session_data['customer_device_id']=$customer_device_id;
+					$session_data['status']=1;
+					$session = $this->appsession($session_data);
+					$device_other_detail->session_id= $session;
+					$this->User_model->addotherdeviceinfo($device_other_detail);
+				//--add device detail ends--//
+				//-- generate activation token --//
                     $tokendata = array('user_id'=>$id,'token'=>$token,'action'=>'activation');
-                    $this->User_model->activationToken($tokendata);
-                //---------------------------------//
-                
+					//print_r($tokendata);
+                    $tid=$this->User_model->activationToken($tokendata);
+					//echo $tid; die;
+				//---------------------------------//
+					
                 //-- send confirmation mail --//               
                 $subject = '[I Am Punjabi]Confirm your email address';
                 $message = '<p>You recently register in our service</p>';
@@ -283,7 +299,7 @@ class User extends REST_Controller
         
          if($this->validatelogin($data)){
                $id = $this->User_model->loginuser($this->post('email'),md5($this->post('password')));
-               if($id>0){
+			   if($id>0){
                 //-- api token --//
                     $this->generateApiToken($id,$this->post('email'),$this->post('password'));
                     $result = $this->User_model->getuser($id);
@@ -424,7 +440,8 @@ class User extends REST_Controller
         $uid=0;
         $provider = $this->post('provider');
 	$access_key = $this->post('access_key');
-       // print_r($this->post());die;
+        //print_r($this->post());die;
+	   //echopre($this->post('device_other_detail'));
         $device_other_detail = json_decode($this->post('device_other_detail'));
        
         $devicedetail = json_decode($this->post('devicedetail'));
@@ -433,7 +450,7 @@ class User extends REST_Controller
         $userdetails = json_decode($this->post('social'));  
        // print_r(get_object_vars($device_other_detail));die;
         //-- check if Admin token is valid --//
-        
+       // echopre($device_other_detail);
 	$owner_id =  $this->User_model->checkAdminToken($this->admin_token);
 	// $owner_id =  $this->User_model->checkAdminToken('54d46a72bab49');
            
@@ -451,18 +468,18 @@ class User extends REST_Controller
        
        //print_r($userdetails);die;
         if(strtolower($provider)=='facebook'){
-            
             $imageUrl = $this->social_data_image($access_key);
-            
             $firstname = $userdetails->first_name;
             $lastname = $userdetails->last_name;
             $email = $userdetails->email;
             $gender = $userdetails->gender;
             $socialid = $userdetails->id;
+			$aboutme = $userdetails->about_me;
+			$age= $userdetails->age;
             $password = md5($socialid);
-	    $image = $imageUrl;
+			$image = $imageUrl;
             $token = sha1($socialid.rand());
-	    $age = @$userdetails->dob;
+			$dob = @$userdetails->dob;
 	    $id='';
 	    //-- get user keywords --//
 	    $social_keywords = $this->social_data($id,$socialid,$access_key);
@@ -476,10 +493,28 @@ class User extends REST_Controller
             $email = $userdetails->email;
             $gender = $userdetails->gender;
             $socialid = $userdetails->id;
+			$aboutme = $userdetails->about_me;
+			$age= $userdetails->age;
             $password = md5($socialid);
             $token = sha1($socialid.rand());
-	    $image = $userdetails->image;
-	    $age = $userdetails->dob;
+			$image = $userdetails->image;
+			$dob = $userdetails->dob;
+            //echo '<pre>'; print_r($userdetails);die;
+        }
+		if(strtolower($provider)=='twitter')
+        {
+	    $social_keywords='';
+            $firstname = $userdetails->first_name;
+            $lastname = $userdetails->last_name;
+            $email = $userdetails->email;
+            $gender = $userdetails->gender;
+            $socialid = $userdetails->id;
+			$aboutme = $userdetails->about_me;
+			$age= $userdetails->age;
+            $password = md5($socialid);
+            $token = sha1($socialid.rand());
+			$image = $userdetails->image;
+			$dob = $userdetails->dob;
             //echo '<pre>'; print_r($userdetails);die;
         }
 	if($email !='')
@@ -531,7 +566,9 @@ class User extends REST_Controller
                 'email' => $email, 
                 'password' => $password,
                 'image' => $image,
+				'about_me' => $aboutme,
                 'age' => $age,
+				'dob' => $dob,
                 //'device_unique_id' => $uniqueId,
                 'device_unique_id' => serialize($deviceIdArr),
                 'keywords'=>$social_keywords,
@@ -558,6 +595,7 @@ class User extends REST_Controller
                 'created'=>date('Y-m-d h:i:s'));
                  $this->User_model->addsocial($socialdata);
                 }
+				
                 if($id)
                 {
                      //-- api token --//

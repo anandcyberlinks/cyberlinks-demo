@@ -27,36 +27,34 @@ class User_model extends CI_Model {
        
    }
    
-   public function adduser($data)
-   {
-	$this->db->set($data);
-        $this->db->set('created', 'NOW()', FALSE); 
-	$this->db->insert('customers', $data);
-	//echo '<br>'.$this->db->last_query();die;
-	return $this->db->insert_id();
+   public function adduser($data){
+   $this->db->set($data);
+   $this->db->set('created', 'NOW()', FALSE); 
+   $this->db->insert('customers', $data);
+   //echo '<br>'.$this->db->last_query();die;
+   return $this->db->insert_id();
    }
    
-   public function activationToken($data)
-   {
-       $this->db->set($data);
-       $this->db->set('expiry','NOW()',FALSE);
-       $this->db->insert('token',$data);
-       return $this->db->insert_id();
+   public function activationToken($data){
+   $this->db->set($data);
+   $this->db->set('expiry','NOW()',FALSE);
+   $this->db->insert('token',$data);
+   return $this->db->insert_id();
    }
    
    public function addpassword($data)
    {
-	$this->db->set($data);
-	$this->db->insert('user_password', $data);
-	//echo '<br>'.$this->db->last_query();die;
-	return $this->db->insert_id();
+   $this->db->set($data);
+   $this->db->insert('user_password', $data);
+   //echo '<br>'.$this->db->last_query();die;
+   return $this->db->insert_id();
    }
    public function addsocial($data)
    {
-	$this->db->set($data);
-	$this->db->insert('social_connects', $data);
-	//echo '<br>'.$this->db->last_query();die;
-	return $this->db->insert_id();
+   $this->db->set($data);
+   $this->db->insert('social_connects', $data);
+   //echo '<br>'.$this->db->last_query();die;
+   return $this->db->insert_id();
    }
    
    public function checkuser($email)
@@ -76,13 +74,13 @@ class User_model extends CI_Model {
    public function loginuser($email,$password)
    {
         $this->db->select('a.id');
-	$this->db->from('customers a');
+		 $this->db->from('customers a');
         $this->db->join('social_connects b', 'a.id = b.user_id', 'left');
         $this->db->where('a.email',$email);        
         $this->db->where('a.password',$password); 
         $this->db->where('a.status',1); 
         $query = $this->db->get();
-        //echo '<br>'.$this->db->last_query();die;
+       // echo $this->db->last_query();die;
         $result = $query->row();
         if($result)
             return $result->id;
