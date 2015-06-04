@@ -45,7 +45,7 @@ foreach($menuArr as $k1=>$v1){
 //print_r($s['menu']);
 $menu = array();
 switch ($s[0]->username) {
-    case('superadmin') :
+   /* case('superadmin') :
         $menu = array(
             //array('name' => 'SuperDashboard', 'url' => base_url() . 'super_admin/dashboard', 'class' => 'fa-dashboard', 'li-class' => ($this->uri->segment(1) == 'layout') ? 'active' : ''),
             array('name' => 'Dashboard', 'url' => base_url() . 'layout/dashboard', 'class' => 'fa-dashboard', 'li-class' => ($this->uri->segment(1) == 'layout') ? 'active' : ''),
@@ -74,9 +74,11 @@ switch ($s[0]->username) {
                 )),
             array('name' => 'Help', 'url' => base_url() . 'helplist', 'class' => 'fa-dashboard', 'li-class' => ($this->uri->segment(1) == 'help') ? 'active' : ''),
             array('name' => 'CMS', 'url' => base_url() . 'pages', 'class' => 'fa-dashboard', 'li-class' => ($this->uri->segment(1) == 'pages') ? 'active' : ''),
+            array('name' => 'Module', 'url' => base_url() . 'module', 'class' => 'fa-ellipsis-h', 'li-class' => ($this->uri->segment(1) == 'module') ? 'active' : ''),
+            
             );
         
-        break;
+        break; */
     /**case ('veena'):
         $menu = array(
             array('name' => 'Dashboard', 'url' => base_url() . 'layout/dashboard', 'class' => 'fa-dashboard', 'li-class' => ($this->uri->segment(1) == 'layout') ? 'active' : ''),
@@ -242,6 +244,8 @@ switch ($s[0]->username) {
         <!-- jquery.tagit.css -->
         <link href="<?php echo base_url() ?>assets/css/jquery.tagit.css" rel="stylesheet" type="text/css">
         <!-- tagit.ui-zendesk.css-->
+        
+        <link href="<?php echo base_url() ?>assets/css/iCheck/all.css" rel="stylesheet" type="text/css">
         <link href="<?php echo base_url() ?>assets/css/tagit.ui-zendesk.css" rel="stylesheet" type="text/css">
         <link href="<?php echo base_url(); ?>assets/css/timepicker/bootstrap-timepicker.min.css" rel="stylesheet"/>
         <link href="<?php echo base_url(); ?>assets/css/ion.rangeSlider.css" rel="stylesheet"/>
