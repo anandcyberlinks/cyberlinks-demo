@@ -117,16 +117,17 @@ class Smart_analytics extends MY_Controller {
 				$days =1;
 		if($days === 'Today' || $days === 0)
 			 $days = 1;
-		
+		 if (!empty($_POST))
+               {
 		//$days = 3;
 		
 		$dayDiff = $this->getDateIntervel($days);
 		$prepareData = array();
-	    $sqlData = array();
+                $sqlData = array();
 		 $startDate = $sqlData['startdate'] = $dayDiff['startdate']." 00:00:00";
 		 $endDate= $sqlData['enddate']=   $dayDiff['enddate']." 23:59:59";
 		//$sqlData['startdate']	=   "2015-05-19 00:00:00";
-	    //$sqlData['enddate']		=   "2015-05-19 23:59:59";
+                //$sqlData['enddate']		=   "2015-05-19 23:59:59";
 	
 		$TotalUserDaysWaise 	=	$this->newanalytics_model->getTotalUserDaysWaise($sqlData);
 		$prepareData['graph']['totaluser'] = $TotalUserDaysWaise;
@@ -139,9 +140,10 @@ class Smart_analytics extends MY_Controller {
 		$gridData  =  array();
 		$k=1;
 		
-	$resultData =  array();
+                $resultData =  array();
 		 if($dayDiff['startdate'] === $dayDiff['enddate']){
-			for($i = 1 ; $i<= 24 ; $i++){
+			for($i = 1 ; $i<= 24 ; $i++)
+                        {
 				//$gridData[$k]['hr']  = $prepareData['graph']['totaluser'][$i]['hr'];
 				//$gridData[$k]['t']  =  sprintf('%02d',($prepareData['graph']['totaluser'][$i]['hr']-1)).":00";
 				$gridData[$k]['hr']  =  sprintf('%02d',($prepareData['graph']['totaluser'][$i]['hr']-1)).":00";
@@ -159,40 +161,29 @@ class Smart_analytics extends MY_Controller {
 				
 				
 			} 
-		 }else{
-			for($startDate = strtotime($startDate); $startDate <= strtotime($endDate); $startDate = strtotime("+1 day", $startDate)){
-			$i= $d = date('Y-m-d',$startDate); 						
-			$m = $gridData[$k]['hr']  =$prepareData['graph']['totaluser'][$i]['month'];
-			$gridData[$k]['date']  = $prepareData['graph']['totaluser'][$i]['date'];
-			$gridData[$k]['totaluser']  = $prepareData['graph']['totaluser'][$i]['totaluser'];
-			$gridData[$k]['totalnewuser']  = $prepareData['graph']['totalnewuser'][$i]['totaluser'];
-			$gridData[$k]['returninguser']  = $prepareData['graph']['returninguser'][$i]['totaluser']; 
-			
-			$gridArray = array($m, $prepareData['graph']['totaluser'][$i]['totaluser'],$prepareData['graph']['totalnewuser'][$i]['totaluser'], $prepareData['graph']['returninguser'][$i]['totaluser']);
-			$resultData['grid'][] = $gridArray;
-			$k++;
-		}
-	}
+                        }else{
+                               for($startDate = strtotime($startDate); $startDate <= strtotime($endDate); $startDate = strtotime("+1 day", $startDate)){
+                               $i= $d = date('Y-m-d',$startDate); 						
+                               $m = $gridData[$k]['hr']  =$prepareData['graph']['totaluser'][$i]['month'];
+                               $gridData[$k]['date']  = $prepareData['graph']['totaluser'][$i]['date'];
+                               $gridData[$k]['totaluser']  = $prepareData['graph']['totaluser'][$i]['totaluser'];
+                               $gridData[$k]['totalnewuser']  = $prepareData['graph']['totalnewuser'][$i]['totaluser'];
+                               $gridData[$k]['returninguser']  = $prepareData['graph']['returninguser'][$i]['totaluser']; 
 
-		$data =array();
-		$data['welcome'] = $this;
-		
-	
-		
-		
-		
-			
-			//PRINT_R(JSON_ENCODE($data));
-		
-		//DIE;
-		  if (!empty($_POST)) {
-			$data['jsondata'] =$gridData;
-			$data['grid'] = 	$resultData;
-			echo json_encode($data,true);
+                               $gridArray = array($m, $prepareData['graph']['totaluser'][$i]['totaluser'],$prepareData['graph']['totalnewuser'][$i]['totaluser'], $prepareData['graph']['returninguser'][$i]['totaluser']);
+                               $resultData['grid'][] = $gridArray;
+                               $k++;
+                                }
+                            }
+                                //echo "<pre>";
+				// print_r($resultData);die;
+			//$data['jsondata'] =$gridData;
+			//$data['grid'] = 	$resultData;
+			echo json_encode($resultData,true);
 			//	ECHO $data ;
 				exit;
 		}else{
-		
+                        $data['welcome'] = $this;
 			$this->show_view('analytics_user',$data);
 		}
 	}
