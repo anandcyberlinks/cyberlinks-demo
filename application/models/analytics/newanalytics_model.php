@@ -12,26 +12,28 @@ class Newanalytics_model extends CI_Model{
 		$this->timeInterval($data,"app_session.session_start");
 		$query = $this->db->get('app_session');
 		return $totalSession = $query->num_rows();
-		// echo $this->db->last_query();
+		
     }
 	
 	public function getTotalSessionDayWise($data= array()){
-		//echo date("Y-m-d",strtotime($data['startdate']);
+		
+		//echo date("Y-m-d",strtotime($data['startdate']); die;
 		if(date("Y-m-d",strtotime($data['startdate'])) === date("Y-m-d",strtotime($data['enddate']))){
-			$this->db->select('count(app_session.session_start) as totaluser,HOUR(app_session.session_start) as hr');
+			$this->db->select('count(app_session.id) as totaluser,HOUR(app_session.session_start) as hr');
+			$this->timeInterval($data,"app_session.session_start");
 			$this->timeInterval($data,"app_session.session_start");
                         $this->db->group_by('HOUR(app_session.session_start)'); 
 			$this->db->order_by('hr', 'ASC'); 
 			$query = $this->db->get('app_session');
 			$result = $query->result_array();
-                        
 			return $this->perHourData($result,$data,'totaluser');
 			
 		}else{
-			$this->db->select("count(session_start) as totaluser,DATE_FORMAT(app_session.session_start,'%Y-%m-%d') as date",false);
+			$this->db->select("count(id) as totaluser,DATE_FORMAT(app_session.session_start,'%Y-%m-%d') as date",false);
+			$this->timeInterval($data,"app_session.session_start");
 			$this->timeInterval($data,"app_session.session_start");
                         $this->db->group_by('Day(app_session.session_start)');
-			$this->db->order_by('totaluser', 'desc'); 
+			$this->db->order_by('totaluser','desc');
 			$query = $this->db->get('app_session');
 			$result = $query->result_array();
 			return $this->dayWiseData($result,$data,'totaluser');
@@ -50,14 +52,16 @@ class Newanalytics_model extends CI_Model{
 	
 	public function getTotalUserDaysWaise($data= array()){
 		if(date("Y-m-d",strtotime($data['startdate'])) === date("Y-m-d",strtotime($data['enddate']))){
+			
 			$this->timeInterval($data,"app_session.session_start");
 			$this->db->select("count(distinct(customer_device_id)) as totaluser,HOUR(app_session.session_start) as hr",false);
 			$this->db->group_by('HOUR(app_session.session_start)'); 
 			$this->db->order_by('totaluser', 'desc'); 
 			$query = $this->db->get('app_session');
 			$result = $query->result_array();
-			$this->perHourData($result,$data,'totaluser');
+			return $this->perHourData($result,$data,'totaluser');
 		}else{
+		
 			$this->timeInterval($data,"app_session.session_start");
 			//$this->db->distinct();
 			$this->db->select("count(distinct(customer_device_id)) as totaluser,DATE_FORMAT(app_session.session_start,'%Y-%m-%d') as date",false);
@@ -65,6 +69,8 @@ class Newanalytics_model extends CI_Model{
 			$this->db->order_by('totaluser', 'desc'); 
 			$query = $this->db->get('app_session');
 			$result = $query->result_array();
+			 
+			
 			return $this->dayWiseData($result,$data,'totaluser');
 		}
 		
@@ -96,6 +102,7 @@ class Newanalytics_model extends CI_Model{
 			$this->db->group_by('Day(app_session.session_start)'); 
 			$query = $this->db->get('app_session');
 			$result = $query->result_array();
+			//echo $this->db->last_query();die('fff');
 			return $this->dayWiseData($result,$data,'totaluser');
 		}
 	 }
@@ -215,6 +222,10 @@ class Newanalytics_model extends CI_Model{
 				$perHourArray[$hr]['hr']  = $hr;
 			}
 		}
+		
+		/* echo "<pre>";
+		print_r($perHourArray);
+		die; */
 		return $perHourArray;
 	}	
 	
@@ -231,7 +242,10 @@ class Newanalytics_model extends CI_Model{
 		foreach($queryData as $val){
 			$temp[$val[$date]] = $val[$columName];
 		}
+		
+		
 		$dayWiseData = array();
+		
 		for($startDate = strtotime($startDate); $startDate <= strtotime($endDate); $startDate = strtotime("+1 day", $startDate)) 
 		{	$d = date('Y-m-d',$startDate); 
 			if(isset($temp[$d])){
@@ -239,24 +253,30 @@ class Newanalytics_model extends CI_Model{
 					$perDayData[$d]['month'] =$this->addOrdinalNumberSuffix($startDate);
 					$perDayData[$d][$columName] =@$temp[$d];
 				}else{
+					
 					$perDayData[$d][$date] =$d ; 
 					//$perDayData[$d]['month'] =date('F d',$startDate);
 					$perDayData[$d]['month'] =$this->addOrdinalNumberSuffix($startDate);
 					$perDayData[$d][$columName] =0;
 				}				
-		}return  $perDayData ;
+		}
+		
+	//	echo '<pre>';
+	//	print_r($perDayData); die('xx');
+		
+		return  $perDayData ;
 	}
 	
 	
 	function addOrdinalNumberSuffix($startDate) {
-		//date('F d',$startDate);
-		$num =	date('j',$startDate);
+		//echo date('F d',$startDate);
+		 $num =	date('j',$startDate);
 		if (!in_array(($num % 100),array(11,12,13))){
 		  switch ($num % 10) {
 			// Handle 1st, 2nd, 3rd
-			case 1:  return date('F',$startDate).' '.'st';
-			case 2:  return date('F',$startDate).' '.'nd';
-			case 3:  return date('F',$startDate).' '.'rd';
+			case 1:  return date('F',$startDate).' '.$num.'st';
+			case 2:  return date('F',$startDate).' '.$num.'nd';
+			case 3:  return date('F',$startDate).' '.$num.'rd';
 		  }
 		}
 		return date('F',$startDate).' '.$num.'th';
@@ -311,7 +331,6 @@ class Newanalytics_model extends CI_Model{
 		}
 	 } 
 }
-
 
 
 
