@@ -108,66 +108,90 @@ class Smart_analytics extends MY_Controller {
         
          
    function Users(){
-	//die;
-		
+
 		$days = $this->input->post('daydiff'); 
 			if($days =='')
 				$days =1;
 		if($days === 'Today' || $days === 0)
 			 $days = 1;
 		
-		// $days = 1;
-		$dayDiff = $this->getDateIntervel($days);
-		///print_r($dayDiff);
+		//$days = 3;
 		
+		$dayDiff = $this->getDateIntervel($days);
 		$prepareData = array();
 	    $sqlData = array();
-		$sqlData['startdate'] = $dayDiff['startdate']." 00:00:00";
-		$sqlData['enddate']=   $dayDiff['enddate']." 23:59:59";
-		$sqlData['startdate']	=   "2015-05-19 00:00:00";
-	 	$sqlData['enddate']		=   "2015-05-19 23:59:59";
+		 $startDate = $sqlData['startdate'] = $dayDiff['startdate']." 00:00:00";
+		 $endDate= $sqlData['enddate']=   $dayDiff['enddate']." 23:59:59";
+		//$sqlData['startdate']	=   "2015-05-19 00:00:00";
+	    //$sqlData['enddate']		=   "2015-05-19 23:59:59";
 	
 		$TotalUserDaysWaise 	=	$this->newanalytics_model->getTotalUserDaysWaise($sqlData);
 		$prepareData['graph']['totaluser'] = $TotalUserDaysWaise;
-		
-	
-		
 		$NewUserPerDay 			= 	$this->newanalytics_model->getNewUserPerDay($sqlData);
 		$prepareData['graph']['totalnewuser'] = $NewUserPerDay;
 		
 		$ReturningUserPerDay 			= $this->newanalytics_model->getReturningUserPerDay($sqlData);
 		$prepareData['graph']['returninguser'] = $ReturningUserPerDay;
 		
-		 
-		
 		$gridData  =  array();
 		$k=1;
-		for($i = 1 ; $i<= 24 ; $i++){
-		$gridData[$k]['hr']  = $prepareData['graph']['totaluser'][$i]['hr'];
-		$gridData[$k]['t']  =  sprintf('%02d',($prepareData['graph']['totaluser'][$i]['hr']-1)).":00";
-		$gridData[$k]['h']  = sprintf('%02d', $prepareData['graph']['totaluser'][$i]['hr']).":00";
-		$gridData[$k]['totaluser']  = $prepareData['graph']['totaluser'][$i]['totaluser'];
-		$gridData[$k]['totalnewuser']  = $prepareData['graph']['totalnewuser'][$i]['totaluser'];
-		$gridData[$k]['returninguser']  = $prepareData['graph']['returninguser'][$i]['totaluser']; 
-		$k++;
-		}
 		
-		/* 
-		 echo "<pre>";
-		print_r($gridData);
-		die;   */
+	$resultData =  array();
+		 if($dayDiff['startdate'] === $dayDiff['enddate']){
+			for($i = 1 ; $i<= 24 ; $i++){
+				//$gridData[$k]['hr']  = $prepareData['graph']['totaluser'][$i]['hr'];
+				//$gridData[$k]['t']  =  sprintf('%02d',($prepareData['graph']['totaluser'][$i]['hr']-1)).":00";
+				$gridData[$k]['hr']  =  sprintf('%02d',($prepareData['graph']['totaluser'][$i]['hr']-1)).":00";
+				$h = sprintf('%02d',($prepareData['graph']['totaluser'][$i]['hr']-1)).":00";
+				$gridData[$k]['h']  = sprintf('%02d', $prepareData['graph']['totaluser'][$i]['hr']).":00";
+				$gridData[$k]['totaluser']  = $prepareData['graph']['totaluser'][$i]['totaluser'];
+				$gridData[$k]['totalnewuser']  = $prepareData['graph']['totalnewuser'][$i]['totaluser'];
+				$gridData[$k]['returninguser']  = $prepareData['graph']['returninguser'][$i]['totaluser']; 
+				
+				
+				$gridArray = array($h, $prepareData['graph']['totaluser'][$i]['totaluser'],$prepareData['graph']['totalnewuser'][$i]['totaluser'], $prepareData['graph']['returninguser'][$i]['totaluser']);
+				$resultData['grid'][] = $gridArray;
+				$k++;
+				//[    ["Edinburgh","5421","2011/04/25","$3,120"],["Edinburgh","8422","2011/07/25","$5,300"    ]]
+				
+				
+			} 
+		 }else{
+			for($startDate = strtotime($startDate); $startDate <= strtotime($endDate); $startDate = strtotime("+1 day", $startDate)){
+			$i= $d = date('Y-m-d',$startDate); 						
+			$m = $gridData[$k]['hr']  =$prepareData['graph']['totaluser'][$i]['month'];
+			$gridData[$k]['date']  = $prepareData['graph']['totaluser'][$i]['date'];
+			$gridData[$k]['totaluser']  = $prepareData['graph']['totaluser'][$i]['totaluser'];
+			$gridData[$k]['totalnewuser']  = $prepareData['graph']['totalnewuser'][$i]['totaluser'];
+			$gridData[$k]['returninguser']  = $prepareData['graph']['returninguser'][$i]['totaluser']; 
+			
+			$gridArray = array($m, $prepareData['graph']['totaluser'][$i]['totaluser'],$prepareData['graph']['totalnewuser'][$i]['totaluser'], $prepareData['graph']['returninguser'][$i]['totaluser']);
+			$resultData['grid'][] = $gridArray;
+			$k++;
+		}
+	}
+
+		$data =array();
 		$data['welcome'] = $this;
 		
-		 $data['jsondata'] = json_encode($gridData,true);
-		if (!empty($_POST)) {
-				ECHO $data['jsondata'] ;
+	
+		
+		
+		
+			
+			//PRINT_R(JSON_ENCODE($data));
+		
+		//DIE;
+		  if (!empty($_POST)) {
+			$data['jsondata'] =$gridData;
+			$data['grid'] = 	$resultData;
+			echo json_encode($data,true);
+			//	ECHO $data ;
 				exit;
 		}else{
+		
 			$this->show_view('analytics_user',$data);
 		}
-		
-		
-		
 	}
         
         
