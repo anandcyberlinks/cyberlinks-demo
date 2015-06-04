@@ -145,30 +145,70 @@
     <script type="text/javascript" language="javascript" src="//cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.js"></script>             
   <script>
   
-			var parsedData = JSON.parse('<?php echo $jsondata;?>');
-			//console.log(parsedData);
+			
+			
+			
+			
   
-			function parseJson(data){
+			/* function parseJson1(data){
+				//$('#example1 tbody tr').remove()
+				//$('#example1').find('tr:not(:has(th))).remove();
 				for (var key in data)
 				{	
-				var $tr = '<tr role="row" class="odd">'
+					var $tr = '<tr id ="temp" role="row" class="odd">'
                       +'<td class="sorting_1">'+data[key].hr+'</td>'
                        + '<td>'+data[key].totaluser+'</td>'
                        +' <td>'+data[key].totalnewuser+'</td>'
                        +'<td>'+data[key].returninguser+'</td>'+
 					'</tr>';
-					$('#example1').append($tr);
-			}
-		}
-			parseJson(parsedData);
-		  
-  
-  
-      $(document).ready(function(){
-           $('#example1').dataTable({
+					// $('#example1 > tbody > tr:last').after($tr);
+					$('#example1 tbody').append($tr);
+				}
+			} */
+			
+			
+		function parseJson(data)
+         {            
+		 
+		 console.log(data);
+		 
+            $('#example1').dataTable({
+              data: data,
               bFilter: false,
               bLengthChange: false,
-                 });
+                 }); 
+          }
+			
+			
+			//parseJson(parsedData);
+			
+			function ajaxCall(){
+			str = $('.btn-group').find(".active-header-btn").text()
+			var num = +str.match(/-?\d+\.?\d*/);
+			
+                      	$(function()
+                        { // start of doc ready.
+                            $.ajax({ 	 	
+                            dataType:'json',
+                                  url: 'Users',
+                                  data: {'daydiff': num}, // change this to send js object
+                                  type: "post",
+									success: function(data){   
+									 $("#example1").dataTable().fnDestroy();
+									parseJson(data);                                  
+                                  }
+                            });
+					});
+				}
+		  
+
+  
+      $(document).ready(function(){
+		   ajaxCall();
+          /*  $('#example1').dataTable({
+              bFilter: false,
+              bLengthChange: false,
+                 }); */
                
                 var data_today = [
                   ['0',2666],
@@ -199,7 +239,13 @@
           $('.mailbox-controls .btn-default').click(function () {
             $('.btn-default').removeClass('active-header-btn');
             $(this).addClass('active-header-btn'); 
+			            ajaxCall();
+
           });
+		  
+		  
+		  
+		    
         $(".reservation").daterangepicker();
         var gdpData = {
             "AF": 16.63,
