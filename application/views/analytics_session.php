@@ -75,7 +75,7 @@
                     <div class="row"><div class="col-sm-12">
                     <table class="table table-bordered table-striped dataTable" id="example1" role="grid" aria-describedby="example1_info">
                     <thead>
-                      <tr role="row"><th style="width: 167px;">Date</th><th>Total Session</th><th>New Session</th><th>Unique Session</th></tr>
+                      <tr role="row"><th style="width: 167px;">Date/Hours</th><th>Total Session</th><th>New Session</th><th>Unique Session</th></tr>
                     </thead>
                     <tbody>
                     
