@@ -16,7 +16,7 @@
               <div class="box box-primary">
                 <div class="box-header">
                     <div class="widget-header logo"></div>
-                    <h3 class="timeHeading pull-left">USERS</h3>
+                    <h3 class="timeHeading pull-left">SESSIONS</h3>
           <div class="mailbox-controls pull-right">
                     <!-- Check all button -->
                     <a class="btn btn-default btn-sm reservation" onclick="dateRange()"><i class="fa fa-calendar"></i></a>
