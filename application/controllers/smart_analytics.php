@@ -195,13 +195,15 @@ class Smart_analytics extends MY_Controller {
 
                     $resultData['graph'] = array();
                     $resultData['grid'] = array();
-                    $totalsession =array();
-                    $newsession = array();
-                    $uniquesession = array();
+                    $resultData['total'] = array();
+                    
+                    $total =0;
+                    $new = 0;
+                    $unique = 0;
                     foreach($TotalSession as $key => $value)
                     {            
                             $nkey=$value['date'];
-                            if(is_array($newsession)>0 && is_array($newSession[$key]))
+                            if(is_array($newSession)>0 && is_array($newSession[$key]))
                             {  
                              $value['newsession']= $newSession[$key]['newsession'];
                             }
@@ -213,11 +215,17 @@ class Smart_analytics extends MY_Controller {
                             $resultData['graph'][$nkey] = $value;
 
                             $gridArray = array($nkey,$value['totalsession'],$value['newsession'],$value['uniquesession']);
-                            $resultData['grid'][] = $gridArray;
-                           // $totalsession;
-                    }              
+                            
+                             $resultData['grid'][] = $gridArray;
+                          
+                             $total +=$value['totalsession'];
+                             $unique +=$value['uniquesession'];
+                             $new +=$value['newsession'];
+                    }  
+                    
+                    $resultData['total']=array($total,$unique,$new);
 
-                        echo json_encode($resultData,true);
+                    echo json_encode($resultData,true);
 		}
 		else 
 		{                
