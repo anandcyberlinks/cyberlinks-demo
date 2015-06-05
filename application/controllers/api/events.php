@@ -26,10 +26,11 @@ class Events extends REST_Controller
        $this->load->helper('url');
        $this->load->model('api/Events_model');
        $this->load->model('api/User_model');
+	   $this->load->helper('common');
         //-- validate token --//
         $token = $this->get('token');
-        $owner_id =  $this->User_model->checkAdminToken($token);	                
-        if($owner_id <= 0 || $token=='')
+        $this->owner_id =  $this->User_model->checkAdminToken($token);	                
+        if($this->owner_id <= 0 || $token=='')
         {                
             $response_arr = array('code'=>0,'error' => "Invalid Token");               
             $this->response($response_arr, 404);
@@ -70,6 +71,8 @@ class Events extends REST_Controller
     
     function list_get()
     {
+		$arra = array('4','6','10');
+		print_r(json_encode($arra));die;
         $cid = $this->get('id');
         $userid = $this->get('userid');
         $result = $this->Events_model->categoryEvents($cid,$userid);
@@ -99,9 +102,11 @@ class Events extends REST_Controller
     }
     
     function add_post(){
-        
+		 //--- validate user token ---//        
+            $this->validateToken();
+        //------------------------//	
         $ext = $this->post('ext');
-        $my_base64_string = $this->post('pic');
+        $my_base64_string = $this->post('pic');				
         //---- Upload logo image for user --//
         if($ext !=''){
 	    if($my_base64_string !=''){
@@ -132,43 +137,80 @@ class Events extends REST_Controller
         for ($i = 0; $i < 4; $i++) {
              $random_key .= $characters[rand(0, strlen($characters) - 1)];
         }
-        
-        $data = array(
-            'event_id' =>$random_key,
-            'name' => $this->post('name'), 
-            'description' => ($this->post('description') !='' ? $this->post('description'):""), 
-            'category' => $this->post('category'),
-            'url' => EVENT_URL.$this->post('u_token').$random_key,
-            'start_date' => $this->post('start_date'), 
-            'end_date' => $this->post('end_date'),
-            'event_type' => $this->post('event_type'),                     
-            'uid' => $this->post('userid'),
-            'status' => '0'
-            );		
-	    if($pic !='' && $pic != 0){
+		$data = array('event_id' =>$random_key,
+				'source' => $this->post('source'),
+				'name' => $this->post('name'),
+				'description' => ($this->post('description') !='' ? $this->post('description'):""),
+				'category_id' => $this->post('category'),
+				'type' => 'Live',
+				'keywords' => $this->post('tags'),
+				'status'=>0,
+				'access' => $this->post('access'),
+				'uid' => $this->owner_id,
+				'customer_id' => $this->post('userid'),
+				'rtsp' => EVENT_URL.$this->post('u_token').$random_key,
+				'thumbnail' => $pic,
+				'start_date' => $this->post('start_date'),
+				'start_time' => $this->post('start_time'),
+				'end_date' => $this->post('end_date'),
+				'end_time' => $this->post('end_time'),
+				'show_duration' => $this->post('duration'),
+				'susbcribe_ids' => $this->post('subscribe_ids')
+				 );
+		
+	    if(isset($pic) && $pic !='' && $pic != 0){
                $data['thumbnail']=base_url().EVENTPIC_PATH.$pic;
-           }
+        }
+		    $data['ios'] = EVENT_URL_MOBILE.$this->post('u_token').$data['event_id'].'/playlist.m3u8';
+            $data['android'] = EVENT_URL_MOBILE.$this->post('u_token').$data['event_id'].'/playlist.m3u8';
+            $data['windows'] = EVENT_URL_MOBILE.$this->post('u_token').$data['event_id'].'/Manifest';
+            $data['web'] = EVENT_URL_WEB.$this->post('u_token').$data['event_id'];
            //echo '<pre>'; print_r($data); exit;
-           $result = $this->Events_model->saveEvents($data);
-           $result['url_mobile'] = EVENT_URL_MOBILE.$this->post('u_token').$random_key.'/playlist.m3u8';
-           $result['url_web'] = EVENT_URL_WEB.$this->post('u_token').$random_key;
+           $id = $this->Events_model->saveEvents($data);          
            
-           if(isset($result) && $result!=''){
+           if(isset($id) && $id >0){
+				//-- get event detail --//
+				$result = $this->Events_model->getEventDetail($id);			
                $this->response(array('code'=>1,'result'=>$result), 200); // 200 being the HTTP response code
            }else{
-               $this->response(array('code'=>0,'result'=>'Error'), 404);
+               $this->response(array('code'=>0,'result'=>'Error creating event'), 201);
            }
     }
 	
 	function publish_post()
 	{
-		$id = $this->post('id');
-		$status = $this->post('status');
-		$this->db->set('status',$status);
-		$this->db->set('modified', 'NOW()',false);
-		$this->db->where('id',$id);
-		$this->db->update('events');
-		//echo $this->db->last_query();
-        $this->response(array('code'=>1), 200); // 200 being the HTTP response code        
+		//--- validate user token ---//        
+            $this->validateToken();
+        //------------------------//
+		//$id = $this->post('id');
+		//$status = $this->post('status');
+		$otp = mt_rand(100000, 999999);
+		$data['user_id'] = $this->post('user_id');
+		$data['event_id'] = $this->post('event_id');
+		$data['email'] = $this->post('email');
+		$data['otp'] = $otp;
+		
+		$id = $this->Events_model->publishEvent($data);
+		
+		if($id){
+		 //-- send confirmation mail --//               
+                $subject = 'Multitv Publish Evnet OTP';
+                $message = '<p>'.$otp.' is Onetime password(OTP) for publish your event.</p>';
+                $message .= '<p>This is usable once and valid for 10 minutes</p>';                
+                $message .= "<br><br> Kind Regards,<br><br>";
+                $message .= "MultiTv Team";
+                $to = $data['email'];
+                $from = 'info@cyberlinks.in';
+               
+				if(sendmail($to,$subject,$message))  //-- common helper function
+				{
+					$this->response(array('code'=>1), 200); // 200 being the HTTP response code  
+				}else{
+					$this->response(array('code'=>0,'result'=>'Sending mail failed'), 201); 
+				}
+				$this->response(array('code'=>1), 200); // 200 being the HTTP response code 
+		}else{
+				$this->response(array('code'=>0,'result'=>'Error publish event'), 201); 
+		}
 	}
 }

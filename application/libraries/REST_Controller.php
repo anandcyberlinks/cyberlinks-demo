@@ -1544,9 +1544,9 @@ abstract class REST_Controller extends CI_Controller
 
 	//-- validate token and update on each request --//
     public function validateToken(){
-        $data = $this->get();
-        if(isset($data['token']) && $data['token'] != ''){
-            $token = $data['token'];
+        $data = $this->post();              
+        if(isset($data['u_token']) && $data['u_token'] != ''){
+            $token = $data['u_token'];
             $this->load->model('api/User_model');
             //-- validate token --//
             $id =  $this->User_model->validateToken($token);
@@ -1555,7 +1555,7 @@ abstract class REST_Controller extends CI_Controller
                 //$this->User_model->update_api($token);
                 return $id;
             }else{
-                $this->response(array('code'=>0,'error' => "Invalid Token"), 404);
+                $this->response(array('code'=>0,'error' => "Invalid user Token"), 404);
             }
         }else{
             $this->response(array('code'=>0,'error' => "Token Missing"), 404);
