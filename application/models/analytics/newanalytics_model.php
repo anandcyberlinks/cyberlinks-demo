@@ -330,6 +330,30 @@ class Newanalytics_model extends CI_Model{
 			//return $this->dayWiseData($result,$data,'totaluser');
 		}
 	 } 
+         
+        public function getNewSessionDataGraphYear()
+          {
+
+                  $this->db->select("count(id) as newsession,DATE_FORMAT(app_session.session_start,'%M') as date",false);
+                  //$this->timeInterval($data,"app_session.session_start");
+                  $this->db->where("YEAR(session_start)","YEAR(CURDATE())", false);
+                  $this->db->group_by('MONTH(app_session.session_start)');
+                  $this->db->order_by('date', 'ASC'); 
+                  $query = $this->db->get('app_session');
+                  return $result = $query->result_array();
+                  //return $this->dayWiseData($result,$data,'totaluser');	
+           } 
+                 
+         public function getSessionDataGraphYear()
+         {
+			$this->db->select("count(id) as totalsession,count(distinct app_session.customer_device_id) as uniquesession,DATE_FORMAT(app_session.session_start,'%M') as date",false);
+			 $this->db->where("YEAR(session_start)","YEAR(CURDATE())", false);
+                        $this->db->group_by('MONTH(app_session.session_start)');
+			$this->db->order_by('date', 'ASC'); 
+			$query = $this->db->get('app_session');
+			return $result = $query->result_array();
+                      
+	 }
 }
 
 
