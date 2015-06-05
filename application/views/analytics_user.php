@@ -168,16 +168,13 @@
 			
 			
 		function parseJson(data)
-         {            
-		 
-		 console.log(data);
-		 
-            $('#example1').dataTable({
-              data: data,
-              bFilter: false,
-              bLengthChange: false,
-                 }); 
-          }
+                {        
+                   $('#example1').dataTable({
+                     data: data,
+                     bFilter: false,
+                     bLengthChange: false,
+                     }); 
+                 }
 			
 			
 			//parseJson(parsedData);
@@ -193,11 +190,13 @@
                                   url: 'Users',
                                   data: {'daydiff': num}, // change this to send js object
                                   type: "post",
-									success: function(data){   
-									 $("#example1").dataTable().fnDestroy();
-									parseJson(data);                                  
+                                success: function(data){   
+                                //    console.log(data.grid);
+                                $("#example1").dataTable().fnDestroy();
+                                parseJson(data.grid);    
+                                                                        
                                   }
-                            });
+                                     });
 					});
 				}
 		  
@@ -540,6 +539,22 @@ element.style {
     right: 20px;
     top: 62px;
     width: 12px;
+}
+ .daterangepicker .calendar th, .daterangepicker .calendar td
+{
+    min-width:0px!important;
+    font-size: 12px!important;
+}
+.table-condensed > tbody > tr > td, .table-condensed > tbody > tr > th, .table-condensed > tfoot > tr > td, .table-condensed > tfoot > tr > th, .table-condensed > thead > tr > td, .table-condensed > thead > tr > th
+{
+padding:3px!important;
+}
+.daterangepicker_start_input, .daterangepicker_end_input{
+display : none!important;
+}
+.daterangepicker .calendar-date
+{
+    padding: 0px!important;
 }
 </style>    
   
