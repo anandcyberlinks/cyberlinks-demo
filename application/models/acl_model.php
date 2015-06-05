@@ -2,11 +2,12 @@
 
 class Acl_model extends CI_Model {
 
-    function module($uid) {
-        $this->db->select('id, name, icon-class as icon');
+    function module($uid, $role_id) {
+        $this->db->select('modules.id, modules.name, modules.icon-class as icon');
         $this->db->from('modules');
-        $this->db->where('parent_id', 0);
-        $this->db->order_by('order', 'ASC');
+        $this->db->join('module_role','modules.id = module_role.module_id');
+        $this->db->where('module_role.role_id', $role_id);
+        $this->db->order_by('modules.order', 'ASC');
         $module = $this->db->get()->result();
         $temp = array();
         foreach ($module as $val) {
@@ -21,6 +22,7 @@ class Acl_model extends CI_Model {
     function child($parent_id, $uid) {
         $this->db->select('id, name');
         $this->db->where('parent_id', $parent_id);
+        $this->db->order_by('name', 'ASC');
         $child = $this->db->get('modules')->result();
         if (count($child) == 0) {
             return '';
@@ -62,6 +64,13 @@ class Acl_model extends CI_Model {
         }else{
             return 1;
         }
+    }
+    
+    function get_roleid($uid){
+        $this->db->select('role_id');
+        $this->db->where('id', $uid);
+        $result = $this->db->get('users')->result();
+        return $result[0]->role_id;
     }
 
 }

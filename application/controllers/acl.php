@@ -5,10 +5,13 @@ class Acl extends MY_Controller{
     function __construct() {
         parent::__construct();
         $this->load->model('acl_model');
+        
+        
     }
     
     function index(){
         $uid = $this->uri->segment(3);
+        $role_id = $this->acl_model->get_roleid($uid);
         if(isset($_POST['save'])){
             $this->acl_model->addpermision($uid, (isset($_POST['module']))?$_POST['module']:'');
             $msg = $this->loadPo('Premission Succefully saved');
@@ -24,7 +27,7 @@ class Acl extends MY_Controller{
         
         $data['username'] = $username[0]->username;
         $data['welcome'] = $this;
-        $data['module'] = $this->acl_model->module($uid);
+        $data['module'] = $this->acl_model->module($uid, $role_id);
         //echo "<pre>";        print_r($data['module']); die;
         $this->show_view('acl/acl', $data);
     }

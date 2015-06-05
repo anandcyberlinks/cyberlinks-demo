@@ -1,7 +1,6 @@
 <div class="content-wrapper" style="min-height: 308px;">
     <!-- Main content -->
     <section>
-        
         <div class="content body">
             <?php echo $this->session->flashdata('message'); ?>
             <h2 class="page-header">Manage Permission For User:-  <b><?php echo ucfirst($username) ?></b></h2>
