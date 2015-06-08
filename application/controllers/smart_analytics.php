@@ -62,7 +62,7 @@ class Smart_analytics extends MY_Controller {
 		///print_r($dayDiff);
 		
 		$prepareData = array();
-	    $sqlData = array();
+                $sqlData = array();
 		$sqlData['startdate'] = $dayDiff['startdate']." 00:00:00";
 		$sqlData['enddate']=   $dayDiff['enddate']." 23:59:59";
 		$sqlData['startdate']	=   "2015-05-19 00:00:00";
@@ -198,18 +198,43 @@ class Smart_analytics extends MY_Controller {
         
 		$days = $this->input->post('daydiff');
 		if($days === 'Today')
-		$days =1;
-                if (!empty($_POST)) 
+                    $days =1;
+                if (!empty($this->input->post())) 
 		{ 
-                    $dayDiff = $this->getDateIntervel($days);
-                    $prepareData = array();
-                    $sqlData = array();
-                    $sqlData['startdate'] = $dayDiff['startdate']." 00:00:00";
-                    $sqlData['enddate']=   $dayDiff['enddate']." 23:59:59";
+                   // print_r($_POST);die;
+                   
+                  
+                    if($days==365)
+                    {
+                        
+                        $TotalSession =	$this->newanalytics_model->getSessionDataGraphYear();
+                        $newSession =	$this->newanalytics_model->getNewSessionDataGraphYear();                
+                    }
+                    else
+                    {
+                        
+                        $sqlData = array();
+                        
+                        if(is_array($days))
+                        {
+                            $sqlData['startdate'] =$days[0]." 00:00:00";
+                            $sqlData['enddate']   = $days[1]." 23:59:59";
+                           // print_r($days);die;
+                        }
+                        else
+                        {
+                           $dayDiff = $this->getDateIntervel($days);                        
+                         
+                            $sqlData['startdate'] = $dayDiff['startdate']." 00:00:00";
+                            $sqlData['enddate']=   $dayDiff['enddate']." 23:59:59";
+                        }
 
-                    $TotalSession =	$this->newanalytics_model->getSessionDataGraph($sqlData);
-                    $newSession =	$this->newanalytics_model->getNewSessionDataGraph($sqlData);                
-//print_r($TotalSession);die;
+                        $TotalSession =	$this->newanalytics_model->getSessionDataGraph($sqlData);
+                        $newSession =	$this->newanalytics_model->getNewSessionDataGraph($sqlData);                
+                       
+                    }
+                    
+                  //   print_r($newSession);die;
                     $resultData['graph'] = array();
                     $resultData['grid'] = array();
                     $resultData['total'] = array();
@@ -217,10 +242,12 @@ class Smart_analytics extends MY_Controller {
                     $total =0;
                     $new = 0;
                     $unique = 0;
+                    //print_r($TotalSession);
+                    
                     foreach($TotalSession as $key => $value)
                     {            
                             $nkey=$value['date'];
-                            if(is_array($newSession)>0 && is_array($newSession[$key]))
+                            if(is_array($newSession)>0 && array_key_exists($key,$newSession) && array_key_exists('newsession',$newSession[$key]))
                             {  
                              $value['newsession']= $newSession[$key]['newsession'];
                             }
@@ -230,9 +257,9 @@ class Smart_analytics extends MY_Controller {
                             }
 
                             $resultData['graph'][$nkey] = $value;
-                            $value['totalsession']=($value['totalsession']==NULL)?0:$value['totalsession'];
-                            $value['newsession']=($value['newsession']==NULL)?0:$value['newsession'];
-                            $value['uniquesession']=($value['uniquesession']==NULL)?0:$value['uniquesession'];
+                            $value['totalsession']=($value['totalsession']==NULL && array_key_exists('totalsession',$value))?0:$value['totalsession'];
+                            $value['newsession']=($value['newsession']==NULL && array_key_exists('newsession',$value))?0:$value['newsession'];
+                            $value['uniquesession']=($value['uniquesession']==NULL && array_key_exists('uniquesession',$value))?0:$value['uniquesession'];
                             
                             $gridArray = array($nkey,$value['totalsession'],$value['newsession'],$value['uniquesession']);
                             
