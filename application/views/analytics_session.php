@@ -30,7 +30,10 @@
                     </div><!-- /.btn-group -->
                   </div>
                 </div>
-                  <div id="line-chart" style="height: 300px;"></div>           
+                  <div >
+                      
+                      <canvas id="line-chart" width="1250" height="300"></canvas>
+                  </div>           
                 <div class="box-body" id="analyticsUser">
               <div class="dashboard" id="big-numbers-container">
 					<div class="big-numbers three-column">
@@ -101,9 +104,9 @@
     <!-- FLOT RESIZE PLUGIN - allows the chart to redraw when the window is resized -->
     <script src="<?php echo base_url() ?>assets/js/plugins/flot/jquery.flot.resize.min.js" type="text/javascript"></script>
     <!-- FLOT PIE PLUGIN - also used to draw donut charts -->
-    <script src="<?php echo base_url() ?>assets/js/plugins/flot/jquery.flot.pie.min.js" type="text/javascript"></script>
+  <!--  <script src="<?php echo base_url() ?>assets/js/plugins/flot/jquery.flot.pie.min.js" type="text/javascript"></script> -->
     <!-- FLOT CATEGORIES PLUGIN - Used to draw bar charts -->
-    <script src="<?php echo base_url() ?>assets/js/plugins/flot/jquery.flot.categories.min.js" type="text/javascript"></script>
+  <!--  <script src="<?php echo base_url() ?>assets/js/plugins/flot/jquery.flot.categories.min.js" type="text/javascript"></script>-->
           <script src="<?php echo base_url() ?>assets/js/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js" type="text/javascript"></script>
     <script src="<?php echo base_url() ?>assets/js/plugins/jvectormap/jquery-jvectormap-world-mill-en.js" type="text/javascript"></script>
       <script src="<?php echo base_url() ?>assets/js/plugins/daterangepicker/daterangepicker.js" type="text/javascript"></script>
@@ -111,11 +114,13 @@
                 <script src="<?php echo base_url() ?>assets/js/plugins/morris/morris.min.js"></script>
                 <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.css">
     <script type="text/javascript" language="javascript" src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" language="javascript" src="//cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.js"></script>             
- 
+    <script type="text/javascript" language="javascript" src="//cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.js"></script> 
+    <script type="text/javascript" language="javascript" src="<?php echo base_url() ?>assets/js/plugins/chartjs/Chart.min.js"></script>
+<script type="text/javascript" language="javascript" src="<?php echo base_url() ?>assets/js/plugins/chartjs/Chart.js"></script>
+
    <script>
        // var data = [    ["Edinburgh","5421","2011/04/25","$3,120"],["Edinburgh","8422","2011/07/25","$5,300"    ]]
-         
+       
         function drawDataGrid(data)
          {            
             $('#example1').dataTable({
@@ -126,6 +131,7 @@
           }
          
       $(document).ready(function(){
+           var myLineChart;
            $(".reservation").daterangepicker({
                format: 'YYYY-MM-DD',
         });
@@ -143,70 +149,36 @@
           ajaxCall('Today');
          
          // ajaxCall();   //  Bydefault Load Today Data 
-         //drawDataGrid(data);
-                
-                var data_today = [
-                  ['21May',2666],
-                  ['22May',2777],
-                  ['23May',1000],
-                  ['24May',2000],
-                  ['25May',2500],
-                  ['26May',8900],
-                  ['27May',15000],
-                  ['28May',5600],
-                  ['29May',5892],
-                  ['30May',1478],
-                  ['31May',2356],
-                  ['1Jun',500],
-                ];
-                var data_today1 = [
-                  ['21 May',100],
-                  ['22 May',27],
-                  ['23 May',14500],
-                  ['24 May',20060],
-                  ['25 May',250],
-                  ['26 May',800],
-                  ['27 May',5000],
-                  ['28 May',600],
-                  ['29 May',592],
-                  ['30 May',14780],
-                  ['31 May',14780],
-                  ['1 Jun',23561],
-                ];
-                var data_today2 = [
-                  ['21 May',266],
-                  ['22 May',2007],
-                  ['23 May',1550],
-                  ['24 May',1000],
-                  ['25 May',2030],
-                  ['26 May',7600],
-                  ['27 May',7000],
-                  ['28 May',8600],
-                  ['29 May',5002],
-                  ['30 May',1508],
-                  ['31 May',2006],
-                  ['1 Jun',3400],
-                ];
-         
-          
-       /* if(num == 'undefined')
-             {
-                 strdt = $('input[name="daterangepicker_start"]').val();
-                 enddt = $('input[name="daterangepicker_end"]').val();
-                 num[0] =strdt;
-                 num[1] =enddt;
-                 console.log(strdt);
-                 console.log(picker.enddt.format('YYYY-MM-DD'));
-             } */
-       
-        var gdpData = {
-            "AF": 16.63,
-            "AL": 11.58,
-            "DZ": 158.97,
-        };       
-    
-        drawGraph(data_today);
+        //drawDataGrid(data);
+    drawdata = {
+    labels: ["January", "February"],
+    datasets: [
+                {
+                    label: "My First dataset",
+                    strokeColor: "rgba(220,220,220,1)",
+                    pointColor: "rgba(220,220,220,1)", 
+                    pointStrokeColor: "#dff",
+                    data: [65, 59]
+                },
+                {
+                    label: "My Second dataset",
+                    strokeColor: "rgba(151,187,205,1)",
+                    pointColor: "rgba(151,187,205,1)",
+                    data: [28, 48]
+                }
+                ,
+                {
+                    label: "My third dataset",
+                    strokeColor: "rgba(214,155,200,0.75)",
+                    pointColor: "rgba(214,155,200,0.75)",
+                    data: [48, 28]
+                }
+            ]
+        };
         
+  DrawLineChart(drawdata);
+
+ /* Date Select Functionality */
          $('.applyBtn').on('click',function(){
             num =[]; 
             strdt = $('input[name="daterangepicker_start"]').val();
@@ -220,36 +192,7 @@
             });
         });
       
-        function drawGraph(data_today)
-        {
-            $.plot("#line-chart", [data_today], {
-                grid: {
-            hoverable: true,
-            borderColor: "#f3f3f3",
-            borderWidth: 1,
-            tickColor: "#f3f3f3"
-          },
-          series: {
-            shadowSize: 0,
-            lines: {
-              show: true
-            },
-            points: {
-              show: true
-            }
-          },
-          lines: {
-            fill: false,
-            color: ["#3c8dbc", "#f56954"]
-          },
-          yaxis: {
-            show: true,
-          },
-          xaxis: {
-             show: true
-          }
-        });
-    }    
+   
     
       function dateRange() {
           $("#reservation").daterangepicker('show');
@@ -268,12 +211,17 @@
                                   success: function(data){                                    
                                     
                                     //Draw Grid
-                                   // console.log(data.total[0]);
+                                   // 
                                     $('#total').html(data.total[0]);
                                     $('#new').html(data.total[1]);
                                     $('#unique').html(data.total[2]);
                                     $("#example1").dataTable().fnDestroy();
-                                    drawDataGrid(data.grid);                                  
+                                    drawDataGrid(data.grid); 
+                                    
+                                   // console.log(data.graph);
+                                    RemoveGraph();
+                                   // drawdata=data.graph;
+                                    DrawLineChart(data.graph);
                                   }
                             });
 					 
@@ -281,7 +229,157 @@
 			//console.log($('.btn-group').find(".active-header-btn").text());
 		//console.log($(".big-numbers.active").find(".select").text());
 	       }
+               
+function DrawLineChart(drawdata)
+   {
+        var areaChartOptions = {
+          
+    // Boolean - Whether to animate the chart
+    animation: true,
+
+    // Number - Number of animation steps
+    animationSteps: 60,
+
+    // String - Animation easing effect
+    // Possible effects are:
+    // [easeInOutQuart, linear, easeOutBounce, easeInBack, easeInOutQuad,
+    //  easeOutQuart, easeOutQuad, easeInOutBounce, easeOutSine, easeInOutCubic,
+    //  easeInExpo, easeInOutBack, easeInCirc, easeInOutElastic, easeOutBack,
+    //  easeInQuad, easeInOutExpo, easeInQuart, easeOutQuint, easeInOutCirc,
+    //  easeInSine, easeOutExpo, easeOutCirc, easeOutCubic, easeInQuint,
+    //  easeInElastic, easeInOutSine, easeInOutQuint, easeInBounce,
+    //  easeOutElastic, easeInCubic]
+    animationEasing: "easeOutQuart",
+
+    // Boolean - If we should show the scale at all
+    showScale: true,
+
+    // Boolean - If we want to override with a hard coded scale
+    scaleOverride: false,
+
+    // ** Required if scaleOverride is true **
+    // Number - The number of steps in a hard coded scale
+    scaleSteps: null,
+    // Number - The value jump in the hard coded scale
+    scaleStepWidth: null,
+    // Number - The scale starting value
+    scaleStartValue: null,
+
+    // String - Colour of the scale line
+    scaleLineColor: "rgba(0,0,0,.1)",
+
+    // Number - Pixel width of the scale line
+    scaleLineWidth: 1,
+
+    // Boolean - Whether to show labels on the scale
+    scaleShowLabels: true,
+
+    // Interpolated JS string - can access value
+    scaleLabel: "<%=value%>",
+
+    // Boolean - Whether the scale should stick to integers, not floats even if drawing space is there
+    scaleIntegersOnly: true,
+
+    // Boolean - Whether the scale should start at zero, or an order of magnitude down from the lowest value
+    scaleBeginAtZero: false,
+
+    // String - Scale label font declaration for the scale label
+    scaleFontFamily: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
+
+    // Number - Scale label font size in pixels
+    scaleFontSize: 12,
+
+    // String - Scale label font weight style
+    scaleFontStyle: "normal",
+
+    // String - Scale label font colour
+    scaleFontColor: "#666",
+
+    // Boolean - whether or not the chart should be responsive and resize when the browser does.
+    responsive: false,
+
+    // Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
+    maintainAspectRatio: true,
+
+    // Boolean - Determines whether to draw tooltips on the canvas or not
+    showTooltips: true,
+
+    // Function - Determines whether to execute the customTooltips function instead of drawing the built in tooltips (See [Advanced - External Tooltips](#advanced-usage-custom-tooltips))
+    customTooltips: false,
+
+    // Array - Array of string names to attach tooltip events
+    tooltipEvents: ["mousemove", "touchstart", "touchmove"],
+
+    // String - Tooltip background colour
+    tooltipFillColor: "rgba(0,0,0,0.8)",
+
+    // String - Tooltip label font declaration for the scale label
+    tooltipFontFamily: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
+
+    // Number - Tooltip label font size in pixels
+    tooltipFontSize: 14,
+
+    // String - Tooltip font weight style
+    tooltipFontStyle: "normal",
+
+    // String - Tooltip label font colour
+    tooltipFontColor: "#fff",
+
+    // String - Tooltip title font declaration for the scale label
+    tooltipTitleFontFamily: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
+
+    // Number - Tooltip title font size in pixels
+    tooltipTitleFontSize: 14,
+
+    // String - Tooltip title font weight style
+    tooltipTitleFontStyle: "bold",
+
+    // String - Tooltip title font colour
+    tooltipTitleFontColor: "#fff",
+
+    // Number - pixel width of padding around tooltip text
+    tooltipYPadding: 6,
+
+    // Number - pixel width of padding around tooltip text
+    tooltipXPadding: 6,
+
+    // Number - Size of the caret on the tooltip
+    tooltipCaretSize: 8,
+
+    // Number - Pixel radius of the tooltip border
+    tooltipCornerRadius: 6,
+
+    // Number - Pixel offset from point x to tooltip edge
+    tooltipXOffset: 10,
+
+    // String - Template string for single tooltips
+    tooltipTemplate: "<%if (label){%><%=label%>: <%}%><%= value %>",
+
+    // String - Template string for multiple tooltips
+    multiTooltipTemplate: "<%= value %>",
+
+    // Function - Will fire on animation progression.
+    onAnimationProgress: function(){},
+
+    // Function - Will fire on animation completion.
+    onAnimationComplete: function(){}
+   };
+        
+        var ctx = document.getElementById("line-chart").getContext("2d");
+        //var myNewChart = new Chart(ctx).PolarArea(data);
+        //lineChartOptions.datasetFill = false;
+         var lineChartOptions =areaChartOptions;
+        lineChartOptions.datasetFill = false;
+        lineChartOptions.responsive = true;
+        myLineChart = new Chart(ctx).Line(drawdata,lineChartOptions);
+        //Chart.defaults.global.responsive = true;
+} 
+
+function RemoveGraph()
+{
+    myLineChart.destroy();
            
+}
  </script>
 <style>
   h3.timeHeading
