@@ -101,11 +101,49 @@
     <script type="text/javascript" language="javascript" src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" language="javascript" src="//cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.js"></script>             
    <script>
+   
+   
+   
+   function parseJson(data){        
+		   $('#example1').dataTable({
+			 data: data,
+			 bFilter: false,
+			 bLengthChange: false,
+			 }); 
+		}
+   
+		
+		
+		function ajaxCall(){
+			str = $('.btn-group').find(".active-header-btn").text();
+			
+			var num = +str.match(/-?\d+\.?\d*/);
+			
+                      	$(function()
+                        { // start of doc ready.
+                            $.ajax({ 	 	
+                            dataType:'json',
+                                  url: 'Frequency',
+                                  data: {'daydiff': num}, // change this to send js object
+                                  type: "post",
+                                success: function(data){   
+                              //      console.log(data.grid);
+                                $("#example1").dataTable().fnDestroy();
+                                parseJson(data.grid);    
+                                                                        
+                                  }
+                                     });
+					});
+				}
+			
+   
       $(document).ready(function(){
-           $('#example1').dataTable({
+			ajaxCall();
+	  
+          /*  $('#example1').dataTable({
               bFilter: false,
               bLengthChange: false,
-                 });
+                 }); */
                
                 var data_today = [
                   ['0',2666],
@@ -135,7 +173,8 @@
                 ];
           $('.mailbox-controls .btn-default').click(function () {
             $('.btn-default').removeClass('active-header-btn');
-            $(this).addClass('active-header-btn'); 
+            $(this).addClass('active-header-btn');
+			ajaxCall();			
           });
         $(".reservation").daterangepicker();
 
