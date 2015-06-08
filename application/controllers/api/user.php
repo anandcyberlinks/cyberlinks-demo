@@ -979,6 +979,11 @@ class User extends REST_Controller
 		echo $val;
 		return $val;
 	}
+	function list_get(){
+		$this->param =  $this->paging($this->get('p'));
+		$owner_id =  $this->User_model->checkAdminToken($this->admin_token);
+		$data = $this->User_model->listdata($owner_id,$this->param);
+	}
     function resumesession_post()
     {	
      //rint_r($this->get());

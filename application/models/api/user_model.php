@@ -144,7 +144,15 @@ class User_model extends CI_Model {
         } else
             return 0;
    }
-   
+   public function listdata($owner,$limit){
+	  $this->db->select('*');
+	  $this->db->from('customers');
+      $this->db->where('owner_id',$owner);
+	  $this->db->where('status','active');
+	  $this->db->limit($limit['limit'],$limit['offset']);
+	  $query = $this->db->get();
+	  return $result = $query->result();
+   }
     public function validateToken($token)
     {
        if($token == ''){
