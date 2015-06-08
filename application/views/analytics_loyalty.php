@@ -43,7 +43,7 @@
                       <tr role="row"><th style="width: 167px;">Session of User</th><th>Number of Users</th><th>Percent</th></tr>
                     </thead>
                     <tbody>
-                    <tr role="row" class="odd">
+                  <!--  <tr role="row" class="odd">
                         <td class="sorting_1">1</td>
                         <td>16,368</td>
                         <td>15</td>
@@ -66,7 +66,7 @@
                         <td>16,368</td>
                         <td>19</td>
                          
-                    </tr>                  
+                    </tr>  -->                 
                     </tbody>
                   </table></div></div></div>
                 </div><!-- /.box-body -->
@@ -101,12 +101,45 @@
     <script type="text/javascript" language="javascript" src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" language="javascript" src="//cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.js"></script>             
    <script>
+   
+	
+		function parseJson(data)
+                {        
+                   $('#example1').dataTable({
+                     data: data,
+                     bFilter: false,
+                     bLengthChange: false,
+                     }); 
+                 }
+				 
+				 
+   
+		function ajaxCall(){
+			str = $('.btn-group').find(".active-header-btn").text();
+			
+			var num = +str.match(/-?\d+\.?\d*/);
+			
+                      	$(function()
+                        { // start of doc ready.
+                            $.ajax({ 	 	
+                            dataType:'json',
+                                  url: 'Loyalty',
+                                  data: {'daydiff': num}, // change this to send js object
+                                  type: "post",
+                                success: function(data){   
+                                //   console.log(data.grid);
+                                $("#example1").dataTable().fnDestroy();
+                                parseJson(data.grid);    
+                                                                        
+                                  }
+                                     });
+					});
+				}
+   
+   
       $(document).ready(function(){
-           $('#example1').dataTable({
-              bFilter: false,
-              bLengthChange: false,
-                 });
-               
+		ajaxCall();
+          
                 var data_today = [
                   ['0',2666],
                   ['1',2777],
@@ -135,7 +168,8 @@
                 ];
           $('.mailbox-controls .btn-default').click(function () {
             $('.btn-default').removeClass('active-header-btn');
-            $(this).addClass('active-header-btn'); 
+			 $(this).addClass('active-header-btn'); 
+			ajaxCall();
           });
         $(".reservation").daterangepicker();
 
