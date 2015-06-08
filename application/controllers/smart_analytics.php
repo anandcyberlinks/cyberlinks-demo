@@ -216,60 +216,115 @@ class Smart_analytics extends MY_Controller {
         
 		$days = $this->input->post('daydiff');
 		if($days === 'Today')
-			$days =1;
-			if (!empty($_POST)) 
-			{ 
-				if($days==365)
-				{
-				  $TotalSession =	$this->newanalytics_model->getSessionDataGraphYear();
-				  $newSession =	$this->newanalytics_model->getNewSessionDataGraphYear();                
-				}else {
-					$sqlData = array();
-					if(is_array($days)){
-						$sqlData['startdate'] =$days[0]." 00:00:00";
-						$sqlData['enddate']   = $days[1]." 23:59:59";
-					}else
-					{
-					   $dayDiff = $this->getDateIntervel($days);                        
-					   $sqlData['startdate'] = $dayDiff['startdate']." 00:00:00";
-					   $sqlData['enddate']=   $dayDiff['enddate']." 23:59:59";
-					}
-					$TotalSession =	$this->newanalytics_model->getSessionDataGraph($sqlData);
-					$newSession =	$this->newanalytics_model->getNewSessionDataGraph($sqlData);                
-				}
-				$resultData['graph'] = array();
-				$resultData['grid'] = array();
-				$resultData['total'] = array();
-				$total =0;
-				$new = 0;
-				$unique = 0;
-			    foreach($TotalSession as $key => $value)
-				{            
-					$nkey=$value['date'];
-					if(is_array($newSession)>0 && array_key_exists($key,$newSession) && array_key_exists('newsession',$newSession[$key]))
-					{  
-					 $value['newsession']= $newSession[$key]['newsession'];
-					}
-					else{
-							$value['newsession']=0;
-						}
-					$resultData['graph'][$nkey] = $value;
-					$value['totalsession']=($value['totalsession']==NULL && array_key_exists('totalsession',$value))?0:$value['totalsession'];
-					$value['newsession']=($value['newsession']==NULL && array_key_exists('newsession',$value))?0:$value['newsession'];
-					$value['uniquesession']=($value['uniquesession']==NULL && array_key_exists('uniquesession',$value))?0:$value['uniquesession'];
-					$gridArray = array($nkey,$value['totalsession'],$value['newsession'],$value['uniquesession']);
-					$resultData['grid'][] = $gridArray;
-					$total +=$value['totalsession'];
-					$unique +=$value['uniquesession'];
-					$new +=$value['newsession'];
-				} 
-				$resultData['total']=array($total,$unique,$new);
-				echo json_encode($resultData,true);
-			}else{                
-				$data['welcome'] = $this;
-				$this->show_view('analytics_session',$data);
-				}
+                    $days =1;
+                if (!empty($this->input->post())) 
+		{ 
+                   // print_r($_POST);die;
+                   
+                  
+                    if($days==365)
+                    {
+                        
+                        $TotalSession =	$this->newanalytics_model->getSessionDataGraphYear();
+                        $newSession =	$this->newanalytics_model->getNewSessionDataGraphYear();                
+                    }
+                    else
+                    {
+                        
+                        $sqlData = array();
+                        
+                        if(is_array($days))
+                        {
+                            $sqlData['startdate'] =$days[0]." 00:00:00";
+                            $sqlData['enddate']   = $days[1]." 23:59:59";
+                           // print_r($days);die;
+                        }
+                        else
+                        {
+                           $dayDiff = $this->getDateIntervel($days);                        
+                         
+                            $sqlData['startdate'] = $dayDiff['startdate']." 00:00:00";
+                            $sqlData['enddate']=   $dayDiff['enddate']." 23:59:59";
+                        }
+
+                        $TotalSession =	$this->newanalytics_model->getSessionDataGraph($sqlData);
+                        $newSession =	$this->newanalytics_model->getNewSessionDataGraph($sqlData);                
+                       
+                    }
+                    
+                  //   print_r($newSession);die;
+                    $resultData['graph'] = array();
+                    $resultData['grid'] = array();
+                    $resultData['total'] = array();
+                    
+                    $ts = array();
+                    $ns = array();
+                    $us = array();
+                    
+                    $labels = array();
+                    
+                    $total =0;
+                    $new = 0;
+                    $unique = 0;
+                    //print_r($TotalSession);
+                    
+                    foreach($TotalSession as $key => $value)
+                    {            
+                            $nkey=$value['date'];
+                            $labels[]=$value['date'];
+                            if(is_array($newSession)>0 && array_key_exists($key,$newSession) && array_key_exists('newsession',$newSession[$key]))
+                            {  
+                             $value['newsession']= $newSession[$key]['newsession'];
+                            }
+                            else
+                            {
+                                $value['newsession']=0;
+                            }
+
+                        //    $resultData['graph'][$nkey] = $value;
+                            
+                                    
+                           $ts[]= $value['totalsession']=($value['totalsession']==NULL && array_key_exists('totalsession',$value))?0:$value['totalsession'];
+                           $ns[]= $value['newsession']=($value['newsession']==NULL && array_key_exists('newsession',$value))?0:$value['newsession'];
+                           $us[]= $value['uniquesession']=($value['uniquesession']==NULL && array_key_exists('uniquesession',$value))?0:$value['uniquesession'];
+                            
+                            $gridArray = array($nkey,$value['totalsession'],$value['newsession'],$value['uniquesession']);
+                            
+                            $resultData['grid'][] = $gridArray;
+                          
+                             $total +=$value['totalsession'];
+                             $unique +=$value['uniquesession'];
+                             $new +=$value['newsession'];
+                    } 
+                    $datasets[] =array(
+                        'label'=>'Total Session',
+                        'strokeColor'=>'rgba(220,220,220,1)',
+                        'pointColor' =>'rgba(220,220,220,1)',
+                        'data'=>$ts);
+                    $datasets[] =array(
+                        'label'=>'New Session',
+                        'strokeColor'=>'rgba(151,187,205,1)',
+                        'pointColor' =>'rgba(151,187,205,1)',
+                        'data'=>$ns);
+                    $datasets[] =array(
+                        'label'=>'Unique Session',
+                        'strokeColor'=>'rgba(214,155,200,0.75)',
+                        'pointColor' =>'rgba(214,155,200,0.75)',
+                        'data'=>$us);
+                        
+                            
+                    $resultData['graph']['labels']=$labels;
+                    $resultData['graph']['datasets']=$datasets;
+                    $resultData['total']=array($total,$unique,$new);
+
+                    echo json_encode($resultData,true);
 		}
+		else 
+		{                
+		$data['welcome'] = $this;
+		$this->show_view('analytics_session',$data);
+		}
+	}
         
 		function Frequency(){
 					if(!empty($_POST)){
