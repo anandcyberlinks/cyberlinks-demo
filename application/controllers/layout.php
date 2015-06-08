@@ -36,7 +36,7 @@ class Layout extends MY_Controller {
         $tmp = @$s['0'];
         if (isset($tmp->id)) {
             if ($tmp->role == 'advertiser') {
-                redirect(base_url() . 'ads/');
+                redirect(base_url() . 'ads');
             } else {
                 //redirect(base_url().'layout/dashboard');
                 redirect(base_url() . 'analytics/report');
