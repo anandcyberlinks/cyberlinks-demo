@@ -150,23 +150,6 @@
 			
 			
   
-			/* function parseJson1(data){
-				//$('#example1 tbody tr').remove()
-				//$('#example1').find('tr:not(:has(th))).remove();
-				for (var key in data)
-				{	
-					var $tr = '<tr id ="temp" role="row" class="odd">'
-                      +'<td class="sorting_1">'+data[key].hr+'</td>'
-                       + '<td>'+data[key].totaluser+'</td>'
-                       +' <td>'+data[key].totalnewuser+'</td>'
-                       +'<td>'+data[key].returninguser+'</td>'+
-					'</tr>';
-					// $('#example1 > tbody > tr:last').after($tr);
-					$('#example1 tbody').append($tr);
-				}
-			} */
-			
-			
 		function parseJson(data)
                 {        
                    $('#example1').dataTable({
