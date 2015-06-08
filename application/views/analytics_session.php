@@ -16,10 +16,10 @@
               <div class="box box-primary">
                 <div class="box-header">
                     <div class="widget-header logo"></div>
-                    <h3 class="timeHeading pull-left">SESSIONS</h3>
+                    <h3 class="timeHeading pull-left">Sessions</h3>
           <div class="mailbox-controls pull-right">
                     <!-- Check all button -->
-                    <a class="btn btn-default btn-sm reservation" onclick="dateRange()"><i class="fa fa-calendar"></i></a>
+                    <a class="btn btn-default btn-sm reservation" onclick="dateRange()" id="reservation"><i class="fa fa-calendar"></i></a>
                     <div class="btn-group ">
                       <a class="btn btn-default btn-sm year-class" value="365">2015</a>
                       <a class="btn btn-default btn-sm active-header-btn today-class" value="1">Today</a>
@@ -115,7 +115,7 @@
  
    <script>
        // var data = [    ["Edinburgh","5421","2011/04/25","$3,120"],["Edinburgh","8422","2011/07/25","$5,300"    ]]
-        
+         
         function drawDataGrid(data)
          {            
             $('#example1').dataTable({
@@ -126,8 +126,23 @@
           }
          
       $(document).ready(function(){
+           $(".reservation").daterangepicker({
+               format: 'YYYY-MM-DD',
+        });
+           $('.mailbox-controls .btn-default').click(function () {
+            $('.btn-default').removeClass('active-header-btn');
+            $(this).addClass('active-header-btn');
+             var num = $('.btn-group').find(".active-header-btn").attr('value');
+            // alert(num);
+             if(!(num ===undefined))
+             {
+                 ajaxCall(num);
+             }        
+                 
+          });
+          ajaxCall('Today');
          
-         ajaxCall();   //  Bydefault Load Today Data 
+         // ajaxCall();   //  Bydefault Load Today Data 
          //drawDataGrid(data);
                 
                 var data_today = [
@@ -172,12 +187,18 @@
                   ['31 May',2006],
                   ['1 Jun',3400],
                 ];
-          $('.mailbox-controls .btn-default').click(function () {
-            $('.btn-default').removeClass('active-header-btn');
-            $(this).addClass('active-header-btn'); 
-            ajaxCall();
-          });
-        $(".reservation").daterangepicker();
+         
+          
+       /* if(num == 'undefined')
+             {
+                 strdt = $('input[name="daterangepicker_start"]').val();
+                 enddt = $('input[name="daterangepicker_end"]').val();
+                 num[0] =strdt;
+                 num[1] =enddt;
+                 console.log(strdt);
+                 console.log(picker.enddt.format('YYYY-MM-DD'));
+             } */
+       
         var gdpData = {
             "AF": 16.63,
             "AL": 11.58,
@@ -185,12 +206,24 @@
         };       
     
         drawGraph(data_today);
+        
+         $('.applyBtn').on('click',function(){
+            num =[]; 
+            strdt = $('input[name="daterangepicker_start"]').val();
+            enddt = $('input[name="daterangepicker_end"]').val();
+            num[0] =strdt;
+            num[1] =enddt;
+           //console.log(strdt);
+           
+            //alert($('input[name="daterangepicker_start"]').val());
+             ajaxCall(num)
+            });
         });
       
         function drawGraph(data_today)
         {
             $.plot("#line-chart", [data_today], {
-          grid: {
+                grid: {
             hoverable: true,
             borderColor: "#f3f3f3",
             borderWidth: 1,
@@ -218,11 +251,12 @@
         });
     }    
     
-      function dateRange($divs) {
-        $("#"+$divs+" .reservation").daterangepicker('show');
-      }  
-		 function ajaxCall(){
-			var num = $('.btn-group').find(".active-header-btn").attr('value')
+      function dateRange() {
+          $("#reservation").daterangepicker('show');
+    }  
+      
+		 function ajaxCall(num){
+
                       	$(function()
                         { // start of doc ready.
                             $.ajax({ 	 	
@@ -247,7 +281,7 @@
 			//console.log($('.btn-group').find(".active-header-btn").text());
 		//console.log($(".big-numbers.active").find(".select").text());
 	       }
-
+           
  </script>
 <style>
   h3.timeHeading
