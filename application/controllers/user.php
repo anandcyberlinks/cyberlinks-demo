@@ -66,8 +66,8 @@ class user extends MY_Controller {
     }
 
     public function DeleteUser() {
-        $per = $this->checkpermission($this->role_id, 'delete');
-        if ($per) {
+        $per = $this->action_per('DeleteUser', 'user');
+        if($per){
             $data['id'] = $_GET['id'];
             $this->super_model->deleteuser($data);
             $msg = $this->loadPo($this->config->item('success_delete_user'));
@@ -106,8 +106,8 @@ class user extends MY_Controller {
         $data['owner_id'] = $this->user_id;
         $data['userrole'] = $this->role;
         $data['welcome'] = $this;
-        $data['role'] = $this->super_model->Fetchrole($this->user_id);
-        if ($_POST) {
+        $data['role'] = $this->super_model->Fetchrole(NULL);
+        if (isset($_POST['submit'])) {
             unset($_POST['submit']);
             unset($_POST['cpassword']);
             $_POST['password'] = md5($_POST['password']);
@@ -153,6 +153,9 @@ class user extends MY_Controller {
     function updateprofile() {
         //echo $this->user;
         $data['welcome'] = $this;
+        $per = $this->action_per('updateprofile', 'user');
+        if($per){
+        
         $data['userrole'] = $this->role;
         $data['role'] = $this->super_model->Fetchrole($this->user_id);
         if (isset($_GET['id'])) {
@@ -168,6 +171,10 @@ class user extends MY_Controller {
                 $data['result'] = $this->super_model->profile($id);
                 $this->show_view('edituser', $data);
             }
+        } else {
+            $this->session->set_flashdata('message', $this->_errormsg($this->loadPo($this->config->item('error_permission'))));
+            redirect(base_url() . 'user');
+        }
         } else {
             $this->session->set_flashdata('message', $this->_errormsg($this->loadPo($this->config->item('error_permission'))));
             redirect(base_url() . 'user');

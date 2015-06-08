@@ -161,6 +161,19 @@ class MY_Controller extends CI_Controller {
             return TRUE;
         }
     }
+    
+    function action_per($action, $controller){
+        $session = $this->session->all_userdata();
+        $session_temp = $session['menu'];
+        //echo "<pre>"; print_r($session_temp); die;
+        foreach ($session_temp as $val){
+            if($val->action == $action && $val->controller == $controller){
+                return true;
+            }
+        }
+        return false;
+    }
+    
 
     function getimage() {
         $s = $this->session->all_userdata();

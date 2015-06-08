@@ -102,6 +102,7 @@
                                     <th width="12%"><?php echo $welcome->loadPo('Status'); ?></th>
                                     <th><?php echo $welcome->loadPo('Token'); ?></th>
                                     <th><?php echo $welcome->loadPo('Created Date'); ?></th>
+                                    <th width="12%"><?php echo $welcome->loadPo('Permission'); ?></th>
                                     <th width="12%"><?php echo $welcome->loadPo('Action'); ?></th>
                                 </tr>
                             </thead>
@@ -124,9 +125,15 @@
                                         <td><a href="<?=  base_url().'acl/index/'.$value->id ?>">Permission </a></td>
                                         
                                         <td><?php echo $value->created; ?></td>
-                                        <td>
-                                            <a class="confirm" onclick="return delete_user(<?php echo $value->id; ?>);" href="" ><button class="btn btn-danger btn-sm" data-toggle="modal" data-target=".bs-example-modal-sm" ><?php echo $welcome->loadPo('Delete') ?></button></a>
+                                        <td> 
+                                            <?php if($welcome->action_per('DeleteUser', 'user')){ ?>
+                                            <a class="confirm" href="<?php echo base_url().'user/DeleteUser?id='.$value->id ?>" ><button class="btn btn-danger btn-sm" data-toggle="modal" data-target=".bs-example-modal-sm" ><?php echo $welcome->loadPo('Delete') ?></button></a>
+                                            <?php } 
+                                            if($welcome->action_per('updateprofile', 'user')){
+                                            ?>
+                                            &nbsp;
                                             <a class="confirm" href="<?php echo base_url() ?>user/updateprofile/?id=<?php echo $value->id; ?>" ><button class="btn btn-warning btn-sm"><?php echo $welcome->loadPo('Edit') ?></button></a>
+                                            <?php } ?>
                                         </td>
                                     </tr>
                                 <?php } ?>

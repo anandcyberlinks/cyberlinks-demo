@@ -126,10 +126,16 @@
                                                     <?php } ?>
                                                 </td>
                                                 <td  width="120"><?php echo date('M d,Y', strtotime($value->created)); ?></td>
-                                                <td  width="150"> 
+                                                <td  width="150">
+                                                    <?php if($welcome->action_per('videoOpr', 'video')){ ?>
                                                     <a href="<?php echo base_url(); ?>video/videoOpr/Basic?action=<?php echo base64_encode($value->id) . '&'; ?>" class="btn btn-info btn-sm"><?php echo $welcome->loadPo('Edit') ?></a>
+                                                    <?php } 
+                                                    if($welcome->action_per('videoOpr', 'video')){
+                                                    ?>
                                                     &nbsp;
-                                                    <a class="confirm" onclick="return delete_video(<?php echo $value->id; ?>, '<?php echo base_url() . 'video/deletevideo' ?>', '<?php echo current_full_url(); ?>');" href="" ><button class="btn btn-danger btn-sm" data-toggle="modal" data-target=".bs-example-modal-sm" ><?php echo $welcome->loadPo('Delete') ?></button></a>                            </td>
+                                                    <a class="confirm" onclick="return delete_video(<?php echo $value->id; ?>, '<?php echo base_url() . 'video/deletevideo' ?>', '<?php echo current_full_url(); ?>');" href="" ><button class="btn btn-danger btn-sm" data-toggle="modal" data-target=".bs-example-modal-sm" ><?php echo $welcome->loadPo('Delete') ?></button></a>
+                                                    <?php } ?>
+                                                </td>
                                             </tr>
                                         <?php } ?>
                                     </tbody>

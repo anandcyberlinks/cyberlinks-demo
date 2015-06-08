@@ -27,6 +27,9 @@ class Video extends MY_Controller {
         }
         $data['welcome'] = $this;
         $s = $this->session->all_userdata();
+        
+        //echo "<pre>"; print_r($s); die;
+        
         $this->user = $s[0]->username;
         $this->uid = $s[0]->id;
         $this->role_id = $s[0]->role_id;
@@ -348,7 +351,7 @@ class Video extends MY_Controller {
      */
 
     function videoOpr() {
-        $per = $this->checkpermission($this->role_id, 'add');
+        $per = $this->action_per('videoOpr', 'video');
         if ($per) {
             $this->data['welcome'] = $this;
             $this->data['id'] = base64_decode(@$_GET['action']);
@@ -1158,7 +1161,7 @@ class Video extends MY_Controller {
      */
 
     function deletevideo() {
-        $per = $this->checkpermission($this->role_id, 'delete');
+        $per = $this->action_per('deletevideo', 'video');
         $redirect_url = $_GET['curl'];
         if ($per) {
             $sess = $this->session->all_userdata();
