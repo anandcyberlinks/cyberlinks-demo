@@ -57,20 +57,33 @@ class User_model extends CI_Model {
    return $this->db->insert_id();
    }
    
-   public function checkuser($email)
-   {
+   public function setonlinestatus($id,$value){
+	  $this->db->set('modified','NOW()', FALSE); 
+	  $this->db->where('id', $id);
+	  $res=$this->db->update('customers', array('online'=>$value));
+      //echo '<br>'.$this->db->last_query();die;
+	  return $res;
+   }
+   public function checkuser($email){
         $this->db->select('id');
-	$this->db->from('customers');
+		$this->db->from('customers');
         $this->db->where('email',$email);
         $query = $this->db->get();    
-       // echo '<br>'.$this->db->last_query();die;
+        // echo '<br>'.$this->db->last_query();die;
         $result = $query->row();
         if($result)
             return $result->id;
         else
             return 0;
    }
-   
+   public function changepass($data){
+	  $pass=md5($data['newpassword']);
+	  $this->db->set('modified','NOW()', FALSE); 
+	  $this->db->where('id', $data['id']);
+	  $res=$this->db->update('customers', array('password'=>$pass));
+	  //echo $this->db->last_query();die;
+	  return $res;
+   }
    public function loginuser($email,$password)
    {
         $this->db->select('a.id');
@@ -78,9 +91,9 @@ class User_model extends CI_Model {
         $this->db->join('social_connects b', 'a.id = b.user_id', 'left');
         $this->db->where('a.email',$email);        
         $this->db->where('a.password',$password); 
-        $this->db->where('a.status',1); 
+        $this->db->where('a.status','active'); 
         $query = $this->db->get();
-       // echo $this->db->last_query();die;
+        //echo $this->db->last_query();die;
         $result = $query->row();
         if($result)
             return $result->id;
@@ -181,19 +194,20 @@ class User_model extends CI_Model {
         else
             return 0;
    }
+  
    
     public function validpassword($email,$password)
     {
-        $this->db->select('a.id');
+    $this->db->select('a.id');
 	$this->db->from('customers a');        
-        $this->db->where('a.email',$email);        
-        $this->db->where('a.password',$password); 
-        $this->db->where('a.status',1); 
-        $query = $this->db->get();
+    $this->db->where('a.email',$email);        
+    $this->db->where('a.password',$password); 
+    $this->db->where('a.status',1); 
+    $query = $this->db->get();
        // echo '<br>'.$this->db->last_query();die;
-        $result = $query->row();
-        if($result)
-            return $result->id;
+    $result = $query->row();
+    if($result)
+           return $result->id;
         else
             return 0;
     }
@@ -302,15 +316,24 @@ function delete_user($id){
   }
   public function userprofile($id)
   {
-      $this->db->select('c.id,c.first_name,c.last_name,c.gender,c.contact_no,c.location,c.dob,c.keywords,c.image');
+      $this->db->select('c.id,c.first_name,c.last_name,c.gender,c.contact_no,c.location,c.age,c.about_me,c.dob,c.keywords,c.image');
       $this->db->from('social_connects a');
       $this->db->join('customers c', 'c.id = a.user_id', 'right');   
       $this->db->where('c.id',$id);
       $this->db->where('c.status','active');
       $this->db->limit(1);
       $query = $this->db->get();
-      //echo $this->db->last_query();
-      $result = $query->row();
+	  $result = $query->row();
+	  
+	  $this->db->select('a.channel_category_id,a.user_id,b.category,b.id');
+	  $this->db->from('customer_event_category_preference a');
+	  $this->db->join('channel_categories b', 'a.channel_category_id = b.id','inner');
+	  $this->db->where('a.user_id',$id);
+	  $query1 = $this->db->get();
+	  $result1 = $query1->result();
+	  $result->categoryArray=$result1;
+	  //echopre($result);
+      //echo $this->db->last_query();die;
       if($result)
           {
           return $result;
@@ -318,6 +341,15 @@ function delete_user($id){
               {
                 return 0;
               }      
+  }
+  public function updateCat($data,$id){
+     $this->db->set('created', 'NOW()', FALSE);
+	  $this->db->set('user_id', $id, FALSE);
+	  foreach($data['category'] as $k=>$v){
+		  $id = $this->db->insert_id('customer_event_category_preference',$v);
+		  echo $this->db->last_query();die;
+	  }
+	  return $id; 
   }
   public function userDeviceID($data)
     {

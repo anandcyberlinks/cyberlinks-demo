@@ -30,7 +30,7 @@ class User extends REST_Controller
        $this->admin_token = $this->get('token');
 	   
         if($this->admin_token ==' ' || $this->admin_token==0){
-          echo  $this->admin_token = $this->post('token');
+            $this->admin_token = $this->post('token');
             {
             $this->response(array('code'=>0,'error' => "Must Pass Token"), 404);
             }
@@ -244,20 +244,34 @@ class User extends REST_Controller
             'first_name' => $this->post('first_name'), 
             'last_name' => $this->post('last_name'),
             'gender' => $this->post('gender'),
-	    'dob' => $this->post('dob'),
+			'dob' => $this->post('dob'),
+			'age' => $this->post('age'),
+			'about_me' => $this->post('about_me'),
+			'category_preference' => $this->post('category_preference'),
             'contact_no' => $this->post('contact_no'),
             'location'=>$this->post('location'),
 	    'keywords' => trim($keywordData)
             );
-                
+		
+            foreach($data as $k=>$val){
+				if(($val=='')||($val==NULL)||($val=='0'))
+				{
+					unset($data[$k]);
+				}
+			}
            if($pic !='' && $pic != 0){
                $data['image']=base_url().PROFILEPIC_PATH.$pic;
            }
-	
+			
             $result = $this->User_model->update_user($data,$id);
          //   $result_social = $this->User_model->update_usersocial($keywordData,$id);
             if($result){
-		$output = $this->User_model->getuser($id);
+				$catdata=json_decode($this->post('categoryArray'));
+				$catarr=array(
+					'category'=>$catdata
+				);
+			$output = $this->User_model->getuser($id);
+		//	$this->User_model->updateCat($catarr,$id);
 		/*if($output->image !=""){
                  //   $output->image = base_url().PROFILEPIC_PATH.$output->image;
      		}*/
@@ -296,35 +310,43 @@ class User extends REST_Controller
             'email' => $this->post('email'),
             'password' => $this->post('password'),
             );
-        
+		
          if($this->validatelogin($data)){
                $id = $this->User_model->loginuser($this->post('email'),md5($this->post('password')));
+			   //echopre($id);
 			   if($id>0){
                 //-- api token --//
                     $this->generateApiToken($id,$this->post('email'),$this->post('password'));
                     $result = $this->User_model->getuser($id);
-                
+					
                 if($result->image !=""){
                     $result->image = base_url().PROFILEPIC_PATH.$result->image;
-     		}
-                       $this->response(array('code'=>1,'result'=>$result), 200); // 200 being the HTTP response code
+				}
+				$res = $this->User_model->setonlinestatus($id,'1');
+				
+					$this->response(array('code'=>1,'result'=>$result), 200); // 200 being the HTTP response code
                }else{
                    $this->response(array('code'=>0,'error' => "Login failed"), 404);
                }
          }
     }
     
-    function logout_get()
-    {
-        //$token = $this->get('token');
-	$token = $this->get('uniqueID');
-	$id = $this->get('id');
-        $result = $this->User_model->logout_social($token,$id);
-	if($result>0)
-	    $this->response(array('code'=>1,'result'=>'Logout successfully'), 200); // 200 being the HTTP response code
-	else
-	    $this->response(array('code'=>0,'result'=>'Logout failed'), 404); // 200 being the HTTP response code
-    }
+    function logout_get(){
+		//$token = $this->get('token');
+		//$token = $this->get('uniqueID');
+		$id = $this->get('id');
+		//$result = $this->User_model->logout_social($token,$id);
+		
+		$result=$this->User_model->setonlinestatus($id,'0');
+		
+		
+		
+		if($result>0){
+			$this->response(array('code'=>1,'result'=>'Logout successfully'), 200); // 200 being the HTTP response code
+		}else{
+			$this->response(array('code'=>0,'result'=>'Logout failed'), 404); // 200 being the HTTP response code
+		}
+	}
     
     function forgot_post()
     {
@@ -607,6 +629,9 @@ class User extends REST_Controller
                }
         //echo $customer_device_id;die;
         /* Insert into session table */
+		if($id){
+			$this->User_model->setonlinestatus($id,'1');
+		}
         $session_data['customer_id']=$id;
         $session_data['customer_device_id']=$customer_device_id;
         $session_data['status']=1;
@@ -621,8 +646,8 @@ class User extends REST_Controller
         $response_code = 200;
         $this->response($response_arr, $response_code);
     }
-    
-    function social_data($id,$userFacebookId,$access_key)
+    	
+	function social_data($id,$userFacebookId,$access_key)
     {
       //  $userFacebookId = "799074976840826";
          $facebookUrl = "https://graph.facebook.com/".$userFacebookId."/likes?limit=10000&access_token=";
@@ -948,7 +973,12 @@ class User extends REST_Controller
 		$this->User_model->checksession($sess_id,$is_active,$endtime);
 		$this->response(array('code'=>1), 200); 
 	}
-	
+	function changepassword_post(){
+		$data = $this->post();
+		$val = $this->User_model->changepass($data);
+		echo $val;
+		return $val;
+	}
     function resumesession_post()
     {	
      //rint_r($this->get());

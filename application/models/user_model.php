@@ -131,7 +131,19 @@ class User_Model extends CI_Model {
         $this->db->update('files');
         //echo $this->db->last_query(); die;
     }
-    
+     public function getcupassword($data)
+   {
+        $this->db->select('id,password');
+        $this->db->from('customers');
+        $this->db->where('id',$data['id']);
+        $this->db->where('password',md5($data['password']));
+        $query = $this->db->get();    
+        $result = $query->row();
+        if($result)
+            return $result;
+        else
+            return 0;
+   }
     function saveskin($skin_id,$uid,$fileid='')
 	{
 	  $this->db->set('modified', 'NOW()', FALSE); 

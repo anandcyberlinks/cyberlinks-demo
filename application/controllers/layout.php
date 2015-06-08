@@ -427,5 +427,18 @@ class Layout extends MY_Controller {
         $data['welcome'] = $this;
         $this->show_view('permissionerror',$data);
     }
+    function change_password() {
+        $data['data']['token'] = $_GET['token'];
+        $data['data']['id'] = $_GET['id'];
+        $this->load->view('change_password',$data);
+    }
+    function validpass(){
+        $user = $this->user_model->getcupassword($_POST);
+        if($user){
+            echo '1';die; 
+        }else{
+            echo '0';die;
+        }
+    }
 
 }
