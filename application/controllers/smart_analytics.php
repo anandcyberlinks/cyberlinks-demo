@@ -298,18 +298,18 @@ class Smart_analytics extends MY_Controller {
                     } 
                     $datasets[] =array(
                         'label'=>'Total Session',
-                        'strokeColor'=>'rgba(220,220,220,1)',
-                        'pointColor' =>'rgba(220,220,220,1)',
+                        'strokeColor'=>'rgba(136,187,200,1)',
+                        'pointColor' =>'rgba(136,187,200,1)',
                         'data'=>$ts);
                     $datasets[] =array(
                         'label'=>'New Session',
-                        'strokeColor'=>'rgba(151,187,205,1)',
-                        'pointColor' =>'rgba(151,187,205,1)',
+                        'strokeColor'=>'rgba(237,134,98,1)',
+                        'pointColor' =>'rgba(237,134,98,1)',
                         'data'=>$ns);
                     $datasets[] =array(
                         'label'=>'Unique Session',
-                        'strokeColor'=>'rgba(214,155,200,0.75)',
-                        'pointColor' =>'rgba(214,155,200,0.75)',
+                        'strokeColor'=>'rgba(190,235,159,0.75)',
+                        'pointColor' =>'rgba(190,235,159,0.75)',
                         'data'=>$us);
                         
                             
