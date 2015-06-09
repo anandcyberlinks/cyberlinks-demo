@@ -3,7 +3,7 @@
     <section>
         <div class="content body">
             <?php echo $this->session->flashdata('message'); ?>
-            <h2 class="page-header">Manage Permission For User:-  <b><?php echo ucfirst($username) ?></b></h2>
+            <h2 class="page-header">Module Allocation For User:-  <b><?php echo ucfirst($username) ?></b></h2>
             <form action="" method="post"><div class="pull-right"><input type="submit" name="save" value="Save" class="btn btn-success btn-sm"></div>
                 <p class="lead">
                     Modules and Sub-Modules

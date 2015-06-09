@@ -85,7 +85,7 @@
                                     <th width="12%"><?php echo $welcome->loadPo('Status'); ?></th>
                                     <th><?php echo $welcome->loadPo('Token'); ?></th>
                                     <th><?php echo $welcome->loadPo('Created Date'); ?></th>
-                                    <th width="12%"><?php echo $welcome->loadPo('Permission'); ?></th>
+                                    <th width="12%"><?php echo $welcome->loadPo('Allocation'); ?></th>
                                     <th width="12%"><?php echo $welcome->loadPo('Action'); ?></th>
                                 </tr>
                             </thead>
@@ -108,7 +108,7 @@
                                         </td>
                                         <td><?= $value->token ?></td>
                                         <td><?php echo $value->created; ?></td>
-                                        <td><a href="<?= base_url() . 'acl/index/' . $value->id ?>">Permission </a></td>
+                                        <td><a href="<?= base_url() . 'acl/index/' . $value->id ?>">Module Allocation </a></td>
                                         <td> 
                                             <?php if ($welcome->action_per('DeleteUser', 'user')) { ?>
                                                 <a class="confirm_delete" href="<?php echo base_url() . 'user/DeleteUser?id=' . $value->id ?>" ><button class="btn btn-danger btn-sm confirm_delete" data-toggle="modal" data-target=".bs-example-modal-sm" ><?php echo $welcome->loadPo('Delete') ?></button></a>
