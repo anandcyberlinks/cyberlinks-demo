@@ -9,7 +9,11 @@ class Events_model extends CI_Model{
     }
     
     function getCategories(){
-        $query = $this->db->get('event_category');
+        $this->db->where('u_id',$this->owner_id);
+        $this->db->where('status',1);
+        $query = $this->db->get('channel_categories');
+        
+        //echo $this->db->last_query();die;
         return $query->result();
     }
     
