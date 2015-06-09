@@ -217,7 +217,7 @@ class Smart_analytics extends MY_Controller {
 		$days = $this->input->post('daydiff');
 		if($days === 'Today')
                     $days =1;
-                if (!empty($this->input->post())) 
+                if (!empty($_POST)) 
 		{ 
                    // print_r($_POST);die;
                    
