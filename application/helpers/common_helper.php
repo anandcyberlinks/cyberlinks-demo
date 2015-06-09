@@ -100,4 +100,35 @@ if($filename) {
 }
 }
 
+  function sendmail($to, $subject, $body, $attachment = '') {
+		$ci = &get_instance();
+        $ci->load->library('PHPMailer/phpmailer');
+        $mail = new PHPMailer();
+        //$mail->isSMTP();                                      // Set mailer to use SMTP
+        //$mail->Host = 'smtp.gmail.com';                       // Specify main and backup SMTP servers
+        //$mail->SMTPAuth = true;                               // Enable SMTP authentication
+        //$mail->Username = 'cyberlinkslive@gmail.com';      // SMTP username
+        //$mail->Password = 'cYBERLINKS1!';                         // SMTP password
+        //$mail->SMTPSecure = 'tls';                            // Enable encryption, 'ssl' also accepted
+        $mail->From = 'Admin@cyberlinks.co.in';
+        $mail->FromName = 'Admin MultiTv';
+        $mail->addAddress($to);    // Add a recipient
+        //$mail->addAddress('pavan.prajapati@cyberlinks.in', 'Pawan PAAAArjapti');     // Name is optional
+        //$mail->addReplyTo('info@example.com', 'Information');                       // Reply To.........
+        //$mail->addCC('cc@example.com');
+        //$mail->addBCC('bcc@example.com');
+        $mail->WordWrap = 50;                                 // Set word wrap to 50 characters
+        if (isset($attachment) && $attachment != '') {
+            $mail->addAttachment($attachment);
+            $mail->addAttachment('/tmp/' . $attachment, 'new.jpg'); // Add attachments
+        }
+        // echopre($attachment);
+        //$mail->addAttachment('/tmp/image.jpg', 'new.jpg');  // Optional name
+        $mail->isHTML(true);                                  // Set email format to HTML
+        $mail->Subject = $subject;
+        $mail->Body = $body;
+        $mail->AltBody = 'Success';
+        return $mail->send();
+        // echopre($mail);
+    }
 ?>
