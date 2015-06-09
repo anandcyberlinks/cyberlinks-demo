@@ -2,8 +2,20 @@
 
 class Super_model extends CI_Model {
 
-    function countuser($id) {
+    function countuser($id, $searchterm) {
         $this->db->where('owner_id', $id);
+        if(isset($searchterm['status']) && $searchterm['status'] !=''){
+            $this->db->where('users.status',trim($searchterm['status']));
+        }
+        if(isset($searchterm['username']) && $searchterm['username'] !=''){
+            $this->db->like('users.username',trim($searchterm['username']));
+        }
+        if(isset($searchterm['name']) && $searchterm['name'] !=''){
+            $this->db->like('users.first_name',trim($searchterm['name']));
+        }
+        if(isset($searchterm['email']) && $searchterm['email'] !=''){
+            $this->db->where('users.email',trim($searchterm['email']));
+        }
         $query = $this->db->get('users');
         //$query = $this->db->get('customers');
 
@@ -26,22 +38,31 @@ class Super_model extends CI_Model {
      * Function For Check user
      */
 
-    public function fetchUser($id, $limit, $start, $sort = '', $sort_by = '') {
+    public function fetchUser($id, $limit, $start, $searchterm, $sort = '', $sort_by = '') {
+        //print_r($searchterm);
         $this->db->select('users.*, roles.name as role');
         $this->db->from('users');
         $this->db->join('roles', 'users.role_id = roles.id');
         $this->db->where('users.owner_id', $id);
-        //$this->db->order_by($sort, $sort_by);*/
-        /*$this->db->select('customers.*');
-        $this->db->from('customers');
-        //$this->db->join('roles', 'users.role_id = roles.id');
-        $this->db->where('customers.owner_id', $id);
-        */
+        if(isset($searchterm['status']) && $searchterm['status'] !=''){
+            $this->db->where('users.status',trim($searchterm['status']));
+        }
+        if(isset($searchterm['username']) && $searchterm['username'] !=''){
+            $this->db->like('users.username',trim($searchterm['username']));
+        }
+        if(isset($searchterm['name']) && $searchterm['name'] !=''){
+            $this->db->like('users.first_name',trim($searchterm['name']));
+        }
+        if(isset($searchterm['email']) && $searchterm['email'] !=''){
+            $this->db->where('users.email',trim($searchterm['email']));
+        }
+        
+        
         $this->db->order_by('id', 'DESC');
         $this->db->limit($limit, $start);
         $query = $this->db->get();
         //echo $this->db->last_query(); 
-        // print_r($query->result()); die;
+        //print_r($query->result()); die;
         return $query->result();
     }
     public function fetchcUser($id, $limit, $start, $sort = '', $sort_by = '') {

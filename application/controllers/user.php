@@ -31,20 +31,27 @@ class user extends MY_Controller {
     }
 
     function index() {
+        if(isset($_POST['submit']) && $_POST['submit']=='Search'){
+            unset($_POST['submit']);
+            $this->session->set_userdata('serach_user', $_POST);
+            //print_r($_POST);
+        } else if (isset($_POST['reset']) && $_POST['reset'] == 'Reset') {
+            $this->session->unset_userdata('serach_user');
+        }
+        
+        $searchterm = $this->session->userdata('serach_user');
         $data['welcome'] = $this;
         $this->load->library("pagination");
         $config = array();
         $config["base_url"] = base_url() . "user/index/";
-        $config["total_rows"] = $this->super_model->countuser($this->user_id);
+        $config["total_rows"] = $this->super_model->countuser($this->user_id, $searchterm);
         $config["per_page"] = 10;
         $config["uri_segment"] = 3;
         $this->pagination->initialize($config);
         $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
-        $data['result'] = $this->super_model->fetchUser($this->user_id, $config["per_page"], $page);
+        $data['result'] = $this->super_model->fetchUser($this->user_id, $config["per_page"], $page, $searchterm);
         $data["links"] = $this->pagination->create_links();
         $data['total_rows'] = $config["total_rows"];
-
-
         $this->show_view('users', $data);
     }
 
