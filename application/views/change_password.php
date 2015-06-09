@@ -39,7 +39,7 @@
                 <b>Multi</b>TV
             </div><!-- /.login-logo -->
             <div class="login-box-body">
-                <p class="login-box-msg">Sign in to start your session</p>
+                
                 <form action="<?php echo base_url().'api/user/changepassword/token/'.$data['token'];?>" method="post" onsubmit="return validatedata(<?php echo "'".$data['id']."'";?>);">
                     <div class="form-group has-feedback">
                         <input type="password" name="oldpassword" id="oldpassword" required value="" class="form-control" placeholder="Old Password"/>
