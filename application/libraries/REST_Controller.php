@@ -1566,12 +1566,13 @@ abstract class REST_Controller extends CI_Controller
     public function paging($p)
     {
            //--paging limit --//
-       if($p > 1){
-           $param['limit'] = PER_PAGE * $p;
+       if($p > 0){
+           $param['limit'] = PER_PAGE ;
            $param['offset'] = ($p-1) * PER_PAGE;
        }else{
-           $param['limit'] = PER_PAGE;
-           $param['offset'] = 0;
+            //$param['limit'] = PER_PAGE;
+           //$param['offset'] = 0;
+           $param = array();
        }
        return $param;
     }

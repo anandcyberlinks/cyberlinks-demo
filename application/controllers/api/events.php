@@ -34,7 +34,9 @@ class Events extends REST_Controller
         {                
             $response_arr = array('code'=>0,'error' => "Invalid Token");               
             $this->response($response_arr, 404);
-        }
+        }		
+		 //--paging limit --//
+          $this->param =  $this->paging($this->get('p'));
     }
     
     function base64_to_jpeg($base64_string, $output_file,$extension) {
@@ -71,31 +73,12 @@ class Events extends REST_Controller
     
     function list_get()
     {
-		$arra = array('4','6','10');
-		print_r(json_encode($arra));die;
         $cid = $this->get('id');
-        $userid = $this->get('userid');
-        $result = $this->Events_model->categoryEvents($cid,$userid);
+        $userid = $this->get('user_id');
+        $result = $this->Events_model->categoryEvents($cid,$userid,$this->param);
         if(isset($result) && count($result) > 0)
-        {
-            $newresult = array();
-            foreach($result as $key => $val){
-				
-				if($val->thumbnail ==''){
-					$val->thumbnail = base_url().IMG_PATH.'no-image.jpg';	
-				}
-                //error_reporting(E_ALL);
-                    $val->url_mobile = preg_replace("/^rtsp:/i", "http:", $val->url,1).'/playlist.m3u8';
-                    $val->url_web = preg_replace("/^rtsp:/i", "rtmp:", $val->url,1);
-                    unset($val->event_id);
-                    unset($val->url);
-					if($val->id !=''){
-                    $newresult[$val->category_name][] = $val;
-					}else{
-						$newresult[$val->category_name] =array();
-					}					
-			}
-            $this->response(array('code'=>1,'result'=>$newresult), 200); // 200 being the HTTP response code
+        {        
+            $this->response(array('code'=>1,'result'=>$result), 200); // 200 being the HTTP response code
         }else{
             $this->response(array('code'=>0,'result'=>'No record found'), 404);
         }
@@ -137,7 +120,13 @@ class Events extends REST_Controller
         for ($i = 0; $i < 4; $i++) {
              $random_key .= $characters[rand(0, strlen($characters) - 1)];
         }
-		$data = array('event_id' =>$random_key,
+		if($this->post('source')=='external'){
+			$url = $this->post('url');
+		}else{
+			$url = EVENT_URL.$this->post('u_token').$random_key;
+		}
+		
+		$data = array('event_code' =>$random_key,
 				'source' => $this->post('source'),
 				'name' => $this->post('name'),
 				'description' => ($this->post('description') !='' ? $this->post('description'):""),
@@ -147,8 +136,8 @@ class Events extends REST_Controller
 				'status'=>0,
 				'access' => $this->post('access'),
 				'uid' => $this->owner_id,
-				'customer_id' => $this->post('userid'),
-				'rtsp' => EVENT_URL.$this->post('u_token').$random_key,
+				'customer_id' => $this->post('user_id'),
+				'rtsp' => $url,
 				'thumbnail' => $pic,
 				'start_date' => $this->post('start_date'),
 				'start_time' => $this->post('start_time'),
@@ -161,11 +150,19 @@ class Events extends REST_Controller
 	    if(isset($pic) && $pic !='' && $pic != 0){
                $data['thumbnail']=base_url().EVENTPIC_PATH.$pic;
         }
-		    $data['ios'] = EVENT_URL_MOBILE.$this->post('u_token').$data['event_id'].'/playlist.m3u8';
-            $data['android'] = EVENT_URL_MOBILE.$this->post('u_token').$data['event_id'].'/playlist.m3u8';
-            $data['windows'] = EVENT_URL_MOBILE.$this->post('u_token').$data['event_id'].'/Manifest';
-            $data['web'] = EVENT_URL_WEB.$this->post('u_token').$data['event_id'];
+		
+		if($this->post('source')=='external'){			
+			 $data['ios'] =str_replace('rtsp://','http://',$this->post('url')).'/playlist.m3u8';
+			 $data['android'] =str_replace('rtsp://','http://',$this->post('url')).'/playlist.m3u8';
+			 $data['windows'] =str_replace('rtsp://','http://',$this->post('url')).'/Manifest';
+			 $data['web'] =str_replace('rtsp://','rtmp://',$this->post('url'));
+		}else{
+		    $data['ios'] = EVENT_URL_MOBILE.$this->post('u_token').$data['event_code'].'/playlist.m3u8';
+            $data['android'] = EVENT_URL_MOBILE.$this->post('u_token').$data['event_code'].'/playlist.m3u8';
+            $data['windows'] = EVENT_URL_MOBILE.$this->post('u_token').$data['event_code'].'/Manifest';
+            $data['web'] = EVENT_URL_WEB.$this->post('u_token').$data['event_code'];
            //echo '<pre>'; print_r($data); exit;
+		}
            $id = $this->Events_model->saveEvents($data);          
            
            if(isset($id) && $id >0){
@@ -186,10 +183,9 @@ class Events extends REST_Controller
 		//$status = $this->post('status');
 		$otp = mt_rand(100000, 999999);
 		$data['user_id'] = $this->post('user_id');
-		$data['event_id'] = $this->post('event_id');
-		$data['email'] = $this->post('email');
+		$data['channel_id'] = $this->post('event_id');		
 		$data['otp'] = $otp;
-		
+		$email = $this->post('email');
 		$id = $this->Events_model->publishEvent($data);
 		
 		if($id){
@@ -199,7 +195,7 @@ class Events extends REST_Controller
                 $message .= '<p>This is usable once and valid for 10 minutes</p>';                
                 $message .= "<br><br> Kind Regards,<br><br>";
                 $message .= "MultiTv Team";
-                $to = $data['email'];
+                $to = $email;
                 $from = 'info@cyberlinks.in';
                
 				if(sendmail($to,$subject,$message))  //-- common helper function
@@ -212,5 +208,42 @@ class Events extends REST_Controller
 		}else{
 				$this->response(array('code'=>0,'result'=>'Error publish event'), 201); 
 		}
+	}
+	
+	function verify_otp_post(){
+		$post = $this->post();
+		//$otp = $this->post('otp');
+		//$id = $this->post('event_id');
+		$result = $this->Events_model->checkOtp($post);
+		if($result >0){
+			$this->response(array('code'=>1), 200); // 200 being the HTTP response code 
+		}else{
+			$this->response(array('code'=>0,'result'=>'Incorrect OTP'), 201); 
+		}		
+	}
+	
+	function subscribe_post()
+	{		
+		$user_id = $this->post('user_id');
+		$event_id = $this->post('event_id');		
+		$result = $this->Events_model->subscribe($user_id,$event_id);
+		if($result >0){
+			$this->response(array('code'=>1), 200); // 200 being the HTTP response code 
+		}else{
+			$this->response(array('code'=>0,'result'=>'Error in Subscription'), 201); 
+		}	
+	}
+	
+	function like_post(){
+		$data['content_id'] = $this->post('event_id');
+		$data['user_id'] = $this->post('user_id');
+		$data['like'] =  $this->post('like');
+		$data['type'] = 'Live';
+		$result = $this->Events_model->like($data);
+		if($result >0){
+			$this->response(array('code'=>1), 200); // 200 being the HTTP response code 
+		}else{
+			$this->response(array('code'=>0,'result'=>'Error'), 201); 
+		}	
 	}
 }
