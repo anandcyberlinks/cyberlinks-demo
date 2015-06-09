@@ -19,9 +19,9 @@ class Events_model extends CI_Model{
     
     function categoryEvents($cid='', $userid='', $param=array()){
         if($param){
-            $this->db->limit($param['limit'],$param['offset']);
-            $this->db->select("a.id as channel_id,a.name,a.keywords as tags,b.category,a.customer_id,d.first_name AS user_name,d.image as user_thumbnail,c.thumbnail_url as thumbnail,c.ios,c.android,c.windows,c.web,a.status",FALSE);
-        }       
+            $this->db->limit($param['limit'],$param['offset']);            
+        }
+        $this->db->select("a.id as channel_id,a.name,a.keywords as tags,b.category as category_name,a.customer_id,d.first_name AS user_name,d.image as user_thumbnail,c.thumbnail_url as thumbnail,c.ios,c.android,c.windows,c.web,a.status",FALSE);
         $this->db->from('channels a');
         $this->db->join('channel_categories b','a.category_id=b.id','RIGHT');
         $this->db->join('livestream c','c.channel_id=a.id');
@@ -36,7 +36,7 @@ class Events_model extends CI_Model{
         $this->db->where('uid',$this->owner_id);
         $this->db->order_by('a.id','desc');
        $query = $this->db->get();       
-      // echo $this->db->last_query();
+     //  echo $this->db->last_query();die;
        $result = $query->result();
        
        if($result){
