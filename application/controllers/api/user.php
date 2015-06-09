@@ -112,8 +112,8 @@ class User extends REST_Controller
         $data = array(
 	    'owner_id' => $owner_id,
 	    'username' => $this->post('email'), 
-            'first_name' => $this->post('firstname'), 
-            'last_name' => $this->post('lastname'),
+            'first_name' => $this->post('first_name'), 
+            'last_name' => $this->post('last_name'),
             'gender' => $this->post('gender'),
             'email' => $this->post('email'), 
             'password' => $this->post('password'),
@@ -162,7 +162,7 @@ class User extends REST_Controller
 				//---------------------------------//
 					
                 //-- send confirmation mail --//               
-                $subject = '[I Am Punjabi]Confirm your email address';
+                $subject = '[MultiTV]Confirm your email address';
                 $message = '<p>You recently register in our service</p>';
                 $message .= '<p>Please confirm your email by clicking link below.</p>';
                 $message .= '<p><a href="'.site_url('confirmation').'?t='.$token.'">Confirm your email address</a></p>';
