@@ -75,10 +75,26 @@ class Events extends REST_Controller
     {
         $cid = $this->get('id');
         $userid = $this->get('user_id');
-        $result = $this->Events_model->categoryEvents($cid,$userid,$this->param);
-        if(isset($result) && count($result) > 0)
+        $result = $this->Events_model->categoryEvents($cid,$userid,$this->param);		
+		if(isset($result) && count($result) > 0)
+        {
+            $newresult = array();
+            foreach($result as $key => $val){                
+                if($val->thumbnail ==''){
+                    $val->thumbnail = base_url().IMG_PATH.'no-image.jpg';    
+                }
+                //error_reporting(E_ALL);                   
+                    unset($val->event_code);                    
+                    if($val->channel_id !=''){
+                    $newresult[$val->category_name][] = $val;
+                    }else{
+                        $newresult[$val->category_name] =array();
+                    }
+            }
+		}
+        if(isset($newresult) && count($newresult) > 0)
         {        
-            $this->response(array('code'=>1,'result'=>$result), 200); // 200 being the HTTP response code
+            $this->response(array('code'=>1,'result'=>$newresult), 200); // 200 being the HTTP response code
         }else{
             $this->response(array('code'=>0,'result'=>'No record found'), 404);
         }
