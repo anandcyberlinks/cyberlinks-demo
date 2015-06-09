@@ -265,51 +265,7 @@ class Newanalytics_model extends CI_Model{
 		return date('F',$startDate).' '.$num.'th';
 	}
         
-    public function getSessionDataGraph($data= array()){
-		if(date("Y-m-d",strtotime($data['startdate'])) === date("Y-m-d",strtotime($data['enddate']))){
-			$this->db->select('count(app_session.id) as totalsession,count(distinct app_session.customer_device_id) as uniquesession, HOUR(app_session.session_start) as hr');
-			$this->timeInterval($data,"app_session.session_start");
-            $this->db->group_by('HOUR(app_session.session_start)'); 
-			$this->db->order_by('hr', 'ASC'); 
-			$query = $this->db->get('app_session');
-			$result = $query->result_array();
-			return $result;
-			
-		}else{
-			$this->db->select("count(id) as totalsession,count(distinct app_session.customer_device_id) as uniquesession,DATE_FORMAT(app_session.session_start,'%d %M') as date",false);
-			$this->timeInterval($data,"app_session.session_start");
-            $this->db->group_by('Day(app_session.session_start)');
-			$this->db->order_by('date', 'ASC'); 
-			$query = $this->db->get('app_session');
-			return $result = $query->result_array();
-       }
-	 }    
-         public function getNewSessionDataGraph($data= array()){
-		//echo date("Y-m-d",strtotime($data['startdate']);
-		if(date("Y-m-d",strtotime($data['startdate'])) === date("Y-m-d",strtotime($data['enddate']))){
-			$this->db->select('count(app_session.id) as newsession, HOUR(app_session.session_start) as hr');
-			$this->db->where('session_use',1);
-                        $this->timeInterval($data,"app_session.session_start");
-                        $this->db->group_by('HOUR(app_session.session_start)'); 
-			$this->db->order_by('hr', 'ASC'); 
-			$query = $this->db->get('app_session');
-			return $result = $query->result_array();
-			//return $this->perHourData($result,$data,'totaluser');
-			
-		}else{
-			$this->db->select("count(id) as newsession,DATE_FORMAT(app_session.session_start,'%d %M') as date",false);
-			$this->timeInterval($data,"app_session.session_start");
-                        $this->db->where('session_use',1);
-                        $this->db->group_by('Day(app_session.session_start)');
-			$this->db->order_by('date', 'ASC'); 
-			$query = $this->db->get('app_session');
-			return $result = $query->result_array();
-			//return $this->dayWiseData($result,$data,'totaluser');
-		}
-	 }
-
-
-
+   
 		public function getLoyalityUser($data= array()){
 		$this->timeInterval($data,"app_session.session_start");
 		$start  =$data['startdate']." 00:00:00";
@@ -366,6 +322,54 @@ class Newanalytics_model extends CI_Model{
 		}
 		RETURN $query->result_array();
 	}
+        
+        
+        /* Session Model Start Here   */
+        
+        
+         public function getSessionDataGraph($data= array()){
+		if(date("Y-m-d",strtotime($data['startdate'])) === date("Y-m-d",strtotime($data['enddate']))){
+			$this->db->select('count(app_session.id) as totalsession,count(distinct app_session.customer_device_id) as uniquesession, HOUR(app_session.session_start) as hr');
+			$this->timeInterval($data,"app_session.session_start");
+            $this->db->group_by('HOUR(app_session.session_start)'); 
+			$this->db->order_by('hr', 'ASC'); 
+			$query = $this->db->get('app_session');
+			$result = $query->result_array();
+			return $result;
+			
+		}else{
+			$this->db->select("count(id) as totalsession,count(distinct app_session.customer_device_id) as uniquesession,DATE_FORMAT(app_session.session_start,'%d %M') as date",false);
+			$this->timeInterval($data,"app_session.session_start");
+            $this->db->group_by('Day(app_session.session_start)');
+			$this->db->order_by('date', 'ASC'); 
+			$query = $this->db->get('app_session');
+			return $result = $query->result_array();
+                    }
+	 } 
+         
+         public function getNewSessionDataGraph($data= array()){
+		//echo date("Y-m-d",strtotime($data['startdate']);
+		if(date("Y-m-d",strtotime($data['startdate'])) === date("Y-m-d",strtotime($data['enddate']))){
+			$this->db->select('count(app_session.id) as newsession, HOUR(app_session.session_start) as hr');
+			$this->db->where('session_use',1);
+                        $this->timeInterval($data,"app_session.session_start");
+                        $this->db->group_by('HOUR(app_session.session_start)'); 
+			$this->db->order_by('hr', 'ASC'); 
+			$query = $this->db->get('app_session');
+			return $result = $query->result_array();
+			//return $this->perHourData($result,$data,'totaluser');
+			
+		}else{
+			$this->db->select("count(id) as newsession,DATE_FORMAT(app_session.session_start,'%d %M') as date",false);
+			$this->timeInterval($data,"app_session.session_start");
+                        $this->db->where('session_use',1);
+                        $this->db->group_by('Day(app_session.session_start)');
+			$this->db->order_by('date', 'ASC'); 
+			$query = $this->db->get('app_session');
+			return $result = $query->result_array();
+			//return $this->dayWiseData($result,$data,'totaluser');
+		}
+	 }
          
         public function getNewSessionDataGraphYear()
           {
@@ -390,6 +394,8 @@ class Newanalytics_model extends CI_Model{
 			return $result = $query->result_array();
                       
 	 }
+         
+         /* End Session Model Here   */
 }
 
 
