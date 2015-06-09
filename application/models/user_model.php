@@ -157,7 +157,7 @@ class User_Model extends CI_Model {
         $this->db->from('module_permission a');
         $this->db->join('modules b', 'a.modules_id=b.id AND a.user=' . $id . '', 'inner');
         $this->db->order_by("parent_id", "asc");
-        $this->db->order_by("name", "asc");
+        $this->db->order_by("order", "asc");
         $query = $this->db->get();
         return $result = $query->result();
     }
