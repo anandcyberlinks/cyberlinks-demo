@@ -100,6 +100,34 @@ class Events extends REST_Controller
         }
     }
     
+	function subscription_list_get()
+	{		
+        $userid = $this->get('user_id');
+		$result = $this->Events_model->subscribeEventsList($userid);
+		if(isset($result) && count($result) > 0)
+        {
+            $newresult = array();
+            foreach($result as $key => $val){                
+                if($val->thumbnail ==''){
+                    $val->thumbnail = base_url().IMG_PATH.'no-image.jpg';    
+                }
+                //error_reporting(E_ALL);                   
+                    unset($val->event_code);                    
+                    if($val->channel_id !=''){
+                    $newresult[$val->category_name][] = $val;
+                    }else{
+                        $newresult[$val->category_name] =array();
+                    }
+            }
+		}
+        if(isset($newresult) && count($newresult) > 0)
+        {        
+            $this->response(array('code'=>1,'result'=>$newresult), 200); // 200 being the HTTP response code
+        }else{
+            $this->response(array('code'=>0,'result'=>'No record found'), 404);
+        }
+	}
+	
     function add_post(){
 		 //--- validate user token ---//        
             $this->validateToken();
@@ -239,7 +267,10 @@ class Events extends REST_Controller
 	}
 	
 	function subscribe_post()
-	{		
+	{
+		//--- validate user token ---//        
+            $this->validateToken();
+        //------------------------//
 		$user_id = $this->post('user_id');
 		$event_id = $this->post('event_id');		
 		$result = $this->Events_model->subscribe($user_id,$event_id);
@@ -251,6 +282,9 @@ class Events extends REST_Controller
 	}
 	
 	function like_post(){
+		//--- validate user token ---//        
+            $this->validateToken();
+        //------------------------//
 		$data['content_id'] = $this->post('event_id');
 		$data['user_id'] = $this->post('user_id');
 		$data['like'] =  $this->post('like');
