@@ -11,6 +11,7 @@ foreach($menu as $key=>$val){
     $array=array();
     $val=(array) $val;
     if(isset($val['is_action'])&&($val['is_action']=='0')){
+           
             $array['name']=$val['name'];
             $array['id']=$val['id'];
             $array['li-class']='';
@@ -22,9 +23,15 @@ foreach($menu as $key=>$val){
                 array_push($menuArr,$array);
             }else{
                 $array['type']='child';
+                $key =  $array['sub-order']= ($val['sub-order']==NULL)?'':$val['sub-order'];
                 foreach($menuArr as $k=>$v){
+                  //  print_r($array); 
+                  //  echo "<br>";
+                    
                     if($v['id']==$val['parent_id']){
-                        array_push($menuArr[$k]['childs'],$array);
+                       // array_push($menuArr[$k]['childs'],$array);
+                        $menuArr[$k]['childs'][$key]= $array;
+                       
                     }
                 }
             }
@@ -40,7 +47,7 @@ foreach($menuArr as $k1=>$v1){
     }
 }
 
-//echopre($menuArr);
+//echo "<pre>"; print_r($menuArr);
 //echo '<pre>';
 //print_r($s['menu']);
 $menu = array();
@@ -298,11 +305,12 @@ switch ($s[0]->username) {
                       <span><?php echo $welcome->loadPo($val['name']); ?></span> <span class="caret"></span>
                   </a>
                   <ul role="menu" class="dropdown-menu">
-                      <?php foreach ($val['childs'] as $child){ ?>
+                      <?php ksort($val['childs']); 
+                      foreach ($val['childs'] as $child){ ?>
                         <li class="<?=$child['li-class']?>">
                            <a href="<?=$child['url']?>">
                                <i class="fa fa-angle-double-right"></i>
-                                   <?php echo $welcome->loadPo($child['name']) ?>
+                                   <?php echo $welcome->loadPo(ucfirst($child['name'])) ?>
                            </a>
                        </li>
                       <?php } ?>
