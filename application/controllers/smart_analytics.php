@@ -400,11 +400,69 @@ class Smart_analytics extends MY_Controller {
 	}
         
     function Versions(){
-		$data['welcome'] = $this;
-		$this->show_view('analytics_version',$data);
+		if(!empty($_POST)){
+			$resultData[] = array();
+			$days = $this->input->post('daydiff');
+			if($days === 'Today')
+				 $days =1;
+			
+			$dayDiff = $this->getDateIntervel($days);
+			$prepareData = array();
+			$sqlData = array();
+			$appUserData 				=	$this->newanalytics_model->getAppVersiondata($dayDiff);
+			$appNewuserData 			=	$this->newanalytics_model->getAppNewUser($dayDiff);
+			
+			$newUserTemp = array();
+			foreach($appNewuserData as $key=>$val){
+				$newUserTemp[$val['os_version']] =$appNewuserData[$key];
+			}
+			
+			$appUserTemp = array();
+			foreach($appUserData as $key=>$val){
+				$appUserTemp[$val['os_version']] =$appUserData[$key];
+			}
+			
+			$userdata = sizeof($appUserTemp);//7
+			$newdataTemp = sizeof($newUserTemp); //4
+			$i = 0;
+			if($newdataTemp < $userdata)
+			{
+				foreach($appUserTemp as $key=>$val){
+					$prepareData[$i][] = $val['os_version'];
+					$prepareData[$i][] = $val['totalsession'];
+					$prepareData[$i][] = $val['totaluser'];
+					if(isset($newUserTemp[$key]) && is_array($newUserTemp[$key])){
+						$prepareData[$i][] =  @$newUserTemp[$key]['newuser'];
+					}else{ 
+						$prepareData[$i][] =0;
+					}$i++;
+				}
+			}else{	
+				foreach($newUserTemp as $key=>$val){
+					if(isset($appUserTemp[$key]) && is_array($appUserTemp[$key])){
+						$prepareData[$i][] = $appUserTemp[$key]['os_version'];
+						$prepareData[$i][] = $appUserTemp[$key]['totalsession'];
+						$prepareData[$i][] = $appUserTemp[$key]['totaluser'];
+						$prepareData[$i][] = $val['newuser'];
+					}else{
+						$prepareData[$i][] = $val['os_version'];
+						$prepareData[$i][] = 0;
+						$prepareData[$i][] = 0;
+						$prepareData[$i][] = $val['newuser'];
+					}
+						$i++;
+					}
+				}
+			 $resultData['grid'] =$prepareData;
+			 echo json_encode($resultData,true);
+			 EXIT;
+		}ELSE{
+			$data['welcome'] = $this;
+			$this->show_view('analytics_version',$data);
+		}
 	}
-        
-    function Carrier(){
+	
+	  function Carrier(){
 		$data['welcome'] = $this;
 		$this->show_view('analytics_carrier',$data);
 	}
