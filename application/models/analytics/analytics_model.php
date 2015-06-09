@@ -627,13 +627,27 @@ class Analytics_model extends CI_Model{
         switch($param['type']){
 
         case 'content':
-            $select = 'c.name as title,a.platform,a.browser,a.created,a.country,a.city,a.content_id,concat(u.first_name," ",u.last_name) as content_provider,count(content_id) as total_hits,sum(watched_time) as total_watched_time,           
+            
+             $select = 'c.name as title,a.platform,a.browser,a.created,a.country,a.city,a.content_id,concat(u.first_name," ",u.last_name) as content_provider,count(content_id) as total_hits,sum(watched_time) as total_watched_time,           
             SUM(IF( a.complete =1, 1, 0 )) AS complete, 
             SUM(IF( a.complete =0 && a.pause =1, 1, 0 )) AS partial, 
             SUM(IF( a.replay =1, 1, 0) ) AS replay ';
            // $group = 'a.content_id';
            // $group = 'a.id';
            
+          if($param['date_from'] && $param['date_to']){
+              $startdate = $param['date_from'];
+              $enddate = $param['date_to'];
+              $this->db->where("DATE_FORMAT(a.created,'%Y-%m-%d') BETWEEN '$startdate' AND '$enddate'"); 
+          }
+          
+            /*$select = 'c.name as title,a.platform,a.browser,a.created,a.country,a.city,a.content_id,concat(u.first_name," ",u.last_name) as content_provider,count(content_id) as total_hits,sum(watched_time) as total_watched_time,           
+            SUM(IF( a.complete =1, 1, 0 )) AS complete, 
+            SUM(IF( a.complete =0 && a.pause =1, 1, 0 )) AS partial, 
+            SUM(IF( a.replay =1, 1, 0) ) AS replay ';
+           // $group = 'a.content_id';
+           // $group = 'a.id';
+           */
            if($param['top'] == 1){  //-- top video --//
                 $this->db->group_by('a.content_id');
                 $this->db->order_by('count(content_id) desc');

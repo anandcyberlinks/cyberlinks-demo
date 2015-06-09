@@ -85,7 +85,7 @@ class Analytics extends MY_Controller {
                 $post['app_version'] = $device_other_info->app_version;
                 $post['network_type'] = $device_other_info->network_type;
                 $post['network_provider'] = $device_other_info->network_provider;
-               echo $this->Analytics_model->save($post);
+                $this->Analytics_model->save($post);
 	}
         
         function pause()
@@ -818,7 +818,7 @@ class Analytics extends MY_Controller {
                         $post['app_version'] = $device_other_info->app_version;
                         $post['network_type'] = $device_other_info->network_type;
                         $post['network_provider'] = $device_other_info->network_provider;
-			echo $this->Analytics_model->save_ads($post);
+			 $this->Analytics_model->save_ads($post);
 		}
 		//print_r($post);
 		die;

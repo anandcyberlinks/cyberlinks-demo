@@ -31,7 +31,7 @@ class Details extends MY_Controller {
 		$platform = $this->data['platform'] = ($_GET['platform'] !='' ? $_GET['platform']:$_GET['device']);
 		$id = $_GET['id'];
 		$type= $_GET['type'];
-                $this->data['session_id'] = $_GET['session_id'];
+        $this->data['session_id'] = $_GET['session_id'];
 				 
 		//-- log start --//
 			//$this->log_load('db load','start',$id,$platform);
