@@ -247,8 +247,7 @@ class User extends REST_Controller
 			'dob' => $this->post('dob'),
 			'age' => $this->post('age'),
 			'about_me' => $this->post('about_me'),
-			'category_preference' => $this->post('category_preference'),
-            'contact_no' => $this->post('contact_no'),
+			'contact_no' => $this->post('contact_no'),
             'location'=>$this->post('location'),
 	    'keywords' => trim($keywordData)
             );
@@ -266,12 +265,12 @@ class User extends REST_Controller
             $result = $this->User_model->update_user($data,$id);
          //   $result_social = $this->User_model->update_usersocial($keywordData,$id);
             if($result){
-				$catdata=json_decode($this->post('categoryArray'));
+				$catdata=json_decode($this->post('category_preference'));
 				$catarr=array(
 					'category'=>$catdata
 				);
 			$output = $this->User_model->getuser($id);
-		//	$this->User_model->updateCat($catarr,$id);
+			$this->User_model->updateCat($catarr,$id);
 		/*if($output->image !=""){
                  //   $output->image = base_url().PROFILEPIC_PATH.$output->image;
      		}*/
@@ -948,8 +947,7 @@ class User extends REST_Controller
         $this->response($response_arr, $response_code);
     }
 	
-	function heart_beat_post()
-	{
+	function heart_beat_post(){
 		//-- check if Admin token is valid --//
 	    $owner_id =  $this->User_model->checkAdminToken($this->admin_token);	  
 	    if($owner_id <= 0){
@@ -965,8 +963,7 @@ class User extends REST_Controller
 		$this->response(array('code'=>1), 200); 
 	}
     
-	function socket_post()
-	{		   
+	function socket_post(){		   
 		$sess_id = $this->post('sess_id');
 		$is_active = $this->post('status');
 		$endtime = $this->post('end_time');		
@@ -983,6 +980,31 @@ class User extends REST_Controller
 		$this->param =  $this->paging($this->get('p'));
 		$owner_id =  $this->User_model->checkAdminToken($this->admin_token);
 		$data = $this->User_model->listdata($owner_id,$this->param);
+		$this->response(array('code'=>1,'result'=>$data), 200); 
+	}
+	function online_get(){
+		$owner_id =  $this->User_model->checkAdminToken($this->admin_token);
+		$data = $this->User_model->onlineuser($owner_id);
+		$this->response(array('code'=>1,'result'=>$data), 200); 
+	}
+	function search_post(){
+		$this->param =  $this->paging($this->get('p'));
+		$data = $this->post();
+		$owner_id =  $this->User_model->checkAdminToken($this->admin_token);
+		$data = $this->User_model->searchdata($owner_id,$this->param,$data);
+		$this->response(array('code'=>1,'result'=>$data), 200); 
+	}
+	function follow_post(){
+		$data = $this->post();
+		$status=$data['status'];
+		unset($data['status']);
+		$data = $this->User_model->follow($data,$status);
+		$this->response(array('code'=>1,'result'=>'Success','id'=>$data), 200);
+	}
+	function followlist_post(){
+		$data = $this->post();
+		$res = $this->User_model->follow_list($data);
+		$this->response(array('code'=>1,'result'=>$res), 200);
 	}
     function resumesession_post()
     {	

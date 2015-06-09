@@ -121,7 +121,7 @@ class User_model extends CI_Model {
     public function confirmRegistration($token)
     {
         $this->db->select('a.id');
-	$this->db->from('customers a');
+		 $this->db->from('customers a');
         $this->db->join('token b','a.id = b.user_id','inner');
         $this->db->where('b.token',$token);
         $this->db->where('a.status','inactive');
@@ -153,6 +153,61 @@ class User_model extends CI_Model {
 	  $query = $this->db->get();
 	  return $result = $query->result();
    }
+    public function searchdata($owner,$limit,$data){
+	  $this->db->select('id,username,image as thumbnail,online');
+	  $this->db->from('customers');
+      $this->db->where('owner_id',$owner);
+	  $this->db->where('status','active');
+	  $this->db->like('username',$data['username']);
+	  $this->db->limit($limit['limit'],$limit['offset']);
+	  $query = $this->db->get();
+	  //echo '<br>'.$this->db->last_query();die;
+	  return $result = $query->result();
+   }
+    public function onlineuser($owner){
+	  $this->db->select('id,username,image as thumbnail,online');
+	  $this->db->from('customers');
+      $this->db->where('owner_id',$owner);
+	  $this->db->where('status','active');
+	  $this->db->where('online','1');
+	  $query = $this->db->get();
+	  //echo '<br>'.$this->db->last_query();die;
+	  return $result = $query->result();
+   }
+   public function follow_list($data){
+	  if(isset($data['by'])&&($data['by']!='')){
+		 $this->db->select('a.follow_user_id as user_id,a.user_id as follower_user_id,b.username as follower_user_name,b.image as thumbnail');
+		 $this->db->from('follow_user as a');
+		 $this->db->join('customers b','a.user_id = b.id','left');
+		 $this->db->where('follow_user_id',$data['id']);
+		 $query = $this->db->get();
+		 //echo '<br>'.$this->db->last_query();die;
+		 return $result = $query->result();
+	  }else if(isset($data['to'])&&($data['to']=='1')){
+		 $this->db->select('a.user_id,a.follow_user_id,b.username as follow_user_name,b.image as thumbnail');
+		 $this->db->from('follow_user as a');
+		 $this->db->join('customers b','a.follow_user_id = b.id','left');
+		 $this->db->where('user_id',$data['id']);
+		 $query = $this->db->get();
+		 return $result = $query->result();
+	  }
+   }
+   function follow($data,$status)
+    {	//echopre($data);
+	  if($status=='1'){
+		$this->db->set($data);
+		$this->db->set('created', 'NOW()', FALSE); 
+		$this->db->insert('follow_user', $data);
+		//echo '<br>'.$this->db->last_query();die;
+		return $this->db->insert_id();
+	  }else{  
+		$this->db->where('user_id', $data['user_id']);
+		$this->db->where('follow_user_id', $data['follow_user_id']);
+		$this->db->delete('follow_user');
+		//echo $this->db->last_query();
+		return $this->db->affected_rows();  
+	  }
+    }
     public function validateToken($token)
     {
        if($token == ''){
@@ -355,7 +410,7 @@ function delete_user($id){
 	  $this->db->set('user_id', $id, FALSE);
 	  foreach($data['category'] as $k=>$v){
 		  $id = $this->db->insert_id('customer_event_category_preference',$v);
-		  echo $this->db->last_query();die;
+		  //echo $this->db->last_query();die;
 	  }
 	  return $id; 
   }
