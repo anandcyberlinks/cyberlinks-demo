@@ -85,7 +85,7 @@
                             <div class="row">
                                 <div class="col-xs-4">
                                     <label>Gender:</label>
-                                    <select name="gender" class="form-control">
+                                    <select name="gender" class="form-control disabled">
                                         <option value="">-Select-</option>
                                         <option value="Male">Male</option>
                                         <option value="Female">Female</option>
