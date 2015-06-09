@@ -55,9 +55,9 @@ class User_Model extends CI_Model {
         $this->db->update('users', $data);
     }
 
-    public function genratetoken($data, $id='') {
+    public function genratetoken($data, $id = '') {
         $action = $data['action'];
-        $id = ($id == '')? $data[0]->id : $id;
+        $id = ($id == '') ? $data[0]->id : $id;
         $token = $data['token'];
         $t2 = time() + 120;
         $exp = date("Y-m-d h:i:s", $t2);
@@ -118,11 +118,11 @@ class User_Model extends CI_Model {
         $this->db->where('uid', $user_id);
         $this->db->where('type', 'logo');
         $temp = $this->db->get('files')->result();
-        if(count($temp) == '0'){
-            $this->db->insert('files', array('uid'=>$user_id, 'type'=>'logo','relative_path'=>$image, 'absolute_path'=>$abpath ));
+        if (count($temp) == '0') {
+            $this->db->insert('files', array('uid' => $user_id, 'type' => 'logo', 'relative_path' => $image, 'absolute_path' => $abpath));
             $fileid = $this->db->insert_id();
             $this->db->where('id', $user_id);
-            $this->db->set('image',$fileid);
+            $this->db->set('image', $fileid);
             $this->db->update('users');
         }
         $this->db->where('id', $temp[0]->id);
@@ -131,39 +131,40 @@ class User_Model extends CI_Model {
         $this->db->update('files');
         //echo $this->db->last_query(); die;
     }
-     public function getcupassword($data)
-   {
+
+    public function getcupassword($data) {
         $this->db->select('id,password');
         $this->db->from('customers');
-        $this->db->where('id',$data['id']);
-        $this->db->where('password',md5($data['password']));
-        $query = $this->db->get();    
+        $this->db->where('id', $data['id']);
+        $this->db->where('password', md5($data['password']));
+        $query = $this->db->get();
         $result = $query->row();
-        if($result)
+        if ($result)
             return $result;
         else
             return 0;
-   }
-    function saveskin($skin_id,$uid,$fileid='')
-	{
-	  $this->db->set('modified', 'NOW()', FALSE); 
-      $this->db->where('id', $uid);
-      $this->db->update('users', array('skin_id'=>$skin_id,'skin_banner'=>$fileid));
-	}
-     function getmenu($id)
-	{
-	  $this->db->select('a.user,b.*');
-      $this->db->from('module_permission a');
-      $this->db->join('modules b','a.modules_id=b.id AND a.user='.$id.'','inner');
-      $this->db->order_by("parent_id", "asc");
-      $this->db->order_by("order", "asc");
-      $query = $this->db->get();
-      return $result = $query->result();
     }
-   
+
+    function saveskin($skin_id, $uid, $fileid = '') {
+        $this->db->set('modified', 'NOW()', FALSE);
+        $this->db->where('id', $uid);
+        $this->db->update('users', array('skin_id' => $skin_id, 'skin_banner' => $fileid));
+    }
+
+
+    function getmenu($id) {
+        $this->db->select('a.user,b.*');
+        $this->db->from('module_permission a');
+        $this->db->join('modules b', 'a.modules_id=b.id AND a.user=' . $id . '', 'inner');
+        $this->db->order_by("parent_id", "asc");
+        $this->db->order_by("name", "asc");
+        $query = $this->db->get();
+        return $result = $query->result();
+    }
 
 }
-    /*
+
+/*
      * To change this license header, choose License Headers in Project Properties.
      * To change this template file, choose Tools | Templates
      * and open the template in the editor.
