@@ -352,8 +352,8 @@ class Newanalytics_model extends CI_Model{
 		if(date("Y-m-d",strtotime($data['startdate'])) === date("Y-m-d",strtotime($data['enddate']))){
 			$this->db->select('count(app_session.id) as newsession, HOUR(app_session.session_start) as hr');
 			$this->db->where('session_use',1);
-                        $this->timeInterval($data,"app_session.session_start");
-                        $this->db->group_by('HOUR(app_session.session_start)'); 
+			$this->timeInterval($data,"app_session.session_start");
+			$this->db->group_by('HOUR(app_session.session_start)'); 
 			$this->db->order_by('hr', 'ASC'); 
 			$query = $this->db->get('app_session');
 			return $result = $query->result_array();
@@ -384,18 +384,61 @@ class Newanalytics_model extends CI_Model{
                   //return $this->dayWiseData($result,$data,'totaluser');	
            } 
                  
-         public function getSessionDataGraphYear()
+         public function getSessionDataGraphYear($data = ARRAY())
          {
+			$this->timeInterval($data,"app_session.session_start");
 			$this->db->select("count(id) as totalsession,count(distinct app_session.customer_device_id) as uniquesession,DATE_FORMAT(app_session.session_start,'%M') as date",false);
-			 $this->db->where("YEAR(session_start)","YEAR(CURDATE())", false);
-                        $this->db->group_by('MONTH(app_session.session_start)');
+			$this->db->where("YEAR(session_start)","YEAR(CURDATE())", false);
+            $this->db->group_by('MONTH(app_session.session_start)');
 			$this->db->order_by('date', 'ASC'); 
 			$query = $this->db->get('app_session');
 			return $result = $query->result_array();
                       
 	 }
+	 
+	 
+	 
+	  public function getAppVersiondata($data=array())
+         {
+			
+					$this->db->select("device_other_information.os_version,count(app_session.id) as totalsession,count(distinct app_session.customer_device_id) as totaluser",false);
+					$this->timeInterval($data,"app_session.session_start");
+					$this->db->join('device_other_information','device_other_information.session_id = app_session.id', 'INNER');
+					$this->db->where('device_other_information.os_version !=""');
+					$this->db->group_by('device_other_information.os_version ');
+					$query = $this->db->get('app_session');
+					//	$this->db->order_by('hr', 'ASC');  
+					//echo $this->db->last_query();
+					//die;	
+			return $result = $query->result_array();
+                      
+	 }
+	 
+	 
+	/*  SELECT distinct(device_other_information.os_version), count(app_session.id) as totalsession,
+	count(distinct app_session.customer_device_id) as totaluser,
+	DATE_FORMAT(app_session.session_start,'%M') as date FROM (`app_session`) 
+	INNER JOIN `device_other_information` ON `device_other_information`.`session_id` = `app_session`.`id` 
+	WHERE  `app_session`.`session_start` BETWEEN '2015-05-19 00:00:00' AND '2015-06-19 23:59:59'
+	GROUP BY  DAY(app_session.session_start),device_other_information.os_version */
+	 
          
          /* End Session Model Here   */
+		 
+		 
+		function getAppNewUser($data=array()){
+			$this->db->select("(device_other_information.os_version),count(distinct app_session.customer_device_id) as newuser",false);
+			$this->timeInterval($data,"app_session.session_start");
+			$this->db->join('device_other_information','device_other_information.session_id = app_session.id', 'INNER');
+			$this->db->where('device_other_information.os_version !=""');
+			$this->db->group_by('device_other_information.os_version');
+			$this->db->where('status',1);
+			$query = $this->db->get('app_session');
+			return $result = $query->result_array();
+			//echo $this->db->last_query(); die;
+			//return $newUser = $query->num_rows();
+		 }
+		 
 }
 
 
