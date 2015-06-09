@@ -169,8 +169,8 @@
                 ,
                 {
                     label: "My third dataset",
-                    strokeColor: "rgba(214,155,200,0.75)",
-                    pointColor: "rgba(214,155,200,0.75)",
+                    strokeColor: "rgba(190,235,159,0.75)",
+                    pointColor: "rgba(90,235,159,0.75)",
                     data: [48, 28]
                 }
             ]
@@ -296,7 +296,7 @@ function DrawLineChart(drawdata)
     scaleFontColor: "#666",
 
     // Boolean - whether or not the chart should be responsive and resize when the browser does.
-    responsive: false,
+    responsive: true,
 
     // Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
     maintainAspectRatio: true,
@@ -370,7 +370,7 @@ function DrawLineChart(drawdata)
         //lineChartOptions.datasetFill = false;
          var lineChartOptions =areaChartOptions;
         lineChartOptions.datasetFill = false;
-        lineChartOptions.responsive = true;
+        //lineChartOptions.responsive = true;
         myLineChart = new Chart(ctx).Line(drawdata,lineChartOptions);
         //Chart.defaults.global.responsive = true;
 } 
