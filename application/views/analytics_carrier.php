@@ -19,18 +19,25 @@
                     <!-- Check all button -->
                     <a class="btn btn-default btn-sm reservation" onclick="dateRange()"><i class="fa fa-calendar"></i></a>
                     <div class="btn-group ">
-                      <a class="btn btn-default btn-sm year-class">2015</a>
-                      <a class="btn btn-default btn-sm active-header-btn today-class">Today</a>
-                      <a class="btn btn-default btn-sm week-class">7 Days</a>
-                      <a class="btn btn-default btn-sm month-class">30 Days</a>
-                      <a class="btn btn-default btn-sm months2-class">60 Days</a>
-                      <a class="btn btn-default btn-sm months3-class">90 Days</a>
+                      <a class="btn btn-default btn-sm year-class" value="365">2015</a>
+                      <a class="btn btn-default btn-sm active-header-btn today-class" value="1">Today</a>
+                      <a class="btn btn-default btn-sm week-class" value="7">7 Days</a>
+                      <a class="btn btn-default btn-sm month-class" value="30">30 Days</a>
+                      <a class="btn btn-default btn-sm months2-class" value="60">60 Days</a>
+                      <a class="btn btn-default btn-sm months3-class" value="90">90 Days</a>
                     </div><!-- /.btn-group -->
                   </div>
                 </div>
-                  <div style="width: 50%;float: left;border-right: 1px solid gray"><div id="placeholder" style="height: 250px;margin: 10px 0px"></div>
+                  <div style="width: 50%;float: left;border-right: 1px solid gray">
+                      <div id="placeholder" style="margin: 10px 0px">
+                      
+                          <canvas height="250" id="pieChart1"  width="499"></canvas>
+                      </div>
                   <div class='newUserGrid'>New Users</div></div>
-                   <div style="width: 50%;float: left;border-right: 1px solid gray"><div id="placeholder1" style="height: 250px;margin: 10px 0px"></div>
+                   <div style="width: 50%;float: left;border-right: 1px solid gray">
+                       <div id="placeholder1" style="margin: 10px 0px">
+                           <canvas height="250" id="pieChart2"  width="499"></canvas>
+                       </div>
                   <div class='newUserGrid'>Total Users</div></div>
                   <div style="clear: both"></div>
               </div><!--/.col (left) -->
@@ -86,11 +93,11 @@
         </section><!-- /.content -->
       </div><!-- /.content-wrapper -->
     <!-- jQuery 2.1.3 -->
-     <script src="<?php echo base_url() ?>assets/js/plugins/flot/jquery.flot.min.js" type="text/javascript"></script>
+     <!--<script src="<?php echo base_url() ?>assets/js/plugins/flot/jquery.flot.min.js" type="text/javascript"></script>-->
     <!-- FLOT RESIZE PLUGIN - allows the chart to redraw when the window is resized -->
-    <script src="<?php echo base_url() ?>assets/js/plugins/flot/jquery.flot.resize.min.js" type="text/javascript"></script>
+    <!--<script src="<?php echo base_url() ?>assets/js/plugins/flot/jquery.flot.resize.min.js" type="text/javascript"></script>-->
     <!-- FLOT PIE PLUGIN - also used to draw donut charts -->
-    <script src="<?php echo base_url() ?>assets/js/plugins/flot/jquery.flot.pie.min.js" type="text/javascript"></script>
+   <!-- <script src="<?php echo base_url() ?>assets/js/plugins/flot/jquery.flot.pie.min.js" type="text/javascript"></script>-->
     <!-- FLOT CATEGORIES PLUGIN - Used to draw bar charts -->
     <script src="<?php echo base_url() ?>assets/js/plugins/flot/jquery.flot.categories.min.js" type="text/javascript"></script>
           <script src="<?php echo base_url() ?>assets/js/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js" type="text/javascript"></script>
@@ -100,10 +107,15 @@
                 <script src="<?php echo base_url() ?>assets/js/plugins/morris/morris.min.js"></script>
                 <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.css">
     <script type="text/javascript" language="javascript" src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" language="javascript" src="//cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.js"></script>             
+    <script type="text/javascript" language="javascript" src="//cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.js"></script>
+    <script type="text/javascript" language="javascript" src="<?php echo base_url() ?>assets/js/plugins/chartjs/Chart.min.js"></script>
+    <script type="text/javascript" language="javascript" src="<?php echo base_url() ?>assets/js/plugins/chartjs/Chart.js"></script>
    <script>
-   
-   
+   var myDoughnutChart1;
+   var myDoughnutChart2;
+  var drawdata = [{value:0,color:"#370bff",highlight:"#affcda",label:"Galaxy S3"},
+            {value:2,color:"#e74e04",highlight:"#33f723",label:"testing"}];
+
    function parseJson(data)
                 {        
                    $('#example1').dataTable({
@@ -112,10 +124,10 @@
                      bLengthChange: false,
                      }); 
                  }
-   	function ajaxCall(){
-			str = $('.btn-group').find(".active-header-btn").text();
+   	function ajaxCall(num){
+			//str = $('.btn-group').find(".active-header-btn").text();
 			
-			var num = +str.match(/-?\d+\.?\d*/);
+			//var num = +str.match(/-?\d+\.?\d*/);
 			
                       	$(function()
                         { // start of doc ready.
@@ -125,11 +137,13 @@
                                   data: {'daydiff': num}, // change this to send js object
                                   type: "post",
                                 success: function(data){   
-                                //   console.log(data.grid);
+                                //   console.log(data.totalusergraph);
 								  //  console.log(eval(data.totalusergraph));
                                 $("#example1").dataTable().fnDestroy();
-                                parseJson(data.grid);    
-                                                                        
+                                parseJson(data.grid);
+                                
+                                RemoveGraph();
+                                DrawBarGraph(eval(data.totalusergraph),eval(data.newusergraph)) ;                                    
                                   }
                                      });
 					});
@@ -137,71 +151,105 @@
    
    
       $(document).ready(function(){
-	  ajaxCall();
+	  //  ajaxCall();
            $('#example1').dataTable({
               bFilter: false,
               bLengthChange: false,
                  });           
-          $('.mailbox-controls .btn-default').click(function () {
+            
+            $('.mailbox-controls .btn-default').click(function () {
             $('.btn-default').removeClass('active-header-btn');
-            $(this).addClass('active-header-btn'); 
-			ajaxCall();
+            $(this).addClass('active-header-btn');
+             var num = $('.btn-group').find(".active-header-btn").attr('value');
+            // alert(num);
+             if(!(num ===undefined))
+             {
+                 ajaxCall(num);
+             }        
+                 
           });
+          ajaxCall('Today');
 		  
 		  
-        $(".reservation").daterangepicker();
-			var data = [
-			{ label: "Ipad2",  data: [[1,25]]},
-			{ label: "Galaxy S3",  data: [[1,30]]},
-			{ label: "iPhone 3GS",  data: [[1,15]]},
-			{ label: "iPhone4",  data: [[1,40]]},
-			{ label: "iPhone9",  data: [[1,48]]},
-		];
+        $(".reservation").daterangepicker();		
 		
-		
+	/* Date Select Functionality */
+         $('.applyBtn').on('click',function(){
+            num =[]; 
+            strdt = $('input[name="daterangepicker_start"]').val();
+            enddt = $('input[name="daterangepicker_end"]').val();
+            num[0] =strdt;
+            num[1] =enddt;
+           //console.log(strdt);
+           
+            //alert($('input[name="daterangepicker_start"]').val());
+             ajaxCall(num)
+            });
+        
+      	
         function labelFormatter(label, series) {
 		return "<div style='font-size:8pt; text-align:center; padding:2px; color:white;'>" + label + "<br/>" + Math.round(series.percent) + "%</div>";
 	}
-         $.plot('#placeholder', data, {
-    series: {
-        pie: {
-            show: true,
-            radius: 1,
-            label: {
-                show: true,
-                radius: 2/3,
-                 formatter: labelFormatter,
-                threshold: 0.1
-            }
-        }
-    },
-    legend: {
-        show: false
-    }
-});
-   $.plot('#placeholder1', data, {
-    series: {
-        pie: {
-            show: true,
-            radius: 1,
-            label: {
-                show: true,
-                radius: 2/3,
-                formatter: labelFormatter,
-                threshold: 0.1
-            }
-        }
-    },
-    legend: {
-        show: false
-    }
-});
         
+            DrawBarGraph(drawdata,drawdata);
         });
       
-      function dateRange($divs) {
+      function dateRange($divs)
+      {
         $("#"+$divs+" .reservation").daterangepicker('show');
       }
+      
+     function DrawBarGraph(drawdata1,drawdata2)
+        {
+         var options = {
+
+                //Boolean - Whether we should show a stroke on each segment
+          segmentShowStroke : true,
+          
+          responsive: true,
+
+          //String - The colour of each segment stroke
+          segmentStrokeColor : "#fff",
+
+          //Number - The width of each segment stroke
+          segmentStrokeWidth : 2,
+
+          //Number - The percentage of the chart that we cut out of the middle
+          percentageInnerCutout : 50, // This is 0 for Pie charts
+
+          //Number - Amount of animation steps
+          animationSteps : 100,
+
+          //String - Animation easing effect
+          animationEasing : "easeOutBounce",
+
+          //Boolean - Whether we animate the rotation of the Doughnut
+          animateRotate : true,
+
+          //Boolean - Whether we animate scaling the Doughnut from the centre
+          animateScale : false,
+
+          //String - A legend template
+          legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<segments.length; i++){%><li><span style=\"background-color:<%=segments[i].fillColor%>\"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>"
+
+        };
+//ar myDoughnutChart = new Chart(ctx[1]).Doughnut(data,options);
+             var ctx = document.getElementById("pieChart1").getContext("2d");
+            
+            myDoughnutChart1 = new Chart(ctx).Doughnut(drawdata1,options);
+             //Chart.defaults.global.responsive = true;
+             
+             var ctx = document.getElementById("pieChart2").getContext("2d");
+            
+            myDoughnutChart2 = new Chart(ctx).Doughnut(drawdata2,options);
+     } 
+
+        function RemoveGraph()
+        {
+            myDoughnutChart1.destroy();
+            myDoughnutChart2.destroy();
+
+        } 
     </script>
 <style>
   h3.timeHeading
@@ -305,6 +353,22 @@
     text-align: center;
     text-shadow: 0 1px #fff;
     width: 100%;
+}
+ .daterangepicker .calendar th, .daterangepicker .calendar td
+{
+    min-width:0px!important;
+    font-size: 12px!important;
+}
+.table-condensed > tbody > tr > td, .table-condensed > tbody > tr > th, .table-condensed > tfoot > tr > td, .table-condensed > tfoot > tr > th, .table-condensed > thead > tr > td, .table-condensed > thead > tr > th
+{
+padding:3px!important;
+}
+.daterangepicker_start_input, .daterangepicker_end_input{
+display : none!important;
+}
+.daterangepicker .calendar-date
+{
+    padding: 0px!important;
 }
 </style>    
   
