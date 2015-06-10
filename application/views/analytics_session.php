@@ -159,19 +159,6 @@
                     pointColor: "rgba(220,220,220,1)", 
                     pointStrokeColor: "#dff",
                     data: [65, 59]
-                },
-                {
-                    label: "My Second dataset",
-                    strokeColor: "rgba(151,187,205,1)",
-                    pointColor: "rgba(151,187,205,1)",
-                    data: [28, 48]
-                }
-                ,
-                {
-                    label: "My third dataset",
-                    strokeColor: "rgba(190,235,159,0.75)",
-                    pointColor: "rgba(90,235,159,0.75)",
-                    data: [48, 28]
                 }
             ]
         };
