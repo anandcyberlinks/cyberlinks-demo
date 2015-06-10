@@ -326,7 +326,8 @@ class Smart_analytics extends MY_Controller {
 		}
 	}
         
-		function Frequency(){
+	function Frequency()
+        {
 					if(!empty($_POST)){
 					$resultData['graph'] = array();
                     $resultData['grid'] = array();
@@ -468,13 +469,31 @@ class Smart_analytics extends MY_Controller {
 	
 	  function Carrier(){
 	  
-		if(!empty($_POST)){
-			$resultData[] = array();
+		if(!empty($_POST))
+                    {
+			$resultData = array();
 			$days = $this->input->post('daydiff');
+                        
 			if($days === 'Today')
 				 $days =1;
+                        
+                        $sqlData = array();
+                        
+                        if(is_array($days))
+                        {
+                            $sqlData['startdate'] =$days[0]." 00:00:00";
+                            $sqlData['enddate']   = $days[1]." 23:59:59";
+                           // print_r($days);die;
+                        }
+                        else
+                        {
+                           $dayDiff = $this->getDateIntervel($days);                        
+                         
+                            $sqlData['startdate'] = $dayDiff['startdate']." 00:00:00";
+                            $sqlData['enddate']=   $dayDiff['enddate']." 23:59:59";
+                        }
 			
-			$dayDiff = $this->getDateIntervel($days);
+			//$dayDiff = $this->getDateIntervel($days);
 			$deviceUserData	 =	$this->newanalytics_model->getDevicedata($dayDiff);
 			$deviceNewUserData	 =	$this->newanalytics_model->getDeviceNewUser($dayDiff);
 			$deviceUserTemp = array();
@@ -516,17 +535,26 @@ class Smart_analytics extends MY_Controller {
 						}$i++;
 					}
 				}
-				$prepareGraphNewUserData = array();
-				$prepareGraphTotalUserData = array();
+				$ctu = array();
+				$cnu = array();
+                                
+                                
+                                            
 				foreach($prepareData as $val){
 					$v1 = array("1",$val[2]);
 					$v2 = array("1",$val[3]);
-					$prepareGraphTotalUserData[] = array('label'=>$val[0],'data'=>array($v1));
-					$prepareGraphNewUserData[] = array('label'=>$val[0],'data'=>array($v2));
+                                        $cl = $this->random_color();
+                                        $hl = $this->random_color();
+                                        $ctu[]=array('value'=>intval($val[2]),'color'=>$cl,'highlight'=>$hl,'label'=>$val[0]);
+                                        $cnu[]=array('value'=>intval($val[3]),'color'=>$cl,'highlight'=>$hl,'label'=>$val[0]);
+					//$prepareGraphTotalUserData[] = array('label'=>$val[0],'data'=>array($v1));
+					//$prepareGraphNewUserData[] = array('label'=>$val[0],'data'=>array($v2));
 				}
 				///	var data = [{ label: "Ipad2",  data: [[1,25]]},	];
+                                
 				$resultData['grid'] =$prepareData;
-			    $resultData['totalusergraph'] =$prepareGraphTotalUserData;
+			        $resultData['totalusergraph'] =$ctu;
+                                $resultData['newusergraph'] =$cnu;
 
 				echo json_encode($resultData,true);
 				EXIT;
@@ -540,5 +568,13 @@ class Smart_analytics extends MY_Controller {
 		$data['welcome'] = $this;
 		$this->show_view('analytics_platforms',$data);
 	}
+        
+        function random_color_part() {
+                return str_pad( dechex( mt_rand( 0, 255 ) ), 2, '0', STR_PAD_LEFT);
+            }
+
+            function random_color() {
+                return '#'.$this->random_color_part() . $this->random_color_part() . $this->random_color_part();
+            }
 
 }
