@@ -21,12 +21,12 @@
                     <!-- Check all button -->
                     <a class="btn btn-default btn-sm reservation" onclick="dateRange()"><i class="fa fa-calendar"></i></a>
                     <div class="btn-group ">
-                      <a class="btn btn-default btn-sm year-class">2015</a>
-                      <a class="btn btn-default btn-sm active-header-btn today-class">Today</a>
-                      <a class="btn btn-default btn-sm week-class">7 Days</a>
-                      <a class="btn btn-default btn-sm month-class">30 Days</a>
-                      <a class="btn btn-default btn-sm months2-class">60 Days</a>
-                      <a class="btn btn-default btn-sm months3-class">90 Days</a>
+                      <a class="btn btn-default btn-sm year-class" value="365"><?php echo date("Y"); ?></a>
+                      <a class="btn btn-default btn-sm active-header-btn today-class" value="1">Today</a>
+                      <a class="btn btn-default btn-sm week-class" value="7">7 Days</a>
+                      <a class="btn btn-default btn-sm month-class" value="30">30 Days</a>
+                      <a class="btn btn-default btn-sm months2-class" value="60">60 Days</a>
+                      <a class="btn btn-default btn-sm months3-class" value="90">90 Days</a>
                     </div><!-- /.btn-group -->
                   </div>
                 </div>
@@ -47,7 +47,7 @@
                       <tr role="row"><th style="width: 167px;">App Version</th><th>Total Sessions</th><th>Total Users</th><th>New Users</th></tr>
                     </thead>
                     <tbody>
-                    <tr role="row" class="odd">
+                   <!-- <tr role="row" class="odd">
                         <td class="sorting_1">1.0</td>
                         <td>16,368</td>
                         <td>15,678</td>
@@ -76,7 +76,7 @@
                         <td>16,368</td>
                         <td>15,678</td>
                         <td>3,583</td>  
-                    </tr>                  
+                    </tr>    -->              
                     </tbody>
                   </table></div></div></div>
                 </div><!-- /.box-body -->
@@ -213,9 +213,9 @@ function DrawLineChart(drawdata){
 		 }); 
 	 }
 	  
-	  function ajaxCall(){
-			str = $('.btn-group').find(".active-header-btn").text();
-			var num = +str.match(/-?\d+\.?\d*/);
+	  function ajaxCall(num){
+			//str = $('.btn-group').find(".active-header-btn").text();
+		//	var num = +str.match(/-?\d+\.?\d*/);
 			$(function()
 			{ // start of doc ready.
 				$.ajax({ 	 	
@@ -237,20 +237,53 @@ function DrawLineChart(drawdata){
 	  
 	  
 	  
-	  $(document).ready(function(){
-	  ajaxCall();
+	  $(document).ready(function(){	
             $('.mailbox-controls .btn-default').click(function () {
             $('.btn-default').removeClass('active-header-btn');
             $(this).addClass('active-header-btn'); 
-			ajaxCall();
+		
+             var num = $('.btn-group').find(".active-header-btn").attr('value');
+             alert(num);
+             if(!(num ===undefined))
+             {
+                 ajaxCall(num);
+             } 
+			
           });
-        $(".reservation").daterangepicker();
-
+		  ajaxCall('Today');
+      //  $(".reservation").daterangepicker();
+		 $(".reservation").daterangepicker({
+            format: 'YYYY-MM-DD',
+        });	
+		
+			 function dateRange() {
+				$(".reservation").daterangepicker('show');
+			  }
+  
+		
+		 $('.applyBtn').on('click',function(){
+			console.log("----------");
+            num =[]; 
+            strdt = $('input[name="daterangepicker_start"]').val();
+            enddt = $('input[name="daterangepicker_end"]').val();
+            num[0] =strdt;
+            num[1] =enddt;
+            console.log(strdt);
+           
+            //alert($('input[name="daterangepicker_start"]').val());
+             ajaxCall(num);
+            });
+		
+		
      });
       
-  function dateRange($divs) {
-	$("#"+$divs+" .reservation").daterangepicker('show');
-  }
+ 
+  
+  
+  
+  
+  
+  
   
 	function RemoveGraph()
 	{
@@ -516,6 +549,23 @@ element.style {
     right: 20px;
     top: 62px;
     width: 12px;
+}
+
+ .daterangepicker .calendar th, .daterangepicker .calendar td
+{
+    min-width:0px!important;
+    font-size: 12px!important;
+}
+.table-condensed > tbody > tr > td, .table-condensed > tbody > tr > th, .table-condensed > tfoot > tr > td, .table-condensed > tfoot > tr > th, .table-condensed > thead > tr > td, .table-condensed > thead > tr > th
+{
+padding:3px!important;
+}
+.daterangepicker_start_input, .daterangepicker_end_input{
+display : none!important;
+}
+.daterangepicker .calendar-date
+{
+    padding: 0px!important;
 }
 </style>    
   

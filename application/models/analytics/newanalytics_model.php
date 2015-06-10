@@ -186,8 +186,6 @@ class Newanalytics_model extends CI_Model{
 	}
 	
 	public function timeInterval($data =array(),$column){
-		//print_r($data);
-		
 		$startdate =$data['startdate']." 00:00:00";
 		$enddate = $data['enddate']." 23:59:59";
 		return $this->db->where("$column BETWEEN '$startdate' AND '$enddate'");

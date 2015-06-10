@@ -392,14 +392,26 @@ class Smart_analytics extends MY_Controller {
 		if(!empty($_POST)){
 			$resultData[] = array();
 			$days = $this->input->post('daydiff');
-			if($days === 'Today')
-				 $days =1;
+			if($days === 'Today' || $days ===1)
+				$days =1;
+				$sqlData = array();
+				if(is_array($days)){
+				$sqlData['startdate'] =$days[0];
+				$sqlData['enddate']   = $days[1];
+				}else{
+				   if($days==365) {
+					   $sqlData['startdate'] = date("Y")."-01-01";
+					   $sqlData['enddate']=   date("Y")."-12-01";
+					 } else{
+						$dayDiff = $this->getDateIntervel($days);                        
+						$sqlData['startdate'] = $dayDiff['startdate'];
+						$sqlData['enddate']=   $dayDiff['enddate'];
+					}
+				}
 			
-			$dayDiff = $this->getDateIntervel($days);
 			$prepareData = array();
-			$sqlData = array();
-			$appUserData 				=	$this->newanalytics_model->getAppVersiondata($dayDiff);
-			$appNewuserData 			=	$this->newanalytics_model->getAppNewUser($dayDiff);
+			$appUserData 				=	$this->newanalytics_model->getAppVersiondata($sqlData);
+			$appNewuserData 			=	$this->newanalytics_model->getAppNewUser($sqlData);
 			
 			$newUserTemp = array();
 			foreach($appNewuserData as $key=>$val){
@@ -410,7 +422,6 @@ class Smart_analytics extends MY_Controller {
 			foreach($appUserData as $key=>$val){
 				$appUserTemp[$val['os_version']] =$appUserData[$key];
 			}
-			
 			$userdata = sizeof($appUserTemp);//7
 			$newdataTemp = sizeof($newUserTemp); //4
 			$i = 0;
@@ -442,7 +453,6 @@ class Smart_analytics extends MY_Controller {
 						$i++;
 					}
 				}
-				
 				$prepareGraphTotalUserData =  array();
 				$j = 0;
 				foreach($prepareData as $val){
@@ -451,13 +461,10 @@ class Smart_analytics extends MY_Controller {
 					$prepareGraphTotalUserData['newuser'][$j] 		= intval($val[3]);
 					$j++;
 				}
-				
-				
-			
-			  $resultData['grid'] =$prepareData;
-			  $resultData['graph'] =$prepareGraphTotalUserData;
-			  echo json_encode($resultData,true);
-			 EXIT;
+			$resultData['grid'] =$prepareData;
+			$resultData['graph'] =$prepareGraphTotalUserData;
+			echo json_encode($resultData,true);
+			EXIT;
 		}ELSE{
 			$data['welcome'] = $this;
 			$this->show_view('analytics_version',$data);
@@ -465,41 +472,26 @@ class Smart_analytics extends MY_Controller {
 	}
 	
 	  function Carrier(){
-	  
-		if(!empty($_POST))
-                    {
+		if(!empty($_POST)){
 			$resultData = array();
 			$days = $this->input->post('daydiff');
-                        
-			if($days === 'Today')
-				 $days =1;
-                        
-                        $sqlData = array();
-                        
-                        if(is_array($days))
-                        {
-                            $sqlData['startdate'] =$days[0]." 00:00:00";
-                            $sqlData['enddate']   = $days[1]." 23:59:59";
-                           // print_r($days);die;
-                        }
-                        else
-                        {
-                           if($days==365)
-                           {
-                               $sqlData['startdate'] = date("Y")."-01-01"." 00:00:00";
-                               $sqlData['enddate']=   date("Y")."-12-01"." 23:59:59";
-                           }
-                           else 
-                           {
-                             $dayDiff = $this->getDateIntervel($days);                        
-                         
-                             $sqlData['startdate'] = $dayDiff['startdate']." 00:00:00";
-                             $sqlData['enddate']=   $dayDiff['enddate']." 23:59:59";
-                            }
-                        }
-			//echo $days;
-			//print_r($sqlData);
-                       //die;
+            if($days === 'Today' || $days ===1)
+				$days =1;
+				
+				$sqlData = array();
+				 if(is_array($days)){
+					$sqlData['startdate'] =$days[0];
+					$sqlData['enddate']   = $days[1];
+				} else{
+				   if($days==365) {
+					   $sqlData['startdate'] = date("Y")."-01-01";
+					   $sqlData['enddate']=   date("Y")."-12-01";
+				   } else {
+					 $dayDiff = $this->getDateIntervel($days);                        
+					 $sqlData['startdate'] = $dayDiff['startdate'];
+					 $sqlData['enddate']=   $dayDiff['enddate'];
+					}
+				}
 			$deviceUserData	 =	$this->newanalytics_model->getDevicedata($sqlData);
 			$deviceNewUserData	 =	$this->newanalytics_model->getDeviceNewUser($sqlData);
 			$deviceUserTemp = array();
@@ -543,28 +535,21 @@ class Smart_analytics extends MY_Controller {
 				}
 				$ctu = array();
 				$cnu = array();
-                                
-                                
-                                            
-				foreach($prepareData as $val){
+                foreach($prepareData as $val){
 					$v1 = array("1",$val[2]);
 					$v2 = array("1",$val[3]);
-                                        $cl = $this->random_color();
-                                        $hl = $this->random_color();
-                                        $ctu[]=array('value'=>intval($val[2]),'color'=>$cl,'highlight'=>$hl,'label'=>$val[0]);
-                                        $cnu[]=array('value'=>intval($val[3]),'color'=>$cl,'highlight'=>$hl,'label'=>$val[0]);
-					//$prepareGraphTotalUserData[] = array('label'=>$val[0],'data'=>array($v1));
-					//$prepareGraphNewUserData[] = array('label'=>$val[0],'data'=>array($v2));
-				}
+					$cl = $this->random_color();
+					$hl = $this->random_color();
+					$ctu[]=array('value'=>intval($val[2]),'color'=>$cl,'highlight'=>$hl,'label'=>$val[0]);
+					$cnu[]=array('value'=>intval($val[3]),'color'=>$cl,'highlight'=>$hl,'label'=>$val[0]);
+			}
 				///	var data = [{ label: "Ipad2",  data: [[1,25]]},	];
-                                
-				$resultData['grid'] =$prepareData;
-			        $resultData['totalusergraph'] =$ctu;
-                                $resultData['newusergraph'] =$cnu;
-
-				echo json_encode($resultData,true);
-				EXIT;
-			}else{
+            $resultData['grid'] =$prepareData;
+			$resultData['totalusergraph'] =$ctu;
+			$resultData['newusergraph'] =$cnu;
+			echo json_encode($resultData,true);
+			EXIT;
+		}else{
 			$data['welcome'] = $this;
 			$this->show_view('analytics_carrier',$data);
 		}
