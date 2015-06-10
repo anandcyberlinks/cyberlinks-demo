@@ -66,7 +66,7 @@ class User extends REST_Controller
 	if($result >0){
             $this->response(array('code'=>1, 'id' => $result), 200);
         }  else {
-            $this->response(array('code'=>0,'error' => "No record found"), 404);
+            $this->response(array('code'=>0,'error' => "No record found"), 200);
         }
     }
     
