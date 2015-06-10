@@ -494,8 +494,8 @@ class Smart_analytics extends MY_Controller {
                         }
 			
 			//$dayDiff = $this->getDateIntervel($days);
-			$deviceUserData	 =	$this->newanalytics_model->getDevicedata($dayDiff);
-			$deviceNewUserData	 =	$this->newanalytics_model->getDeviceNewUser($dayDiff);
+			$deviceUserData	 =	$this->newanalytics_model->getDevicedata($sqlData);
+			$deviceNewUserData	 =	$this->newanalytics_model->getDeviceNewUser($sqlData);
 			$deviceUserTemp = array();
 			foreach($deviceUserData as $key=>$val){
 				$deviceUserTemp[$val['device_type']] =$deviceUserData[$key];
