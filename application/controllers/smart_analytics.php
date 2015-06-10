@@ -487,13 +487,22 @@ class Smart_analytics extends MY_Controller {
                         }
                         else
                         {
-                           $dayDiff = $this->getDateIntervel($days);                        
+                           if($days==365)
+                           {
+                               $sqlData['startdate'] = date("Y")."-01-01"." 00:00:00";
+                               $sqlData['enddate']=   date("Y")."-12-01"." 23:59:59";
+                           }
+                           else 
+                           {
+                             $dayDiff = $this->getDateIntervel($days);                        
                          
-                            $sqlData['startdate'] = $dayDiff['startdate']." 00:00:00";
-                            $sqlData['enddate']=   $dayDiff['enddate']." 23:59:59";
+                             $sqlData['startdate'] = $dayDiff['startdate']." 00:00:00";
+                             $sqlData['enddate']=   $dayDiff['enddate']." 23:59:59";
+                            }
                         }
-			
-			//$dayDiff = $this->getDateIntervel($days);
+			//echo $days;
+			//print_r($sqlData);
+                       //die;
 			$deviceUserData	 =	$this->newanalytics_model->getDevicedata($sqlData);
 			$deviceNewUserData	 =	$this->newanalytics_model->getDeviceNewUser($sqlData);
 			$deviceUserTemp = array();
