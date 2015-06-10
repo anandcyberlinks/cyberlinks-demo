@@ -19,7 +19,7 @@
                     <!-- Check all button -->
                     <a class="btn btn-default btn-sm reservation" onclick="dateRange()"><i class="fa fa-calendar"></i></a>
                     <div class="btn-group ">
-                      <a class="btn btn-default btn-sm year-class" value="365">2015</a>
+                      <a class="btn btn-default btn-sm year-class" value="365"><?php echo date("Y"); ?></a>
                       <a class="btn btn-default btn-sm active-header-btn today-class" value="1">Today</a>
                       <a class="btn btn-default btn-sm week-class" value="7">7 Days</a>
                       <a class="btn btn-default btn-sm month-class" value="30">30 Days</a>
@@ -113,8 +113,7 @@
    <script>
    var myDoughnutChart1;
    var myDoughnutChart2;
-  var drawdata = [{value:0,color:"#370bff",highlight:"#affcda",label:"Galaxy S3"},
-            {value:2,color:"#e74e04",highlight:"#33f723",label:"testing"}];
+  var drawdata = [];
 
    function parseJson(data)
                 {        
@@ -144,9 +143,8 @@
                                 
                                 RemoveGraph();
                                 DrawBarGraph(eval(data.totalusergraph),eval(data.newusergraph)) ;                                    
-                                  }
-                                     });
-					});
+                                  }});
+				});
 				}
    
    
@@ -193,7 +191,7 @@
 		return "<div style='font-size:8pt; text-align:center; padding:2px; color:white;'>" + label + "<br/>" + Math.round(series.percent) + "%</div>";
 	}
         
-            DrawBarGraph(drawdata,drawdata);
+           DrawBarGraph(drawdata,drawdata);
         });
       
       function dateRange($divs)
