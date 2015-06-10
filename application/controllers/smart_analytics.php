@@ -395,6 +395,10 @@ class Smart_analytics extends MY_Controller {
 	}
         
     function Devices(){
+		
+			
+
+	
 		$data['welcome'] = $this;
 		$this->show_view('analytics_device',$data);
 	}
@@ -463,8 +467,73 @@ class Smart_analytics extends MY_Controller {
 	}
 	
 	  function Carrier(){
-		$data['welcome'] = $this;
-		$this->show_view('analytics_carrier',$data);
+	  
+		if(!empty($_POST)){
+			$resultData[] = array();
+			$days = $this->input->post('daydiff');
+			if($days === 'Today')
+				 $days =1;
+			
+			$dayDiff = $this->getDateIntervel($days);
+			$deviceUserData	 =	$this->newanalytics_model->getDevicedata($dayDiff);
+			$deviceNewUserData	 =	$this->newanalytics_model->getDeviceNewUser($dayDiff);
+			$deviceUserTemp = array();
+			foreach($deviceUserData as $key=>$val){
+				$deviceUserTemp[$val['device_type']] =$deviceUserData[$key];
+			}
+			$deviceNewTemp = array();
+			foreach($deviceNewUserData as $key=>$val){
+				$deviceNewTemp[$val['device_type']] =$deviceNewUserData[$key];
+			}
+			$deviceUserCount = sizeof($deviceUserTemp);//7
+			$deviceNewUserCount = sizeof($deviceNewTemp); //4
+			$i = 0;
+			$prepareData = array();
+			if($deviceUserCount < $deviceNewUserCount)
+			{
+				foreach($deviceNewTemp as $key=>$val){
+					$prepareData[$i][] = $val['device_type'];
+					$prepareData[$i][] = $val['totalsession'];
+					$prepareData[$i][] = $val['totaluser'];
+					if(isset($deviceUserTemp[$key]) && is_array($deviceUserTemp[$key])){
+						$prepareData[$i][] =  @$deviceUserTemp[$key]['newuser'];
+					}else{ 
+						$prepareData[$i][] =0;
+					}$i++;
+				}
+			}else{
+				foreach($deviceUserTemp as $key=>$val){
+					if(isset($deviceNewTemp[$key]) && is_array($deviceNewTemp[$key])){
+						$prepareData[$i][] = $deviceUserTemp[$key]['device_type'];
+						$prepareData[$i][] = $deviceUserTemp[$key]['totalsession'];
+						$prepareData[$i][] = $deviceUserTemp[$key]['totaluser'];
+						$prepareData[$i][] = $deviceNewTemp[$key]['newuser'];
+					}else{
+						$prepareData[$i][] = $val['device_type'];
+						$prepareData[$i][] =  $val['totalsession'];
+						$prepareData[$i][] = $val['totaluser'];
+						$prepareData[$i][] = 0;
+						}$i++;
+					}
+				}
+				$prepareGraphNewUserData = array();
+				$prepareGraphTotalUserData = array();
+				foreach($prepareData as $val){
+					$v1 = array("1",$val[2]);
+					$v2 = array("1",$val[3]);
+					$prepareGraphTotalUserData[] = array('label'=>$val[0],'data'=>array($v1));
+					$prepareGraphNewUserData[] = array('label'=>$val[0],'data'=>array($v2));
+				}
+				///	var data = [{ label: "Ipad2",  data: [[1,25]]},	];
+				$resultData['grid'] =$prepareData;
+			    $resultData['totalusergraph'] =$prepareGraphTotalUserData;
+
+				echo json_encode($resultData,true);
+				EXIT;
+			}else{
+			$data['welcome'] = $this;
+			$this->show_view('analytics_carrier',$data);
+		}
 	}
         
     function Platforms(){
