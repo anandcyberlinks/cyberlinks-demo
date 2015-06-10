@@ -14,7 +14,7 @@
               <div class="box box-primary">
                 <div class="box-header">
                     <div class="logo app-versions"></div>
-                    <h3 class="timeHeading pull-left">Devices</h3>
+                    <h3 class="timeHeading pull-left">Carrier</h3>
           <div class="mailbox-controls pull-right">
                     <!-- Check all button -->
                     <a class="btn btn-default btn-sm reservation" onclick="dateRange()"><i class="fa fa-calendar"></i></a>
@@ -44,7 +44,7 @@
                       <tr role="row"><th style="width: 167px;">Device</th><th>Total Sessions</th><th>Total Users</th><th>New Users</th></tr>
                     </thead>
                     <tbody>
-                    <tr role="row" class="odd">
+                    <!-- <tr role="row" class="odd">
                         <td class="sorting_1">Galaxy S3</td>
                         <td>16,368</td>
                         <td>15,678</td>
@@ -67,7 +67,7 @@
                         <td>16,368</td>
                         <td>15,678</td>
                         <td>3,583</td>  
-                    </tr>               
+                    </tr>  -->         
                     </tbody>
                   </table></div></div></div>
                 </div><!-- /.box-body -->
@@ -102,7 +102,42 @@
     <script type="text/javascript" language="javascript" src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" language="javascript" src="//cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.js"></script>             
    <script>
+   
+   
+   function parseJson(data)
+                {        
+                   $('#example1').dataTable({
+                     data: data,
+                     bFilter: false,
+                     bLengthChange: false,
+                     }); 
+                 }
+   	function ajaxCall(){
+			str = $('.btn-group').find(".active-header-btn").text();
+			
+			var num = +str.match(/-?\d+\.?\d*/);
+			
+                      	$(function()
+                        { // start of doc ready.
+                            $.ajax({ 	 	
+                            dataType:'json',
+                                  url: 'Carrier',
+                                  data: {'daydiff': num}, // change this to send js object
+                                  type: "post",
+                                success: function(data){   
+                                //   console.log(data.grid);
+								  //  console.log(eval(data.totalusergraph));
+                                $("#example1").dataTable().fnDestroy();
+                                parseJson(data.grid);    
+                                                                        
+                                  }
+                                     });
+					});
+				}
+   
+   
       $(document).ready(function(){
+	  ajaxCall();
            $('#example1').dataTable({
               bFilter: false,
               bLengthChange: false,
@@ -110,14 +145,20 @@
           $('.mailbox-controls .btn-default').click(function () {
             $('.btn-default').removeClass('active-header-btn');
             $(this).addClass('active-header-btn'); 
+			ajaxCall();
           });
+		  
+		  
         $(".reservation").daterangepicker();
-	var data = [
+			var data = [
 			{ label: "Ipad2",  data: [[1,25]]},
 			{ label: "Galaxy S3",  data: [[1,30]]},
 			{ label: "iPhone 3GS",  data: [[1,15]]},
 			{ label: "iPhone4",  data: [[1,40]]},
+			{ label: "iPhone9",  data: [[1,48]]},
 		];
+		
+		
         function labelFormatter(label, series) {
 		return "<div style='font-size:8pt; text-align:center; padding:2px; color:white;'>" + label + "<br/>" + Math.round(series.percent) + "%</div>";
 	}
