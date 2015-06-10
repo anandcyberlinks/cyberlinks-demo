@@ -333,7 +333,7 @@ class Layout extends MY_Controller {
         //print_r($data['data']); die;
         $this->show_view('userProfile', $data);
     }
-
+    
     function checkemail() {
         $email = $_GET['email'];
         $this->db->select('id');

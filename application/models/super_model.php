@@ -2,6 +2,12 @@
 
 class Super_model extends CI_Model {
 
+    function __construct()
+    {
+       parent::__construct();
+       $this->load->database();
+       
+    }
     function countuser($id, $searchterm) {
         $this->db->where('owner_id', $id);
         if(isset($searchterm['status']) && $searchterm['status'] !=''){
@@ -22,9 +28,29 @@ class Super_model extends CI_Model {
         return count($query->result());
     }
     
-    function countCuser($id) {
-        $this->db->where('owner_id', $id);
-        $query = $this->db->get('customers');
+    function getowner() {
+        $this->db->select('id,username');
+        $this->db->from('users');
+        $query = $this->db->get();
+        return $query->result();
+    }
+    function countCuser($searchterm) {
+        $this->db->select('*');
+        $this->db->from('customers');
+        if(isset($searchterm['status']) && $searchterm['status'] !=''){
+            $this->db->where('status',trim($searchterm['status']));
+        }
+        if(isset($searchterm['username']) && $searchterm['username'] !=''){
+            $this->db->like('username',trim($searchterm['username']));
+        }
+        if(isset($searchterm['owner_id']) && $searchterm['owner_id'] !=''){
+            $this->db->where('owner_id',trim($searchterm['owner_id']));
+        }
+        if(isset($searchterm['email']) && $searchterm['email'] !=''){
+            $this->db->where('email',trim($searchterm['email']));
+        }
+        //$this->db->where('owner_id', $id);
+        $query = $this->db->get();
         return count($query->result());
     }
 
@@ -56,8 +82,6 @@ class Super_model extends CI_Model {
         if(isset($searchterm['email']) && $searchterm['email'] !=''){
             $this->db->where('users.email',trim($searchterm['email']));
         }
-        
-        
         $this->db->order_by('id', 'DESC');
         $this->db->limit($limit, $start);
         $query = $this->db->get();
@@ -65,14 +89,27 @@ class Super_model extends CI_Model {
         //print_r($query->result()); die;
         return $query->result();
     }
-    public function fetchcUser($id, $limit, $start, $sort = '', $sort_by = '') {
-        $this->db->select('id, username, email, first_name, last_name, gender, dob, contact_no, image, status, created');
-        $this->db->from('customers');
-        $this->db->where('owner_id', $id);
+    public function fetchcUser($searchterm, $limit, $start, $sort = '', $sort_by = '') {
+        $this->db->select('a.id, a.username, a.email, a.first_name, a.last_name, a.gender, a.dob, a.contact_no, a.image, a.status, a.created, a.owner_id, a.online, b.username as owner_name');
+        $this->db->from('customers a');
+        $this->db->join('users b','a.owner_id=b.id','left');
+        if(isset($searchterm['status']) && $searchterm['status'] !=''){
+            $this->db->where('a.status',trim($searchterm['status']));
+        }
+        if(isset($searchterm['username']) && $searchterm['username'] !=''){
+            $this->db->like('a.username',trim($searchterm['username']));
+        }
+        if(isset($searchterm['owner_id']) && $searchterm['owner_id'] !=''){
+            $this->db->where('a.owner_id',trim($searchterm['owner_id']));
+        }
+        if(isset($searchterm['email']) && $searchterm['email'] !=''){
+            $this->db->where('a.email',trim($searchterm['email']));
+        }
+        //$this->db->where('owner_id', $id);
         $this->db->order_by('id', 'DESC');
         $this->db->limit($limit, $start);
         $query = $this->db->get();
-        //echo $this->db->last_query(); 
+        //  echo $this->db->last_query(); 
         // print_r($query->result()); die;
         return $query->result();
     }
@@ -106,7 +143,26 @@ class Super_model extends CI_Model {
         $this->db->update('users', $data);
         return $token;
     }
-
+    public function updatestatuscustomer($data) {
+        $id = $data['id'];
+        $status = $data['status'];
+        $this->db->where('id', $id);
+        if ($status == 'active') {
+            $data = array('status' => 'inactive');
+        }
+        if ($status == 'inactive') {
+            $data = array('status' => 'active');
+        }
+        $this->db->where('id', $id);
+        $res = $this->db->update('customers', $data);
+        //echo $this->db->last_query();die;
+        return $res;
+    }
+    function cprofile($data) {
+        $this->db->where('id', $data);
+        $query = $this->db->get('customers');
+        return $query->result();
+    }
     public function Checkemail($data) {
         $email = $data['email'];
         $this->db->select('*');
@@ -163,7 +219,19 @@ class Super_model extends CI_Model {
         $this->db->update('users', $data);
         
     }
-
+    function do_upload($user_id, $image, $abpath) {
+            $this->db->where('id', $user_id);
+            $this->db->set('image', $image);
+            $this->db->update('customers');
+        //echo $this->db->last_query(); die;
+    }
+     public function fetchdata($id) {
+        $this->db->select('*');
+        $this->db->from('customers');
+        $this->db->where('id', $id);
+        $query = $this->db->get();
+        return $query->result();
+    }
 }
 
 /* 
