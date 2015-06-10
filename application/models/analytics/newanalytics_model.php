@@ -393,8 +393,7 @@ class Newanalytics_model extends CI_Model{
 			$this->db->order_by('date', 'ASC'); 
 			$query = $this->db->get('app_session');
 			return $result = $query->result_array();
-                      
-	 }
+        }
 	 
 	 
 	 
@@ -436,6 +435,49 @@ class Newanalytics_model extends CI_Model{
 			$query = $this->db->get('app_session');
 			return $result = $query->result_array();
 			//echo $this->db->last_query(); die;
+			//return $newUser = $query->num_rows();
+		 }
+		 
+		 
+	/* 	 
+	 SELECT DISTINCT (customer_device.device_type), count( app_session.id ) AS totalsession, count( DISTINCT app_session.customer_device_id ) AS totaluser
+FROM (
+`app_session`
+)
+INNER JOIN `customer_device` ON `customer_device`.`id` = `app_session`.customer_device_id
+WHERE `app_session`.`session_start`
+BETWEEN '2015-05-19 00:00:00'
+AND '2015-06-19 23:59:59'
+GROUP BY customer_device.device_type */
+
+		public function getDevicedata($data=array())
+        {
+			$this->db->select("DISTINCT (customer_device.device_type),count(app_session.id) as totalsession,count(distinct app_session.customer_device_id) as totaluser",false);
+			$this->timeInterval($data,"app_session.session_start");
+			$this->db->join('customer_device','customer_device.id = app_session.customer_device_id', 'INNER');
+			$this->db->where('customer_device.device_type !=""');
+			$this->db->group_by('customer_device.device_type');
+			$query = $this->db->get('app_session');
+			$result = $query->result_array();
+			//echo $this->db->last_query();
+			//die;
+			//	$this->db->order_by('hr', 'ASC');  
+			//echo $this->db->last_query();
+			//die;	
+			return $result = $query->result_array();
+        }
+		
+		
+		function getDeviceNewUser($data=array()){
+			$this->db->select("(customer_device.device_type),count(distinct app_session.customer_device_id) as newuser",false);
+			$this->timeInterval($data,"app_session.session_start");
+			$this->db->join('customer_device','customer_device.id = app_session.customer_device_id', 'INNER');
+			$this->db->where('customer_device.device_type !=""');
+			$this->db->group_by('customer_device.device_type');
+			$this->db->where('status',1);
+			$query = $this->db->get('app_session');
+			return $result = $query->result_array();
+			echo $this->db->last_query(); die;
 			//return $newUser = $query->num_rows();
 		 }
 		 
