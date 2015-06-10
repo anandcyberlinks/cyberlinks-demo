@@ -85,5 +85,21 @@ $db['default']['autoinit'] = TRUE;
 $db['default']['stricton'] = FALSE;
 */
 
+$db['stitch_report']['hostname'] = 'localhost';
+$db['stitch_report']['username'] = 'root';
+$db['stitch_report']['password'] = 'admin123';
+$db['stitch_report']['database'] = 'gpi';
+$db['stitch_report']['dbdriver'] = 'mysql';
+$db['stitch_report']['dbprefix'] = '';
+$db['stitch_report']['pconnect'] = TRUE;
+$db['stitch_report']['db_debug'] = TRUE;
+$db['stitch_report']['cache_on'] = FALSE;
+$db['stitch_report']['cachedir'] = '';
+$db['stitch_report']['char_set'] = 'utf8';
+$db['stitch_report']['dbcollat'] = 'utf8_general_ci';
+$db['stitch_report']['swap_pre'] = '';
+$db['stitch_report']['autoinit'] = TRUE;
+$db['stitch_report']['stricton'] = FALSE;
+///----------------///
 /* End of file database.php */
 /* Location: ./application/config/database.php */
