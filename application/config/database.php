@@ -49,9 +49,9 @@ $active_group = 'default';
 $active_record = TRUE;
 
 //$db['default']['hostname'] = 'anand.local';
-$db['default']['hostname'] = '192.168.10.7';
+$db['default']['hostname'] = 'localhost';
 //$db['default']['username'] = 'root';
-$db['default']['username'] = 'localhost';
+$db['default']['username'] = 'root';
 //$db['default']['password'] = '@cyberlinks';
 $db['default']['password'] = 'admin123';
 $db['default']['database'] = 'multitvfinal';
