@@ -157,7 +157,25 @@ class New_analytics extends MY_Controller {
 		$this->show_view('newdashboard',$data);
 	}
         
-        function Versions(){
+    function Versions(){
+	die('ss');
+		$days = $this->input->post('daydiff');
+		if($days === 'Today')
+			 $days =1;
+		
+		$dayDiff = $this->getDateIntervel($days);
+		$prepareData = array();
+	    $sqlData = array();
+		
+		$dayDiff['startdate'] = '2015-05-19';
+		$dayDiff['enddate'] = '2015-05-19';
+		$sqlData['startdate'] = $dayDiff['startdate']." 00:00:00";
+		$sqlData['enddate']=   $dayDiff['enddate']." 23:59:59";
+		
+		
+		$TotalSession 			=	$this->Newanalytics_model->getAppVersiondata($sqlData);
+		die('ss');
+		
 		$data['welcome'] = $this;
 		$this->show_view('newdashboard',$data);
 	}

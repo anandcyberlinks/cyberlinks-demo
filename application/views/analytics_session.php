@@ -373,7 +373,7 @@ function DrawLineChart(drawdata)
         //lineChartOptions.responsive = true;
         myLineChart = new Chart(ctx).Line(drawdata,lineChartOptions);
         //Chart.defaults.global.responsive = true;
-} 
+}						 
 
 function RemoveGraph()
 {

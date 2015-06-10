@@ -163,7 +163,6 @@ class Smart_analytics extends MY_Controller {
 					   $k++;
 						}
 					}
-			
 				echo json_encode($resultData,true);
 				exit;
 		}else{
@@ -215,41 +214,29 @@ class Smart_analytics extends MY_Controller {
     function Sessions(){
         
 		$days = $this->input->post('daydiff');
-		if($days === 'Today')
-                    $days =1;
+			if($days === 'Today')
+                $days =1;
+				
                 if (!empty($_POST)) 
-		{ 
-                   // print_r($_POST);die;
-                   
-                  
-                    if($days==365)
-                    {
-                        
-                        $TotalSession =	$this->newanalytics_model->getSessionDataGraphYear();
+				{ 			
+				if($days==365)
+                    {	 $TotalSession =	$this->newanalytics_model->getSessionDataGraphYear();
                         $newSession =	$this->newanalytics_model->getNewSessionDataGraphYear();                
                     }
                     else
                     {
-                        
                         $sqlData = array();
-                        
                         if(is_array($days))
                         {
                             $sqlData['startdate'] =$days[0]." 00:00:00";
                             $sqlData['enddate']   = $days[1]." 23:59:59";
-                           // print_r($days);die;
+                        }else{
+                         $dayDiff = $this->getDateIntervel($days);                        
+                         $sqlData['startdate'] = $dayDiff['startdate']." 00:00:00";
+                         $sqlData['enddate']=   $dayDiff['enddate']." 23:59:59";
                         }
-                        else
-                        {
-                           $dayDiff = $this->getDateIntervel($days);                        
-                         
-                            $sqlData['startdate'] = $dayDiff['startdate']." 00:00:00";
-                            $sqlData['enddate']=   $dayDiff['enddate']." 23:59:59";
-                        }
-
-                        $TotalSession =	$this->newanalytics_model->getSessionDataGraph($sqlData);
+						$TotalSession =	$this->newanalytics_model->getSessionDataGraph($sqlData);
                         $newSession =	$this->newanalytics_model->getNewSessionDataGraph($sqlData);                
-                       
                     }
                     
                   //   print_r($newSession);die;
@@ -266,35 +253,34 @@ class Smart_analytics extends MY_Controller {
                     $total =0;
                     $new = 0;
                     $unique = 0;
-                    //print_r($TotalSession);
-                    
+					
                     foreach($TotalSession as $key => $value)
                     {            
-                            $nkey=$value['date'];
-                            $labels[]=$value['date'];
-                            if(is_array($newSession)>0 && array_key_exists($key,$newSession) && array_key_exists('newsession',$newSession[$key]))
-                            {  
-                             $value['newsession']= $newSession[$key]['newsession'];
-                            }
-                            else
-                            {
-                                $value['newsession']=0;
-                            }
+						$nkey=$value['date'];
+						$labels[]=$value['date'];
+						if(is_array($newSession)>0 && array_key_exists($key,$newSession) && array_key_exists('newsession',$newSession[$key]))
+						{  
+						 $value['newsession']= $newSession[$key]['newsession'];
+						}
+						else
+						{
+							$value['newsession']=0;
+						}
 
-                        //    $resultData['graph'][$nkey] = $value;
-                            
-                                    
-                           $ts[]= $value['totalsession']=($value['totalsession']==NULL && array_key_exists('totalsession',$value))?0:$value['totalsession'];
-                           $ns[]= $value['newsession']=($value['newsession']==NULL && array_key_exists('newsession',$value))?0:$value['newsession'];
-                           $us[]= $value['uniquesession']=($value['uniquesession']==NULL && array_key_exists('uniquesession',$value))?0:$value['uniquesession'];
-                            
-                            $gridArray = array($nkey,$value['totalsession'],$value['newsession'],$value['uniquesession']);
-                            
-                            $resultData['grid'][] = $gridArray;
-                          
-                             $total +=$value['totalsession'];
-                             $unique +=$value['uniquesession'];
-                             $new +=$value['newsession'];
+					//    $resultData['graph'][$nkey] = $value;
+						
+								
+					   $ts[]= $value['totalsession']=($value['totalsession']==NULL && array_key_exists('totalsession',$value))?0:$value['totalsession'];
+					   $ns[]= $value['newsession']=($value['newsession']==NULL && array_key_exists('newsession',$value))?0:$value['newsession'];
+					   $us[]= $value['uniquesession']=($value['uniquesession']==NULL && array_key_exists('uniquesession',$value))?0:$value['uniquesession'];
+						
+						$gridArray = array($nkey,$value['totalsession'],$value['newsession'],$value['uniquesession']);
+						
+						$resultData['grid'][] = $gridArray;
+					  
+						 $total +=$value['totalsession'];
+						 $unique +=$value['uniquesession'];
+						 $new +=$value['newsession'];
                     } 
                     $datasets[] =array(
                         'label'=>'Total Session',
@@ -311,8 +297,6 @@ class Smart_analytics extends MY_Controller {
                         'strokeColor'=>'rgba(190,235,159,0.75)',
                         'pointColor' =>'rgba(190,235,159,0.75)',
                         'data'=>$us);
-                        
-                            
                     $resultData['graph']['labels']=$labels;
                     $resultData['graph']['datasets']=$datasets;
                     $resultData['total']=array($total,$unique,$new);
@@ -458,8 +442,21 @@ class Smart_analytics extends MY_Controller {
 						$i++;
 					}
 				}
-			 $resultData['grid'] =$prepareData;
-			 echo json_encode($resultData,true);
+				
+				$prepareGraphTotalUserData =  array();
+				$j = 0;
+				foreach($prepareData as $val){
+					$prepareGraphTotalUserData['label'][$j] 		= $val[0];
+					$prepareGraphTotalUserData['totaluser'][$j] 	= intval($val[2]);
+					$prepareGraphTotalUserData['newuser'][$j] 		= intval($val[3]);
+					$j++;
+				}
+				
+				
+			
+			  $resultData['grid'] =$prepareData;
+			  $resultData['graph'] =$prepareGraphTotalUserData;
+			  echo json_encode($resultData,true);
 			 EXIT;
 		}ELSE{
 			$data['welcome'] = $this;

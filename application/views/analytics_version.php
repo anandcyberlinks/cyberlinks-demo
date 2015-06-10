@@ -30,7 +30,11 @@
                     </div><!-- /.btn-group -->
                   </div>
                 </div>
-                  <div id="line-chart" style="height: 300px;"></div>
+                  <!--<div id="line-chart" style="height: 300px;"></div>-->
+				   <div>
+                      
+                      <canvas id="line-chart" width="1250" height="250"></canvas>
+                  </div> 
               </div><!--/.col (left) -->
             
 
@@ -91,13 +95,13 @@
         </section><!-- /.content -->
       </div><!-- /.content-wrapper -->
     <!-- jQuery 2.1.3 -->
-     <script src="<?php echo base_url() ?>assets/js/plugins/flot/jquery.flot.min.js" type="text/javascript"></script>
+    <!-- <script src="<?php //echo base_url() ?>assets/js/plugins/flot/jquery.flot.min.js" type="text/javascript"></script>
     <!-- FLOT RESIZE PLUGIN - allows the chart to redraw when the window is resized -->
-    <script src="<?php echo base_url() ?>assets/js/plugins/flot/jquery.flot.resize.min.js" type="text/javascript"></script>
+    <!-- <script src="<?php //echo base_url() ?>assets/js/plugins/flot/jquery.flot.resize.min.js" type="text/javascript"></script>
     <!-- FLOT PIE PLUGIN - also used to draw donut charts -->
-    <script src="<?php echo base_url() ?>assets/js/plugins/flot/jquery.flot.pie.min.js" type="text/javascript"></script>
+  <!--   <script src="<?php //echo base_url() ?>assets/js/plugins/flot/jquery.flot.pie.min.js" type="text/javascript"></script>
     <!-- FLOT CATEGORIES PLUGIN - Used to draw bar charts -->
-    <script src="<?php echo base_url() ?>assets/js/plugins/flot/jquery.flot.categories.min.js" type="text/javascript"></script>
+    <!-- <script src="<?php //echo base_url() ?>assets/js/plugins/flot/jquery.flot.categories.min.js" type="text/javascript"></script> -->
           <script src="<?php echo base_url() ?>assets/js/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js" type="text/javascript"></script>
     <script src="<?php echo base_url() ?>assets/js/plugins/jvectormap/jquery-jvectormap-world-mill-en.js" type="text/javascript"></script>
       <script src="<?php echo base_url() ?>assets/js/plugins/daterangepicker/daterangepicker.js" type="text/javascript"></script>
@@ -105,127 +109,154 @@
                 <script src="<?php echo base_url() ?>assets/js/plugins/morris/morris.min.js"></script>
                 <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.css">
     <script type="text/javascript" language="javascript" src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" language="javascript" src="//cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.js"></script>             
+    <script type="text/javascript" language="javascript" src="//cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.js"></script> 
+  <script type="text/javascript" language="javascript" src="<?php echo base_url() ?>assets/js/plugins/chartjs/Chart.min.js"></script>
+<script type="text/javascript" language="javascript" src="<?php echo base_url() ?>assets/js/plugins/chartjs/Chart.js"></script>
+	
    <script>
       
-	   function parseJson(data)
-                {        
-                   $('#example1').dataTable({
-                     data: data,
-                     bFilter: false,
-                     bLengthChange: false,
-                     }); 
-                 }
+	
+	function dataprepare(resultset){
+	
+	drawdata = {
+    //labels: ["January", "1", "March", "April", "May", "June", "July"],
+    labels: resultset.label,
+    datasets: [
+        {
+            label: "My First dataset",
+            fillColor: "rgba(220,220,220,0.5)",
+            strokeColor: "rgba(220,220,220,0.8)",
+            highlightFill: "rgba(220,220,220,0.75)",
+            highlightStroke: "rgba(220,220,220,1)",
+            data: resultset.totaluser
+        },
+        {
+            label: "My Second dataset",
+            fillColor: "rgba(151,187,205,0.5)",
+            strokeColor: "rgba(151,187,205,0.8)",
+            highlightFill: "rgba(151,187,205,0.75)",
+            highlightStroke: "rgba(151,187,205,1)",
+            data: resultset.newuser
+        }
+    ]
+}
+	return drawdata;
+};
+
+function DrawLineChart(drawdata){
+ 
+	 var areaChartOptions = {
+    //Boolean - Whether the scale should start at zero, or an order of magnitude down from the lowest value
+    scaleBeginAtZero : true,
+
+    //Boolean - Whether grid lines are shown across the chart
+    scaleShowGridLines : true,
+
+    //String - Colour of the grid lines
+    scaleGridLineColor : "rgba(0,0,0,.05)",
+
+    //Number - Width of the grid lines
+    scaleGridLineWidth : 1,
+
+    //Boolean - Whether to show horizontal lines (except X axis)
+    scaleShowHorizontalLines: true,
+
+    //Boolean - Whether to show vertical lines (except Y axis)
+    scaleShowVerticalLines: true,
+
+    //Boolean - If there is a stroke on each bar
+    barShowStroke : true,
+
+    //Number - Pixel width of the bar stroke
+    barStrokeWidth : 2,
+
+    //Number - Spacing between each of the X value sets
+    barValueSpacing : 5,
+
+    //Number - Spacing between data sets within X values
+    barDatasetSpacing : 1,
+	
+	responsive: true,
+
+    //String - A legend template
+    legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].fillColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>"
+
+}
+
+
+ var ctx = document.getElementById("line-chart").getContext("2d");
+ var myBarChart = new Chart(ctx).Bar(drawdata, areaChartOptions);
+        //var myNewChart = new Chart(ctx).PolarArea(data);
+        //lineChartOptions.datasetFill = false;
+        // var lineChartOptions =areaChartOptions;
+       // lineChartOptions.datasetFill = false;
+        //lineChartOptions.responsive = true;
+       // myLineChart = new Chart(ctx).Line(drawdata,lineChartOptions);
+        //Chart.defaults.global.responsive = true;
+		/* 	
+		new Chart(ctx).Bar(drawdata, {
+				barShowStroke: false
+			});
+	   */
+
+ } 
+ 
+	
+	  
+	 
+ function parseJson(data)
+	{        
+	   $('#example1').dataTable({
+		 data: data,
+		 bFilter: false,
+		 bLengthChange: false,
+		 }); 
+	 }
 	  
 	  function ajaxCall(){
 			str = $('.btn-group').find(".active-header-btn").text();
 			var num = +str.match(/-?\d+\.?\d*/);
-			
-                      	$(function()
-                        { // start of doc ready.
-                            $.ajax({ 	 	
-                            dataType:'json',
-                                  url: 'Versions',
-                                  data: {'daydiff': num}, // change this to send js object
-                                  type: "post",
-                                success: function(data){   
-                                //   console.log(data.grid);
-                                $("#example1").dataTable().fnDestroy();
-                                parseJson(data.grid);    
-                             }
-                        });
-					});
-				}
+			$(function()
+			{ // start of doc ready.
+				$.ajax({ 	 	
+				dataType:'json',
+					  url: 'Versions',
+					  data: {'daydiff': num}, // change this to send js object
+					  type: "post",
+					success: function(data){   
+				   // console.log(data.graph);
+					$("#example1").dataTable().fnDestroy();
+					parseJson(data.grid);
+					d=dataprepare(data.graph);
+					//RemoveGraph();
+					DrawLineChart(d);							
+				 }
+			});
+		});
+	}
 	  
 	  
 	  
 	  $(document).ready(function(){
 	  ajaxCall();
-          
-               
-                var data_today = [
-                  ['0',2666],
-                  ['1',2777],
-                  ['2',1000],
-                  ['3',2000],
-                  ['4',2500],
-                  ['5',8900],
-                  ['6',15000],
-                  ['7',5600],
-                  ['8',5892],
-                  ['9',1478],
-                  ['10',2356],
-                ];
-                var data_today1 = [
-                  ['0',100],
-                  ['1',27],
-                  ['2',14500],
-                  ['3',20060],
-                  ['4',250],
-                  ['5',800],
-                  ['6',5000],
-                  ['7',600],
-                  ['8',592],
-                  ['9',14780],
-                  ['10',23561],
-                ];
-          $('.mailbox-controls .btn-default').click(function () {
+            $('.mailbox-controls .btn-default').click(function () {
             $('.btn-default').removeClass('active-header-btn');
             $(this).addClass('active-header-btn'); 
 			ajaxCall();
           });
         $(".reservation").daterangepicker();
 
- var data = [[0, 110000],[1, 150000],[2, 25000],[3, 240000],[4, 130000],[5, 180000]];
-        var dataset = [{ label: "", data: data, color: "#5482FF" }];
-        var ticks = [[0, "1.0"], [1, "1.1"], [2, "1.2"], [3, "2.0"],[4, "2.1"], [5, "2.0.1"]];
- 
-        var options = {
-            series: {
-                bars: {
-                    show: true
-                }
-            },
-            bars: {
-                align: "center",
-                barWidth: 0.5
-            },
-            xaxis: {
-                axisLabel: "World Cities",
-                axisLabelUseCanvas: true,
-                axisLabelFontSizePixels: 12,
-                axisLabelFontFamily: 'Verdana, Arial',
-                axisLabelPadding: 10,
-                ticks: ticks
-            },
-            yaxis: {
-                axisLabel: "Average Temperature",
-                axisLabelUseCanvas: true,
-                axisLabelFontSizePixels: 12,
-                axisLabelFontFamily: 'Verdana, Arial',
-                axisLabelPadding: 3,
-                tickFormatter: function (v, axis) {
-                    return v;
-                }
-            },
-            legend: {
-                noColumns: 0,
-                labelBoxBorderColor: "#000000",
-                position: "nw"
-            },
-            grid: {
-                hoverable: true,
-                borderWidth: 2,
-                backgroundColor: { colors: ["#ffffff", "#EDF5FF"] }
-            }
-        };        
-         $.plot($("#line-chart"), dataset, options);
-        
-        });
+     });
       
-      function dateRange($divs) {
-        $("#"+$divs+" .reservation").daterangepicker('show');
-      }
+  function dateRange($divs) {
+	$("#"+$divs+" .reservation").daterangepicker('show');
+  }
+  
+	function RemoveGraph()
+	{
+		myBarChart.destroy();           
+	}
+
     </script>
 <style>
   h3.timeHeading
