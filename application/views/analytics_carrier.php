@@ -171,7 +171,9 @@
           ajaxCall('Today');
 		  
 		  
-        $(".reservation").daterangepicker();		
+        $(".reservation").daterangepicker({
+            format: 'YYYY-MM-DD',
+        });		
 		
 	/* Date Select Functionality */
          $('.applyBtn').on('click',function(){
