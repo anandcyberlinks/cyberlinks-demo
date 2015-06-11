@@ -364,16 +364,17 @@ function delete_user($id){
   
   function validate_device($id)
   {
-   $this->db->select('a.id');
+   $this->db->select('a.id,c.token as u_token');
    $this->db->from('customers a');
    $this->db->join('customer_device b','a.id=b.user_id');
+   $this->db->join('api_token c','a.id=c.user_id');
    $this->db->where('b.device_unique_id',$id);
    $this->db->limit(1);
    $query = $this->db->get();
   // echo '<br>'.$this->db->last_query();die;
    $result = $query->row();
    if($result)
-      return $result->id;
+      return $result;
    else
       return 0;
   }
