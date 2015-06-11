@@ -349,7 +349,7 @@ class Events extends REST_Controller
 					$data_history['type'] = 'Push';
 					$data_history['message'] = $data["message"];
 					$data_history['platform'] = 'android';
-					$data_history['audience'] = $_POST['notification_type'];
+					$data_history['audience'] = $data['notification_type'];
 					$data_history['sent_count'] = count($gcmRegIds);	
 					//------------------------//
 					//print_r($data_history);die;

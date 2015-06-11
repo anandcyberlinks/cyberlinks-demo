@@ -323,7 +323,7 @@ class Crons extends REST_Controller {
                         
                     if(!$result)
 					{
-						 $this->response('Failed to connet GCM', 404);
+						 //$this->response('Failed to connet GCM', 404);
 					}else{
 						//--- insert in history databse ---//
 						$data_history['push_id'] = $uniquid;
@@ -348,7 +348,7 @@ class Crons extends REST_Controller {
                     $new_gcmRegIds = array_chunk($gcmRegIds, NOTIFICATION_DEVICE_CHUNK);
                     foreach($new_gcmRegIds as $gcmIdArray){
                         $pushStatus = sendMessageThroughGCM($gcmIdArray, $message,$uniquid);
-                    } 
+                    }
                     //$pushStatus = sendMessageThroughGCM($gcmRegIds, $message,$uniquid);	//-- helper function --//			
                    if(!$pushStatus)
                     {
@@ -372,7 +372,7 @@ class Crons extends REST_Controller {
                 }
             }            
             //-- update status --//
-            echo $new_id;
+            
             if($new_id){
                 $data['status'] ='completed';                      
                 $this->update($data,$id);
@@ -384,6 +384,105 @@ class Crons extends REST_Controller {
         //SELECT * FROM `pushnotification_scheduler` WHERE `schedule_time` < NOW() and `status` = 'pending'
     }
 }
+
+
+    function subs_notification_get()
+    {
+        $this->load->helper('push');
+        $timestamp = strtotime("now");
+        $uniquid = uniqid($timestamp);          
+        $this->db->select('b.device_unique_id,b.platform as device_type,d.name as channel_name,e.date,e.show_time,e.end_date,e.end_time');
+		$this->db->from('customers a');
+		$this->db->join('customer_device b','a.id = b.user_id');
+        $this->db->join('subscribe_event c','a.id = c.user_id');
+        $this->db->join('channels d','c.channel_id = d.id');
+        $this->db->join('livechannel_epg e','e.channel_id=d.id','left');
+        $this->db->where("TIMESTAMPDIFF(MINUTE,CONCAT_WS(' ',e.date,e.show_time),NOW()) <=",65);
+        $this->db->where("TIMESTAMPDIFF(SECOND,CONCAT_WS(' ',e.date,e.show_time),NOW()) >",0);
+        $query = $this->db->get();
+       //echo $this->db->last_query();
+        $result = $query->result();
+        if($result){
+        foreach($query->result() as $key => $val){
+            if(strtolower($val->device_type)=='ios'){
+               $device_data['ios'][] = $val->device_unique_id;
+            }else if(strtolower($val->device_type)=='android'){
+                $device_data['android'][] = $val->device_unique_id;
+            }
+            $data['message'] = $val->channel_name;
+            $data['show_time'] = $val->date.' '.$val->show_time;
+            $data['device'] = $device_data;
+        }
+        //--- send notification ---//
+            foreach($data as $row){
+                $device_ids = $row['device'];
+                $message = $row['message']." Event is going to start at ". $row['show_time'];
+                //$notification_type = $row->notification_type;
+                //$id= $row->id;
+                
+                foreach($device_ids as $key=>$value)
+                {
+                    if($key=='ios'){
+                        //for($i=0;$i<count($value);$i++){		
+                        $deviceToken = $value;
+                        $result = apns($deviceToken,$message,$uniquid);  //-- helper function
+                            
+                        /*if(!$result)
+                        {
+                             //$this->response('Failed to connet GCM', 404);
+                        }else{
+                            //--- insert in history databse ---//
+                            $data_history['push_id'] = $uniquid;
+                            $data_history['type'] = 'Push';
+                            $data_history['message'] = $message;
+                            $data_history['platform'] = 'ios';
+                            $data_history['audience'] = $notification_type;
+                            $data_history['sent_count'] = count($deviceToken);									
+                            //------------------------//
+                             //-- insert data --//
+                            $this->save($data_history);
+                          $new_id = $this->db->insert_id();
+                          // $this->response("Message sent successfully", 200);                       
+                            //----------------//
+                        }*/
+                        //}
+                    }
+                    if($key=='android'){
+                        $gcmRegIds = $value;
+                        //  print_r($gcmRegIds);die;
+                        $message = array("m" => $pushMessage);	
+                        $new_gcmRegIds = array_chunk($gcmRegIds, NOTIFICATION_DEVICE_CHUNK);
+                        foreach($new_gcmRegIds as $gcmIdArray){
+                            $pushStatus = sendMessageThroughGCM($gcmIdArray, $message,$uniquid);
+                        }
+                        //$pushStatus = sendMessageThroughGCM($gcmRegIds, $message,$uniquid);	//-- helper function --//			
+                      /* if(!$pushStatus)
+                        {
+                            $this->response('Failed to connet GCM', 404);
+                        }else
+                        {
+                            //--- insert in history databse ---//
+                            $data_history['push_id'] = $uniquid;
+                            $data_history['type'] = 'Push';
+                            $data_history['message'] = $message;
+                            $data_history['platform'] = 'android';
+                            $data_history['audience'] = $notification_type;
+                            $data_history['sent_count'] = count($gcmRegIds);	
+                            //------------------------//
+                            //print_r($data_history);die;
+                            $this->save($data_history);
+                            $new_id = $this->db->insert_id();                                    
+                            //----------------//
+                           // echo "Notification send successfully";
+                        }	*/
+                    }
+                } 
+          
+          //echo '<pre>';  print_r($result);die;
+            //SELECT * FROM `pushnotification_scheduler` WHERE `schedule_time` < NOW() and `status` = 'pending'
+        }
+        }
+    }
 
     function save($data_history)
     {

@@ -1860,4 +1860,18 @@ abstract class REST_Controller extends CI_Controller
         $xmlobj->saveXML($path.$filename.".xml");
         return $path.$filename.".xml";
     }
+    
+    function sendmail($subject='no reply',$body='Test',$from,$to)
+    {
+        $this->load->library('email');
+       
+        $result = $this->email
+                ->from($from)
+                ->reply_to($from) // Optional, an account where a human being reads.
+                ->to($to)
+                ->subject($subject)
+                ->message($body)
+                ->send();
+        return $result;          
+    }
 }
