@@ -153,19 +153,23 @@ class User_model extends CI_Model {
 	  $query = $this->db->get();
 	  return $result = $query->result();
    }
-    public function searchdata($owner,$limit,$data){
-	  $this->db->select('id,username,image as thumbnail,online');
+    public function searchdata($owner,$param=array(),$data){
+	   if($param){
+            $this->db->limit($param['limit'],$param['offset']);            
+        }
+	  $this->db->select('id,first_name,last_name,image as thumbnail,online');
 	  $this->db->from('customers');
       $this->db->where('owner_id',$owner);
 	  $this->db->where('status','active');
-	  $this->db->like('username',$data['username']);
-	  $this->db->limit($limit['limit'],$limit['offset']);
+	  $this->db->like('first_name',$data['username']);
+	  $this->db->or_like('last_name',$data['username']);
+	//  $this->db->limit($limit['limit'],$limit['offset']);
 	  $query = $this->db->get();
-	  //echo '<br>'.$this->db->last_query();die;
+	 // echo '<br>'.$this->db->last_query();die;
 	  return $result = $query->result();
    }
     public function onlineuser($owner){
-	  $this->db->select('id,username,image as thumbnail,online');
+	  $this->db->select('id,first_name,last_name,image as thumbnail,online');
 	  $this->db->from('customers');
       $this->db->where('owner_id',$owner);
 	  $this->db->where('status','active');
@@ -175,20 +179,21 @@ class User_model extends CI_Model {
 	  return $result = $query->result();
    }
    public function follow_list($data){
-	  if(isset($data['by'])&&($data['by']!='')){
-		 $this->db->select('a.follow_user_id as user_id,a.user_id as follower_user_id,b.username as follower_user_name,b.image as thumbnail');
+	  if(isset($data['arg'])&&($data['arg']=='by')){
+		 $this->db->select('a.follow_user_id as user_id,a.user_id as follower_user_id,b.first_name,b.last_name ,b.image as thumbnail');
 		 $this->db->from('follow_user as a');
 		 $this->db->join('customers b','a.user_id = b.id','left');
 		 $this->db->where('follow_user_id',$data['id']);
 		 $query = $this->db->get();
 		 //echo '<br>'.$this->db->last_query();die;
 		 return $result = $query->result();
-	  }else if(isset($data['to'])&&($data['to']=='1')){
-		 $this->db->select('a.user_id,a.follow_user_id,b.username as follow_user_name,b.image as thumbnail');
+	  }else if(isset($data['arg'])&&($data['arg']=='to')){
+		 $this->db->select('a.user_id,a.follow_user_id,b.first_name,b.last_name,b.image as thumbnail');
 		 $this->db->from('follow_user as a');
 		 $this->db->join('customers b','a.follow_user_id = b.id','left');
 		 $this->db->where('user_id',$data['id']);
 		 $query = $this->db->get();
+		  //echo '<br>'.$this->db->last_query();die;
 		 return $result = $query->result();
 	  }
    }
@@ -207,6 +212,7 @@ class User_model extends CI_Model {
 		//echo $this->db->last_query();
 		return $this->db->affected_rows();  
 	  }
+	  return 0;
     }
     public function validateToken($token)
     {

@@ -980,31 +980,51 @@ class User extends REST_Controller
 		$this->param =  $this->paging($this->get('p'));
 		$owner_id =  $this->User_model->checkAdminToken($this->admin_token);
 		$data = $this->User_model->listdata($owner_id,$this->param);
-		$this->response(array('code'=>1,'result'=>$data), 200); 
+		if($data){
+			$this->response(array('code'=>1,'result'=>$data), 200);
+		}else{
+			$this->response(array('code'=>0,'error'=>"No record found"), 200);
+		}
 	}
 	function online_get(){
 		$owner_id =  $this->User_model->checkAdminToken($this->admin_token);
 		$data = $this->User_model->onlineuser($owner_id);
-		$this->response(array('code'=>1,'result'=>$data), 200); 
+		if($data){
+			$this->response(array('code'=>1,'result'=>$data), 200);
+		}else{
+			$this->response(array('code'=>0,'error'=>"No record found"), 200);
+		}		
 	}
 	function search_post(){
 		$this->param =  $this->paging($this->get('p'));
 		$data = $this->post();
 		$owner_id =  $this->User_model->checkAdminToken($this->admin_token);
 		$data = $this->User_model->searchdata($owner_id,$this->param,$data);
-		$this->response(array('code'=>1,'result'=>$data), 200); 
+		if($data){
+			$this->response(array('code'=>1,'result'=>$data), 200);
+		}else{
+			$this->response(array('code'=>0,'error'=>"No record found"), 200);
+		}		
 	}
 	function follow_post(){
 		$data = $this->post();
 		$status=$data['status'];
 		unset($data['status']);
 		$data = $this->User_model->follow($data,$status);
-		$this->response(array('code'=>1,'result'=>'Success','id'=>$data), 200);
+		if($data >0){
+			$this->response(array('code'=>1), 200);
+		}else{
+			$this->response(array('code'=>0), 200);
+		}
 	}
 	function followlist_get(){
 		$data = $this->get();
 		$res = $this->User_model->follow_list($data);
-		$this->response(array('code'=>1,'result'=>$res), 200);
+		if($res){
+			$this->response(array('code'=>1,'result'=>$res), 200);
+		}else{
+			$this->response(array('code'=>0,'error'=>"No record found"), 200);
+		}		
 	}
     function resumesession_post()
     {	
