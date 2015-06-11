@@ -31,12 +31,12 @@
                   <div style="width: 50%;float: left;border-right: 1px solid gray">
                       <div id="placeholder" style="margin: 10px 0px">
                       
-                          <canvas height="250" id="pieChart1"  width="499"></canvas>
+                          <canvas height="180" id="pieChart1"  width="499"></canvas>
                       </div>
                   <div class='newUserGrid'>New Users</div></div>
                    <div style="width: 50%;float: left;border-right: 1px solid gray">
                        <div id="placeholder1" style="margin: 10px 0px">
-                           <canvas height="250" id="pieChart2"  width="499"></canvas>
+                           <canvas height="180" id="pieChart2"  width="499"></canvas>
                        </div>
                   <div class='newUserGrid'>Total Users</div></div>
                   <div style="clear: both"></div>
