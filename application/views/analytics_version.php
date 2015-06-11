@@ -223,7 +223,7 @@ function DrawLineChart(drawdata){
 					  url: 'Versions',
 					  data: {'daydiff': num}, // change this to send js object
 					  type: "post",
-					success: function(data){   
+					  success: function(data){   
 				   // console.log(data.graph);
 					$("#example1").dataTable().fnDestroy();
 					parseJson(data.grid);
@@ -242,8 +242,7 @@ function DrawLineChart(drawdata){
             $('.btn-default').removeClass('active-header-btn');
             $(this).addClass('active-header-btn'); 
 		
-             var num = $('.btn-group').find(".active-header-btn").attr('value');
-             alert(num);
+             var num = $('.btn-group').find(".active-header-btn").attr('value');           
              if(!(num ===undefined))
              {
                  ajaxCall(num);

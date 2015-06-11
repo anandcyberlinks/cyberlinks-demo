@@ -21,16 +21,21 @@
                     <!-- Check all button -->
                     <a class="btn btn-default btn-sm reservation" onclick="dateRange()"><i class="fa fa-calendar"></i></a>
                     <div class="btn-group ">
-                      <a class="btn btn-default btn-sm year-class">2015</a>
-                      <a class="btn btn-default btn-sm active-header-btn today-class">Today</a>
-                      <a class="btn btn-default btn-sm week-class">7 Days</a>
-                      <a class="btn btn-default btn-sm month-class">30 Days</a>
-                      <a class="btn btn-default btn-sm months2-class">60 Days</a>
-                      <a class="btn btn-default btn-sm months3-class">90 Days</a>
+                         <a class="btn btn-default btn-sm year-class" value="365"><?php echo date("Y"); ?></a>
+                      <a class="btn btn-default btn-sm active-header-btn today-class" value="1">Today</a>
+                      <a class="btn btn-default btn-sm week-class" value="7">7 Days</a>
+                      <a class="btn btn-default btn-sm month-class" value="30">30 Days</a>
+                      <a class="btn btn-default btn-sm months2-class" value="60">60 Days</a>
+                      <a class="btn btn-default btn-sm months3-class" value="90">90 Days</a>
                     </div><!-- /.btn-group -->
                   </div>
                 </div>
-                  <div id="line-chart" style="height: 300px;"></div>
+                 <!--  <div id="line-chart" style="height: 300px;"></div> -->
+				  
+				   <div>
+                      
+                      <canvas id="line-chart" width="1250" height="250"></canvas>
+                  </div>
               </div><!--/.col (left) -->
             
 
@@ -43,7 +48,7 @@
                       <tr role="row"><th style="width: 167px;">Time after previous session</th><th>Number of Users</th><th>Percent</th></tr>
                     </thead>
                     <tbody>
-                    <tr role="row" class="odd">
+                    <!-- <tr role="row" class="odd">
                         <td class="sorting_1">1</td>
                         <td>16,368</td>
                         <td>15</td>
@@ -66,7 +71,7 @@
                         <td>16,368</td>
                         <td>19</td>
                          
-                    </tr>                  
+                    </tr> -->                 
                     </tbody>
                   </table></div></div></div>
                 </div><!-- /.box-body -->
@@ -85,11 +90,11 @@
         </section><!-- /.content -->
       </div><!-- /.content-wrapper -->
     <!-- jQuery 2.1.3 -->
-     <script src="<?php echo base_url() ?>assets/js/plugins/flot/jquery.flot.min.js" type="text/javascript"></script>
+    <!--  <script src="<?php //echo base_url() ?>assets/js/plugins/flot/jquery.flot.min.js" type="text/javascript"></script>
     <!-- FLOT RESIZE PLUGIN - allows the chart to redraw when the window is resized -->
-    <script src="<?php echo base_url() ?>assets/js/plugins/flot/jquery.flot.resize.min.js" type="text/javascript"></script>
+    <!-- <script src="<?php// echo base_url() ?>assets/js/plugins/flot/jquery.flot.resize.min.js" type="text/javascript"></script>
     <!-- FLOT PIE PLUGIN - also used to draw donut charts -->
-    <script src="<?php echo base_url() ?>assets/js/plugins/flot/jquery.flot.pie.min.js" type="text/javascript"></script>
+    <!-- <script src="<?php// echo base_url() ?>assets/js/plugins/flot/jquery.flot.pie.min.js" type="text/javascript"></script>
     <!-- FLOT CATEGORIES PLUGIN - Used to draw bar charts -->
     <script src="<?php echo base_url() ?>assets/js/plugins/flot/jquery.flot.categories.min.js" type="text/javascript"></script>
           <script src="<?php echo base_url() ?>assets/js/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js" type="text/javascript"></script>
@@ -99,133 +104,147 @@
                 <script src="<?php echo base_url() ?>assets/js/plugins/morris/morris.min.js"></script>
                 <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.css">
     <script type="text/javascript" language="javascript" src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" language="javascript" src="//cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.js"></script>             
+    <script type="text/javascript" language="javascript" src="//cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.js"></script>  
+ <script type="text/javascript" language="javascript" src="<?php echo base_url() ?>assets/js/plugins/chartjs/Chart.min.js"></script>
+<script type="text/javascript" language="javascript" src="<?php echo base_url() ?>assets/js/plugins/chartjs/Chart.js"></script>	
    <script>
    
    
+function dataprepare(resultset){
+		drawdata = {
+		labels: resultset.label,
+		datasets: [
+			{
+				label: "My First dataset",
+				fillColor: "rgba(220,220,220,0.5)",
+				strokeColor: "rgba(220,220,220,0.8)",
+				highlightFill: "rgba(220,220,220,0.75)",
+				highlightStroke: "rgba(220,220,220,1)",
+				data: resultset.totaluser
+			}
+		]
+	}
+		return drawdata;
+	};
    
-   function parseJson(data){        
-		   $('#example1').dataTable({
-			 data: data,
-			 bFilter: false,
-			 bLengthChange: false,
-			 }); 
-		}
    
-		
-		
-		function ajaxCall(){
-			str = $('.btn-group').find(".active-header-btn").text();
-			
-			var num = +str.match(/-?\d+\.?\d*/);
-			
-                      	$(function()
-                        { // start of doc ready.
-                            $.ajax({ 	 	
-                            dataType:'json',
-                                  url: 'Frequency',
-                                  data: {'daydiff': num}, // change this to send js object
-                                  type: "post",
-                                success: function(data){   
-                              //      console.log(data.grid);
-                                $("#example1").dataTable().fnDestroy();
-                                parseJson(data.grid);    
-                                                                        
-                                  }
-                                     });
-					});
-				}
-			
    
-      $(document).ready(function(){
-			ajaxCall();
-	  
-          /*  $('#example1').dataTable({
-              bFilter: false,
-              bLengthChange: false,
-                 }); */
-               
-                var data_today = [
-                  ['0',2666],
-                  ['1',2777],
-                  ['2',1000],
-                  ['3',2000],
-                  ['4',2500],
-                  ['5',8900],
-                  ['6',15000],
-                  ['7',5600],
-                  ['8',5892],
-                  ['9',1478],
-                  ['10',2356],
-                ];
-                var data_today1 = [
-                  ['0',100],
-                  ['1',27],
-                  ['2',14500],
-                  ['3',20060],
-                  ['4',250],
-                  ['5',800],
-                  ['6',5000],
-                  ['7',600],
-                  ['8',592],
-                  ['9',14780],
-                  ['10',23561],
-                ];
-          $('.mailbox-controls .btn-default').click(function () {
-            $('.btn-default').removeClass('active-header-btn');
-            $(this).addClass('active-header-btn');
-			ajaxCall();			
-          });
-        $(".reservation").daterangepicker();
-
- var data = [[0, 110000],[1, 150000],[2, 25000],[3, 240000],[4, 130000],[5, 180000]];
-        var dataset = [{ label: "", data: data, color: "#5482FF" }];
-        var ticks = [[0, "1.0"], [1, "1.1"], [2, "1.2"], [3, "2.0"],[4, "2.1"], [5, "2.0.1"]];
+   
+   function DrawLineChart(drawdata){
  
-        var options = {
-            series: {
-                bars: {
-                    show: true
-                }
-            },
-            bars: {
-                align: "center",
-                barWidth: 0.5
-            },
-            xaxis: {
-                axisLabel: "World Cities",
-                axisLabelUseCanvas: true,
-                axisLabelFontSizePixels: 12,
-                axisLabelFontFamily: 'Verdana, Arial',
-                axisLabelPadding: 10,
-                ticks: ticks
-            },
-            yaxis: {
-                axisLabel: "Average Temperature",
-                axisLabelUseCanvas: true,
-                axisLabelFontSizePixels: 12,
-                axisLabelFontFamily: 'Verdana, Arial',
-                axisLabelPadding: 3,
-                tickFormatter: function (v, axis) {
-                    return v;
-                }
-            },
-            legend: {
-                noColumns: 0,
-                labelBoxBorderColor: "#000000",
-                position: "nw"
-            },
-            grid: {
-                hoverable: true,
-                borderWidth: 2,
-                backgroundColor: { colors: ["#ffffff", "#EDF5FF"] }
-            }
-        };        
-         $.plot($("#line-chart"), dataset, options);
-        
-        });
+	 var areaChartOptions = {
+    //Boolean - Whether the scale should start at zero, or an order of magnitude down from the lowest value
+    scaleBeginAtZero : true,
+
+    //Boolean - Whether grid lines are shown across the chart
+    scaleShowGridLines : true,
+
+    //String - Colour of the grid lines
+    scaleGridLineColor : "rgba(0,0,0,.05)",
+
+    //Number - Width of the grid lines
+    scaleGridLineWidth : 1,
+
+    //Boolean - Whether to show horizontal lines (except X axis)
+    scaleShowHorizontalLines: true,
+
+    //Boolean - Whether to show vertical lines (except Y axis)
+    scaleShowVerticalLines: true,
+
+    //Boolean - If there is a stroke on each bar
+    barShowStroke : true,
+
+    //Number - Pixel width of the bar stroke
+    barStrokeWidth : 2,
+
+    //Number - Spacing between each of the X value sets
+    barValueSpacing : 5,
+
+    //Number - Spacing between data sets within X values
+    barDatasetSpacing : 1,
+	
+	responsive: true,
+
+    //String - A legend template
+    legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].fillColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>"
+
+}
+
+
+ var ctx = document.getElementById("line-chart").getContext("2d");
+ var myBarChart = new Chart(ctx).Bar(drawdata, areaChartOptions);
+        //var myNewChart = new Chart(ctx).PolarArea(data);
+        //lineChartOptions.datasetFill = false;
+        // var lineChartOptions =areaChartOptions;
+       // lineChartOptions.datasetFill = false;
+        //lineChartOptions.responsive = true;
+       // myLineChart = new Chart(ctx).Line(drawdata,lineChartOptions);
+        //Chart.defaults.global.responsive = true;
+		/* 	
+		new Chart(ctx).Bar(drawdata, {
+				barShowStroke: false
+			});
+	   */
+
+ } 
+ 
+	function parseJson(data){        
+	   $('#example1').dataTable({
+		 data: data,
+		 bFilter: false,
+		 bLengthChange: false,
+		 }); 
+	}
+   
+		
+	function ajaxCall(num){
+		//	str = $('.btn-group').find(".active-header-btn").text();
+		//var num = +str.match(/-?\d+\.?\d*/);
+		$(function()
+			{ // start of doc ready.
+				$.ajax({ 	 	
+				dataType:'json',
+					url: 'Frequency',
+					data: {'daydiff': num}, // change this to send js object
+					type: "post",
+					success: function(data){   
+					$("#example1").dataTable().fnDestroy();
+					parseJson(data.grid); 
+					d=dataprepare(data.graph);
+					//RemoveGraph();
+					DrawLineChart(d);											
+				}
+			 });
+		});
+	}
+			
+   
+    $(document).ready(function(){
+		$('.mailbox-controls .btn-default').click(function () {
+        $('.btn-default').removeClass('active-header-btn');
+		$(this).addClass('active-header-btn');
+		var num = $('.btn-group').find(".active-header-btn").attr('value');           
+		if(!(num ===undefined)) {ajaxCall(num);} 		
+		});
+		 ajaxCall('Today');
+		$(".reservation").daterangepicker({
+            format: 'YYYY-MM-DD',
+        });	
+		
+	function dateRange() {$(".reservation").daterangepicker('show');}
+		$('.applyBtn').on('click',function(){
+		//console.log("----------");
+		num =[]; 
+		strdt = $('input[name="daterangepicker_start"]').val();
+		enddt = $('input[name="daterangepicker_end"]').val();
+		num[0] =strdt;
+		num[1] =enddt;
+	   //alert($('input[name="daterangepicker_start"]').val());
+		ajaxCall(num);
+		});
+    });
       
-      function dateRange($divs) {
+    function dateRange($divs) {
         $("#"+$divs+" .reservation").daterangepicker('show');
       }
     </script>
@@ -487,6 +506,23 @@ element.style {
     right: 20px;
     top: 62px;
     width: 12px;
+}
+
+ .daterangepicker .calendar th, .daterangepicker .calendar td
+{
+    min-width:0px!important;
+    font-size: 12px!important;
+}
+.table-condensed > tbody > tr > td, .table-condensed > tbody > tr > th, .table-condensed > tfoot > tr > td, .table-condensed > tfoot > tr > th, .table-condensed > thead > tr > td, .table-condensed > thead > tr > th
+{
+padding:3px!important;
+}
+.daterangepicker_start_input, .daterangepicker_end_input{
+display : none!important;
+}
+.daterangepicker .calendar-date
+{
+    padding: 0px!important;
 }
 </style>    
   
