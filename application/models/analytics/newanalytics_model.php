@@ -287,14 +287,8 @@ class Newanalytics_model extends CI_Model{
 	
 	public function getFrequenceUser($data= array()){
 		
-		/* SELECT `session_use` AS sessionofuse, count(customer_device_id) as totaluser, 
-		((count(customer_device_id) * 100)/(select count(*) from `app_session` where session_start between "2015-05-19 00:00:00" AND "2015-05-19 23:59:59")) as percent FROM (`app_session`) 
-		WHERE `app_session`.`session_start`  BETWEEN '2015-05-19 00:00:00' AND '2015-05-19 23:59:59' GROUP BY session_start  */
-	
-		
-		$start  =$data['startdate']." 00:00:00";
-		$end  	=$data['enddate']." 23:59:59";
-		
+		$start  =$data['startdate'];
+		$end  	=$data['enddate'];
 		if(date("Y-m-d",strtotime($data['startdate'])) === date("Y-m-d",strtotime($data['enddate']))){
 		
 		$this->db->select('HOUR(`session_start`) as hr, count(customer_device_id) as totaluser, ((count(customer_device_id) * 100)/(select count(*)
@@ -307,12 +301,21 @@ class Newanalytics_model extends CI_Model{
 		//echo $this->db->last_query();
 		
 		}ELSE{
+			if(isset($data['Year'])){
+				$this->db->select('DATE_FORMAT(session_start,"%b") as month,DATE_FORMAT(session_start,"%Y-%m-%d") as date, count(customer_device_id) as totaluser, ((count(customer_device_id) * 100)/(select count(*)
+				from `app_session` where session_start between "'.$start.'" AND "'.$end.'")) as percent',false);
+				$this->timeInterval($data,"app_session.session_start");	
+				$this->db->group_by('MONTH(session_start)'); 
+				//echo $this->db->last_query();die;
+				$query = $this->db->get('app_session');
+			}else{
+				$this->db->select('DATE_FORMAT(session_start,"%d %M") as day,DATE_FORMAT(session_start,"%Y-%m-%d") as date, count(customer_device_id) as totaluser, ((count(customer_device_id) * 100)/(select count(*)
+				from `app_session` where session_start between "'.$start.'" AND "'.$end.'")) as percent',false);
+				$this->timeInterval($data,"app_session.session_start");	
+				$this->db->group_by('DAY(session_start)'); 
+				$query = $this->db->get('app_session');
+			}
 			
-			$this->db->select('DATE_FORMAT(session_start,"%d %M") as day,DATE_FORMAT(session_start,"%Y-%m-%d") as date, count(customer_device_id) as totaluser, ((count(customer_device_id) * 100)/(select count(*)
-			from `app_session` where session_start between "'.$start.'" AND "'.$end.'")) as percent',false);
-			$this->timeInterval($data,"app_session.session_start");	
-			$this->db->group_by('DAY(session_start)'); 
-			$query = $this->db->get('app_session');
 			
 			//return $this->dayWiseData($query->result_array(),$data,'date');
 			//echo $this->db->last_query();
