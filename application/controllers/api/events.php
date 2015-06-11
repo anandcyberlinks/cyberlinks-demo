@@ -103,7 +103,35 @@ class Events extends REST_Controller
 	function subscription_list_get()
 	{		
         $userid = $this->get('user_id');
-		$result = $this->Events_model->subscribeEventsList($userid);
+		$result = $this->Events_model->subscribeEventsList($userid,$this->param);
+		if(isset($result) && count($result) > 0)
+        {
+            $newresult = array();
+            foreach($result as $key => $val){                
+                if($val->thumbnail ==''){
+                    $val->thumbnail = base_url().IMG_PATH.'no-image.jpg';    
+                }
+                //error_reporting(E_ALL);                   
+                    unset($val->event_code);                    
+                    if($val->channel_id !=''){
+                    $newresult[$val->category_name][] = $val;
+                    }else{
+                        $newresult[$val->category_name] =array();
+                    }
+            }
+		}
+        if(isset($newresult) && count($newresult) > 0)
+        {        
+            $this->response(array('code'=>1,'result'=>$newresult), 200); // 200 being the HTTP response code
+        }else{
+            $this->response(array('code'=>0,'result'=>'No record found'), 404);
+        }
+	}
+		
+	function watched_list_get()
+	{
+        $userid = $this->get('user_id');
+		$result = $this->Events_model->watchedEventsList($userid,$this->param);
 		if(isset($result) && count($result) > 0)
         {
             $newresult = array();
@@ -240,17 +268,17 @@ class Events extends REST_Controller
                 $message .= "<br><br> Kind Regards,<br><br>";
                 $message .= "MultiTv Team";
                 $to = $email;
-                $from = 'info@cyberlinks.in';
+                $from = 'admin@multitv.in';
                
-				if(sendmail($to,$subject,$message))  //-- common helper function
+				if($this->sendmail($subject,$message,$from,$to))  //-- common helper function
 				{
 					$this->response(array('code'=>1), 200); // 200 being the HTTP response code  
 				}else{
-					$this->response(array('code'=>0,'result'=>'Sending mail failed'), 201); 
+					$this->response(array('code'=>0,'result'=>'Sending mail failed'), 200); 
 				}
 				$this->response(array('code'=>1), 200); // 200 being the HTTP response code 
 		}else{
-				$this->response(array('code'=>0,'result'=>'Error publish event'), 201); 
+				$this->response(array('code'=>0,'result'=>'Error publish event'), 200); 
 		}
 	}
 	
@@ -259,13 +287,79 @@ class Events extends REST_Controller
 		//$otp = $this->post('otp');
 		//$id = $this->post('event_id');
 		$result = $this->Events_model->checkOtp($post);
-		if($result >0){
+		if($result){
+			//--- send push notification ---//
+			$data['device_type']  = array('ios','android');
+			$data['notification_type'] = 'broadcast';
+			$data['message'] = $result->channel_name." Event is launching on ". $result->date." at ".$result->show_time.". Hurry!! to Subscribe for the event";			
+			$this->push_notification($data);
+			//-----------------------------//			
 			$this->response(array('code'=>1), 200); // 200 being the HTTP response code 
 		}else{
 			$this->response(array('code'=>0,'result'=>'Incorrect OTP'), 201); 
-		}		
+		}
 	}
 	
+	function push_notification($data)
+	{
+		$this->load->helper('push');
+		$this->load->model('push_notification/Push_notification_model');		
+		$result = $this->Push_notification_model->push_notification_data($data);		
+		$timestamp = strtotime("now");
+		$uniquid = uniqid($timestamp);
+		if($result){
+		foreach($result as $key=>$value)
+		{
+			if($key=='ios'){
+				//for($i=0;$i<count($value);$i++){		
+					$deviceToken = $value;
+					
+					$result = apns($deviceToken,$data["message"],$uniquid); //-- helper function --//
+					if (!$result)
+					{
+						//$this->response(array('code'=>0,'result'=>'Failed to connect APNS'), 201);						
+					}else{
+						//--- insert in history databse ---//
+						$data_history['push_id'] = $uniquid;
+						$data_history['type'] = 'Push';
+						$data_history['message'] = $data["message"];
+						$data_history['platform'] = 'ios';
+						$data_history['audience'] = $data['notification_type'];
+						$data_history['sent_count'] = count($deviceToken);		
+						$this->Push_notification_model->save($data_history);	
+						//------------------------//
+					}
+				//}
+			}
+			if($key=='android'){
+				$gcmRegIds = $value;
+				//echo '<pre>';  print_r($gcmRegIds); die;
+				$message = array("m" => $pushMessage);
+                                $new_gcmRegIds = array_chunk($gcmRegIds, NOTIFICATION_DEVICE_CHUNK);
+                                foreach($new_gcmRegIds as $gcmIdArray){
+                                    $pushStatus = sendMessageThroughGCM($gcmIdArray, $message,$uniquid);
+                                } 
+				//$pushStatus = sendMessageThroughGCM($gcmRegIds, $message,$uniquid);				
+				if(!$pushStatus)
+				{
+					//$this->session->set_flashdata('message', $this->_errormsg("Failed to connect GCM"));													
+				}else{
+					//--- insert in history databse ---//
+					$data_history['push_id'] = $uniquid;
+					$data_history['type'] = 'Push';
+					$data_history['message'] = $data["message"];
+					$data_history['platform'] = 'android';
+					$data_history['audience'] = $_POST['notification_type'];
+					$data_history['sent_count'] = count($gcmRegIds);	
+					//------------------------//
+					//print_r($data_history);die;
+					//-- insert data --//
+					$this->Push_notification_model->save($data_history);
+				}		
+			}
+		}
+		}
+	}
 	function subscribe_post()
 	{
 		//--- validate user token ---//        
@@ -295,5 +389,20 @@ class Events extends REST_Controller
 		}else{
 			$this->response(array('code'=>0,'result'=>'Error'), 201); 
 		}	
+	}
+	
+	function watch_post()
+	{
+		//--- validate user token ---//        
+            $this->validateToken();
+        //------------------------//
+		$data['user_id'] = $this->post('user_id');
+		$data['channel_id'] = $this->post('event_id');		
+		$result = $this->Events_model->watched($data);
+		if($result >0){
+			$this->response(array('code'=>1), 200); // 200 being the HTTP response code 
+		}else{
+			$this->response(array('code'=>0,'result'=>'Error in Subscription'), 201); 
+		}
 	}
 }

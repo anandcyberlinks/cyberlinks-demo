@@ -21,6 +21,7 @@ class Events_model extends CI_Model{
         if($param){
             $this->db->limit($param['limit'],$param['offset']);            
         }
+        
         $this->db->select("a.id as channel_id,a.name,a.keywords as tags,b.category as category_name,a.customer_id,d.first_name AS user_name,d.image as user_thumbnail,c.thumbnail_url as thumbnail,c.ios,c.android,c.windows,c.web,a.status",FALSE);
         $this->db->from('channels a');
         $this->db->join('channel_categories b','a.category_id=b.id','RIGHT');
@@ -45,6 +46,71 @@ class Events_model extends CI_Model{
                $key->epg = $this->getLivechannelEpg($key->channel_id);               
                //-- Vast file --//
               $key->vast = $this->getAdsRevive($lat,$lng,$age,$key->keywords,$gender);             
+            } );
+       }       
+       return $result;
+    }
+    
+    function subscribeEventsList($userid='', $param=array()){
+        if($param){
+            $this->db->limit($param['limit'],$param['offset']);            
+        }
+        
+        $this->db->select("a.id as channel_id,a.name,a.keywords as tags,b.category as category_name,a.customer_id,d.first_name AS user_name,d.image as user_thumbnail,c.thumbnail_url as thumbnail,c.ios,c.android,c.windows,c.web,a.status",FALSE);
+        $this->db->from('channels a');
+        $this->db->join('channel_categories b','a.category_id=b.id','RIGHT');
+        $this->db->join('livestream c','c.channel_id=a.id');
+        $this->db->join('customers d','a.customer_id=d.id','LEFT');
+        $this->db->join('subscribe_event e','e.channel_id=a.id');
+                       
+        if($userid !=''){
+            $this->db->where('e.user_id',$userid);
+        }
+        $this->db->where('uid',$this->owner_id);
+        $this->db->order_by('a.id','desc');
+       $query = $this->db->get();       
+      // echo $this->db->last_query();die;
+       $result = $query->result();
+       
+       if($result){
+       array_walk ( $result, function (&$key) {                
+                //-- epg ---//
+               $key->epg = $this->getLivechannelEpg($key->channel_id);               
+               //-- Vast file --//
+              $key->vast = $this->getAdsRevive($lat='',$lng='',$age='',$key->tags,$gender);             
+            } );
+       }       
+       return $result;
+    }
+    
+    
+    function watchedEventsList($userid='', $param=array()){
+        if($param){
+            $this->db->limit($param['limit'],$param['offset']);            
+        }
+        
+        $this->db->select("a.id as channel_id,a.name,a.keywords as tags,b.category as category_name,a.customer_id,d.first_name AS user_name,d.image as user_thumbnail,c.thumbnail_url as thumbnail,c.ios,c.android,c.windows,c.web,a.status",FALSE);
+        $this->db->from('channels a');
+        $this->db->join('channel_categories b','a.category_id=b.id','RIGHT');
+        $this->db->join('livestream c','c.channel_id=a.id');
+        $this->db->join('customers d','a.customer_id=d.id','LEFT');
+        $this->db->join('event_watched e','e.channel_id=a.id');
+                       
+        if($userid !=''){
+            $this->db->where('e.user_id',$userid);
+        }
+        $this->db->where('uid',$this->owner_id);
+        $this->db->order_by('a.id','desc');
+       $query = $this->db->get();       
+      // echo $this->db->last_query();die;
+       $result = $query->result();
+       
+       if($result){
+       array_walk ( $result, function (&$key) {                
+                //-- epg ---//
+               $key->epg = $this->getLivechannelEpg($key->channel_id);               
+               //-- Vast file --//
+              $key->vast = $this->getAdsRevive($lat='',$lng='',$age='',$key->tags,$gender='');             
             } );
        }       
        return $result;
@@ -178,20 +244,22 @@ class Events_model extends CI_Model{
     
     function checkOtp($data)
     {
-        $this->db->select('id');
-        $this->db->from('event_otp');
-        $this->db->where('channel_id',$data['event_id']);
-        $this->db->where('user_id',$data['user_id']);
-        $this->db->where('otp',$data['otp']);
+        $this->db->select('o.id,c.name as channel_name,e.date,e.show_time');
+        $this->db->from('event_otp o');
+        $this->db->join('channels c','c.id=o.channel_id');
+        $this->db->join('livechannel_epg e','e.channel_id=c.id','left');
+        $this->db->where('o.channel_id',$data['event_id']);
+        $this->db->where('o.user_id',$data['user_id']);
+        $this->db->where('o.otp',$data['otp']);
         $this->db->limit(1);
         $query = $this->db->get();
        $result = $query->row();
         if($result){
         //-- delete otp once verified --//
-        $this->db->where('id',$result->id);
-        $this->db->delete('event_otp');
+      //  $this->db->where('id',$result->id);
+       // $this->db->delete('event_otp');
         //---------//
-        return $result->id;
+        return $result;
         } else
         return 0;
     }
@@ -213,12 +281,18 @@ class Events_model extends CI_Model{
         }
         return 0;
     }
+    
+    function watched($data)
+    {
+		$this->db->insert('event_watched',$data);
+        return $this->db->insert_id();
+    }
         
     function getAdsRevive($lat='',$lng='',$age='',$keywords='',$gender='',$l='')
 	{		
 		$this->load->helper('url');		
                 //$url = CAMPAIGN_URL."?zone=".$this->zone_id."&keyword=$keywords&age=$age&gender=$gender&lat=$lat&lng=$lng&limit=$l";
-				$url ="http://multitvsolution.com/multitv/Api/public/index.php/ads/getvast?zone=11&country=$country&keyword=$keywords&age=$age&gender=$gender&lat=$lat&lng=$lng&limit=$limit&apikey=b3639adf52880e2d1ba1accb5d8875fdfb0a536b2b657a4c0c3d361061ca017b";
+				$url ="http://multitvsolution.com/multitv/Api/public/index.php/ads/getvast?zone=11&keyword=$keywords&age=$age&gender=$gender&lat=$lat&lng=$lng&limit=$l&apikey=b3639adf52880e2d1ba1accb5d8875fdfb0a536b2b657a4c0c3d361061ca017b";
 			//$url ="http://multitvsolution.com/multitv/Api/public/index.php/ads/getvast?zone=$this->zone_id&keyword=$keywords&lat=$lat&lng=$lng&limit=$limit&apikey=b3639adf52880e2d1ba1accb5d8875fdfb0a536b2b657a4c0c3d361061ca017b";
                // Get cURL resource
                 $curl = curl_init();

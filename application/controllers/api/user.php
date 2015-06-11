@@ -22,7 +22,7 @@ require APPPATH.'/libraries/REST_Controller.php';
 
 class User extends REST_Controller
 {      
-    function __construct()
+   function __construct()
    {
        parent::__construct();
        $this->load->helper('url');
@@ -103,7 +103,7 @@ class User extends REST_Controller
                     if ($output['error']) {
                         $this->response(array('code'=>0,'error' => $output['error']), 404);
                     } else {
-                        $pic = $output['path'];
+                        $pic = base_url().$output['path'];
                     }
                 } else {
                     //$_POST['file'] = $_POST['logo'];
@@ -317,7 +317,7 @@ class User extends REST_Controller
                 //-- api token --//
                     $this->generateApiToken($id,$this->post('email'),$this->post('password'));
                     $result = $this->User_model->getuser($id);
-					
+
                 if($result->image !=""){
                     $result->image = base_url().PROFILEPIC_PATH.$result->image;
 				}
@@ -1001,8 +1001,8 @@ class User extends REST_Controller
 		$data = $this->User_model->follow($data,$status);
 		$this->response(array('code'=>1,'result'=>'Success','id'=>$data), 200);
 	}
-	function followlist_post(){
-		$data = $this->post();
+	function followlist_get(){
+		$data = $this->get();
 		$res = $this->User_model->follow_list($data);
 		$this->response(array('code'=>1,'result'=>$res), 200);
 	}
