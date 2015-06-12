@@ -73,6 +73,40 @@ class Event_model extends CI_Model {
         $this->db->where('id', $id);
         return $this->db->get('events')->result();
     }
+    
+    function categoryEvents($uid, $start, $limit, $data){
+        if($param){
+            $this->db->limit($param['limit'],$param['offset']);            
+        }
+        
+        $this->db->select("a.id,a.status,a.name,a.keywords as tags,b.category as category_name,a.customer_id,d.first_name AS user_name,d.image as user_thumbnail,c.thumbnail_url as thumbnail,c.ios,c.android,c.windows,c.web,a.status",FALSE);
+        $this->db->from('channels a');
+        $this->db->join('channel_categories b','a.category_id=b.id','RIGHT');
+        $this->db->join('livestream c','c.channel_id=a.id');
+        //$this->db->join('livechannel_epg e','e.channel_id=a.id','left');
+        $this->db->join('customers d','a.customer_id=d.id','LEFT');
+        if($cid!=''){
+            $this->db->where('a.category_id',$cid);
+        }
+        if($userid !=''){
+            $this->db->where('a.customer_id',$userid);
+        }
+        $this->db->where('uid',$uid);
+        $this->db->order_by('a.id','desc');
+       $query = $this->db->get();       
+     //  echo $this->db->last_query();die;
+       $result = $query->result();
+       
+       if($result){
+       /*array_walk ( $result, function (&$key) {                
+                //-- epg ---//
+               $key->epg = $this->getLivechannelEpg($key->channel_id);               
+               //-- Vast file --//
+              $key->vast = $this->getAdsRevive($lat,$lng,$age,$key->keywords,$gender);             
+            } );*/
+       }       
+       return $result;
+    }
 
 }
 

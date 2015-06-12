@@ -391,31 +391,37 @@ class Crons extends REST_Controller {
         $this->load->helper('push');
         $timestamp = strtotime("now");
         $uniquid = uniqid($timestamp);          
-        $this->db->select('b.device_unique_id,b.platform as device_type,d.name as channel_name,e.date,e.show_time,e.end_date,e.end_time');
+        $this->db->select('a.id as uid,d.id,b.device_unique_id,b.platform as device_type,d.name as channel_name,e.date,e.show_time,e.end_date,e.end_time');
 		$this->db->from('customers a');
 		$this->db->join('customer_device b','a.id = b.user_id');
         $this->db->join('subscribe_event c','a.id = c.user_id');
         $this->db->join('channels d','c.channel_id = d.id');
         $this->db->join('livechannel_epg e','e.channel_id=d.id','left');
-        $this->db->where("TIMESTAMPDIFF(MINUTE,CONCAT_WS(' ',e.date,e.show_time),NOW()) <=",65);
-        $this->db->where("TIMESTAMPDIFF(SECOND,CONCAT_WS(' ',e.date,e.show_time),NOW()) >",0);
+        $this->db->where("TIMESTAMPDIFF(MINUTE,NOW(),CONCAT_WS(' ',e.date,e.show_time)) <=",65);
+        $this->db->where("TIMESTAMPDIFF(SECOND,NOW(),CONCAT_WS(' ',e.date,e.show_time)) >",0);
         $query = $this->db->get();
        //echo $this->db->last_query();
         $result = $query->result();
+        
         if($result){
+            $i=0;
         foreach($query->result() as $key => $val){
             if(strtolower($val->device_type)=='ios'){
                $device_data['ios'][] = $val->device_unique_id;
             }else if(strtolower($val->device_type)=='android'){
                 $device_data['android'][] = $val->device_unique_id;
             }
-            $data['message'] = $val->channel_name;
-            $data['show_time'] = $val->date.' '.$val->show_time;
-            $data['device'] = $device_data;
+            $data[$i]['id']=$val->id;
+            $data[$i]['message'] = $val->channel_name;
+            $data[$i]['show_time'] = $val->date.' '.$val->show_time;
+            $data[$i]['device'] = $device_data;
+            $i++;
+            $device_data= array();
         }
+        
         //--- send notification ---//
             foreach($data as $row){
-                $device_ids = $row['device'];
+                $device_ids = $device_data;
                 $message = $row['message']." Event is going to start at ". $row['show_time'];
                 //$notification_type = $row->notification_type;
                 //$id= $row->id;
@@ -481,7 +487,10 @@ class Crons extends REST_Controller {
           //echo '<pre>';  print_r($result);die;
             //SELECT * FROM `pushnotification_scheduler` WHERE `schedule_time` < NOW() and `status` = 'pending'
         }
+        
+        $this->response(array('code'=>1));
         }
+        $this->response(array('code'=>0,'result'=>'No record found'));
     }
 
     function save($data_history)

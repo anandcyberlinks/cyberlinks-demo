@@ -101,7 +101,7 @@ class Events extends REST_Controller
     }
     
 	function subscription_list_get()
-	{		
+	{
         $userid = $this->get('user_id');
 		$result = $this->Events_model->subscribeEventsList($userid,$this->param);
 		if(isset($result) && count($result) > 0)
@@ -306,7 +306,7 @@ class Events extends REST_Controller
 		$this->load->model('push_notification/Push_notification_model');		
 		$result = $this->Push_notification_model->push_notification_data($data);		
 		$timestamp = strtotime("now");
-		$uniquid = uniqid($timestamp);
+		$uniquid = uniqid($timestamp);		
 		if($result){
 		foreach($result as $key=>$value)
 		{
